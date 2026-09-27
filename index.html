@@ -171,7 +171,7 @@
     background: #4CAF50;
     color: #fff;
     text-decoration: none;
-    border-radius: 0;
+    border-radius: 8px;
     font-size: 20px;               /* 字调大 */
     font-weight: 500;
     text-align: center;
@@ -241,7 +241,7 @@
   </nav>
 
   <header>
-    <img class="avatar" src="avatar.jpg" alt="头像">
+    <img class="avatar" src="B站头像.jpg" alt="头像">
     <h1 class="name">乘法</h1>
     <p class="tagline">这是想要进行乘法运算的测试网页</p>
   </header>
@@ -299,10 +299,13 @@
   </footer>
 
 <script>
-  fetch('https://api.ipify.org?format=json')
-    .then(r => r.json())
-    .then(d => document.getElementById('ip').textContent = d.ip)
-    .catch(() => document.getElementById('ip').textContent = '获取失败');
+fetch('https://1.1.1.1/cdn-cgi/trace')
+  .then(r => r.text())
+  .then(t => {
+    const ip = t.split('\n').find(l => l.startsWith('ip=')).split('=')[1];
+    document.getElementById('ip').textContent = ip;
+  })
+  .catch(() => document.getElementById('ip').textContent = '获取失败');
 
   const themeBtn = document.getElementById('themeBtn');
   const themeIcon = document.getElementById('themeIcon');
