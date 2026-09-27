@@ -1,8 +1,8 @@
 /* ---------- 1. 获取访客 IP ---------- */
-fetch('https://api.ipify.org?format=json')
-  .then(r => r.json())
-  .then(d => {
-    document.getElementById('ip').textContent = d.ip;
+fetch('https://ipv4.icanhazip.com')
+  .then(r => r.text())
+  .then(ip => {
+    document.getElementById('ip').textContent = ip.trim();
   })
   .catch(() => {
     document.getElementById('ip').textContent = '获取失败';
