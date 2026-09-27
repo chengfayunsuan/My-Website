@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>乘法 · 个人主页</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f7f9fc;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  /* 导航栏 */
+  nav {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #4A90D9;
+  }
+  .nav-links a {
+    margin-left: 24px;
+    text-decoration: none;
+    color: #555;
+    font-size: 15px;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: #4A90D9; }
+
+  /* 头部 */
+  header {
+    max-width: 900px;
+    margin: 60px auto 40px;
+    padding: 0 20px;
+    text-align: center;
+  }
+  .avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: #e6eef9;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 14px rgba(74,144,217,.25);
+  }
+  .name {
+    font-size: 40px;
+    margin: 20px 0 10px;
+    color: #2c3e50;
+  }
+  .tagline {
+    font-size: 17px;
+    color: #666;
+  }
+
+  /* 通用区块 */
+  section {
+    max-width: 900px;
+    margin: 0 auto 50px;
+    padding: 0 20px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  .section-title {
+    font-size: 22px;
+    color: #2c3e50;
+    margin-bottom: 16px;
+    position: relative;
+    padding-left: 14px;
+  }
+  .section-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 4px;
+    height: 22px;
+    background: #4A90D9;
+    border-radius: 2px;
+  }
+
+  /* 社交图标 */
+  .socials {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 8px;
+  }
+  .socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #eef4fc;
+    color: #4A90D9;
+    font-size: 20px;
+    text-decoration: none;
+    transition: all .2s;
+  }
+  .socials a:hover {
+    background: #4A90D9;
+    color: #fff;
+    transform: translateY(-3px);
+  }
+
+  /* 页脚 */
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #999;
+    font-size: 14px;
+  }
+
+  /* 响应式 */
+  @media (max-width: 600px) {
+    .nav-inner { flex-direction: column; gap: 10px; }
+    .nav-links a { margin: 0 10px; }
+    .name { font-size: 30px; }
+    .card { padding: 22px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 导航栏 -->
+  <nav>
+    <div class="nav-inner">
+      <div class="logo">乘法</div>
+      <div class="nav-links">
+        <a href="#">首页</a>
+        <a href="#about">关于我</a>
+        <a href="#contact">联系我</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 头部 -->
+  <header>
+    <img class="avatar" src="https://via.placeholder.com/130" alt="头像">
+    <h1 class="name">乘法</h1>
+    <p class="tagline">这是想要进行乘法运算的测试网页</p>
+  </header>
+
+  <!-- 关于我 -->
+  <section id="about">
+    <div class="card">
+      <h2 class="section-title">关于我</h2>
+      <p>你好，我是乘法。一名热爱编程与计算机技术的学习者，目前正在认真学习 C 语言，喜欢折腾各种小项目，乐于把想法一点点变成代码。希望在这里记录成长，也期待与你交流。</p>
+    </div>
+  </section>
+
+  <!-- 联系我 -->
+  <section id="contact">
+    <div class="card">
+      <h2 class="section-title">联系我</h2>
+      <div class="socials">
+        <a href="#" title="GitHub">GH</a>
+        <a href="#" title="邮箱">@</a>
+        <a href="#" title="微博">WB</a>
+        <a href="#" title="微信">WX</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer>
+    © 2026 CHENGFA
+  </footer>
+
+  <script>
+    // 平滑滚动（点击导航跳转到对应区块）
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', e => {
+        const href = link.getAttribute('href');
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
