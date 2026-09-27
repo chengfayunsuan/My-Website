@@ -241,7 +241,7 @@
   </nav>
 
   <header>
-    <img class="avatar" src="avatar.jpg" alt="头像">
+   <img class="avatar" src="avatar.jpg" alt="头像">
     <h1 class="name">乘法</h1>
     <p class="tagline">这是想要进行乘法运算的测试网页</p>
   </header>
@@ -299,13 +299,14 @@
   </footer>
 
 <script>
-fetch('https://ipapi.co/json/')
+fetch('https://api.vore.top/api/IPdata')
   .then(r => r.json())
   .then(d => {
-   document.getElementById('ip').textContent = d.ip + ' · ' + d.region + ' ' + d.city;
+    document.getElementById('ip').textContent = d.ipinfo.text + ' · ' + d.ipdata.info1;
   })
-  .catch(() => document.getElementById('ip').textContent = '获取失败');
-
+  .catch(() => {
+    document.getElementById('ip').textContent = '获取失败';
+  });
   const themeBtn = document.getElementById('themeBtn');
   const themeIcon = document.getElementById('themeIcon');
 
