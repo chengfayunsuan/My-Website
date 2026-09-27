@@ -31,5 +31,5 @@ themeBtn.addEventListener('click', () => {
 /* ---------- 3. Logo 平滑回顶 ---------- */
 document.querySelector('.logo').addEventListener('click', e => {
   e.preventDefault();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  location.href = '/';   // ← 这一行改成滚动
 });
