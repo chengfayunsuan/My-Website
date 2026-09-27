@@ -299,9 +299,11 @@
   </footer>
 
 <script>
-fetch('https://api.ip.sb/ip')
-  .then(r => r.text())
-  .then(ip => document.getElementById('ip').textContent = ip.trim())
+fetch('https://ipapi.co/json/')
+  .then(r => r.json())
+  .then(d => {
+   document.getElementById('ip').textContent = d.ip + ' · ' + d.region + ' ' + d.city;
+  })
   .catch(() => document.getElementById('ip').textContent = '获取失败');
 
   const themeBtn = document.getElementById('themeBtn');
