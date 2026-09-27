@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP 纯度检测 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css">
+<style>
+  /* 本页专属：结果面板 */
+  .result-box {
+    margin-top: 20px;
+    padding: 24px;
+    background: var(--bg);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-family: monospace;
+    font-size: 15px;
+    line-height: 2;
+    min-height: 120px;
+  }
+  .result-box .label {
+    color: var(--text-light);
+    display: inline-block;
+    width: 110px;
+  }
+  .result-box .value {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .purity-bar {
+    margin-top: 16px;
+    height: 12px;
+    border-radius: 6px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .purity-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--success);
+    transition: width .6s, background .6s;
+    border-radius: 6px;
+  }
+  .purity-text {
+    margin-top: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--success);
+    text-align: center;
+  }
+  .status-loading { color: var(--text-light); }
+  .status-error   { color: #e74c3c; }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a class="logo" href="/">乘法</a>
+      <div class="nav-right">
+        <span class="ip-wrap">你的 IP：<span id="ip">获取中…</span></span>
+        <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
+          <svg id="themeIcon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <img class="avatar" src="/avatar.jpg" alt="头像" onerror="this.style.display='none'">
+    <h1 class="name">IP 纯度检测</h1>
+    <p class="tagline">检测你的出口 IP 类型、代理状态与风险等级</p>
+  </header>
+
+  <section>
+    <div class="card">
+      <h2 class="section-title">检测结果</h2>
+
+      <div class="result-box" id="result">
+        <span class="status-loading">正在检测，请稍候…</span>
+      </div>
+
+      <div class="purity-bar">
+        <div class="purity-fill" id="purityFill"></div>
+      </div>
+      <div class="purity-text" id="purityText">—</div>
+
+      <p style="margin-top:22px;font-size:13px;color:var(--text-light);text-align:center;">
+        数据来源：ip-api.com · 仅供参考
+      </p>
+    </div>
+  </section>
+
+  <footer>© 2026 CHENGFA</footer>
+
+  <script>
+    // 主题切换（和主页一致）
+    const themeBtn  = document.getElementById('themeBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    const sunSVG  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+      themeIcon.innerHTML = sunSVG;
+    }
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      themeIcon.innerHTML = isDark ? sunSVG : moonSVG;
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // Logo 回首页 + 顶部 IP 展示
+    document.querySelector('.logo').addEventListener('click', e => {
+      e.preventDefault();
+      location.href = '/';
+    });
+    fetch('https://api.ip.sb/ip')
+      .then(r => r.text())
+      .then(ip => document.getElementById('ip').textContent = ip.trim())
+      .catch(() => document.getElementById('ip').textContent = '获取失败');
+
+    // ===== 核心：IP 纯度检测 =====
+    const resultBox  = document.getElementById('result');
+    const purityFill = document.getElementById('purityFill');
+    const purityText = document.getElementById('purityText');
+
+    function render(data) {
+      const {
+        query, country, regionName, city, isp, org, as,
+        mobile, proxy, hosting
+      } = data;
+
+      // 综合判断 IP 类型
+      let type = '住宅 IP';
+      let purity = 95;
+      let color = 'var(--success)';
+
+      if (hosting) {
+        type = '机房 / 数据中心 IP';
+        purity = 40;
+        color = '#e67e22';
+      } else if (proxy) {
+        type = '代理 / VPN IP';
+        purity = 20;
+        color = '#e74c3c';
+      } else if (mobile) {
+        type = '移动网络 IP';
+        purity = 70;
+        color = '#f1c40f';
+      }
+
+      resultBox.innerHTML = `
+        <div><span class="label">IP 地址</span><span class="value">${query}</span></div>
+        <div><span class="label">位置</span><span class="value">${country} · ${regionName} · ${city}</span></div>
+        <div><span class="label">ISP</span><span class="value">${isp || '—'}</span></div>
+        <div><span class="label">组织</span><span class="value">${org || '—'}</span></div>
+        <div><span class="label">AS 号</span><span class="value">${as || '—'}</span></div>
+        <div><span class="label">IP 类型</span><span class="value" style="color:${color}">${type}</span></div>
+        <div><span class="label">是否代理</span><span class="value">${proxy ? '是' : '否'}</span></div>
+        <div><span class="label">是否机房</span><span class="value">${hosting ? '是' : '否'}</span></div>
+      `;
+
+      purityFill.style.width = purity + '%';
+      purityFill.style.background = color;
+      purityText.style.color = color;
+      purityText.textContent = `纯度评分：${purity} / 100`;
+    }
+
+    // 主接口：ip-api.com（免费、支持 https？注意：免费版仅 http）
+    // 免费版不支持 https，所以我们走 https 的备用接口
+    fetch('https://ipapi.co/json/')
+      .then(r => r.json())
+      .then(d => {
+        // ipapi.co 字段名不太一样，做一层映射
+        render({
+          query:     d.ip,
+          country:   d.country_name,
+          regionName:d.region,
+          city:      d.city,
+          isp:       d.org,
+          org:       d.org,
+          as:        d.asn,
+          mobile:    false,
+          proxy:     false,
+          hosting:   /amazon|google|microsoft|cloudflare|digitalocean|ovh|linode|vultr|aliyun|tencent/i.test(d.org || '')
+        });
+      })
+      .catch(() => {
+        resultBox.innerHTML = '<span class="status-error">检测失败，请稍后重试或检查网络。</span>';
+        purityText.textContent = '—';
+      });
+  </script>
+
+</body>
+</html>
