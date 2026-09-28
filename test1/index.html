@@ -125,13 +125,11 @@
       .catch(() => document.getElementById('ip').textContent = '获取失败');
 
     // ===== 核心：IP 纯度检测 =====
-       // ===== 核心：IP 纯度检测 =====
     const resultBox  = document.getElementById('result');
     const purityFill = document.getElementById('purityFill');
     const purityText = document.getElementById('purityText');
 
-    // 👇 换成你自己的 key
-    const API_KEY = '你的完整key';
+    const API_KEY = '65636CB7682F0AA2621C1B05E0173849';
 
     function judge(d) {
       if (d.is_proxy)      return { type: '代理 / VPN',   purity: 20, color: '#e74c3c' };
