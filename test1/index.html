@@ -367,12 +367,21 @@ function openTool(key) {
   const stage = document.getElementById('stage');
 
   let html = `<h3>${t.name}</h3>`;
+
+  // 每个输入框一行（label + input 同一行）
   t.inputs.forEach(inp => {
-    html += `<label>${inp.label}</label>`;
-    html += `<input id="in_${inp.id}" type="${inp.type}" ${inp.placeholder ? `placeholder="${inp.placeholder}"` : ''}>`;
+    html += `
+      <div class="input-row">
+        <label>${inp.label}</label>
+        <input id="in_${inp.id}" type="${inp.type}"
+               ${inp.placeholder ? `placeholder="${inp.placeholder}"` : ''}>
+      </div>`;
   });
-  html += `<button class="run" id="runBtn">运行</button>`;
+
+  // 运行按钮单独一行，靠右
+  html += `<div class="run-row"><button class="run" id="runBtn">运行</button></div>`;
   html += `<pre id="out">（点运行查看结果）</pre>`;
+
   stage.innerHTML = html;
 
   document.getElementById('runBtn').onclick = () => {
@@ -388,6 +397,11 @@ function openTool(key) {
       document.getElementById('out').textContent = '运行出错：' + e.message;
     }
   };
+
+  if (t.inputs.length === 0) {
+    document.getElementById('runBtn').click();
+  }
+}
 
   // 无输入的工具，自动跑一次
   if (t.inputs.length === 0) {
