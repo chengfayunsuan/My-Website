@@ -213,10 +213,11 @@ section {
 
 /* 邮箱文字 */
 .email-text {
-  margin-top: 18px;
   text-align: center;
+  padding: 0 20px;
   color: var(--text-light);
-  font-size: 15px;
+  font-size: 14px;       /* 跟 footer 一样 */
+  font-family: var(--font-orbitron);
   letter-spacing: .5px;
   user-select: text;
 }
