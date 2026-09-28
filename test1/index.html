@@ -3,54 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IP 纯度检测 · 乘法</title>
+<title>小工具集 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/style.css">
 <style>
-  /* 本页专属：结果面板 */
-  .result-box {
-    margin-top: 20px;
-    padding: 24px;
-    background: var(--bg);
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    font-family: monospace;
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 10px;
+  }
+  .tool-btn {
+    padding: 14px 10px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
     font-size: 15px;
-    line-height: 2;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+    text-align: center;
+    font-family: inherit;
+  }
+  .tool-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+  .tool-btn.active { background: var(--success); }
+
+  #stage {
+    margin-top: 24px;
+    padding: 22px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
     min-height: 120px;
   }
-  .result-box .label {
-    color: var(--text-light);
-    display: inline-block;
-    width: 110px;
-  }
-  .result-box .value {
-    color: var(--text);
-    font-weight: 500;
-  }
-  .purity-bar {
-    margin-top: 16px;
-    height: 12px;
-    border-radius: 6px;
-    background: var(--border);
-    overflow: hidden;
-  }
-  .purity-fill {
-    height: 100%;
-    width: 0%;
-    background: var(--success);
-    transition: width .6s, background .6s;
-    border-radius: 6px;
-  }
-  .purity-text {
-    margin-top: 8px;
+  #stage h3 {
+    margin-bottom: 14px;
+    color: var(--primary);
     font-size: 18px;
-    font-weight: bold;
-    color: var(--success);
-    text-align: center;
   }
-  .status-loading { color: var(--text-light); }
-  .status-error   { color: #e74c3c; }
+  #stage label {
+    display: block;
+    margin: 10px 0 4px;
+    font-size: 14px;
+    color: var(--text-light);
+  }
+  #stage input {
+    width: 100%;
+    max-width: 280px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card);
+    color: var(--text);
+    font-size: 15px;
+    font-family: monospace;
+    outline: none;
+  }
+  #stage input:focus { border-color: var(--primary); }
+  #stage button.run {
+    margin-top: 14px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  #stage button.run:hover { filter: brightness(1.1); }
+  #stage pre {
+    margin-top: 16px;
+    padding: 14px;
+    background: var(--card);
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--text);
+    min-height: 40px;
+  }
+  @media (max-width: 600px) {
+    .tools-grid { grid-template-columns: repeat(2, 1fr); }
+  }
 </style>
 </head>
 <body>
@@ -71,101 +108,267 @@
 
   <header>
     <img class="avatar" src="/avatar.jpg" alt="头像" onerror="this.style.display='none'">
-    <h1 class="name">IP 纯度检测</h1>
-    <p class="tagline">检测你的出口 IP 类型、代理状态与风险等级</p>
+    <h1 class="name">小工具集</h1>
+    <p class="tagline">12 个用 JavaScript 重写的 C 语言小程序</p>
   </header>
 
   <section>
     <div class="card">
-      <h2 class="section-title">检测结果</h2>
-
-      <div class="result-box" id="result">
-        <span class="status-loading">正在检测，请稍候…</span>
+      <h2 class="section-title">选择工具</h2>
+      <div class="tools-grid" id="toolsGrid"></div>
+      <div id="stage">
+        <p style="color:var(--text-light);">👆 点上面任意一个按钮开始</p>
       </div>
-
-      <div class="purity-bar">
-        <div class="purity-fill" id="purityFill"></div>
-      </div>
-      <div class="purity-text" id="purityText">—</div>
-
-      <p style="margin-top:22px;font-size:13px;color:var(--text-light);text-align:center;">
-        数据来源：ip-api.com · 仅供参考
-      </p>
     </div>
   </section>
 
   <footer>© 2026 CHENGFA</footer>
 
-  <script>
-    // 主题切换（和主页一致）
-    const themeBtn  = document.getElementById('themeBtn');
-    const themeIcon = document.getElementById('themeIcon');
-    const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-    const sunSVG  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
-
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      themeIcon.innerHTML = sunSVG;
+<script>
+/* ========== 工具定义 ========== */
+const tools = {
+  tri: {
+    name: '001 求三角形面积',
+    inputs: [
+      { id: 'a', label: '边长 a', type: 'number' },
+      { id: 'b', label: '边长 b', type: 'number' },
+      { id: 'c', label: '边长 c', type: 'number' }
+    ],
+    run: (v) => {
+      const { a, b, c } = v;
+      if (a >= b + c || b >= a + c || c >= a + b) return '出错了！这三条边组不成三角形。';
+      const p = (a + b + c) / 2;
+      const area = Math.sqrt(p * (p - a) * (p - b) * (p - c));
+      return `三角形的面积为：${area.toFixed(2)}`;
     }
-    themeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      themeIcon.innerHTML = isDark ? sunSVG : moonSVG;
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
+  },
 
-    // Logo 回首页 + 顶部 IP 展示
-    document.querySelector('.logo').addEventListener('click', e => {
-      e.preventDefault();
-      location.href = '/';
-    });
-    fetch('https://api.ip.sb/ip')
-      .then(r => r.text())
-      .then(ip => document.getElementById('ip').textContent = ip.trim())
-      .catch(() => document.getElementById('ip').textContent = '获取失败');
-
-    // ===== 核心：IP 纯度检测 =====
-    const resultBox  = document.getElementById('result');
-    const purityFill = document.getElementById('purityFill');
-    const purityText = document.getElementById('purityText');
-
-    const API_KEY = '65636CB7682F0AA2621C1B05E0173849';
-
-    function judge(d) {
-      if (d.is_proxy)      return { type: '代理 / VPN',   purity: 20, color: '#e74c3c' };
-      if (d.is_datacenter) return { type: '机房 / 数据中心', purity: 40, color: '#e67e22' };
-      if (/mobile|cellular|4g|5g/i.test(d.as || '')) return { type: '移动网络', purity: 70, color: '#f1c40f' };
-      return { type: '住宅 IP', purity: 95, color: 'var(--success)' };
+  multi: {
+    name: '002 九九乘法表',
+    inputs: [],
+    run: () => {
+      let s = '';
+      for (let i = 1; i <= 9; i++) {
+        for (let j = 1; j <= i; j++) s += `${j}×${i}=${i*j}\t`;
+        s += '\n';
+      }
+      return s;
     }
+  },
 
-    fetch(`https://api.ip2location.io/?key=${API_KEY}`)
-      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-      .then(d => {
-        if (d.error) throw new Error(d.error);
-        const v = judge(d);
-        resultBox.innerHTML = `
-          <div><span class="label">IP 地址</span><span class="value">${d.ip || '—'}</span></div>
-          <div><span class="label">位置</span><span class="value">${[d.country_name, d.region_name, d.city_name].filter(Boolean).join(' · ') || '—'}</span></div>
-          <div><span class="label">ISP</span><span class="value">${d.isp || '—'}</span></div>
-          <div><span class="label">组织</span><span class="value">${d.as || '—'}</span></div>
-          <div><span class="label">AS 号</span><span class="value">${d.asn || '—'}</span></div>
-          <div><span class="label">经纬度</span><span class="value">${d.latitude ?? '—'}, ${d.longitude ?? '—'}</span></div>
-          <div><span class="label">时区</span><span class="value">${d.time_zone || '—'}</span></div>
-          <div><span class="label">IP 类型</span><span class="value" style="color:${v.color}">${v.type}</span></div>
-          <div><span class="label">是否代理</span><span class="value">${d.is_proxy ? '是' : '否'}</span></div>
-          <div><span class="label">是否机房</span><span class="value">${d.is_datacenter ? '是' : '否'}</span></div>
-        `;
-        purityFill.style.width = v.purity + '%';
-        purityFill.style.background = v.color;
-        purityText.style.color = v.color;
-        purityText.textContent = `纯度评分：${v.purity} / 100`;
-      })
-      .catch(err => {
-        console.error(err);
-        resultBox.innerHTML = `<span class="status-error">检测失败：${err.message}</span>`;
-        purityText.textContent = '—';
-      });
-  </script> 
+  guess: {
+    name: '003 猜数模拟器',
+    inputs: [
+      { id: 'target', label: '目标数字（1-100）', type: 'number', placeholder: '自己定一个' },
+      { id: 'guess',  label: '你的猜测',        type: 'number' }
+    ],
+    run: (v) => {
+      if (v.guess > v.target) return '大了！';
+      if (v.guess < v.target) return '小了！';
+      return '猜中了！🎉';
+    }
+  },
+
+  prime: {
+    name: '004 质数检测器',
+    inputs: [{ id: 'n', label: '输入一个数字', type: 'number' }],
+    run: (v) => {
+      const n = v.n;
+      if (n < 2) return '既不是质数也不是合数！';
+      for (let i = 2; i < n; i++) if (n % i === 0) return `${n} 是合数！`;
+      return `${n} 是质数！`;
+    }
+  },
+
+  rps: {
+    name: '005 石头剪刀布',
+    inputs: [{ id: 'p', label: '你的出拳（1=石头 2=剪刀 3=布）', type: 'number' }],
+    run: (v) => {
+      if (![1,2,3].includes(v.p)) return '你输错了！只能输入 1、2、3';
+      const ai = Math.floor(Math.random() * 3) + 1;
+      const names = { 1: '石头', 2: '剪刀', 3: '布' };
+      const diff = v.p - ai;
+      let result;
+      if (diff === 2 || diff === -1) result = '你赢了！';
+      else if (diff === -2 || diff === 1) result = '你输了！';
+      else result = '平局！';
+      return `你出：${names[v.p]}\n对方出：${names[ai]}\n${result}`;
+    }
+  },
+
+  bubble: {
+    name: '006 冒泡排序',
+    inputs: [{ id: 'arr', label: '输入数字，用逗号分隔', type: 'text', placeholder: '645,9486,123,456' }],
+    run: (v) => {
+      const arr = v.arr.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+      for (let i = 0; i < arr.length - 1; i++)
+        for (let j = 0; j < arr.length - 1 - i; j++)
+          if (arr[j] > arr[j+1]) [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
+      return `排序结果：\n${arr.join(' ')}`;
+    }
+  },
+
+  huiwen: {
+    name: '007 回文数检测',
+    inputs: [{ id: 'n', label: '输入一个正整数', type: 'number' }],
+    run: (v) => {
+      const a = v.n;
+      if (a < 1) return '不是让你输入正数吗？';
+      let t = a, c = 0;
+      while (t !== 0) { c = c * 10 + t % 10; t = Math.floor(t / 10); }
+      return c === a ? '这个数是回文数！' : '这个数不是回文数！';
+    }
+  },
+
+  bsearch: {
+    name: '008 二分查找',
+    inputs: [{ id: 'n', label: '要查找的数字（数组是 10~240 的 10 的倍数）', type: 'number' }],
+    run: (v) => {
+      const arr = [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240];
+      const target = v.n;
+      let min = 0, max = arr.length - 1;
+      while (min <= max) {
+        const mid = Math.floor((min + max) / 2);
+        if (target < arr[mid]) max = mid - 1;
+        else if (target > arr[mid]) min = mid + 1;
+        else return `您查找的数字在第 ${mid + 1} 个！`;
+      }
+      return '您查找的数字不在数组里！';
+    }
+  },
+
+  factor: {
+    name: '009 质因数分解',
+    inputs: [{ id: 'n', label: '输入一个正整数', type: 'number' }],
+    run: (v) => {
+      let a = v.n;
+      if (a < 1) return '不是让你输入正数吗？';
+      if (a === 1) return '1 没有质因数';
+      let out = `${a} = `;
+      const orig = a;
+      const parts = [];
+      for (let i = 2; i * i <= a; i++)
+        while (a % i === 0) { a /= i; parts.push(i); }
+      if (a > 1) parts.push(a);
+      return `${orig} = ${parts.join(' × ')}`;
+    }
+  },
+
+  del: {
+    name: '010 数组删除数据',
+    inputs: [{ id: 'n', label: '要删除的数字（数组是 1~10）', type: 'number' }],
+    run: (v) => {
+      let arr = [1,2,3,4,5,6,7,8,9,10];
+      const idx = arr.indexOf(v.n);
+      if (idx === -1) return '您输入的数字不在数组里！';
+      arr.splice(idx, 1);
+      return `更正数组：\n${arr.join(' ')}`;
+    }
+  },
+
+  select: {
+    name: '011 选择排序',
+    inputs: [{ id: 'arr', label: '输入数字，用逗号分隔', type: 'text', placeholder: '6,46,468885,33' }],
+    run: (v) => {
+      const arr = v.arr.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+      for (let i = 0; i < arr.length - 1; i++)
+        for (let j = 0; j < arr.length - 1; j++)
+          if (arr[j] > arr[j+1]) [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
+      return `排序结果：\n${arr.join(' ')}`;
+    }
+  },
+
+  fib: {
+    name: '012 斐波那契数列',
+    inputs: [{ id: 'n', label: '输入序号', type: 'number' }],
+    run: (v) => {
+      const z = v.n;
+      if (z < 1) return '没有此序号';
+      if (z === 1 || z === 2) return `第 ${z} 个序号对应数字为：1`;
+      let a = 1, b = 1;
+      for (let i = 3; i <= z; i++) {
+        const c = a + b;
+        if (i === z) return `第 ${z} 个序号对应数字为：${c}`;
+        a = b; b = c;
+      }
+    }
+  }
+};
+
+/* ========== 主题切换 ========== */
+const themeBtn  = document.getElementById('themeBtn');
+const themeIcon = document.getElementById('themeIcon');
+const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+const sunSVG  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark');
+  themeIcon.innerHTML = sunSVG;
+}
+themeBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  themeIcon.innerHTML = isDark ? sunSVG : moonSVG;
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+/* ========== 顶部 IP ========== */
+document.querySelector('.logo').addEventListener('click', e => {
+  e.preventDefault();
+  location.href = '/';
+});
+fetch('https://api.ip.sb/ip')
+  .then(r => r.text())
+  .then(ip => document.getElementById('ip').textContent = ip.trim())
+  .catch(() => document.getElementById('ip').textContent = '获取失败');
+
+/* ========== 渲染按钮 ========== */
+const grid = document.getElementById('toolsGrid');
+Object.entries(tools).forEach(([key, t]) => {
+  const btn = document.createElement('button');
+  btn.className = 'tool-btn';
+  btn.textContent = t.name;
+  btn.dataset.key = key;
+  btn.onclick = () => openTool(key);
+  grid.appendChild(btn);
+});
+
+/* ========== 打开某个工具 ========== */
+function openTool(key) {
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tool-btn[data-key="${key}"]`).classList.add('active');
+
+  const t = tools[key];
+  const stage = document.getElementById('stage');
+
+  let html = `<h3>${t.name}</h3>`;
+  t.inputs.forEach(inp => {
+    html += `<label>${inp.label}</label>`;
+    html += `<input id="in_${inp.id}" type="${inp.type}" ${inp.placeholder ? `placeholder="${inp.placeholder}"` : ''}>`;
+  });
+  html += `<button class="run" id="runBtn">运行</button>`;
+  html += `<pre id="out">（点运行查看结果）</pre>`;
+  stage.innerHTML = html;
+
+  document.getElementById('runBtn').onclick = () => {
+    const vals = {};
+    t.inputs.forEach(inp => {
+      const raw = document.getElementById(`in_${inp.id}`).value;
+      vals[inp.id] = (inp.type === 'number') ? parseFloat(raw) : raw;
+    });
+    try {
+      const result = t.run(vals);
+      document.getElementById('out').textContent = result;
+    } catch (e) {
+      document.getElementById('out').textContent = '运行出错：' + e.message;
+    }
+  };
+
+  // 无输入的工具，自动跑一次
+  if (t.inputs.length === 0) {
+    document.getElementById('runBtn').click();
+  }
+}
+</script>
 
 </body>
 </html>
