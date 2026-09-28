@@ -1,16 +1,16 @@
-@import url('https://fonts.googleapis.cn/css2?family=Orbitron:wght@400;500;700;900&display=swap');
-
 :root {
-  --bg: #f7f9fc;
-  --card: #ffffff;
-  --text: #333333;
-  --text-light: #666666;
-  --nav-bg: #ffffff;
-  --primary: #7356B1;          /* ← 紫罗兰 */
+  /* ===== 配色：紫罗兰 + 雪青 ===== */
+  --bg: #BDB5D7;              /* 页面背景 = 雪青 */
+  --nav-bg: #7356B1;          /* 导航栏 = 紫罗兰 */
+  --card: #948BBA;            /* 卡片 = 比雪青深的紫 */
+  --text: #2A2333;            /* 正文 = 深紫黑 */
+  --text-light: #4A4258;      /* 次要文字 */
+  --primary: #7356B1;         /* 主色 = 紫罗兰 */
+  --primary-soft: rgba(115,86,177,.18);
   --success: #4CAF50;
   --success-hover: #43A047;
-  --border: #eaeaea;
-  --font-orbitron: 'Orbitron', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --border: #A89FC9;
+  --font-main: "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
 body.dark {
@@ -19,7 +19,8 @@ body.dark {
   --text: #E0E0E0;
   --text-light: #9499A0;
   --nav-bg: #222327;
-  --primary: #BDB5D7;          /* ← 雪青 */
+  --primary: #BDB5D7;
+  --primary-soft: rgba(189,181,215,.15);
   --success: #2E7D32;
   --success-hover: #388E3C;
   --border: #2f3033;
@@ -28,7 +29,7 @@ body.dark {
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: var(--font-orbitron);
+  font-family: var(--font-main);
   background: var(--bg);
   color: var(--text);
   line-height: 1.7;
@@ -40,7 +41,7 @@ nav {
   position: sticky;
   top: 0;
   background: var(--nav-bg);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   z-index: 100;
   transition: background .3s;
 }
@@ -55,7 +56,7 @@ nav {
 .logo {
   font-size: 20px;
   font-weight: bold;
-  color: var(--primary);
+  color: #fff;
   text-decoration: none;
   cursor: pointer;
 }
@@ -64,14 +65,14 @@ nav {
   align-items: center;
   gap: 14px;
   font-size: 14px;
-  color: var(--text-light);
+  color: rgba(255,255,255,.85);
 }
 #ip {
   padding: 4px 10px;
   border-radius: 6px;
-  background: rgba(115,86,177,.12);
-  color: var(--primary);
-  font-family: var(--font-orbitron);
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  font-family: monospace;
   font-variant-numeric: tabular-nums;
 }
 .theme-btn {
@@ -79,18 +80,15 @@ nav {
   height: 36px;
   border-radius: 50%;
   border: none;
-  background: rgba(115,86,177,.12);
-  color: var(--primary);
+  background: rgba(255,255,255,.15);
+  color: #fff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .2s, color .2s;
+  transition: background .2s;
 }
-.theme-btn:hover {
-  background: var(--primary);
-  color: #fff;
-}
+.theme-btn:hover { background: rgba(255,255,255,.3); }
 .theme-btn svg {
   width: 20px;
   height: 20px;
@@ -114,7 +112,7 @@ header {
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid var(--card);
-  box-shadow: 0 4px 14px rgba(115,86,177,.25);
+  box-shadow: 0 4px 14px rgba(115,86,177,.4);
   background: var(--card);
 }
 .name {
@@ -137,7 +135,7 @@ section {
   background: var(--card);
   border-radius: 14px;
   padding: 32px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   transition: background .3s;
 }
 .section-title {
@@ -178,7 +176,7 @@ section {
   font-weight: 500;
   text-align: center;
   transition: background .2s, transform .2s;
-  box-shadow: 0 2px 6px rgba(76,175,80,.2);
+  box-shadow: 0 2px 6px rgba(76,175,80,.3);
 }
 .test-item:hover {
   background: var(--success-hover);
@@ -199,7 +197,7 @@ section {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: rgba(115,86,177,.12);
+  background: var(--primary-soft);
   color: var(--primary);
   text-decoration: none;
   transition: background .2s, color .2s, transform .2s;
@@ -211,24 +209,12 @@ section {
 }
 .socials svg { width: 22px; height: 22px; }
 
-/* 邮箱文字 */
-.email-text {
-  text-align: center;
-  padding: 0 20px;
-  color: var(--text-light);
-  font-size: 14px;       /* 跟 footer 一样 */
-  font-family: var(--font-orbitron);
-  letter-spacing: .5px;
-  user-select: text;
-}
-
 footer {
   text-align: center;
   padding: 30px 20px;
   color: var(--text-light);
   font-size: 14px;
 }
-
 footer p { margin: 4px 0; }
 
 /* 移动端 */
