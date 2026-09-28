@@ -125,76 +125,49 @@
       .catch(() => document.getElementById('ip').textContent = '获取失败');
 
     // ===== 核心：IP 纯度检测 =====
+       // ===== 核心：IP 纯度检测 =====
     const resultBox  = document.getElementById('result');
     const purityFill = document.getElementById('purityFill');
     const purityText = document.getElementById('purityText');
 
-    function render(data) {
-      const {
-        query, country, regionName, city, isp, org, as,
-        mobile, proxy, hosting
-      } = data;
+    // 👇 换成你自己的 key
+    const API_KEY = '你的完整key';
 
-      // 综合判断 IP 类型
-      let type = '住宅 IP';
-      let purity = 95;
-      let color = 'var(--success)';
-
-      if (hosting) {
-        type = '机房 / 数据中心 IP';
-        purity = 40;
-        color = '#e67e22';
-      } else if (proxy) {
-        type = '代理 / VPN IP';
-        purity = 20;
-        color = '#e74c3c';
-      } else if (mobile) {
-        type = '移动网络 IP';
-        purity = 70;
-        color = '#f1c40f';
-      }
-
-      resultBox.innerHTML = `
-        <div><span class="label">IP 地址</span><span class="value">${query}</span></div>
-        <div><span class="label">位置</span><span class="value">${country} · ${regionName} · ${city}</span></div>
-        <div><span class="label">ISP</span><span class="value">${isp || '—'}</span></div>
-        <div><span class="label">组织</span><span class="value">${org || '—'}</span></div>
-        <div><span class="label">AS 号</span><span class="value">${as || '—'}</span></div>
-        <div><span class="label">IP 类型</span><span class="value" style="color:${color}">${type}</span></div>
-        <div><span class="label">是否代理</span><span class="value">${proxy ? '是' : '否'}</span></div>
-        <div><span class="label">是否机房</span><span class="value">${hosting ? '是' : '否'}</span></div>
-      `;
-
-      purityFill.style.width = purity + '%';
-      purityFill.style.background = color;
-      purityText.style.color = color;
-      purityText.textContent = `纯度评分：${purity} / 100`;
+    function judge(d) {
+      if (d.is_proxy)      return { type: '代理 / VPN',   purity: 20, color: '#e74c3c' };
+      if (d.is_datacenter) return { type: '机房 / 数据中心', purity: 40, color: '#e67e22' };
+      if (/mobile|cellular|4g|5g/i.test(d.as || '')) return { type: '移动网络', purity: 70, color: '#f1c40f' };
+      return { type: '住宅 IP', purity: 95, color: 'var(--success)' };
     }
 
-    // 主接口：ip-api.com（免费、支持 https？注意：免费版仅 http）
-    // 免费版不支持 https，所以我们走 https 的备用接口
-    fetch('https://ipapi.co/json/')
-      .then(r => r.json())
+    fetch(`https://api.ip2location.io/?key=${API_KEY}`)
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(d => {
-        // ipapi.co 字段名不太一样，做一层映射
-        render({
-          query:     d.ip,
-          country:   d.country_name,
-          regionName:d.region,
-          city:      d.city,
-          isp:       d.org,
-          org:       d.org,
-          as:        d.asn,
-          mobile:    false,
-          proxy:     false,
-          hosting:   /amazon|google|microsoft|cloudflare|digitalocean|ovh|linode|vultr|aliyun|tencent/i.test(d.org || '')
-        });
+        if (d.error) throw new Error(d.error);
+        const v = judge(d);
+        resultBox.innerHTML = `
+          <div><span class="label">IP 地址</span><span class="value">${d.ip || '—'}</span></div>
+          <div><span class="label">位置</span><span class="value">${[d.country_name, d.region_name, d.city_name].filter(Boolean).join(' · ') || '—'}</span></div>
+          <div><span class="label">ISP</span><span class="value">${d.isp || '—'}</span></div>
+          <div><span class="label">组织</span><span class="value">${d.as || '—'}</span></div>
+          <div><span class="label">AS 号</span><span class="value">${d.asn || '—'}</span></div>
+          <div><span class="label">经纬度</span><span class="value">${d.latitude ?? '—'}, ${d.longitude ?? '—'}</span></div>
+          <div><span class="label">时区</span><span class="value">${d.time_zone || '—'}</span></div>
+          <div><span class="label">IP 类型</span><span class="value" style="color:${v.color}">${v.type}</span></div>
+          <div><span class="label">是否代理</span><span class="value">${d.is_proxy ? '是' : '否'}</span></div>
+          <div><span class="label">是否机房</span><span class="value">${d.is_datacenter ? '是' : '否'}</span></div>
+        `;
+        purityFill.style.width = v.purity + '%';
+        purityFill.style.background = v.color;
+        purityText.style.color = v.color;
+        purityText.textContent = `纯度评分：${v.purity} / 100`;
       })
-      .catch(() => {
-        resultBox.innerHTML = '<span class="status-error">检测失败，请稍后重试或检查网络。</span>';
+      .catch(err => {
+        console.error(err);
+        resultBox.innerHTML = `<span class="status-error">检测失败：${err.message}</span>`;
         purityText.textContent = '—';
       });
-  </script>
+  </script> 
 
 </body>
 </html>
