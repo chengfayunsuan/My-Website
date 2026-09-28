@@ -218,6 +218,15 @@ footer {
   font-size: 14px;
 }
 
+.email-text {
+  margin-top: 18px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 14px;
+  letter-spacing: .5px;
+  user-select: text;
+}
+
 /* 移动端 */
 @media (max-width: 600px) {
   .nav-inner { flex-direction: column; gap: 10px; }
