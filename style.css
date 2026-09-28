@@ -1,13 +1,16 @@
+@import url('https://fonts.googleapis.cn/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+
 :root {
   --bg: #f7f9fc;
   --card: #ffffff;
   --text: #333333;
   --text-light: #666666;
   --nav-bg: #ffffff;
-  --primary: #4A90D9;
+  --primary: #5DADE2;         /* ← 改成天蓝 */
   --success: #4CAF50;
   --success-hover: #43A047;
   --border: #eaeaea;
+  --font-orbitron: 'Orbitron', 'Microsoft YaHei', sans-serif;  /* ← 新增 */
 }
 
 body.dark {
@@ -16,7 +19,7 @@ body.dark {
   --text: #E0E0E0;
   --text-light: #9499A0;
   --nav-bg: #222327;
-  --primary: #00AEEC;
+  --primary: #74B9FF;
   --success: #2E7D32;
   --success-hover: #388E3C;
   --border: #2f3033;
