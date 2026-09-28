@@ -6,11 +6,11 @@
   --text: #333333;
   --text-light: #666666;
   --nav-bg: #ffffff;
-  --primary: #5DADE2;         /* ← 改成天蓝 */
+  --primary: #5DADE2;
   --success: #4CAF50;
   --success-hover: #43A047;
   --border: #eaeaea;
-  --font-orbitron: 'Orbitron', 'Microsoft YaHei', sans-serif;  /* ← 新增 */
+  --font-orbitron: 'Orbitron', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
 body.dark {
@@ -28,7 +28,7 @@ body.dark {
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: var(--font-orbitron);
   background: var(--bg);
   color: var(--text);
   line-height: 1.7;
@@ -69,9 +69,9 @@ nav {
 #ip {
   padding: 4px 10px;
   border-radius: 6px;
-  background: rgba(74,144,217,.12);
+  background: rgba(93,173,226,.12);
   color: var(--primary);
-  font-family: monospace;
+  font-family: var(--font-orbitron);
   font-variant-numeric: tabular-nums;
 }
 .theme-btn {
@@ -79,7 +79,7 @@ nav {
   height: 36px;
   border-radius: 50%;
   border: none;
-  background: rgba(74,144,217,.12);
+  background: rgba(93,173,226,.12);
   color: var(--primary);
   cursor: pointer;
   display: flex;
@@ -114,7 +114,7 @@ header {
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid var(--card);
-  box-shadow: 0 4px 14px rgba(74,144,217,.25);
+  box-shadow: 0 4px 14px rgba(93,173,226,.25);
   background: var(--card);
 }
 .name {
@@ -199,7 +199,7 @@ section {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: rgba(74,144,217,.12);
+  background: rgba(93,173,226,.12);
   color: var(--primary);
   text-decoration: none;
   transition: background .2s, color .2s, transform .2s;
@@ -211,6 +211,16 @@ section {
 }
 .socials svg { width: 22px; height: 22px; }
 
+/* 邮箱文字 */
+.email-text {
+  margin-top: 18px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 15px;
+  letter-spacing: .5px;
+  user-select: text;
+}
+
 footer {
   text-align: center;
   padding: 30px 20px;
@@ -218,19 +228,10 @@ footer {
   font-size: 14px;
 }
 
-.email-text {
-  margin-top: 18px;
-  text-align: center;
-  color: var(--text-light);
-  font-size: 14px;
-  letter-spacing: .5px;
-  user-select: text;
-}
-
 /* 移动端 */
 @media (max-width: 600px) {
   .nav-inner { flex-direction: column; gap: 10px; }
-  .ip-wrap { display: none; }      /* 移动端隐藏 IP */
+  .ip-wrap { display: none; }
   .name { font-size: 30px; }
   .card { padding: 22px; }
   .test-grid { grid-template-columns: repeat(2, 1fr); }
