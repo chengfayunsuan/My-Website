@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鼠标特效 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css">
+<style>
+  html, body {
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  #trail {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  .center-tip {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--text-light);
+    font-size: 16px;
+    pointer-events: none;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a class="logo" href="/">乘法</a>
+      <div class="nav-right">
+        <span class="ip-wrap">你的 IP：<span id="ip">获取中…</span></span>
+        <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
+          <svg id="themeIcon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <canvas id="trail"></canvas>
+  <div class="center-tip">移动鼠标试试 ✨</div>
+
+<script>
+/* ===== 主题切换 ===== */
+const themeBtn  = document.getElementById('themeBtn');
+const themeIcon = document.getElementById('themeIcon');
+const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+const sunSVG  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark');
+  themeIcon.innerHTML = sunSVG;
+}
+themeBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  themeIcon.innerHTML = isDark ? sunSVG : moonSVG;
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+/* ===== 顶部 IP ===== */
+document.querySelector('.logo').addEventListener('click', e => {
+  e.preventDefault();
+  location.href = '/';
+});
+fetch('https://api.ip.sb/ip')
+  .then(r => r.text())
+  .then(ip => document.getElementById('ip').textContent = ip.trim())
+  .catch(() => document.getElementById('ip').textContent = '获取失败');
+
+/* ===== 流光拖尾 ===== */
+const canvas = document.getElementById('trail');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const points = [];
+const MAX = 40;
+
+document.addEventListener('mousemove', e => {
+  points.push({ x: e.clientX, y: e.clientY });
+  if (points.length > MAX) points.shift();
+});
+
+function drawLine() {
+  ctx.clearRect(0, 0, W, H);
+  if (points.length < 2) return;
+
+  // 多画几层，越画越细，叠加出光晕
+  const layers = [
+    { width: 24, color: 'rgba(160, 100, 255, 0.08)' },
+    { width: 16, color: 'rgba(180, 120, 255, 0.15)' },
+    { width: 10, color: 'rgba(200, 140, 255, 0.35)' },
+    { width: 5,  color: 'rgba(230, 190, 255, 0.7)' },
+    { width: 2,  color: 'rgba(255, 255, 255, 0.95)' }
+  ];
+
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  for (const layer of layers) {
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+
+    // 用二次贝塞尔画平滑曲线
+    for (let i = 1; i < points.length - 1; i++) {
+      const xc = (points[i].x + points[i + 1].x) / 2;
+      const yc = (points[i].y + points[i + 1].y) / 2;
+      ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+    }
+
+    ctx.strokeStyle = layer.color;
+    ctx.lineWidth = layer.width;
+    ctx.stroke();
+  }
+
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+function loop() {
+  drawLine();
+  // 越旧的拖尾自动消失
+  if (points.length > 0 && Math.random() < 0.15) {
+    points.shift();
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+
+</body>
+</html>
