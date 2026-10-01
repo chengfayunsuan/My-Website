@@ -7,26 +7,26 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/style.css">
 <style>
-  html, body {
-    min-height: 100vh;
-    overflow: hidden;
-  }
-  #trail {
+  html, body { min-height: 100vh; overflow: hidden; background: #08050f; }
+  body.dark { background: #08050f; }
+
+  #canvas {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 1;
   }
   .center-tip {
     position: fixed;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    color: var(--text-light);
+    color: rgba(255,255,255,.35);
     font-size: 16px;
     pointer-events: none;
     user-select: none;
+    z-index: 2;
   }
 </style>
 </head>
@@ -46,7 +46,7 @@
     </div>
   </nav>
 
-  <canvas id="trail"></canvas>
+  <canvas id="canvas"></canvas>
   <div class="center-tip">移动鼠标试试 ✨</div>
 
 <script>
@@ -76,70 +76,155 @@ fetch('https://api.ip.sb/ip')
   .then(ip => document.getElementById('ip').textContent = ip.trim())
   .catch(() => document.getElementById('ip').textContent = '获取失败');
 
-/* ===== 流光拖尾 ===== */
-const canvas = document.getElementById('trail');
-const ctx = canvas.getContext('2d');
-let W, H;
-function resize() {
-  W = canvas.width  = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
+/* ===== 流光拖尾（原版逻辑，去依赖） ===== */
+(function () {
+  var ctx, hue, target = {}, tendrils = [], settings = {};
 
-const points = [];
-const MAX = 40;
+  settings.friction  = 0.5;
+  settings.trails    = 20;
+  settings.size      = 50;
+  settings.dampening = 0.25;
+  settings.tension   = 0.98;
 
-document.addEventListener('mousemove', e => {
-  points.push({ x: e.clientX, y: e.clientY });
-  if (points.length > MAX) points.shift();
-});
+  Math.TWO_PI = Math.PI * 2;
 
-function drawLine() {
-  ctx.clearRect(0, 0, W, H);
-  if (points.length < 2) return;
+  function Oscillator(opt) {
+    opt = opt || {};
+    this.phase = opt.phase || 0;
+    this.offset = opt.offset || 0;
+    this.frequency = opt.frequency || 0.001;
+    this.amplitude = opt.amplitude || 1;
+    this._v = 0;
+  }
+  Oscillator.prototype.update = function () {
+    this.phase += this.frequency;
+    this._v = this.offset + Math.sin(this.phase) * this.amplitude;
+    return this._v;
+  };
+  Oscillator.prototype.value = function () { return this._v; };
 
-  // 多画几层，越画越细，叠加出光晕
-  const layers = [
-    { width: 24, color: 'rgba(160, 100, 255, 0.08)' },
-    { width: 16, color: 'rgba(180, 120, 255, 0.15)' },
-    { width: 10, color: 'rgba(200, 140, 255, 0.35)' },
-    { width: 5,  color: 'rgba(230, 190, 255, 0.7)' },
-    { width: 2,  color: 'rgba(255, 255, 255, 0.95)' }
-  ];
-
-  ctx.globalCompositeOperation = 'lighter';
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-
-  for (const layer of layers) {
-    ctx.beginPath();
-    ctx.moveTo(points[0].x, points[0].y);
-
-    // 用二次贝塞尔画平滑曲线
-    for (let i = 1; i < points.length - 1; i++) {
-      const xc = (points[i].x + points[i + 1].x) / 2;
-      const yc = (points[i].y + points[i + 1].y) / 2;
-      ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+  function Tendril(opt) {
+    this.spring = opt.spring + (Math.random() * 0.1) - 0.05;
+    this.friction = settings.friction + (Math.random() * 0.01) - 0.005;
+    this.nodes = [];
+    for (var i = 0; i < settings.size; i++) {
+      this.nodes.push({ x: target.x, y: target.y, vx: 0, vy: 0 });
     }
-
-    ctx.strokeStyle = layer.color;
-    ctx.lineWidth = layer.width;
+  }
+  Tendril.prototype.update = function () {
+    var spring = this.spring;
+    var node = this.nodes[0];
+    node.vx += (target.x - node.x) * spring;
+    node.vy += (target.y - node.y) * spring;
+    for (var prev, i = 0, n = this.nodes.length; i < n; i++) {
+      node = this.nodes[i];
+      if (i > 0) {
+        prev = this.nodes[i - 1];
+        node.vx += (prev.x - node.x) * spring;
+        node.vy += (prev.y - node.y) * spring;
+        node.vx += prev.vx * settings.dampening;
+        node.vy += prev.vy * settings.dampening;
+      }
+      node.vx *= this.friction;
+      node.vy *= this.friction;
+      node.x += node.vx;
+      node.y += node.vy;
+      spring *= settings.tension;
+    }
+  };
+  Tendril.prototype.draw = function () {
+    var x = this.nodes[0].x;
+    var y = this.nodes[0].y;
+    var a, b;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    var i, n = this.nodes.length - 2;
+    for (i = 1; i < n; i++) {
+      a = this.nodes[i];
+      b = this.nodes[i + 1];
+      x = (a.x + b.x) * 0.5;
+      y = (a.y + b.y) * 0.5;
+      ctx.quadraticCurveTo(a.x, a.y, x, y);
+    }
+    a = this.nodes[i];
+    b = this.nodes[i + 1];
+    ctx.quadraticCurveTo(a.x, a.y, b.x, b.y);
     ctx.stroke();
+    ctx.closePath();
+  };
+
+  function reset() {
+    tendrils = [];
+    for (var i = 0; i < settings.trails; i++) {
+      tendrils.push(new Tendril({ spring: 0.45 + 0.025 * (i / settings.trails) }));
+    }
   }
 
-  ctx.globalCompositeOperation = 'source-over';
-}
+  function loop() {
+    if (!ctx.running) return;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = 'rgba(8,5,16,0.4)';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.strokeStyle = 'hsla(' + Math.round(hue.update()) + ',90%,50%,0.25)';
+    ctx.lineWidth = 1;
 
-function loop() {
-  drawLine();
-  // 越旧的拖尾自动消失
-  if (points.length > 0 && Math.random() < 0.15) {
-    points.shift();
+    for (var i = 0, t; i < settings.trails; i++) {
+      t = tendrils[i];
+      t.update();
+      t.draw();
+    }
+    requestAnimationFrame(loop);
   }
-  requestAnimationFrame(loop);
-}
-loop();
+
+  function resize() {
+    ctx.canvas.width  = window.innerWidth;
+    ctx.canvas.height = window.innerHeight;
+  }
+
+  function mousemove(e) {
+    if (e.touches) {
+      target.x = e.touches[0].pageX;
+      target.y = e.touches[0].pageY;
+    } else {
+      target.x = e.clientX;
+      target.y = e.clientY;
+    }
+    if (e.preventDefault) e.preventDefault();
+  }
+
+  function init(e) {
+    document.removeEventListener('mousemove', init);
+    document.removeEventListener('touchstart', init);
+    document.addEventListener('mousemove', mousemove);
+    document.addEventListener('touchmove', mousemove, { passive: true });
+    document.addEventListener('touchstart', mousemove, { passive: true });
+    mousemove(e);
+    reset();
+    loop();
+  }
+
+  window.addEventListener('load', function () {
+    ctx = document.getElementById('canvas').getContext('2d');
+    ctx.running = true;
+
+    hue = new Oscillator({
+      phase: Math.random() * Math.TWO_PI,
+      amplitude: 85,
+      frequency: 0.0015,
+      offset: 285
+    });
+
+    target.x = window.innerWidth  / 2;
+    target.y = window.innerHeight / 2;
+
+    document.addEventListener('mousemove', init);
+    document.addEventListener('touchstart', init);
+    window.addEventListener('resize', resize);
+
+    resize();
+  });
+})();
 </script>
 
 </body>
