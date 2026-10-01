@@ -7,7 +7,7 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/style.css">
 <style>
- html, body { min-height: 100vh; overflow: hidden; }
+  html, body { min-height: 100vh; overflow: hidden; }
 
   #canvas {
     position: fixed;
@@ -21,7 +21,7 @@
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    color: rgba(255,255,255,.35);
+    color: var(--text-light);
     font-size: 16px;
     pointer-events: none;
     user-select: none;
@@ -75,154 +75,120 @@ fetch('https://api.ip.sb/ip')
   .then(ip => document.getElementById('ip').textContent = ip.trim())
   .catch(() => document.getElementById('ip').textContent = '获取失败');
 
-/* ===== 流光拖尾（原版逻辑，去依赖） ===== */
+/* ===== 鼠标拖尾（路径点记录版） ===== */
 (function () {
-  var ctx, hue, target = {}, tendrils = [], settings = {};
-
-  settings.friction  = 0.6;
-settings.trails    = 8;
-settings.size      = 30;
-settings.dampening = 0.4;
-settings.tension   = 0.95;
-
-  Math.TWO_PI = Math.PI * 2;
-
-  function Oscillator(opt) {
-    opt = opt || {};
-    this.phase = opt.phase || 0;
-    this.offset = opt.offset || 0;
-    this.frequency = opt.frequency || 0.001;
-    this.amplitude = opt.amplitude || 1;
-    this._v = 0;
-  }
-  Oscillator.prototype.update = function () {
-    this.phase += this.frequency;
-    this._v = this.offset + Math.sin(this.phase) * this.amplitude;
-    return this._v;
-  };
-  Oscillator.prototype.value = function () { return this._v; };
-
-  function Tendril(opt) {
-    this.spring = opt.spring + (Math.random() * 0.1) - 0.05;
-    this.friction = settings.friction + (Math.random() * 0.01) - 0.005;
-    this.nodes = [];
-    for (var i = 0; i < settings.size; i++) {
-      this.nodes.push({ x: target.x, y: target.y, vx: 0, vy: 0 });
-    }
-  }
-  Tendril.prototype.update = function () {
-    var spring = this.spring;
-    var node = this.nodes[0];
-    node.vx += (target.x - node.x) * spring;
-    node.vy += (target.y - node.y) * spring;
-    for (var prev, i = 0, n = this.nodes.length; i < n; i++) {
-      node = this.nodes[i];
-      if (i > 0) {
-        prev = this.nodes[i - 1];
-        node.vx += (prev.x - node.x) * spring;
-        node.vy += (prev.y - node.y) * spring;
-        node.vx += prev.vx * settings.dampening;
-        node.vy += prev.vy * settings.dampening;
-      }
-      node.vx *= this.friction;
-      node.vy *= this.friction;
-      node.x += node.vx;
-      node.y += node.vy;
-      spring *= settings.tension;
-    }
-  };
-  Tendril.prototype.draw = function () {
-    var x = this.nodes[0].x;
-    var y = this.nodes[0].y;
-    var a, b;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    var i, n = this.nodes.length - 2;
-    for (i = 1; i < n; i++) {
-      a = this.nodes[i];
-      b = this.nodes[i + 1];
-      x = (a.x + b.x) * 0.5;
-      y = (a.y + b.y) * 0.5;
-      ctx.quadraticCurveTo(a.x, a.y, x, y);
-    }
-    a = this.nodes[i];
-    b = this.nodes[i + 1];
-    ctx.quadraticCurveTo(a.x, a.y, b.x, b.y);
-    ctx.stroke();
-    ctx.closePath();
-  };
-
-  function reset() {
-    tendrils = [];
-    for (var i = 0; i < settings.trails; i++) {
-      tendrils.push(new Tendril({ spring: 0.45 + 0.025 * (i / settings.trails) }));
-    }
-  }
-
-  function loop() {
-    if (!ctx.running) return;
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = 'rgba(8,5,16,0.4)';
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    ctx.globalCompositeOperation = 'lighter';
-    ctx.strokeStyle = 'hsla(' + Math.round(hue.update()) + ',90%,50%,0.25)';
-    ctx.lineWidth = 1;
-
-    for (var i = 0, t; i < settings.trails; i++) {
-      t = tendrils[i];
-      t.update();
-      t.draw();
-    }
-    requestAnimationFrame(loop);
-  }
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
 
   function resize() {
-    ctx.canvas.width  = window.innerWidth;
-    ctx.canvas.height = window.innerHeight;
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
   }
+  resize();
+  window.addEventListener('resize', resize);
 
-  function mousemove(e) {
-    if (e.touches) {
-      target.x = e.touches[0].pageX;
-      target.y = e.touches[0].pageY;
-    } else {
-      target.x = e.clientX;
-      target.y = e.clientY;
+  // 路径点队列
+  const points = [];
+  const MAX_POINTS = 60;          // 轨迹长度
+
+  // 鼠标位置（坐标平滑一点，避免抖动）
+  let lastX = null, lastY = null;
+
+  function pushPoint(x, y) {
+    // 如果跟上一个点太近就不记，防止点过密
+    if (lastX !== null) {
+      const dx = x - lastX, dy = y - lastY;
+      if (dx*dx + dy*dy < 4) return;   // 距离小于 2px 不加
     }
-    if (e.preventDefault) e.preventDefault();
+    points.push({ x, y, life: 1 });
+    if (points.length > MAX_POINTS) points.shift();
+    lastX = x;
+    lastY = y;
   }
 
-  function init(e) {
-    document.removeEventListener('mousemove', init);
-    document.removeEventListener('touchstart', init);
-    document.addEventListener('mousemove', mousemove);
-    document.addEventListener('touchmove', mousemove, { passive: true });
-    document.addEventListener('touchstart', mousemove, { passive: true });
-    mousemove(e);
-    reset();
-    loop();
+  document.addEventListener('mousemove', e => pushPoint(e.clientX, e.clientY));
+  document.addEventListener('touchmove', e => {
+    if (e.touches[0]) pushPoint(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+
+  // 主题相关：暗色用亮紫，亮色用深紫
+  function isDark() {
+    return document.body.classList.contains('dark');
   }
 
-  window.addEventListener('load', function () {
-    ctx = document.getElementById('canvas').getContext('2d');
-    ctx.running = true;
+  function draw() {
+    // 每帧完全清空（不留残影，路径本身自带渐隐）
+    ctx.clearRect(0, 0, W, H);
 
-    hue = new Oscillator({
-      phase: Math.random() * Math.TWO_PI,
-      amplitude: 85,
-      frequency: 0.0015,
-      offset: 285
-    });
+    if (points.length < 2) {
+      requestAnimationFrame(draw);
+      return;
+    }
 
-    target.x = window.innerWidth  / 2;
-    target.y = window.innerHeight / 2;
+    // 让每个点的 life 衰减
+    for (let i = 0; i < points.length; i++) {
+      points[i].life -= 0.02;
+    }
+    // 移除 life <= 0 的
+    while (points.length && points[0].life <= 0) points.shift();
 
-    document.addEventListener('mousemove', init);
-    document.addEventListener('touchstart', init);
-    window.addEventListener('resize', resize);
+    // ---- 画主体：一条平滑渐变曲线 ----
+    // 用分段画，每段透明度按 life 变化
+    const dark = isDark();
 
-    resize();
-  });
+    // 从旧到新画，这样新的盖在旧的上面
+    for (let i = 1; i < points.length; i++) {
+      const p0 = points[i - 1];
+      const p1 = points[i];
+      const life = p1.life;
+
+      // 越新越不透明
+      const alpha = Math.max(0, life * 0.8);
+
+      // 颜色：紫色系，明暗模式不同亮度
+      const hue = 280;                        // 紫色相
+      const light = dark ? 70 : 45;           // 暗色模式亮一点
+      const color = `hsla(${hue}, 85%, ${light}%, ${alpha})`;
+
+      // 线宽：中间粗两头细
+      const t = i / points.length;
+      const lineW = 2 + Math.sin(t * Math.PI) * 6;
+
+      // 用二次贝塞尔让曲线平滑
+      ctx.beginPath();
+      if (i < points.length - 1) {
+        const p2 = points[i + 1];
+        const xc = (p1.x + p2.x) / 2;
+        const yc = (p1.y + p2.y) / 2;
+        ctx.moveTo(p0.x, p0.y);
+        ctx.quadraticCurveTo(p1.x, p1.y, xc, yc);
+      } else {
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+      }
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineW;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // 光晕（同一根线再画一次更宽的）
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.stroke();
+
+      // 用更宽更透的线做光晕
+      ctx.lineWidth = lineW * 3;
+      const glowColor = `hsla(${hue}, 85%, ${light}%, ${alpha * 0.15})`;
+      ctx.strokeStyle = glowColor;
+      ctx.stroke();
+
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    requestAnimationFrame(draw);
+  }
+  draw();
 })();
 </script>
 
