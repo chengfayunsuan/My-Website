@@ -7,8 +7,7 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/style.css">
 <style>
-  html, body { min-height: 100vh; overflow: hidden; background: #08050f; }
-  body.dark { background: #08050f; }
+ html, body { min-height: 100vh; overflow: hidden; }
 
   #canvas {
     position: fixed;
@@ -80,11 +79,11 @@ fetch('https://api.ip.sb/ip')
 (function () {
   var ctx, hue, target = {}, tendrils = [], settings = {};
 
-  settings.friction  = 0.5;
-  settings.trails    = 20;
-  settings.size      = 50;
-  settings.dampening = 0.25;
-  settings.tension   = 0.98;
+  settings.friction  = 0.55;    // 0.5 → 0.55（摩擦大，节点收得更紧）
+settings.trails    = 10;      // 20 → 10（绳子减半，不密）
+settings.size      = 40;      // 50 → 40（每根节点少，长度短）
+settings.dampening = 0.15;    // 0.25 → 0.15（阻尼小，跟随更紧）
+settings.tension   = 0.99;    // 0.98 → 0.99（张力大，绳子硬）
 
   Math.TWO_PI = Math.PI * 2;
 
