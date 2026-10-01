@@ -79,11 +79,11 @@ fetch('https://api.ip.sb/ip')
 (function () {
   var ctx, hue, target = {}, tendrils = [], settings = {};
 
-  settings.friction  = 0.55;    // 0.5 → 0.55（摩擦大，节点收得更紧）
-settings.trails    = 10;      // 20 → 10（绳子减半，不密）
-settings.size      = 40;      // 50 → 40（每根节点少，长度短）
-settings.dampening = 0.15;    // 0.25 → 0.15（阻尼小，跟随更紧）
-settings.tension   = 0.99;    // 0.98 → 0.99（张力大，绳子硬）
+  settings.friction  = 0.6;
+settings.trails    = 8;
+settings.size      = 30;
+settings.dampening = 0.4;
+settings.tension   = 0.95;
 
   Math.TWO_PI = Math.PI * 2;
 
