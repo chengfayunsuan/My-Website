@@ -92,16 +92,26 @@ function escapeHTML(s) {
 }
 
 // 提交
+// 显示当前用户
+const token = localStorage.getItem('token');
+const username = localStorage.getItem('username');
+if (token) document.getElementById('who').textContent = username;
+
 document.getElementById('submitBtn').onclick = async () => {
-  const name = document.getElementById('name').value.trim();
+  const token = localStorage.getItem('token');
+  if (!token) return alert('请先登录');
+
   const text = document.getElementById('text').value.trim();
-  if (!name || !text) return alert('名字和内容都要填');
+  if (!text) return alert('内容不能为空');
 
   try {
     const res = await fetch(API + '/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, text })
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ text })
     });
     const data = await res.json();
     if (!data.ok) return alert('失败：' + data.error);
