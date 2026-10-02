@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>登录 · 乘法</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+  .form-row { margin: 12px 0; }
+  .form-row input {
+    width: 100%; padding: 10px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 15px; background: var(--card); color: var(--text);
+    outline: none; font-family: inherit;
+  }
+  .form-row button {
+    padding: 10px 24px; border: none; border-radius: 8px;
+    background: var(--primary); color: #fff; cursor: pointer;
+    font-size: 15px; font-family: inherit; margin-right: 10px;
+  }
+  .msg { margin-top: 14px; font-size: 14px; }
+  .msg.ok { color: var(--success); }
+  .msg.err { color: #e74c3c; }
+</style>
+</head>
+<body>
+
+  <nav><div class="nav-inner"><a class="logo" href="/">乘法</a></div></nav>
+
+  <section style="margin-top:40px;">
+    <div class="card">
+      <h2 class="section-title">登录 / 注册</h2>
+
+      <div class="form-row">
+        <input id="username" placeholder="用户名（2~20 字）">
+      </div>
+      <div class="form-row">
+        <input id="password" type="password" placeholder="密码（至少 6 位）">
+      </div>
+      <div class="form-row">
+        <button id="loginBtn">登录</button>
+        <button id="registerBtn">注册</button>
+      </div>
+
+      <div class="msg" id="msg"></div>
+
+      <div id="loggedIn" style="display:none; margin-top:20px;">
+        <p>已登录：<b id="who"></b></p>
+        <button onclick="logout()">退出登录</button>
+      </div>
+    </div>
+  </section>
+
+<script>
+const API = 'https://api.chengfa.dpdns.org';
+
+function showMsg(text, ok = true) {
+  const m = document.getElementById('msg');
+  m.textContent = text;
+  m.className = 'msg ' + (ok ? 'ok' : 'err');
+}
+
+// 注册
+document.getElementById('registerBtn').onclick = async () => {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  if (!username || !password) return showMsg('用户名密码必填', false);
+
+  const res = await fetch(API + '/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+  const data = await res.json();
+  if (!data.ok) return showMsg(data.error, false);
+  showMsg('注册成功，请登录', true);
+};
+
+// 登录
+document.getElementById('loginBtn').onclick = async () => {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  if (!username || !password) return showMsg('用户名密码必填', false);
+
+  const res = await fetch(API + '/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+  const data = await res.json();
+  if (!data.ok) return showMsg(data.error, false);
+
+  localStorage.setItem('token', data.token);
+  localStorage.setItem('username', data.username);
+  showMsg('登录成功', true);
+  refresh();
+};
+
+// 显示登录状态
+function refresh() {
+  const token = localStorage.getItem('token');
+  const username = localStorage.getItem('username');
+  if (token) {
+    document.getElementById('loggedIn').style.display = 'block';
+    document.getElementById('who').textContent = username;
+  } else {
+    document.getElementById('loggedIn').style.display = 'none';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('username');
+  refresh();
+  showMsg('已退出', true);
+}
+
+refresh();
+</script>
+</body>
+</html>
