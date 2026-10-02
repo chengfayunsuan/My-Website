@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>后台测试 · 乘法</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+  .form-row { margin: 12px 0; }
+  .form-row input, .form-row textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    background: var(--card);
+    color: var(--text);
+    outline: none;
+  }
+  .form-row textarea { min-height: 80px; resize: vertical; }
+  .form-row button {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    cursor: pointer;
+    font-size: 15px;
+    font-family: inherit;
+  }
+  .msg-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .msg-name { font-weight: bold; color: var(--text); }
+  .msg-time { color: var(--text-light); font-size: 13px; margin-left: 10px; }
+  .msg-text { margin-top: 6px; color: var(--text); }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a class="logo" href="/">乘法</a>
+    </div>
+  </nav>
+
+  <section style="margin-top:40px;">
+    <div class="card">
+      <h2 class="section-title">留言板</h2>
+
+      <div class="form-row">
+        <input id="name" placeholder="你的名字（最多 20 字）" maxlength="20">
+      </div>
+      <div class="form-row">
+        <textarea id="text" placeholder="留言内容（最多 200 字）" maxlength="200"></textarea>
+      </div>
+      <div class="form-row">
+        <button id="submitBtn">提交留言</button>
+      </div>
+
+      <h3 style="margin-top:30px;">全部留言</h3>
+      <div id="list">加载中…</div>
+    </div>
+  </section>
+
+<script>
+const API = 'https://api.chengfa.dpdns.org';
+
+// 加载留言
+async function load() {
+  const list = document.getElementById('list');
+  try {
+    const res = await fetch(API + '/messages');
+    const data = await res.json();
+    if (!data.length) { list.textContent = '还没有留言'; return; }
+    list.innerHTML = data.slice().reverse().map(m => `
+      <div class="msg-item">
+        <span class="msg-name">${escapeHTML(m.name)}</span>
+        <span class="msg-time">${escapeHTML(m.time)}</span>
+        <div class="msg-text">${escapeHTML(m.text)}</div>
+      </div>
+    `).join('');
+  } catch {
+    list.textContent = '加载失败';
+  }
+}
+
+// 防 XSS
+function escapeHTML(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// 提交
+document.getElementById('submitBtn').onclick = async () => {
+  const name = document.getElementById('name').value.trim();
+  const text = document.getElementById('text').value.trim();
+  if (!name || !text) return alert('名字和内容都要填');
+
+  try {
+    const res = await fetch(API + '/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, text })
+    });
+    const data = await res.json();
+    if (!data.ok) return alert('失败：' + data.error);
+    document.getElementById('text').value = '';
+    load();
+  } catch {
+    alert('提交失败，请重试');
+  }
+};
+
+load();
+</script>
+
+</body>
+</html>
