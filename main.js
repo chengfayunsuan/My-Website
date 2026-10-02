@@ -33,3 +33,31 @@ document.querySelector('.logo').addEventListener('click', e => {
   e.preventDefault();
   location.href = '/';   // ← 这一行改成滚动
 });
+
+/* ---------- 4. 导航登录状态 ---------- */
+(async function checkLogin() {
+  const token = localStorage.getItem('token');
+  const loginBtn = document.getElementById('loginBtn');
+  const avatarBox = document.getElementById('userAvatar');
+
+  if (!token) return;   // 没 token，保持显示"登录"按钮
+
+  try {
+    const res = await fetch('https://api.chengfa.dpdns.org/me', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      // token 有效 → 显示头像
+      loginBtn.style.display = 'none';
+      avatarBox.style.display = 'block';
+    } else {
+      // token 失效（比如后端删了这个用户）→ 清掉，显示登录
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+    }
+  } catch {
+    // 请求失败（后端挂了/断网）→ 保持原样，不折腾用户
+  }
+})();
