@@ -34,30 +34,127 @@ document.querySelector('.logo').addEventListener('click', e => {
   location.href = '/';   // ← 这一行改成滚动
 });
 
-/* ---------- 4. 导航登录状态 ---------- */
-(async function checkLogin() {
-  const token = localStorage.getItem('token');
-  const loginBtn = document.getElementById('loginBtn');
-  const avatarBox = document.getElementById('userAvatar');
+/* ---------- 4. 导航登录状态 + 弹窗 ---------- */
+(function () {
+  const API = 'https://api.chengfa.dpdns.org';
+  const loginBtn   = document.getElementById('loginBtn');
+  const avatarBox  = document.getElementById('userAvatar');
+  const modal      = document.getElementById('loginModal');
+  const closeBtn   = document.getElementById('loginClose');
+  const userInput  = document.getElementById('loginUser');
+  const passInput  = document.getElementById('loginPass');
+  const loginSubmit    = document.getElementById('loginSubmit');
+  const registerSubmit = document.getElementById('registerSubmit');
+  const msgBox     = document.getElementById('loginMsg');
 
-  if (!token) return;   // 没 token，保持显示"登录"按钮
-
-  try {
-    const res = await fetch('https://api.chengfa.dpdns.org/me', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    const data = await res.json();
-
-    if (data.ok) {
-      // token 有效 → 显示头像
-      loginBtn.style.display = 'none';
-      avatarBox.style.display = 'block';
-    } else {
-      // token 失效（比如后端删了这个用户）→ 清掉，显示登录
-      localStorage.removeItem('token');
-      localStorage.removeItem('username');
-    }
-  } catch {
-    // 请求失败（后端挂了/断网）→ 保持原样，不折腾用户
+  /* --- 显示状态切换 --- */
+  function showLoggedIn() {
+    loginBtn.style.display = 'none';
+    avatarBox.style.display = 'block';
   }
+  function showLoggedOut() {
+    loginBtn.style.display = '';
+    avatarBox.style.display = 'none';
+  }
+
+  /* --- 检查本地 token 是否有效 --- */
+  async function checkLogin() {
+    const token = localStorage.getItem('token');
+    if (!token) return showLoggedOut();
+    try {
+      const res = await fetch(API + '/me', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await res.json();
+      if (data.ok) showLoggedIn();
+      else {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        showLoggedOut();
+      }
+    } catch {
+      // 后端没响应，保持原样
+    }
+  }
+
+  /* --- 弹窗开关 --- */
+  function openModal() {
+    modal.classList.add('show');
+    msgBox.textContent = '';
+    msgBox.className = 'login-msg';
+  }
+  function closeModal() {
+    modal.classList.remove('show');
+    userInput.value = '';
+    passInput.value = '';
+    msgBox.textContent = '';
+    msgBox.className = 'login-msg';
+  }
+
+  loginBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
+  });
+
+  /* --- 提示 --- */
+  function showMsg(text, ok) {
+    msgBox.textContent = text;
+    msgBox.className = 'login-msg ' + (ok ? 'ok' : 'err');
+  }
+
+  /* --- 登录 --- */
+  loginSubmit.addEventListener('click', async () => {
+    const username = userInput.value.trim();
+    const password = passInput.value;
+    if (!username || !password) return showMsg('用户名密码必填', false);
+
+    try {
+      const res = await fetch(API + '/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (!data.ok) return showMsg(data.error || '登录失败', false);
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('username', data.username);
+      showLoggedIn();
+      closeModal();
+    } catch {
+      showMsg('网络错误，请重试', false);
+    }
+  });
+
+  /* --- 注册 --- */
+  registerSubmit.addEventListener('click', async () => {
+    const username = userInput.value.trim();
+    const password = passInput.value;
+    if (!username || !password) return showMsg('用户名密码必填', false);
+
+    try {
+      const res = await fetch(API + '/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (!data.ok) return showMsg(data.error || '注册失败', false);
+      showMsg('注册成功，请登录', true);
+    } catch {
+      showMsg('网络错误，请重试', false);
+    }
+  });
+
+  /* 回车提交 */
+  passInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') loginSubmit.click();
+  });
+
+  /* --- 启动 --- */
+  checkLogin();
 })();

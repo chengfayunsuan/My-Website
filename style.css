@@ -248,6 +248,110 @@ footer p { margin: 4px 0; }
   display: block;
 }
 
+/* 导航登录按钮 */
+.login-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  background: rgba(255,255,255,.22);
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.login-btn:hover { background: rgba(255,255,255,.35); }
+
+/* 导航头像 */
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,.6);
+  display: block;
+  transition: border-color .2s;
+}
+.user-avatar:hover { border-color: #fff; }
+.user-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* 登录弹窗 */
+.login-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+.login-modal.show { display: flex; }
+.login-box {
+  position: relative;
+  width: 320px;
+  max-width: 90vw;
+  background: var(--card);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 28px 24px 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.25);
+}
+.login-close {
+  position: absolute;
+  top: 10px; right: 14px;
+  border: none; background: none;
+  font-size: 24px; line-height: 1;
+  color: var(--text-light);
+  cursor: pointer;
+}
+.login-close:hover { color: var(--text); }
+.login-title {
+  font-size: 20px;
+  margin-bottom: 18px;
+  text-align: center;
+  color: var(--text);
+}
+.login-input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+}
+.login-input:focus { border-color: var(--primary); }
+.login-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+.login-submit {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .2s;
+}
+.login-submit:hover { background: var(--primary-deep); }
+.login-submit.reg { background: var(--success); }
+.login-submit.reg:hover { background: var(--success-hover); }
+.login-msg {
+  margin-top: 12px;
+  font-size: 14px;
+  text-align: center;
+  min-height: 20px;
+}
+.login-msg.ok { color: var(--success); }
+.login-msg.err { color: #e74c3c; }
+
 /* 移动端 */
 @media (max-width: 600px) {
   .nav-inner { flex-direction: column; gap: 10px; }
