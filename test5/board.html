@@ -39,16 +39,12 @@
 </head>
 <body>
 
-  <nav>
-    <div class="nav-inner">
-      <a class="logo" href="/">乘法</a>
-    </div>
-  </nav>
+    <div id="navbar"></div>
 
   <section style="margin-top:40px;">
     <div class="card">
       <h2 class="section-title">留言板</h2>
-      <p style="margin-bottom:16px;">当前用户：<b id="who">未登录</b> <a href="/login/">去登录</a></p>
+            <p style="margin-bottom:16px;">当前用户：<b id="who">未登录</b> <a href="javascript:;" id="goLogin">去登录</a></p>
 
       <div class="form-row">
         <textarea id="text" placeholder="留言内容（最多 200 字）" maxlength="200"></textarea>
@@ -62,7 +58,17 @@
     </div>
   </section>
 
+  <script src="/nav.js"></script>
 <script>
+/* 点"去登录"打开登录弹窗 */
+const goLogin = document.getElementById('goLogin');
+if (goLogin) {
+  goLogin.addEventListener('click', () => {
+    const modal = document.getElementById('loginModal');
+    if (modal) modal.classList.add('show');
+  });
+}
+
 const API = 'https://api.chengfa.dpdns.org';
 
 // 加载留言

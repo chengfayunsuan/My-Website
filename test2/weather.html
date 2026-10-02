@@ -86,19 +86,7 @@
 </head>
 <body>
 
-  <nav>
-    <div class="nav-inner">
-      <a class="logo" href="/">乘法</a>
-      <div class="nav-right">
-        <span class="ip-wrap">你的 IP：<span id="ip">获取中…</span></span>
-        <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
-          <svg id="themeIcon" viewBox="0 0 24 24">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </nav>
+    <div id="navbar"></div>
 
   <header>
     <img class="avatar" src="/avatar.jpg" alt="头像" onerror="this.style.display='none'">
@@ -124,33 +112,9 @@
   </section>
 
   <footer><p>© 2026 CHENGFA</p></footer>
-
+  
+ <script src="/nav.js"></script>
 <script>
-/* ========== 主题切换 ========== */
-const themeBtn  = document.getElementById('themeBtn');
-const themeIcon = document.getElementById('themeIcon');
-const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-const sunSVG  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
-if (localStorage.getItem('theme') === 'dark') {
-  document.body.classList.add('dark');
-  themeIcon.innerHTML = sunSVG;
-}
-themeBtn.addEventListener('click', () => {
-  document.body.classList.toggle('dark');
-  const isDark = document.body.classList.contains('dark');
-  themeIcon.innerHTML = isDark ? sunSVG : moonSVG;
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-});
-
-/* ========== 顶部 IP ========== */
-document.querySelector('.logo').addEventListener('click', e => {
-  e.preventDefault();
-  location.href = '/';
-});
-fetch('https://api.ip.sb/ip')
-  .then(r => r.text())
-  .then(ip => document.getElementById('ip').textContent = ip.trim())
-  .catch(() => document.getElementById('ip').textContent = '获取失败');
 
 /* ========== 天气 ========== */
 const resultBox = document.getElementById('weatherResult');
