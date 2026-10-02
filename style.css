@@ -352,6 +352,51 @@ footer p { margin: 4px 0; }
 .login-msg.ok { color: var(--success); }
 .login-msg.err { color: #e74c3c; }
 
+/* 更新日志 */
+.log-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.log-list li {
+  display: flex;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+}
+.log-list li:last-child { border-bottom: none; }
+.log-date {
+  color: var(--primary-deep);
+  font-family: monospace;
+  white-space: nowrap;
+  font-size: 14px;
+  padding-top: 2px;
+}
+.log-text { color: var(--text); }
+
+.log-more {
+  display: block;
+  margin: 18px auto 0;
+  padding: 8px 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.log-more:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+}
+.log-more:disabled {
+  opacity: .5;
+  cursor: default;
+}
+
 /* 移动端 */
 @media (max-width: 600px) {
   .nav-inner { flex-direction: column; gap: 10px; }
