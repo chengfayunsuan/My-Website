@@ -12,7 +12,12 @@
           <a class="user-avatar" id="userAvatar" href="/profile/" style="display:none;">
             <img id="avatarImg" src="/avatar-default.jpg" alt="头像">
           </a>
-          <div class="gear-wrap">
+                <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
+            <svg id="themeIcon" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+                    <div class="gear-wrap">
             <button class="gear-btn" id="gearBtn" aria-label="设置">
               <svg viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="3"/>
@@ -24,11 +29,6 @@
               <span class="gear-empty" id="gearEmpty">请先登录</span>
             </div>
           </div>
-          <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
-            <svg id="themeIcon" viewBox="0 0 24 24">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
-          </button>
         </div>
       </div>
     </nav>

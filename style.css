@@ -405,3 +405,65 @@ footer p { margin: 4px 0; }
   .card { padding: 22px; }
   .test-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* 齿轮设置 */
+.gear-wrap { position: relative; }
+
+.gear-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,.22);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+}
+.gear-btn:hover { background: rgba(255,255,255,.35); }
+.gear-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gear-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 130px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  overflow: hidden;
+  z-index: 200;
+}
+.gear-menu.show { display: block; }
+
+.gear-item {
+  display: block;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--text);
+  text-decoration: none;
+  transition: background .15s;
+}
+.gear-item:hover {
+  background: var(--primary-soft);
+  color: var(--primary-deep);
+}
+
+.gear-empty {
+  display: block;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--text-light);
+}
