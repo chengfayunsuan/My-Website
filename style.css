@@ -467,3 +467,195 @@ footer p { margin: 4px 0; }
   font-size: 13px;
   color: var(--text-light);
 }
+
+/* ===== Profile ===== */
+.profile-wrap {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+}
+.profile-left {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding-top: 40px;
+}
+.profile-right {
+  flex: 1;
+  position: relative;
+}
+
+.profile-avatar-box {
+  position: relative;
+  margin-bottom: 18px;
+}
+.profile-avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--card);
+  box-shadow: 0 6px 20px rgba(127,179,229,.4);
+  background: var(--card);
+}
+.avatar-upload {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+.avatar-upload:hover { background: var(--primary-deep); }
+
+.profile-name {
+  font-size: 26px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* 身份标签 */
+.role-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  vertical-align: middle;
+}
+.role-tag.role-user {
+  background: rgba(127,179,229,.22);
+  color: #3b7bbf;
+}
+.role-tag.role-admin {
+  background: rgba(76,175,80,.18);
+  color: #2e7d32;
+}
+.role-tag.role-owner {
+  background: rgba(255,193,7,.22);
+  color: #b8860b;
+}
+body.dark .role-tag.role-user { color: #7FB3E5; }
+body.dark .role-tag.role-admin { color: #66bb6a; }
+body.dark .role-tag.role-owner { color: #ffca28; }
+
+.profile-bio {
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.8;
+  min-height: 60px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.profile-bio-input {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.8;
+  outline: none;
+  resize: vertical;
+}
+.profile-bio-input:focus { border-color: var(--primary); }
+
+.profile-time {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+/* 右下角编辑按钮 */
+.edit-fab {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(127,179,229,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, transform .2s;
+  z-index: 500;
+}
+.edit-fab:hover {
+  background: var(--primary-deep);
+  transform: scale(1.05);
+}
+.edit-fab svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 编辑操作栏 */
+.edit-actions {
+  position: fixed;
+  right: 30px;
+  bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 500;
+}
+.edit-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  transition: background .2s;
+}
+.edit-save {
+  background: var(--success);
+  color: #fff;
+}
+.edit-save:hover { background: var(--success-hover); }
+.edit-cancel {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border) !important;
+}
+.edit-cancel:hover { background: var(--primary-soft); }
+.edit-pwd {
+  background: var(--primary);
+  color: #fff;
+}
+.edit-pwd:hover { background: var(--primary-deep); }
+
+/* 移动端：两栏叠起来 */
+@media (max-width: 700px) {
+  .profile-wrap { flex-direction: column; }
+  .profile-left { padding-top: 24px; }
+  .profile-avatar { width: 120px; height: 120px; }
+}

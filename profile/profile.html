@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人主页 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <section style="margin-top:40px;">
+    <div class="profile-wrap">
+
+      <!-- 左栏 -->
+      <div class="card profile-left">
+        <div class="profile-avatar-box">
+          <img class="profile-avatar" id="avatarImg" src="/avatar-default.png" alt="头像">
+          <label class="avatar-upload" id="avatarUploadLabel" for="avatarInput">
+            <span>更换头像</span>
+            <input type="file" id="avatarInput" accept="image/*" hidden>
+          </label>
+        </div>
+        <h1 class="profile-name">
+          <span id="profileName">加载中…</span>
+          <span class="role-tag" id="roleTag">用户</span>
+        </h1>
+      </div>
+
+      <!-- 右栏 -->
+      <div class="card profile-right">
+        <h2 class="section-title">个性签名</h2>
+        <p class="profile-bio" id="bioText">这个人很懒，什么都没写。</p>
+        <textarea class="profile-bio-input" id="bioInput" maxlength="200" placeholder="写点什么…" style="display:none;"></textarea>
+
+        <p class="profile-time">注册于 <span id="createdAt">—</span></p>
+      </div>
+
+    </div>
+
+    <!-- 右下角编辑按钮 -->
+    <button class="edit-fab" id="editFab" aria-label="编辑">
+      <svg viewBox="0 0 24 24" id="editIcon">
+        <path d="M12 20h9"/>
+        <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+      </svg>
+    </button>
+
+    <!-- 编辑模式下的操作面板 -->
+    <div class="edit-actions" id="editActions" style="display:none;">
+      <button class="edit-save" id="saveBtn">保存</button>
+      <button class="edit-cancel" id="cancelBtn">取消</button>
+      <button class="edit-pwd" id="pwdBtn">修改密码</button>
+    </div>
+  </section>
+
+  <script src="/nav.js"></script>
+  <script>
+  (function () {
+    const API = 'https://api.chengfa.dpdns.org';
+    const token = localStorage.getItem('token');
+
+    // 没登录 → 跳回首页
+    if (!token) {
+      alert('请先登录');
+      location.href = '/';
+      return;
+    }
+
+    let editing = false;
+    let originalBio = '';
+    let originalAvatar = '';
+
+    const el = {
+      avatarImg: document.getElementById('avatarImg'),
+      avatarInput: document.getElementById('avatarInput'),
+      avatarLabel: document.getElementById('avatarUploadLabel'),
+      name: document.getElementById('profileName'),
+      roleTag: document.getElementById('roleTag'),
+      bioText: document.getElementById('bioText'),
+      bioInput: document.getElementById('bioInput'),
+      createdAt: document.getElementById('createdAt'),
+      editFab: document.getElementById('editFab'),
+      editIcon: document.getElementById('editIcon'),
+      editActions: document.getElementById('editActions'),
+      saveBtn: document.getElementById('saveBtn'),
+      cancelBtn: document.getElementById('cancelBtn'),
+      pwdBtn: document.getElementById('pwdBtn')
+    };
+
+    const pencilSVG = '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>';
+    const closeSVG  = '<path d="M18 6 6 18"/><path d="M6 6l12 12"/>';
+
+    /* ===== 拿用户信息 ===== */
+    async function loadMe() {
+      try {
+        const res = await fetch(API + '/me', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (!data.ok) {
+          alert('登录已失效，请重新登录');
+          localStorage.removeItem('token');
+          localStorage.removeItem('username');
+          location.href = '/';
+          return;
+        }
+        render(data);
+      } catch {
+        el.name.textContent = '加载失败';
+      }
+    }
+
+    function render(data) {
+      el.name.textContent = data.username;
+      el.createdAt.textContent = data.createdAt || '—';
+
+      // 角色标签
+      const role = data.role || 'user';
+      el.roleTag.className = 'role-tag';
+      if (role === 'owner') {
+        el.roleTag.textContent = '站长';
+        el.roleTag.classList.add('role-owner');
+      } else if (role === 'admin') {
+        el.roleTag.textContent = '管理员';
+        el.roleTag.classList.add('role-admin');
+      } else {
+        el.roleTag.textContent = '用户';
+        el.roleTag.classList.add('role-user');
+      }
+
+      // 头像
+      if (data.avatar) {
+        el.avatarImg.src = data.avatar;
+        originalAvatar = data.avatar;
+      } else {
+        el.avatarImg.src = '/avatar-default.png';
+        originalAvatar = '/avatar-default.png';
+      }
+
+      // 签名
+      if (data.bio && data.bio.trim()) {
+        el.bioText.textContent = data.bio;
+      } else {
+        el.bioText.textContent = '这个人很懒，什么都没写。';
+      }
+      el.bioInput.value = data.bio || '';
+      originalBio = data.bio || '';
+    }
+
+    /* ===== 切换编辑模式 ===== */
+    function enterEdit() {
+      editing = true;
+      el.bioText.style.display = 'none';
+      el.bioInput.style.display = 'block';
+      el.avatarLabel.style.display = 'flex';
+      el.editActions.style.display = 'flex';
+      el.editIcon.innerHTML = closeSVG;
+    }
+
+    function exitEdit() {
+      editing = false;
+      el.bioText.style.display = 'block';
+      el.bioInput.style.display = 'none';
+      el.avatarLabel.style.display = 'none';
+      el.editActions.style.display = 'none';
+      el.editIcon.innerHTML = pencilSVG;
+      // 还原未保存的改动
+      el.bioInput.value = originalBio;
+      el.avatarImg.src = originalAvatar;
+    }
+
+    el.editFab.addEventListener('click', () => {
+      editing ? exitEdit() : enterEdit();
+    });
+
+    el.cancelBtn.addEventListener('click', exitEdit);
+
+    /* ===== 头像上传（转 base64，先看预览） ===== */
+    el.avatarInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) return alert('请选图片文件');
+      if (file.size > 1024 * 1024) return alert('图片不能超过 1MB');
+
+      const reader = new FileReader();
+      reader.onload = ev => {
+        el.avatarImg.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    /* ===== 保存 ===== */
+    el.saveBtn.addEventListener('click', async () => {
+      const bio = el.bioInput.value;
+      const avatar = el.avatarImg.src;
+
+      try {
+        const res = await fetch(API + '/profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ bio, avatar })
+        });
+        const data = await res.json();
+        if (!data.ok) return alert('保存失败：' + (data.error || '未知错误'));
+
+        originalBio = bio;
+        originalAvatar = avatar;
+        alert('保存成功');
+        exitEdit();
+        loadMe();
+      } catch {
+        alert('网络错误，保存失败');
+      }
+    });
+
+    /* ===== 修改密码 ===== */
+    el.pwdBtn.addEventListener('click', async () => {
+      const oldPassword = prompt('请输入原密码');
+      if (!oldPassword) return;
+      const newPassword = prompt('请输入新密码（至少 6 位）');
+      if (!newPassword) return;
+      if (newPassword.length < 6) return alert('新密码至少 6 位');
+
+      try {
+        const res = await fetch(API + '/change-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ oldPassword, newPassword })
+        });
+        const data = await res.json();
+        if (!data.ok) return alert('修改失败：' + (data.error || '未知错误'));
+        alert('密码已修改');
+      } catch {
+        alert('网络错误，修改失败');
+      }
+    });
+
+    /* ===== 启动 ===== */
+    loadMe();
+  })();
+  </script>
+
+</body>
+</html>
