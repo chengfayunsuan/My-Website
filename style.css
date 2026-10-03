@@ -472,116 +472,192 @@ footer p { margin: 4px 0; }
 .profile-wrap {
   display: flex;
   gap: 24px;
-  align-items: stretch;
+  align-items: flex-start;
 }
 .profile-left {
-  flex: 2;
+  flex: 3;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: center;
-  padding-top: 40px;
+  gap: 24px;
+  min-width: 0;
 }
 .profile-right {
   flex: 1;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
 }
 
+/* 头部：头像 + 用户名（横排，靠左） */
+.profile-head {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 28px 32px;
+  width: 100%;
+  box-sizing: border-box;
+}
 .profile-avatar-box {
   position: relative;
-  margin-bottom: 18px;
+  flex-shrink: 0;
 }
 .profile-avatar {
-  width: 160px;
-  height: 160px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid var(--card);
-  box-shadow: 0 6px 20px rgba(127,179,229,.4);
+  border: 3px solid var(--card);
+  box-shadow: 0 4px 14px rgba(127,179,229,.35);
   background: var(--card);
+  display: block;
 }
 .avatar-upload {
-  display: none;
   position: absolute;
-  bottom: 0;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--primary);
   color: #fff;
-  padding: 6px 16px;
+  padding: 4px 12px;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   white-space: nowrap;
   box-shadow: 0 4px 12px rgba(0,0,0,.15);
 }
 .avatar-upload:hover { background: var(--primary-deep); }
 
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
 .profile-name {
   font-size: 26px;
   color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
+  line-height: 1.2;
+  word-break: break-word;
+  margin: 0;
 }
 
 /* 身份标签 */
 .role-tag {
   display: inline-block;
-  padding: 2px 10px;
+  padding: 3px 12px;
   border-radius: 6px;
   font-size: 13px;
   font-weight: 500;
-  vertical-align: middle;
+  background: var(--nav-bg);
+  color: #fff;
 }
 .role-tag.role-user {
-  background: rgba(127,179,229,.22);
-  color: #3b7bbf;
+  background: var(--nav-bg);
+  color: #fff;
 }
 .role-tag.role-admin {
-  background: rgba(76,175,80,.18);
-  color: #2e7d32;
+  background: #4CAF50;
+  color: #fff;
 }
 .role-tag.role-owner {
-  background: rgba(255,193,7,.22);
-  color: #b8860b;
+  background: #f0b400;
+  color: #fff;
 }
-body.dark .role-tag.role-user { color: #7FB3E5; }
-body.dark .role-tag.role-admin { color: #66bb6a; }
-body.dark .role-tag.role-owner { color: #ffca28; }
 
+/* 我的留言 */
+.profile-feed {
+  padding: 28px 32px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.my-msg-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.my-msg-item:last-child { border-bottom: none; }
+.my-msg-text {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.7;
+  word-break: break-word;
+}
+.my-msg-time {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+.empty-hint {
+  color: var(--text-light);
+  font-size: 14px;
+  padding: 20px 0;
+  text-align: center;
+}
+
+/* 右栏合并卡片 */
+.profile-side {
+  padding: 24px;
+}
+.side-section + .side-section {
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+/* 签名 */
 .profile-bio {
   color: var(--text);
-  font-size: 15px;
-  line-height: 1.8;
-  min-height: 60px;
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 40px;
   white-space: pre-wrap;
   word-break: break-word;
 }
 .profile-bio-input {
   width: 100%;
-  min-height: 100px;
+  min-height: 80px;
   padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg);
   color: var(--text);
   font-family: inherit;
-  font-size: 15px;
-  line-height: 1.8;
+  font-size: 14px;
+  line-height: 1.7;
   outline: none;
   resize: vertical;
+  box-sizing: border-box;
 }
 .profile-bio-input:focus { border-color: var(--primary); }
 
-.profile-time {
-  margin-top: 20px;
-  font-size: 13px;
+/* 关注/粉丝/拉黑：文字在前，数字在后 */
+.profile-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 4px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background .15s;
+}
+.profile-stat:hover { background: var(--primary-soft); }
+.stat-label {
+  font-size: 14px;
   color: var(--text-light);
 }
+.stat-num {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--primary-deep);
+}
+
+.profile-meta {
+  font-size: 14px;
+  color: var(--text-light);
+  padding: 4px 0;
+}
+.profile-meta span { color: var(--text); }
 
 /* 右下角编辑按钮 */
 .edit-fab {
@@ -652,6 +728,50 @@ body.dark .role-tag.role-owner { color: #ffca28; }
   color: #fff;
 }
 .edit-pwd:hover { background: var(--primary-deep); }
+
+/* 通用弹窗 */
+.generic-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+.generic-modal.show { display: flex; }
+.generic-box {
+  position: relative;
+  width: 400px;
+  max-width: 90vw;
+  max-height: 70vh;
+  background: var(--card);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 28px 24px 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.25);
+  display: flex;
+  flex-direction: column;
+}
+.generic-close {
+  position: absolute;
+  top: 10px; right: 14px;
+  border: none; background: none;
+  font-size: 24px; line-height: 1;
+  color: var(--text-light);
+  cursor: pointer;
+}
+.generic-close:hover { color: var(--text); }
+.generic-title {
+  font-size: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+  color: var(--text);
+}
+.generic-body {
+  overflow-y: auto;
+  flex: 1;
+}
 
 /*移动端：两栏叠起来*/
 @media (max-width: 700px) {
