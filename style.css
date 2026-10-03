@@ -471,29 +471,29 @@ footer p { margin: 4px 0; }
 /* ===== Profile ===== */
 .profile-wrap {
   display: flex;
-  gap: 24px;
+  gap: 0;
   align-items: flex-start;
 }
 .profile-left {
   flex: 3;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 0;
   min-width: 0;
 }
 .profile-right {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 0;
   min-width: 0;
 }
 
-/* 头部：头像 + 用户名（横排，靠左） */
+/* 头部：头像 + 用户名（横排，靠左上） */
 .profile-head {
   display: flex;
   gap: 24px;
-  align-items: center;
+  align-items: flex-start;
   padding: 28px 32px;
   width: 100%;
   box-sizing: border-box;
