@@ -11,50 +11,94 @@
 
   <div id="navbar"></div>
 
-  <section style="margin-top:40px;">
+  <section style="margin-top:40px; margin-bottom:40px;">
     <div class="profile-wrap">
 
       <!-- 左栏 -->
-      <div class="card profile-left">
-        <div class="profile-avatar-box">
-          <img class="profile-avatar" id="avatarImg" src="/avatar-default.png" alt="头像">
-          <label class="avatar-upload" id="avatarUploadLabel" for="avatarInput">
-            <span>更换头像</span>
-            <input type="file" id="avatarInput" accept="image/*" hidden>
-          </label>
+      <div class="profile-left">
+
+        <!-- 头部：头像 + 用户名 + 标签 -->
+        <div class="card profile-head">
+          <div class="profile-avatar-box">
+            <img class="profile-avatar" id="avatarImg" src="/avatar-default.png" alt="头像">
+            <label class="avatar-upload" id="avatarUploadLabel" for="avatarInput" style="display:none;">
+              <span>更换头像</span>
+              <input type="file" id="avatarInput" accept="image/*" hidden>
+            </label>
+          </div>
+          <div class="profile-info">
+            <h1 class="profile-name">
+              <span id="profileName">加载中…</span>
+            </h1>
+            <span class="role-tag" id="roleTag">用户</span>
+          </div>
         </div>
-        <h1 class="profile-name">
-          <span id="profileName">加载中…</span>
-          <span class="role-tag" id="roleTag">用户</span>
-        </h1>
+
+        <!-- 下方：用户动态 -->
+        <div class="card profile-feed">
+          <h2 class="section-title">我的留言</h2>
+          <div id="myMessages">加载中…</div>
+        </div>
+
       </div>
 
       <!-- 右栏 -->
-      <div class="card profile-right">
-        <h2 class="section-title">个性签名</h2>
-        <p class="profile-bio" id="bioText">这个人很懒，什么都没写。</p>
-        <textarea class="profile-bio-input" id="bioInput" maxlength="200" placeholder="写点什么…" style="display:none;"></textarea>
+      <div class="profile-right">
 
-        <p class="profile-time">注册于 <span id="createdAt">—</span></p>
+        <div class="card">
+          <h2 class="section-title">个性签名</h2>
+          <p class="profile-bio" id="bioText">这个人很懒，什么都没写。</p>
+          <textarea class="profile-bio-input" id="bioInput" maxlength="200" placeholder="写点什么…" style="display:none;"></textarea>
+        </div>
+
+        <div class="card">
+          <div class="profile-stat" data-type="following">
+            <span class="stat-num" id="followingCount">0</span>
+            <span class="stat-label">关注</span>
+          </div>
+          <div class="profile-stat" data-type="followers">
+            <span class="stat-num" id="followersCount">0</span>
+            <span class="stat-label">粉丝</span>
+          </div>
+          <div class="profile-stat" data-type="blocked">
+            <span class="stat-num" id="blockedCount">0</span>
+            <span class="stat-label">拉黑</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="profile-meta">UID: <span id="uid">—</span></p>
+          <p class="profile-meta">注册于 <span id="createdAt">—</span></p>
+        </div>
+
       </div>
 
     </div>
-
-    <!-- 右下角编辑按钮 -->
-    <button class="edit-fab" id="editFab" aria-label="编辑">
-      <svg viewBox="0 0 24 24" id="editIcon">
-        <path d="M12 20h9"/>
-        <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
-      </svg>
-    </button>
-
-    <!-- 编辑模式下的操作面板 -->
-    <div class="edit-actions" id="editActions" style="display:none;">
-      <button class="edit-save" id="saveBtn">保存</button>
-      <button class="edit-cancel" id="cancelBtn">取消</button>
-      <button class="edit-pwd" id="pwdBtn">修改密码</button>
-    </div>
   </section>
+
+  <!-- 右下角编辑按钮 -->
+  <button class="edit-fab" id="editFab" aria-label="编辑">
+    <svg viewBox="0 0 24 24" id="editIcon">
+      <path d="M12 20h9"/>
+      <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+    </svg>
+  </button>
+
+  <!-- 编辑操作栏 -->
+  <div class="edit-actions" id="editActions" style="display:none;">
+    <button class="edit-save" id="saveBtn">保存</button>
+    <button class="edit-cancel" id="cancelBtn">取消</button>
+    <button class="edit-pwd" id="pwdBtn">修改密码</button>
+  </div>
+
+  <!-- 通用弹窗（关注/粉丝/拉黑用） -->
+  <div class="generic-modal" id="genericModal">
+    <div class="generic-box">
+      <button class="generic-close" id="genericClose">×</button>
+      <h2 class="generic-title" id="genericTitle">标题</h2>
+      <div class="generic-body" id="genericBody"></div>
+    </div>
+  </div>
 
   <script src="/nav.js"></script>
   <script>
@@ -62,7 +106,6 @@
     const API = 'https://api.chengfa.dpdns.org';
     const token = localStorage.getItem('token');
 
-    // 没登录 → 跳回首页
     if (!token) {
       alert('请先登录');
       location.href = '/';
@@ -72,6 +115,7 @@
     let editing = false;
     let originalBio = '';
     let originalAvatar = '';
+    let currentUsername = '';
 
     const el = {
       avatarImg: document.getElementById('avatarImg'),
@@ -81,19 +125,25 @@
       roleTag: document.getElementById('roleTag'),
       bioText: document.getElementById('bioText'),
       bioInput: document.getElementById('bioInput'),
+      uid: document.getElementById('uid'),
       createdAt: document.getElementById('createdAt'),
+      myMessages: document.getElementById('myMessages'),
       editFab: document.getElementById('editFab'),
       editIcon: document.getElementById('editIcon'),
       editActions: document.getElementById('editActions'),
       saveBtn: document.getElementById('saveBtn'),
       cancelBtn: document.getElementById('cancelBtn'),
-      pwdBtn: document.getElementById('pwdBtn')
+      pwdBtn: document.getElementById('pwdBtn'),
+      genericModal: document.getElementById('genericModal'),
+      genericClose: document.getElementById('genericClose'),
+      genericTitle: document.getElementById('genericTitle'),
+      genericBody: document.getElementById('genericBody')
     };
 
     const pencilSVG = '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>';
     const closeSVG  = '<path d="M18 6 6 18"/><path d="M6 6l12 12"/>';
 
-    /* ===== 拿用户信息 ===== */
+    /* ===== 加载用户信息 ===== */
     async function loadMe() {
       try {
         const res = await fetch(API + '/me', {
@@ -108,16 +158,18 @@
           return;
         }
         render(data);
+        loadMyMessages(data.username);
       } catch {
         el.name.textContent = '加载失败';
       }
     }
 
     function render(data) {
+      currentUsername = data.username;
       el.name.textContent = data.username;
+      el.uid.textContent = data.uid || '—';
       el.createdAt.textContent = data.createdAt || '—';
 
-      // 角色标签
       const role = data.role || 'user';
       el.roleTag.className = 'role-tag';
       if (role === 'owner') {
@@ -131,7 +183,6 @@
         el.roleTag.classList.add('role-user');
       }
 
-      // 头像
       if (data.avatar) {
         el.avatarImg.src = data.avatar;
         originalAvatar = data.avatar;
@@ -140,7 +191,6 @@
         originalAvatar = '/avatar-default.png';
       }
 
-      // 签名
       if (data.bio && data.bio.trim()) {
         el.bioText.textContent = data.bio;
       } else {
@@ -150,7 +200,34 @@
       originalBio = data.bio || '';
     }
 
-    /* ===== 切换编辑模式 ===== */
+    /* ===== 加载我的留言 ===== */
+    async function loadMyMessages(username) {
+      try {
+        const res = await fetch(API + '/messages');
+        const data = await res.json();
+        const mine = data.filter(m => m.name === username).reverse();
+        if (!mine.length) {
+          el.myMessages.innerHTML = '<p class="empty-hint">还没有发过留言</p>';
+          return;
+        }
+        el.myMessages.innerHTML = mine.map(m => `
+          <div class="my-msg-item">
+            <div class="my-msg-text">${escapeHTML(m.text)}</div>
+            <div class="my-msg-time">${escapeHTML(m.time)}</div>
+          </div>
+        `).join('');
+      } catch {
+        el.myMessages.innerHTML = '<p class="empty-hint">加载失败</p>';
+      }
+    }
+
+    function escapeHTML(s) {
+      const d = document.createElement('div');
+      d.textContent = String(s);
+      return d.innerHTML;
+    }
+
+    /* ===== 编辑模式 ===== */
     function enterEdit() {
       editing = true;
       el.bioText.style.display = 'none';
@@ -167,7 +244,6 @@
       el.avatarLabel.style.display = 'none';
       el.editActions.style.display = 'none';
       el.editIcon.innerHTML = pencilSVG;
-      // 还原未保存的改动
       el.bioInput.value = originalBio;
       el.avatarImg.src = originalAvatar;
     }
@@ -175,20 +251,16 @@
     el.editFab.addEventListener('click', () => {
       editing ? exitEdit() : enterEdit();
     });
-
     el.cancelBtn.addEventListener('click', exitEdit);
 
-    /* ===== 头像上传（转 base64，先看预览） ===== */
+    /* ===== 头像上传（预览） ===== */
     el.avatarInput.addEventListener('change', e => {
       const file = e.target.files[0];
       if (!file) return;
       if (!file.type.startsWith('image/')) return alert('请选图片文件');
       if (file.size > 1024 * 1024) return alert('图片不能超过 1MB');
-
       const reader = new FileReader();
-      reader.onload = ev => {
-        el.avatarImg.src = ev.target.result;
-      };
+      reader.onload = ev => { el.avatarImg.src = ev.target.result; };
       reader.readAsDataURL(file);
     });
 
@@ -196,7 +268,6 @@
     el.saveBtn.addEventListener('click', async () => {
       const bio = el.bioInput.value;
       const avatar = el.avatarImg.src;
-
       try {
         const res = await fetch(API + '/profile', {
           method: 'POST',
@@ -208,7 +279,6 @@
         });
         const data = await res.json();
         if (!data.ok) return alert('保存失败：' + (data.error || '未知错误'));
-
         originalBio = bio;
         originalAvatar = avatar;
         alert('保存成功');
@@ -226,7 +296,6 @@
       const newPassword = prompt('请输入新密码（至少 6 位）');
       if (!newPassword) return;
       if (newPassword.length < 6) return alert('新密码至少 6 位');
-
       try {
         const res = await fetch(API + '/change-password', {
           method: 'POST',
@@ -244,7 +313,25 @@
       }
     });
 
-    /* ===== 启动 ===== */
+    /* ===== 关注/粉丝/拉黑弹窗 ===== */
+    document.querySelectorAll('.profile-stat').forEach(stat => {
+      stat.addEventListener('click', () => {
+        const type = stat.dataset.type;
+        const titles = { following: '关注', followers: '粉丝', blocked: '拉黑' };
+        el.genericTitle.textContent = titles[type];
+        el.genericBody.innerHTML = '<p class="empty-hint">功能开发中…</p>';
+        el.genericModal.classList.add('show');
+      });
+    });
+
+    el.genericClose.addEventListener('click', () => el.genericModal.classList.remove('show'));
+    el.genericModal.addEventListener('click', e => {
+      if (e.target === el.genericModal) el.genericModal.classList.remove('show');
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') el.genericModal.classList.remove('show');
+    });
+
     loadMe();
   })();
   </script>
