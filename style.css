@@ -653,7 +653,7 @@ body.dark .role-tag.role-owner { color: #ffca28; }
 }
 .edit-pwd:hover { background: var(--primary-deep); }
 
-/* 移动端：两栏叠起来 */
+/*移动端：两栏叠起来*/
 @media (max-width: 700px) {
   .profile-wrap { flex-direction: column; }
   .profile-left { padding-top: 24px; }

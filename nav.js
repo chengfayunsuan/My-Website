@@ -197,6 +197,7 @@
       if (!data.ok) return showMsg(data.error || '登录失败', false);
       localStorage.setItem('token', data.token);
       localStorage.setItem('username', data.username);
+      localStorage.setItem('uid', data.uid || '');
       location.reload();
     } catch {
       showMsg('网络错误，请重试', false);
