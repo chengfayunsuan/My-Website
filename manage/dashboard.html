@@ -7,13 +7,14 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/style.css">
 <style>
-  /* ===== 管理后台 · 紫色主题 ===== */
+  /* ===== 管理后台 · 灰白主题 ===== */
   body.manage {
-    --bg: #7b5ea7;
-    --nav-bg: #7b5ea7;
-    --primary: #9b6bf2;
-    --primary-deep: #8A5CE0;
-    --primary-soft: rgba(155,107,242,.18);
+    --bg: #EEF1F5;
+    --nav-bg: #EEF1F5;
+    --primary: #3B82F6;
+    --primary-deep: #2563EB;
+    --primary-soft: rgba(59,130,246,.14);
+    --text: #333333;
   }
   .manage-header {
     text-align: center;
@@ -21,28 +22,28 @@
   }
   .manage-title {
     font-size: 38px;
-    color: #ffffff;
+    color: #333333;
     margin: 0 0 8px;
     font-weight: 700;
     letter-spacing: 1px;
   }
   .manage-sub {
     font-size: 15px;
-    color: rgba(255,255,255,.85);
+    color: #777777;
     margin: 0;
   }
 
-  /* 15 个按钮 */
+  /* 15 个按钮：三列五行 */
   .manage-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     margin-top: 16px;
   }
   .manage-btn {
     border: none;
     border-radius: 10px;
-    background: #9b6bf2;
+    background: #3B82F6;
     color: #fff;
     font-size: 16px;
     font-family: inherit;
@@ -50,26 +51,23 @@
     padding: 18px 12px;
     cursor: default;
     transition: background .2s, transform .2s, box-shadow .2s;
-    box-shadow: 0 3px 10px rgba(0,0,0,.14);
+    box-shadow: 0 3px 10px rgba(59,130,246,.14);
   }
   .manage-btn:hover {
-    background: #8A5CE0;
+    background: #2563EB;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,.2);
+    box-shadow: 0 6px 16px rgba(59,130,246,.22);
   }
 
   /* 无权限提示 */
   .access-tip {
     text-align: center;
-    color: var(--text);
+    color: #666666;
     padding: 30px 0;
   }
-  .access-tip a { color: #9b6bf2; }
+  .access-tip a { color: #3B82F6; }
 
-  @media (max-width: 900px) {
-    .manage-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     .manage-grid { grid-template-columns: repeat(2, 1fr); }
     .manage-title { font-size: 30px; }
   }
