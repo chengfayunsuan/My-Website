@@ -7,13 +7,13 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/style.css">
 <style>
-  /* ===== 管理后台 · 灰白主题 ===== */
+  /* ===== 管理后台 · 灰色背景 + 紫色导航/按钮 ===== */
   body.manage {
     --bg: #EEF1F5;
-    --nav-bg: #EEF1F5;
-    --primary: #3B82F6;
-    --primary-deep: #2563EB;
-    --primary-soft: rgba(59,130,246,.14);
+    --nav-bg: #7b5ea7;
+    --primary: #9b6bf2;
+    --primary-deep: #8A5CE0;
+    --primary-soft: rgba(155,107,242,.18);
     --text: #333333;
   }
   .manage-header {
@@ -43,7 +43,7 @@
   .manage-btn {
     border: none;
     border-radius: 10px;
-    background: #3B82F6;
+    background: #9b6bf2;
     color: #fff;
     font-size: 16px;
     font-family: inherit;
@@ -51,12 +51,12 @@
     padding: 18px 12px;
     cursor: default;
     transition: background .2s, transform .2s, box-shadow .2s;
-    box-shadow: 0 3px 10px rgba(59,130,246,.14);
+    box-shadow: 0 3px 10px rgba(155,107,242,.14);
   }
   .manage-btn:hover {
-    background: #2563EB;
+    background: #8A5CE0;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(59,130,246,.22);
+    box-shadow: 0 6px 16px rgba(155,107,242,.22);
   }
 
   /* 无权限提示 */
@@ -65,7 +65,7 @@
     color: #666666;
     padding: 30px 0;
   }
-  .access-tip a { color: #3B82F6; }
+  .access-tip a { color: #9b6bf2; }
 
   @media (max-width: 700px) {
     .manage-grid { grid-template-columns: repeat(2, 1fr); }
