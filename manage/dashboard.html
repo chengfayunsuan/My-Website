@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理面板 · Chengfa</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css">
+<style>
+  /* ===== 管理后台 · 紫色主题 ===== */
+  body.manage {
+    --bg: #7b5ea7;
+    --nav-bg: #7b5ea7;
+    --primary: #9b6bf2;
+    --primary-deep: #8A5CE0;
+    --primary-soft: rgba(155,107,242,.18);
+  }
+  .manage-header {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .manage-title {
+    font-size: 38px;
+    color: #ffffff;
+    margin: 0 0 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .manage-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,.85);
+    margin: 0;
+  }
+
+  /* 15 个按钮 */
+  .manage-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .manage-btn {
+    border: none;
+    border-radius: 10px;
+    background: #9b6bf2;
+    color: #fff;
+    font-size: 16px;
+    font-family: inherit;
+    font-weight: 500;
+    padding: 18px 12px;
+    cursor: default;
+    transition: background .2s, transform .2s, box-shadow .2s;
+    box-shadow: 0 3px 10px rgba(0,0,0,.14);
+  }
+  .manage-btn:hover {
+    background: #8A5CE0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,.2);
+  }
+
+  /* 无权限提示 */
+  .access-tip {
+    text-align: center;
+    color: var(--text);
+    padding: 30px 0;
+  }
+  .access-tip a { color: #9b6bf2; }
+
+  @media (max-width: 900px) {
+    .manage-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .manage-grid { grid-template-columns: repeat(2, 1fr); }
+    .manage-title { font-size: 30px; }
+  }
+</style>
+</head>
+<body class="manage">
+
+  <div id="navbar"></div>
+
+  <header class="manage-header">
+    <h1 class="manage-title">管理面板</h1>
+    <p class="manage-sub">Chengfa · 网站管理后台</p>
+  </header>
+
+  <section>
+    <div class="card">
+      <h2 class="section-title">功能入口</h2>
+      <div class="manage-grid" id="manageGrid"></div>
+    </div>
+  </section>
+
+  <script src="/config.js"></script>
+  <script src="/nav.js"></script>
+  <script>
+  (function () {
+    const API = window.API_BASE;
+    const token = localStorage.getItem('token');
+    const grid = document.getElementById('manageGrid');
+
+    function deny(text) {
+      const msg = document.createElement('div');
+      msg.className = 'access-tip';
+      msg.innerHTML = text + '<br><a href="/">返回首页</a>';
+      grid.appendChild(msg);
+    }
+
+    if (!token) {
+      deny('请先登录后再进入管理面板');
+      return;
+    }
+
+    fetch(API + '/me', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (!data.ok) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('username');
+          deny('登录已失效，请重新登录');
+          return;
+        }
+        // 这个面板：管理员(admin) 和 站长(Chengfa / owner) 都能进
+        const okRole = (data.role === 'owner' || data.role === 'admin');
+        if (!okRole) {
+          deny('你还没有权限访问管理后台');
+          return;
+        }
+        renderGrid();
+      })
+      .catch(() => deny('网络错误，请稍后重试'));
+
+    function renderGrid() {
+      for (let i = 0; i < 15; i++) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'manage-btn';
+        b.textContent = '测试中';
+        grid.appendChild(b);
+      }
+    }
+  })();
+  </script>
+
+</body>
+</html>

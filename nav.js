@@ -12,6 +12,14 @@
           <a class="user-avatar" id="userAvatar" href="/profile/" style="display:none;">
             <img id="avatarImg" src="/avatar-default.jpg" alt="头像">
           </a>
+          <a class="admin-btn" id="adminBtn" href="/manage/dashboard" aria-label="管理后台" title="管理后台" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="9" rx="1"/>
+              <rect x="14" y="3" width="7" height="5" rx="1"/>
+              <rect x="14" y="12" width="7" height="9" rx="1"/>
+              <rect x="3" y="16" width="7" height="5" rx="1"/>
+            </svg>
+          </a>
                 <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
             <svg id="themeIcon" viewBox="0 0 24 24">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -105,17 +113,24 @@
     });
 
   /* ========== 6. 登录状态判断 ========== */
-  function showLoggedIn() {
+  function showLoggedIn(role) {
     loginBtn.style.display = 'none';
     avatarBox.style.display = 'block';
     gearLogout.style.display = 'block';
     gearEmpty.style.display = 'none';
+    // 后台入口只给站长(owner)/管理员(admin)看
+    const adminBtn = document.getElementById('adminBtn');
+    if (adminBtn) {
+      adminBtn.style.display = (role === 'owner' || role === 'admin') ? 'flex' : 'none';
+    }
   }
   function showLoggedOut() {
     loginBtn.style.display = '';
     avatarBox.style.display = 'none';
     gearLogout.style.display = 'none';
     gearEmpty.style.display = 'block';
+    const adminBtn = document.getElementById('adminBtn');
+    if (adminBtn) adminBtn.style.display = 'none';
   }
 
   async function checkLogin() {
@@ -127,7 +142,7 @@
       });
       const data = await res.json();
       if (data.ok) {
-        showLoggedIn();
+        showLoggedIn(data.role);
         const name = localStorage.getItem('username');
         if (name) document.getElementById('avatarImg').alt = name;
       } else {

@@ -50,8 +50,9 @@
     </div>
   </section>
 
+<script src="/config.js"></script>
 <script>
-const API = 'https://api.chengfa.dpdns.org';
+const API = window.API_BASE;
 
 function showMsg(text, ok = true) {
   const m = document.getElementById('msg');
