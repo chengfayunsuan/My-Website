@@ -2,6 +2,11 @@
   const API = 'https://api.chengfa.dpdns.org';
 
   /* ========== 1. 生成导航栏 ========== */
+  // 判断当前是不是后台页：是的话后台按钮"回到首页"，否则"进入后台"
+  const isManage = location.pathname.indexOf('/manage/') === 0;
+  const adminHref = isManage ? '/' : '/manage/dashboard';
+  const adminTitle = isManage ? '返回普通界面' : '管理后台';
+
   const navHTML = `
     <nav>
       <div class="nav-inner">
@@ -11,14 +16,6 @@
           <a class="login-btn" id="loginBtn" href="javascript:;">登录</a>
           <a class="user-avatar" id="userAvatar" href="/profile/" style="display:none;">
             <img id="avatarImg" src="/avatar-default.jpg" alt="头像">
-          </a>
-          <a class="admin-btn" id="adminBtn" href="/manage/dashboard" aria-label="管理后台" title="管理后台" style="display:none;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="9" rx="1"/>
-              <rect x="14" y="3" width="7" height="5" rx="1"/>
-              <rect x="14" y="12" width="7" height="9" rx="1"/>
-              <rect x="3" y="16" width="7" height="5" rx="1"/>
-            </svg>
           </a>
                 <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
             <svg id="themeIcon" viewBox="0 0 24 24">
@@ -38,6 +35,12 @@
             </div>
           </div>
         </div>
+        <a class="admin-btn" id="adminBtn" href="` + adminHref + `" aria-label="` + adminTitle + `" title="` + adminTitle + `" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="11" rx="2"/>
+            <path d="M8 20h8M12 15v5"/>
+          </svg>
+        </a>
       </div>
     </nav>
   `;
