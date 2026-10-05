@@ -34,7 +34,7 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.7;
-  transition: background .3s, color .3s;
+  transition: background .3s, color .3s, opacity .18s;
 }
 
 /* 导航 */
@@ -46,8 +46,10 @@ nav {
   z-index: 100;
   transition: background .3s;
 }
+
+/* 导航内容：和主页 section 对齐 */
 .nav-inner {
-  max-width: 100%;
+  max-width: 900px;
   margin: 0 auto;
   padding: 12px 20px;
   display: flex;
@@ -55,6 +57,7 @@ nav {
   align-items: center;
   position: relative;
 }
+
 .logo {
   font-size: 20px;
   font-weight: bold;
@@ -62,14 +65,16 @@ nav {
   text-decoration: none;
   cursor: pointer;
 }
+
 .nav-right {
   display: flex;
   align-items: center;
   gap: 14px;
   font-size: 14px;
   color: rgba(255,255,255,.95);
-  padding-right: 46px; /* 给最右侧的电脑图标让出空间 */
+  padding-right: 54px; /* 给最右侧的电脑图标让出空间 */
 }
+
 #ip {
   padding: 4px 10px;
   border-radius: 6px;
@@ -78,6 +83,7 @@ nav {
   font-family: monospace;
   font-variant-numeric: tabular-nums;
 }
+
 .theme-btn {
   width: 36px;
   height: 36px;
@@ -228,36 +234,6 @@ footer p { margin: 4px 0; }
   color: #fff;
   text-decoration: none;
   font-size: 14px;
-  transition: background .2s;
-}
-.login-btn:hover { background: rgba(255,255,255,.35); }
-
-/* 导航头像 */
-.user-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid rgba(255,255,255,.6);
-  display: block;
-  transition: border-color .2s;
-}
-.user-avatar:hover { border-color: #fff; }
-.user-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* 导航登录按钮 */
-.login-btn {
-  padding: 6px 16px;
-  border-radius: 6px;
-  background: rgba(255,255,255,.22);
-  color: #fff;
-  text-decoration: none;
-  font-size: 14px;
   cursor: pointer;
   transition: background .2s;
 }
@@ -276,32 +252,31 @@ footer p { margin: 4px 0; }
 .user-avatar:hover { border-color: #fff; }
 .user-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* 切换后台图标(电脑图标，贴最右) */
+/* 切换后台图标：贴浏览器最右 */
 .admin-btn {
   position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: rgba(255,255,255,.18);
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 48px;
+  border-radius: 0;
+  background: rgba(255,255,255,.12);
   color: #ffffff;
-  border: 1px solid rgba(255,255,255,.55);
+  border: none;
+  border-left: 1px solid rgba(255,255,255,.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .2s, border-color .2s, transform .2s;
+  transition: background .2s;
   text-decoration: none;
+  z-index: 10;
 }
 .admin-btn:hover {
-  background: rgba(255,255,255,.34);
-  border-color: #ffffff;
-  transform: translateY(-50%) scale(1.05);
+  background: rgba(255,255,255,.28);
 }
 .admin-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   stroke: currentColor;
   stroke-width: 2;
   fill: none;
@@ -434,7 +409,7 @@ footer p { margin: 4px 0; }
 
 /* 移动端 */
 @media (max-width: 600px) {
-  .nav-inner { flex-direction: column; gap: 10px; }
+  .nav-inner { flex-direction: column; gap: 10px; padding-right: 54px; }
   .ip-wrap { display: none; }
   .name { font-size: 30px; }
   .card { padding: 22px; }
@@ -808,7 +783,7 @@ footer p { margin: 4px 0; }
   flex: 1;
 }
 
-/*移动端：两栏叠起来*/
+/* 移动端：两栏叠起来 */
 @media (max-width: 700px) {
   .profile-wrap { flex-direction: column; }
   .profile-left { padding-top: 24px; }

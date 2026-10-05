@@ -1,9 +1,9 @@
 (function () {
-  const API = 'https://api.chengfa.dpdns.org';
+  const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
   /* ========== 1. 生成导航栏 ========== */
   // 判断当前是不是后台页：是的话后台按钮"回到首页"，否则"进入后台"
-  const isManage = location.pathname.indexOf('/manage/') === 0;
+  const isManage = location.pathname.indexOf('/manage') === 0;
   const adminHref = isManage ? '/' : '/manage/dashboard';
   const adminTitle = isManage ? '返回普通界面' : '管理后台';
 
@@ -17,12 +17,12 @@
           <a class="user-avatar" id="userAvatar" href="/profile/" style="display:none;">
             <img id="avatarImg" src="/avatar-default.jpg" alt="头像">
           </a>
-                <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
+          <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
             <svg id="themeIcon" viewBox="0 0 24 24">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
           </button>
-                    <div class="gear-wrap">
+          <div class="gear-wrap">
             <button class="gear-btn" id="gearBtn" aria-label="设置">
               <svg viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="3"/>
@@ -35,13 +35,13 @@
             </div>
           </div>
         </div>
-        <a class="admin-btn" id="adminBtn" href="` + adminHref + `" aria-label="` + adminTitle + `" title="` + adminTitle + `" style="display:none;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="11" rx="2"/>
-            <path d="M8 20h8M12 15v5"/>
-          </svg>
-        </a>
       </div>
+      <a class="admin-btn" id="adminBtn" href="${adminHref}" aria-label="${adminTitle}" title="${adminTitle}" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+      </a>
     </nav>
   `;
 
@@ -83,6 +83,7 @@
   const loginSubmit    = document.getElementById('loginSubmit');
   const registerSubmit = document.getElementById('registerSubmit');
   const msgBox    = document.getElementById('loginMsg');
+  const adminBtn  = document.getElementById('adminBtn');
 
   /* ========== 4. 主题切换 ========== */
   const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
@@ -122,7 +123,6 @@
     gearLogout.style.display = 'block';
     gearEmpty.style.display = 'none';
     // 后台入口只给站长(owner)/管理员(admin)看
-    const adminBtn = document.getElementById('adminBtn');
     if (adminBtn) {
       adminBtn.style.display = (role === 'owner' || role === 'admin') ? 'flex' : 'none';
     }
@@ -132,7 +132,6 @@
     avatarBox.style.display = 'none';
     gearLogout.style.display = 'none';
     gearEmpty.style.display = 'block';
-    const adminBtn = document.getElementById('adminBtn');
     if (adminBtn) adminBtn.style.display = 'none';
   }
 
@@ -159,7 +158,18 @@
   }
   checkLogin();
 
-  /* ========== 7. 齿轮菜单 ========== */
+  /* ========== 7. 后台按钮：平滑跳转 ========== */
+  if (adminBtn) {
+    adminBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const href = this.getAttribute('href');
+      document.body.style.transition = 'opacity .18s';
+      document.body.style.opacity = '0';
+      setTimeout(() => { location.href = href; }, 180);
+    });
+  }
+
+  /* ========== 8. 齿轮菜单 ========== */
   gearBtn.addEventListener('click', e => {
     e.stopPropagation();
     gearMenu.classList.toggle('show');
@@ -174,7 +184,7 @@
     location.reload();
   });
 
-  /* ========== 8. 登录弹窗 ========== */
+  /* ========== 9. 登录弹窗 ========== */
   function openModal() {
     modal.classList.add('show');
     msgBox.textContent = '';
