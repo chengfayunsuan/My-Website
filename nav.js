@@ -2,7 +2,6 @@
   const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
   /* ========== 1. 生成导航栏 ========== */
-  // 判断当前是不是后台页：是的话后台按钮"回到首页"，否则"进入后台"
   const isManage = location.pathname.indexOf('/manage') === 0;
   const adminHref = isManage ? '/' : '/manage/dashboard';
   const adminTitle = isManage ? '返回普通界面' : '管理后台';
@@ -16,6 +15,12 @@
           <a class="login-btn" id="loginBtn" href="javascript:;">登录</a>
           <a class="user-avatar" id="userAvatar" href="/profile/" style="display:none;">
             <img id="avatarImg" src="/avatar-default.jpg" alt="头像">
+          </a>
+          <a class="admin-btn" id="adminBtn" href="${adminHref}" aria-label="${adminTitle}" title="${adminTitle}" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <path d="M8 21h8M12 17v4"/>
+            </svg>
           </a>
           <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
             <svg id="themeIcon" viewBox="0 0 24 24">
@@ -36,12 +41,6 @@
           </div>
         </div>
       </div>
-      <a class="admin-btn" id="adminBtn" href="${adminHref}" aria-label="${adminTitle}" title="${adminTitle}" style="display:none;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="3" width="20" height="14" rx="2"/>
-          <path d="M8 21h8M12 17v4"/>
-        </svg>
-      </a>
     </nav>
   `;
 
@@ -62,7 +61,6 @@
     </div>
   `;
 
-  /* 插入到页面 */
   const navRoot = document.getElementById('navbar');
   if (navRoot) navRoot.innerHTML = navHTML;
   document.body.insertAdjacentHTML('beforeend', modalHTML);
@@ -117,12 +115,17 @@
     });
 
   /* ========== 6. 登录状态判断 ========== */
-  function showLoggedIn(role) {
+  function showLoggedIn(role, avatar) {
     loginBtn.style.display = 'none';
     avatarBox.style.display = 'block';
     gearLogout.style.display = 'block';
     gearEmpty.style.display = 'none';
-    // 后台入口只给站长(owner)/管理员(admin)看
+
+    // 导航栏头像同步
+    const navAvatarImg = document.getElementById('avatarImg');
+    if (navAvatarImg && avatar) navAvatarImg.src = avatar;
+
+    // 后台按钮：只有 owner/admin 显示
     if (adminBtn) {
       adminBtn.style.display = (role === 'owner' || role === 'admin') ? 'flex' : 'none';
     }
@@ -144,9 +147,10 @@
       });
       const data = await res.json();
       if (data.ok) {
-        showLoggedIn(data.role);
+        showLoggedIn(data.role, data.avatar);
         const name = localStorage.getItem('username');
-        if (name) document.getElementById('avatarImg').alt = name;
+        const navAvatarImg = document.getElementById('avatarImg');
+        if (name && navAvatarImg) navAvatarImg.alt = name;
       } else {
         localStorage.removeItem('token');
         localStorage.removeItem('username');

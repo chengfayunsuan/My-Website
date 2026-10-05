@@ -32,14 +32,14 @@
           </div>
         </div>
 
-        <!-- 签名（放在用户名下方） -->
+        <!-- 签名 -->
         <div class="card profile-bio-card">
           <h2 class="section-title">个性签名</h2>
           <p class="profile-bio" id="bioText">这个人很懒，什么都没写。</p>
           <textarea class="profile-bio-input" id="bioInput" maxlength="200" placeholder="写点什么…" style="display:none;"></textarea>
         </div>
 
-        <!-- 下方：我的留言（撑满） -->
+        <!-- 我的留言 -->
         <div class="card profile-feed">
           <h2 class="section-title">我的留言</h2>
           <div id="myMessages">加载中…</div>
@@ -47,11 +47,10 @@
 
       </div>
 
-      <!-- 右栏：所有信息合成一个卡片 -->
+      <!-- 右栏 -->
       <div class="profile-right">
         <div class="card profile-side">
 
-          <!-- 关注/粉丝/拉黑 -->
           <div class="side-section">
             <div class="profile-stat" data-type="following">
               <span class="stat-label">关注</span>
@@ -67,7 +66,6 @@
             </div>
           </div>
 
-          <!-- UID + 注册时间 -->
           <div class="side-section">
             <p class="profile-meta">UID: <span id="uid">—</span></p>
             <p class="profile-meta">注册于 <span id="createdAt">—</span></p>
@@ -104,7 +102,7 @@
   <script src="/nav.js"></script>
   <script>
   (function () {
-    const API = 'https://api.chengfa.dpdns.org';
+    const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -183,13 +181,10 @@
         el.roleTag.classList.add('role-user');
       }
 
-      if (data.avatar) {
-        el.avatarImg.src = data.avatar;
-        originalAvatar = data.avatar;
-      } else {
-        el.avatarImg.src = '/avatar-default.jpg';
-        originalAvatar = '/avatar-default.jpg';
-      }
+      // 头像与导航栏同步
+      const avatarSrc = data.avatar || '/avatar-default.jpg';
+      el.avatarImg.src = avatarSrc;
+      originalAvatar = avatarSrc;
 
       if (data.bio && data.bio.trim()) {
         el.bioText.textContent = data.bio;

@@ -44,7 +44,7 @@
   <section style="margin-top:40px;">
     <div class="card">
       <h2 class="section-title">留言板</h2>
-            <p style="margin-bottom:16px;">当前用户：<b id="who">未登录</b> <a href="javascript:;" id="goLogin">去登录</a></p>
+      <p style="margin-bottom:16px;">当前用户：<b id="who">未登录</b> <a href="javascript:;" id="goLogin">去登录</a></p>
 
       <div class="form-row">
         <textarea id="text" placeholder="留言内容（最多 200 字）" maxlength="200"></textarea>
@@ -61,7 +61,9 @@
   <script src="/config.js"></script>
   <script src="/nav.js"></script>
 <script>
-/* 点"去登录"打开登录弹窗 */
+const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+
+// 点"去登录"打开登录弹窗
 const goLogin = document.getElementById('goLogin');
 if (goLogin) {
   goLogin.addEventListener('click', () => {
@@ -69,8 +71,6 @@ if (goLogin) {
     if (modal) modal.classList.add('show');
   });
 }
-
-const API = 'https://api.chengfa.dpdns.org';
 
 // 加载留言
 async function load() {
@@ -98,11 +98,14 @@ function escapeHTML(s) {
   return d.innerHTML;
 }
 
-// 提交
-// 显示当前用户
+// 显示当前用户 + 登录后隐藏"去登录"
 const token = localStorage.getItem('token');
 const username = localStorage.getItem('username');
-if (token) document.getElementById('who').textContent = username;
+const whoEl = document.getElementById('who');
+if (token) {
+  whoEl.textContent = username || '已登录';
+  if (goLogin) goLogin.style.display = 'none';
+}
 
 document.getElementById('submitBtn').onclick = async () => {
   const token = localStorage.getItem('token');

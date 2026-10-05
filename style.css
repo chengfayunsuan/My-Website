@@ -47,7 +47,6 @@ nav {
   transition: background .3s;
 }
 
-/* 导航内容：和主页 section 对齐 */
 .nav-inner {
   max-width: 900px;
   margin: 0 auto;
@@ -72,7 +71,6 @@ nav {
   gap: 14px;
   font-size: 14px;
   color: rgba(255,255,255,.95);
-  padding-right: 54px; /* 给最右侧的电脑图标让出空间 */
 }
 
 #ip {
@@ -84,7 +82,10 @@ nav {
   font-variant-numeric: tabular-nums;
 }
 
-.theme-btn {
+/* 导航栏里的圆形图标按钮（登录、头像、后台、主题、齿轮统一风格） */
+.theme-btn,
+.admin-btn,
+.gear-btn {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -96,9 +97,16 @@ nav {
   align-items: center;
   justify-content: center;
   transition: background .2s;
+  text-decoration: none;
+  flex-shrink: 0;
 }
-.theme-btn:hover { background: rgba(255,255,255,.35); }
-.theme-btn svg {
+.theme-btn:hover,
+.admin-btn:hover,
+.gear-btn:hover { background: rgba(255,255,255,.35); }
+
+.theme-btn svg,
+.admin-btn svg,
+.gear-btn svg {
   width: 20px;
   height: 20px;
   stroke: currentColor;
@@ -248,41 +256,10 @@ footer p { margin: 4px 0; }
   border: 2px solid rgba(255,255,255,.6);
   display: block;
   transition: border-color .2s;
+  flex-shrink: 0;
 }
 .user-avatar:hover { border-color: #fff; }
 .user-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-/* 切换后台图标：贴浏览器最右 */
-.admin-btn {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  width: 48px;
-  border-radius: 0;
-  background: rgba(255,255,255,.12);
-  color: #ffffff;
-  border: none;
-  border-left: 1px solid rgba(255,255,255,.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background .2s;
-  text-decoration: none;
-  z-index: 10;
-}
-.admin-btn:hover {
-  background: rgba(255,255,255,.28);
-}
-.admin-btn svg {
-  width: 22px;
-  height: 22px;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
 
 /* 登录弹窗 */
 .login-modal {
@@ -409,7 +386,7 @@ footer p { margin: 4px 0; }
 
 /* 移动端 */
 @media (max-width: 600px) {
-  .nav-inner { flex-direction: column; gap: 10px; padding-right: 54px; }
+  .nav-inner { flex-direction: column; gap: 10px; }
   .ip-wrap { display: none; }
   .name { font-size: 30px; }
   .card { padding: 22px; }
@@ -418,30 +395,6 @@ footer p { margin: 4px 0; }
 
 /* 齿轮设置 */
 .gear-wrap { position: relative; }
-
-.gear-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255,255,255,.22);
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background .2s;
-}
-.gear-btn:hover { background: rgba(255,255,255,.35); }
-.gear-btn svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
 
 .gear-menu {
   display: none;
@@ -499,7 +452,6 @@ footer p { margin: 4px 0; }
   min-width: 0;
 }
 
-/* 头部：头像 + 用户名（横排，靠左上） */
 .profile-head {
   display: flex;
   gap: 24px;
@@ -563,18 +515,9 @@ footer p { margin: 4px 0; }
   background: var(--nav-bg);
   color: #fff;
 }
-.role-tag.role-user {
-  background: var(--nav-bg);
-  color: #fff;
-}
-.role-tag.role-admin {
-  background: #4CAF50;
-  color: #fff;
-}
-.role-tag.role-owner {
-  background: #f0b400;
-  color: #fff;
-}
+.role-tag.role-user { background: var(--nav-bg); color: #fff; }
+.role-tag.role-admin { background: #4CAF50; color: #fff; }
+.role-tag.role-owner { background: #f0b400; color: #fff; }
 
 /* 我的留言 */
 .profile-feed {
@@ -605,17 +548,13 @@ footer p { margin: 4px 0; }
   text-align: center;
 }
 
-/* 右栏合并卡片 */
-.profile-side {
-  padding: 24px;
-}
+.profile-side { padding: 24px; }
 .side-section + .side-section {
   border-top: 1px solid var(--border);
   margin-top: 20px;
   padding-top: 20px;
 }
 
-/* 签名 */
 .profile-bio {
   color: var(--text);
   font-size: 14px;
@@ -641,7 +580,6 @@ footer p { margin: 4px 0; }
 }
 .profile-bio-input:focus { border-color: var(--primary); }
 
-/* 关注/粉丝/拉黑：文字在前，数字在后 */
 .profile-stat {
   display: flex;
   align-items: baseline;
@@ -652,10 +590,7 @@ footer p { margin: 4px 0; }
   transition: background .15s;
 }
 .profile-stat:hover { background: var(--primary-soft); }
-.stat-label {
-  font-size: 14px;
-  color: var(--text-light);
-}
+.stat-label { font-size: 14px; color: var(--text-light); }
 .stat-num {
   font-size: 18px;
   font-weight: bold;
@@ -669,7 +604,6 @@ footer p { margin: 4px 0; }
 }
 .profile-meta span { color: var(--text); }
 
-/* 右下角编辑按钮 */
 .edit-fab {
   position: fixed;
   right: 30px;
@@ -702,7 +636,6 @@ footer p { margin: 4px 0; }
   stroke-linejoin: round;
 }
 
-/* 编辑操作栏 */
 .edit-actions {
   position: fixed;
   right: 30px;
@@ -722,10 +655,7 @@ footer p { margin: 4px 0; }
   box-shadow: 0 4px 12px rgba(0,0,0,.12);
   transition: background .2s;
 }
-.edit-save {
-  background: var(--success);
-  color: #fff;
-}
+.edit-save { background: var(--success); color: #fff; }
 .edit-save:hover { background: var(--success-hover); }
 .edit-cancel {
   background: var(--card);
@@ -733,13 +663,9 @@ footer p { margin: 4px 0; }
   border: 1px solid var(--border) !important;
 }
 .edit-cancel:hover { background: var(--primary-soft); }
-.edit-pwd {
-  background: var(--primary);
-  color: #fff;
-}
+.edit-pwd { background: var(--primary); color: #fff; }
 .edit-pwd:hover { background: var(--primary-deep); }
 
-/* 通用弹窗 */
 .generic-modal {
   display: none;
   position: fixed;
@@ -778,12 +704,8 @@ footer p { margin: 4px 0; }
   text-align: center;
   color: var(--text);
 }
-.generic-body {
-  overflow-y: auto;
-  flex: 1;
-}
+.generic-body { overflow-y: auto; flex: 1; }
 
-/* 移动端：两栏叠起来 */
 @media (max-width: 700px) {
   .profile-wrap { flex-direction: column; }
   .profile-left { padding-top: 24px; }
