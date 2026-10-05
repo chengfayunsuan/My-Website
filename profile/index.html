@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>个人主页 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style.css?v=3">
 </head>
 <body>
 
   <div id="navbar"></div>
 
-  <section style="margin-top:40px; margin-bottom:40px; max-width:1200px;">
+  <section style="margin-top:40px; margin-bottom:40px;">
     <div class="profile-wrap">
 
       <!-- 左栏 -->
@@ -99,7 +99,7 @@
   </div>
 
   <script src="/config.js"></script>
-  <script src="/nav.js"></script>
+  <script src="/nav.js?v=3"></script>
   <script>
   (function () {
     const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
@@ -181,7 +181,6 @@
         el.roleTag.classList.add('role-user');
       }
 
-      // 头像与导航栏同步
       const avatarSrc = data.avatar || '/avatar-default.jpg';
       el.avatarImg.src = avatarSrc;
       originalAvatar = avatarSrc;

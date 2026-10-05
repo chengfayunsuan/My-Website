@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>后台测试 · 乘法</title>
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style.css?v=3">
 <style>
   .form-row { margin: 12px 0; }
   .form-row input, .form-row textarea {
@@ -59,11 +59,10 @@
   </section>
 
   <script src="/config.js"></script>
-  <script src="/nav.js"></script>
+  <script src="/nav.js?v=3"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
-// 点"去登录"打开登录弹窗
 const goLogin = document.getElementById('goLogin');
 if (goLogin) {
   goLogin.addEventListener('click', () => {
@@ -72,7 +71,6 @@ if (goLogin) {
   });
 }
 
-// 加载留言
 async function load() {
   const list = document.getElementById('list');
   try {
@@ -91,14 +89,12 @@ async function load() {
   }
 }
 
-// 防 XSS
 function escapeHTML(s) {
   const d = document.createElement('div');
   d.textContent = s;
   return d.innerHTML;
 }
 
-// 显示当前用户 + 登录后隐藏"去登录"
 const token = localStorage.getItem('token');
 const username = localStorage.getItem('username');
 const whoEl = document.getElementById('who');

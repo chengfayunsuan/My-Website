@@ -121,11 +121,9 @@
     gearLogout.style.display = 'block';
     gearEmpty.style.display = 'none';
 
-    // 导航栏头像同步
     const navAvatarImg = document.getElementById('avatarImg');
     if (navAvatarImg && avatar) navAvatarImg.src = avatar;
 
-    // 后台按钮：只有 owner/admin 显示
     if (adminBtn) {
       adminBtn.style.display = (role === 'owner' || role === 'admin') ? 'flex' : 'none';
     }

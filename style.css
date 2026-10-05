@@ -11,6 +11,7 @@
   --success-hover: #43A047;
   --border: #eaeaea;
   --font-main: "PingFang SC", "Microsoft YaHei", sans-serif;
+  --page-width: 1200px;   /* 全站统一宽度 */
 }
 
 body.dark {
@@ -48,7 +49,7 @@ nav {
 }
 
 .nav-inner {
-  max-width: 900px;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: 12px 20px;
   display: flex;
@@ -82,7 +83,7 @@ nav {
   font-variant-numeric: tabular-nums;
 }
 
-/* 导航栏里的圆形图标按钮（登录、头像、后台、主题、齿轮统一风格） */
+/* 导航栏统一圆形图标按钮 */
 .theme-btn,
 .admin-btn,
 .gear-btn {
@@ -118,7 +119,7 @@ nav {
 
 /* 头部 */
 header {
-  max-width: 900px;
+  max-width: var(--page-width);
   margin: 60px auto 40px;
   padding: 0 20px;
   text-align: center;
@@ -144,7 +145,7 @@ header {
 
 /* 通用 section / card */
 section {
-  max-width: 900px;
+  max-width: var(--page-width);
   margin: 0 auto 50px;
   padding: 0 20px;
 }
@@ -434,21 +435,21 @@ footer p { margin: 4px 0; }
 /* ===== Profile ===== */
 .profile-wrap {
   display: flex;
-  gap: 0;
+  gap: 20px;
   align-items: flex-start;
 }
 .profile-left {
   flex: 3;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 20px;
   min-width: 0;
 }
 .profile-right {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 20px;
   min-width: 0;
 }
 
