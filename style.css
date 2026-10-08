@@ -30,6 +30,9 @@ body.dark {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* 始终预留滚动条位置：内容长短不一时，居中的导航与内容不会左右跳动 */
+html { scrollbar-gutter: stable; }
+
 body {
   font-family: var(--font-main);
   background: var(--bg);
