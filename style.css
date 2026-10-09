@@ -30,8 +30,15 @@ body.dark {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* 始终预留滚动条位置：内容长短不一时，居中的导航与内容不会左右跳动 */
-html { scrollbar-gutter: stable; }
+/* 恒定保留纵向滚动条位置。
+   否则长页面出现滚动条后可视宽度少约 15px，居中的导航与内容会整体左移约 8px，
+   短页面没有滚动条就不动，于是同一个导航栏在不同页面看起来偏左偏右。
+   新浏览器用 scrollbar-gutter（滚动条不常驻，只是留出位置）；
+   老浏览器不支持就退回 overflow-y:scroll（滚动条常驻，但位置一定一致）。 */
+html { overflow-y: scroll; }
+@supports (scrollbar-gutter: stable) {
+  html { overflow-y: auto; scrollbar-gutter: stable; }
+}
 
 body {
   font-family: var(--font-main);
