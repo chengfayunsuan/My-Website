@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>写文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=17">
+<link rel="stylesheet" href="/style.css?v=18">
 <style>
   .ed-card { padding: 24px; }
   .ed-title {
@@ -204,7 +204,7 @@
       <div class="ed-foot">
         <span>字数 <b id="chars">0</b> / 10000</span>
         <span>素材空间 <span id="quota">—</span></span>
-        <span style="color:var(--text-light)">图片 ≤ 8MB，音频 ≤ 30MB，视频 ≤ 80MB</span>
+        <span style="color:var(--text-light)">图片 ≤ 50MB，音频 ≤ 200MB，视频 ≤ 2GB</span>
       </div>
 
       <div class="ed-actions">
@@ -219,11 +219,11 @@
   </footer>
 
   <input type="file" id="fileImg"   accept="image/*" hidden>
-  <input type="file" id="fileVideo" accept="video/*" hidden>
+  <input type="file" id="fileVideo" accept="video/*,.mkv" hidden>
   <input type="file" id="fileAudio" accept="audio/*" hidden>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=17"></script>
+  <script src="/nav.js?v=18"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const MAX_CHARS = 10000;
@@ -261,11 +261,75 @@ function countChars() {
 editor.addEventListener('input', countChars);
 
 /* ===== 工具栏 ===== */
+/* 点工具栏按钮会抢走焦点，编辑器的选区就没了，execCommand 作用在空选区上等于没干。
+   所以：随时记下编辑器里最后的选区，点按钮时先把它恢复回来。 */
+let savedRange = null;
+function saveRange() {
+  const s = window.getSelection();
+  if (!s || !s.rangeCount) return;
+  const r = s.getRangeAt(0);
+  if (editor.contains(r.commonAncestorContainer)) savedRange = r.cloneRange();
+}
+function restoreRange() {
+  if (!savedRange) return false;
+  const s = window.getSelection();
+  s.removeAllRanges();
+  s.addRange(savedRange);
+  return true;
+}
+['keyup', 'mouseup', 'input', 'focus'].forEach(ev => editor.addEventListener(ev, saveRange));
+
+// 让颜色、高亮这些生成 <span style>，而不是被浏览器忽略的 <font>
+try { document.execCommand('styleWithCSS', false, true); } catch { /* 老浏览器没有就算了 */ }
+
+/* 这些命令不需要先选中文字（光标放在那儿就能用） */
+const NO_SELECTION_OK = ['insertHorizontalRule', 'undo', 'redo', 'formatBlock'];
+
+/* execCommand 万一没生效（有些浏览器/场景会），自己把选中的文字包一层 */
+function wrapSelection(tag, css) {
+  const s = window.getSelection();
+  if (!s || s.rangeCount === 0 || s.isCollapsed) return false;
+  const r = s.getRangeAt(0);
+  const el = document.createElement(tag);
+  if (css) el.setAttribute('style', css);
+  try {
+    el.appendChild(r.extractContents());
+    r.insertNode(el);
+    const nr = document.createRange();
+    nr.selectNodeContents(el);
+    s.removeAllRanges();
+    s.addRange(nr);
+    savedRange = nr.cloneRange();
+    return true;
+  } catch { return false; }
+}
+const FALLBACK = {
+  bold:         () => wrapSelection('strong', ''),
+  italic:       () => wrapSelection('em', ''),
+  underline:    () => wrapSelection('span', 'text-decoration:underline'),
+  strikeThrough:() => wrapSelection('span', 'text-decoration:line-through'),
+  foreColor:    v => wrapSelection('span', 'color:' + v),
+  hiliteColor:  v => wrapSelection('span', 'background:' + v)
+};
+
 function exec(cmd, val) {
   editor.focus();
-  document.execCommand(cmd, false, val);
+  const has = restoreRange();
+  if (!has && NO_SELECTION_OK.indexOf(cmd) === -1) {
+    const s = window.getSelection();
+    if ((!s || s.isCollapsed) && !editor.contains(s && s.anchorNode)) {
+      setMsg('先在正文里点一下，选中要改的文字', 'err');
+      return false;
+    }
+  }
+  let ok = false;
+  try { ok = document.execCommand(cmd, false, val); } catch { ok = false; }
+  if (!ok && FALLBACK[cmd]) ok = FALLBACK[cmd](val);
+  saveRange();
   countChars();
+  return ok;
 }
+
 document.querySelectorAll('.ed-btn[data-cmd]').forEach(btn => {
   btn.addEventListener('mousedown', e => e.preventDefault());   // 别让按钮抢走选区
   btn.addEventListener('click', () => {
@@ -279,7 +343,11 @@ document.querySelectorAll('.ed-btn[data-cmd]').forEach(btn => {
     }
     let val = btn.dataset.val;
     if (cmd === 'foreColor') val = document.getElementById('foreColor').value;
-    exec(cmd, val);
+    if (exec(cmd, val)) {                                        // 点到了就闪一下，给个反馈
+      btn.style.background = 'var(--primary)';
+      btn.style.color = '#fff';
+      setTimeout(() => { btn.style.background = ''; btn.style.color = ''; }, 180);
+    }
   });
 });
 document.getElementById('blockSel').addEventListener('change', e => exec('formatBlock', e.target.value));
@@ -294,33 +362,85 @@ document.querySelectorAll('.ed-btn[data-act]').forEach(btn => {
   });
 });
 
-function uploadFile(file, kind) {
+/* 上限（跟后端 UPLOAD_RULES 对齐）：图片 50MB、音频 200MB、视频 2GB */
+const LIMITS = { img: 50 * 1024 * 1024, audio: 200 * 1024 * 1024, video: 2 * 1024 * 1024 * 1024 };
+const CHUNK = 6 * 1024 * 1024;      // 和后端 CHUNK_MAX 一致
+const KIND_NAME = { img: 'image', audio: 'audio', video: 'video' };
+
+function sizeText(b) {
+  if (b >= 1024 * 1024 * 1024) return (b / 1024 / 1024 / 1024).toFixed(2) + 'GB';
+  if (b >= 1024 * 1024) return (b / 1024 / 1024).toFixed(1) + 'MB';
+  return Math.round(b / 1024) + 'KB';
+}
+function readAsDataURL(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = reject;
+    r.readAsDataURL(blob);
+  });
+}
+async function api(path, payload) {
+  const res = await fetch(API + path, { method: 'POST', headers: authHeaders(), body: JSON.stringify(payload || {}) });
+  return await res.json();
+}
+function progress(pct, text) {
+  setMsg(text + (pct ? ' ' + pct + '%' : ''), '');
+}
+
+/* 小文件一次传完；大文件切成 6MB 一片慢慢传，不然 2GB 直接把浏览器和内存干爆 */
+async function uploadFile(file, kind) {
   if (!file) return;
-  const rule = { img: 8, video: 80, audio: 30 }[kind];
-  if (file.size > rule * 1024 * 1024) {
-    return alert(`这个文件 ${(file.size / 1024 / 1024).toFixed(1)}MB，超过 ${rule}MB 上限`);
+  if (file.size > LIMITS[kind]) {
+    return alert(`这个文件 ${sizeText(file.size)}，超过${kind === 'img' ? '图片' : kind === 'video' ? '视频' : '音频'} ${sizeText(LIMITS[kind])} 的上限`);
   }
-  const reader = new FileReader();
-  reader.onload = async () => {
-    setMsg('上传中…', '');
-    try {
-      const res = await fetch(API + '/article/upload', {
-        method: 'POST', headers: authHeaders(),
-        body: JSON.stringify({ kind: kind === 'img' ? 'image' : kind, articleId: articleId || 0, data: reader.result })
+  const kindName = KIND_NAME[kind];
+  try {
+    if (file.size <= CHUNK) {
+      progress(0, '上传中…');
+      const d = await api('/article/upload', {
+        kind: kindName, articleId: articleId || 0, data: await readAsDataURL(file)
       });
-      const d = await res.json();
       if (!d.ok) return setMsg(d.error || '上传失败', 'err');
-      const src = API + d.url;                       // 存绝对路径，前台后台都能直接显示
-      editor.focus();
-      if (kind === 'img')        document.execCommand('insertHTML', false, `<img src="${src}" alt=""><br>`);
-      else if (kind === 'video') document.execCommand('insertHTML', false, `<video src="${src}" controls style="max-width:100%"></video><br>`);
-      else                       document.execCommand('insertHTML', false, `<audio src="${src}" controls></audio><br>`);
-      setMsg('已插入', 'ok');
-      countChars();
-      loadQuota();
-    } catch { setMsg('上传失败，检查网络', 'err'); }
-  };
-  reader.readAsDataURL(file);
+      return insertMedia(API + d.url, kind);
+    }
+
+    const start = await api('/article/upload/start', {
+      kind: kindName, articleId: articleId || 0, name: file.name, size: file.size, mime: file.type
+    });
+    if (!start.ok) return setMsg(start.error || '上传失败', 'err');
+
+    let done = 0;
+    while (done < file.size) {
+      const slice = file.slice(done, Math.min(done + CHUNK, file.size));
+      const c = await api('/article/upload/chunk', {
+        uploadId: start.uploadId, data: await readAsDataURL(slice)
+      });
+      if (!c.ok) {
+        await api('/article/upload/cancel', { uploadId: start.uploadId });
+        return setMsg(c.error || '上传中断', 'err');
+      }
+      done = c.got;
+      progress(Math.round(done / file.size * 100), `上传中 ${sizeText(done)} / ${sizeText(file.size)}`);
+    }
+
+    const fin = await api('/article/upload/finish', { uploadId: start.uploadId });
+    if (!fin.ok) return setMsg(fin.error || '收尾失败', 'err');
+    return insertMedia(API + fin.url, kind);
+  } catch (e) {
+    setMsg('上传失败，检查网络', 'err');
+  }
+}
+
+function insertMedia(src, kind) {
+  editor.focus();
+  restoreRange();
+  if (kind === 'img')        document.execCommand('insertHTML', false, `<img src="${src}" alt=""><br>`);
+  else if (kind === 'video') document.execCommand('insertHTML', false, `<video src="${src}" controls preload="metadata" style="max-width:100%"></video><br>`);
+  else                       document.execCommand('insertHTML', false, `<audio src="${src}" controls preload="metadata"></audio><br>`);
+  setMsg('已插入', 'ok');
+  countChars();
+  loadQuota();
 }
 ['img', 'video', 'audio'].forEach(k => {
   document.getElementById(FILE_INPUT[k]).addEventListener('change', e => {
