@@ -96,6 +96,7 @@ nav {
 /* 导航栏统一圆形图标按钮 */
 .theme-btn,
 .admin-btn,
+.mail-btn,
 .gear-btn {
   width: 36px;
   height: 36px;
@@ -113,10 +114,12 @@ nav {
 }
 .theme-btn:hover,
 .admin-btn:hover,
+.mail-btn:hover,
 .gear-btn:hover { background: rgba(255,255,255,.35); }
 
 .theme-btn svg,
 .admin-btn svg,
+.mail-btn svg,
 .gear-btn svg {
   width: 20px;
   height: 20px;
@@ -948,24 +951,10 @@ footer p { margin: 4px 0; }
 .user-row-uid { font-size: 13px; color: var(--text-light); }
 
 /* ===== 导航栏右上角的信箱 ===== */
-.mail-wrap { position: relative; }
-.mail-btn {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background: transparent;
-  color: #fff;
-  transition: background .15s;
-}
-.mail-btn:hover { background: rgba(255,255,255,.28); }
-.mail-btn svg { width: 20px; height: 20px; }
+/* 按钮外观（36px 圆形、半透明白底）跟主题/后台/齿轮三个图标共用上面那条统一规则，
+   这里只负责给未读数红点和下拉面板做定位 */
+.mail-wrap { position: relative; display: flex; align-items: center; }
+.mail-btn { position: relative; padding: 0; }
 .mail-dot {
   position: absolute;
   top: -3px;
