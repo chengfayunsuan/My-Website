@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>后台测试 · 乘法</title>
-<link rel="stylesheet" href="/style.css?v=8">
+<title>留言板 · 乘法</title>
+<link rel="stylesheet" href="/style.css?v=9">
 <style>
   .form-row { margin: 12px 0; }
   .form-row input, .form-row textarea {
@@ -32,6 +32,35 @@
     padding: 12px 0;
     border-bottom: 1px solid var(--border);
   }
+  .msg-item.hl { background: var(--primary-soft); border-radius: 8px; }
+  .reply-box {
+    margin: 10px 0 4px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--primary-soft);
+  }
+  .reply-input {
+    width: 100%;
+    min-height: 56px;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--card);
+    color: var(--text);
+    outline: none;
+    resize: vertical;
+  }
+  .reply-input:focus { border-color: var(--primary); }
+  .reply-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .reply-actions .act-btn { background: var(--card); }
+  .reply-actions .act-btn.on { background: var(--primary); color: #fff; }
+  .like-btn { font-size: 15px; line-height: 1; }
+  .like-btn .like-n { font-size: 13px; margin-left: 2px; }
+  .like-btn.on { color: #e5534b; border-color: #e5534b; background: rgba(229,83,75,.12); }
+  .like-btn.on:hover { background: rgba(229,83,75,.2); }
   .msg-head { display: flex; align-items: center; gap: 8px; }
   .msg-avatar { display: inline-flex; flex: none; line-height: 0; }
   .msg-avatar img {
@@ -77,7 +106,7 @@
   </section>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=8"></script>
+  <script src="/nav.js?v=9"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
@@ -146,8 +175,13 @@ let me = null;                    // {uid, username, role}
 let followSet  = new Set();       // 我关注的人
 let blockedSet = new Set();       // 我拉黑的人
 let reportedSet = new Set();      // 我举报过、还没处理的留言 id
+let likeCount = {};               // { 留言id: 赞数 }
+let likeSet   = new Set();        // 我赞过的留言 id
+let openReplyId = null;           // 当前打开着回复框的那条留言 id
+let replyDraft = '';              // 回复框里预填的内容（@某某 ）
 let msgsCache = [];
-let meLoaded = false;
+let meToken = null;               // 记住这份 me 是用哪个 token 换来的，换人了要重取
+let urlActionDone = false;        // ?reply= / ?msg= 只处理一次，别每次重画都跳
 
 function authHeaders() {
   return {
@@ -165,15 +199,16 @@ function ensureLogin() {
 }
 
 async function loadMe() {
-  if (meLoaded) return;
-  meLoaded = true;
   const token = localStorage.getItem('token');
-  if (!token) return;
+  // 退出登录了就当没登录；换了个 token（换人登录）要重新取
+  if (!token) { me = null; meToken = null; return; }
+  if (me && meToken === token) return;
   try {
     const res = await fetch(API + '/me', { headers: { 'Authorization': 'Bearer ' + token } });
     const d = await res.json();
     if (d && d.ok) {
       me = { uid: d.uid, username: d.username, role: d.role };
+      meToken = token;
       const who = document.getElementById('who');
       if (who) who.textContent = d.username;
       if (goLogin) goLogin.style.display = 'none';
@@ -207,20 +242,91 @@ async function loadReports() {
 }
 
 /* ===== 渲染 ===== */
+/* 每条留言右边的按钮： 关注 | 回复 | ♡赞 | ⋯
+   —— 自己的留言也有「回复 / 赞 / 三个点」，只是三个点里没有关注和拉黑 */
 function actionsHTML(m, who) {
-  // 没登录 / 认不出作者 / 是自己的留言 —— 都不显示按钮
-  if (!me || who.uid == null || who.uid === me.uid) return '';
-  const followed = followSet.has(who.uid);
+  if (!me) return '';
+  if (typeof m.id !== 'number') return '';
+
+  const mine = who.uid != null && who.uid === me.uid;
+  const hasUid = who.uid != null;
+  const followed = hasUid && followSet.has(who.uid);
+  const liked = likeSet.has(m.id);
+  const n = likeCount[m.id] || 0;
   const reported = reportedSet.has(m.id);
+
+  const followBtn = (!mine && hasUid)
+    ? `<button type="button" class="act-btn${followed ? ' on' : ''}" data-act="follow" data-uid="${who.uid}">${followed ? '已关注' : '关注'}</button>`
+    : '';
+  // 拉黑只对别人开放（后端也拦着自己拉黑自己）
+  const blockItem = (!mine && hasUid)
+    ? `<button type="button" data-act="block" data-uid="${who.uid}" class="danger">拉黑 TA</button>`
+    : '';
+
   return `
         <div class="msg-actions">
-          <button type="button" class="act-btn${followed ? ' on' : ''}" data-act="follow" data-uid="${who.uid}">${followed ? '已关注' : '关注'}</button>
+          ${followBtn}
+          <button type="button" class="act-btn" data-act="reply" data-id="${m.id}" data-name="${escapeHTML(who.name)}">回复</button>
+          <button type="button" class="act-btn like-btn${liked ? ' on' : ''}" data-act="like" data-id="${m.id}" data-uid="${hasUid ? who.uid : ''}" title="${liked ? '取消赞' : '赞一个'}">♥<span class="like-n">${n > 0 ? n : ''}</span></button>
           <button type="button" class="act-btn dots" data-act="menu" aria-label="更多操作" title="更多操作">⋯</button>
           <div class="act-menu">
-            <button type="button" data-act="block" data-uid="${who.uid}" class="danger">拉黑 TA</button>
-            <button type="button" data-act="report" data-id="${typeof m.id === 'number' ? m.id : ''}"${reported ? ' disabled' : ''} class="danger">${reported ? '已举报' : '举报'}</button>
+            ${blockItem}
+            <button type="button" data-act="report" data-id="${m.id}"${reported ? ' disabled' : ''} class="danger">${reported ? '已举报' : '举报'}</button>
           </div>
         </div>`;
+}
+
+/* 回复框：预填「@某某 」，和后端识别 @ 的逻辑对上 */
+function replyBoxHTML(m, who) {
+  return `
+      <div class="reply-box" data-for="${m.id}">
+        <textarea class="reply-input" placeholder="回复 ${escapeHTML(who.name)}…（第一行会自动带上 @${escapeHTML(who.name)} ）">${escapeHTML(replyDraft)}</textarea>
+        <div class="reply-actions">
+          <button type="button" class="act-btn on" data-act="send-reply" data-id="${m.id}" data-uid="${who.uid == null ? '' : who.uid}" data-name="${escapeHTML(who.name)}">发送回复</button>
+          <button type="button" class="act-btn" data-act="cancel-reply">取消</button>
+        </div>
+      </div>`;
+}
+
+/* 打开某条留言下面的回复框，并预填 @名字 */
+function openReply(id, name) {
+  openReplyId = id;
+  replyDraft = name ? '@' + name + ' ' : '';
+  render();
+  const box = document.querySelector('.reply-box[data-for="' + id + '"]');
+  if (!box) return;
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const ta = box.querySelector('.reply-input');
+  if (ta) {
+    ta.focus();
+    ta.setSelectionRange(ta.value.length, ta.value.length);   // 光标放最后，直接接着打
+  }
+}
+
+/* 信箱点过来会带 ?reply=留言id&to=对方名字（或 ?msg=留言id 只跳过去）*/
+function applyUrlAction() {
+  if (urlActionDone) return;
+  const qs = new URLSearchParams(location.search);
+  const rid = parseInt(qs.get('reply'), 10);
+  const mid = parseInt(qs.get('msg'), 10);
+
+  if (rid) {
+    const m = msgsCache.find(x => x.id === rid);
+    if (m) {
+      urlActionDone = true;
+      openReply(rid, qs.get('to') || whoOf(m).name);
+      return;
+    }
+  }
+  if (mid) {
+    const item = document.querySelector('.msg-item[data-id="' + mid + '"]');
+    if (item) {
+      urlActionDone = true;
+      item.classList.add('hl');
+      item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => item.classList.remove('hl'), 2500);
+    }
+  }
 }
 
 function render() {
@@ -231,11 +337,12 @@ function render() {
     const who = whoOf(m);
     const href = '/profile/?uid=' + who.uid;
     const mine = me && who.uid === me.uid;
+    const idAttr = typeof m.id === 'number' ? m.id : '';
 
     // 拉黑的人：留言折叠起来，留一个「取消拉黑」的入口，不然永远解不开
     if (me && who.uid != null && !mine && blockedSet.has(who.uid)) {
       return `
-      <div class="msg-item blocked-item">
+      <div class="msg-item blocked-item" data-id="${idAttr}">
         <div class="msg-head">
           <span class="msg-avatar"><img src="${who.avatar}" alt=""></span>
           <span class="msg-name">${escapeHTML(who.name)}</span>
@@ -256,7 +363,7 @@ function render() {
       : `<span class="msg-avatar"><img src="${who.avatar}" alt=""></span>`;
 
     return `
-      <div class="msg-item">
+      <div class="msg-item" data-id="${idAttr}">
         <div class="msg-head">
           ${avatarHTML}
           ${nameHTML}
@@ -264,6 +371,7 @@ function render() {
           ${actionsHTML(m, who)}
         </div>
         <div class="msg-text">${escapeHTML(m.text)}</div>
+        ${openReplyId === m.id ? replyBoxHTML(m, who) : ''}
       </div>`;
   }).join('');
 
@@ -289,7 +397,11 @@ async function load() {
   list.textContent = '加载中…';
   let data;
   try {
-    const res = await fetch(API + '/messages');
+    const token = localStorage.getItem('token');
+    // 带上 token，后端才知道哪几条是我赞过的
+    const res = await fetch(API + '/messages', {
+      headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+    });
     data = await res.json();
   } catch {
     list.textContent = '加载失败';
@@ -297,6 +409,15 @@ async function load() {
   }
   if (!Array.isArray(data)) { list.textContent = '加载失败'; return; }
   msgsCache = data;
+
+  // 赞数和「我赞过没」跟着留言一起来，不用再单独请求
+  likeCount = {};
+  likeSet = new Set();
+  data.forEach(m => {
+    if (typeof m.id !== 'number') return;
+    likeCount[m.id] = m.likes || 0;
+    if (m.likedByMe) likeSet.add(m.id);
+  });
 
   await loadUsers();
   await loadMe();
@@ -306,7 +427,7 @@ async function load() {
   const warn = document.getElementById('warnBar');
   if (warn) {
     if (msgsCache.some(m => typeof m.id !== 'number')) {
-      warn.textContent = '后端还是旧版本：留言还没编号，举报用不了。请把那个黑窗口关掉，再双击「启动网站.bat」。';
+      warn.textContent = '后端还是旧版本：留言还没编号，点赞、回复、举报都用不了。请把那个黑窗口关掉，再双击「启动网站.bat」。';
       warn.classList.add('show');
     } else {
       warn.classList.remove('show');
@@ -314,6 +435,7 @@ async function load() {
   }
 
   render();
+  applyUrlAction();
 }
 
 /* ===== 按钮事件（用事件委托，重新渲染后不用重新绑定）===== */
@@ -333,7 +455,60 @@ document.getElementById('list').addEventListener('click', async (e) => {
   }
   closeMenus();
 
+  // 打开 / 收起回复框不用登录，真要发送时才拦
+  if (act === 'reply') {
+    openReply(id, btn.dataset.name || '');
+    return;
+  }
+  if (act === 'cancel-reply') {
+    openReplyId = null;
+    replyDraft = '';
+    render();
+    return;
+  }
+
   if (!ensureLogin()) return;
+
+  if (act === 'send-reply') {
+    const box = btn.closest('.reply-box');
+    const ta = box && box.querySelector('.reply-input');
+    const text = ta ? ta.value.trim() : '';
+    if (!text) return alert('内容不能为空');
+    btn.disabled = true;
+    try {
+      const res = await fetch(API + '/messages', {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify({ text })
+      });
+      const d = await res.json();
+      if (!d.ok) { btn.disabled = false; return alert(d.error || '发送失败'); }
+      openReplyId = null;
+      replyDraft = '';
+      await load();
+      showTip(uid ? '回复发出去了，TA 的信箱里会收到提醒。' : '回复发出去了。');
+    } catch { btn.disabled = false; alert('网络错误，请重试'); }
+    return;
+  }
+
+  if (act === 'like') {
+    btn.disabled = true;
+    try {
+      const res = await fetch(API + '/like', {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify({ id })
+      });
+      const d = await res.json();
+      btn.disabled = false;
+      if (!d.ok) return alert(d.error || '操作失败');
+      likeCount[id] = d.likes;
+      if (d.liked) likeSet.add(id); else likeSet.delete(id);
+      // 只改这一个按钮，不整页重画 —— 重画会把正开着的回复框关掉
+      btn.classList.toggle('on', !!d.liked);
+      const nEl = btn.querySelector('.like-n');
+      if (nEl) nEl.textContent = d.likes > 0 ? String(d.likes) : '';
+      btn.title = d.liked ? '取消赞' : '赞一个';
+      if (d.liked && uid && (!me || uid !== me.uid)) showTip('赞好了，TA 的信箱里会收到提醒。');
+    } catch { btn.disabled = false; alert('网络错误，请重试'); }
+    return;
+  }
 
   if (act === 'follow') {
     btn.disabled = true;

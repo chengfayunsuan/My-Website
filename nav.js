@@ -34,6 +34,22 @@
               <path d="M8 21h8M12 17v4"/>
             </svg>
           </a>
+          <div class="mail-wrap" id="mailWrap" style="display:none;">
+            <button class="mail-btn" id="mailBtn" aria-label="信箱" title="信箱">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"/>
+                <path d="m3 7 9 6 9-6"/>
+              </svg>
+              <span class="mail-dot" id="mailDot" style="display:none;"></span>
+            </button>
+            <div class="mail-panel" id="mailPanel">
+              <div class="mail-head">
+                <span>信箱</span>
+                <button class="mail-readall" id="mailReadAll" type="button">全部已读</button>
+              </div>
+              <div class="mail-list" id="mailList"><p class="mail-empty">加载中…</p></div>
+            </div>
+          </div>
           <button class="theme-btn" id="themeBtn" aria-label="切换深色模式">
             <svg id="themeIcon" viewBox="0 0 24 24">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -94,6 +110,10 @@
   const registerSubmit = document.getElementById('registerSubmit');
   const msgBox    = document.getElementById('loginMsg');
   const adminBtn  = document.getElementById('adminBtn');
+  const mailWrap  = document.getElementById('mailWrap');
+  const mailBtn   = document.getElementById('mailBtn');
+  const mailPanel = document.getElementById('mailPanel');
+  const mailDot   = document.getElementById('mailDot');
 
   /* ========== 4. 主题切换 ========== */
   const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
@@ -145,6 +165,8 @@
     if (adminBtn) {
       adminBtn.style.display = (role === 'owner' || role === 'admin') ? 'flex' : 'none';
     }
+    if (mailWrap) mailWrap.style.display = 'block';
+    loadMail(false);          // 只看一眼有没有未读，好显示小红点
   }
   function showLoggedOut() {
     loginBtn.style.display = '';
@@ -152,6 +174,9 @@
     gearLogout.style.display = 'none';
     gearEmpty.style.display = 'block';
     if (adminBtn) adminBtn.style.display = 'none';
+    if (mailWrap) mailWrap.style.display = 'none';
+    if (mailPanel) mailPanel.classList.remove('show');
+    if (mailDot) mailDot.style.display = 'none';
   }
 
   async function checkLogin() {
@@ -192,11 +217,16 @@
   /* ========== 8. 齿轮菜单 ========== */
   gearBtn.addEventListener('click', e => {
     e.stopPropagation();
+    closeMail();
     gearMenu.classList.toggle('show');
   });
-  document.addEventListener('click', () => gearMenu.classList.remove('show'));
+  document.addEventListener('click', e => {
+    gearMenu.classList.remove('show');
+    // 点信箱面板里面（滚动、看内容）不该把它关掉
+    if (!e.target.closest('.mail-wrap')) closeMail();
+  });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') gearMenu.classList.remove('show');
+    if (e.key === 'Escape') { gearMenu.classList.remove('show'); closeMail(); }
   });
   gearLogout.addEventListener('click', () => {
     localStorage.removeItem('token');
@@ -204,7 +234,112 @@
     location.reload();
   });
 
-  /* ========== 9. 登录弹窗 ========== */
+  /* ========== 9. 信箱（被点赞 / 被回复 / 举报结果）========== */
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function mailLine(n) {
+    const who = '<b>' + esc(n.fromName || '有人') + '</b>';
+    if (n.type === 'like') return who + ' 赞了你的留言';
+    if (n.type === 'report') return '你的举报处理好了：<b>' + esc(n.action || '') + '</b>';
+    return who + ' 在留言板回复了你';
+  }
+
+  function mailIcon(type) {
+    if (type === 'like') return '<span class="mail-ico like">♥</span>';
+    if (type === 'report') return '<span class="mail-ico report">!</span>';
+    return '<span class="mail-ico reply">@</span>';
+  }
+
+  function renderMail(list, unread) {
+    if (mailDot) {
+      mailDot.textContent = unread > 99 ? '99+' : String(unread || '');
+      mailDot.style.display = unread > 0 ? 'inline-flex' : 'none';
+    }
+    const box = document.getElementById('mailList');
+    if (!box) return;
+    if (!list.length) { box.innerHTML = '<p class="mail-empty">还没有消息</p>'; return; }
+
+    box.innerHTML = list.map(n => {
+      const cls = 'mail-item' + (n.read ? '' : ' new');
+      const body = mailIcon(n.type) +
+        '<div class="mail-body">' +
+          '<div class="mail-line">' + mailLine(n) + '</div>' +
+          (n.text ? '<div class="mail-ex">' + esc(String(n.text).slice(0, 60)) + '</div>' : '') +
+          '<div class="mail-time">' + esc(n.time || '') + '</div>' +
+        '</div>';
+      // href 由后端算好（能回复的就带上 ?reply= 和 @对象）
+      return n.href
+        ? '<a class="' + cls + '" href="' + esc(n.href) + '">' + body + '</a>'
+        : '<div class="' + cls + '">' + body + '</div>';
+    }).join('');
+  }
+
+  let mailBusy = false;
+  async function loadMail(markRead) {
+    const token = localStorage.getItem('token');
+    if (!token || mailBusy) return;
+    mailBusy = true;
+    try {
+      const res = await fetch(API + '/notifications', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const d = await res.json();
+      if (!d || !d.ok) return;
+      renderMail(d.list || [], d.unread || 0);
+      if (markRead && d.unread > 0) {
+        await fetch(API + '/notifications/read', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ all: true })
+        });
+        if (mailDot) mailDot.style.display = 'none';
+      }
+    } catch {
+      /* 隧道抖一下就忽略，点开信箱时会重试 */
+    } finally {
+      mailBusy = false;
+    }
+  }
+
+  function closeMail() {
+    if (mailPanel) mailPanel.classList.remove('show');
+  }
+
+  if (mailBtn) {
+    mailBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      gearMenu.classList.remove('show');
+      const open = mailPanel.classList.contains('show');
+      if (open) return closeMail();
+      mailPanel.classList.add('show');
+      loadMail(true);          // 打开就当作已读，红点消失
+    });
+  }
+
+  const mailReadAll = document.getElementById('mailReadAll');
+  if (mailReadAll) {
+    mailReadAll.addEventListener('click', async e => {
+      e.stopPropagation();
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      await fetch(API + '/notifications/read', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ all: true })
+      });
+      if (mailDot) mailDot.style.display = 'none';
+      document.querySelectorAll('.mail-item.new').forEach(x => x.classList.remove('new'));
+    });
+  }
+
+  // 每 60 秒偷偷看一眼有没有新消息，好更新小红点
+  setInterval(() => { if (!mailPanel.classList.contains('show')) loadMail(false); }, 60000);
+
+  /* ========== 10. 登录弹窗 ========== */
   function openModal() {
     modal.classList.add('show');
     msgBox.textContent = '';
