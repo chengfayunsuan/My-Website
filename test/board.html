@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>留言板 · 乘法</title>
-<link rel="stylesheet" href="/style.css?v=15">
+<link rel="stylesheet" href="/style.css?v=16">
 <style>
   /* ===== 发表框（B 站风格：圆角输入框 + 右下角发布按钮）===== */
   .post-box {
@@ -105,7 +105,7 @@
     line-height: 1;
   }
   .msg-badge.pin { background: #ff7f24; }
-  /* 写了签名的：铭牌显示签名，用主题蓝，跟粉色的站长/管理区分开 */
+  /* 写了签名的：铭牌显示签名，普通人用主题蓝 */
   .msg-badge.plate {
     background: var(--primary-deep);
     max-width: 200px;
@@ -113,6 +113,8 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  /* 站长 / 管理员：一律红色 */
+  .msg-badge.staff { background: #fb7299; }
 
   /* 置顶的评论整条淡高亮一下，跟普通评论区分开 */
   .msg-item.pinned {
@@ -242,7 +244,7 @@
   </section>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=15"></script>
+  <script src="/nav.js?v=16"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
@@ -494,12 +496,18 @@ function topHTML(m, who) {
   const nameHTML = who.uid
     ? `<a class="msg-name" href="${href}">${escapeHTML(who.name)}</a>`
     : `<span class="msg-name">${escapeHTML(who.name)}</span>`;
-  // 铭牌：优先显示本人写的签名；没写签名才显示身份；普通用户（没签名也不是管理）不显示
+  // 铭牌：有签名就显示签名，没签名才显示身份；普通用户（没签名也不是管理）不显示。
+  // 颜色按身份走：站长 / 管理员是红色，普通人是蓝色。
+  const staff = who.role === 'owner' || who.role === 'admin';
   const bio = String(who.bio || '').trim();
   let plate = '';
-  if (bio) plate = `<span class="msg-badge plate" title="${escapeHTML(bio)}">${escapeHTML(bio.length > 20 ? bio.slice(0, 20) + '…' : bio)}</span>`;
-  else if (who.role === 'owner') plate = `<span class="msg-badge">站长</span>`;
-  else if (who.role === 'admin') plate = `<span class="msg-badge">管理</span>`;
+  if (bio) {
+    plate = `<span class="msg-badge plate${staff ? ' staff' : ''}" title="${escapeHTML(bio)}">${escapeHTML(bio.length > 20 ? bio.slice(0, 20) + '…' : bio)}</span>`;
+  } else if (who.role === 'owner') {
+    plate = `<span class="msg-badge staff">站长</span>`;
+  } else if (who.role === 'admin') {
+    plate = `<span class="msg-badge staff">管理</span>`;
+  }
   const pinBadge = m.pinned ? `<span class="msg-badge pin">置顶</span>` : '';
   return `<div class="msg-top">${nameHTML}${plate}${pinBadge}</div>`;
 }
