@@ -710,6 +710,37 @@ footer p { margin: 4px 0; }
   color: var(--text-light);
   margin-top: 4px;
 }
+
+/* 个人主页·我的文章 */
+.my-art-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.my-art-item:last-child { border-bottom: none; }
+.my-art-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  line-height: 1.5;
+  word-break: break-word;
+}
+.my-art-title:hover { color: var(--primary-deep); text-decoration: underline; }
+.my-art-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-light);
+}
+.my-art-ops {
+  display: inline-flex;
+  gap: 8px;
+  margin-left: auto;
+}
 .empty-hint {
   color: var(--text-light);
   font-size: 14px;

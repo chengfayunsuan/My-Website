@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=19">
+<link rel="stylesheet" href="/style.css?v=20">
 <style>
   .art-title {
     font-size: 28px;
@@ -172,6 +172,37 @@
   .cmt-btn:hover { background: var(--primary-soft); color: var(--primary-deep); }
   .cmt-btn.on { color: #fb7299; background: rgba(251, 114, 153, .12); }
   .cmt-btn.danger:hover { color: #e5534b; background: rgba(229, 83, 75, .12); }
+  /* 「⋯」三个点菜单 */
+  .cmt-more { position: relative; display: inline-block; }
+  .cmt-menu {
+    position: absolute;
+    right: 0; top: calc(100% + 4px);
+    min-width: 120px;
+    z-index: 40;
+    padding: 4px;
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .16);
+  }
+  .cmt-menu.show { display: block; }
+  .cmt-menu button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+  .cmt-menu button:hover { background: var(--primary-soft); }
+  .cmt-menu button.danger { color: #e5534b; }
+  .cmt-menu button.danger:hover { background: rgba(229, 83, 75, .12); }
   .cmt-children { margin-top: 10px; }
   .cmt-item.is-reply { gap: 8px; padding: 10px 0 0; border-bottom: none; }
   .cmt-item.is-reply .cmt-avatar img { width: 26px; height: 26px; }
@@ -208,7 +239,7 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=19"></script>
+  <script src="/nav.js?v=20"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const id = parseInt(new URLSearchParams(location.search).get('id'), 10);
@@ -374,9 +405,16 @@ function footHTML(c, isReply) {
   const staff = me && (me.role === 'owner' || me.role === 'admin');
   const likeBtn = `<button class="cmt-btn${c.likedByMe ? ' on' : ''}" data-a="like" data-id="${c.id}">♥ ${c.likes || 0}</button>`;
   const replyBtn = `<button class="cmt-btn" data-a="reply" data-id="${c.id}" data-name="${cmtEsc(c.name)}">回复</button>`;
-  const delBtn = (mine || staff) ? `<button class="cmt-btn danger" data-a="del" data-id="${c.id}">删除</button>` : '';
+  // 三个点：举报 +（自己的或管理员）删除
+  const menu = `<span class="cmt-more">
+      <button class="cmt-btn" data-a="menu" aria-label="更多操作" title="更多操作">⋯</button>
+      <div class="cmt-menu">
+        ${(mine || staff) ? `<button data-a="del" data-id="${c.id}" class="danger">删除</button>` : ''}
+        <button data-a="report" data-id="${c.id}" class="danger">举报</button>
+      </div>
+    </span>`;
   const floor = (!isReply && c.floor) ? `<span class="cmt-floor">#${c.floor}</span>` : '';
-  return `<div class="cmt-foot"><span class="cmt-time">${cmtEsc(c.time)}</span>${likeBtn}${replyBtn}${delBtn}${floor}</div>`;
+  return `<div class="cmt-foot"><span class="cmt-time">${cmtEsc(c.time)}</span>${likeBtn}${replyBtn}${menu}${floor}</div>`;
 }
 
 function replyItem(c) {
@@ -469,6 +507,15 @@ function bindComments() {
     const a = btn.dataset.a;
     const cid = parseInt(btn.dataset.id, 10);
 
+    if (a === 'menu') {
+      const m = btn.parentElement.querySelector('.cmt-menu');
+      const wasOpen = m.classList.contains('show');
+      document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
+      if (!wasOpen) m.classList.add('show');
+      return;
+    }
+    document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
+
     if (a === 'cancel') { openReply = null; return renderComments(); }
     if (a === 'reply') {
       openReply = cid;
@@ -496,11 +543,25 @@ function bindComments() {
       return;
     }
     if (a === 'del') {
-      if (!confirm('确定删掉这条评论？')) return;
+      if (!confirm('确定删掉这条评论？它下面的回复也会一起删掉。')) return;
       const d = await cmtPost('/article/comment/delete', { articleId: id, id: cid });
       if (!d.ok) return alert(d.error || '删除失败');
       await loadComments();
+      return;
     }
+    if (a === 'report') {
+      const reason = prompt('说说这条评论哪里有问题（可以留空）：', '');
+      if (reason === null) return;
+      const d = await cmtPost('/article/comment/report', { articleId: id, id: cid, reason: reason.trim() });
+      if (!d.ok) return alert(d.error || '举报失败');
+      alert('举报已提交，管理员会看的');
+    }
+  });
+
+  // 点空白处收起三个点菜单
+  document.addEventListener('click', e => {
+    if (e.target.closest('.cmt-more')) return;
+    document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
   });
 }
 

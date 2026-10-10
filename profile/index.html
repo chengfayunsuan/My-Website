@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>个人主页 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=19">
+<link rel="stylesheet" href="/style.css?v=20">
 </head>
 <body>
 
@@ -41,6 +41,12 @@
           <h2 class="section-title">个性签名</h2>
           <p class="profile-bio" id="bioText">这个人很懒，什么都没写。</p>
           <textarea class="profile-bio-input" id="bioInput" maxlength="200" placeholder="写点什么…" style="display:none;"></textarea>
+        </div>
+
+        <!-- 我的文章（在留言之上） -->
+        <div class="card profile-feed">
+          <h2 class="section-title" id="artTitle">我的文章</h2>
+          <div id="myArticles">加载中…</div>
         </div>
 
         <!-- 我的留言 -->
@@ -103,7 +109,7 @@
   </div>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=19"></script>
+  <script src="/nav.js?v=20"></script>
   <script>
   (function () {
     const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
@@ -145,6 +151,8 @@
       createdAt: document.getElementById('createdAt'),
       myMessages: document.getElementById('myMessages'),
       msgTitle: document.getElementById('msgTitle'),
+      myArticles: document.getElementById('myArticles'),
+      artTitle: document.getElementById('artTitle'),
       editFab: document.getElementById('editFab'),
       editIcon: document.getElementById('editIcon'),
       editActions: document.getElementById('editActions'),
@@ -231,6 +239,7 @@
         el.createdAt.textContent = '—';
         el.bioText.textContent = 'UID ' + wantedUid + ' 不存在，可能还没注册。';
         el.myMessages.innerHTML = '<p class="empty-hint">—</p>';
+        el.myArticles.innerHTML = '<p class="empty-hint">—</p>';
         el.editFab.style.display = 'none';
         return;
       }
@@ -291,7 +300,10 @@
         el.msgTitle.textContent = 'TA 的留言';
       }
 
+      el.artTitle.textContent = isSelf ? '我的文章' : 'TA 的文章';
+
       loadMessages(data.username);
+      loadArticles(data.uid);
       loadRelations(data.uid);
     }
 
@@ -424,6 +436,62 @@
         el.myMessages.innerHTML = '<p class="empty-hint">加载失败</p>';
       }
     }
+
+    /* ---------- 我的文章：可以改、可以删 ---------- */
+    async function loadArticles(uid) {
+      const box = el.myArticles;
+      if (!box) return;
+      if (!uid) { box.innerHTML = '<p class="empty-hint">—</p>'; return; }
+      try {
+        const res = await fetch(API + '/articles?uid=' + encodeURIComponent(uid) + '&limit=50');
+        const d = await res.json();
+        const list = (d && d.list) || [];
+        if (!list.length) {
+          box.innerHTML = '<p class="empty-hint">' +
+            (isSelf ? '还没有写过文章，<a href="/write.html">去写一篇</a>' : 'TA 还没有写过文章') + '</p>';
+          return;
+        }
+        box.innerHTML = list.map(a => `
+          <div class="my-art-item">
+            <a class="my-art-title" href="/article.html?id=${a.id}">${escapeHTML(a.title)}</a>
+            <div class="my-art-meta">
+              <span>${escapeHTML(a.updatedAt || a.createdAt || '')}</span>
+              <span>${a.chars || 0} 字</span>
+              <span>♥ ${a.likes || 0}</span>
+              <span>★ ${a.favs || 0}</span>
+              <span>👁 ${a.views || 0}</span>
+              ${isSelf ? `<span class="my-art-ops">
+                <button class="act-btn" data-art="edit" data-id="${a.id}">编辑</button>
+                <button class="act-btn danger" data-art="del" data-id="${a.id}">删除</button>
+              </span>` : ''}
+            </div>
+          </div>`).join('');
+      } catch {
+        box.innerHTML = '<p class="empty-hint">加载失败</p>';
+      }
+    }
+
+    el.myArticles.addEventListener('click', async e => {
+      const btn = e.target.closest('[data-art]');
+      if (!btn) return;
+      const artId = parseInt(btn.dataset.id, 10);
+      if (btn.dataset.art === 'edit') {
+        location.href = '/write.html?id=' + artId;
+        return;
+      }
+      if (!confirm('确定删掉这篇文章吗？\n里面的图片视频也会一起删掉，删了找不回来。')) return;
+      btn.disabled = true;
+      try {
+        const res = await fetch(API + '/article/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ id: artId })
+        });
+        const d = await res.json();
+        if (!d.ok) { btn.disabled = false; return alert(d.error || '删除失败'); }
+        loadArticles(viewUid);
+      } catch { btn.disabled = false; alert('网络错误，请重试'); }
+    });
 
     /* 文本和属性里都能安全用的转义 */
     function escapeHTML(s) {
