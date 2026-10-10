@@ -313,9 +313,10 @@
     box.innerHTML = CATS.map(c => {
       const items = mailAll.filter(n => (n.type || 'reply') === c.key);
       const un = items.filter(n => !n.read).length;
+      // 看过了（没有未读）就干脆不挂数字，别老顶着个圆圈
       const badge = un
         ? '<span class="mail-cat-n">' + (un > 99 ? '99+' : un) + '</span>'
-        : '<span class="mail-cat-n zero">' + items.length + '</span>';
+        : '';
       return '<button type="button" class="mail-cat" data-cat="' + c.key + '">' +
         '<span class="mail-ico ' + c.cls + '">' + c.ico + '</span>' +
         '<span class="mail-cat-label">' + c.label + '</span>' +
@@ -394,6 +395,14 @@
       if (!d || !d.ok) return;
       mailAll = d.list || [];
       renderMail();
+
+      // 信箱一打开就算「看过了」，红圈数字不再一直挂着
+      if (mailPanel && mailPanel.classList.contains('show') && mailAll.some(n => !n.read)) {
+        mailAll.forEach(n => { n.read = true; });
+        renderMail();
+        markRead({ all: true });
+      }
+
       // 小窗正开着的话跟着刷新（比如刚处理完举报）
       const modal = document.getElementById('mailModal');
       if (modal && modal.classList.contains('show')) paintModal();

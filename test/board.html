@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>留言板 · 乘法</title>
-<link rel="stylesheet" href="/style.css?v=12">
+<link rel="stylesheet" href="/style.css?v=13">
 <style>
   /* ===== 发表框（B 站风格：圆角输入框 + 右下角发布按钮）===== */
   .post-box {
@@ -103,6 +103,15 @@
     color: #fff;
     font-size: 11px;
     line-height: 1;
+  }
+  .msg-badge.pin { background: #ff7f24; }
+
+  /* 置顶的评论整条淡高亮一下，跟普通评论区分开 */
+  .msg-item.pinned {
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 10px;
+    background: var(--primary-soft);
   }
 
   .msg-text {
@@ -225,7 +234,7 @@
   </section>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=12"></script>
+  <script src="/nav.js?v=13"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
@@ -383,6 +392,16 @@ function actionsHTML(m, who) {
     ? `<button type="button" data-act="block" data-uid="${who.uid}" class="danger">拉黑 TA</button>`
     : '';
 
+  // 置顶：只有站长和管理员，而且只能置顶主楼（有楼层号的才是主楼）
+  const isStaff = me.role === 'owner' || me.role === 'admin';
+  const pinItem = (isStaff && typeof m.floor === 'number')
+    ? `<button type="button" data-act="pin" data-id="${m.id}">${m.pinned ? '取消置顶' : '置顶'}</button>`
+    : '';
+  // 删除：自己的留言，或者站长/管理员删别人的
+  const delItem = (mine || isStaff)
+    ? `<button type="button" data-act="del" data-id="${m.id}" class="danger">删除</button>`
+    : '';
+
   return `
         <div class="msg-actions">
           ${followBtn}
@@ -390,6 +409,8 @@ function actionsHTML(m, who) {
           <button type="button" class="act-btn like-btn${liked ? ' on' : ''}" data-act="like" data-id="${m.id}" data-uid="${hasUid ? who.uid : ''}" title="${liked ? '取消赞' : '赞一个'}">♥<span class="like-n">${n > 0 ? n : ''}</span></button>
           <button type="button" class="act-btn dots" data-act="menu" aria-label="更多操作" title="更多操作">⋯</button>
           <div class="act-menu">
+            ${pinItem}
+            ${delItem}
             ${blockItem}
             <button type="button" data-act="report" data-id="${m.id}"${reported ? ' disabled' : ''} class="danger">${reported ? '已举报' : '举报'}</button>
           </div>
@@ -464,10 +485,11 @@ function topHTML(m, who) {
   const nameHTML = who.uid
     ? `<a class="msg-name" href="${href}">${escapeHTML(who.name)}</a>`
     : `<span class="msg-name">${escapeHTML(who.name)}</span>`;
-  const badge = (who.role === 'owner' || who.role === 'admin')
+  const roleBadge = (who.role === 'owner' || who.role === 'admin')
     ? `<span class="msg-badge">${who.role === 'owner' ? '站长' : '管理'}</span>`
     : '';
-  return `<div class="msg-top">${nameHTML}${badge}</div>`;
+  const pinBadge = m.pinned ? `<span class="msg-badge pin">置顶</span>` : '';
+  return `<div class="msg-top">${nameHTML}${roleBadge}${pinBadge}</div>`;
 }
 
 /* 正文：是回复的话，像 B 站那样把「回复 @某某 :」接在内容前面 */
@@ -533,7 +555,7 @@ function floorHTML(m) {
     : '';
 
   return `
-      <div class="msg-item" data-id="${idAttr}">
+      <div class="msg-item${m.pinned ? ' pinned' : ''}" data-id="${idAttr}">
         <div class="msg-side">${avatarHTML(who)}</div>
         <div class="msg-main">
           ${topHTML(m, who)}
@@ -551,13 +573,19 @@ function floorHTML(m) {
 
 function render() {
   const list = document.getElementById('list');
-  // 一楼按楼层从低到高排（1 楼在最上面），回复缩进挂在自己那条底下；
-  // 父留言已经被删掉的孤儿回复，自己升成一条排到最后，不然会凭空消失
+  // 排法：置顶的排最前面（先置顶的靠前），其余按新 → 旧（楼层高的在上）。
+  // 回复不参与排序，缩进挂在自己那条主楼底下；
+  // 主楼已经被删掉的孤儿回复，自己升成一条混在里面排，不然会凭空消失
   const exists = id => msgsCache.some(x => x.id === id);
-  const rank = m => (typeof m.floor === 'number' ? m.floor : 1e9);
+  const rank = m => (typeof m.floor === 'number' ? m.floor : (m.id || 0));
   const floors = msgsCache
     .filter(m => !m.parent || !exists(m.parent))
-    .sort((a, b) => (rank(a) - rank(b)) || ((a.id || 0) - (b.id || 0)));
+    .sort((a, b) => {
+      const pa = a.pinned ? 1 : 0, pb = b.pinned ? 1 : 0;
+      if (pa !== pb) return pb - pa;                       // 置顶优先
+      if (pa && pb) return (a.id || 0) - (b.id || 0);      // 置顶的按置顶先后
+      return rank(b) - rank(a);                            // 其余：新的在上
+    });
 
   list.innerHTML = floors.map(floorHTML).join('') || '还没有评论，来抢个沙发~';
 
@@ -673,6 +701,40 @@ document.getElementById('list').addEventListener('click', async (e) => {
       replyDraft = '';
       await load();
       showTip(uid ? '回复发出去了，TA 的信箱里会收到提醒。' : '回复发出去了。');
+    } catch { btn.disabled = false; alert('网络错误，请重试'); }
+    return;
+  }
+
+  if (act === 'del') {
+    const kids = msgsCache.filter(x => x.parent === id).length;
+    const tip = kids ? `这条留言下面还有 ${kids} 条回复，会跟着一起删掉。` : '';
+    if (!confirm('确定删掉这条留言吗？' + tip + '\n删了就找不回来了。')) return;
+    btn.disabled = true;
+    try {
+      const res = await fetch(API + '/messages/delete', {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify({ id })
+      });
+      const d = await res.json();
+      btn.disabled = false;
+      if (!d.ok) return alert(d.error || '删除失败');
+      if (openReplyId === id) { openReplyId = null; replyDraft = ''; }
+      await load();
+      showTip(kids ? `已删除，连同下面 ${kids} 条回复。` : '已删除。');
+    } catch { btn.disabled = false; alert('网络错误，请重试'); }
+    return;
+  }
+
+  if (act === 'pin') {
+    btn.disabled = true;
+    try {
+      const res = await fetch(API + '/messages/pin', {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify({ id })
+      });
+      const d = await res.json();
+      btn.disabled = false;
+      if (!d.ok) return alert(d.error || '操作失败');
+      await load();
+      showTip(d.pinned ? '已经置顶，会一直排在最前面。' : '已取消置顶。');
     } catch { btn.disabled = false; alert('网络错误，请重试'); }
     return;
   }
