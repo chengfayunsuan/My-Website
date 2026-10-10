@@ -280,14 +280,24 @@ let pollTimer = null;
 let isRefreshing = false;
 let feedLoaded = false;
 
-/* 三个 CORS 代理，谁先成功用谁 */
+/* 取数据的两条路：
+   ① 问自己的后端（/live-feed）—— 后端是 Node，能直连源站，快且不卡，优先走这条；
+   ② 后端没开或不通时，才退回公共 CORS 代理（那些代理又慢又爱挂，是以前卡顿的根因） */
 const PROXIES = [
   url => `https://cors.eu.org/${url}`,
   url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
   url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
 ];
 
-async function fetchFeed() {
+async function fetchViaBackend() {
+  const r = await fetch(API + '/live-feed?limit=' + LIMIT + '&offset=0', { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const d = await r.json();
+  if (!Array.isArray(d)) throw new Error('后端没给数组');
+  return d;
+}
+
+async function fetchViaProxy() {
   const results = await Promise.allSettled(
     PROXIES.map(p => fetch(p(TARGET)).then(r => {
       if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -297,6 +307,14 @@ async function fetchFeed() {
   const ok = results.find(r => r.status === 'fulfilled');
   if (!ok) throw new Error('所有代理均失败');
   return await ok.value.json();
+}
+
+async function fetchFeed() {
+  try {
+    return await fetchViaBackend();
+  } catch {
+    return await fetchViaProxy();
+  }
 }
 
 /* 防 XSS */

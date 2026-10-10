@@ -20,7 +20,7 @@
         <!-- 头部：头像 + 用户名（横排，靠左） -->
         <div class="card profile-head">
           <div class="profile-avatar-box">
-            <img class="profile-avatar" id="avatarImg" src="/avatar-default.jpg" alt="头像">
+            <img class="profile-avatar" id="profileAvatarImg" src="/avatar-default.jpg" alt="头像">
             <label class="avatar-upload" id="avatarUploadLabel" for="avatarInput" style="display:none;">
               <span>更换头像</span>
               <input type="file" id="avatarInput" accept="image/*" hidden>
@@ -134,7 +134,7 @@
     let usersCache = null;   // /users 的名单，点开列表时用
 
     const el = {
-      avatarImg: document.getElementById('avatarImg'),
+      avatarImg: document.getElementById('profileAvatarImg'),
       avatarInput: document.getElementById('avatarInput'),
       avatarLabel: document.getElementById('avatarUploadLabel'),
       name: document.getElementById('profileName'),
