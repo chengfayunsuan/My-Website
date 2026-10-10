@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>写文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=20">
+<link rel="stylesheet" href="/style.css?v=21">
 <style>
   .ed-card { padding: 24px; }
   .ed-title {
@@ -240,7 +240,7 @@
   <input type="file" id="fileAudio" accept="audio/*" hidden>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=20"></script>
+  <script src="/nav.js?v=21"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const MAX_CHARS = 10000;
@@ -464,9 +464,50 @@ function progress(pct, text) {
   setMsg(text + (pct ? ' ' + pct + '%' : ''), '');
 }
 
+/* 上传前先把大图片压一压。
+   经隧道上传一次往返就要 1 秒多，图越大越明显，所以在浏览器里先缩到 1600 宽、
+   转成质量 0.82 的 JPEG，几 MB 的照片能压到两三百 KB，上传快一大截。
+   GIF 不动（可能有动画），已经很小或压完反而更大的就用原图。 */
+async function compressImage(file) {
+  if (file.size <= 400 * 1024) return file;                       // 已经够小
+  if (!/^image\/(jpeg|jpg|png|webp|bmp)$/i.test(file.type)) return file;
+  try {
+    const url = URL.createObjectURL(file);
+    const img = await new Promise((res, rej) => {
+      const i = new Image();
+      i.onload = () => res(i);
+      i.onerror = rej;
+      i.src = url;
+    });
+    const scale = Math.min(1, 1600 / img.width);
+    const w = Math.max(1, Math.round(img.width * scale));
+    const h = Math.max(1, Math.round(img.height * scale));
+    const cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    const ctx = cv.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, w, h);          // PNG 的透明区域压成 JPEG 会变黑，先垫白底
+    ctx.drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(url);
+    const out = await new Promise(r => cv.toBlob(r, 'image/jpeg', 0.82));
+    if (!out || out.size >= file.size) return file;                // 压完没变小就用原图
+    return out;
+  } catch {
+    return file;                                                   // 压失败就用原图，别拦着人发
+  }
+}
+
 /* 小文件一次传完；大文件切成 6MB 一片慢慢传，不然 2GB 直接把浏览器和内存干爆 */
-async function uploadFile(file, kind) {
-  if (!file) return;
+async function uploadFile(rawFile, kind) {
+  if (!rawFile) return;
+  let file = rawFile;
+  if (kind === 'img') {
+    progress(0, '压缩中…');
+    file = await compressImage(rawFile);
+    if (file !== rawFile) {
+      setMsg(`已压缩 ${sizeText(rawFile.size)} → ${sizeText(file.size)}`, '');
+    }
+  }
   if (file.size > LIMITS[kind]) {
     return alert(`这个文件 ${sizeText(file.size)}，超过${kind === 'img' ? '图片' : kind === 'video' ? '视频' : '音频'} ${sizeText(LIMITS[kind])} 的上限`);
   }
@@ -482,7 +523,9 @@ async function uploadFile(file, kind) {
     }
 
     const start = await api('/article/upload/start', {
-      kind: kindName, articleId: articleId || 0, name: file.name, size: file.size, mime: file.type
+      kind: kindName, articleId: articleId || 0,
+      name: file.name || ('upload.' + ((file.type || '').split('/')[1] || 'jpg')),
+      size: file.size, mime: file.type
     });
     if (!start.ok) return setMsg(start.error || '上传失败', 'err');
 
