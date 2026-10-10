@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>留言板 · 乘法</title>
-<link rel="stylesheet" href="/style.css?v=10">
+<link rel="stylesheet" href="/style.css?v=11">
 <style>
   .form-row { margin: 12px 0; }
   .form-row input, .form-row textarea {
@@ -78,6 +78,34 @@
   a.msg-name:hover { color: var(--primary); }
   .msg-time { color: var(--text-light); font-size: 13px; margin-left: 4px; }
   .msg-text { margin-top: 6px; color: var(--text); }
+
+  /* 每条留言最下面那一行：左边是操作按钮，右边是楼层号 */
+  .msg-foot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .msg-foot .msg-actions { margin-left: 0; }
+  .msg-floor {
+    margin-left: auto;
+    flex: none;
+    color: var(--text-light);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 回复挂在被回复的那条留言下面，缩进去一点，左边一根竖线 */
+  .msg-children {
+    margin: 10px 0 2px 22px;
+    padding-left: 12px;
+    border-left: 2px solid var(--border);
+  }
+  .msg-item.is-reply { border-bottom: none; padding: 10px 0 0; }
+  .msg-item.is-reply .msg-avatar img { width: 24px; height: 24px; }
+  .msg-item.is-reply .msg-text { font-size: 14px; }
+  .msg-to { color: var(--text-light); font-size: 13px; }
+  .msg-to b { color: var(--primary); font-weight: normal; }
 </style>
 </head>
 <body>
@@ -106,7 +134,7 @@
   </section>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=10"></script>
+  <script src="/nav.js?v=11"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
@@ -329,20 +357,25 @@ function applyUrlAction() {
   }
 }
 
-function render() {
-  const list = document.getElementById('list');
-  const rows = msgsCache.slice().reverse();   // 最新的排在最上面
+/* 一条留言的头部：头像 + 名字 +（是回复的话）回复 @某某 + 时间 */
+function headHTML(m, who, isReply) {
+  const href = '/profile/?uid=' + who.uid;
+  const nameHTML = who.uid
+    ? `<a class="msg-name" href="${href}">${escapeHTML(who.name)}</a>`
+    : `<span class="msg-name">${escapeHTML(who.name)}</span>`;
+  const avatarHTML = who.uid
+    ? `<a class="msg-avatar" href="${href}" title="${escapeHTML(who.name)} 的主页"><img src="${who.avatar}" alt=""></a>`
+    : `<span class="msg-avatar"><img src="${who.avatar}" alt=""></span>`;
+  const toHTML = (isReply && m.toName)
+    ? `<span class="msg-to">回复 <b>@${escapeHTML(m.toName)}</b></span>`
+    : '';
+  return `<div class="msg-head">${avatarHTML}${nameHTML}${toHTML}<span class="msg-time">${escapeHTML(m.time)}</span></div>`;
+}
 
-  const html = rows.map(m => {
-    const who = whoOf(m);
-    const href = '/profile/?uid=' + who.uid;
-    const mine = me && who.uid === me.uid;
-    const idAttr = typeof m.id === 'number' ? m.id : '';
-
-    // 拉黑的人：留言折叠起来，留一个「取消拉黑」的入口，不然永远解不开
-    if (me && who.uid != null && !mine && blockedSet.has(who.uid)) {
-      return `
-      <div class="msg-item blocked-item" data-id="${idAttr}">
+/* 拉黑的人的留言：折叠起来，留一个「取消拉黑」的入口，不然永远解不开 */
+function blockedHTML(m, who, idAttr, isReply) {
+  return `
+      <div class="msg-item${isReply ? ' is-reply' : ''} blocked-item" data-id="${idAttr}">
         <div class="msg-head">
           <span class="msg-avatar"><img src="${who.avatar}" alt=""></span>
           <span class="msg-name">${escapeHTML(who.name)}</span>
@@ -353,29 +386,62 @@ function render() {
         </div>
         <div class="msg-text">这条留言来自你拉黑的用户，已经隐藏起来了。</div>
       </div>`;
-    }
+}
 
-    const nameHTML = who.uid
-      ? `<a class="msg-name" href="${href}">${escapeHTML(who.name)}</a>`
-      : `<span class="msg-name">${escapeHTML(who.name)}</span>`;
-    const avatarHTML = who.uid
-      ? `<a class="msg-avatar" href="${href}" title="${escapeHTML(who.name)} 的主页"><img src="${who.avatar}" alt=""></a>`
-      : `<span class="msg-avatar"><img src="${who.avatar}" alt=""></span>`;
+/* 一条回复：挂在父留言底下，不占楼层号 */
+function replyHTML(k) {
+  const who = whoOf(k);
+  const idAttr = typeof k.id === 'number' ? k.id : '';
+  if (me && who.uid != null && who.uid !== me.uid && blockedSet.has(who.uid)) {
+    return blockedHTML(k, who, idAttr, true);
+  }
 
-    return `
-      <div class="msg-item" data-id="${idAttr}">
-        <div class="msg-head">
-          ${avatarHTML}
-          ${nameHTML}
-          <span class="msg-time">${escapeHTML(m.time)}</span>
-          ${actionsHTML(m, who)}
-        </div>
-        <div class="msg-text">${escapeHTML(m.text)}</div>
-        ${openReplyId === m.id ? replyBoxHTML(m, who) : ''}
+  return `
+      <div class="msg-item is-reply" data-id="${idAttr}">
+        ${headHTML(k, who, true)}
+        <div class="msg-text">${escapeHTML(k.text)}</div>
+        <div class="msg-foot">${actionsHTML(k, who)}</div>
+        ${openReplyId === k.id ? replyBoxHTML(k, who) : ''}
       </div>`;
-  }).join('');
+}
 
-  list.innerHTML = html || '还没有留言';
+/* 一楼：底下挂着自己所有的回复 */
+function floorHTML(m) {
+  const who = whoOf(m);
+  const idAttr = typeof m.id === 'number' ? m.id : '';
+  if (me && who.uid != null && who.uid !== me.uid && blockedSet.has(who.uid)) {
+    return blockedHTML(m, who, idAttr, false);
+  }
+
+  const kids = msgsCache.filter(x => x.parent === m.id);
+  const kidsHTML = kids.length
+    ? `<div class="msg-children">${kids.map(replyHTML).join('')}</div>`
+    : '';
+
+  return `
+      <div class="msg-item" data-id="${idAttr}">
+        ${headHTML(m, who, false)}
+        <div class="msg-text">${escapeHTML(m.text)}</div>
+        <div class="msg-foot">
+          ${actionsHTML(m, who)}
+          ${m.floor ? `<span class="msg-floor">${m.floor}楼</span>` : ''}
+        </div>
+        ${openReplyId === m.id ? replyBoxHTML(m, who) : ''}
+        ${kidsHTML}
+      </div>`;
+}
+
+function render() {
+  const list = document.getElementById('list');
+  // 一楼按楼层从低到高排（1 楼在最上面），回复缩进挂在自己那条底下；
+  // 父留言已经被删掉的孤儿回复，自己升成一条排到最后，不然会凭空消失
+  const exists = id => msgsCache.some(x => x.id === id);
+  const rank = m => (typeof m.floor === 'number' ? m.floor : 1e9);
+  const floors = msgsCache
+    .filter(m => !m.parent || !exists(m.parent))
+    .sort((a, b) => (rank(a) - rank(b)) || ((a.id || 0) - (b.id || 0)));
+
+  list.innerHTML = floors.map(floorHTML).join('') || '还没有留言';
 }
 
 function closeMenus() {
@@ -477,7 +543,8 @@ document.getElementById('list').addEventListener('click', async (e) => {
     btn.disabled = true;
     try {
       const res = await fetch(API + '/messages', {
-        method: 'POST', headers: authHeaders(), body: JSON.stringify({ text })
+        // parent = 被回复那条的 id，后端会把它挂到对应的一楼底下，不新开一楼
+        method: 'POST', headers: authHeaders(), body: JSON.stringify({ text, parent: id })
       });
       const d = await res.json();
       if (!d.ok) { btn.disabled = false; return alert(d.error || '发送失败'); }
