@@ -6,7 +6,7 @@
 <title>乘法 · 个人主页</title>
 <meta name="description" content="乘法的个人主页，记录编程学习与项目">
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=16">
+<link rel="stylesheet" href="/style.css?v=17">
 </head>
 <body>
   <div id="navbar"></div>
@@ -27,6 +27,19 @@
         <a class="test-item" href="/test/dynamic">近期动态</a>
         <a class="test-item" href="/test/mouse">鼠标特效</a>
         <a class="test-item" href="/test/users">用户名单</a>
+      </div>
+
+      <a class="art-entry-btn" href="/write.html">✍ 写文章</a>
+
+      <!-- 文章入口：小方框里放最新的几篇 -->
+      <div class="art-box">
+        <div class="art-box-head">
+          <span class="art-box-title">文章</span>
+          <a class="art-box-more" href="/articles.html">全部 ›</a>
+        </div>
+        <div class="art-box-list" id="artList">
+          <p class="art-box-empty">加载中…</p>
+        </div>
       </div>
     </div>
   </section>
@@ -95,7 +108,33 @@
   </footer>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=16"></script>
+  <script src="/nav.js?v=17"></script>
   <script src="main.js"></script>
+<script>
+/* 主页那个文章小方框：拉最新的 5 篇 */
+(function () {
+  const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+  const box = document.getElementById('artList');
+  if (!box) return;
+  const esc = s => String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+  fetch(API + '/articles?limit=5&offset=0')
+    .then(r => r.json())
+    .then(d => {
+      if (!d || !d.ok || !d.list.length) {
+        box.innerHTML = '<p class="art-box-none">还没有人写文章，来当第一个吧~</p>';
+        return;
+      }
+      box.innerHTML = d.list.map(a => `
+        <a class="art-box-row" href="/article.html?id=${a.id}">
+          <span class="t">${esc(a.title)}</span>
+          <span class="m">${esc(a.author || '匿名')} · ♥${a.likes || 0} · 👁${a.views || 0}</span>
+        </a>`).join('');
+    })
+    .catch(() => { box.innerHTML = '<p class="art-box-none">文章加载失败</p>'; });
+})();
+</script>
 </body>
 </html>

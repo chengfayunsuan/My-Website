@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文章 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css?v=17">
+<style>
+  .art-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .art-tabs { display: flex; gap: 8px; }
+  .art-tab {
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--text-light);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .art-tab.on {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    font-weight: 600;
+  }
+  .art-write {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .art-write:hover { background: var(--primary-deep); }
+
+  .art-list { display: flex; flex-direction: column; gap: 10px; }
+  .art-row {
+    display: block;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    text-decoration: none;
+    transition: transform .15s, border-color .15s;
+  }
+  .art-row:hover { transform: translateX(3px); border-color: var(--primary); }
+  .art-row h3 {
+    font-size: 17px;
+    color: var(--text);
+    margin-bottom: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .art-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-light);
+  }
+  .art-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 15px;
+  }
+  .art-more {
+    margin-top: 14px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--text-light);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .art-more:hover { border-color: var(--primary); color: var(--primary); }
+</style>
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <section style="margin-top:36px;">
+    <div class="card">
+      <div class="art-head">
+        <h2 class="section-title" style="margin:0;">文章</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="art-tabs">
+            <button class="art-tab on" data-sort="new">最新</button>
+            <button class="art-tab" data-sort="hot">热门</button>
+          </div>
+          <a class="art-write" href="/write.html">写文章</a>
+        </div>
+      </div>
+
+      <div class="art-list" id="list">
+        <div class="art-empty">加载中…</div>
+      </div>
+
+      <button class="art-more" id="moreBtn" style="display:none;">加载更多</button>
+    </div>
+  </section>
+
+  <footer><p>© 2026 CHENGFA</p></footer>
+
+  <script src="/config.js"></script>
+  <script src="/nav.js?v=17"></script>
+<script>
+const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+const listEl = document.getElementById('list');
+const moreBtn = document.getElementById('moreBtn');
+
+let sort = 'new';
+let offset = 0;
+const STEP = 20;
+let total = 0;
+
+function escapeHTML(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function rowHTML(a) {
+  const href = '/profile/?uid=' + a.uid;
+  return `
+    <a class="art-row" href="/article.html?id=${a.id}">
+      <h3>${escapeHTML(a.title)}</h3>
+      <div class="art-meta">
+        <span>${escapeHTML(a.author || '匿名')}</span>
+        <span>${escapeHTML(a.updatedAt || a.createdAt || '')}</span>
+        <span>${a.chars || 0} 字</span>
+        <span>♥ ${a.likes || 0}</span>
+        <span>★ ${a.favs || 0}</span>
+        <span>👁 ${a.views || 0}</span>
+      </div>
+    </a>`;
+}
+
+async function load(append) {
+  if (!append) { offset = 0; listEl.innerHTML = '<div class="art-empty">加载中…</div>'; }
+  try {
+    const d = await (await fetch(API + `/articles?sort=${sort}&limit=${STEP}&offset=${offset}`)).json();
+    if (!d.ok) throw new Error();
+    total = d.total;
+    const rows = d.list.map(rowHTML).join('');
+    listEl.innerHTML = (append ? listEl.innerHTML.replace(/<div class="art-empty">.*?<\/div>/s, '') : '') + rows;
+    if (!d.list.length && !append) listEl.innerHTML = '<div class="art-empty">还没有人写文章，来当第一个吧~</div>';
+    offset += d.list.length;
+    moreBtn.style.display = offset < total ? 'block' : 'none';
+  } catch {
+    listEl.innerHTML = '<div class="art-empty">加载失败，刷新试试</div>';
+  }
+}
+
+document.querySelectorAll('.art-tab').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.art-tab').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    sort = b.dataset.sort;
+    load(false);
+  });
+});
+moreBtn.addEventListener('click', () => load(true));
+
+load(false);
+</script>
+</body>
+</html>

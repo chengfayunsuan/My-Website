@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>写文章 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css?v=17">
+<style>
+  .ed-card { padding: 24px; }
+  .ed-title {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: 600;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+  }
+  .ed-title:focus { border-color: var(--primary); }
+
+  /* 工具栏 */
+  .ed-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+    margin: 12px 0 8px;
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+  }
+  .ed-bar .sep {
+    width: 1px; height: 20px;
+    margin: 0 4px;
+    background: var(--border);
+  }
+  .ed-btn {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 8px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: none;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    line-height: 28px;
+  }
+  .ed-btn:hover { background: var(--primary-soft); border-color: var(--primary); color: var(--primary-deep); }
+  .ed-btn b { font-weight: 800; }
+  .ed-btn i { font-style: italic; }
+  .ed-btn u { text-decoration: underline; }
+  .ed-btn s { text-decoration: line-through; }
+  .ed-select {
+    height: 30px;
+    padding: 0 6px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .ed-color {
+    width: 30px; height: 30px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+  }
+  /* 编辑器主体 */
+  .ed-body {
+    min-height: 380px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.8;
+    outline: none;
+    overflow-x: auto;
+  }
+  .ed-body:focus { border-color: var(--primary); }
+  .ed-body:empty::before {
+    content: attr(data-placeholder);
+    color: var(--text-light);
+  }
+  .ed-body img, .ed-body video { max-width: 100%; border-radius: 6px; }
+  .ed-body audio { width: 100%; margin: 6px 0; }
+  .ed-body blockquote {
+    margin: 10px 0;
+    padding: 6px 14px;
+    border-left: 4px solid var(--primary);
+    background: var(--primary-soft);
+    color: var(--text-light);
+  }
+  .ed-body pre {
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    font-family: Consolas, Menlo, monospace;
+    font-size: 14px;
+    white-space: pre-wrap;
+  }
+  .ed-body h1, .ed-body h2, .ed-body h3 { margin: 14px 0 8px; }
+
+  .ed-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-light);
+  }
+  .ed-foot .over { color: #c0392b; font-weight: 600; }
+  .ed-actions { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+  .ed-submit {
+    padding: 9px 26px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .ed-submit:hover { background: var(--primary-deep); }
+  .ed-submit:disabled { opacity: .6; cursor: not-allowed; }
+  .ed-msg { font-size: 14px; color: var(--text-light); }
+  .ed-msg.ok { color: #2e7d32; }
+  .ed-msg.err { color: #c0392b; }
+</style>
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <section style="margin-top:36px;">
+    <div class="card ed-card">
+      <h2 class="section-title" id="pageTitle">写文章</h2>
+
+      <input class="ed-title" id="title" maxlength="100" placeholder="标题（最多 100 字）">
+
+      <div class="ed-bar">
+        <button class="ed-btn" data-cmd="undo" title="撤销">↶</button>
+        <button class="ed-btn" data-cmd="redo" title="重做">↷</button>
+        <span class="sep"></span>
+
+        <select class="ed-select" id="blockSel" title="段落格式">
+          <option value="p">正文</option>
+          <option value="h1">一级标题</option>
+          <option value="h2">二级标题</option>
+          <option value="h3">三级标题</option>
+          <option value="blockquote">引用</option>
+          <option value="pre">代码块</option>
+        </select>
+        <span class="sep"></span>
+
+        <button class="ed-btn" data-cmd="bold" title="加粗"><b>B</b></button>
+        <button class="ed-btn" data-cmd="italic" title="斜体"><i>I</i></button>
+        <button class="ed-btn" data-cmd="underline" title="下划线"><u>U</u></button>
+        <button class="ed-btn" data-cmd="strikeThrough" title="删除线"><s>S</s></button>
+        <span class="sep"></span>
+
+        <select class="ed-select" id="sizeSel" title="字号">
+          <option value="2">小</option>
+          <option value="3" selected>正常</option>
+          <option value="5">大</option>
+          <option value="6">特大</option>
+        </select>
+
+        <input class="ed-color" type="color" id="foreColor" value="#e5534b" title="文字颜色">
+        <button class="ed-btn" data-cmd="foreColor" data-val="#e5534b" title="用左边选的颜色">A</button>
+        <button class="ed-btn" data-cmd="hiliteColor" data-val="#fff3a3" title="黄色高亮">🖍</button>
+        <span class="sep"></span>
+
+        <button class="ed-btn" data-cmd="insertUnorderedList" title="无序列表">• 列表</button>
+        <button class="ed-btn" data-cmd="insertOrderedList" title="有序列表">1. 列表</button>
+        <button class="ed-btn" data-cmd="formatBlock" data-val="blockquote" title="引用">❝</button>
+        <button class="ed-btn" data-cmd="formatBlock" data-val="pre" title="代码块">&lt;/&gt;</button>
+        <button class="ed-btn" data-cmd="insertHorizontalRule" title="分割线">—</button>
+        <button class="ed-btn" data-cmd="createLink" title="插入链接">🔗</button>
+        <button class="ed-btn" data-cmd="removeFormat" title="清除格式">🧹</button>
+        <span class="sep"></span>
+
+        <button class="ed-btn" data-act="img" title="插入图片">🖼 图片</button>
+        <button class="ed-btn" data-act="video" title="插入视频">🎬 视频</button>
+        <button class="ed-btn" data-act="audio" title="插入音频">🎵 音频</button>
+      </div>
+
+      <div class="ed-body" id="editor" contenteditable="true" data-placeholder="开始写吧…（最多 10000 字，可粘贴或拖入图片）"></div>
+
+      <div class="ed-foot">
+        <span>字数 <b id="chars">0</b> / 10000</span>
+        <span>素材空间 <span id="quota">—</span></span>
+        <span style="color:var(--text-light)">图片 ≤ 8MB，音频 ≤ 30MB，视频 ≤ 80MB</span>
+      </div>
+
+      <div class="ed-actions">
+        <button class="ed-submit" id="saveBtn">发布</button>
+        <span class="ed-msg" id="msg"></span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 CHENGFA</p>
+  </footer>
+
+  <input type="file" id="fileImg"   accept="image/*" hidden>
+  <input type="file" id="fileVideo" accept="video/*" hidden>
+  <input type="file" id="fileAudio" accept="audio/*" hidden>
+
+  <script src="/config.js"></script>
+  <script src="/nav.js?v=17"></script>
+<script>
+const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+const MAX_CHARS = 10000;
+
+const editor  = document.getElementById('editor');
+const titleEl = document.getElementById('title');
+const charsEl = document.getElementById('chars');
+const msgEl   = document.getElementById('msg');
+
+const qs = new URLSearchParams(location.search);
+let articleId = parseInt(qs.get('id'), 10) || null;
+
+function escapeHTML(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') };
+}
+function requireLogin() {
+  if (localStorage.getItem('token')) return true;
+  const m = document.getElementById('loginModal');
+  if (m) m.classList.add('show'); else alert('请先登录');
+  return false;
+}
+
+/* ===== 字数 ===== */
+function countChars() {
+  const plain = editor.innerText.replace(/\s+/g, ' ').trim();
+  charsEl.textContent = plain.length;
+  charsEl.parentElement.classList.toggle('over', plain.length > MAX_CHARS);
+  return plain.length;
+}
+editor.addEventListener('input', countChars);
+
+/* ===== 工具栏 ===== */
+function exec(cmd, val) {
+  editor.focus();
+  document.execCommand(cmd, false, val);
+  countChars();
+}
+document.querySelectorAll('.ed-btn[data-cmd]').forEach(btn => {
+  btn.addEventListener('mousedown', e => e.preventDefault());   // 别让按钮抢走选区
+  btn.addEventListener('click', () => {
+    const cmd = btn.dataset.cmd;
+    if (cmd === 'createLink') {
+      const url = prompt('链接地址（要带 http:// 或 https://）', 'https://');
+      if (!url) return;
+      if (!/^https?:\/\//i.test(url)) return alert('只支持 http/https 链接');
+      exec('createLink', url);
+      return;
+    }
+    let val = btn.dataset.val;
+    if (cmd === 'foreColor') val = document.getElementById('foreColor').value;
+    exec(cmd, val);
+  });
+});
+document.getElementById('blockSel').addEventListener('change', e => exec('formatBlock', e.target.value));
+document.getElementById('sizeSel').addEventListener('change', e => exec('fontSize', e.target.value));
+
+/* ===== 插入素材 ===== */
+const FILE_INPUT = { img: 'fileImg', video: 'fileVideo', audio: 'fileAudio' };
+document.querySelectorAll('.ed-btn[data-act]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!requireLogin()) return;
+    document.getElementById(FILE_INPUT[btn.dataset.act]).click();
+  });
+});
+
+function uploadFile(file, kind) {
+  if (!file) return;
+  const rule = { img: 8, video: 80, audio: 30 }[kind];
+  if (file.size > rule * 1024 * 1024) {
+    return alert(`这个文件 ${(file.size / 1024 / 1024).toFixed(1)}MB，超过 ${rule}MB 上限`);
+  }
+  const reader = new FileReader();
+  reader.onload = async () => {
+    setMsg('上传中…', '');
+    try {
+      const res = await fetch(API + '/article/upload', {
+        method: 'POST', headers: authHeaders(),
+        body: JSON.stringify({ kind: kind === 'img' ? 'image' : kind, articleId: articleId || 0, data: reader.result })
+      });
+      const d = await res.json();
+      if (!d.ok) return setMsg(d.error || '上传失败', 'err');
+      const src = API + d.url;                       // 存绝对路径，前台后台都能直接显示
+      editor.focus();
+      if (kind === 'img')        document.execCommand('insertHTML', false, `<img src="${src}" alt=""><br>`);
+      else if (kind === 'video') document.execCommand('insertHTML', false, `<video src="${src}" controls style="max-width:100%"></video><br>`);
+      else                       document.execCommand('insertHTML', false, `<audio src="${src}" controls></audio><br>`);
+      setMsg('已插入', 'ok');
+      countChars();
+      loadQuota();
+    } catch { setMsg('上传失败，检查网络', 'err'); }
+  };
+  reader.readAsDataURL(file);
+}
+['img', 'video', 'audio'].forEach(k => {
+  document.getElementById(FILE_INPUT[k]).addEventListener('change', e => {
+    uploadFile(e.target.files[0], k);
+    e.target.value = '';
+  });
+});
+
+// 粘贴 / 拖入图片直接上传
+editor.addEventListener('paste', e => {
+  const items = (e.clipboardData || {}).items || [];
+  for (const it of items) {
+    if (it.type && it.type.startsWith('image/')) {
+      e.preventDefault();
+      if (!requireLogin()) return;
+      uploadFile(it.getAsFile(), 'img');
+      return;
+    }
+  }
+});
+
+function setMsg(text, cls) {
+  msgEl.textContent = text;
+  msgEl.className = 'ed-msg' + (cls ? ' ' + cls : '');
+}
+
+/* ===== 素材空间 ===== */
+async function loadQuota() {
+  try {
+    const d = await (await fetch(API + '/article/quota')).json();
+    if (d.ok) document.getElementById('quota').textContent = d.usedMB + ' MB / ' + d.limitGB + ' GB';
+  } catch { /* 忽略 */ }
+}
+
+/* ===== 读取已有文章（编辑模式）===== */
+async function loadArticle() {
+  if (!articleId) return;
+  document.getElementById('pageTitle').textContent = '编辑文章';
+  try {
+    const d = await (await fetch(API + '/article?id=' + articleId)).json();
+    if (!d.ok) { setMsg(d.error || '加载失败', 'err'); return; }
+    if (!d.article.canEdit) {
+      setMsg('这不是你的文章', 'err');
+      document.getElementById('saveBtn').disabled = true;
+      return;
+    }
+    titleEl.value = d.article.title;
+    editor.innerHTML = d.article.content || '';
+    countChars();
+  } catch { setMsg('加载失败', 'err'); }
+}
+
+/* ===== 保存 ===== */
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  if (!requireLogin()) return;
+  const title = titleEl.value.trim();
+  if (!title) return alert('先写个标题');
+  const n = countChars();
+  if (n > MAX_CHARS) return alert(`正文 ${n} 字，超过 ${MAX_CHARS} 字上限`);
+
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  setMsg('保存中…', '');
+  try {
+    const res = await fetch(API + '/article/save', {
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ id: articleId, title, html: editor.innerHTML })
+    });
+    const d = await res.json();
+    if (!d.ok) { btn.disabled = false; return setMsg(d.error || '保存失败', 'err'); }
+    articleId = d.id;
+    setMsg('已发布，正在跳转…', 'ok');
+    setTimeout(() => { location.href = '/article.html?id=' + d.id; }, 600);
+  } catch {
+    btn.disabled = false;
+    setMsg('保存失败，检查网络', 'err');
+  }
+});
+
+loadQuota();
+loadArticle();
+countChars();
+</script>
+</body>
+</html>

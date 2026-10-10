@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文章 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css?v=17">
+<style>
+  .art-title {
+    font-size: 28px;
+    line-height: 1.4;
+    color: var(--text);
+    margin-bottom: 10px;
+    word-break: break-word;
+  }
+  .art-sub {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-light);
+  }
+  .art-sub a { color: var(--primary-deep); text-decoration: none; font-weight: 600; }
+  .art-sub a:hover { text-decoration: underline; }
+
+  /* 正文 */
+  .art-content {
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--text);
+    word-break: break-word;
+    overflow-x: auto;
+  }
+  .art-content img, .art-content video { max-width: 100%; border-radius: 8px; margin: 8px 0; }
+  .art-content audio { width: 100%; margin: 8px 0; }
+  .art-content blockquote {
+    margin: 12px 0;
+    padding: 8px 14px;
+    border-left: 4px solid var(--primary);
+    background: var(--primary-soft);
+    color: var(--text-light);
+  }
+  .art-content pre {
+    margin: 12px 0;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    font-family: Consolas, Menlo, monospace;
+    font-size: 14px;
+    white-space: pre-wrap;
+  }
+  .art-content a { color: var(--primary-deep); }
+  .art-content h1, .art-content h2, .art-content h3 { margin: 18px 0 10px; }
+
+  /* 底部一排按钮 */
+  .art-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-top: 26px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .art-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--text-light);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .art-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .art-btn.on { background: var(--primary-soft); border-color: var(--primary); color: var(--primary-deep); font-weight: 600; }
+  .art-btn.like.on { color: #fb7299; border-color: #fb7299; background: rgba(251,114,153,.12); }
+  .art-btn.fav.on  { color: #f0b400; border-color: #f0b400; background: rgba(240,180,0,.14); }
+  .art-btn.danger:hover { border-color: #e5534b; color: #e5534b; }
+  .art-back { margin-left: auto; color: var(--text-light); text-decoration: none; font-size: 14px; }
+  .art-back:hover { color: var(--primary); }
+  .art-tip { margin-top: 12px; font-size: 14px; color: var(--text-light); }
+</style>
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <section style="margin-top:36px;">
+    <div class="card">
+      <div id="box">
+        <div class="art-empty" style="padding:40px;text-align:center;color:var(--text-light)">加载中…</div>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>© 2026 CHENGFA</p></footer>
+
+  <script src="/config.js"></script>
+  <script src="/nav.js?v=17"></script>
+<script>
+const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+const id = parseInt(new URLSearchParams(location.search).get('id'), 10);
+const box = document.getElementById('box');
+
+let article = null;
+
+function escapeHTML(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') };
+}
+function requireLogin() {
+  if (localStorage.getItem('token')) return true;
+  const m = document.getElementById('loginModal');
+  if (m) m.classList.add('show'); else alert('请先登录');
+  return false;
+}
+
+function render() {
+  const a = article;
+  document.title = a.title + ' · 乘法';
+  box.innerHTML = `
+    <h1 class="art-title">${escapeHTML(a.title)}</h1>
+    <div class="art-sub">
+      ${a.uid ? `<a href="/profile/?uid=${a.uid}">${escapeHTML(a.author || '匿名')}</a>` : `<span>${escapeHTML(a.author || '匿名')}</span>`}
+      <span>${escapeHTML(a.updatedAt || a.createdAt || '')}</span>
+      <span>${a.chars || 0} 字</span>
+      <span>👁 ${a.views || 0}</span>
+    </div>
+
+    <div class="art-content">${a.content || '<p style="color:var(--text-light)">（这篇还没有正文）</p>'}</div>
+
+    <div class="art-actions">
+      <button class="art-btn like${a.likedByMe ? ' on' : ''}" data-act="like">♥ <span id="likeN">${a.likes || 0}</span></button>
+      <button class="art-btn fav${a.favedByMe ? ' on' : ''}" data-act="fav">★ <span id="favN">${a.favs || 0}</span></button>
+      <button class="art-btn danger" data-act="report">举报</button>
+      ${a.canEdit ? `<button class="art-btn" data-act="edit">编辑</button>` : ''}
+      ${a.canEdit ? `<button class="art-btn danger" data-act="del">删除</button>` : ''}
+      <a class="art-back" href="/articles.html">← 全部文章</a>
+    </div>
+    <div class="art-tip" id="tip"></div>`;
+}
+
+function setTip(t) { const el = document.getElementById('tip'); if (el) el.textContent = t || ''; }
+
+async function load() {
+  if (!id) { box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">缺少文章 id</div>'; return; }
+  try {
+    const d = await (await fetch(API + '/article?id=' + id)).json();
+    if (!d.ok) { box.innerHTML = `<div style="padding:40px;text-align:center;color:var(--text-light)">${escapeHTML(d.error || '加载失败')}</div>`; return; }
+    article = d.article;
+    render();
+  } catch {
+    box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">加载失败，刷新试试</div>';
+  }
+}
+
+async function post(path, payload) {
+  const res = await fetch(API + path, { method: 'POST', headers: authHeaders(), body: JSON.stringify(payload || {}) });
+  return await res.json();
+}
+
+box.addEventListener('click', async e => {
+  const btn = e.target.closest('[data-act]');
+  if (!btn || !article) return;
+  const act = btn.dataset.act;
+
+  if (act === 'edit') { location.href = '/write.html?id=' + article.id; return; }
+
+  if (!requireLogin()) return;
+
+  if (act === 'like' || act === 'fav') {
+    const d = await post('/article/' + act, { id: article.id });
+    if (!d.ok) return alert(d.error || '操作失败');
+    const on = !!d.on;
+    btn.classList.toggle('on', on);
+    if (act === 'like') { document.getElementById('likeN').textContent = d.count; article.likedByMe = on; }
+    else { document.getElementById('favN').textContent = d.count; article.favedByMe = on; }
+    setTip(on ? (act === 'like' ? '已点赞' : '已收藏') : (act === 'like' ? '取消点赞' : '取消收藏'));
+    return;
+  }
+
+  if (act === 'report') {
+    const reason = prompt('说说这篇文章哪里有问题（可以留空）：', '');
+    if (reason === null) return;
+    const d = await post('/article/report', { id: article.id, reason: reason.trim() });
+    if (!d.ok) return alert(d.error || '举报失败');
+    setTip('举报已提交，管理员会看的');
+    return;
+  }
+
+  if (act === 'del') {
+    if (!confirm('确定删掉这篇文章吗？\n里面的图片视频也会一起删掉，删了找不回来。')) return;
+    const d = await post('/article/delete', { id: article.id });
+    if (!d.ok) return alert(d.error || '删除失败');
+    alert('已删除');
+    location.href = '/articles.html';
+  }
+});
+
+load();
+</script>
+</body>
+</html>

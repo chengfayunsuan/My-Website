@@ -187,6 +187,65 @@ section {
   border-radius: 2px;
 }
 
+/* ===== 主页·文章入口 ===== */
+.art-entry-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 9px 22px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background .2s;
+}
+.art-entry-btn:hover { background: var(--primary-deep); color: #fff; }
+
+.art-box {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+.art-box-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.art-box-title { font-size: 15px; font-weight: 600; color: var(--text); }
+.art-box-more { font-size: 13px; color: var(--primary-deep); text-decoration: none; }
+.art-box-more:hover { text-decoration: underline; }
+.art-box-list { display: flex; flex-direction: column; gap: 4px; }
+.art-box-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 4px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 14px;
+}
+.art-box-row:hover { background: var(--primary-soft); }
+.art-box-row .t {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.art-box-row .m {
+  flex: none;
+  font-size: 12px;
+  color: var(--text-light);
+}
+.art-box-empty, .art-box-none {
+  padding: 10px 4px;
+  font-size: 13px;
+  color: var(--text-light);
+}
+
 /* 测试页网格 */
 .test-grid {
   display: grid;
