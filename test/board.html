@@ -73,7 +73,7 @@
   </section>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=6"></script>
+  <script src="/nav.js?v=7"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
@@ -108,10 +108,14 @@ async function loadUsers() {
 }
 
 function safeAvatar(a) {
-  if (typeof a === 'string' &&
-      (a.startsWith('data:image/') || a.startsWith('/')) &&
-      a.indexOf('"') === -1 && a.indexOf('<') === -1) return a;
-  return '/avatar-default.jpg';
+  if (typeof a !== 'string' || !a) return '/avatar-default.jpg';
+  let s = a;
+  // 新后端给完整网址；旧后端只给文件名 uid1.jpg，这里补上前缀
+  if (!s.startsWith('data:') && !s.startsWith('/') && !/^https?:\/\//.test(s)) {
+    s = API.replace(/\/+$/, '') + '/avatar/' + s;
+  }
+  if (s.indexOf('"') !== -1 || s.indexOf('<') !== -1) return '/avatar-default.jpg';
+  return s;
 }
 
 function whoOf(m) {

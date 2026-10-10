@@ -1,6 +1,18 @@
 (function () {
   const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
+  /* 头像字段有两种可能：新后端给完整网址（…/avatar/uid1.jpg?v=123），
+     旧后端只给文件名（uid1.jpg）。两种都要能正常显示。 */
+  function fixAvatar(a) {
+    if (!a) return '/avatar-default.jpg';
+    let s = a;
+    if (!s.startsWith('data:') && !s.startsWith('/') && !/^https?:\/\//.test(s)) {
+      s = API.replace(/\/+$/, '') + '/avatar/' + s;
+    }
+    if (s.indexOf('"') !== -1 || s.indexOf('<') !== -1) return '/avatar-default.jpg';
+    return s;
+  }
+
   /* ========== 1. 生成导航栏 ========== */
   const isManage = location.pathname.indexOf('/manage') === 0;
   const adminHref = isManage ? '/' : '/manage/dashboard';
@@ -128,7 +140,7 @@
     }
 
     const navAvatarImg = document.getElementById('avatarImg');
-    if (navAvatarImg && avatar) navAvatarImg.src = avatar;
+    if (navAvatarImg && avatar) navAvatarImg.src = fixAvatar(avatar);
 
     if (adminBtn) {
       adminBtn.style.display = (role === 'owner' || role === 'admin') ? 'flex' : 'none';

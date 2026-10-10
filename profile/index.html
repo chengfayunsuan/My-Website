@@ -99,11 +99,22 @@
   </div>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=6"></script>
+  <script src="/nav.js?v=7"></script>
   <script>
   (function () {
     const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
     const token = localStorage.getItem('token');
+
+    /* 头像字段有两种可能：新后端给完整网址，旧后端只给文件名 uid1.jpg */
+    function fixAvatar(a) {
+      if (!a) return '/avatar-default.jpg';
+      let s = a;
+      if (!s.startsWith('data:') && !s.startsWith('/') && !/^https?:\/\//.test(s)) {
+        s = API.replace(/\/+$/, '') + '/avatar/' + s;
+      }
+      if (s.indexOf('"') !== -1 || s.indexOf('<') !== -1) return '/avatar-default.jpg';
+      return s;
+    }
 
     // 从网址里读 uid： /profile/?uid=3   （没有就是看自己）
     const wantedUid = parseInt(new URLSearchParams(location.search).get('uid'), 10) || null;
@@ -239,7 +250,7 @@
         el.roleTag.classList.add('role-user');
       }
 
-      const avatarSrc = data.avatar || '/avatar-default.jpg';
+      const avatarSrc = fixAvatar(data.avatar);
       el.avatarImg.src = avatarSrc;
       originalAvatar = avatarSrc;
 
