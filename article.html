@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=18">
+<link rel="stylesheet" href="/style.css?v=19">
 <style>
   .art-title {
     font-size: 28px;
@@ -90,6 +90,108 @@
   .art-back { margin-left: auto; color: var(--text-light); text-decoration: none; font-size: 14px; }
   .art-back:hover { color: var(--primary); }
   .art-tip { margin-top: 12px; font-size: 14px; color: var(--text-light); }
+
+  /* ===== 评论区（B 站那套：头像一列，右边名字/正文/操作）===== */
+  .cmt-wrap { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .cmt-title {
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 12px;
+  }
+  .cmt-title::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 5px;
+    width: 3px; height: 16px;
+    background: var(--primary-deep);
+    border-radius: 2px;
+  }
+  .cmt-post {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+  }
+  .cmt-post textarea {
+    width: 100%;
+    min-height: 64px;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    background: var(--card);
+    color: var(--text);
+    outline: none;
+    resize: vertical;
+  }
+  .cmt-post textarea:focus { border-color: var(--primary); }
+  .cmt-post-bar { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+  .cmt-post-bar .n { font-size: 12px; color: var(--text-light); }
+  .cmt-post-bar button {
+    margin-left: auto;
+    padding: 7px 20px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .cmt-post-bar button:hover { background: var(--primary-deep); }
+
+  .cmt-list { margin-top: 14px; display: flex; flex-direction: column; }
+  .cmt-item { display: flex; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .cmt-item:last-child { border-bottom: none; }
+  .cmt-side { flex: none; }
+  .cmt-avatar { display: block; line-height: 0; }
+  .cmt-avatar img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--card); border: 1px solid var(--border); }
+  .cmt-main { flex: 1; min-width: 0; }
+  .cmt-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .cmt-name { font-size: 13px; font-weight: 500; color: var(--primary-deep); text-decoration: none; }
+  .cmt-name:hover { text-decoration: underline; }
+  .cmt-text { margin-top: 4px; font-size: 15px; line-height: 1.7; color: var(--text); white-space: pre-wrap; word-break: break-word; }
+  .cmt-to { color: var(--primary-deep); }
+  .cmt-foot { display: flex; align-items: center; gap: 2px; margin-top: 6px; flex-wrap: wrap; }
+  .cmt-time { font-size: 12px; color: var(--text-light); margin-right: 8px; }
+  .cmt-floor { margin-left: auto; font-size: 12px; color: var(--text-light); }
+  .cmt-btn {
+    padding: 4px 8px;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text-light);
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .cmt-btn:hover { background: var(--primary-soft); color: var(--primary-deep); }
+  .cmt-btn.on { color: #fb7299; background: rgba(251, 114, 153, .12); }
+  .cmt-btn.danger:hover { color: #e5534b; background: rgba(229, 83, 75, .12); }
+  .cmt-children { margin-top: 10px; }
+  .cmt-item.is-reply { gap: 8px; padding: 10px 0 0; border-bottom: none; }
+  .cmt-item.is-reply .cmt-avatar img { width: 26px; height: 26px; }
+  .cmt-item.is-reply .cmt-text { font-size: 14px; margin-top: 2px; }
+  .cmt-empty { padding: 26px 10px; text-align: center; font-size: 14px; color: var(--text-light); }
+  .cmt-reply-box { margin: 8px 0 2px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); }
+  .cmt-reply-box textarea {
+    width: 100%; min-height: 54px; padding: 8px 10px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: 14px; line-height: 1.6;
+    background: var(--card); color: var(--text); outline: none; resize: vertical;
+  }
+  .cmt-reply-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .cmt-reply-actions button {
+    padding: 5px 16px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--card); color: var(--text-light);
+    font-family: inherit; font-size: 13px; cursor: pointer;
+  }
+  .cmt-reply-actions button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .cmt-reply-actions button.primary:hover { background: var(--primary-deep); }
 </style>
 </head>
 <body>
@@ -106,7 +208,7 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=18"></script>
+  <script src="/nav.js?v=19"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const id = parseInt(new URLSearchParams(location.search).get('id'), 10);
@@ -151,7 +253,21 @@ function render() {
       ${a.canEdit ? `<button class="art-btn danger" data-act="del">删除</button>` : ''}
       <a class="art-back" href="/articles.html">← 全部文章</a>
     </div>
-    <div class="art-tip" id="tip"></div>`;
+    <div class="art-tip" id="tip"></div>
+
+    <div class="cmt-wrap">
+      <h3 class="cmt-title">评论 <span id="cmtCount" style="font-size:13px;font-weight:normal;color:var(--text-light)">0</span></h3>
+      <div class="cmt-post">
+        <textarea id="cmtText" maxlength="500" placeholder="写下你的评论…（最多 500 字）"></textarea>
+        <div class="cmt-post-bar">
+          <span class="n" id="cmtChars">0/500</span>
+          <button id="cmtSend">发布</button>
+        </div>
+      </div>
+      <div class="cmt-list" id="cmtList"><div class="cmt-empty">加载中…</div></div>
+    </div>`;
+
+  bindComments();
 }
 
 function setTip(t) { const el = document.getElementById('tip'); if (el) el.textContent = t || ''; }
@@ -211,6 +327,184 @@ box.addEventListener('click', async e => {
   }
 });
 
+/* ================= 评论区 ================= */
+let me = null;
+let userAvatars = {};      // uid -> 头像地址
+let cmts = [];
+let openReply = null;
+let cmtBound = false;
+
+function cmtEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+async function loadMe() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+  try {
+    const d = await (await fetch(API + '/me', { headers: { Authorization: 'Bearer ' + token } })).json();
+    if (d.ok) me = { uid: d.uid, name: d.username, role: d.role };
+  } catch { /* 没登录就算了 */ }
+}
+async function loadAvatars() {
+  try {
+    const list = await (await fetch(API + '/users')).json();
+    if (Array.isArray(list)) list.forEach(u => { userAvatars[u.uid] = u.avatar; });
+  } catch { /* 拿不到就用默认头像 */ }
+}
+function fixAvatar(a) {
+  if (!a) return '/avatar-default.jpg';
+  let s = String(a);
+  if (!s.startsWith('data:') && !s.startsWith('/') && !/^https?:\/\//.test(s)) s = API.replace(/\/+$/, '') + '/avatar/' + s;
+  return s;
+}
+
+function headHTML(c) {
+  const av = fixAvatar(userAvatars[c.uid]);
+  const img = `<img src="${av}" alt="">`;
+  const a = c.uid ? `<a class="cmt-avatar" href="/profile/?uid=${c.uid}">${img}</a>` : `<span class="cmt-avatar">${img}</span>`;
+  const name = c.uid ? `<a class="cmt-name" href="/profile/?uid=${c.uid}">${cmtEsc(c.name)}</a>` : `<span class="cmt-name">${cmtEsc(c.name)}</span>`;
+  return `<div class="cmt-side">${a}</div><div class="cmt-main"><div class="cmt-top">${name}</div>`;
+}
+
+function footHTML(c, isReply) {
+  const mine = me && c.uid != null && c.uid === me.uid;
+  const staff = me && (me.role === 'owner' || me.role === 'admin');
+  const likeBtn = `<button class="cmt-btn${c.likedByMe ? ' on' : ''}" data-a="like" data-id="${c.id}">♥ ${c.likes || 0}</button>`;
+  const replyBtn = `<button class="cmt-btn" data-a="reply" data-id="${c.id}" data-name="${cmtEsc(c.name)}">回复</button>`;
+  const delBtn = (mine || staff) ? `<button class="cmt-btn danger" data-a="del" data-id="${c.id}">删除</button>` : '';
+  const floor = (!isReply && c.floor) ? `<span class="cmt-floor">#${c.floor}</span>` : '';
+  return `<div class="cmt-foot"><span class="cmt-time">${cmtEsc(c.time)}</span>${likeBtn}${replyBtn}${delBtn}${floor}</div>`;
+}
+
+function replyItem(c) {
+  const to = c.toName ? `<span class="cmt-to">回复 @${cmtEsc(c.toName)} :</span> ` : '';
+  return `<div class="cmt-item is-reply" id="cmt${c.id}">
+    ${headHTML(c)}
+      <div class="cmt-text">${to}${cmtEsc(c.text)}</div>
+      ${footHTML(c, true)}
+      ${openReply === c.id ? replyBoxHTML(c) : ''}
+    </div>
+  </div>`;
+}
+
+function topItem(c) {
+  const kids = cmts.filter(x => x.parent === c.id).sort((a, b) => a.id - b.id);
+  const kidsHTML = kids.length ? `<div class="cmt-children">${kids.map(replyItem).join('')}</div>` : '';
+  return `<div class="cmt-item" id="cmt${c.id}">
+    ${headHTML(c)}
+      <div class="cmt-text">${cmtEsc(c.text)}</div>
+      ${footHTML(c, false)}
+      ${openReply === c.id ? replyBoxHTML(c) : ''}
+      ${kidsHTML}
+    </div>
+  </div>`;
+}
+
+function replyBoxHTML(c) {
+  return `<div class="cmt-reply-box">
+    <textarea data-for="${c.id}" placeholder="回复 ${cmtEsc(c.name)}…">@${cmtEsc(c.name)} </textarea>
+    <div class="cmt-reply-actions">
+      <button class="primary" data-a="send" data-id="${c.id}">发送</button>
+      <button data-a="cancel">取消</button>
+    </div>
+  </div>`;
+}
+
+function renderComments() {
+  const box = document.getElementById('cmtList');
+  if (!box) return;
+  const tops = cmts.filter(c => !c.parent).sort((a, b) => (b.floor || 0) - (a.floor || 0) || b.id - a.id);
+  document.getElementById('cmtCount').textContent = cmts.length;
+  box.innerHTML = tops.length
+    ? tops.map(topItem).join('')
+    : '<div class="cmt-empty">还没有评论，来说两句吧~</div>';
+}
+
+async function loadComments() {
+  try {
+    const d = await (await fetch(API + '/article/comments?articleId=' + id)).json();
+    if (!d.ok) throw new Error();
+    cmts = d.list || [];
+    renderComments();
+  } catch {
+    const box = document.getElementById('cmtList');
+    if (box) box.innerHTML = '<div class="cmt-empty">评论加载失败</div>';
+  }
+}
+
+async function cmtPost(path, payload) {
+  const res = await fetch(API + path, { method: 'POST', headers: authHeaders(), body: JSON.stringify(payload || {}) });
+  return await res.json();
+}
+
+function bindComments() {
+  const box = document.getElementById('cmtList');
+  const textEl = document.getElementById('cmtText');
+  const sendBtn = document.getElementById('cmtSend');
+  const charsEl = document.getElementById('cmtChars');
+  if (!box || cmtBound) return;
+  cmtBound = true;
+
+  textEl.addEventListener('input', () => { charsEl.textContent = textEl.value.length + '/500'; });
+
+  sendBtn.addEventListener('click', async () => {
+    if (!requireLogin()) return;
+    const t = textEl.value.trim();
+    if (!t) return alert('评论不能为空');
+    sendBtn.disabled = true;
+    const d = await cmtPost('/article/comment', { articleId: id, text: t });
+    sendBtn.disabled = false;
+    if (!d.ok) return alert(d.error || '发送失败');
+    textEl.value = '';
+    charsEl.textContent = '0/500';
+    await loadComments();
+  });
+
+  box.addEventListener('click', async e => {
+    const btn = e.target.closest('[data-a]');
+    if (!btn) return;
+    const a = btn.dataset.a;
+    const cid = parseInt(btn.dataset.id, 10);
+
+    if (a === 'cancel') { openReply = null; return renderComments(); }
+    if (a === 'reply') {
+      openReply = cid;
+      renderComments();
+      const ta = document.querySelector(`.cmt-reply-box textarea[data-for="${cid}"]`);
+      if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+      return;
+    }
+    if (!requireLogin()) return;
+
+    if (a === 'send') {
+      const ta = btn.closest('.cmt-reply-box').querySelector('textarea');
+      const t = ta.value.trim();
+      if (!t) return alert('回复不能为空');
+      const d = await cmtPost('/article/comment', { articleId: id, text: t, parent: cid });
+      if (!d.ok) return alert(d.error || '发送失败');
+      openReply = null;
+      await loadComments();
+      return;
+    }
+    if (a === 'like') {
+      const d = await cmtPost('/article/comment/like', { id: cid });
+      if (!d.ok) return alert(d.error || '操作失败');
+      await loadComments();
+      return;
+    }
+    if (a === 'del') {
+      if (!confirm('确定删掉这条评论？')) return;
+      const d = await cmtPost('/article/comment/delete', { articleId: id, id: cid });
+      if (!d.ok) return alert(d.error || '删除失败');
+      await loadComments();
+    }
+  });
+}
+
+loadMe().then(loadAvatars).then(loadComments);
 load();
 </script>
 </body>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>写文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=18">
+<link rel="stylesheet" href="/style.css?v=19">
 <style>
   .ed-card { padding: 24px; }
   .ed-title {
@@ -96,6 +96,21 @@
   }
   .ed-body img, .ed-body video { max-width: 100%; border-radius: 6px; }
   .ed-body audio { width: 100%; margin: 6px 0; }
+  /* 点中图片/视频后右下角出现拖动手柄，拖一下就能改大小（改的是宽度，高度按比例） */
+  .ed-body img.ed-sel, .ed-body video.ed-sel { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .ed-handle {
+    position: fixed;
+    width: 14px; height: 14px;
+    margin: -7px 0 0 -7px;
+    border-radius: 3px;
+    background: var(--primary);
+    border: 2px solid #fff;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .35);
+    cursor: nwse-resize;
+    z-index: 120;
+    display: none;
+  }
+  .ed-handle.on { display: block; }
   .ed-body blockquote {
     margin: 10px 0;
     padding: 6px 14px;
@@ -218,12 +233,14 @@
     <p>© 2026 CHENGFA</p>
   </footer>
 
+  <div class="ed-handle" id="resizeHandle" title="拖我改大小，双击图片可恢复原始尺寸"></div>
+
   <input type="file" id="fileImg"   accept="image/*" hidden>
   <input type="file" id="fileVideo" accept="video/*,.mkv" hidden>
   <input type="file" id="fileAudio" accept="audio/*" hidden>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=18"></script>
+  <script src="/nav.js?v=19"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const MAX_CHARS = 10000;
@@ -352,6 +369,65 @@ document.querySelectorAll('.ed-btn[data-cmd]').forEach(btn => {
 });
 document.getElementById('blockSel').addEventListener('change', e => exec('formatBlock', e.target.value));
 document.getElementById('sizeSel').addEventListener('change', e => exec('fontSize', e.target.value));
+
+/* ===== 图片 / 视频拖动改大小 ===== */
+const handleEl = document.getElementById('resizeHandle');
+let resizing = null;
+
+function showHandle(el) {
+  hideHandle();
+  if (!el) return;
+  el.classList.add('ed-sel');
+  const r = el.getBoundingClientRect();
+  handleEl.style.left = r.right + 'px';
+  handleEl.style.top = r.bottom + 'px';
+  handleEl.classList.add('on');
+}
+function hideHandle() {
+  handleEl.classList.remove('on');
+  editor.querySelectorAll('.ed-sel').forEach(x => x.classList.remove('ed-sel'));
+}
+function selectedMedia() { return editor.querySelector('img.ed-sel, video.ed-sel'); }
+
+editor.addEventListener('click', e => {
+  const el = e.target.closest('img, video');
+  if (el) showHandle(el); else hideHandle();
+});
+// 双击恢复原始尺寸
+editor.addEventListener('dblclick', e => {
+  const el = e.target.closest('img, video');
+  if (!el) return;
+  el.style.width = '';
+  el.style.height = '';
+  showHandle(el);
+  setMsg('已恢复原始尺寸', 'ok');
+});
+editor.addEventListener('input', hideHandle);
+window.addEventListener('scroll', () => { const el = selectedMedia(); if (el) showHandle(el); }, true);
+document.addEventListener('click', e => {
+  if (!resizing && !e.target.closest('#resizeHandle') && !e.target.closest('#editor')) hideHandle();
+});
+
+handleEl.addEventListener('mousedown', e => {
+  const el = selectedMedia();
+  if (!el) return;
+  e.preventDefault();
+  resizing = { el, x: e.clientX, w: el.getBoundingClientRect().width };
+});
+window.addEventListener('mousemove', e => {
+  if (!resizing) return;
+  const max = editor.clientWidth;
+  const w = Math.max(60, Math.min(max, resizing.w + (e.clientX - resizing.x)));
+  resizing.el.style.width = Math.round(w) + 'px';
+  resizing.el.style.height = 'auto';
+  showHandle(resizing.el);
+});
+window.addEventListener('mouseup', () => {
+  if (!resizing) return;
+  resizing = null;
+  countChars();
+  setMsg('大小已调整', 'ok');
+});
 
 /* ===== 插入素材 ===== */
 const FILE_INPUT = { img: 'fileImg', video: 'fileVideo', audio: 'fileAudio' };
