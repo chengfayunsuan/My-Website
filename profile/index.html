@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>个人主页 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=14">
+<link rel="stylesheet" href="/style.css?v=15">
 </head>
 <body>
 
@@ -103,7 +103,7 @@
   </div>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=14"></script>
+  <script src="/nav.js?v=15"></script>
   <script>
   (function () {
     const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
@@ -262,9 +262,12 @@
       } else if (role === 'admin') {
         el.roleTag.textContent = '管理员';
         el.roleTag.classList.add('role-admin');
+      } else if (role === 'owner') {
+        el.roleTag.textContent = '站长';
+        el.roleTag.classList.add('role-owner');
       } else {
-        el.roleTag.textContent = '用户';
-        el.roleTag.classList.add('role-user');
+        // 普通用户又没写签名 → 铭牌整个不显示
+        el.roleTag.style.display = 'none';
       }
 
       const avatarSrc = fixAvatar(data.avatar);
@@ -487,12 +490,12 @@
         const t = String(bio || '').trim();
         el.roleTag.className = 'role-tag';
         if (t) {
+          el.roleTag.style.display = '';
           el.roleTag.textContent = t.length > 20 ? t.slice(0, 20) + '…' : t;
           el.roleTag.classList.add('role-bio');
           el.roleTag.title = t;
         } else {
-          el.roleTag.textContent = '用户';
-          el.roleTag.classList.add('role-user');
+          el.roleTag.style.display = 'none';
           el.roleTag.removeAttribute('title');
         }
         el.bioText.textContent = t || '这个人很懒，什么都没写。';

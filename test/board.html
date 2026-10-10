@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>留言板 · 乘法</title>
-<link rel="stylesheet" href="/style.css?v=14">
+<link rel="stylesheet" href="/style.css?v=15">
 <style>
   /* ===== 发表框（B 站风格：圆角输入框 + 右下角发布按钮）===== */
   .post-box {
@@ -105,6 +105,14 @@
     line-height: 1;
   }
   .msg-badge.pin { background: #ff7f24; }
+  /* 写了签名的：铭牌显示签名，用主题蓝，跟粉色的站长/管理区分开 */
+  .msg-badge.plate {
+    background: var(--primary-deep);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   /* 置顶的评论整条淡高亮一下，跟普通评论区分开 */
   .msg-item.pinned {
@@ -234,7 +242,7 @@
   </section>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=14"></script>
+  <script src="/nav.js?v=15"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
@@ -285,6 +293,7 @@ function whoOf(m) {
     uid: (m.uid != null) ? m.uid : (u ? u.uid : null),
     name: u ? u.username : m.name,
     role: u ? u.role : null,
+    bio: u ? (u.bio || '') : '',
     avatar: safeAvatar(u && u.avatar)
   };
 }
@@ -485,11 +494,14 @@ function topHTML(m, who) {
   const nameHTML = who.uid
     ? `<a class="msg-name" href="${href}">${escapeHTML(who.name)}</a>`
     : `<span class="msg-name">${escapeHTML(who.name)}</span>`;
-  const roleBadge = (who.role === 'owner' || who.role === 'admin')
-    ? `<span class="msg-badge">${who.role === 'owner' ? '站长' : '管理'}</span>`
-    : '';
+  // 铭牌：优先显示本人写的签名；没写签名才显示身份；普通用户（没签名也不是管理）不显示
+  const bio = String(who.bio || '').trim();
+  let plate = '';
+  if (bio) plate = `<span class="msg-badge plate" title="${escapeHTML(bio)}">${escapeHTML(bio.length > 20 ? bio.slice(0, 20) + '…' : bio)}</span>`;
+  else if (who.role === 'owner') plate = `<span class="msg-badge">站长</span>`;
+  else if (who.role === 'admin') plate = `<span class="msg-badge">管理</span>`;
   const pinBadge = m.pinned ? `<span class="msg-badge pin">置顶</span>` : '';
-  return `<div class="msg-top">${nameHTML}${roleBadge}${pinBadge}</div>`;
+  return `<div class="msg-top">${nameHTML}${plate}${pinBadge}</div>`;
 }
 
 /* 正文：是回复的话，像 B 站那样把「回复 @某某 :」接在内容前面 */
