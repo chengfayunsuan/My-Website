@@ -67,7 +67,23 @@
 
   <section id="changelog">
     <div class="card">
-      <h2 class="section-title">更新日志</h2>
+      <div class="log-head">
+        <h2 class="section-title">更新日志</h2>
+        <button class="log-add" id="logAdd" type="button" title="添加一条更新日志" style="display:none;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          添加
+        </button>
+      </div>
+
+      <div class="log-editor" id="logEditor" style="display:none;">
+        <textarea class="log-input" id="logInput" rows="2" maxlength="200" placeholder="写一条更新日志…（最多 200 字，Ctrl+Enter 快速发布）"></textarea>
+        <div class="log-editor-actions">
+          <button class="log-submit" id="logSubmit" type="button">发布</button>
+          <button class="log-cancel" id="logCancel" type="button">取消</button>
+          <span class="log-editor-msg" id="logEditorMsg"></span>
+        </div>
+      </div>
+
       <ul class="log-list" id="logList"></ul>
       <button class="log-more" id="logMore">加载更多</button>
     </div>

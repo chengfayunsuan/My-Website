@@ -395,6 +395,92 @@ footer p { margin: 4px 0; }
   cursor: default;
 }
 
+/* 更新日志：标题那行 + 添加按钮 */
+.log-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.log-head .section-title { margin-bottom: 0; }
+
+.log-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+.log-add:hover { background: var(--primary-deep); transform: translateY(-1px); }
+
+/* 更新日志：书写框 */
+.log-editor {
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+.log-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  transition: border-color .2s;
+}
+.log-input:focus { border-color: var(--primary); }
+
+.log-editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.log-submit,
+.log-cancel {
+  padding: 6px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.log-submit {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.log-submit:hover { background: var(--primary-deep); border-color: var(--primary-deep); }
+.log-submit:disabled { opacity: .6; cursor: default; }
+.log-cancel {
+  background: var(--card);
+  color: var(--text);
+}
+.log-cancel:hover { background: var(--primary-soft); border-color: var(--primary); }
+
+.log-editor-msg { font-size: 13px; }
+.log-editor-msg.ok { color: var(--success); }
+.log-editor-msg.err { color: #e74c3c; }
+
 /* 移动端 */
 @media (max-width: 600px) {
   .nav-inner { flex-direction: column; gap: 10px; }

@@ -32,10 +32,22 @@
     padding: 12px 0;
     border-bottom: 1px solid var(--border);
   }
+  .msg-head { display: flex; align-items: center; gap: 8px; }
+  .msg-avatar { display: inline-flex; flex: none; line-height: 0; }
+  .msg-avatar img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+  a.msg-avatar:hover { opacity: .85; }
   .msg-name { font-weight: bold; color: var(--text); }
   a.msg-name { text-decoration: none; border-bottom: 1px dashed currentColor; }
   a.msg-name:hover { color: var(--primary); }
-  .msg-time { color: var(--text-light); font-size: 13px; margin-left: 10px; }
+  .msg-time { color: var(--text-light); font-size: 13px; margin-left: 4px; }
   .msg-text { margin-top: 6px; color: var(--text); }
 </style>
 </head>
@@ -73,21 +85,69 @@ if (goLogin) {
   });
 }
 
+/* 把 uid 和用户名都对到一个用户上：
+   新留言带了 uid，直接用；老留言没 uid，就用用户名去对 */
+let byName = null, byUid = null;
+
+async function loadUsers() {
+  if (byName) return;
+  byName = new Map();
+  byUid  = new Map();
+  try {
+    const res = await fetch(API + '/users');
+    const d = await res.json();
+    if (Array.isArray(d)) {
+      d.forEach(u => {
+        byName.set(u.username, u);
+        byUid.set(u.uid, u);
+      });
+    }
+  } catch {
+    /* 拿不到名单就统一显示默认头像 */
+  }
+}
+
+function safeAvatar(a) {
+  if (typeof a === 'string' &&
+      (a.startsWith('data:image/') || a.startsWith('/')) &&
+      a.indexOf('"') === -1 && a.indexOf('<') === -1) return a;
+  return '/avatar-default.jpg';
+}
+
+function whoOf(m) {
+  const u = (m.uid != null ? byUid.get(m.uid) : null) || byName.get(m.name) || null;
+  return {
+    uid: (m.uid != null) ? m.uid : (u ? u.uid : null),
+    avatar: safeAvatar(u && u.avatar)
+  };
+}
+
 async function load() {
   const list = document.getElementById('list');
   try {
     const res = await fetch(API + '/messages');
     const data = await res.json();
     if (!data.length) { list.textContent = '还没有留言'; return; }
+
+    await loadUsers();
+
     list.innerHTML = data.slice().reverse().map(m => {
-      // 有 uid 的留言 → 名字可点，进 TA 的主页；老留言没 uid 就当纯文本
-      const nameHTML = m.uid
-        ? `<a class="msg-name" href="/profile/?uid=${m.uid}">${escapeHTML(m.name)}</a>`
+      const who = whoOf(m);
+      const href = '/profile/?uid=' + who.uid;
+      // 头像和名字都能点，进 TA 的主页；认不出是谁就只是普通头像
+      const avatarHTML = who.uid
+        ? `<a class="msg-avatar" href="${href}" title="${escapeHTML(m.name)} 的主页"><img src="${who.avatar}" alt=""></a>`
+        : `<span class="msg-avatar"><img src="${who.avatar}" alt=""></span>`;
+      const nameHTML = who.uid
+        ? `<a class="msg-name" href="${href}">${escapeHTML(m.name)}</a>`
         : `<span class="msg-name">${escapeHTML(m.name)}</span>`;
       return `
       <div class="msg-item">
-        ${nameHTML}
-        <span class="msg-time">${escapeHTML(m.time)}</span>
+        <div class="msg-head">
+          ${avatarHTML}
+          ${nameHTML}
+          <span class="msg-time">${escapeHTML(m.time)}</span>
+        </div>
         <div class="msg-text">${escapeHTML(m.text)}</div>
       </div>
     `;
