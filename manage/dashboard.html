@@ -7,7 +7,10 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/style.css?v=8">
 <style>
-  /* ===== 管理后台 · 灰色背景 + 紫色导航/按钮 ===== */
+  /* ===== 管理后台 · 灰色背景 + 紫色导航/按钮 =====
+     所有颜色都走变量，夜间模式才能整体跟着换。
+     （以前这里把它自己的一套 --bg/--text 写死在 body.manage 上，
+       style.css 里的 body.dark 被覆盖掉，所以开了夜间模式背景还是白的、字还是黑的。） */
   body.manage {
     --bg: #EEF1F5;
     --nav-bg: #7b5ea7;
@@ -15,21 +18,49 @@
     --primary-deep: #8A5CE0;
     --primary-soft: rgba(155,107,242,.18);
     --text: #333333;
+    --text-light: #777777;
+    --card: #ffffff;
+    --border: #e3e6ec;
+    --field: #ffffff;        /* 小按钮 / 输入框底色 */
+    --quote: #f7f8fa;        /* 引用块底色 */
+    --ok-text: #3d8b40;      /* 绿色文字（已处理 / 已禁言） */
+    --danger: #f04438;       /* 红色文字（待处理 / 删评 / 封号） */
+    --toast-bg: #333333;
+    --toast-text: #ffffff;
   }
+
+  /* 夜间模式：把上面那一整套换成深色。
+     选择器 body.manage.dark 比 body.manage 多一个类，优先级更高，一定赢。 */
+  body.manage.dark {
+    --bg: #18191C;
+    --card: #222327;
+    --nav-bg: #3b2f57;       /* 紫色导航压暗，但不变成一块灰 */
+    --text: #E0E0E0;
+    --text-light: #9499A0;
+    --border: #2f3033;
+    --field: #2a2b30;
+    --quote: #2a2b30;
+    --primary-soft: rgba(155,107,242,.28);
+    --ok-text: #7cc47f;
+    --danger: #ff6b60;       /* 深色底上要亮一点的红色才看得清 */
+    --toast-bg: #E0E0E0;
+    --toast-text: #18191C;
+  }
+
   .manage-header {
     text-align: center;
     margin-bottom: 10px;
   }
   .manage-title {
     font-size: 38px;
-    color: #333333;
+    color: var(--text);
     margin: 0 0 8px;
     font-weight: 700;
     letter-spacing: 1px;
   }
   .manage-sub {
     font-size: 15px;
-    color: #777777;
+    color: var(--text-light);
     margin: 0;
   }
 
@@ -90,10 +121,10 @@
   /* 无权限提示 */
   .access-tip {
     text-align: center;
-    color: #666666;
+    color: var(--text-light);
     padding: 30px 0;
   }
-  .access-tip a { color: #9b6bf2; }
+  .access-tip a { color: var(--primary); }
 
   /* ===== 举报处理面板 ===== */
   .report-head-row {
@@ -109,21 +140,21 @@
     font-size: 14px;
     padding: 6px 16px;
     border-radius: 8px;
-    border: 1px solid #d8dbe2;
-    background: #fff;
-    color: #555;
+    border: 1px solid var(--border);
+    background: var(--field);
+    color: var(--text);
     cursor: pointer;
   }
-  .report-refresh:hover { border-color: #9b6bf2; color: #9b6bf2; }
+  .report-refresh:hover { border-color: var(--primary); color: var(--primary); }
 
   .report-item {
-    border: 1px solid #e3e6ec;
+    border: 1px solid var(--border);
     border-radius: 10px;
     padding: 14px 16px;
     margin-bottom: 14px;
-    background: #fff;
+    background: var(--card);
   }
-  .report-item.done { background: #fafbfc; }
+  .report-item.done { background: var(--quote); }
   .report-item.done .report-quote { opacity: .7; }
   .report-top {
     display: flex;
@@ -132,31 +163,31 @@
     flex-wrap: wrap;
     margin-bottom: 8px;
   }
-  .report-name { font-weight: 700; font-size: 16px; color: #333; }
+  .report-name { font-weight: 700; font-size: 16px; color: var(--text); }
   .status-pill {
     font-size: 12px;
     padding: 2px 10px;
     border-radius: 999px;
-    background: rgba(240,68,56,.12);
-    color: #f04438;
+    background: rgba(240,68,56,.16);
+    color: var(--danger);
     font-weight: 600;
   }
-  .status-pill.done { background: rgba(76,175,80,.14); color: #3d8b40; }
-  .report-time { font-size: 13px; color: #8a8f98; margin-left: auto; }
+  .status-pill.done { background: rgba(76,175,80,.18); color: var(--ok-text); }
+  .report-time { font-size: 13px; color: var(--text-light); margin-left: auto; }
   .report-quote {
-    border-left: 3px solid #d8dbe2;
+    border-left: 3px solid var(--border);
     padding: 8px 12px;
     margin: 8px 0;
-    color: #444;
-    background: #f7f8fa;
+    color: var(--text);
+    background: var(--quote);
     border-radius: 0 8px 8px 0;
     white-space: pre-wrap;
     word-break: break-word;
     font-size: 15px;
   }
-  .report-quote.gone { color: #999; font-style: italic; }
-  .report-line { font-size: 14px; color: #555; margin: 4px 0; word-break: break-word; }
-  .report-line b { color: #333; }
+  .report-quote.gone { color: var(--text-light); font-style: italic; }
+  .report-line { font-size: 14px; color: var(--text-light); margin: 4px 0; word-break: break-word; }
+  .report-line b { color: var(--text); }
   .report-actions {
     display: flex;
     gap: 8px;
@@ -169,21 +200,21 @@
     font-size: 14px;
     padding: 6px 16px;
     border-radius: 8px;
-    border: 1px solid #d8dbe2;
-    background: #fff;
-    color: #444;
+    border: 1px solid var(--border);
+    background: var(--field);
+    color: var(--text);
     cursor: pointer;
     transition: background .15s, color .15s, border-color .15s;
   }
-  .report-btn:hover { border-color: #9b6bf2; color: #9b6bf2; }
-  .report-btn.ok:hover { border-color: #4CAF50; color: #4CAF50; }
+  .report-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .report-btn.ok:hover { border-color: var(--ok-text); color: var(--ok-text); }
   .report-btn.warn:hover { border-color: #d9a200; color: #d9a200; }
-  .report-btn.danger { color: #f04438; border-color: rgba(240,68,56,.35); }
+  .report-btn.danger { color: var(--danger); border-color: rgba(240,68,56,.35); }
   .report-btn.danger:hover { background: #f04438; color: #fff; border-color: #f04438; }
   .report-btn:disabled { opacity: .45; cursor: default; }
-  .report-btn:disabled:hover { border-color: #d8dbe2; color: #444; background: #fff; }
-  .report-done { font-size: 14px; color: #3d8b40; }
-  .report-empty { text-align: center; color: #888; padding: 26px 0; }
+  .report-btn:disabled:hover { border-color: var(--border); color: var(--text); background: var(--field); }
+  .report-done { font-size: 14px; color: var(--ok-text); }
+  .report-empty { text-align: center; color: var(--text-light); padding: 26px 0; }
 
   /* 小提示条 */
   .toast {
@@ -191,8 +222,8 @@
     left: 50%;
     top: 24px;
     transform: translate(-50%, -20px);
-    background: #333;
-    color: #fff;
+    background: var(--toast-bg);
+    color: var(--toast-text);
     font-size: 14px;
     padding: 10px 20px;
     border-radius: 8px;
