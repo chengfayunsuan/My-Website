@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>后台测试 · 乘法</title>
-<link rel="stylesheet" href="/style.css?v=6">
+<link rel="stylesheet" href="/style.css?v=8">
 <style>
   .form-row { margin: 12px 0; }
   .form-row input, .form-row textarea {
@@ -60,6 +60,8 @@
       <h2 class="section-title">留言板</h2>
       <p style="margin-bottom:16px;">当前用户：<b id="who">未登录</b> <a href="javascript:;" id="goLogin">去登录</a></p>
 
+      <div class="warn-bar" id="warnBar"></div>
+
       <div class="form-row">
         <textarea id="text" placeholder="留言内容（最多 200 字）" maxlength="200"></textarea>
       </div>
@@ -67,13 +69,15 @@
         <button id="submitBtn">提交留言</button>
       </div>
 
+      <div class="social-tip" id="tip"></div>
+
       <h3 style="margin-top:30px;">全部留言</h3>
       <div id="list">加载中…</div>
     </div>
   </section>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=7"></script>
+  <script src="/nav.js?v=8"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 
@@ -122,62 +126,264 @@ function whoOf(m) {
   const u = (m.uid != null ? byUid.get(m.uid) : null) || byName.get(m.name) || null;
   return {
     uid: (m.uid != null) ? m.uid : (u ? u.uid : null),
+    name: u ? u.username : m.name,
     avatar: safeAvatar(u && u.avatar)
   };
 }
 
-async function load() {
-  const list = document.getElementById('list');
+/* 文本和属性里都能安全用的转义（'"' 在属性里必须转，所以不能用 innerHTML 那套） */
+function escapeHTML(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/* ===== 我自己的状态 ===== */
+let me = null;                    // {uid, username, role}
+let followSet  = new Set();       // 我关注的人
+let blockedSet = new Set();       // 我拉黑的人
+let reportedSet = new Set();      // 我举报过、还没处理的留言 id
+let msgsCache = [];
+let meLoaded = false;
+
+function authHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + localStorage.getItem('token')
+  };
+}
+
+function ensureLogin() {
+  if (localStorage.getItem('token')) return true;
+  const m = document.getElementById('loginModal');
+  if (m) m.classList.add('show');
+  else alert('请先登录');
+  return false;
+}
+
+async function loadMe() {
+  if (meLoaded) return;
+  meLoaded = true;
+  const token = localStorage.getItem('token');
+  if (!token) return;
   try {
-    const res = await fetch(API + '/messages');
-    const data = await res.json();
-    if (!data.length) { list.textContent = '还没有留言'; return; }
+    const res = await fetch(API + '/me', { headers: { 'Authorization': 'Bearer ' + token } });
+    const d = await res.json();
+    if (d && d.ok) {
+      me = { uid: d.uid, username: d.username, role: d.role };
+      const who = document.getElementById('who');
+      if (who) who.textContent = d.username;
+      if (goLogin) goLogin.style.display = 'none';
+    }
+  } catch { /* 网络不行就当成没登录 */ }
+}
 
-    await loadUsers();
+async function loadRelations() {
+  if (!me) return;
+  try {
+    const res = await fetch(API + '/relations?uid=' + me.uid, {
+      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    });
+    const d = await res.json();
+    if (d && d.ok) {
+      followSet  = new Set(d.following || []);
+      blockedSet = new Set(d.blocked || []);
+    }
+  } catch { /* 忽略 */ }
+}
 
-    list.innerHTML = data.slice().reverse().map(m => {
-      const who = whoOf(m);
-      const href = '/profile/?uid=' + who.uid;
-      // 头像和名字都能点，进 TA 的主页；认不出是谁就只是普通头像
-      const avatarHTML = who.uid
-        ? `<a class="msg-avatar" href="${href}" title="${escapeHTML(m.name)} 的主页"><img src="${who.avatar}" alt=""></a>`
-        : `<span class="msg-avatar"><img src="${who.avatar}" alt=""></span>`;
-      const nameHTML = who.uid
-        ? `<a class="msg-name" href="${href}">${escapeHTML(m.name)}</a>`
-        : `<span class="msg-name">${escapeHTML(m.name)}</span>`;
+async function loadReports() {
+  if (!me) return;
+  try {
+    const res = await fetch(API + '/my-reports', {
+      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    });
+    const d = await res.json();
+    if (Array.isArray(d)) reportedSet = new Set(d);
+  } catch { /* 忽略 */ }
+}
+
+/* ===== 渲染 ===== */
+function actionsHTML(m, who) {
+  // 没登录 / 认不出作者 / 是自己的留言 —— 都不显示按钮
+  if (!me || who.uid == null || who.uid === me.uid) return '';
+  const followed = followSet.has(who.uid);
+  const reported = reportedSet.has(m.id);
+  return `
+        <div class="msg-actions">
+          <button type="button" class="act-btn${followed ? ' on' : ''}" data-act="follow" data-uid="${who.uid}">${followed ? '已关注' : '关注'}</button>
+          <button type="button" class="act-btn dots" data-act="menu" aria-label="更多操作" title="更多操作">⋯</button>
+          <div class="act-menu">
+            <button type="button" data-act="block" data-uid="${who.uid}" class="danger">拉黑 TA</button>
+            <button type="button" data-act="report" data-id="${typeof m.id === 'number' ? m.id : ''}"${reported ? ' disabled' : ''} class="danger">${reported ? '已举报' : '举报'}</button>
+          </div>
+        </div>`;
+}
+
+function render() {
+  const list = document.getElementById('list');
+  const rows = msgsCache.slice().reverse();   // 最新的排在最上面
+
+  const html = rows.map(m => {
+    const who = whoOf(m);
+    const href = '/profile/?uid=' + who.uid;
+    const mine = me && who.uid === me.uid;
+
+    // 拉黑的人：留言折叠起来，留一个「取消拉黑」的入口，不然永远解不开
+    if (me && who.uid != null && !mine && blockedSet.has(who.uid)) {
       return `
+      <div class="msg-item blocked-item">
+        <div class="msg-head">
+          <span class="msg-avatar"><img src="${who.avatar}" alt=""></span>
+          <span class="msg-name">${escapeHTML(who.name)}</span>
+          <span class="msg-time">已拉黑</span>
+          <div class="msg-actions">
+            <button type="button" class="act-btn" data-act="block" data-uid="${who.uid}">取消拉黑</button>
+          </div>
+        </div>
+        <div class="msg-text">这条留言来自你拉黑的用户，已经隐藏起来了。</div>
+      </div>`;
+    }
+
+    const nameHTML = who.uid
+      ? `<a class="msg-name" href="${href}">${escapeHTML(who.name)}</a>`
+      : `<span class="msg-name">${escapeHTML(who.name)}</span>`;
+    const avatarHTML = who.uid
+      ? `<a class="msg-avatar" href="${href}" title="${escapeHTML(who.name)} 的主页"><img src="${who.avatar}" alt=""></a>`
+      : `<span class="msg-avatar"><img src="${who.avatar}" alt=""></span>`;
+
+    return `
       <div class="msg-item">
         <div class="msg-head">
           ${avatarHTML}
           ${nameHTML}
           <span class="msg-time">${escapeHTML(m.time)}</span>
+          ${actionsHTML(m, who)}
         </div>
         <div class="msg-text">${escapeHTML(m.text)}</div>
-      </div>
-    `;
-    }).join('');
+      </div>`;
+  }).join('');
+
+  list.innerHTML = html || '还没有留言';
+}
+
+function closeMenus() {
+  document.querySelectorAll('.act-menu.show').forEach(x => x.classList.remove('show'));
+}
+
+let tipTimer = null;
+function showTip(text) {
+  const t = document.getElementById('tip');
+  if (!t) return;
+  t.textContent = text;
+  t.classList.add('show');
+  clearTimeout(tipTimer);
+  tipTimer = setTimeout(() => t.classList.remove('show'), 5000);
+}
+
+async function load() {
+  const list = document.getElementById('list');
+  list.textContent = '加载中…';
+  let data;
+  try {
+    const res = await fetch(API + '/messages');
+    data = await res.json();
   } catch {
     list.textContent = '加载失败';
+    return;
   }
+  if (!Array.isArray(data)) { list.textContent = '加载失败'; return; }
+  msgsCache = data;
+
+  await loadUsers();
+  await loadMe();
+  await Promise.all([loadRelations(), loadReports()]);
+
+  // 后端没重启的提示：旧后端不会给留言编号
+  const warn = document.getElementById('warnBar');
+  if (warn) {
+    if (msgsCache.some(m => typeof m.id !== 'number')) {
+      warn.textContent = '后端还是旧版本：留言还没编号，举报用不了。请把那个黑窗口关掉，再双击「启动网站.bat」。';
+      warn.classList.add('show');
+    } else {
+      warn.classList.remove('show');
+    }
+  }
+
+  render();
 }
 
-function escapeHTML(s) {
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
+/* ===== 按钮事件（用事件委托，重新渲染后不用重新绑定）===== */
+document.getElementById('list').addEventListener('click', async (e) => {
+  const btn = e.target.closest('button[data-act]');
+  if (!btn) return;
+  const act = btn.dataset.act;
+  const uid = Number(btn.dataset.uid);
+  const id  = Number(btn.dataset.id);
 
-const token = localStorage.getItem('token');
-const username = localStorage.getItem('username');
-const whoEl = document.getElementById('who');
-if (token) {
-  whoEl.textContent = username || '已登录';
-  if (goLogin) goLogin.style.display = 'none';
-}
+  if (act === 'menu') {
+    const menu = btn.parentElement.querySelector('.act-menu');
+    const wasOpen = menu.classList.contains('show');
+    closeMenus();
+    if (!wasOpen) menu.classList.add('show');
+    return;
+  }
+  closeMenus();
+
+  if (!ensureLogin()) return;
+
+  if (act === 'follow') {
+    btn.disabled = true;
+    try {
+      const res = await fetch(API + '/follow', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ uid }) });
+      const d = await res.json();
+      if (!d.ok) { btn.disabled = false; return alert(d.error || '操作失败'); }
+      if (d.following) { followSet.add(uid); showTip('关注好了，可以在 TA 的主页看到。'); }
+      else followSet.delete(uid);
+      render();
+    } catch { btn.disabled = false; alert('网络错误，请重试'); }
+    return;
+  }
+
+  if (act === 'block') {
+    btn.disabled = true;
+    try {
+      const res = await fetch(API + '/block', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ uid }) });
+      const d = await res.json();
+      if (!d.ok) { btn.disabled = false; return alert(d.error || '操作失败'); }
+      if (d.blocked) { blockedSet.add(uid); showTip('已拉黑，TA 的留言不再显示（折叠在上面那条里）。'); }
+      else { blockedSet.delete(uid); showTip('已经取消拉黑了。'); }
+      render();
+    } catch { btn.disabled = false; alert('网络错误，请重试'); }
+    return;
+  }
+
+  if (act === 'report') {
+    if (!id) return alert('这条留言还没有编号。请把后端那个黑窗口关掉，再双击「启动网站.bat」重启一次。');
+    const reason = prompt('说说这条留言哪里有问题（可以留空）：', '');
+    if (reason === null) return;   // 点了取消
+    try {
+      const res = await fetch(API + '/report', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ id, reason: reason.trim() }) });
+      const d = await res.json();
+      if (!d.ok) return alert(d.error || '举报失败');
+      reportedSet.add(id);
+      render();
+      showTip('举报已经交给后台，管理员在管理面板里会看到。');
+    } catch { alert('网络错误，请重试'); }
+  }
+});
+
+// 点空白处收起菜单
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.msg-actions')) return;
+  closeMenus();
+});
 
 document.getElementById('submitBtn').onclick = async () => {
-  const token = localStorage.getItem('token');
-  if (!token) return alert('请先登录');
+  if (!ensureLogin()) return;
 
   const text = document.getElementById('text').value.trim();
   if (!text) return alert('内容不能为空');
@@ -185,10 +391,7 @@ document.getElementById('submitBtn').onclick = async () => {
   try {
     const res = await fetch(API + '/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
+      headers: authHeaders(),
       body: JSON.stringify({ text })
     });
     const data = await res.json();
@@ -201,6 +404,13 @@ document.getElementById('submitBtn').onclick = async () => {
 };
 
 load();
+
+// 导航栏里登录成功后这个页面不会自己刷新，盯一下 token 变了就重载
+let lastToken = localStorage.getItem('token');
+setInterval(() => {
+  const t = localStorage.getItem('token');
+  if (t !== lastToken) { lastToken = t; load(); }
+}, 1000);
 </script>
 
 </body>

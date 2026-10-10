@@ -808,3 +808,141 @@ footer p { margin: 4px 0; }
   .profile-left { padding-top: 24px; }
   .profile-avatar { width: 120px; height: 120px; }
 }
+
+/* ===== 留言板 / 主页的互动按钮：关注、拉黑、举报 ===== */
+.msg-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  position: relative;
+}
+.act-btn {
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text-light);
+  transition: background .15s, color .15s, border-color .15s;
+}
+.act-btn:hover { border-color: var(--primary); color: var(--primary); }
+.act-btn.on {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+.act-btn.danger:hover { border-color: #e5534b; color: #e5534b; }
+.act-btn:disabled { opacity: .5; cursor: default; }
+.act-btn:disabled:hover { border-color: var(--border); color: var(--text-light); }
+.act-btn.dots {
+  padding: 3px 10px;
+  font-size: 16px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.act-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 124px;
+  z-index: 40;
+  padding: 4px;
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.16);
+}
+.act-menu.show { display: block; }
+.act-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.act-menu button:hover { background: var(--primary-soft); }
+.act-menu button.danger { color: #e5534b; }
+.act-menu button.danger:hover { background: rgba(229,83,75,.12); }
+.act-menu button:disabled { color: var(--text-light); cursor: default; }
+.act-menu button:disabled:hover { background: none; }
+
+/* 被拉黑的留言：折叠成一条灰提示，留个「取消拉黑」的出口 */
+.blocked-item { opacity: .62; }
+.blocked-item .msg-text { font-size: 13px; color: var(--text-light); font-style: italic; }
+
+/* 操作结果提示条 */
+.social-tip {
+  display: none;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--primary-soft);
+  border: 1px solid var(--primary);
+}
+.social-tip.show { display: block; }
+
+/* 后端没重启的警告条 */
+.warn-bar {
+  display: none;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text);
+  background: rgba(240,180,0,.14);
+  border: 1px solid #f0b400;
+}
+.warn-bar.show { display: block; }
+
+/* ===== 主页：关注 / 拉黑 按钮 ===== */
+.profile-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.profile-actions .act-btn { font-size: 14px; padding: 6px 18px; border-radius: 8px; }
+
+/* ===== 主页：点开「关注 / 粉丝 / 拉黑」看到的人 ===== */
+.generic-box { max-height: 72vh; }
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+}
+.user-row:last-child { border-bottom: none; }
+.user-row:hover { background: var(--primary-soft); }
+.user-row-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+.user-row-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.user-row-name { font-weight: bold; font-size: 15px; }
+.user-row-you { font-weight: normal; font-size: 13px; color: var(--text-light); }
+.user-row-uid { font-size: 13px; color: var(--text-light); }

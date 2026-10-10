@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>个人主页 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=6">
+<link rel="stylesheet" href="/style.css?v=8">
 </head>
 <body>
 
@@ -29,6 +29,10 @@
           <div class="profile-info">
             <h1 class="profile-name" id="profileName">加载中…</h1>
             <span class="role-tag" id="roleTag">用户</span>
+            <div class="profile-actions" id="profileActions" style="display:none;">
+              <button type="button" class="act-btn" id="followBtn">关注</button>
+              <button type="button" class="act-btn danger" id="blockBtn">拉黑</button>
+            </div>
           </div>
         </div>
 
@@ -99,7 +103,7 @@
   </div>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=7"></script>
+  <script src="/nav.js?v=8"></script>
   <script>
   (function () {
     const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
@@ -125,6 +129,9 @@
     let currentUsername = '';
     let myUid = null;
     let isSelf = false;
+    let viewUid = null;      // 当前看的这个主页是谁的
+    let rel = null;          // /relations 的结果
+    let usersCache = null;   // /users 的名单，点开列表时用
 
     const el = {
       avatarImg: document.getElementById('avatarImg'),
@@ -144,6 +151,9 @@
       saveBtn: document.getElementById('saveBtn'),
       cancelBtn: document.getElementById('cancelBtn'),
       pwdBtn: document.getElementById('pwdBtn'),
+      profileActions: document.getElementById('profileActions'),
+      followBtn: document.getElementById('followBtn'),
+      blockBtn: document.getElementById('blockBtn'),
       genericModal: document.getElementById('genericModal'),
       genericClose: document.getElementById('genericClose'),
       genericTitle: document.getElementById('genericTitle'),
@@ -272,6 +282,116 @@
       }
 
       loadMessages(data.username);
+      loadRelations(data.uid);
+    }
+
+    /* ---------- 关注 / 拉黑 ---------- */
+
+    async function loadRelations(uid) {
+      viewUid = uid;
+      rel = null;
+      try {
+        const res = await fetch(API + '/relations?uid=' + encodeURIComponent(uid), {
+          headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+        });
+        const d = await res.json();
+        if (d && d.ok) rel = d;
+      } catch { /* 拿不到就显示 0 */ }
+      paintRelations();
+    }
+
+    function paintRelations() {
+      const f  = rel ? (rel.following || []).length : 0;
+      const fo = rel ? (rel.followers || []).length : 0;
+      const b  = rel ? (rel.blocked   || []).length : 0;
+      document.getElementById('followingCount').textContent = f;
+      document.getElementById('followersCount').textContent = fo;
+      document.getElementById('blockedCount').textContent   = b;
+
+      // 看自己的主页不显示关注 / 拉黑；没登录也没法点
+      if (!rel || isSelf || !token) {
+        el.profileActions.style.display = 'none';
+        return;
+      }
+      el.profileActions.style.display = 'flex';
+      el.followBtn.textContent = rel.meFollowing ? '已关注' : '关注';
+      el.followBtn.className = 'act-btn' + (rel.meFollowing ? ' on' : '');
+      el.blockBtn.textContent = rel.meBlocked ? '取消拉黑' : '拉黑';
+      el.blockBtn.className = 'act-btn danger' + (rel.meBlocked ? ' on' : '');
+    }
+
+    async function toggleRelation(kind) {
+      if (!token) return alert('请先登录');
+      if (!viewUid) return;
+      const btn = (kind === 'follow') ? el.followBtn : el.blockBtn;
+      btn.disabled = true;
+      try {
+        const res = await fetch(API + '/' + kind, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ uid: viewUid })
+        });
+        const d = await res.json();
+        btn.disabled = false;
+        if (!d.ok) return alert(d.error || '操作失败');
+        await loadRelations(viewUid);
+      } catch {
+        btn.disabled = false;
+        alert('网络错误，请重试');
+      }
+    }
+
+    el.followBtn.addEventListener('click', () => toggleRelation('follow'));
+    el.blockBtn.addEventListener('click', () => toggleRelation('block'));
+
+    /* ---------- 关注 / 粉丝 / 拉黑 三个数字点开看人 ---------- */
+
+    const STAT_TITLE = { following: '关注', followers: '粉丝', blocked: '拉黑' };
+    const STAT_EMPTY = {
+      following: '还没有关注任何人',
+      followers: '还没有粉丝',
+      blocked: '还没有拉黑任何人'
+    };
+
+    async function fetchUsers() {
+      if (usersCache) return usersCache;
+      try {
+        const res = await fetch(API + '/users');
+        const d = await res.json();
+        usersCache = Array.isArray(d) ? d : [];
+      } catch { usersCache = []; }
+      return usersCache;
+    }
+
+    async function showStatList(type) {
+      const uids = (rel && rel[type]) || [];
+      el.genericTitle.textContent = STAT_TITLE[type] + '（' + uids.length + '）';
+      el.genericBody.innerHTML = '<p class="empty-hint">加载中…</p>';
+      el.genericModal.classList.add('show');
+
+      if (!uids.length) {
+        el.genericBody.innerHTML = '<p class="empty-hint">' + STAT_EMPTY[type] + '</p>';
+        return;
+      }
+
+      const all = await fetchUsers();
+      const map = new Map(all.map(u => [u.uid, u]));
+      el.genericBody.innerHTML = uids.map(uid => {
+        const u = map.get(uid);
+        const name = u ? u.username : ('UID ' + uid);
+        const meMark = (uid === myUid) ? ' <span class="user-row-you">（我）</span>' : '';
+        return `
+          <a class="user-row" href="/profile/?uid=${encodeURIComponent(uid)}">
+            <img class="user-row-avatar" src="${fixAvatar(u && u.avatar)}" alt="">
+            <span class="user-row-info">
+              <span class="user-row-name">${escapeHTML(name)}${meMark}</span>
+              <span class="user-row-uid">UID: ${escapeHTML(uid)}</span>
+            </span>
+          </a>`;
+      }).join('');
     }
 
     async function loadMessages(username) {
@@ -295,10 +415,14 @@
       }
     }
 
+    /* 文本和属性里都能安全用的转义 */
     function escapeHTML(s) {
-      const d = document.createElement('div');
-      d.textContent = String(s);
-      return d.innerHTML;
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     function enterEdit() {
@@ -384,13 +508,7 @@
     });
 
     document.querySelectorAll('.profile-stat').forEach(stat => {
-      stat.addEventListener('click', () => {
-        const type = stat.dataset.type;
-        const titles = { following: '关注', followers: '粉丝', blocked: '拉黑' };
-        el.genericTitle.textContent = titles[type];
-        el.genericBody.innerHTML = '<p class="empty-hint">功能开发中…</p>';
-        el.genericModal.classList.add('show');
-      });
+      stat.addEventListener('click', () => showStatList(stat.dataset.type));
     });
 
     el.genericClose.addEventListener('click', () => el.genericModal.classList.remove('show'));

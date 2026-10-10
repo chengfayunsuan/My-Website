@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>管理面板 · Chengfa</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=6">
+<link rel="stylesheet" href="/style.css?v=8">
 <style>
   /* ===== 管理后台 · 灰色背景 + 紫色导航/按钮 ===== */
   body.manage {
@@ -41,6 +41,7 @@
     margin-top: 10px;
   }
   .manage-btn {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -61,6 +62,30 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(155,107,242,.22);
   }
+  /* 还没做的按钮：灰一点、点不动 */
+  .manage-btn.todo { opacity: .55; }
+  .manage-btn.todo:hover {
+    background: #9b6bf2;
+    transform: none;
+    box-shadow: 0 3px 10px rgba(155,107,242,.14);
+  }
+  .manage-btn.live { cursor: pointer; }
+  .manage-btn .badge {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 7px;
+    border-radius: 12px;
+    background: #f04438;
+    color: #fff;
+    font-size: 13px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(240,68,56,.4);
+  }
 
   /* 无权限提示 */
   .access-tip {
@@ -69,6 +94,115 @@
     padding: 30px 0;
   }
   .access-tip a { color: #9b6bf2; }
+
+  /* ===== 举报处理面板 ===== */
+  .report-head-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .report-head-row .section-title { margin-bottom: 0; }
+  .report-refresh {
+    margin-left: auto;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: 1px solid #d8dbe2;
+    background: #fff;
+    color: #555;
+    cursor: pointer;
+  }
+  .report-refresh:hover { border-color: #9b6bf2; color: #9b6bf2; }
+
+  .report-item {
+    border: 1px solid #e3e6ec;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    background: #fff;
+  }
+  .report-item.done { background: #fafbfc; }
+  .report-item.done .report-quote { opacity: .7; }
+  .report-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .report-name { font-weight: 700; font-size: 16px; color: #333; }
+  .status-pill {
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: rgba(240,68,56,.12);
+    color: #f04438;
+    font-weight: 600;
+  }
+  .status-pill.done { background: rgba(76,175,80,.14); color: #3d8b40; }
+  .report-time { font-size: 13px; color: #8a8f98; margin-left: auto; }
+  .report-quote {
+    border-left: 3px solid #d8dbe2;
+    padding: 8px 12px;
+    margin: 8px 0;
+    color: #444;
+    background: #f7f8fa;
+    border-radius: 0 8px 8px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 15px;
+  }
+  .report-quote.gone { color: #999; font-style: italic; }
+  .report-line { font-size: 14px; color: #555; margin: 4px 0; word-break: break-word; }
+  .report-line b { color: #333; }
+  .report-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 12px;
+  }
+  .report-btn {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: 1px solid #d8dbe2;
+    background: #fff;
+    color: #444;
+    cursor: pointer;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .report-btn:hover { border-color: #9b6bf2; color: #9b6bf2; }
+  .report-btn.ok:hover { border-color: #4CAF50; color: #4CAF50; }
+  .report-btn.warn:hover { border-color: #d9a200; color: #d9a200; }
+  .report-btn.danger { color: #f04438; border-color: rgba(240,68,56,.35); }
+  .report-btn.danger:hover { background: #f04438; color: #fff; border-color: #f04438; }
+  .report-btn:disabled { opacity: .45; cursor: default; }
+  .report-btn:disabled:hover { border-color: #d8dbe2; color: #444; background: #fff; }
+  .report-done { font-size: 14px; color: #3d8b40; }
+  .report-empty { text-align: center; color: #888; padding: 26px 0; }
+
+  /* 小提示条 */
+  .toast {
+    position: fixed;
+    left: 50%;
+    top: 24px;
+    transform: translate(-50%, -20px);
+    background: #333;
+    color: #fff;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, transform .2s;
+    z-index: 999;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
   @media (max-width: 700px) {
     .manage-grid { grid-template-columns: repeat(2, 1fr); }
@@ -92,8 +226,20 @@
     </div>
   </section>
 
+  <section id="reportSection" style="display:none;">
+    <div class="card">
+      <div class="report-head-row">
+        <h2 class="section-title">举报处理</h2>
+        <button type="button" class="report-refresh" id="reportRefresh">刷新</button>
+      </div>
+      <div id="reportList">加载中…</div>
+    </div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+
   <script src="/config.js"></script>
-  <script src="/nav.js?v=7"></script>
+  <script src="/nav.js?v=8"></script>
   <script>
   (function () {
     const API = window.API_BASE;
@@ -133,17 +279,200 @@
       })
       .catch(() => deny('网络错误，请稍后重试'));
 
+    /* ===== 15 个功能入口：第 1 个是举报处理，其余待做 ===== */
     function renderGrid() {
       for (let i = 0; i < 15; i++) {
         const b = document.createElement('button');
         b.type = 'button';
-        b.className = 'manage-btn';
-        b.textContent = '测试中';
+
+        if (i === 0) {
+          b.className = 'manage-btn live';
+          b.innerHTML = '<span>举报处理</span><span class="badge" id="reportBadge" style="display:none;">0</span>';
+          b.addEventListener('click', openReports);
+        } else {
+          b.className = 'manage-btn todo';
+          b.textContent = '测试中';
+          b.disabled = true;
+        }
         grid.appendChild(b);
       }
+      refreshBadge();
     }
-  })();
-  </script>
+
+    /* ===== 小提示 ===== */
+    let toastTimer = null;
+    function toast(text) {
+      const t = document.getElementById('toast');
+      t.textContent = text;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    /* ===== 举报处理 ===== */
+    function openReports() {
+      const sec = document.getElementById('reportSection');
+      sec.style.display = 'block';
+      sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      loadReports();
+    }
+
+    document.getElementById('reportRefresh').addEventListener('click', loadReports);
+
+    async function loadReports() {
+      const box = document.getElementById('reportList');
+      try {
+        const res = await fetch(API + '/reports', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (res.status === 401 || res.status === 403) {
+          box.innerHTML = '<p class="report-empty">登录已失效或没有权限，刷新页面重新登录。</p>';
+          return;
+        }
+        const list = await res.json();
+        if (!Array.isArray(list)) {
+          box.innerHTML = '<p class="report-empty">拿不到举报列表，后端可能还没重启。</p>';
+          return;
+        }
+        renderReports(list);
+      } catch {
+        box.innerHTML = '<p class="report-empty">加载失败，检查一下后端和隧道是不是开着。</p>';
+      }
+    }
+
+    function renderReports(list) {
+      const box = document.getElementById('reportList');
+      const pending = list.filter(r => r.status !== 'done');
+      const done = list.filter(r => r.status === 'done');
+
+      // 按钮角标 = 待处理条数
+      const badge = document.getElementById('reportBadge');
+      badge.textContent = pending.length;
+      badge.style.display = pending.length ? 'inline-block' : 'none';
+
+      if (!list.length) {
+        box.innerHTML = '<p class="report-empty">还没有人举报过，很清静。</p>';
+        return;
+      }
+
+      const all = pending.concat(done);
+      box.innerHTML = all.map(r => {
+        const isDone = (r.status === 'done');
+        const quoted = r.alive
+          ? `<div class="report-quote">${escapeHTML(r.msgText || '')}</div>`
+          : `<div class="report-quote gone">${escapeHTML(r.msgText || '')}　（这条留言已经不在了）</div>`;
+
+        let actions;
+        if (isDone) {
+          actions = `<div class="report-actions"><span class="report-done">
+            ✓ ${escapeHTML(r.action || '已处理')} · ${escapeHTML(r.handler || '')} · ${escapeHTML(r.handleTime || '')}
+          </span></div>`;
+        } else {
+          const btns = [];
+          btns.push(`<button type="button" class="report-btn ok" data-id="${r.id}" data-act="approve">放行</button>`);
+          btns.push(`<button type="button" class="report-btn danger" data-id="${r.id}" data-act="remove"${r.alive ? '' : ' disabled'}>删评</button>`);
+          if (r.targetMuted) {
+            btns.push(`<button type="button" class="report-btn" data-id="${r.id}" data-act="unmute">解除禁言</button>`);
+          } else {
+            btns.push(`<button type="button" class="report-btn warn" data-id="${r.id}" data-act="mute"${r.targetExists ? '' : ' disabled'}>禁言</button>`);
+          }
+          if (r.targetBanned) {
+            btns.push(`<button type="button" class="report-btn" data-id="${r.id}" data-act="unban">解除封号</button>`);
+          } else {
+            btns.push(`<button type="button" class="report-btn danger" data-id="${r.id}" data-act="ban"${r.targetExists ? '' : ' disabled'}>封号</button>`);
+          }
+          actions = `<div class="report-actions">${btns.join('')}</div>`;
+        }
+
+        const stateTag = [];
+        if (r.targetMuted) stateTag.push('已禁言');
+        if (r.targetBanned) stateTag.push('已封号');
+
+        return `
+        <div class="report-item${isDone ? ' done' : ''}">
+          <div class="report-top">
+            <span class="report-name">${escapeHTML(r.msgName || '（未知用户）')}</span>
+            <span class="status-pill${isDone ? ' done' : ''}">${isDone ? '已处理' : '待处理'}</span>
+            ${stateTag.length ? `<span class="status-pill done">${stateTag.join(' / ')}</span>` : ''}
+            <span class="report-time">举报于 ${escapeHTML(r.time || '')}</span>
+          </div>
+          ${quoted}
+          <div class="report-line"><b>举报理由：</b>${escapeHTML(r.reason || '（没写）')}</div>
+          <div class="report-line"><b>举报人：</b>${escapeHTML(r.reporter || '')}　<b>被举报人：</b>${escapeHTML(r.msgName || '')}${r.targetUid != null ? '（UID ' + escapeHTML(r.targetUid) + '）' : ''}　<b>留言时间：</b>${escapeHTML(r.msgTime || '')}</div>
+          ${actions}
+        </div>`;
+      }).join('');
+    }
+
+    document.getElementById('reportList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-act]');
+      if (!btn) return;
+      handleAction(Number(btn.dataset.id), btn.dataset.act, btn);
+    });
+
+    const CONFIRM_TEXT = {
+      remove: '确定删掉这条留言吗？删了就找不回来了。',
+      mute: '确定禁言吗？TA 将不能再发留言和改资料。',
+      ban: '确定封号吗？TA 会被立刻踢下线，而且再也登不上，直到你解除。'
+    };
+
+    async function handleAction(id, act, btn) {
+      if (!id) return alert('这条举报没有编号，后端可能还没重启。');
+      if (CONFIRM_TEXT[act] && !confirm(CONFIRM_TEXT[act])) return;
+
+      btn.disabled = true;
+      try {
+        const res = await fetch(API + '/reports', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ id, action: act })
+        });
+        const d = await res.json();
+        if (!d.ok) {
+          btn.disabled = false;
+          return alert(d.error || '操作失败');
+        }
+        toast(d.note || '处理好了');
+        await loadReports();
+      } catch {
+        btn.disabled = false;
+        alert('网络错误，请重试');
+      }
+    }
+
+    /* 只看一眼待处理几条，用来给按钮打角标 */
+    function refreshBadge() {
+      fetch(API + '/reports', { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(r => r.json())
+        .then(list => {
+          if (!Array.isArray(list)) return;
+          const n = list.filter(x => x.status !== 'done').length;
+          const badge = document.getElementById('reportBadge');
+          if (!badge) return;
+          badge.textContent = n;
+          badge.style.display = n ? 'inline-block' : 'none';
+        })
+        .catch(() => {});
+    }
+
+    function escapeHTML(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // 进页面就先看一眼有没有待处理的，好在按钮上显示角标
+    fetch(API + '/reports', { headers: { 'Authorization': 'Bearer ' + token } })
+      .then(r => r.json())
+      .then(list => { if (Array.isArray(list)) renderReports(list); })
+      .catch(() => {});
+  })();  </script>
 
 </body>
 </html>
