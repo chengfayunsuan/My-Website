@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用户名单 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css?v=8">
+<style>
+  .users-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .users-head .section-title { margin-bottom: 0; }
+
+  /* 正序 / 倒序 切换：一个胶囊里两个按钮 */
+  .sort-box {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--card);
+  }
+  .sort-btn {
+    padding: 8px 18px;
+    border: none;
+    background: transparent;
+    color: var(--text-light);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .sort-btn:hover { color: var(--primary); }
+  .sort-btn.on { background: var(--primary); color: #fff; }
+
+  .users-count {
+    color: var(--text-light);
+    font-size: 14px;
+    margin: 16px 0 6px;
+  }
+  .users-empty {
+    text-align: center;
+    color: var(--text-light);
+    padding: 34px 0;
+  }
+
+  .user-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: inherit;
+    border-radius: 8px;
+    transition: background .2s;
+  }
+  .user-row:last-child { border-bottom: none; }
+  .user-row:hover { background: var(--primary-soft); }
+
+  .user-row-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: none;
+    display: block;
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+  .user-row-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .user-row-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    word-break: break-all;
+  }
+  .user-row-uid { font-size: 13px; color: var(--text-light); }
+  .user-row-go {
+    margin-left: auto;
+    flex: none;
+    font-size: 13px;
+    color: var(--text-light);
+  }
+  .user-row:hover .user-row-go { color: var(--primary); }
+</style>
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <section style="margin-top:40px;">
+    <div class="card">
+      <div class="users-head">
+        <h2 class="section-title">用户名单</h2>
+        <div class="sort-box">
+          <button class="sort-btn" id="sortAsc" type="button">UID 正序 ↑</button>
+          <button class="sort-btn" id="sortDesc" type="button">UID 倒序 ↓</button>
+        </div>
+      </div>
+
+      <p class="users-count" id="usersCount">正在加载…</p>
+      <div id="usersList"></div>
+    </div>
+  </section>
+
+  <script src="/config.js"></script>
+  <script src="/nav.js?v=8"></script>
+<script>
+(function () {
+  const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+
+  const listEl  = document.getElementById('usersList');
+  const countEl = document.getElementById('usersCount');
+  const ascBtn  = document.getElementById('sortAsc');
+  const descBtn = document.getElementById('sortDesc');
+
+  let users = [];   // 后端给的原始名单
+  let dir = 1;      // 1 = UID 正序（小到大），-1 = 倒序（大到小）
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // 后端可能给完整网址，也可能只给文件名，两种都要认
+  function fixAvatar(a) {
+    if (typeof a !== 'string' || !a) return '/avatar-default.jpg';
+    let s = a.trim();
+    if (/^data:image\//.test(s) || s.charAt(0) === '/' || /^https?:\/\//.test(s)) {
+      // 已经是能直接用的地址
+    } else {
+      s = API.replace(/\/+$/, '') + '/avatar/' + s;
+    }
+    if (s.indexOf('"') !== -1 || s.indexOf('<') !== -1) return '/avatar-default.jpg';
+    return s;
+  }
+
+  function paint() {
+    ascBtn.classList.toggle('on', dir === 1);
+    descBtn.classList.toggle('on', dir === -1);
+
+    if (!users.length) {
+      countEl.textContent = '';
+      listEl.innerHTML = '<p class="users-empty">还没有人注册。</p>';
+      return;
+    }
+
+    const sorted = users.slice().sort(function (a, b) {
+      return dir * ((Number(a.uid) || 0) - (Number(b.uid) || 0));
+    });
+
+    countEl.textContent = '一共 ' + sorted.length + ' 个人'
+      + (dir === 1 ? '（UID 从小到大）' : '（UID 从大到小）');
+
+    listEl.innerHTML = sorted.map(function (u) {
+      const uid = Number(u.uid) || 0;
+      return '<a class="user-row" href="/profile/?uid=' + encodeURIComponent(uid) + '">'
+        +   '<img class="user-row-avatar" src="' + esc(fixAvatar(u.avatar)) + '" alt="">'
+        +   '<span class="user-row-info">'
+        +     '<span class="user-row-name">' + esc(u.username) + '</span>'
+        +     '<span class="user-row-uid">UID ' + esc(uid) + '</span>'
+        +   '</span>'
+        +   '<span class="user-row-go">进入主页 ›</span>'
+        + '</a>';
+    }).join('');
+  }
+
+  // 头像加载失败就退回默认图（error 事件不冒泡，得用捕获）
+  listEl.addEventListener('error', function (e) {
+    const t = e.target;
+    if (t && t.tagName === 'IMG' && t.src.indexOf('avatar-default') === -1) {
+      t.src = '/avatar-default.jpg';
+    }
+  }, true);
+
+  ascBtn.addEventListener('click', function () { dir = 1; paint(); });
+  descBtn.addEventListener('click', function () { dir = -1; paint(); });
+
+  async function load() {
+    countEl.textContent = '正在加载…';
+    listEl.innerHTML = '';
+    try {
+      const res = await fetch(API + '/users');
+      const data = await res.json().catch(function () { return null; });
+
+      if (!res.ok || !Array.isArray(data)) {
+        countEl.textContent = '';
+        listEl.innerHTML = '<p class="users-empty">拿不到用户名单，'
+          + '检查一下后端和隧道是不是开着。</p>';
+        return;
+      }
+      users = data;
+      paint();
+    } catch (e) {
+      countEl.textContent = '';
+      listEl.innerHTML = '<p class="users-empty">连不上后端，'
+        + '检查一下后端和隧道是不是开着。</p>';
+    }
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>
