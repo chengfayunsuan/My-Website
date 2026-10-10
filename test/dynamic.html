@@ -269,6 +269,8 @@ const feedList = document.getElementById('feedList');
 const feedCount = document.getElementById('feedCount');
 const refreshBtn = document.getElementById('refreshBtn');
 
+const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+
 const TARGET = 'https://moonbazaar.xyz/home/get_live_feed.php?limit=30&offset=0';
 const LIMIT = 30;
 const POLL_INTERVAL = 5000;
@@ -346,14 +348,15 @@ function renderWatch() {
   });
 }
 
-/* 开页先把已经存下来的记录铺上，省得刚开始两个框是空的 */
+/* 开页先把后端攒下来的记录铺上（Backend/test/feed-watch.json），
+   省得刚进来两个框是空的。后端没开就只靠实时抓取慢慢攒。 */
 async function seedWatch() {
   try {
-    const r = await fetch('/feed-watch.json', { cache: 'no-store' });
+    const r = await fetch(API + '/feed-watch', { cache: 'no-store' });
     if (!r.ok) return;
     const d = await r.json();
     if (d && d.users) WATCH.forEach(n => mergeWatch(d.users[n] || []));
-  } catch { /* 没有存下来的记录就算了，靠实时抓取慢慢攒 */ }
+  } catch { /* 后端没开就算了 */ }
 }
 
 /* 指纹：用于判断"新数据" */
