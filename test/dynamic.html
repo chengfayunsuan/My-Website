@@ -125,6 +125,82 @@
     color: var(--text-light);
     text-align: right;
   }
+
+  /* ===== 重点关注：两个人的记录左右并排 ===== */
+  .watch-wrap { margin-top: 18px; }
+  .watch-title {
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 12px;
+  }
+  .watch-title::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 5px;
+    width: 3px; height: 16px;
+    background: var(--primary-deep);
+    border-radius: 2px;
+  }
+  .watch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 700px) {
+    .watch-grid { grid-template-columns: 1fr; }
+  }
+  .watch-box {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    padding: 12px;
+  }
+  .watch-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .watch-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    word-break: break-all;
+  }
+  .watch-count {
+    flex: none;
+    min-width: 22px;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: var(--primary-soft);
+    color: var(--primary-deep);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .watch-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 2px;
+  }
+  /* 跟上面实时列表同一套样式，只是小一号 */
+  .watch-box .feed-item {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+  .watch-box .feed-item:hover { transform: none; }
+  .watch-empty {
+    padding: 18px 10px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-light);
+  }
 </style>
 </head>
 <body>
@@ -158,6 +234,26 @@
       <p class="feed-foot">
         共 <b id="feedCount">0</b> 条 · 每 5 秒自动刷新
       </p>
+
+      <div class="watch-wrap">
+        <h3 class="watch-title">重点关注</h3>
+        <div class="watch-grid">
+          <div class="watch-box" id="watch0">
+            <div class="watch-head">
+              <span class="watch-name">chengfayunsuan</span>
+              <span class="watch-count">0</span>
+            </div>
+            <div class="watch-list"><div class="watch-empty">加载中…</div></div>
+          </div>
+          <div class="watch-box" id="watch1">
+            <div class="watch-head">
+              <span class="watch-name">hym666</span>
+              <span class="watch-count">0</span>
+            </div>
+            <div class="watch-list"><div class="watch-empty">加载中…</div></div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -208,6 +304,58 @@ function escapeHTML(str) {
   return div.innerHTML;
 }
 
+/* ============ 重点关注：只留这两个人的记录 ============ */
+const WATCH = ['chengfayunsuan', 'hym666'];
+const WATCH_KEEP = 60;
+const watchStore = {};   // { 名字: [tx, ...] } 新 → 旧
+const watchSeen  = {};   // { 名字: Set(指纹) }
+
+function wfp(tx) {
+  return `${tx.username}|${tx.source}|${tx.robux_val}|${tx.created_at || tx.time_ago}`;
+}
+
+function mergeWatch(list) {
+  if (!Array.isArray(list)) return;
+  list.forEach(tx => {
+    const n = tx.username;
+    if (WATCH.indexOf(n) === -1) return;
+    watchStore[n] = watchStore[n] || [];
+    watchSeen[n]  = watchSeen[n] || new Set();
+    if (watchSeen[n].has(wfp(tx))) return;
+    watchSeen[n].add(wfp(tx));
+    watchStore[n].push(tx);
+    watchStore[n].sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+    if (watchStore[n].length > WATCH_KEEP) watchStore[n].length = WATCH_KEEP;
+  });
+  renderWatch();
+}
+
+function renderWatch() {
+  WATCH.forEach((n, i) => {
+    const box = document.getElementById('watch' + i);
+    if (!box) return;
+    const items = watchStore[n] || [];
+    box.querySelector('.watch-count').textContent = items.length;
+    const listEl = box.querySelector('.watch-list');
+    if (!items.length) {
+      listEl.innerHTML = '<div class="watch-empty">还没抓到 TA 的动态</div>';
+      return;
+    }
+    listEl.innerHTML = '';
+    items.forEach(tx => listEl.appendChild(createItem(tx, false)));
+  });
+}
+
+/* 开页先把已经存下来的记录铺上，省得刚开始两个框是空的 */
+async function seedWatch() {
+  try {
+    const r = await fetch('/feed-watch.json', { cache: 'no-store' });
+    if (!r.ok) return;
+    const d = await r.json();
+    if (d && d.users) WATCH.forEach(n => mergeWatch(d.users[n] || []));
+  } catch { /* 没有存下来的记录就算了，靠实时抓取慢慢攒 */ }
+}
+
 /* 指纹：用于判断"新数据" */
 function fingerprint(tx) {
   return `${tx.username}|${tx.source}|${parseFloat(tx.robux_val).toFixed(4)}|${tx.time_ago}`;
@@ -243,6 +391,7 @@ async function loadFeed(isManual = false) {
 
   try {
     const data = await fetchFeed();
+    if (Array.isArray(data)) mergeWatch(data);
 
     if (!Array.isArray(data) || data.length === 0) {
       if (!feedLoaded || isManual) {
@@ -307,7 +456,8 @@ refreshBtn.addEventListener('click', () => {
 });
 
 /* 首次加载 + 开启轮询 */
-loadFeed(true).then(() => {
+renderWatch();                       // 先把两个框摆出来（空态）
+seedWatch().then(() => loadFeed(true)).then(() => {
   pollTimer = setInterval(() => loadFeed(false), POLL_INTERVAL);
 });
 
