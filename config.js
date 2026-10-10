@@ -4,3 +4,11 @@
 // 用法：每个页面在上一步加载本文件（<script src="/config.js"></script>），
 //       然后在其它脚本里读 window.API_BASE。
 window.API_BASE = 'https://api.chengfa.dpdns.org';
+
+/* 隧道（Cloudflare Tunnel）挂掉时的兜底：
+   用本地预览打开网站（localhost / 127.0.0.1）时，直接连本机后端 3000 端口，
+   不走隧道。这样开 VPN、断网、隧道抽风的时候照样能登录能读写。
+   线上站点（https 域名）不受影响，还是走隧道。 */
+if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+  window.API_BASE = 'http://127.0.0.1:3000';
+}
