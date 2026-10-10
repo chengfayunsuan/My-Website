@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>个人主页 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=13">
+<link rel="stylesheet" href="/style.css?v=14">
 </head>
 <body>
 
@@ -103,7 +103,7 @@
   </div>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=13"></script>
+  <script src="/nav.js?v=14"></script>
   <script>
   (function () {
     const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
@@ -248,8 +248,15 @@
       el.createdAt.textContent = data.createdAt || '—';
 
       const role = data.role || 'user';
+      const bio = String(data.bio || '').trim();
       el.roleTag.className = 'role-tag';
-      if (role === 'owner') {
+      el.roleTag.removeAttribute('title');
+      if (bio) {
+        // 铭牌优先显示本人在 users.json 里写的签名，没写才退回身份标签
+        el.roleTag.textContent = bio.length > 20 ? bio.slice(0, 20) + '…' : bio;
+        el.roleTag.classList.add('role-bio');
+        el.roleTag.title = bio;
+      } else if (role === 'owner') {
         el.roleTag.textContent = '站长';
         el.roleTag.classList.add('role-owner');
       } else if (role === 'admin') {
@@ -476,6 +483,19 @@
         if (!data.ok) return alert('保存失败：' + (data.error || '未知错误'));
         originalBio = bio;
         originalAvatar = avatar;
+        // 铭牌跟着一起变，不用刷新页面
+        const t = String(bio || '').trim();
+        el.roleTag.className = 'role-tag';
+        if (t) {
+          el.roleTag.textContent = t.length > 20 ? t.slice(0, 20) + '…' : t;
+          el.roleTag.classList.add('role-bio');
+          el.roleTag.title = t;
+        } else {
+          el.roleTag.textContent = '用户';
+          el.roleTag.classList.add('role-user');
+          el.roleTag.removeAttribute('title');
+        }
+        el.bioText.textContent = t || '这个人很懒，什么都没写。';
         alert('保存成功');
         exitEdit();
         init();

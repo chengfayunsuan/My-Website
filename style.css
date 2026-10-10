@@ -618,6 +618,16 @@ footer p { margin: 4px 0; }
 .role-tag.role-user { background: var(--nav-bg); color: #fff; }
 .role-tag.role-admin { background: #4CAF50; color: #fff; }
 .role-tag.role-owner { background: #f0b400; color: #fff; }
+/* 写了个性签名的：铭牌显示签名本身，用主题蓝区分 */
+.role-tag.role-bio {
+  background: var(--primary-deep);
+  color: #fff;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
 
 /* 我的留言 */
 .profile-feed {
