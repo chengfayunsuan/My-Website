@@ -33,6 +33,8 @@
     border-bottom: 1px solid var(--border);
   }
   .msg-name { font-weight: bold; color: var(--text); }
+  a.msg-name { text-decoration: none; border-bottom: 1px dashed currentColor; }
+  a.msg-name:hover { color: var(--primary); }
   .msg-time { color: var(--text-light); font-size: 13px; margin-left: 10px; }
   .msg-text { margin-top: 6px; color: var(--text); }
 </style>
@@ -77,13 +79,19 @@ async function load() {
     const res = await fetch(API + '/messages');
     const data = await res.json();
     if (!data.length) { list.textContent = '还没有留言'; return; }
-    list.innerHTML = data.slice().reverse().map(m => `
+    list.innerHTML = data.slice().reverse().map(m => {
+      // 有 uid 的留言 → 名字可点，进 TA 的主页；老留言没 uid 就当纯文本
+      const nameHTML = m.uid
+        ? `<a class="msg-name" href="/profile/?uid=${m.uid}">${escapeHTML(m.name)}</a>`
+        : `<span class="msg-name">${escapeHTML(m.name)}</span>`;
+      return `
       <div class="msg-item">
-        <span class="msg-name">${escapeHTML(m.name)}</span>
+        ${nameHTML}
         <span class="msg-time">${escapeHTML(m.time)}</span>
         <div class="msg-text">${escapeHTML(m.text)}</div>
       </div>
-    `).join('');
+    `;
+    }).join('');
   } catch {
     list.textContent = '加载失败';
   }

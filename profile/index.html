@@ -41,7 +41,7 @@
 
         <!-- 我的留言 -->
         <div class="card profile-feed">
-          <h2 class="section-title">我的留言</h2>
+          <h2 class="section-title" id="msgTitle">我的留言</h2>
           <div id="myMessages">加载中…</div>
         </div>
 
@@ -105,16 +105,15 @@
     const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
     const token = localStorage.getItem('token');
 
-    if (!token) {
-      alert('请先登录');
-      location.href = '/';
-      return;
-    }
+    // 从网址里读 uid： /profile/?uid=3   （没有就是看自己）
+    const wantedUid = parseInt(new URLSearchParams(location.search).get('uid'), 10) || null;
 
     let editing = false;
     let originalBio = '';
     let originalAvatar = '';
     let currentUsername = '';
+    let myUid = null;
+    let isSelf = false;
 
     const el = {
       avatarImg: document.getElementById('avatarImg'),
@@ -127,6 +126,7 @@
       uid: document.getElementById('uid'),
       createdAt: document.getElementById('createdAt'),
       myMessages: document.getElementById('myMessages'),
+      msgTitle: document.getElementById('msgTitle'),
       editFab: document.getElementById('editFab'),
       editIcon: document.getElementById('editIcon'),
       editActions: document.getElementById('editActions'),
@@ -142,29 +142,87 @@
     const pencilSVG = '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>';
     const closeSVG  = '<path d="M18 6 6 18"/><path d="M6 6l12 12"/>';
 
-    async function loadMe() {
+    /* ---------- 取数据 ---------- */
+
+    async function getMe() {
       try {
         const res = await fetch(API + '/me', {
           headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await res.json();
-        if (!data.ok) {
-          alert('登录已失效，请重新登录');
+        return data.ok ? data : null;
+      } catch {
+        return null;
+      }
+    }
+
+    async function getUserByUid(uid) {
+      try {
+        const res = await fetch(API + '/user?uid=' + encodeURIComponent(uid));
+        const data = await res.json();
+        return data.ok ? data : null;
+      } catch {
+        return null;
+      }
+    }
+
+    /* ---------- 入口：决定看谁的主页 ---------- */
+
+    async function init() {
+      let me = null;
+      if (token) {
+        me = await getMe();
+        if (!me) {
           localStorage.removeItem('token');
           localStorage.removeItem('username');
+        } else {
+          myUid = me.uid;
+        }
+      }
+
+      // 情况一：网址没写 uid → 看自己
+      if (!wantedUid) {
+        if (!me) {
+          alert('请先登录');
           location.href = '/';
           return;
         }
-        render(data);
-        loadMyMessages(data.username);
-      } catch {
-        el.name.textContent = '加载失败';
+        isSelf = true;
+        // 把 uid 补进网址，方便复制给别人
+        if (me.uid) history.replaceState(null, '', '/profile/?uid=' + me.uid);
+        render(me);
+        return;
       }
+
+      // 情况二：网址写的就是自己 → 看自己（可编辑）
+      if (me && me.uid === wantedUid) {
+        isSelf = true;
+        render(me);
+        return;
+      }
+
+      // 情况三：看别人的主页（不需要登录）
+      const other = await getUserByUid(wantedUid);
+      if (!other) {
+        el.name.textContent = '找不到这个用户';
+        el.roleTag.style.display = 'none';
+        el.uid.textContent = wantedUid;
+        el.createdAt.textContent = '—';
+        el.bioText.textContent = 'UID ' + wantedUid + ' 不存在，可能还没注册。';
+        el.myMessages.innerHTML = '<p class="empty-hint">—</p>';
+        el.editFab.style.display = 'none';
+        return;
+      }
+      isSelf = false;
+      render(other);
     }
+
+    /* ---------- 渲染 ---------- */
 
     function render(data) {
       currentUsername = data.username;
       el.name.textContent = data.username;
+      document.title = isSelf ? '个人主页 · 乘法' : (data.username + ' 的主页 · 乘法');
       el.uid.textContent = data.uid || '—';
       el.createdAt.textContent = data.createdAt || '—';
 
@@ -192,15 +250,27 @@
       }
       el.bioInput.value = data.bio || '';
       originalBio = data.bio || '';
+
+      // 不是自己 → 只读：藏掉编辑按钮和"更换头像"
+      if (isSelf) {
+        el.msgTitle.textContent = '我的留言';
+      } else {
+        el.editFab.style.display = 'none';
+        el.avatarLabel.style.display = 'none';
+        el.msgTitle.textContent = 'TA 的留言';
+      }
+
+      loadMessages(data.username);
     }
 
-    async function loadMyMessages(username) {
+    async function loadMessages(username) {
       try {
         const res = await fetch(API + '/messages');
         const data = await res.json();
         const mine = data.filter(m => m.name === username).reverse();
         if (!mine.length) {
-          el.myMessages.innerHTML = '<p class="empty-hint">还没有发过留言</p>';
+          el.myMessages.innerHTML = '<p class="empty-hint">' +
+            (isSelf ? '还没有发过留言' : 'TA 还没有发过留言') + '</p>';
           return;
         }
         el.myMessages.innerHTML = mine.map(m => `
@@ -273,7 +343,7 @@
         originalAvatar = avatar;
         alert('保存成功');
         exitEdit();
-        loadMe();
+        init();
       } catch {
         alert('网络错误，保存失败');
       }
@@ -320,7 +390,7 @@
       if (e.key === 'Escape') el.genericModal.classList.remove('show');
     });
 
-    loadMe();
+    init();
   })();
   </script>
 

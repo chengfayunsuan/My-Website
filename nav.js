@@ -115,11 +115,17 @@
     });
 
   /* ========== 6. 登录状态判断 ========== */
-  function showLoggedIn(role, avatar) {
+  function showLoggedIn(role, avatar, uid) {
     loginBtn.style.display = 'none';
     avatarBox.style.display = 'block';
     gearLogout.style.display = 'block';
     gearEmpty.style.display = 'none';
+
+    // 头像点进去 = 自己的主页
+    if (uid) {
+      avatarBox.href = '/profile/?uid=' + uid;
+      avatarBox.title = '我的主页';
+    }
 
     const navAvatarImg = document.getElementById('avatarImg');
     if (navAvatarImg && avatar) navAvatarImg.src = avatar;
@@ -145,7 +151,7 @@
       });
       const data = await res.json();
       if (data.ok) {
-        showLoggedIn(data.role, data.avatar);
+        showLoggedIn(data.role, data.avatar, data.uid);
         const name = localStorage.getItem('username');
         const navAvatarImg = document.getElementById('avatarImg');
         if (name && navAvatarImg) navAvatarImg.alt = name;
