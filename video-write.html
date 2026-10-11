@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投稿视频 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css?v=22">
+<style>
+  .ed-card { padding: 24px; }
+  .ed-title {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: 20px; font-weight: 600; background: var(--bg); color: var(--text); outline: none; box-sizing: border-box;
+  }
+  .ed-title:focus { border-color: var(--primary); }
+  .ed-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 14px 0 6px; }
+  .ed-btn {
+    min-width: 30px; height: 32px; padding: 0 14px; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--card); color: var(--text); font-family: inherit; font-size: 14px; cursor: pointer;
+  }
+  .ed-btn:hover { background: var(--primary-soft); border-color: var(--primary); color: var(--primary-deep); }
+  .ed-desc {
+    width: 100%; min-height: 120px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: 15px; background: var(--bg); color: var(--text); outline: none; box-sizing: border-box; resize: vertical; margin-top: 14px;
+  }
+  .ed-desc:focus { border-color: var(--primary); }
+  .bar { height: 8px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); overflow: hidden; margin-top: 10px; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--primary); transition: width .2s; }
+  .bar-txt { font-size: 13px; color: var(--text-light); margin-top: 6px; }
+  .ed-foot { margin-top: 12px; font-size: 13px; color: var(--text-light); }
+  .ed-actions { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+  .ed-submit { padding: 9px 26px; border: none; border-radius: 8px; background: var(--primary); color: #fff; font-family: inherit; font-size: 15px; cursor: pointer; }
+  .ed-submit:hover { background: var(--primary-deep); }
+  .ed-submit:disabled { opacity: .6; cursor: not-allowed; }
+  .ed-msg { font-size: 14px; }
+  .ed-msg.ok { color: #2e7d32; } .ed-msg.err { color: #c0392b; }
+</style>
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <section style="margin-top:36px;">
+    <div class="card ed-card">
+      <h2 class="section-title" id="pageTitle">投稿视频</h2>
+
+      <input class="ed-title" id="title" maxlength="100" placeholder="标题（最多 100 字）">
+
+      <div class="ed-bar">
+        <button class="ed-btn" id="pickVideo" type="button">🎬 选择视频</button>
+        <span id="fileInfo" style="font-size:13px;color:var(--text-light)">支持 mp4 / webm / ogv / mov / mkv，最大 2GB</span>
+      </div>
+      <div class="bar" id="prog" style="display:none;"><i id="barFill"></i></div>
+      <div class="bar-txt" id="barTxt" style="display:none;"></div>
+      <input type="file" id="fileVideo" accept="video/*,.mkv" hidden>
+
+      <textarea class="ed-desc" id="desc" maxlength="2000" placeholder="简介（选填，最多 2000 字）"></textarea>
+
+      <div class="ed-foot" id="quota">素材空间 —</div>
+
+      <div class="ed-actions">
+        <button class="ed-submit" id="publish" disabled>发布</button>
+        <span class="ed-msg" id="msg"></span>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>© 2026 CHENGFA</p></footer>
+
+  <script src="/config.js"></script>
+  <script src="/nav.js?v=22"></script>
+<script>
+const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+const CHUNK = 6 * 1024 * 1024;
+const VID_MAX = 2 * 1024 * 1024 * 1024;
+
+const fileVideo = document.getElementById('fileVideo');
+const progEl = document.getElementById('prog');
+const barFill = document.getElementById('barFill');
+const barTxt = document.getElementById('barTxt');
+const titleEl = document.getElementById('title');
+const descEl = document.getElementById('desc');
+const publishBtn = document.getElementById('publish');
+const msgEl = document.getElementById('msg');
+const quotaEl = document.getElementById('quota');
+
+let videoName = '', duration = 0, uploaded = false;
+
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') };
+}
+function requireLogin() {
+  if (localStorage.getItem('token')) return true;
+  const m = document.getElementById('loginModal');
+  if (m) m.classList.add('show'); else alert('请先登录');
+  return false;
+}
+function readAsDataURL(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader(); r.onload = () => resolve(r.result); r.onerror = reject; r.readAsDataURL(blob);
+  });
+}
+function setMsg(text, cls) { msgEl.textContent = text; msgEl.className = 'ed-msg' + (cls ? ' ' + cls : ''); }
+
+async function api(path, payload) {
+  const res = await fetch(API + path, { method: 'POST', headers: authHeaders(), body: JSON.stringify(payload || {}) });
+  return await res.json();
+}
+
+document.getElementById('pickVideo').addEventListener('click', () => fileVideo.click());
+fileVideo.addEventListener('change', e => { if (e.target.files[0]) handleVideo(e.target.files[0]); e.target.value = ''; });
+
+async function handleVideo(file) {
+  if (!requireLogin()) return;
+  if (!/^video\//.test(file.type) && !/\.(mp4|webm|ogv|mov|mkv)$/i.test(file.name)) {
+    return alert('只支持视频文件');
+  }
+  if (file.size > VID_MAX) return alert('这个视频 ' + (file.size / 1024 / 1024 / 1024).toFixed(2) + 'GB，超过 2GB 上限');
+
+  progEl.style.display = 'block'; barTxt.style.display = 'block'; barFill.style.width = '0%';
+  barTxt.textContent = '上传中…';
+  try {
+    const start = await api('/video/upload/start', { kind: 'video', videoId: 0, name: file.name, size: file.size, mime: file.type });
+    if (!start.ok) { progEl.style.display = 'none'; return setMsg(start.error || '上传失败', 'err'); }
+    let done = 0;
+    while (done < file.size) {
+      const slice = file.slice(done, Math.min(done + CHUNK, file.size));
+      const c = await api('/video/upload/chunk', { uploadId: start.uploadId, data: await readAsDataURL(slice) });
+      if (!c.ok) { await api('/video/upload/cancel', { uploadId: start.uploadId }); progEl.style.display = 'none'; return setMsg(c.error || '上传中断', 'err'); }
+      done = c.got; barFill.style.width = Math.round(done / file.size * 100) + '%'; barTxt.textContent = '上传中 ' + Math.round(done / file.size * 100) + '%';
+    }
+    const fin = await api('/video/upload/finish', { uploadId: start.uploadId });
+    if (!fin.ok) { progEl.style.display = 'none'; return setMsg(fin.error || '收尾失败', 'err'); }
+    videoName = fin.name;
+    duration = 0; // 时长由后端/前端另行计算，这里留 0 也可
+    progEl.style.display = 'none'; barTxt.textContent = '上传完成';
+    uploaded = true; publishBtn.disabled = false;
+    setMsg('视频已就绪，填好标题就能发布', 'ok');
+  } catch (e) {
+    progEl.style.display = 'none';
+    setMsg('上传失败，检查网络', 'err');
+  }
+}
+
+async function loadQuota() {
+  try {
+    const d = await (await fetch(API + '/video/quota')).json();
+    if (d.ok) quotaEl.textContent = '素材空间 ' + d.usedMB + ' MB / ' + d.limitGB + ' GB（文章+视频共享）';
+  } catch { /* 忽略 */ }
+}
+
+publishBtn.addEventListener('click', async () => {
+  if (!requireLogin()) return;
+  if (!uploaded) return alert('先上传视频');
+  const title = titleEl.value.trim();
+  if (!title) return alert('先写个标题');
+  publishBtn.disabled = true; setMsg('发布中…', '');
+  try {
+    const res = await fetch(API + '/video/save', {
+      method: 'POST', headers: authHeaders(),
+      body: JSON.stringify({ title, description: descEl.value.trim(), videoName, poster: '', duration })
+    });
+    const d = await res.json();
+    if (!d.ok) { publishBtn.disabled = false; return setMsg(d.error || '发布失败', 'err'); }
+    setMsg('已发布，跳转中…', 'ok');
+    setTimeout(() => { location.href = '/video.html?id=' + d.id; }, 600);
+  } catch {
+    publishBtn.disabled = false; setMsg('发布失败，检查网络', 'err');
+  }
+});
+
+loadQuota();
+</script>
+</body>
+</html>

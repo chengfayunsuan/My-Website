@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=21">
+<link rel="stylesheet" href="/style.css?v=22">
 <style>
   .art-head {
     display: flex;
@@ -107,7 +107,17 @@
             <button class="art-tab" data-sort="hot">热门</button>
           </div>
           <a class="art-write" href="/write.html">写文章</a>
+          <a class="art-write" href="/video-write.html">传视频</a>
         </div>
+      </div>
+
+      <!-- 视频（放在文章之上） -->
+      <div class="art-head" style="margin-bottom:14px;">
+        <h2 class="section-title" style="margin:0;">视频</h2>
+        <a class="art-write" href="/videos.html">全部视频</a>
+      </div>
+      <div class="v-grid" id="vidList" style="margin-bottom:24px;">
+        <p class="v-empty">加载中…</p>
       </div>
 
       <div class="art-list" id="list">
@@ -121,7 +131,7 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/config.js"></script>
-  <script src="/nav.js?v=21"></script>
+  <script src="/nav.js?v=22"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const listEl = document.getElementById('list');
@@ -181,6 +191,30 @@ document.querySelectorAll('.art-tab').forEach(b => {
 moreBtn.addEventListener('click', () => load(true));
 
 load(false);
+</script>
+
+<script>
+/* 文章页顶部视频区：拉最新的几支 */
+(function () {
+  const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+  const box = document.getElementById('vidList');
+  if (!box) return;
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+  fetch(API + '/videos?limit=6&offset=0')
+    .then(r => r.json())
+    .then(d => {
+      if (!d || !d.ok || !d.list.length) { box.innerHTML = '<p class="v-empty">还没有人传视频</p>'; return; }
+      box.innerHTML = d.list.map(v => `
+        <a class="v-card" href="/video.html?id=${v.id}">
+          <span class="v-thumb">▶</span>
+          <span class="v-info">
+            <span class="t">${esc(v.title)}</span>
+            <span class="m">作者：${esc(v.author||'匿名')} · ▶${v.views||0} · ♥${v.likes||0}</span>
+          </span>
+        </a>`).join('');
+    })
+    .catch(() => { box.innerHTML = '<p class="v-empty">视频加载失败</p>'; });
+})();
 </script>
 </body>
 </html>

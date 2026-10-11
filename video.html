@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>视频 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css?v=22">
+<style>
+  .vid-player { width: 100%; background: #000; border-radius: 12px; overflow: hidden; }
+  .vid-player video { width: 100%; max-height: 70vh; display: block; background: #000; }
+  .art-title { font-size: 24px; line-height: 1.4; color: var(--text); margin: 16px 0 10px; word-break: break-word; }
+  .art-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-bottom: 14px;
+    margin-bottom: 14px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-light); }
+  .art-sub a { color: var(--primary-deep); text-decoration: none; font-weight: 600; }
+  .art-sub a:hover { text-decoration: underline; }
+  .vid-desc { font-size: 15px; line-height: 1.8; color: var(--text); white-space: pre-wrap; word-break: break-word;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; }
+
+  .art-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid var(--border); }
+  .art-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border: 1px solid var(--border);
+    border-radius: 999px; background: var(--card); color: var(--text-light); font-family: inherit; font-size: 14px; cursor: pointer; transition: all .15s; }
+  .art-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .art-btn.on { background: var(--primary-soft); border-color: var(--primary); color: var(--primary-deep); font-weight: 600; }
+  .art-btn.like.on { color: #fb7299; border-color: #fb7299; background: rgba(251,114,153,.12); }
+  .art-btn.fav.on  { color: #f0b400; border-color: #f0b400; background: rgba(240,180,0,.14); }
+  .art-btn.danger:hover { border-color: #e5534b; color: #e5534b; }
+  .art-back { margin-left: auto; color: var(--text-light); text-decoration: none; font-size: 14px; }
+  .art-back:hover { color: var(--primary); }
+  .art-tip { margin-top: 12px; font-size: 14px; color: var(--text-light); }
+
+  /* ===== 评论区（同文章页）===== */
+  .cmt-wrap { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .cmt-title { font-size: 16px; color: var(--text); margin-bottom: 12px; position: relative; padding-left: 12px; }
+  .cmt-title::before { content: ""; position: absolute; left: 0; top: 5px; width: 3px; height: 16px; background: var(--primary-deep); border-radius: 2px; }
+  .cmt-post { padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); }
+  .cmt-post textarea { width: 100%; min-height: 64px; padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: 14px; line-height: 1.6; background: var(--card); color: var(--text); outline: none; resize: vertical; }
+  .cmt-post textarea:focus { border-color: var(--primary); }
+  .cmt-post-bar { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+  .cmt-post-bar .n { font-size: 12px; color: var(--text-light); }
+  .cmt-post-bar button { margin-left: auto; padding: 7px 20px; border: none; border-radius: 8px; background: var(--primary); color: #fff;
+    font-family: inherit; font-size: 14px; cursor: pointer; }
+  .cmt-post-bar button:hover { background: var(--primary-deep); }
+  .cmt-list { margin-top: 14px; display: flex; flex-direction: column; }
+  .cmt-item { display: flex; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .cmt-item:last-child { border-bottom: none; }
+  .cmt-side { flex: none; }
+  .cmt-avatar { display: block; line-height: 0; }
+  .cmt-avatar img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--card); border: 1px solid var(--border); }
+  .cmt-main { flex: 1; min-width: 0; }
+  .cmt-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .cmt-name { font-size: 13px; font-weight: 500; color: var(--primary-deep); text-decoration: none; }
+  .cmt-name:hover { text-decoration: underline; }
+  .cmt-text { margin-top: 4px; font-size: 15px; line-height: 1.7; color: var(--text); white-space: pre-wrap; word-break: break-word; }
+  .cmt-to { color: var(--primary-deep); }
+  .cmt-foot { display: flex; align-items: center; gap: 2px; margin-top: 6px; flex-wrap: wrap; }
+  .cmt-time { font-size: 12px; color: var(--text-light); margin-right: 8px; }
+  .cmt-floor { margin-left: auto; font-size: 12px; color: var(--text-light); }
+  .cmt-btn { padding: 4px 8px; border: none; background: none; font-family: inherit; font-size: 13px; color: var(--text-light); cursor: pointer; border-radius: 6px; }
+  .cmt-btn:hover { background: var(--primary-soft); color: var(--primary-deep); }
+  .cmt-btn.on { color: #fb7299; background: rgba(251, 114, 153, .12); }
+  .cmt-btn.danger:hover { color: #e5534b; background: rgba(229, 83, 75, .12); }
+  .cmt-more { position: relative; display: inline-block; }
+  .cmt-menu { position: absolute; right: 0; top: calc(100% + 4px); min-width: 120px; z-index: 40; padding: 4px;
+    display: none; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.16); }
+  .cmt-menu.show { display: block; }
+  .cmt-menu button { display: block; width: 100%; text-align: left; border: none; background: none; font-family: inherit; font-size: 14px;
+    color: var(--text); padding: 8px 12px; border-radius: 7px; cursor: pointer; }
+  .cmt-menu button:hover { background: var(--primary-soft); }
+  .cmt-menu button.danger { color: #e5534b; }
+  .cmt-menu button.danger:hover { background: rgba(229,83,75,.12); }
+  .cmt-children { margin-top: 10px; }
+  .cmt-item.is-reply { gap: 8px; padding: 10px 0 0; border-bottom: none; }
+  .cmt-item.is-reply .cmt-avatar img { width: 26px; height: 26px; }
+  .cmt-item.is-reply .cmt-text { font-size: 14px; margin-top: 2px; }
+  .cmt-empty { padding: 26px 10px; text-align: center; font-size: 14px; color: var(--text-light); }
+  .cmt-reply-box { margin: 8px 0 2px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); }
+  .cmt-reply-box textarea { width: 100%; min-height: 54px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: 14px; line-height: 1.6; background: var(--card); color: var(--text); outline: none; resize: vertical; }
+  .cmt-reply-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .cmt-reply-actions button { padding: 5px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--text-light);
+    font-family: inherit; font-size: 13px; cursor: pointer; }
+  .cmt-reply-actions button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .cmt-reply-actions button.primary:hover { background: var(--primary-deep); }
+</style>
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <section style="margin-top:36px;">
+    <div class="card">
+      <div id="box">
+        <div style="padding:40px;text-align:center;color:var(--text-light)">加载中…</div>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>© 2026 CHENGFA</p></footer>
+
+  <script src="/config.js"></script>
+  <script src="/nav.js?v=22"></script>
+<script>
+const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+const id = parseInt(new URLSearchParams(location.search).get('id'), 10);
+const box = document.getElementById('box');
+
+let video = null;
+
+function escapeHTML(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') };
+}
+function authOnly() {
+  const t = localStorage.getItem('token');
+  return t ? { Authorization: 'Bearer ' + t } : {};
+}
+function requireLogin() {
+  if (localStorage.getItem('token')) return true;
+  const m = document.getElementById('loginModal');
+  if (m) m.classList.add('show'); else alert('请先登录');
+  return false;
+}
+function fmtDur(s) {
+  s = Number(s) || 0;
+  if (!s) return '';
+  const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+  return (m ? m + '分' : '') + sec + '秒';
+}
+
+function render() {
+  const v = video;
+  document.title = v.title + ' · 乘法';
+  const posterUrl = v.poster ? (API + '/video/media/' + v.id + '/' + v.poster) : null;
+  box.innerHTML = `
+    <div class="vid-player">
+      ${v.videoUrl
+        ? `<video id="vid" src="${API + v.videoUrl}" ${posterUrl ? `poster="${posterUrl}"` : ''} controls preload="metadata"></video>`
+        : `<div style="padding:40px;text-align:center;color:#fff">视频文件不见了</div>`}
+    </div>
+    <h1 class="art-title">${escapeHTML(v.title)}</h1>
+    <div class="art-sub">
+      ${v.uid ? `<a href="/profile/?uid=${v.uid}">${escapeHTML(v.author || '匿名')}</a>` : `<span>${escapeHTML(v.author || '匿名')}</span>`}
+      <span>${escapeHTML(v.updatedAt || v.createdAt || '')}</span>
+      ${fmtDur(v.duration) ? `<span>时长 ${fmtDur(v.duration)}</span>` : ''}
+      <span>👁 ${v.views || 0}</span>
+    </div>
+
+    ${v.description ? `<div class="vid-desc">${escapeHTML(v.description)}</div>` : ''}
+
+    <div class="art-actions">
+      <button class="art-btn like${v.likedByMe ? ' on' : ''}" data-act="like">♥ <span id="likeN">${v.likes || 0}</span></button>
+      <button class="art-btn fav${v.favedByMe ? ' on' : ''}" data-act="fav">★ <span id="favN">${v.favs || 0}</span></button>
+      <button class="art-btn danger" data-act="report">举报</button>
+      ${v.canEdit ? `<button class="art-btn" data-act="edit">编辑</button>` : ''}
+      ${v.canEdit ? `<button class="art-btn danger" data-act="del">删除</button>` : ''}
+      <a class="art-back" href="/articles.html">← 返回</a>
+    </div>
+    <div class="art-tip" id="tip"></div>
+
+    <div class="cmt-wrap">
+      <h3 class="cmt-title">评论 <span id="cmtCount" style="font-size:13px;font-weight:normal;color:var(--text-light)">0</span></h3>
+      <div class="cmt-post">
+        <textarea id="cmtText" maxlength="500" placeholder="写下你的评论…（最多 500 字）"></textarea>
+        <div class="cmt-post-bar">
+          <span class="n" id="cmtChars">0/500</span>
+          <button id="cmtSend">发布</button>
+        </div>
+      </div>
+      <div class="cmt-list" id="cmtList"><div class="cmt-empty">加载中…</div></div>
+    </div>`;
+  bindComments();
+}
+
+function setTip(t) { const el = document.getElementById('tip'); if (el) el.textContent = t || ''; }
+
+async function load() {
+  if (!id) { box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">缺少视频 id</div>'; return; }
+  try {
+    const d = await (await fetch(API + '/video?id=' + id, { headers: authOnly() })).json();
+    if (!d.ok) { box.innerHTML = `<div style="padding:40px;text-align:center;color:var(--text-light)">${escapeHTML(d.error || '加载失败')}</div>`; return; }
+    video = d.video;
+    render();
+  } catch {
+    box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">加载失败，刷新试试</div>';
+  }
+}
+
+async function post(path, payload) {
+  const res = await fetch(API + path, { method: 'POST', headers: authHeaders(), body: JSON.stringify(payload || {}) });
+  return await res.json();
+}
+
+box.addEventListener('click', async e => {
+  const btn = e.target.closest('[data-act]');
+  if (!btn || !video) return;
+  const act = btn.dataset.act;
+
+  if (act === 'edit') { location.href = '/video-write.html?id=' + video.id; return; }
+
+  if (!requireLogin()) return;
+
+  if (act === 'like' || act === 'fav') {
+    const d = await post('/video/' + act, { id: video.id });
+    if (!d.ok) return alert(d.error || '操作失败');
+    const on = !!d.on;
+    btn.classList.toggle('on', on);
+    if (act === 'like') { document.getElementById('likeN').textContent = d.count; video.likedByMe = on; }
+    else { document.getElementById('favN').textContent = d.count; video.favedByMe = on; }
+    setTip(on ? (act === 'like' ? '已点赞' : '已收藏') : (act === 'like' ? '取消点赞' : '取消收藏'));
+    return;
+  }
+  if (act === 'report') {
+    const reason = prompt('说说这个视频哪里有问题（可以留空）：', '');
+    if (reason === null) return;
+    const d = await post('/video/report', { id: video.id, reason: reason.trim() });
+    if (!d.ok) return alert(d.error || '举报失败');
+    setTip('举报已提交，管理员会看的');
+    return;
+  }
+  if (act === 'del') {
+    if (!confirm('确定删掉这个视频吗？\n里面的素材也会一起删掉，删了找不回来。')) return;
+    const d = await post('/video/delete', { id: video.id });
+    if (!d.ok) return alert(d.error || '删除失败');
+    alert('已删除');
+    location.href = '/articles.html';
+  }
+});
+
+/* ================= 评论区 ================= */
+let me = null;
+let userAvatars = {};
+let cmts = [];
+let openReply = null;
+let cmtBound = false;
+
+function cmtEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+async function loadMe() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+  try {
+    const d = await (await fetch(API + '/me', { headers: { Authorization: 'Bearer ' + token } })).json();
+    if (d.ok) me = { uid: d.uid, name: d.username, role: d.role };
+  } catch { /* 没登录就算了 */ }
+}
+async function loadAvatars() {
+  try {
+    const list = await (await fetch(API + '/users')).json();
+    if (Array.isArray(list)) list.forEach(u => { userAvatars[u.uid] = u.avatar; });
+  } catch { /* 拿不到就用默认头像 */ }
+}
+function fixAvatar(a) {
+  if (!a) return '/avatar-default.jpg';
+  let s = String(a);
+  if (!s.startsWith('data:') && !s.startsWith('/') && !/^https?:\/\//.test(s)) s = API.replace(/\/+$/, '') + '/avatar/' + s;
+  return s;
+}
+function headHTML(c) {
+  const av = fixAvatar(userAvatars[c.uid]);
+  const img = `<img src="${av}" alt="">`;
+  const a = c.uid ? `<a class="cmt-avatar" href="/profile/?uid=${c.uid}">${img}</a>` : `<span class="cmt-avatar">${img}</span>`;
+  const name = c.uid ? `<a class="cmt-name" href="/profile/?uid=${c.uid}">${cmtEsc(c.name)}</a>` : `<span class="cmt-name">${cmtEsc(c.name)}</span>`;
+  return `<div class="cmt-side">${a}</div><div class="cmt-main"><div class="cmt-top">${name}</div>`;
+}
+function footHTML(c, isReply) {
+  const mine = me && c.uid != null && c.uid === me.uid;
+  const staff = me && (me.role === 'owner' || me.role === 'admin');
+  const likeBtn = `<button class="cmt-btn${c.likedByMe ? ' on' : ''}" data-a="like" data-id="${c.id}">♥ ${c.likes || 0}</button>`;
+  const replyBtn = `<button class="cmt-btn" data-a="reply" data-id="${c.id}" data-name="${cmtEsc(c.name)}">回复</button>`;
+  const menu = `<span class="cmt-more">
+      <button class="cmt-btn" data-a="menu" aria-label="更多操作" title="更多操作">⋯</button>
+      <div class="cmt-menu">
+        ${(mine || staff) ? `<button data-a="del" data-id="${c.id}" class="danger">删除</button>` : ''}
+        <button data-a="report" data-id="${c.id}" class="danger">举报</button>
+      </div>
+    </span>`;
+  const floor = (!isReply && c.floor) ? `<span class="cmt-floor">#${c.floor}</span>` : '';
+  return `<div class="cmt-foot"><span class="cmt-time">${cmtEsc(c.time)}</span>${likeBtn}${replyBtn}${menu}${floor}</div>`;
+}
+function replyItem(c) {
+  const to = c.toName ? `<span class="cmt-to">回复 @${cmtEsc(c.toName)} :</span> ` : '';
+  return `<div class="cmt-item is-reply" id="cmt${c.id}">
+    ${headHTML(c)}
+      <div class="cmt-text">${to}${cmtEsc(c.text)}</div>
+      ${footHTML(c, true)}
+      ${openReply === c.id ? replyBoxHTML(c) : ''}
+    </div>
+  </div>`;
+}
+function topItem(c) {
+  const kids = cmts.filter(x => x.parent === c.id).sort((a, b) => a.id - b.id);
+  const kidsHTML = kids.length ? `<div class="cmt-children">${kids.map(replyItem).join('')}</div>` : '';
+  return `<div class="cmt-item" id="cmt${c.id}">
+    ${headHTML(c)}
+      <div class="cmt-text">${cmtEsc(c.text)}</div>
+      ${footHTML(c, false)}
+      ${openReply === c.id ? replyBoxHTML(c) : ''}
+      ${kidsHTML}
+    </div>
+  </div>`;
+}
+function replyBoxHTML(c) {
+  return `<div class="cmt-reply-box">
+    <textarea data-for="${c.id}" placeholder="回复 ${cmtEsc(c.name)}…">@${cmtEsc(c.name)} </textarea>
+    <div class="cmt-reply-actions">
+      <button class="primary" data-a="send" data-id="${c.id}">发送</button>
+      <button data-a="cancel">取消</button>
+    </div>
+  </div>`;
+}
+function renderComments() {
+  const b = document.getElementById('cmtList');
+  if (!b) return;
+  const tops = cmts.filter(c => !c.parent).sort((a, b) => (b.floor || 0) - (a.floor || 0) || b.id - a.id);
+  const cnt = document.getElementById('cmtCount'); if (cnt) cnt.textContent = cmts.length;
+  b.innerHTML = tops.length
+    ? tops.map(topItem).join('')
+    : '<div class="cmt-empty">还没有评论，来说两句吧~</div>';
+}
+async function loadComments() {
+  try {
+    const d = await (await fetch(API + '/video/comments?videoId=' + id)).json();
+    if (!d.ok) throw new Error();
+    cmts = d.list || [];
+    renderComments();
+  } catch {
+    const b = document.getElementById('cmtList');
+    if (b) b.innerHTML = '<div class="cmt-empty">评论加载失败</div>';
+  }
+}
+function bindComments() {
+  const b = document.getElementById('cmtList');
+  const textEl = document.getElementById('cmtText');
+  const sendBtn = document.getElementById('cmtSend');
+  const charsEl = document.getElementById('cmtChars');
+  if (!b || cmtBound) return;
+  cmtBound = true;
+
+  textEl.addEventListener('input', () => { charsEl.textContent = textEl.value.length + '/500'; });
+  sendBtn.addEventListener('click', async () => {
+    if (!requireLogin()) return;
+    const t = textEl.value.trim();
+    if (!t) return alert('评论不能为空');
+    sendBtn.disabled = true;
+    const d = await post('/video/comment', { videoId: id, text: t });
+    sendBtn.disabled = false;
+    if (!d.ok) return alert(d.error || '发送失败');
+    textEl.value = ''; charsEl.textContent = '0/500';
+    await loadComments();
+  });
+
+  b.addEventListener('click', async e => {
+    const btn = e.target.closest('[data-a]');
+    if (!btn) return;
+    const a = btn.dataset.a;
+    const cid = parseInt(btn.dataset.id, 10);
+    if (a === 'menu') {
+      const m = btn.parentElement.querySelector('.cmt-menu');
+      const wasOpen = m.classList.contains('show');
+      document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
+      if (!wasOpen) m.classList.add('show');
+      return;
+    }
+    document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
+    if (a === 'cancel') { openReply = null; return renderComments(); }
+    if (a === 'reply') { openReply = cid; renderComments();
+      const ta = document.querySelector(`.cmt-reply-box textarea[data-for="${cid}"]`);
+      if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+      return; }
+    if (!requireLogin()) return;
+    if (a === 'send') {
+      const ta = btn.closest('.cmt-reply-box').querySelector('textarea');
+      const t = ta.value.trim();
+      if (!t) return alert('回复不能为空');
+      const d = await post('/video/comment', { videoId: id, text: t, parent: cid });
+      if (!d.ok) return alert(d.error || '发送失败');
+      openReply = null; await loadComments(); return;
+    }
+    if (a === 'like') { const d = await post('/video/comment/like', { id: cid }); if (!d.ok) return alert(d.error||'操作失败'); await loadComments(); return; }
+    if (a === 'del') {
+      if (!confirm('确定删掉这条评论？它下面的回复也会一起删掉。')) return;
+      const d = await post('/video/comment/delete', { videoId: id, id: cid });
+      if (!d.ok) return alert(d.error || '删除失败'); await loadComments(); return;
+    }
+    if (a === 'report') {
+      const reason = prompt('说说这条评论哪里有问题（可以留空）：', '');
+      if (reason === null) return;
+      const d = await post('/video/comment/report', { videoId: id, id: cid, reason: reason.trim() });
+      if (!d.ok) return alert(d.error || '举报失败');
+      alert('举报已提交，管理员会看的');
+    }
+  });
+  document.addEventListener('click', e => {
+    if (e.target.closest('.cmt-more')) return;
+    document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
+  });
+}
+
+loadMe().then(loadAvatars).then(loadComments);
+load();
+</script>
+</body>
+</html>

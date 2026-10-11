@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>视频 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css?v=22">
+<style>
+  .vid-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .vid-tabs { display: flex; gap: 8px; }
+  .vid-tab {
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--text-light);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .vid-tab.on {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    font-weight: 600;
+  }
+  .vid-write {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .vid-write:hover { background: var(--primary-deep); }
+  .vid-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 15px;
+  }
+  .vid-more {
+    margin-top: 14px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--text-light);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .vid-more:hover { border-color: var(--primary); color: var(--primary); }
+</style>
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <section style="margin-top:36px;">
+    <div class="card">
+      <div class="vid-head">
+        <h2 class="section-title" style="margin:0;">视频</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="vid-tabs">
+            <button class="vid-tab on" data-sort="new">最新</button>
+            <button class="vid-tab" data-sort="hot">热门</button>
+          </div>
+          <a class="vid-write" href="/video-write.html">传视频</a>
+        </div>
+      </div>
+
+      <div class="v-grid" id="list">
+        <p class="vid-empty">加载中…</p>
+      </div>
+
+      <button class="vid-more" id="moreBtn" style="display:none;">加载更多</button>
+    </div>
+  </section>
+
+  <footer><p>© 2026 CHENGFA</p></footer>
+
+  <script src="/config.js"></script>
+  <script src="/nav.js?v=22"></script>
+<script>
+const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+const listEl = document.getElementById('list');
+const moreBtn = document.getElementById('moreBtn');
+
+let sort = 'new';
+let offset = 0;
+const STEP = 20;
+let total = 0;
+
+function escapeHTML(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function cardHTML(v) {
+  const href = v.uid ? ('/profile/?uid=' + v.uid) : 'javascript:;';
+  return `
+    <a class="v-card" href="/video.html?id=${v.id}">
+      <span class="v-thumb">▶</span>
+      <span class="v-info">
+        <span class="t">${escapeHTML(v.title)}</span>
+        <span class="m">${escapeHTML(v.author || '匿名')} · ${escapeHTML(v.updatedAt || v.createdAt || '')} · ▶ ${v.views || 0} · ♥ ${v.likes || 0} · ★ ${v.favs || 0}</span>
+      </span>
+    </a>`;
+}
+
+async function load(append) {
+  if (!append) { offset = 0; listEl.innerHTML = '<p class="vid-empty">加载中…</p>'; }
+  try {
+    const d = await (await fetch(API + `/videos?sort=${sort}&limit=${STEP}&offset=${offset}`)).json();
+    if (!d.ok) throw new Error();
+    total = d.total;
+    const rows = d.list.map(cardHTML).join('');
+    listEl.innerHTML = (append ? listEl.innerHTML.replace(/<p class="vid-empty">.*?<\/p>/s, '') : '') + rows;
+    if (!d.list.length && !append) listEl.innerHTML = '<p class="vid-empty">还没有人传视频，来当第一个吧~</p>';
+    offset += d.list.length;
+    moreBtn.style.display = offset < total ? 'block' : 'none';
+  } catch {
+    listEl.innerHTML = '<p class="vid-empty">加载失败，刷新试试</p>';
+  }
+}
+
+document.querySelectorAll('.vid-tab').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.vid-tab').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    sort = b.dataset.sort;
+    load(false);
+  });
+});
+moreBtn.addEventListener('click', () => load(true));
+
+load(false);
+</script>
+</body>
+</html>
