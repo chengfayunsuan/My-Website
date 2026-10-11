@@ -129,8 +129,8 @@
       }
       box.innerHTML = d.list.map(a => `
         <a class="art-box-row" href="/article.html?id=${a.id}">
-          <span class="t">${esc(a.title)}</span>
-          <span class="m">${esc(a.author || '匿名')} · ♥${a.likes || 0} · 👁${a.views || 0}</span>
+          <span class="t" style="font-weight:700">${esc(a.title)}</span>
+          <span class="m">作者：${esc(a.author || '匿名')} · ♥${a.likes || 0} · 👁${a.views || 0}</span>
         </a>`).join('');
     })
     .catch(() => { box.innerHTML = '<p class="art-box-none">文章加载失败</p>'; });

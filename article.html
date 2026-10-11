@@ -255,6 +255,11 @@ function escapeHTML(s) {
 function authHeaders() {
   return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') };
 }
+/* GET 只带 Authorization，避免多一次预检往返 */
+function authOnly() {
+  const t = localStorage.getItem('token');
+  return t ? { Authorization: 'Bearer ' + t } : {};
+}
 function requireLogin() {
   if (localStorage.getItem('token')) return true;
   const m = document.getElementById('loginModal');
@@ -306,7 +311,8 @@ function setTip(t) { const el = document.getElementById('tip'); if (el) el.textC
 async function load() {
   if (!id) { box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">缺少文章 id</div>'; return; }
   try {
-    const d = await (await fetch(API + '/article?id=' + id)).json();
+    // 带上 token，后端才能判断这篇文章是不是你的（显示编辑/删除按钮）
+    const d = await (await fetch(API + '/article?id=' + id, { headers: authOnly() })).json();
     if (!d.ok) { box.innerHTML = `<div style="padding:40px;text-align:center;color:var(--text-light)">${escapeHTML(d.error || '加载失败')}</div>`; return; }
     article = d.article;
     render();

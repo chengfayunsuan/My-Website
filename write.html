@@ -261,6 +261,11 @@ function escapeHTML(s) {
 function authHeaders() {
   return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') };
 }
+/* GET 只带 Authorization：不加 Content-Type，省掉一次预检请求（走隧道时那可是 1 秒） */
+function authOnly() {
+  const t = localStorage.getItem('token');
+  return t ? { Authorization: 'Bearer ' + t } : {};
+}
 function requireLogin() {
   if (localStorage.getItem('token')) return true;
   const m = document.getElementById('loginModal');
@@ -599,7 +604,9 @@ async function loadArticle() {
   if (!articleId) return;
   document.getElementById('pageTitle').textContent = '编辑文章';
   try {
-    const d = await (await fetch(API + '/article?id=' + articleId)).json();
+    // 一定要带上 token，后端才知道「你就是作者」，否则 canEdit 是 false，内容也不给。
+    // noView=1：编辑时加载正文不算一次阅读，免得自己改文章把阅读数刷高。
+    const d = await (await fetch(API + '/article?id=' + articleId + '&noView=1', { headers: authOnly() })).json();
     if (!d.ok) { setMsg(d.error || '加载失败', 'err'); return; }
     if (!d.article.canEdit) {
       setMsg('这不是你的文章', 'err');

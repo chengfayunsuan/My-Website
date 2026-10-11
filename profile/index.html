@@ -6,6 +6,28 @@
 <title>个人主页 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/style.css?v=21">
+<style>
+  /* 右栏下面：我点赞 / 收藏的文章 */
+  .acts-block { margin-bottom: 14px; }
+  .acts-block:last-child { margin-bottom: 0; }
+  .acts-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .acts-list { display: flex; flex-direction: column; gap: 6px; }
+  .acts-item {
+    display: block;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    text-decoration: none;
+    color: var(--text);
+    font-size: 14px;
+    transition: border-color .15s;
+  }
+  .acts-item:hover { border-color: var(--primary); }
+  .acts-item .t { font-weight: 600; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .acts-item .m { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+  .acts-empty { font-size: 13px; color: var(--text-light); padding: 4px 0; }
+</style>
 </head>
 <body>
 
@@ -81,6 +103,19 @@
             <p class="profile-meta">注册于 <span id="createdAt">—</span></p>
           </div>
 
+        </div>
+
+        <!-- 右栏下面的小栏目：点赞 / 收藏的文章 -->
+        <div class="card profile-acts" id="actsCard" style="display:none;">
+          <h2 class="section-title" id="actsTitle">我的文章互动</h2>
+          <div class="acts-block">
+            <div class="acts-label" id="likedLabel">我赞过的文章</div>
+            <div class="acts-list" id="likedList"><p class="empty-hint">加载中…</p></div>
+          </div>
+          <div class="acts-block">
+            <div class="acts-label" id="favedLabel">我收藏的文章</div>
+            <div class="acts-list" id="favedList"><p class="empty-hint">加载中…</p></div>
+          </div>
         </div>
       </div>
 
@@ -305,6 +340,7 @@
       loadMessages(data.username);
       loadArticles(data.uid);
       loadRelations(data.uid);
+      loadUserActs(data.uid);
     }
 
     /* ---------- 关注 / 拉黑 ---------- */
@@ -492,6 +528,40 @@
         loadArticles(viewUid);
       } catch { btn.disabled = false; alert('网络错误，请重试'); }
     });
+
+    /* ---------- 右栏：我点赞 / 收藏的文章 ---------- */
+    async function loadUserActs(uid) {
+      const card = document.getElementById('actsCard');
+      const likedBox = document.getElementById('likedList');
+      const favedBox = document.getElementById('favedList');
+      if (!card || !uid) { if (card) card.style.display = 'none'; return; }
+      card.style.display = 'block';
+      document.getElementById('likedLabel').textContent = isSelf ? '我赞过的文章' : 'TA 赞过的文章';
+      document.getElementById('favedLabel').textContent = isSelf ? '我收藏的文章' : 'TA 收藏的文章';
+      likedBox.innerHTML = '<p class="empty-hint">加载中…</p>';
+      favedBox.innerHTML = '<p class="empty-hint">加载中…</p>';
+
+      try {
+        const [la, fa] = await Promise.all([
+          (await fetch(API + '/article/liked-by?uid=' + encodeURIComponent(uid))).json(),
+          (await fetch(API + '/article/faved-by?uid=' + encodeURIComponent(uid))).json()
+        ]);
+        likedBox.innerHTML = actsRows((la && la.list) || []);
+        favedBox.innerHTML = actsRows((fa && fa.list) || []);
+      } catch {
+        likedBox.innerHTML = '<p class="acts-empty">加载失败</p>';
+        favedBox.innerHTML = '<p class="acts-empty">加载失败</p>';
+      }
+    }
+
+    function actsRows(list) {
+      if (!list.length) return '<p class="acts-empty">还没有</p>';
+      return list.map(a => `
+        <a class="acts-item" href="/article.html?id=${a.id}">
+          <span class="t">${escapeHTML(a.title)}</span>
+          <span class="m">${escapeHTML(a.author || '匿名')} · ♥${a.likes || 0} · 👁${a.views || 0}</span>
+        </a>`).join('');
+    }
 
     /* 文本和属性里都能安全用的转义 */
     function escapeHTML(s) {

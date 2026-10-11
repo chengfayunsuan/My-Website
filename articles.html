@@ -59,6 +59,7 @@
   .art-row:hover { transform: translateX(3px); border-color: var(--primary); }
   .art-row h3 {
     font-size: 17px;
+    font-weight: 700;
     color: var(--text);
     margin-bottom: 6px;
     overflow: hidden;
@@ -143,7 +144,7 @@ function rowHTML(a) {
     <a class="art-row" href="/article.html?id=${a.id}">
       <h3>${escapeHTML(a.title)}</h3>
       <div class="art-meta">
-        <span>${escapeHTML(a.author || '匿名')}</span>
+        <span>作者：${escapeHTML(a.author || '匿名')}</span>
         <span>${escapeHTML(a.updatedAt || a.createdAt || '')}</span>
         <span>${a.chars || 0} 字</span>
         <span>♥ ${a.likes || 0}</span>
