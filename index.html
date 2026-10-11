@@ -6,7 +6,7 @@
 <title>乘法 · 个人主页</title>
 <meta name="description" content="乘法的个人主页，记录编程学习与项目">
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=22">
+<link rel="stylesheet" href="/style.css?v=23">
 </head>
 <body>
   <div id="navbar"></div>
@@ -29,14 +29,14 @@
         <a class="test-item" href="/test/users">用户名单</a>
       </div>
 
-      <a class="art-entry-btn" href="/write.html">✍ 写文章</a>
-      <a class="art-entry-btn" href="/video-write.html">🎬 传视频</a>
+      <a class="art-entry-btn" href="/pages/write.html">✍ 写文章</a>
+      <a class="art-entry-btn" href="/pages/video-write.html">🎬 传视频</a>
 
       <!-- 视频入口：小方框里放最新的几支（放在文章之上） -->
       <div class="art-box">
         <div class="art-box-head">
           <span class="art-box-title">视频</span>
-          <a class="art-box-more" href="/videos.html">全部 ›</a>
+          <a class="art-box-more" href="/pages/videos.html">全部 ›</a>
         </div>
         <div class="art-box-list v-grid" id="vidList">
           <p class="v-empty">加载中…</p>
@@ -47,7 +47,7 @@
       <div class="art-box">
         <div class="art-box-head">
           <span class="art-box-title">文章</span>
-          <a class="art-box-more" href="/articles.html">全部 ›</a>
+          <a class="art-box-more" href="/pages/articles.html">全部 ›</a>
         </div>
         <div class="art-box-list" id="artList">
           <p class="art-box-empty">加载中…</p>
@@ -119,8 +119,8 @@
     <p>© 2026 CHENGFA</p>
   </footer>
 
-  <script src="/config.js"></script>
-  <script src="/nav.js?v=22"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/nav.js?v=23"></script>
   <script src="main.js"></script>
 <script>
 /* 主页那个文章小方框：拉最新的 5 篇 */
@@ -140,7 +140,7 @@
         return;
       }
       box.innerHTML = d.list.map(a => `
-        <a class="art-box-row" href="/article.html?id=${a.id}">
+        <a class="art-box-row" href="/pages/article.html?id=${a.id}">
           <span class="t" style="font-weight:700">${esc(a.title)}</span>
           <span class="m">作者：${esc(a.author || '匿名')} · ♥${a.likes || 0} · 👁${a.views || 0}</span>
         </a>`).join('');
@@ -159,7 +159,7 @@
           return;
         }
         vbox.innerHTML = d.list.map(v => `
-          <a class="v-card" href="/video.html?id=${v.id}">
+          <a class="v-card" href="/pages/video.html?id=${v.id}">
             <span class="v-thumb">▶</span>
             <span class="v-info">
               <span class="t">${esc(v.title)}</span>

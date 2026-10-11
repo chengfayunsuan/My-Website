@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>投稿视频 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=22">
+<link rel="stylesheet" href="/style.css?v=23">
 <style>
   .ed-card { padding: 24px; }
   .ed-title {
@@ -66,8 +66,8 @@
 
   <footer><p>© 2026 CHENGFA</p></footer>
 
-  <script src="/config.js"></script>
-  <script src="/nav.js?v=22"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/nav.js?v=23"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const CHUNK = 6 * 1024 * 1024;
@@ -162,7 +162,7 @@ publishBtn.addEventListener('click', async () => {
     const d = await res.json();
     if (!d.ok) { publishBtn.disabled = false; return setMsg(d.error || '发布失败', 'err'); }
     setMsg('已发布，跳转中…', 'ok');
-    setTimeout(() => { location.href = '/video.html?id=' + d.id; }, 600);
+    setTimeout(() => { location.href = '/pages/video.html?id=' + d.id; }, 600);
   } catch {
     publishBtn.disabled = false; setMsg('发布失败，检查网络', 'err');
   }

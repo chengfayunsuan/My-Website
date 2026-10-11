@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=22">
+<link rel="stylesheet" href="/style.css?v=23">
 <style>
   .art-head {
     display: flex;
@@ -106,15 +106,15 @@
             <button class="art-tab on" data-sort="new">最新</button>
             <button class="art-tab" data-sort="hot">热门</button>
           </div>
-          <a class="art-write" href="/write.html">写文章</a>
-          <a class="art-write" href="/video-write.html">传视频</a>
+          <a class="art-write" href="/pages/write.html">写文章</a>
+          <a class="art-write" href="/pages/video-write.html">传视频</a>
         </div>
       </div>
 
       <!-- 视频（放在文章之上） -->
       <div class="art-head" style="margin-bottom:14px;">
         <h2 class="section-title" style="margin:0;">视频</h2>
-        <a class="art-write" href="/videos.html">全部视频</a>
+        <a class="art-write" href="/pages/videos.html">全部视频</a>
       </div>
       <div class="v-grid" id="vidList" style="margin-bottom:24px;">
         <p class="v-empty">加载中…</p>
@@ -130,8 +130,8 @@
 
   <footer><p>© 2026 CHENGFA</p></footer>
 
-  <script src="/config.js"></script>
-  <script src="/nav.js?v=22"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/nav.js?v=23"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const listEl = document.getElementById('list');
@@ -151,7 +151,7 @@ function escapeHTML(s) {
 function rowHTML(a) {
   const href = '/profile/?uid=' + a.uid;
   return `
-    <a class="art-row" href="/article.html?id=${a.id}">
+    <a class="art-row" href="/pages/article.html?id=${a.id}">
       <h3>${escapeHTML(a.title)}</h3>
       <div class="art-meta">
         <span>作者：${escapeHTML(a.author || '匿名')}</span>
@@ -205,7 +205,7 @@ load(false);
     .then(d => {
       if (!d || !d.ok || !d.list.length) { box.innerHTML = '<p class="v-empty">还没有人传视频</p>'; return; }
       box.innerHTML = d.list.map(v => `
-        <a class="v-card" href="/video.html?id=${v.id}">
+        <a class="v-card" href="/pages/video.html?id=${v.id}">
           <span class="v-thumb">▶</span>
           <span class="v-info">
             <span class="t">${esc(v.title)}</span>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>个人主页 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=22">
+<link rel="stylesheet" href="/style.css?v=23">
 <style>
   /* 右栏下面：我点赞 / 收藏的文章 */
   .acts-block { margin-bottom: 14px; }
@@ -155,8 +155,8 @@
     </div>
   </div>
 
-  <script src="/config.js"></script>
-  <script src="/nav.js?v=22"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/nav.js?v=23"></script>
   <script>
   (function () {
     const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
@@ -497,12 +497,12 @@
         const list = (d && d.list) || [];
         if (!list.length) {
           box.innerHTML = '<p class="empty-hint">' +
-            (isSelf ? '还没有写过文章，<a href="/write.html">去写一篇</a>' : 'TA 还没有写过文章') + '</p>';
+            (isSelf ? '还没有写过文章，<a href="/pages/write.html">去写一篇</a>' : 'TA 还没有写过文章') + '</p>';
           return;
         }
         box.innerHTML = list.map(a => `
           <div class="my-art-item">
-            <a class="my-art-title" href="/article.html?id=${a.id}">${escapeHTML(a.title)}</a>
+            <a class="my-art-title" href="/pages/article.html?id=${a.id}">${escapeHTML(a.title)}</a>
             <div class="my-art-meta">
               <span>${escapeHTML(a.updatedAt || a.createdAt || '')}</span>
               <span>${a.chars || 0} 字</span>
@@ -525,7 +525,7 @@
       if (!btn) return;
       const artId = parseInt(btn.dataset.id, 10);
       if (btn.dataset.art === 'edit') {
-        location.href = '/write.html?id=' + artId;
+        location.href = '/pages/write.html?id=' + artId;
         return;
       }
       if (!confirm('确定删掉这篇文章吗？\n里面的图片视频也会一起删掉，删了找不回来。')) return;
@@ -570,7 +570,7 @@
     function actsRows(list) {
       if (!list.length) return '<p class="acts-empty">还没有</p>';
       return list.map(a => `
-        <a class="acts-item" href="/article.html?id=${a.id}">
+        <a class="acts-item" href="/pages/article.html?id=${a.id}">
           <span class="t">${escapeHTML(a.title)}</span>
           <span class="m">${escapeHTML(a.author || '匿名')} · ♥${a.likes || 0} · 👁${a.views || 0}</span>
         </a>`).join('');
@@ -580,7 +580,7 @@
     function videoRows(list) {
       if (!list.length) return '<p class="acts-empty">还没有</p>';
       return list.map(v => `
-        <a class="acts-item" href="/video.html?id=${v.id}">
+        <a class="acts-item" href="/pages/video.html?id=${v.id}">
           <span class="t">${escapeHTML(v.title)}</span>
           <span class="m">${escapeHTML(v.author || '匿名')} · ▶${v.views || 0} · ♥${v.likes || 0}</span>
         </a>`).join('');

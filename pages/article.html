@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=21">
+<link rel="stylesheet" href="/style.css?v=23">
 <style>
   .art-title {
     font-size: 28px;
@@ -238,8 +238,8 @@
 
   <footer><p>© 2026 CHENGFA</p></footer>
 
-  <script src="/config.js"></script>
-  <script src="/nav.js?v=21"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/nav.js?v=23"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const id = parseInt(new URLSearchParams(location.search).get('id'), 10);
@@ -287,7 +287,7 @@ function render() {
       <button class="art-btn danger" data-act="report">举报</button>
       ${a.canEdit ? `<button class="art-btn" data-act="edit">编辑</button>` : ''}
       ${a.canEdit ? `<button class="art-btn danger" data-act="del">删除</button>` : ''}
-      <a class="art-back" href="/articles.html">← 全部文章</a>
+      <a class="art-back" href="/pages/articles.html">← 全部文章</a>
     </div>
     <div class="art-tip" id="tip"></div>
 
@@ -331,7 +331,7 @@ box.addEventListener('click', async e => {
   if (!btn || !article) return;
   const act = btn.dataset.act;
 
-  if (act === 'edit') { location.href = '/write.html?id=' + article.id; return; }
+  if (act === 'edit') { location.href = '/pages/write.html?id=' + article.id; return; }
 
   if (!requireLogin()) return;
 
@@ -360,7 +360,7 @@ box.addEventListener('click', async e => {
     const d = await post('/article/delete', { id: article.id });
     if (!d.ok) return alert(d.error || '删除失败');
     alert('已删除');
-    location.href = '/articles.html';
+    location.href = '/pages/articles.html';
   }
 });
 

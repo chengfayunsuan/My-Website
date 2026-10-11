@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>视频 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=22">
+<link rel="stylesheet" href="/style.css?v=23">
 <style>
   .vid-head {
     display: flex;
@@ -78,7 +78,7 @@
             <button class="vid-tab on" data-sort="new">最新</button>
             <button class="vid-tab" data-sort="hot">热门</button>
           </div>
-          <a class="vid-write" href="/video-write.html">传视频</a>
+          <a class="vid-write" href="/pages/video-write.html">传视频</a>
         </div>
       </div>
 
@@ -92,8 +92,8 @@
 
   <footer><p>© 2026 CHENGFA</p></footer>
 
-  <script src="/config.js"></script>
-  <script src="/nav.js?v=22"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/nav.js?v=23"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const listEl = document.getElementById('list');
@@ -113,7 +113,7 @@ function escapeHTML(s) {
 function cardHTML(v) {
   const href = v.uid ? ('/profile/?uid=' + v.uid) : 'javascript:;';
   return `
-    <a class="v-card" href="/video.html?id=${v.id}">
+    <a class="v-card" href="/pages/video.html?id=${v.id}">
       <span class="v-thumb">▶</span>
       <span class="v-info">
         <span class="t">${escapeHTML(v.title)}</span>

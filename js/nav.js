@@ -23,7 +23,7 @@
       <div class="nav-inner">
         <a class="logo" href="/">乘法</a>
         <div class="nav-right">
-          <a class="nav-link" href="/video-write.html" title="传视频">🎬 传视频</a>
+          <a class="nav-link" href="/pages/video-write.html" title="传视频">🎬 传视频</a>
           <span class="ip-wrap">你的 IP：<span id="ip">获取中…</span></span>
           <a class="login-btn" id="loginBtn" href="javascript:;">登录</a>
           <a class="user-avatar" id="userAvatar" href="/profile/" style="display:none;">

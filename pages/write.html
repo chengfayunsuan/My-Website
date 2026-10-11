@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>写文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=21">
+<link rel="stylesheet" href="/style.css?v=23">
 <style>
   .ed-card { padding: 24px; }
   .ed-title {
@@ -239,8 +239,8 @@
   <input type="file" id="fileVideo" accept="video/*,.mkv" hidden>
   <input type="file" id="fileAudio" accept="audio/*" hidden>
 
-  <script src="/config.js"></script>
-  <script src="/nav.js?v=21"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/nav.js?v=23"></script>
 <script>
 const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const MAX_CHARS = 10000;
@@ -639,7 +639,7 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
     if (!d.ok) { btn.disabled = false; return setMsg(d.error || '保存失败', 'err'); }
     articleId = d.id;
     setMsg('已发布，正在跳转…', 'ok');
-    setTimeout(() => { location.href = '/article.html?id=' + d.id; }, 600);
+    setTimeout(() => { location.href = '/pages/article.html?id=' + d.id; }, 600);
   } catch {
     btn.disabled = false;
     setMsg('保存失败，检查网络', 'err');

@@ -1,2 +1,12 @@
 /test/login  /404.html  404
 /*  /404.html  404
+
+/article.html /pages/article.html 301
+/articles.html /pages/articles.html 301
+/write.html /pages/write.html 301
+/video.html /pages/video.html 301
+/video-write.html /pages/video-write.html 301
+/videos.html /pages/videos.html 301
+/config.js /js/config.js 301
+/nav.js /js/nav.js 301
+/main.js /js/main.js 301
