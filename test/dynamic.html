@@ -262,6 +262,8 @@
   </footer>
   
   <script src="/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
 /* ============ 动态列表 ============ */
@@ -269,10 +271,7 @@ const feedList = document.getElementById('feedList');
 const feedCount = document.getElementById('feedCount');
 const refreshBtn = document.getElementById('refreshBtn');
 
-const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
-
 const TARGET = 'https://moonbazaar.xyz/home/get_live_feed.php?limit=30&offset=0';
-const LIMIT = 30;
 const POLL_INTERVAL = 5000;
 
 let currentFingerprint = null;
@@ -280,22 +279,13 @@ let pollTimer = null;
 let isRefreshing = false;
 let feedLoaded = false;
 
-/* 取数据的两条路：
-   ① 问自己的后端（/live-feed）—— 后端是 Node，能直连源站，快且不卡，优先走这条；
-   ② 后端没开或不通时，才退回公共 CORS 代理（那些代理又慢又爱挂，是以前卡顿的根因） */
+/* 后端已废（前端直连 Supabase，没有自建 Node 了），只能靠公共 CORS 代理直抓源站。
+   三个代理并发打，谁先回来用谁 —— 单个代理经常挂，靠冗余顶住。 */
 const PROXIES = [
   url => `https://cors.eu.org/${url}`,
   url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
   url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
 ];
-
-async function fetchViaBackend() {
-  const r = await fetch(API + '/live-feed?limit=' + LIMIT + '&offset=0', { cache: 'no-store' });
-  if (!r.ok) throw new Error('HTTP ' + r.status);
-  const d = await r.json();
-  if (!Array.isArray(d)) throw new Error('后端没给数组');
-  return d;
-}
 
 async function fetchViaProxy() {
   const results = await Promise.allSettled(
@@ -310,11 +300,7 @@ async function fetchViaProxy() {
 }
 
 async function fetchFeed() {
-  try {
-    return await fetchViaBackend();
-  } catch {
-    return await fetchViaProxy();
-  }
+  return await fetchViaProxy();
 }
 
 /* 防 XSS */
@@ -364,17 +350,6 @@ function renderWatch() {
     listEl.innerHTML = '';
     items.forEach(tx => listEl.appendChild(createItem(tx, false)));
   });
-}
-
-/* 开页先把后端攒下来的记录铺上（Backend/test/feed-watch.json），
-   省得刚进来两个框是空的。后端没开就只靠实时抓取慢慢攒。 */
-async function seedWatch() {
-  try {
-    const r = await fetch(API + '/feed-watch', { cache: 'no-store' });
-    if (!r.ok) return;
-    const d = await r.json();
-    if (d && d.users) WATCH.forEach(n => mergeWatch(d.users[n] || []));
-  } catch { /* 后端没开就算了 */ }
 }
 
 /* 指纹：用于判断"新数据" */
@@ -478,7 +453,7 @@ refreshBtn.addEventListener('click', () => {
 
 /* 首次加载 + 开启轮询 */
 renderWatch();                       // 先把两个框摆出来（空态）
-seedWatch().then(() => loadFeed(true)).then(() => {
+loadFeed(true).then(() => {
   pollTimer = setInterval(() => loadFeed(false), POLL_INTERVAL);
 });
 

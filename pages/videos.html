@@ -93,16 +93,16 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
-const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const listEl = document.getElementById('list');
 const moreBtn = document.getElementById('moreBtn');
 
 let sort = 'new';
 let offset = 0;
 const STEP = 20;
-let total = 0;
 
 function escapeHTML(s) {
   return String(s == null ? '' : s)
@@ -111,13 +111,12 @@ function escapeHTML(s) {
 }
 
 function cardHTML(v) {
-  const href = v.uid ? ('/profile/?uid=' + v.uid) : 'javascript:;';
   return `
     <a class="v-card" href="/pages/video.html?id=${v.id}">
       <span class="v-thumb">▶</span>
       <span class="v-info">
         <span class="t">${escapeHTML(v.title)}</span>
-        <span class="m">${escapeHTML(v.author || '匿名')} · ${escapeHTML(v.updatedAt || v.createdAt || '')} · ▶ ${v.views || 0} · ♥ ${v.likes || 0} · ★ ${v.favs || 0}</span>
+        <span class="m">${escapeHTML(v.author || '匿名')} · ${escapeHTML(v.created_at || '')} · ▶ ${v.views || 0} · ♥ ${v.likes || 0} · ★ ${v.favs || 0}</span>
       </span>
     </a>`;
 }
@@ -125,14 +124,13 @@ function cardHTML(v) {
 async function load(append) {
   if (!append) { offset = 0; listEl.innerHTML = '<p class="vid-empty">加载中…</p>'; }
   try {
-    const d = await (await fetch(API + `/videos?sort=${sort}&limit=${STEP}&offset=${offset}`)).json();
+    const d = await SBAPI.getVideos({ limit: STEP, offset, sort });
     if (!d.ok) throw new Error();
-    total = d.total;
     const rows = d.list.map(cardHTML).join('');
     listEl.innerHTML = (append ? listEl.innerHTML.replace(/<p class="vid-empty">.*?<\/p>/s, '') : '') + rows;
     if (!d.list.length && !append) listEl.innerHTML = '<p class="vid-empty">还没有人传视频，来当第一个吧~</p>';
     offset += d.list.length;
-    moreBtn.style.display = offset < total ? 'block' : 'none';
+    moreBtn.style.display = d.list.length < STEP ? 'block' : 'none';
   } catch {
     listEl.innerHTML = '<p class="vid-empty">加载失败，刷新试试</p>';
   }

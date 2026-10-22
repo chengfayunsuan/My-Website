@@ -131,16 +131,16 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
-const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const listEl = document.getElementById('list');
 const moreBtn = document.getElementById('moreBtn');
 
 let sort = 'new';
 let offset = 0;
 const STEP = 20;
-let total = 0;
 
 function escapeHTML(s) {
   return String(s == null ? '' : s)
@@ -149,13 +149,12 @@ function escapeHTML(s) {
 }
 
 function rowHTML(a) {
-  const href = '/profile/?uid=' + a.uid;
   return `
     <a class="art-row" href="/pages/article.html?id=${a.id}">
       <h3>${escapeHTML(a.title)}</h3>
       <div class="art-meta">
         <span>作者：${escapeHTML(a.author || '匿名')}</span>
-        <span>${escapeHTML(a.updatedAt || a.createdAt || '')}</span>
+        <span>${escapeHTML(a.created_at || '')}</span>
         <span>${a.chars || 0} 字</span>
         <span>♥ ${a.likes || 0}</span>
         <span>★ ${a.favs || 0}</span>
@@ -167,14 +166,13 @@ function rowHTML(a) {
 async function load(append) {
   if (!append) { offset = 0; listEl.innerHTML = '<div class="art-empty">加载中…</div>'; }
   try {
-    const d = await (await fetch(API + `/articles?sort=${sort}&limit=${STEP}&offset=${offset}`)).json();
+    const d = await SBAPI.getArticles({ limit: STEP, offset, sort });
     if (!d.ok) throw new Error();
-    total = d.total;
     const rows = d.list.map(rowHTML).join('');
     listEl.innerHTML = (append ? listEl.innerHTML.replace(/<div class="art-empty">.*?<\/div>/s, '') : '') + rows;
     if (!d.list.length && !append) listEl.innerHTML = '<div class="art-empty">还没有人写文章，来当第一个吧~</div>';
     offset += d.list.length;
-    moreBtn.style.display = offset < total ? 'block' : 'none';
+    moreBtn.style.display = d.list.length < STEP ? 'block' : 'none';
   } catch {
     listEl.innerHTML = '<div class="art-empty">加载失败，刷新试试</div>';
   }
@@ -196,12 +194,10 @@ load(false);
 <script>
 /* 文章页顶部视频区：拉最新的几支 */
 (function () {
-  const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
   const box = document.getElementById('vidList');
   if (!box) return;
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-  fetch(API + '/videos?limit=6&offset=0')
-    .then(r => r.json())
+  SBAPI.getVideos({ limit: 6, offset: 0 })
     .then(d => {
       if (!d || !d.ok || !d.list.length) { box.innerHTML = '<p class="v-empty">还没有人传视频</p>'; return; }
       box.innerHTML = d.list.map(v => `

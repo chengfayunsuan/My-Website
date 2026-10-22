@@ -226,8 +226,6 @@
       <h2 class="section-title">留言板</h2>
       <p style="margin-bottom:16px;">当前用户：<b id="who">未登录</b> <a href="javascript:;" id="goLogin">去登录</a></p>
 
-      <div class="warn-bar" id="warnBar"></div>
-
       <div class="post-box">
         <textarea id="text" placeholder="发一条友善的评论…（最多 200 字）" maxlength="200"></textarea>
         <div class="post-bar">
@@ -244,9 +242,11 @@
   </section>
 
   <script src="/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
-const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+/* 数据全走 window.SBAPI（Supabase 直连 + RLS），不再有任何自建后端 */
 
 const goLogin = document.getElementById('goLogin');
 if (goLogin) {
@@ -265,12 +265,15 @@ async function loadUsers() {
   byName = new Map();
   byUid  = new Map();
   try {
-    const res = await fetch(API + '/users');
-    const d = await res.json();
-    if (Array.isArray(d)) {
-      d.forEach(u => {
-        byName.set(u.username, u);
-        byUid.set(u.uid, u);
+    const d = await SBAPI.getAllUsers();
+    if (d && d.ok) {
+      d.list.forEach(u => {
+        const rec = {
+          uid: u.id, username: u.username, role: u.role,
+          bio: u.bio || '', avatar: u.avatar_url || null
+        };
+        byName.set(u.username, rec);
+        byUid.set(u.id, rec);
       });
     }
   } catch {
@@ -280,23 +283,20 @@ async function loadUsers() {
 
 function safeAvatar(a) {
   if (typeof a !== 'string' || !a) return '/avatar-default.jpg';
-  let s = a;
-  // 新后端给完整网址；旧后端只给文件名 uid1.jpg，这里补上前缀
-  if (!s.startsWith('data:') && !s.startsWith('/') && !/^https?:\/\//.test(s)) {
-    s = API.replace(/\/+$/, '') + '/avatar/' + s;
-  }
-  if (s.indexOf('"') !== -1 || s.indexOf('<') !== -1) return '/avatar-default.jpg';
-  return s;
+  const s = a.trim();
+  // 默认头像也可以是 data: / 完整网址；旧后端的文件名头像已经没地方取了，退回默认图
+  if (s.startsWith('data:image/') || /^https?:\/\//.test(s) || s.charAt(0) === '/') return s;
+  return '/avatar-default.jpg';
 }
 
 function whoOf(m) {
-  const u = (m.uid != null ? byUid.get(m.uid) : null) || byName.get(m.name) || null;
+  const u = (m.uid != null ? byUid.get(m.uid) : null) || byName.get(m.name);
   return {
     uid: (m.uid != null) ? m.uid : (u ? u.uid : null),
-    name: u ? u.username : m.name,
-    role: u ? u.role : null,
-    bio: u ? (u.bio || '') : '',
-    avatar: safeAvatar(u && u.avatar)
+    name: u ? u.username : (m.name || '匿名'),
+    role: (m.role || (u ? u.role : null) || null),
+    bio: m.bio || (u ? u.bio : '') || '',
+    avatar: safeAvatar(m.avatar || (u && u.avatar))
   };
 }
 
@@ -320,18 +320,10 @@ let likeSet   = new Set();        // 我赞过的留言 id
 let openReplyId = null;           // 当前打开着回复框的那条留言 id
 let replyDraft = '';              // 回复框里预填的内容（@某某 ）
 let msgsCache = [];
-let meToken = null;               // 记住这份 me 是用哪个 token 换来的，换人了要重取
 let urlActionDone = false;        // ?reply= / ?msg= 只处理一次，别每次重画都跳
 
-function authHeaders() {
-  return {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + localStorage.getItem('token')
-  };
-}
-
 function ensureLogin() {
-  if (localStorage.getItem('token')) return true;
+  if (me) return true;
   const m = document.getElementById('loginModal');
   if (m) m.classList.add('show');
   else alert('请先登录');
@@ -339,30 +331,23 @@ function ensureLogin() {
 }
 
 async function loadMe() {
-  const token = localStorage.getItem('token');
-  // 退出登录了就当没登录；换了个 token（换人登录）要重新取
-  if (!token) { me = null; meToken = null; return; }
-  if (me && meToken === token) return;
-  try {
-    const res = await fetch(API + '/me', { headers: { 'Authorization': 'Bearer ' + token } });
-    const d = await res.json();
-    if (d && d.ok) {
-      me = { uid: d.uid, username: d.username, role: d.role };
-      meToken = token;
-      const who = document.getElementById('who');
-      if (who) who.textContent = d.username;
-      if (goLogin) goLogin.style.display = 'none';
-    }
-  } catch { /* 网络不行就当成没登录 */ }
+  const s = await SBAPI.getSession();
+  if (!s) { me = null; return; }
+  const d = await SBAPI.me();
+  if (d && d.ok) {
+    me = { uid: d.uid, username: d.username, role: d.role };
+    const who = document.getElementById('who');
+    if (who) who.textContent = d.username;
+    if (goLogin) goLogin.style.display = 'none';
+  } else {
+    me = null;
+  }
 }
 
 async function loadRelations() {
   if (!me) return;
   try {
-    const res = await fetch(API + '/relations?uid=' + me.uid, {
-      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-    });
-    const d = await res.json();
+    const d = await SBAPI.getRelations(me.uid);
     if (d && d.ok) {
       followSet  = new Set(d.following || []);
       blockedSet = new Set(d.blocked || []);
@@ -373,11 +358,8 @@ async function loadRelations() {
 async function loadReports() {
   if (!me) return;
   try {
-    const res = await fetch(API + '/my-reports', {
-      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-    });
-    const d = await res.json();
-    if (Array.isArray(d)) reportedSet = new Set(d);
+    const d = await SBAPI.getMyReports();
+    if (d && d.ok) reportedSet = new Set(d.ids || []);
   } catch { /* 忽略 */ }
 }
 
@@ -386,7 +368,7 @@ async function loadReports() {
    —— 自己的留言也有「回复 / 赞 / 三个点」，只是三个点里没有关注和拉黑 */
 function actionsHTML(m, who) {
   if (!me) return '';
-  if (typeof m.id !== 'number') return '';
+  if (m.id == null) return '';
 
   const mine = who.uid != null && who.uid === me.uid;
   const hasUid = who.uid != null;
@@ -398,7 +380,7 @@ function actionsHTML(m, who) {
   const followBtn = (!mine && hasUid)
     ? `<button type="button" class="act-btn${followed ? ' on' : ''}" data-act="follow" data-uid="${who.uid}">${followed ? '已关注' : '关注'}</button>`
     : '';
-  // 拉黑只对别人开放（后端也拦着自己拉黑自己）
+  // 拉黑只对别人开放（RLS 也拦着自己拉黑自己）
   const blockItem = (!mine && hasUid)
     ? `<button type="button" data-act="block" data-uid="${who.uid}" class="danger">拉黑 TA</button>`
     : '';
@@ -428,7 +410,7 @@ function actionsHTML(m, who) {
         </div>`;
 }
 
-/* 回复框：预填「@某某 」，和后端识别 @ 的逻辑对上 */
+/* 回复框：预填「@某某 」 */
 function replyBoxHTML(m, who) {
   return `
       <div class="reply-box" data-for="${m.id}">
@@ -541,7 +523,7 @@ function blockedHTML(m, who, idAttr, isReply) {
 /* 一条回复：挂在父留言底下，不占楼层号 */
 function replyHTML(k) {
   const who = whoOf(k);
-  const idAttr = typeof k.id === 'number' ? k.id : '';
+  const idAttr = k.id == null ? '' : k.id;
   if (me && who.uid != null && who.uid !== me.uid && blockedSet.has(who.uid)) {
     return blockedHTML(k, who, idAttr, true);
   }
@@ -564,7 +546,7 @@ function replyHTML(k) {
 /* 一楼：底下挂着自己所有的回复 */
 function floorHTML(m) {
   const who = whoOf(m);
-  const idAttr = typeof m.id === 'number' ? m.id : '';
+  const idAttr = m.id == null ? '' : m.id;
   if (me && who.uid != null && who.uid !== me.uid && blockedSet.has(who.uid)) {
     return blockedHTML(m, who, idAttr, false);
   }
@@ -630,44 +612,26 @@ function showTip(text) {
 async function load() {
   const list = document.getElementById('list');
   list.textContent = '加载中…';
-  let data;
-  try {
-    const token = localStorage.getItem('token');
-    // 带上 token，后端才知道哪几条是我赞过的
-    const res = await fetch(API + '/messages', {
-      headers: token ? { 'Authorization': 'Bearer ' + token } : {}
-    });
-    data = await res.json();
-  } catch {
-    list.textContent = '加载失败';
+
+  // 先认人再取留言：赞数 / 我赞过没 依赖当前登录用户
+  await loadMe();
+  await Promise.all([loadUsers(), loadRelations(), loadReports()]);
+
+  const d = await SBAPI.getMessages();
+  if (!d || !d.ok) {
+    list.textContent = '加载失败：' + ((d && d.error) || '读取留言出错');
     return;
   }
-  if (!Array.isArray(data)) { list.textContent = '加载失败'; return; }
-  msgsCache = data;
+  msgsCache = d.list || [];
 
   // 赞数和「我赞过没」跟着留言一起来，不用再单独请求
   likeCount = {};
   likeSet = new Set();
-  data.forEach(m => {
-    if (typeof m.id !== 'number') return;
+  msgsCache.forEach(m => {
+    if (m.id == null) return;
     likeCount[m.id] = m.likes || 0;
     if (m.likedByMe) likeSet.add(m.id);
   });
-
-  await loadUsers();
-  await loadMe();
-  await Promise.all([loadRelations(), loadReports()]);
-
-  // 后端没重启的提示：旧后端不会给留言编号
-  const warn = document.getElementById('warnBar');
-  if (warn) {
-    if (msgsCache.some(m => typeof m.id !== 'number')) {
-      warn.textContent = '后端还是旧版本：留言还没编号，点赞、回复、举报都用不了。请把那个黑窗口关掉，再双击「启动网站.bat」。';
-      warn.classList.add('show');
-    } else {
-      warn.classList.remove('show');
-    }
-  }
 
   render();
   applyUrlAction();
@@ -678,8 +642,8 @@ document.getElementById('list').addEventListener('click', async (e) => {
   const btn = e.target.closest('button[data-act]');
   if (!btn) return;
   const act = btn.dataset.act;
-  const uid = Number(btn.dataset.uid);
-  const id  = Number(btn.dataset.id);
+  const uid = btn.dataset.uid || null;     // Supabase 里是 uuid 字符串，不能再 Number()
+  const id  = btn.dataset.id ? Number(btn.dataset.id) : null;
 
   if (act === 'menu') {
     const menu = btn.parentElement.querySelector('.act-menu');
@@ -711,16 +675,13 @@ document.getElementById('list').addEventListener('click', async (e) => {
     if (!text) return alert('内容不能为空');
     btn.disabled = true;
     try {
-      const res = await fetch(API + '/messages', {
-        // parent = 被回复那条的 id，后端会把它挂到对应的一楼底下，不新开一楼
-        method: 'POST', headers: authHeaders(), body: JSON.stringify({ text, parent: id })
-      });
-      const d = await res.json();
+      // parent = 被回复那条的 id，挂到对应的一楼底下，不新开一楼
+      const d = await SBAPI.postMessage(text, id);
       if (!d.ok) { btn.disabled = false; return alert(d.error || '发送失败'); }
       openReplyId = null;
       replyDraft = '';
       await load();
-      showTip(uid ? '回复发出去了，TA 的信箱里会收到提醒。' : '回复发出去了。');
+      showTip(uid ? '回复发出去了。' : '回复发出去了。');
     } catch { btn.disabled = false; alert('网络错误，请重试'); }
     return;
   }
@@ -731,10 +692,7 @@ document.getElementById('list').addEventListener('click', async (e) => {
     if (!confirm('确定删掉这条留言吗？' + tip + '\n删了就找不回来了。')) return;
     btn.disabled = true;
     try {
-      const res = await fetch(API + '/messages/delete', {
-        method: 'POST', headers: authHeaders(), body: JSON.stringify({ id })
-      });
-      const d = await res.json();
+      const d = await SBAPI.deleteMessage(id);
       btn.disabled = false;
       if (!d.ok) return alert(d.error || '删除失败');
       if (openReplyId === id) { openReplyId = null; replyDraft = ''; }
@@ -747,10 +705,7 @@ document.getElementById('list').addEventListener('click', async (e) => {
   if (act === 'pin') {
     btn.disabled = true;
     try {
-      const res = await fetch(API + '/messages/pin', {
-        method: 'POST', headers: authHeaders(), body: JSON.stringify({ id })
-      });
-      const d = await res.json();
+      const d = await SBAPI.pinMessage(id);
       btn.disabled = false;
       if (!d.ok) return alert(d.error || '操作失败');
       await load();
@@ -762,10 +717,7 @@ document.getElementById('list').addEventListener('click', async (e) => {
   if (act === 'like') {
     btn.disabled = true;
     try {
-      const res = await fetch(API + '/like', {
-        method: 'POST', headers: authHeaders(), body: JSON.stringify({ id })
-      });
-      const d = await res.json();
+      const d = await SBAPI.likeMessage(id);
       btn.disabled = false;
       if (!d.ok) return alert(d.error || '操作失败');
       likeCount[id] = d.likes;
@@ -775,7 +727,7 @@ document.getElementById('list').addEventListener('click', async (e) => {
       const nEl = btn.querySelector('.like-n');
       if (nEl) nEl.textContent = d.likes > 0 ? String(d.likes) : '';
       btn.title = d.liked ? '取消赞' : '赞一个';
-      if (d.liked && uid && (!me || uid !== me.uid)) showTip('赞好了，TA 的信箱里会收到提醒。');
+      if (d.liked && uid && (!me || uid !== me.uid)) showTip('赞好了。');
     } catch { btn.disabled = false; alert('网络错误，请重试'); }
     return;
   }
@@ -783,11 +735,10 @@ document.getElementById('list').addEventListener('click', async (e) => {
   if (act === 'follow') {
     btn.disabled = true;
     try {
-      const res = await fetch(API + '/follow', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ uid }) });
-      const d = await res.json();
+      const d = await SBAPI.follow(uid);
       if (!d.ok) { btn.disabled = false; return alert(d.error || '操作失败'); }
       if (d.following) { followSet.add(uid); showTip('关注好了，可以在 TA 的主页看到。'); }
-      else followSet.delete(uid);
+      else { followSet.delete(uid); showTip('已取消关注。'); }
       render();
     } catch { btn.disabled = false; alert('网络错误，请重试'); }
     return;
@@ -796,8 +747,7 @@ document.getElementById('list').addEventListener('click', async (e) => {
   if (act === 'block') {
     btn.disabled = true;
     try {
-      const res = await fetch(API + '/block', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ uid }) });
-      const d = await res.json();
+      const d = await SBAPI.block(uid);
       if (!d.ok) { btn.disabled = false; return alert(d.error || '操作失败'); }
       if (d.blocked) { blockedSet.add(uid); showTip('已拉黑，TA 的留言不再显示（折叠在上面那条里）。'); }
       else { blockedSet.delete(uid); showTip('已经取消拉黑了。'); }
@@ -807,12 +757,11 @@ document.getElementById('list').addEventListener('click', async (e) => {
   }
 
   if (act === 'report') {
-    if (!id) return alert('这条留言还没有编号。请把后端那个黑窗口关掉，再双击「启动网站.bat」重启一次。');
+    if (id == null) return alert('这条留言还没有编号，刷新一下再试。');
     const reason = prompt('说说这条留言哪里有问题（可以留空）：', '');
     if (reason === null) return;   // 点了取消
     try {
-      const res = await fetch(API + '/report', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ id, reason: reason.trim() }) });
-      const d = await res.json();
+      const d = await SBAPI.reportMessage(id, reason.trim());
       if (!d.ok) return alert(d.error || '举报失败');
       reportedSet.add(id);
       render();
@@ -841,13 +790,8 @@ document.getElementById('submitBtn').onclick = async () => {
   if (!text) return alert('内容不能为空');
 
   try {
-    const res = await fetch(API + '/messages', {
-      method: 'POST',
-      headers: authHeaders(),
-      body: JSON.stringify({ text })
-    });
-    const data = await res.json();
-    if (!data.ok) return alert('失败：' + data.error);
+    const d = await SBAPI.postMessage(text);
+    if (!d.ok) return alert('失败：' + (d.error || '发送失败'));
     textEl.value = '';
     countEl.textContent = '0/200';
     load();
@@ -858,12 +802,11 @@ document.getElementById('submitBtn').onclick = async () => {
 
 load();
 
-// 导航栏里登录成功后这个页面不会自己刷新，盯一下 token 变了就重载
-let lastToken = localStorage.getItem('token');
-setInterval(() => {
-  const t = localStorage.getItem('token');
-  if (t !== lastToken) { lastToken = t; load(); }
-}, 1000);
+// 导航栏里登录 / 登出后这个页面不会自己刷新，盯一下会话变化就重载
+if (window.SBAPI && SBAPI.onAuthChange) {
+  // 回调里别再直接打 supabase，否则会和 auth 锁互等（supabase-js 的老坑），扔到下一轮事件循环
+  SBAPI.onAuthChange(() => { setTimeout(load, 0); });
+}
 </script>
 
 </body>

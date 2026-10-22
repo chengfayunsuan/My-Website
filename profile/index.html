@@ -156,21 +156,15 @@
   </div>
 
   <script src="/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
   <script>
   (function () {
-    const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
-    const token = localStorage.getItem('token');
-
-    /* 头像字段有两种可能：新后端给完整网址，旧后端只给文件名 uid1.jpg */
     function fixAvatar(a) {
       if (!a) return '/avatar-default.jpg';
-      let s = a;
-      if (!s.startsWith('data:') && !s.startsWith('/') && !/^https?:\/\//.test(s)) {
-        s = API.replace(/\/+$/, '') + '/avatar/' + s;
-      }
-      if (s.indexOf('"') !== -1 || s.indexOf('<') !== -1) return '/avatar-default.jpg';
-      return s;
+      if (a.startsWith('data:') || /^https?:\/\//.test(a)) return a;
+      return (window.MEDIA_BASE || '').replace(/\/+$/, '') + '/' + a.replace(/^\/+/, '');
     }
 
     // 从网址里读 uid： /profile/?uid=3   （没有就是看自己）
@@ -221,40 +215,22 @@
     /* ---------- 取数据 ---------- */
 
     async function getMe() {
-      try {
-        const res = await fetch(API + '/me', {
-          headers: { 'Authorization': 'Bearer ' + token }
-        });
-        const data = await res.json();
-        return data.ok ? data : null;
-      } catch {
-        return null;
-      }
+      const s = await SBAPI.getSession();
+      if (!s) return null;
+      const d = await SBAPI.me();
+      return d.ok ? { uid: d.uid, username: d.username, role: d.role } : null;
     }
 
     async function getUserByUid(uid) {
-      try {
-        const res = await fetch(API + '/user?uid=' + encodeURIComponent(uid));
-        const data = await res.json();
-        return data.ok ? data : null;
-      } catch {
-        return null;
-      }
+      const d = await SBAPI.getUserByUid(uid);
+      return d.ok ? d : null;
     }
 
     /* ---------- 入口：决定看谁的主页 ---------- */
 
     async function init() {
-      let me = null;
-      if (token) {
-        me = await getMe();
-        if (!me) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('username');
-        } else {
-          myUid = me.uid;
-        }
-      }
+      let me = await getMe();
+      if (me) myUid = me.uid;
 
       // 情况一：网址没写 uid → 看自己
       if (!wantedUid) {
@@ -264,16 +240,17 @@
           return;
         }
         isSelf = true;
+        const profile = await getUserByUid(me.uid) || me;
         // 把 uid 补进网址，方便复制给别人
         if (me.uid) history.replaceState(null, '', '/profile/?uid=' + me.uid);
-        render(me);
+        render(profile);
         return;
       }
 
       // 情况二：网址写的就是自己 → 看自己（可编辑）
       if (me && me.uid === wantedUid) {
         isSelf = true;
-        render(me);
+        render(await getUserByUid(me.uid) || me);
         return;
       }
 
@@ -362,10 +339,7 @@
       viewUid = uid;
       rel = null;
       try {
-        const res = await fetch(API + '/relations?uid=' + encodeURIComponent(uid), {
-          headers: token ? { 'Authorization': 'Bearer ' + token } : {}
-        });
-        const d = await res.json();
+        const d = await SBAPI.getRelations(uid);
         if (d && d.ok) rel = d;
       } catch { /* 拿不到就显示 0 */ }
       paintRelations();
@@ -380,7 +354,7 @@
       document.getElementById('blockedCount').textContent   = b;
 
       // 看自己的主页不显示关注 / 拉黑；没登录也没法点
-      if (!rel || isSelf || !token) {
+      if (!rel || isSelf || !myUid) {
         el.profileActions.style.display = 'none';
         return;
       }
@@ -392,20 +366,12 @@
     }
 
     async function toggleRelation(kind) {
-      if (!token) return alert('请先登录');
+      if (!myUid) return alert('请先登录');
       if (!viewUid) return;
       const btn = (kind === 'follow') ? el.followBtn : el.blockBtn;
       btn.disabled = true;
       try {
-        const res = await fetch(API + '/' + kind, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify({ uid: viewUid })
-        });
-        const d = await res.json();
+        const d = (kind === 'follow') ? await SBAPI.follow(viewUid) : await SBAPI.block(viewUid);
         btn.disabled = false;
         if (!d.ok) return alert(d.error || '操作失败');
         await loadRelations(viewUid);
@@ -430,9 +396,8 @@
     async function fetchUsers() {
       if (usersCache) return usersCache;
       try {
-        const res = await fetch(API + '/users');
-        const d = await res.json();
-        usersCache = Array.isArray(d) ? d : [];
+        const d = await SBAPI.getAllUsers();
+        usersCache = d.ok ? d.list : [];
       } catch { usersCache = []; }
       return usersCache;
     }
@@ -449,14 +414,14 @@
       }
 
       const all = await fetchUsers();
-      const map = new Map(all.map(u => [u.uid, u]));
+      const map = new Map(all.map(u => [u.id, u]));
       el.genericBody.innerHTML = uids.map(uid => {
         const u = map.get(uid);
         const name = u ? u.username : ('UID ' + uid);
         const meMark = (uid === myUid) ? ' <span class="user-row-you">（我）</span>' : '';
         return `
           <a class="user-row" href="/profile/?uid=${encodeURIComponent(uid)}">
-            <img class="user-row-avatar" src="${fixAvatar(u && u.avatar)}" alt="">
+            <img class="user-row-avatar" src="${fixAvatar(u && u.avatar_url)}" alt="">
             <span class="user-row-info">
               <span class="user-row-name">${escapeHTML(name)}${meMark}</span>
               <span class="user-row-uid">UID: ${escapeHTML(uid)}</span>
@@ -467,9 +432,9 @@
 
     async function loadMessages(username) {
       try {
-        const res = await fetch(API + '/messages');
-        const data = await res.json();
-        const mine = data.filter(m => m.name === username).reverse();
+        const d = await SBAPI.getMessages();
+        const data = d.list || [];
+        const mine = data.filter(m => m.author === username).reverse();
         if (!mine.length) {
           el.myMessages.innerHTML = '<p class="empty-hint">' +
             (isSelf ? '还没有发过留言' : 'TA 还没有发过留言') + '</p>';
@@ -477,7 +442,7 @@
         }
         el.myMessages.innerHTML = mine.map(m => `
           <div class="my-msg-item">
-            <div class="my-msg-text">${escapeHTML(m.text)}</div>
+            <div class="my-msg-text">${escapeHTML(m.content)}</div>
             <div class="my-msg-time">${escapeHTML(m.time)}</div>
           </div>
         `).join('');
@@ -492,8 +457,7 @@
       if (!box) return;
       if (!uid) { box.innerHTML = '<p class="empty-hint">—</p>'; return; }
       try {
-        const res = await fetch(API + '/articles?uid=' + encodeURIComponent(uid) + '&limit=50');
-        const d = await res.json();
+        const d = await SBAPI.getArticles({ uid, limit: 50 });
         const list = (d && d.list) || [];
         if (!list.length) {
           box.innerHTML = '<p class="empty-hint">' +
@@ -504,7 +468,7 @@
           <div class="my-art-item">
             <a class="my-art-title" href="/pages/article.html?id=${a.id}">${escapeHTML(a.title)}</a>
             <div class="my-art-meta">
-              <span>${escapeHTML(a.updatedAt || a.createdAt || '')}</span>
+              <span>${escapeHTML(a.created_at || '')}</span>
               <span>${a.chars || 0} 字</span>
               <span>♥ ${a.likes || 0}</span>
               <span>★ ${a.favs || 0}</span>
@@ -531,12 +495,7 @@
       if (!confirm('确定删掉这篇文章吗？\n里面的图片视频也会一起删掉，删了找不回来。')) return;
       btn.disabled = true;
       try {
-        const res = await fetch(API + '/article/delete', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-          body: JSON.stringify({ id: artId })
-        });
-        const d = await res.json();
+        const d = await SBAPI.deleteArticle(artId);
         if (!d.ok) { btn.disabled = false; return alert(d.error || '删除失败'); }
         loadArticles(viewUid);
       } catch { btn.disabled = false; alert('网络错误，请重试'); }
@@ -556,8 +515,8 @@
 
       try {
         const [la, fa] = await Promise.all([
-          (await fetch(API + '/article/liked-by?uid=' + encodeURIComponent(uid))).json(),
-          (await fetch(API + '/article/faved-by?uid=' + encodeURIComponent(uid))).json()
+          SBAPI.getLikedArticles(uid),
+          SBAPI.getFavedArticles(uid)
         ]);
         likedBox.innerHTML = actsRows((la && la.list) || []);
         favedBox.innerHTML = actsRows((fa && fa.list) || []);
@@ -572,7 +531,7 @@
       return list.map(a => `
         <a class="acts-item" href="/pages/article.html?id=${a.id}">
           <span class="t">${escapeHTML(a.title)}</span>
-          <span class="m">${escapeHTML(a.author || '匿名')} · ♥${a.likes || 0} · 👁${a.views || 0}</span>
+          <span class="m">${escapeHTML(a.author || '匿名')} · ♥${a.likes || a.favs || 0} · 👁${a.views || 0}</span>
         </a>`).join('');
     }
 
@@ -582,7 +541,7 @@
       return list.map(v => `
         <a class="acts-item" href="/pages/video.html?id=${v.id}">
           <span class="t">${escapeHTML(v.title)}</span>
-          <span class="m">${escapeHTML(v.author || '匿名')} · ▶${v.views || 0} · ♥${v.likes || 0}</span>
+          <span class="m">${escapeHTML(v.author || '匿名')} · ▶${v.views || 0} · ♥${v.likes || v.favs || 0}</span>
         </a>`).join('');
     }
 
@@ -599,9 +558,9 @@
       favedBox.innerHTML = '<p class="empty-hint">加载中…</p>';
       try {
         const [mv, lv, fv] = await Promise.all([
-          (await fetch(API + '/videos?uid=' + encodeURIComponent(uid) + '&limit=50')).json(),
-          (await fetch(API + '/video/liked-by?uid=' + encodeURIComponent(uid))).json(),
-          (await fetch(API + '/video/faved-by?uid=' + encodeURIComponent(uid))).json()
+          SBAPI.getVideos({ uid, limit: 50 }),
+          SBAPI.getLikedVideos(uid),
+          SBAPI.getFavedVideos(uid)
         ]);
         myBox.innerHTML = videoRows((mv && mv.list) || []);
         likedBox.innerHTML = videoRows((lv && lv.list) || []);
@@ -662,16 +621,8 @@
       const bio = el.bioInput.value;
       const avatar = el.avatarImg.src;
       try {
-        const res = await fetch(API + '/profile', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify({ bio, avatar })
-        });
-        const data = await res.json();
-        if (!data.ok) return alert('保存失败：' + (data.error || '未知错误'));
+        const d = await SBAPI.updateProfile({ bio, avatar_url: avatar });
+        if (!d.ok) return alert('保存失败：' + (d.error || '未知错误'));
         originalBio = bio;
         originalAvatar = avatar;
         // 铭牌跟着一起变，不用刷新页面
@@ -696,22 +647,12 @@
     });
 
     el.pwdBtn.addEventListener('click', async () => {
-      const oldPassword = prompt('请输入原密码');
-      if (!oldPassword) return;
       const newPassword = prompt('请输入新密码（至少 6 位）');
       if (!newPassword) return;
       if (newPassword.length < 6) return alert('新密码至少 6 位');
       try {
-        const res = await fetch(API + '/change-password', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify({ oldPassword, newPassword })
-        });
-        const data = await res.json();
-        if (!data.ok) return alert('修改失败：' + (data.error || '未知错误'));
+        const d = await SBAPI.changePassword(newPassword);
+        if (!d.ok) return alert('修改失败：' + (d.error || '未知错误'));
         alert('密码已修改');
       } catch {
         alert('网络错误，修改失败');

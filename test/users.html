@@ -109,17 +109,18 @@
   </section>
 
   <script src="/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
 (function () {
-  const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
-
+  /* 数据走 window.SBAPI（Supabase profiles），RLS 只允许读公开字段 */
   const listEl  = document.getElementById('usersList');
   const countEl = document.getElementById('usersCount');
   const ascBtn  = document.getElementById('sortAsc');
   const descBtn = document.getElementById('sortDesc');
 
-  let users = [];   // 后端给的原始名单
+  let users = [];   // {uid(注册顺序序号), username, avatar, role}
   let dir = 1;      // 1 = UID 正序（小到大），-1 = 倒序（大到小）
 
   function esc(s) {
@@ -131,17 +132,11 @@
       .replace(/'/g, '&#39;');
   }
 
-  // 后端可能给完整网址，也可能只给文件名，两种都要认
   function fixAvatar(a) {
     if (typeof a !== 'string' || !a) return '/avatar-default.jpg';
-    let s = a.trim();
-    if (/^data:image\//.test(s) || s.charAt(0) === '/' || /^https?:\/\//.test(s)) {
-      // 已经是能直接用的地址
-    } else {
-      s = API.replace(/\/+$/, '') + '/avatar/' + s;
-    }
-    if (s.indexOf('"') !== -1 || s.indexOf('<') !== -1) return '/avatar-default.jpg';
-    return s;
+    const s = a.trim();
+    if (/^data:image\//.test(s) || s.charAt(0) === '/' || /^https?:\/\//.test(s)) return s;
+    return '/avatar-default.jpg';
   }
 
   function paint() {
@@ -163,7 +158,8 @@
 
     listEl.innerHTML = sorted.map(function (u) {
       const uid = Number(u.uid) || 0;
-      return '<a class="user-row" href="/profile/?uid=' + encodeURIComponent(uid) + '">'
+      // 链接用真实 uuid，显示用注册顺序号（老站点的 int uid 语义）
+      return '<a class="user-row" href="/profile/?uid=' + encodeURIComponent(u.id) + '">'
         +   '<img class="user-row-avatar" src="' + esc(fixAvatar(u.avatar)) + '" alt="">'
         +   '<span class="user-row-info">'
         +     '<span class="user-row-name">' + esc(u.username) + '</span>'
@@ -189,26 +185,32 @@
     countEl.textContent = '正在加载…';
     listEl.innerHTML = '';
     try {
-      const res = await fetch(API + '/users');
-      const data = await res.json().catch(function () { return null; });
-
-      if (!res.ok || !Array.isArray(data)) {
+      const d = await SBAPI.getAllUsers();
+      if (!d || !d.ok) {
         countEl.textContent = '';
-        listEl.innerHTML = '<p class="users-empty">拿不到用户名单，'
-          + '检查一下后端和隧道是不是开着。</p>';
+        listEl.innerHTML = '<p class="users-empty">拿不到用户名单，检查一下网络再刷新。</p>';
         return;
       }
-      users = data;
+      // profiles 已按注册时间升序返回，序号就是注册顺序
+      users = d.list.map(function (u, i) {
+        return {
+          id: u.id,
+          uid: i + 1,
+          username: u.username,
+          role: u.role,
+          avatar: u.avatar_url
+        };
+      });
       paint();
     } catch (e) {
       countEl.textContent = '';
-      listEl.innerHTML = '<p class="users-empty">连不上后端，'
-        + '检查一下后端和隧道是不是开着。</p>';
+      listEl.innerHTML = '<p class="users-empty">连不上服务器，检查一下网络再刷新。</p>';
     }
   }
 
   load();
 })();
 </script>
+
 </body>
 </html>

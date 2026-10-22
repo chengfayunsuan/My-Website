@@ -270,11 +270,11 @@
   <div class="toast" id="toast"></div>
 
   <script src="/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
   <script>
   (function () {
-    const API = window.API_BASE;
-    const token = localStorage.getItem('token');
     const grid = document.getElementById('manageGrid');
 
     function deny(text) {
@@ -284,31 +284,16 @@
       grid.appendChild(msg);
     }
 
-    if (!token) {
-      deny('请先登录后再进入管理面板');
-      return;
-    }
-
-    fetch(API + '/me', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    })
-      .then(r => r.json())
-      .then(data => {
-        if (!data.ok) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('username');
-          deny('登录已失效，请重新登录');
-          return;
-        }
-        // 这个面板：管理员(admin) 和 站长(Chengfa / owner) 都能进
-        const okRole = (data.role === 'owner' || data.role === 'admin');
-        if (!okRole) {
-          deny('你还没有权限访问管理后台');
-          return;
-        }
-        renderGrid();
-      })
-      .catch(() => deny('网络错误，请稍后重试'));
+    (async function boot() {
+      const s = await SBAPI.getSession();
+      if (!s) { deny('请先登录后再进入管理面板'); return; }
+      const me = await SBAPI.me();
+      if (!me.ok) { deny('登录已失效，请重新登录'); return; }
+      // 这个面板：管理员(admin) 和 站长(owner) 都能进
+      const okRole = (me.role === 'owner' || me.role === 'admin');
+      if (!okRole) { deny('你还没有权限访问管理后台'); return; }
+      renderGrid();
+    })();
 
     /* ===== 15 个功能入口：第 1 个是举报处理，其余待做 ===== */
     function renderGrid() {
@@ -353,21 +338,10 @@
     async function loadReports() {
       const box = document.getElementById('reportList');
       try {
-        const res = await fetch(API + '/reports', {
-          headers: { 'Authorization': 'Bearer ' + token }
-        });
-        if (res.status === 401 || res.status === 403) {
-          box.innerHTML = '<p class="report-empty">登录已失效或没有权限，刷新页面重新登录。</p>';
-          return;
-        }
-        const list = await res.json();
-        if (!Array.isArray(list)) {
-          box.innerHTML = '<p class="report-empty">拿不到举报列表，后端可能还没重启。</p>';
-          return;
-        }
-        renderReports(list);
+        const d = await SBAPI.getReports();
+        renderReports(d.list || []);
       } catch {
-        box.innerHTML = '<p class="report-empty">加载失败，检查一下后端和隧道是不是开着。</p>';
+        box.innerHTML = '<p class="report-empty">加载失败，检查一下网络。</p>';
       }
     }
 
@@ -395,37 +369,20 @@
 
         let actions;
         if (isDone) {
-          actions = `<div class="report-actions"><span class="report-done">
-            ✓ ${escapeHTML(r.action || '已处理')} · ${escapeHTML(r.handler || '')} · ${escapeHTML(r.handleTime || '')}
-          </span></div>`;
+          actions = `<div class="report-actions"><span class="report-done">✓ ${escapeHTML(r.action || '已处理')}</span></div>`;
         } else {
           const btns = [];
           btns.push(`<button type="button" class="report-btn ok" data-id="${r.id}" data-act="approve">放行</button>`);
           btns.push(`<button type="button" class="report-btn danger" data-id="${r.id}" data-act="remove"${r.alive ? '' : ' disabled'}>删评</button>`);
-          if (r.targetMuted) {
-            btns.push(`<button type="button" class="report-btn" data-id="${r.id}" data-act="unmute">解除禁言</button>`);
-          } else {
-            btns.push(`<button type="button" class="report-btn warn" data-id="${r.id}" data-act="mute"${r.targetExists ? '' : ' disabled'}>禁言</button>`);
-          }
-          if (r.targetBanned) {
-            btns.push(`<button type="button" class="report-btn" data-id="${r.id}" data-act="unban">解除封号</button>`);
-          } else {
-            btns.push(`<button type="button" class="report-btn danger" data-id="${r.id}" data-act="ban"${r.targetExists ? '' : ' disabled'}>封号</button>`);
-          }
           actions = `<div class="report-actions">${btns.join('')}</div>`;
         }
-
-        const stateTag = [];
-        if (r.targetMuted) stateTag.push('已禁言');
-        if (r.targetBanned) stateTag.push('已封号');
 
         return `
         <div class="report-item${isDone ? ' done' : ''}">
           <div class="report-top">
             <span class="report-name">${escapeHTML(r.msgName || '（未知用户）')}</span>
             <span class="status-pill${isDone ? ' done' : ''}">${isDone ? '已处理' : '待处理'}</span>
-            ${stateTag.length ? `<span class="status-pill done">${stateTag.join(' / ')}</span>` : ''}
-            <span class="report-time">举报于 ${escapeHTML(r.time || '')}</span>
+            <span class="report-time">举报于 ${escapeHTML(r.msgTime || '')}</span>
           </div>
           ${quoted}
           <div class="report-line"><b>举报理由：</b>${escapeHTML(r.reason || '（没写）')}</div>
@@ -442,31 +399,30 @@
     });
 
     const CONFIRM_TEXT = {
-      remove: '确定删掉这条留言吗？删了就找不回来了。',
-      mute: '确定禁言吗？TA 将不能再发留言和改资料。',
-      ban: '确定封号吗？TA 会被立刻踢下线，而且再也登不上，直到你解除。'
+      remove: '确定删掉这条留言吗？删了就找不回来了。'
     };
 
     async function handleAction(id, act, btn) {
-      if (!id) return alert('这条举报没有编号，后端可能还没重启。');
+      if (!id) return alert('这条举报没有编号。');
       if (CONFIRM_TEXT[act] && !confirm(CONFIRM_TEXT[act])) return;
 
       btn.disabled = true;
       try {
-        const res = await fetch(API + '/reports', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify({ id, action: act })
-        });
-        const d = await res.json();
+        if (act === 'remove') {
+          // 先找到被举报的留言 id，软删除它
+          const rd = await SBAPI.getReports();
+          const rep = (rd.list || []).find(x => x.id === id);
+          if (rep && rep.messageId) {
+            const del = await SBAPI.deleteMessage(rep.messageId);
+            if (!del.ok) { btn.disabled = false; return alert(del.error || '删除留言失败'); }
+          }
+        }
+        const d = await SBAPI.handleReport(id, act);
         if (!d.ok) {
           btn.disabled = false;
           return alert(d.error || '操作失败');
         }
-        toast(d.note || '处理好了');
+        toast('处理好了');
         await loadReports();
       } catch {
         btn.disabled = false;
@@ -475,18 +431,16 @@
     }
 
     /* 只看一眼待处理几条，用来给按钮打角标 */
-    function refreshBadge() {
-      fetch(API + '/reports', { headers: { 'Authorization': 'Bearer ' + token } })
-        .then(r => r.json())
-        .then(list => {
-          if (!Array.isArray(list)) return;
-          const n = list.filter(x => x.status !== 'done').length;
-          const badge = document.getElementById('reportBadge');
-          if (!badge) return;
-          badge.textContent = n;
-          badge.style.display = n ? 'inline-block' : 'none';
-        })
-        .catch(() => {});
+    async function refreshBadge() {
+      try {
+        const d = await SBAPI.getReports();
+        const list = d.list || [];
+        const n = list.filter(x => x.status !== 'done').length;
+        const badge = document.getElementById('reportBadge');
+        if (!badge) return;
+        badge.textContent = n;
+        badge.style.display = n ? 'inline-block' : 'none';
+      } catch {}
     }
 
     function escapeHTML(s) {
@@ -499,10 +453,10 @@
     }
 
     // 进页面就先看一眼有没有待处理的，好在按钮上显示角标
-    fetch(API + '/reports', { headers: { 'Authorization': 'Bearer ' + token } })
-      .then(r => r.json())
-      .then(list => { if (Array.isArray(list)) renderReports(list); })
-      .catch(() => {});
+    (async () => {
+      const d = await SBAPI.getReports();
+      if (d.list) renderReports(d.list);
+    })();
   })();  </script>
 
 </body>

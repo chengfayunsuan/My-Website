@@ -67,10 +67,10 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
-const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
-const CHUNK = 6 * 1024 * 1024;
 const VID_MAX = 2 * 1024 * 1024 * 1024;
 
 const fileVideo = document.getElementById('fileVideo');
@@ -84,27 +84,16 @@ const msgEl = document.getElementById('msg');
 const quotaEl = document.getElementById('quota');
 
 let videoName = '', duration = 0, uploaded = false;
+let loggedIn = false;
 
-function authHeaders() {
-  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') };
-}
 function requireLogin() {
-  if (localStorage.getItem('token')) return true;
+  if (loggedIn) return true;
   const m = document.getElementById('loginModal');
   if (m) m.classList.add('show'); else alert('请先登录');
   return false;
 }
-function readAsDataURL(blob) {
-  return new Promise((resolve, reject) => {
-    const r = new FileReader(); r.onload = () => resolve(r.result); r.onerror = reject; r.readAsDataURL(blob);
-  });
-}
+(async () => { const s = await SBAPI.getSession(); loggedIn = !!s; })();
 function setMsg(text, cls) { msgEl.textContent = text; msgEl.className = 'ed-msg' + (cls ? ' ' + cls : ''); }
-
-async function api(path, payload) {
-  const res = await fetch(API + path, { method: 'POST', headers: authHeaders(), body: JSON.stringify(payload || {}) });
-  return await res.json();
-}
 
 document.getElementById('pickVideo').addEventListener('click', () => fileVideo.click());
 fileVideo.addEventListener('change', e => { if (e.target.files[0]) handleVideo(e.target.files[0]); e.target.value = ''; });
@@ -115,51 +104,22 @@ async function handleVideo(file) {
     return alert('只支持视频文件');
   }
   if (file.size > VID_MAX) return alert('这个视频 ' + (file.size / 1024 / 1024 / 1024).toFixed(2) + 'GB，超过 2GB 上限');
-
-  progEl.style.display = 'block'; barTxt.style.display = 'block'; barFill.style.width = '0%';
-  barTxt.textContent = '上传中…';
-  try {
-    const start = await api('/video/upload/start', { kind: 'video', videoId: 0, name: file.name, size: file.size, mime: file.type });
-    if (!start.ok) { progEl.style.display = 'none'; return setMsg(start.error || '上传失败', 'err'); }
-    let done = 0;
-    while (done < file.size) {
-      const slice = file.slice(done, Math.min(done + CHUNK, file.size));
-      const c = await api('/video/upload/chunk', { uploadId: start.uploadId, data: await readAsDataURL(slice) });
-      if (!c.ok) { await api('/video/upload/cancel', { uploadId: start.uploadId }); progEl.style.display = 'none'; return setMsg(c.error || '上传中断', 'err'); }
-      done = c.got; barFill.style.width = Math.round(done / file.size * 100) + '%'; barTxt.textContent = '上传中 ' + Math.round(done / file.size * 100) + '%';
-    }
-    const fin = await api('/video/upload/finish', { uploadId: start.uploadId });
-    if (!fin.ok) { progEl.style.display = 'none'; return setMsg(fin.error || '收尾失败', 'err'); }
-    videoName = fin.name;
-    duration = 0; // 时长由后端/前端另行计算，这里留 0 也可
-    progEl.style.display = 'none'; barTxt.textContent = '上传完成';
-    uploaded = true; publishBtn.disabled = false;
-    setMsg('视频已就绪，填好标题就能发布', 'ok');
-  } catch (e) {
-    progEl.style.display = 'none';
-    setMsg('上传失败，检查网络', 'err');
-  }
+  // 视频上传待 R2 接入后实现（切到 R2 后补 uploadFile / 切片逻辑）
+  setMsg('视频上传暂未接入（待 R2 存储就绪），暂时不能投稿', 'err');
 }
 
 async function loadQuota() {
-  try {
-    const d = await (await fetch(API + '/video/quota')).json();
-    if (d.ok) quotaEl.textContent = '素材空间 ' + d.usedMB + ' MB / ' + d.limitGB + ' GB（文章+视频共享）';
-  } catch { /* 忽略 */ }
+  quotaEl.textContent = '素材空间 待 R2 接入';
 }
 
 publishBtn.addEventListener('click', async () => {
   if (!requireLogin()) return;
-  if (!uploaded) return alert('先上传视频');
+  if (!uploaded) return setMsg('视频上传待 R2 接入，暂时不能发布', 'err');
   const title = titleEl.value.trim();
   if (!title) return alert('先写个标题');
   publishBtn.disabled = true; setMsg('发布中…', '');
   try {
-    const res = await fetch(API + '/video/save', {
-      method: 'POST', headers: authHeaders(),
-      body: JSON.stringify({ title, description: descEl.value.trim(), videoName, poster: '', duration })
-    });
-    const d = await res.json();
+    const d = await SBAPI.createVideo(title, descEl.value.trim());
     if (!d.ok) { publishBtn.disabled = false; return setMsg(d.error || '发布失败', 'err'); }
     setMsg('已发布，跳转中…', 'ok');
     setTimeout(() => { location.href = '/pages/video.html?id=' + d.id; }, 600);

@@ -239,29 +239,23 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
-const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
 const id = parseInt(new URLSearchParams(location.search).get('id'), 10);
 const box = document.getElementById('box');
 
 let article = null;
+let loggedIn = false;
 
 function escapeHTML(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
-function authHeaders() {
-  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') };
-}
-/* GET 只带 Authorization，避免多一次预检往返 */
-function authOnly() {
-  const t = localStorage.getItem('token');
-  return t ? { Authorization: 'Bearer ' + t } : {};
-}
 function requireLogin() {
-  if (localStorage.getItem('token')) return true;
+  if (loggedIn) return true;
   const m = document.getElementById('loginModal');
   if (m) m.classList.add('show'); else alert('请先登录');
   return false;
@@ -274,7 +268,7 @@ function render() {
     <h1 class="art-title">${escapeHTML(a.title)}</h1>
     <div class="art-sub">
       ${a.uid ? `<a href="/profile/?uid=${a.uid}">${escapeHTML(a.author || '匿名')}</a>` : `<span>${escapeHTML(a.author || '匿名')}</span>`}
-      <span>${escapeHTML(a.updatedAt || a.createdAt || '')}</span>
+      <span>${escapeHTML(a.updated_at || a.created_at || '')}</span>
       <span>${a.chars || 0} 字</span>
       <span>👁 ${a.views || 0}</span>
     </div>
@@ -311,19 +305,13 @@ function setTip(t) { const el = document.getElementById('tip'); if (el) el.textC
 async function load() {
   if (!id) { box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">缺少文章 id</div>'; return; }
   try {
-    // 带上 token，后端才能判断这篇文章是不是你的（显示编辑/删除按钮）
-    const d = await (await fetch(API + '/article?id=' + id, { headers: authOnly() })).json();
+    const d = await SBAPI.getArticle(id);
     if (!d.ok) { box.innerHTML = `<div style="padding:40px;text-align:center;color:var(--text-light)">${escapeHTML(d.error || '加载失败')}</div>`; return; }
-    article = d.article;
+    article = d;
     render();
   } catch {
     box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">加载失败，刷新试试</div>';
   }
-}
-
-async function post(path, payload) {
-  const res = await fetch(API + path, { method: 'POST', headers: authHeaders(), body: JSON.stringify(payload || {}) });
-  return await res.json();
 }
 
 box.addEventListener('click', async e => {
@@ -336,20 +324,20 @@ box.addEventListener('click', async e => {
   if (!requireLogin()) return;
 
   if (act === 'like' || act === 'fav') {
-    const d = await post('/article/' + act, { id: article.id });
+    const fn = act === 'like' ? SBAPI.toggleArticleLike : SBAPI.toggleArticleFav;
+    const d = await fn(article.id);
     if (!d.ok) return alert(d.error || '操作失败');
-    const on = !!d.on;
-    btn.classList.toggle('on', on);
-    if (act === 'like') { document.getElementById('likeN').textContent = d.count; article.likedByMe = on; }
-    else { document.getElementById('favN').textContent = d.count; article.favedByMe = on; }
-    setTip(on ? (act === 'like' ? '已点赞' : '已收藏') : (act === 'like' ? '取消点赞' : '取消收藏'));
+    btn.classList.toggle('on', d.on);
+    if (act === 'like') { document.getElementById('likeN').textContent = d.count; article.likedByMe = d.on; }
+    else { document.getElementById('favN').textContent = d.count; article.favedByMe = d.on; }
+    setTip(d.on ? (act === 'like' ? '已点赞' : '已收藏') : (act === 'like' ? '取消点赞' : '取消收藏'));
     return;
   }
 
   if (act === 'report') {
     const reason = prompt('说说这篇文章哪里有问题（可以留空）：', '');
     if (reason === null) return;
-    const d = await post('/article/report', { id: article.id, reason: reason.trim() });
+    const d = await SBAPI.reportArticle(article.id, reason.trim());
     if (!d.ok) return alert(d.error || '举报失败');
     setTip('举报已提交，管理员会看的');
     return;
@@ -357,7 +345,7 @@ box.addEventListener('click', async e => {
 
   if (act === 'del') {
     if (!confirm('确定删掉这篇文章吗？\n里面的图片视频也会一起删掉，删了找不回来。')) return;
-    const d = await post('/article/delete', { id: article.id });
+    const d = await SBAPI.deleteArticle(article.id);
     if (!d.ok) return alert(d.error || '删除失败');
     alert('已删除');
     location.href = '/pages/articles.html';
@@ -378,24 +366,22 @@ function cmtEsc(s) {
 }
 
 async function loadMe() {
-  const token = localStorage.getItem('token');
-  if (!token) return;
-  try {
-    const d = await (await fetch(API + '/me', { headers: { Authorization: 'Bearer ' + token } })).json();
-    if (d.ok) me = { uid: d.uid, name: d.username, role: d.role };
-  } catch { /* 没登录就算了 */ }
+  const s = await SBAPI.getSession();
+  if (!s) { loggedIn = false; return; }
+  const d = await SBAPI.me();
+  if (d.ok) { me = { uid: d.uid, name: d.username, role: d.role }; loggedIn = true; }
+  else loggedIn = false;
 }
 async function loadAvatars() {
   try {
-    const list = await (await fetch(API + '/users')).json();
-    if (Array.isArray(list)) list.forEach(u => { userAvatars[u.uid] = u.avatar; });
-  } catch { /* 拿不到就用默认头像 */ }
+    const d = await SBAPI.getAllUsers();
+    if (d.ok) d.list.forEach(u => { userAvatars[u.id] = u.avatar_url; });
+  } catch { /* 默认头像 */ }
 }
 function fixAvatar(a) {
   if (!a) return '/avatar-default.jpg';
-  let s = String(a);
-  if (!s.startsWith('data:') && !s.startsWith('/') && !/^https?:\/\//.test(s)) s = API.replace(/\/+$/, '') + '/avatar/' + s;
-  return s;
+  if (a.startsWith('data:') || /^https?:\/\//.test(a)) return a;
+  return (window.MEDIA_BASE || '').replace(/\/+$/, '') + '/' + a.replace(/^\/+/, '');
 }
 
 function headHTML(c) {
@@ -469,7 +455,7 @@ function renderComments() {
 
 async function loadComments() {
   try {
-    const d = await (await fetch(API + '/article/comments?articleId=' + id)).json();
+    const d = await SBAPI.getArticleComments(id);
     if (!d.ok) throw new Error();
     cmts = d.list || [];
     renderComments();
@@ -477,11 +463,6 @@ async function loadComments() {
     const box = document.getElementById('cmtList');
     if (box) box.innerHTML = '<div class="cmt-empty">评论加载失败</div>';
   }
-}
-
-async function cmtPost(path, payload) {
-  const res = await fetch(API + path, { method: 'POST', headers: authHeaders(), body: JSON.stringify(payload || {}) });
-  return await res.json();
 }
 
 function bindComments() {
@@ -499,7 +480,7 @@ function bindComments() {
     const t = textEl.value.trim();
     if (!t) return alert('评论不能为空');
     sendBtn.disabled = true;
-    const d = await cmtPost('/article/comment', { articleId: id, text: t });
+    const d = await SBAPI.postComment('article', id, t);
     sendBtn.disabled = false;
     if (!d.ok) return alert(d.error || '发送失败');
     textEl.value = '';
@@ -536,21 +517,21 @@ function bindComments() {
       const ta = btn.closest('.cmt-reply-box').querySelector('textarea');
       const t = ta.value.trim();
       if (!t) return alert('回复不能为空');
-      const d = await cmtPost('/article/comment', { articleId: id, text: t, parent: cid });
+      const d = await SBAPI.postComment('article', id, t, cid);
       if (!d.ok) return alert(d.error || '发送失败');
       openReply = null;
       await loadComments();
       return;
     }
     if (a === 'like') {
-      const d = await cmtPost('/article/comment/like', { id: cid });
+      const d = await SBAPI.likeComment(cid);
       if (!d.ok) return alert(d.error || '操作失败');
       await loadComments();
       return;
     }
     if (a === 'del') {
       if (!confirm('确定删掉这条评论？它下面的回复也会一起删掉。')) return;
-      const d = await cmtPost('/article/comment/delete', { articleId: id, id: cid });
+      const d = await SBAPI.deleteComment(cid);
       if (!d.ok) return alert(d.error || '删除失败');
       await loadComments();
       return;
@@ -558,7 +539,7 @@ function bindComments() {
     if (a === 'report') {
       const reason = prompt('说说这条评论哪里有问题（可以留空）：', '');
       if (reason === null) return;
-      const d = await cmtPost('/article/comment/report', { articleId: id, id: cid, reason: reason.trim() });
+      const d = await SBAPI.reportComment(cid, reason.trim());
       if (!d.ok) return alert(d.error || '举报失败');
       alert('举报已提交，管理员会看的');
     }

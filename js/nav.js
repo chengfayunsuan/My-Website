@@ -1,16 +1,13 @@
 (function () {
-  const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
+  /* 后端已切 Supabase 直连，主调用走 window.SBAPI（见 js/sb.js）。 */
 
   /* 头像字段有两种可能：新后端给完整网址（…/avatar/uid1.jpg?v=123），
      旧后端只给文件名（uid1.jpg）。两种都要能正常显示。 */
   function fixAvatar(a) {
     if (!a) return '/avatar-default.jpg';
-    let s = a;
-    if (!s.startsWith('data:') && !s.startsWith('/') && !/^https?:\/\//.test(s)) {
-      s = API.replace(/\/+$/, '') + '/avatar/' + s;
-    }
-    if (s.indexOf('"') !== -1 || s.indexOf('<') !== -1) return '/avatar-default.jpg';
-    return s;
+    if (a.startsWith('data:') || /^https?:\/\//.test(a)) return a;
+    if (a.indexOf('"') !== -1 || a.indexOf('<') !== -1) return '/avatar-default.jpg';
+    return (window.MEDIA_BASE || '').replace(/\/+$/, '') + '/' + a.replace(/^\/+/, '');
   }
 
   /* ========== 1. 生成导航栏 ========== */
@@ -194,21 +191,15 @@
   }
 
   async function checkLogin() {
-    const token = localStorage.getItem('token');
-    if (!token) return showLoggedOut();
+    const s = await SBAPI.getSession();
+    if (!s) return showLoggedOut();
     try {
-      const res = await fetch(API + '/me', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
-      const data = await res.json();
+      const data = await SBAPI.me();
       if (data.ok) {
         showLoggedIn(data.role, data.avatar, data.uid);
-        const name = localStorage.getItem('username');
         const navAvatarImg = document.getElementById('avatarImg');
-        if (name && navAvatarImg) navAvatarImg.alt = name;
+        if (data.username && navAvatarImg) navAvatarImg.alt = data.username;
       } else {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
         showLoggedOut();
       }
     } catch {
@@ -242,9 +233,8 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { gearMenu.classList.remove('show'); closeMail(); closeMailModal(); }
   });
-  gearLogout.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
+  gearLogout.addEventListener('click', async () => {
+    await SBAPI.signOut();
     location.reload();
   });
 
@@ -372,27 +362,16 @@
   }
 
   async function markRead(payload) {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    try {
-      await fetch(API + '/notifications/read', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify(payload)
-      });
-    } catch { /* 隧道抖一下就忽略，下次打开信箱还会显示未读 */ }
+    try { await SBAPI.markRead(payload); } catch { /* 忽略 */ }
   }
 
   let mailBusy = false;
   async function loadMail() {
-    const token = localStorage.getItem('token');
-    if (!token || mailBusy) return;
+    const s = await SBAPI.getSession();
+    if (!s || mailBusy) return;
     mailBusy = true;
     try {
-      const res = await fetch(API + '/notifications', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
-      const d = await res.json();
+      const d = await SBAPI.getNotifications();
       if (!d || !d.ok) return;
       mailAll = d.list || [];
       renderMail();
@@ -493,17 +472,10 @@
     const password = passInput.value;
     if (!username || !password) return showMsg('用户名密码必填', false);
     try {
-      const res = await fetch(API + '/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-      if (!data.ok) return showMsg(data.error || '登录失败', false);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('username', data.username);
-      localStorage.setItem('uid', data.uid || '');
-      location.reload();
+      const { data, error } = await SBAPI.signIn(username, password);
+      if (error) return showMsg(error.message || '登录失败', false);
+      showMsg('登录成功', true);
+      setTimeout(() => location.reload(), 400);
     } catch {
       showMsg('网络错误，请重试', false);
     }
@@ -514,14 +486,14 @@
     const password = passInput.value;
     if (!username || !password) return showMsg('用户名密码必填', false);
     try {
-      const res = await fetch(API + '/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-      if (!data.ok) return showMsg(data.error || '注册失败', false);
-      showMsg('注册成功，请登录', true);
+      const { data, error } = await SBAPI.signUp(username, password);
+      if (error) return showMsg(error.message || '注册失败', false);
+      if (!data.session) {
+        showMsg('注册成功，请去邮箱完成验证后再登录', true);
+      } else {
+        showMsg('注册成功，已自动登录', true);
+        setTimeout(() => location.reload(), 400);
+      }
     } catch {
       showMsg('网络错误，请重试', false);
     }

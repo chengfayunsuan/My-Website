@@ -120,20 +120,20 @@
   </footer>
 
   <script src="/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
   <script src="main.js"></script>
 <script>
 /* 主页那个文章小方框：拉最新的 5 篇 */
 (function () {
-  const API = window.API_BASE || 'https://api.chengfa.dpdns.org';
   const box = document.getElementById('artList');
   if (!box) return;
   const esc = s => String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
-  fetch(API + '/articles?limit=5&offset=0')
-    .then(r => r.json())
+  SBAPI.getArticles({ limit: 5, offset: 0 })
     .then(d => {
       if (!d || !d.ok || !d.list.length) {
         box.innerHTML = '<p class="art-box-none">还没有人写文章，来当第一个吧~</p>';
@@ -151,8 +151,7 @@
   (function () {
     const vbox = document.getElementById('vidList');
     if (!vbox) return;
-    fetch(API + '/videos?limit=5&offset=0')
-      .then(r => r.json())
+    SBAPI.getVideos({ limit: 5, offset: 0 })
       .then(d => {
         if (!d || !d.ok || !d.list.length) {
           vbox.innerHTML = '<p class="v-empty">还没有人传视频，来当第一个吧~</p>';

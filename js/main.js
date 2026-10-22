@@ -14,7 +14,6 @@
   // =============================================
 
   const PAGE = 5;                     // 每次显示 / 加载几条
-  const API = window.API_BASE || '';
   let logs = [];
   let shown = 0;
 
@@ -74,21 +73,19 @@
   /* ---------- 从后端拿日志 ---------- */
   async function fetchLogs() {
     try {
-      const res = await fetch(API + '/logs');
-      const data = await res.json();
+      const data = await SBAPI.getLogs();
       if (Array.isArray(data)) return data;
-    } catch { /* 后端没起来就用兜底那份 */ }
+    } catch { /* 忽略 */ }
     return null;
   }
 
   /* ---------- 只有站长 / 管理员才显示「添加」按钮 ---------- */
   async function checkAdmin() {
     if (!addBtn) return;
-    const token = localStorage.getItem('token');
-    if (!token) return;                 // 没登录 → 按钮根本不出现
+    const s = await SBAPI.getSession();
+    if (!s) return;                     // 没登录 → 按钮根本不出现
     try {
-      const res = await fetch(API + '/me', { headers: { Authorization: 'Bearer ' + token } });
-      const me = await res.json();
+      const me = await SBAPI.me();
       if (me && me.ok && (me.role === 'owner' || me.role === 'admin')) {
         addBtn.style.display = 'inline-flex';
       }
@@ -111,18 +108,13 @@
     const text = ((input && input.value) || '').trim();
     if (!text) { setMsg('写点内容再发布', true); return; }
 
-    const token = localStorage.getItem('token');
-    if (!token) { setMsg('请先登录', true); return; }
+    const s = await SBAPI.getSession();
+    if (!s) { setMsg('请先登录', true); return; }
 
     submitBtn.disabled = true;
     setMsg('发布中…');
     try {
-      const res = await fetch(API + '/logs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify({ text })
-      });
-      const data = await res.json();
+      const data = await SBAPI.addLog(text);
       if (!data.ok) {
         submitBtn.disabled = false;
         setMsg(data.error || '发布失败', true);
