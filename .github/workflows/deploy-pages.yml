@@ -1,0 +1,41 @@
+name: Deploy to Cloudflare Pages
+
+# 为什么需要这个：Cloudflare Pages 的 Git 自动部署会卡住（最近一次部署停在 d737fbb，
+# 之后 6 个提交都没上线）。这个 workflow 直接用 wrangler 把仓库原样推上去，
+# 每次 push 到 main 就部署一次，绕开 Pages 自己的构建队列。
+#
+# 需要的两个 GitHub Secrets（Settings → Secrets and variables → Actions）：
+#   CLOUDFLARE_API_TOKEN   Cloudflare → My Profile → API Tokens → 用 "Edit Cloudflare Workers" 模板
+#   CLOUDFLARE_ACCOUNT_ID  Cloudflare → 任意域名的 Overview 页右下角 Account ID
+# 没配这两个密钥时这个 job 会自动跳过，不会让仓库出现红叉。
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 检查密钥
+        id: guard
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "::warning::未配置 CLOUDFLARE_API_TOKEN，跳过部署"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 部署静态站点
+        if: steps.guard.outputs.skip == 'false'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name=chengfa-761 --branch=main --commit-dirty=true
