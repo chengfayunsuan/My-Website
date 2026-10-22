@@ -1,5 +1,7 @@
+# Cloudflare Pages 专用（GitHub Pages 不认这个文件）
+# 404 由 Pages 自动接管根目录的 404.html，不要写 /*（会吞掉静态资源请求）
+
 /test/login  /404.html  404
-/*  /404.html  404
 
 /article.html /pages/article.html 301
 /articles.html /pages/articles.html 301

@@ -13,9 +13,7 @@ window.SUPABASE_ANON_KEY = 'sb_publishable_HfcHWpw7pFyRHu0p1aOZQQ_rG8powjC';
 window.API_BASE = 'https://<PROJECT_REF>.functions.supabase.co';
 
 // ============ 媒体独立域名（视频/封面走这里） ============
-// 默认跟 API 一样（视频继续走隧道）。
-// 媒体源：GitHub Pages 站点（chengfayunsuan.github.io）。
-// 注意：GitHub Pages 单文件硬上限 100MB、月带宽 100GB，大视频放不上去；
-//       若视频走 R2 / 对象存储，这一行要改成对应公开地址。
-window.MEDIA_BASE = 'https://chengfayunsuan.github.io';
+// 留空 = 跟站点同域（拼成 /xxx，由当前托管直接吐）。github.io 在国内被墙，不能再当媒体源。
+// 以后接 R2：填成 R2 的自定义域，例如 'https://media.chengfa.app'（末尾不要带斜杠）。
+window.MEDIA_BASE = '';
 
