@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>部署自检 · 乘法</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+  :root {
+    --bg: #f6f8fa;
+    --card: #fff;
+    --border: #e3e8ef;
+    --text: #1f2933;
+    --dim: #6b7683;
+    --ok: #1a7f37;
+    --okbg: #e9f7ee;
+    --bad: #c0392b;
+    --badbg: #fdecea;
+    --warn: #9a6700;
+    --warnbg: #fff8e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171c; --card: #1c2027; --border: #2b3138;
+      --text: #e6e9ee; --dim: #98a1ad;
+      --ok: #57d68a; --okbg: #16301f;
+      --bad: #ff7b6b; --badbg: #361d1a;
+      --warn: #f0c24a; --warnbg: #352a12;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 28px 18px 60px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 6px; }
+  .sub { color: var(--dim); font-size: 13px; margin: 0 0 22px; word-break: break-all; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .row:last-child { border-bottom: none; }
+  .badge {
+    flex: none;
+    min-width: 54px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .badge.ok { background: var(--okbg); color: var(--ok); }
+  .badge.bad { background: var(--badbg); color: var(--bad); }
+  .badge.warn { background: var(--warnbg); color: var(--warn); }
+  .badge.wait { background: var(--border); color: var(--dim); }
+  .body { flex: 1; min-width: 0; }
+  .name { font-weight: 600; font-size: 14px; }
+  .detail { color: var(--dim); font-size: 13px; word-break: break-all; }
+  .ms { flex: none; color: var(--dim); font-size: 12px; font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .summary {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    font-size: 14px;
+  }
+  .summary b { font-size: 15px; }
+  .foot { margin-top: 16px; color: var(--dim); font-size: 12px; }
+  button {
+    margin-top: 14px;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #2f6fed;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  button:hover { background: #2559c4; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>部署自检</h1>
+  <p class="sub" id="where">正在检测…</p>
+
+  <div class="card" id="card"></div>
+  <div class="summary" id="summary" style="display:none;"></div>
+  <button id="again">重新检测</button>
+  <p class="foot">
+    这个页面只读、只测连通性，不改任何数据。用的 key 是前端公开的 publishable key，不含 service_role。
+  </p>
+</div>
+
+<script src="/js/config.js"></script>
+<script>
+(function () {
+  const SB_URL = (typeof window.SUPABASE_URL === 'string' && window.SUPABASE_URL) || '';
+  const SB_KEY = (typeof window.SUPABASE_ANON_KEY === 'string' && window.SUPABASE_ANON_KEY) || '';
+  const card = document.getElementById('card');
+  const summary = document.getElementById('summary');
+  document.getElementById('where').textContent = location.origin + location.pathname;
+
+  let pass = 0, fail = 0;
+
+  function add(name, state, detail, ms) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const label = { ok: '通过', bad: '失败', warn: '注意', wait: '检测中' }[state] || state;
+    row.innerHTML = '<span class="badge ' + state + '">' + label + '</span>'
+      + '<div class="body"><div class="name"></div><div class="detail"></div></div>'
+      + '<span class="ms">' + (ms != null ? ms + ' ms' : '') + '</span>';
+    row.querySelector('.name').textContent = name;
+    row.querySelector('.detail').textContent = detail || '';
+    card.appendChild(row);
+    return row;
+  }
+
+  async function timed(fn) {
+    const t0 = performance.now();
+    try {
+      const v = await fn();
+      return { ok: true, val: v, ms: Math.round(performance.now() - t0) };
+    } catch (e) {
+      return { ok: false, err: (e && e.message) || String(e), ms: Math.round(performance.now() - t0) };
+    }
+  }
+
+  async function fetchT(url, opts, timeout) {
+    const c = new AbortController();
+    const t = setTimeout(() => c.abort(), timeout || 10000);
+    try {
+      return await fetch(url, Object.assign({ cache: 'no-store' }, opts || {}, { signal: c.signal }));
+    } finally {
+      clearTimeout(t);
+    }
+  }
+
+  // ① 配置文件
+  async function checkConfig() {
+    if (!SB_URL || !SB_KEY) {
+      add('js/config.js', 'bad', '没读到 SUPABASE_URL / SUPABASE_ANON_KEY，文件可能 404 或内容被改', null);
+      fail++;
+      return false;
+    }
+    const r = await timed(() => fetchT('/js/config.js').then(x => x.status));
+    if (!r.ok) { add('js/config.js', 'bad', '请求失败：' + r.err, r.ms); fail++; return false; }
+    if (r.val !== 200) { add('js/config.js', 'bad', 'HTTP ' + r.val, r.ms); fail++; return false; }
+    add('js/config.js', 'ok', 'Supabase 地址已读到：' + SB_URL.replace(/^https:\/\//, ''), r.ms);
+    pass++;
+    return true;
+  }
+
+  // ② 静态资源
+  async function checkAssets() {
+    const list = ['/js/sb.js', '/style.css', '/favicon.ico', '/404.html'];
+    const rows = await Promise.all(list.map(u =>
+      timed(() => fetchT(u, { method: 'GET' }).then(x => ({ url: u, status: x.status })))
+    ));
+    const bad = [];
+    rows.forEach(r => {
+      if (r.ok && r.val.status === 200) pass++;
+      else { fail++; bad.push(r.val ? (r.val.url + ' → HTTP ' + r.val.status) : (r.err || '失败')); }
+    });
+    if (bad.length) add('静态资源', 'bad', '这些拿不到：' + bad.join('；'), null);
+    else add('静态资源', 'ok', 'sb.js / style.css / favicon.ico / 404.html 都在', null);
+  }
+
+  // ③ supabase-js 脚本（真实加载一次，两个源分别测）
+  function probeScript(url, timeout) {
+    return new Promise(resolve => {
+      const s = document.createElement('script');
+      const t = setTimeout(() => { s.remove(); resolve({ ok: false, err: '超时 ' + timeout + 'ms' }); }, timeout);
+      s.src = url;
+      s.onload = () => { clearTimeout(t); resolve({ ok: true }); };
+      s.onerror = () => { clearTimeout(t); s.remove(); resolve({ ok: false, err: '加载失败（被墙 / DNS 污染）' }); };
+      document.head.appendChild(s);
+    });
+  }
+
+  async function checkSdk() {
+    if (window.supabase) {
+      add('supabase-js 脚本', 'ok', '已加载（window.supabase 存在）', null);
+      pass++;
+      return;
+    }
+    const a = await timed(() => probeScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', 9000));
+    if (a.ok && a.val.ok) { add('supabase-js 脚本', 'ok', 'jsdelivr 加载成功', a.ms); pass++; return; }
+    const b = await timed(() => probeScript('https://unpkg.com/@supabase/supabase-js@2', 9000));
+    if (b.ok && b.val.ok) { add('supabase-js 脚本', 'warn', 'jsdelivr 不通，unpkg 兜底成功（页面能用，但慢一点）', b.ms); pass++; return; }
+    add('supabase-js 脚本', 'bad', '两个 CDN 都加载不了：jsdelivr ' + (a.val ? a.val.err : a.err) + '；unpkg ' + (b.val ? b.val.err : b.err), null);
+    fail++;
+  }
+
+  // ④ REST：读 profiles
+  async function checkRest() {
+    if (!SB_URL || !SB_KEY) { add('Supabase REST', 'bad', '缺少配置，跳过', null); fail++; return; }
+    const url = SB_URL.replace(/\/+$/, '') + '/rest/v1/profiles?select=id,username&limit=1';
+    const r = await timed(() => fetchT(url, {
+      headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }
+    }, 12000));
+    if (!r.ok) {
+      add('Supabase REST', 'bad', '连不上（' + r.err + '）→ 域名被阻断或网络问题', r.ms);
+      fail++;
+      return;
+    }
+    if (r.val.status === 200) {
+      const n = (await r.val.json().catch(() => [])) || [];
+      add('Supabase REST', 'ok', 'read profiles 正常，返回 ' + n.length + ' 行', r.ms);
+      pass++;
+    } else if (r.val.status === 401 || r.val.status === 403) {
+      add('Supabase REST', 'warn', 'HTTP ' + r.val.status + '：网络通，但 key 或 RLS 有问题', r.ms);
+      fail++;
+    } else {
+      add('Supabase REST', 'bad', 'HTTP ' + r.val.status + '（期望 200）', r.ms);
+      fail++;
+    }
+  }
+
+  // ⑤ 各表行数（schema 是否真的跑过）
+  async function checkTables() {
+    if (!SB_URL || !SB_KEY) return;
+    const tables = ['articles', 'videos', 'messages', 'comments', 'notifications'];
+    const out = [];
+    for (const t of tables) {
+      const url = SB_URL.replace(/\/+$/, '') + '/rest/v1/' + t + '?select=id&limit=1';
+      const r = await timed(() => fetchT(url, {
+        headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, Prefer: 'count=exact' }
+      }, 12000));
+      if (!r.ok) { out.push(t + ':网络失败'); continue; }
+      if (r.val.status === 200) {
+        const cr = r.val.headers.get('content-range') || '';
+        const total = cr.split('/')[1];
+        out.push(t + ':' + (total && total !== '*' ? total + ' 行' : '表在'));
+      } else if (r.val.status === 404) {
+        out.push(t + ':表不存在');
+      } else {
+        out.push(t + ':HTTP ' + r.val.status);
+      }
+    }
+    const broken = out.filter(x => /失效|不存在|HTTP/.test(x));
+    add('数据表', broken.length ? 'warn' : 'ok', out.join('　'), null);
+    broken.length ? fail++ : pass++;
+  }
+
+  // ⑥ Auth 服务（拿假账号故意登录失败，HTTP 400 就证明服务活着）
+  async function checkAuth() {
+    if (!SB_URL || !SB_KEY) return;
+    const url = SB_URL.replace(/\/+$/, '') + '/auth/v1/token?grant_type=password';
+    const r = await timed(() => fetchT(url, {
+      method: 'POST',
+      headers: { apikey: SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'probe-not-exist@chengfa.app', password: 'probe-not-a-real-pass' })
+    }, 12000));
+    if (!r.ok) { add('Auth 登录接口', 'bad', '连不上（' + r.err + '）', r.ms); fail++; return; }
+    if (r.val.status === 400 || r.val.status === 422) {
+      add('Auth 登录接口', 'ok', 'HTTP ' + r.val.status + '（账号不存在，符合预期，说明 Auth 服务正常）', r.ms);
+      pass++;
+    } else if (r.val.status === 429) {
+      add('Auth 登录接口', 'warn', 'HTTP 429 触发限流，等几分钟再试', r.ms);
+      pass++;
+    } else {
+      add('Auth 登录接口', 'warn', 'HTTP ' + r.val.status, r.ms);
+      pass++;
+    }
+  }
+
+  // ⑦ 当前浏览器有没有登录态
+  function checkSession() {
+    const ref = (SB_URL.match(/^https:\/\/([a-z0-9]+)\.supabase\.co/) || [])[1] || '';
+    const key = 'sb-' + ref + '-auth-token';
+    let raw = null;
+    try { raw = localStorage.getItem(key); } catch (e) {}
+    if (!raw) { add('当前登录态', 'warn', '浏览器里没有 Supabase 会话（没登录，属正常）', null); return; }
+    try {
+      const obj = JSON.parse(raw);
+      const exp = obj && obj.expires_at;
+      const living = exp ? exp * 1000 > Date.now() : false;
+      add('当前登录态', 'ok', '有本地会话，' + (living ? '未过期' : '已过期（需要重新登录）'), null);
+      pass++;
+    } catch (e) {
+      add('当前登录态', 'warn', '本地会话解析失败，建议退出重登', null);
+    }
+  }
+
+  // ⑧ 媒体域名
+  function checkMedia() {
+    const m = window.MEDIA_BASE;
+    if (!m) { add('媒体域名 MEDIA_BASE', 'warn', '留空 = 跟站点同域（媒体由本站直接吐），接 R2 前这样是对的', null); return; }
+    if (/github\.io/.test(m)) { add('媒体域名 MEDIA_BASE', 'bad', '还指着 ' + m + '，github.io 国内不通，媒体会全裂', null); fail++; return; }
+    add('媒体域名 MEDIA_BASE', 'ok', m, null);
+    pass++;
+  }
+
+  async function run() {
+    card.innerHTML = '';
+    summary.style.display = 'none';
+    pass = 0; fail = 0;
+
+    const cfgOk = await checkConfig();
+    await checkAssets();
+    await checkSdk();
+    await checkRest();
+    await checkTables();
+    await checkAuth();
+    checkSession();
+    checkMedia();
+
+    summary.style.display = 'block';
+    if (!cfgOk) {
+      summary.innerHTML = '<b style="color:var(--bad)">配置文件都没读到，先修这个。</b><br>'
+        + '打开 <code>' + location.origin + '/js/config.js</code> 看是不是 404。';
+    } else if (fail === 0) {
+      summary.innerHTML = '<b style="color:var(--ok)">全部通过（' + pass + ' 项）。</b><br>'
+        + '站点、数据层、登录接口、媒体路径都正常。可以直接去注册账号了。';
+    } else {
+      summary.innerHTML = '<b style="color:var(--bad)">' + fail + ' 项有问题，' + pass + ' 项通过。</b><br>'
+        + '看上面标“失败”的行，那行的说明就是原因。';
+    }
+  }
+
+  document.getElementById('again').addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>
