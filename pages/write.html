@@ -243,6 +243,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>window.supabase||document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');</script>
   <script src="/js/sb.js"></script>
+  <script src="/js/upload.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
 const MAX_CHARS = 10000;
@@ -438,9 +439,23 @@ function progress(pct, text) {
   setMsg(text + (pct ? ' ' + pct + '%' : ''), '');
 }
 
-/* 媒体上传：待 R2 接入后实现（切到 R2 后补 uploadFile 与切片逻辑） */
+/* 媒体上传：R2 直传（Cloudflare Worker 签预签名地址，文件不过 Worker） */
+let uploading = false;
 async function uploadFile(rawFile, kind) {
-  setMsg('媒体上传暂未接入（待 R2 存储就绪），现在只能发纯文字 / 链接', 'err');
+  if (!rawFile) return;
+  if (uploading) return setMsg('还有文件在传，等它传完', 'err');
+  uploading = true;
+  try {
+    if (!window.MEDIA) throw new Error('upload.js 没加载');
+    setMsg('上传中… 0%', '');
+    const r = await MEDIA.upload(rawFile, kind, pct => progress(pct, '上传中…'));
+    insertMedia(r.url, kind);
+    setMsg('已插入 · ' + MEDIA.fmt(r.size), 'ok');
+  } catch (e) {
+    setMsg(e.message || '上传失败', 'err');
+  } finally {
+    uploading = false;
+  }
 }
 
 function insertMedia(src, kind) {
@@ -480,7 +495,7 @@ function setMsg(text, cls) {
 
 /* ===== 素材空间 ===== */
 async function loadQuota() {
-  document.getElementById('quota').textContent = '待 R2 接入';
+  document.getElementById('quota').textContent = '媒体直传 R2 · 图片 8MB / 音频 30MB / 视频 2GB';
 }
 
 /* ===== 读取已有文章（编辑模式）===== */

@@ -70,6 +70,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>window.supabase||document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');</script>
   <script src="/js/sb.js"></script>
+  <script src="/js/upload.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
 const VID_MAX = 2 * 1024 * 1024 * 1024;
@@ -78,13 +79,14 @@ const fileVideo = document.getElementById('fileVideo');
 const progEl = document.getElementById('prog');
 const barFill = document.getElementById('barFill');
 const barTxt = document.getElementById('barTxt');
+const fileInfo = document.getElementById('fileInfo');
 const titleEl = document.getElementById('title');
 const descEl = document.getElementById('desc');
 const publishBtn = document.getElementById('publish');
 const msgEl = document.getElementById('msg');
 const quotaEl = document.getElementById('quota');
 
-let videoName = '', duration = 0, uploaded = false;
+let videoName = '', duration = 0, uploaded = false, videoUrl = '';
 let loggedIn = false;
 
 function requireLogin() {
@@ -105,22 +107,40 @@ async function handleVideo(file) {
     return alert('只支持视频文件');
   }
   if (file.size > VID_MAX) return alert('这个视频 ' + (file.size / 1024 / 1024 / 1024).toFixed(2) + 'GB，超过 2GB 上限');
-  // 视频上传待 R2 接入后实现（切到 R2 后补 uploadFile / 切片逻辑）
-  setMsg('视频上传暂未接入（待 R2 存储就绪），暂时不能投稿', 'err');
+  videoName = file.name; videoUrl = ''; uploaded = false;
+  publishBtn.disabled = true;
+  fileInfo.textContent = file.name + ' · ' + (file.size / 1048576).toFixed(1) + 'MB';
+  progEl.style.display = ''; barTxt.style.display = ''; barFill.style.width = '0%';
+  barTxt.textContent = '上传中… 0%';
+  setMsg('');
+  try {
+    if (!window.MEDIA) throw new Error('upload.js 没加载');
+    const r = await MEDIA.upload(file, 'video', pct => {
+      barFill.style.width = pct + '%';
+      barTxt.textContent = pct + '%  ·  ' + (file.size * pct / 104857600).toFixed(1) + ' / ' + (file.size / 1048576).toFixed(1) + 'MB';
+    });
+    videoUrl = r.url; uploaded = true;
+    barFill.style.width = '100%'; barTxt.textContent = '上传完成';
+    publishBtn.disabled = false;
+    setMsg('视频已上传，填好标题就能发布', 'ok');
+  } catch (e) {
+    progEl.style.display = 'none'; barTxt.style.display = 'none';
+    setMsg(e.message || '上传失败', 'err');
+  }
 }
 
 async function loadQuota() {
-  quotaEl.textContent = '素材空间 待 R2 接入';
+  quotaEl.textContent = '媒体直传 R2 · 视频上限 2GB';
 }
 
 publishBtn.addEventListener('click', async () => {
   if (!requireLogin()) return;
-  if (!uploaded) return setMsg('视频上传待 R2 接入，暂时不能发布', 'err');
+  if (!uploaded) return setMsg('先选个视频并等它上传完', 'err');
   const title = titleEl.value.trim();
   if (!title) return alert('先写个标题');
   publishBtn.disabled = true; setMsg('发布中…', '');
   try {
-    const d = await SBAPI.createVideo(title, descEl.value.trim());
+    const d = await SBAPI.createVideo(title, descEl.value.trim(), videoUrl);
     if (!d.ok) { publishBtn.disabled = false; return setMsg(d.error || '发布失败', 'err'); }
     setMsg('已发布，跳转中…', 'ok');
     setTimeout(() => { location.href = '/pages/video.html?id=' + d.id; }, 600);

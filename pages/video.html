@@ -106,6 +106,12 @@
   <script src="/js/nav.js?v=23"></script>
 <script>
 const MEDIA = window.MEDIA_BASE || '';
+// 媒体地址：库里的值可能是绝对地址（R2 直传后存的就是整条 URL），也可能是旧的相对路径
+const mediaUrl = p => {
+  if (!p) return '';
+  if (/^(https?:|data:|\/\/)/.test(p)) return p;
+  return MEDIA.replace(/\/+$/, '') + '/' + String(p).replace(/^\/+/, '');
+};
 const id = parseInt(new URLSearchParams(location.search).get('id'), 10);
 const box = document.getElementById('box');
 
@@ -133,11 +139,11 @@ function fmtDur(s) {
 function render() {
   const v = video;
   document.title = v.title + ' · 乘法';
-  const posterUrl = v.poster ? (MEDIA + '/' + v.poster) : null;
+  const posterUrl = v.poster ? mediaUrl(v.poster) : null;
   box.innerHTML = `
     <div class="vid-player">
       ${v.video_path
-        ? `<video id="vid" src="${MEDIA + '/' + v.video_path}" ${posterUrl ? `poster="${posterUrl}"` : ''} controls preload="metadata"></video>`
+        ? `<video id="vid" src="${mediaUrl(v.video_path)}" ${posterUrl ? `poster="${posterUrl}"` : ''} controls preload="metadata"></video>`
         : `<div style="padding:40px;text-align:center;color:#fff">视频文件不见了</div>`}
     </div>
     <h1 class="art-title">${escapeHTML(v.title)}</h1>

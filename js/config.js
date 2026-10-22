@@ -18,6 +18,13 @@ window.API_BASE = '';
 
 // ============ 媒体独立域名（视频/封面走这里） ============
 // 留空 = 跟站点同域（拼成 /xxx，由当前托管直接吐）。github.io 在国内被墙，不能再当媒体源。
-// 以后接 R2：填成 R2 的自定义域，例如 'https://media.chengfa.app'（末尾不要带斜杠）。
+// 接 R2：填成 R2 桶绑定的自定义域，例如 'https://media.chengfa.app'（末尾不要带斜杠）。
+// 注意：上传返回的是绝对地址（publicUrl），文章正文里存的就是它，改这里不影响已发出的内容。
 window.MEDIA_BASE = '';
+
+// ============ 上传签发服务（Cloudflare Worker，见 worker/r2-presign.js）============
+// 部署 Worker 后把地址填进来，例如 'https://r2-presign.xxxx.workers.dev'。
+// 留空 = 发布页的上传按钮会直接报“上传服务未配置”。
+// 它只做一件事：校验 Supabase 登录态，然后签发 R2 预签名 PUT 地址（文件不经过 Worker）。
+window.UPLOAD_API = '';
 

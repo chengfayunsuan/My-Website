@@ -277,10 +277,10 @@
     const { error } = await SB.from('videos').delete().eq('id', videoId);
     if (error) return errRes(error); return { ok: true };
   }
-  async function createVideo(title, description) {
+  async function createVideo(title, description, videoPath, poster) {
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data, error } = await SB.from('videos')
-      .insert({ uid: u.id, title, description })
+      .insert({ uid: u.id, title, description, video_path: videoPath || null, poster: poster || null })
       .select('id').single();
     if (error) return errRes(error);
     return { ok: true, id: data.id };
