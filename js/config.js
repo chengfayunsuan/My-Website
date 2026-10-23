@@ -24,7 +24,12 @@ window.MEDIA_BASE = '';
 
 // ============ 上传签发服务（Cloudflare Worker，见 worker/r2-presign.js）============
 // 部署 Worker 后把地址填进来，例如 'https://r2-presign.xxxx.workers.dev'。
-// 留空 = 发布页的上传按钮会直接报“上传服务未配置”。
+// 留空 = 自动走 Supabase Storage 兜底（见下面的 STORAGE_BUCKET），单文件上限 50MB。
 // 它只做一件事：校验 Supabase 登录态，然后签发 R2 预签名 PUT 地址（文件不经过 Worker）。
 window.UPLOAD_API = '';
+
+// ============ Supabase Storage 兜底桶 ============
+// UPLOAD_API 为空时，上传走这个桶（需在 Supabase 建 public 桶并配好 storage.objects 策略）。
+// 免费计划：总容量 1GB、单文件 50MB。R2 批下来后填上 UPLOAD_API 就自动切走，无需改页面。
+window.STORAGE_BUCKET = 'media';
 

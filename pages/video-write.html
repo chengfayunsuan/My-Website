@@ -150,6 +150,14 @@ publishBtn.addEventListener('click', async () => {
 });
 
 loadQuota();
+// 上限文案跟着当前存储后端走：R2 2GB，Supabase Storage 兜底 50MB
+(function () {
+  if (!window.MEDIA) return;
+  const big = MEDIA.limitOf('video') >= 1073741824;
+  fileInfo.textContent = big
+    ? '支持 mp4 / webm / ogv / mov / mkv，最大 2GB'
+    : '支持 mp4 / webm / ogv / mov / mkv，当前最大 50MB（R2 未接入，先用 Storage 兜底）';
+})();
 </script>
 </body>
 </html>
