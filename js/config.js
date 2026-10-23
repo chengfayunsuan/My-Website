@@ -4,7 +4,19 @@
 // Publishable (anon) key：设计上可公开，受 Row Level Security(RLS) 保护，可放心放前端。
 // 前端用 supabase-js 初始化；写操作权限靠 RLS 兜底（铭牌/删除/举报等）。
 // Service Role key 绝不能放前端，只在 Edge Functions / 服务端脚本里用。
-window.SUPABASE_URL = 'https://masgzimdndyewzpagrmd.supabase.co';
+// 真实 Supabase 地址（仅作记录；实际反代目标写在 functions/sb/[[path]].js 里，两处要一致）
+window.SB_UPSTREAM = 'https://masgzimdndyewzpagrmd.supabase.co';
+
+// 是否走「同域反代」。国内直连 *.supabase.co 会 TLS 握手中断（DNS 正常但连不上），
+// 开了这个开关就变成请求 chengfa-761.pages.dev/sb/...，由 Cloudflare 边缘转给 Supabase。
+// 反代哪天出问题，把它改成 false 就退回直连（能不能通取决于你的网络）。
+window.SB_PROXY = true;
+
+// 页面实际使用的 Supabase 地址。本地 file:// 打开时退回直连，否则用同域 /sb。
+window.SUPABASE_URL = (window.SB_PROXY && /^https?:$/.test(location.protocol))
+  ? location.origin.replace(/\/+$/, '') + '/sb'
+  : window.SB_UPSTREAM;
+
 window.SUPABASE_ANON_KEY = 'sb_publishable_HfcHWpw7pFyRHu0p1aOZQQ_rG8powjC';
 
 // 当前线上地址（Cloudflare Pages）。换自定义域时改这里，仅供文档/分享用，

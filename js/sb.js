@@ -18,6 +18,39 @@
   // 一对多关系的 count 取数（supabase 嵌入返回 [{count:N}]）
   function cnt(arr) { return (arr && arr[0] && arr[0].count) || 0; }
 
+  // ---------- 媒体地址修正 ----------
+  // 数据库里存过 https://xxx.supabase.co/storage/... 的绝对地址，国内直连不通。
+  // 走反代后统一改写成 https://当前站点/sb/storage/...，历史数据不用回炉。
+  const UPSTREAM = (window.SB_UPSTREAM || '').replace(/\/+$/, '');
+  function fixUrl(u) {
+    if (!u || typeof u !== 'string' || !UPSTREAM) return u;
+    if (window.SUPABASE_URL === UPSTREAM) return u;          // 没开反代，原样返回
+    if (u.indexOf(UPSTREAM) === 0) {
+      return window.SUPABASE_URL.replace(/\/+$/, '') + u.slice(UPSTREAM.length);
+    }
+    return u;
+  }
+  function fixDeep(o) {
+    if (!o) return o;
+    if (typeof o === 'string') return fixUrl(o);
+    if (Array.isArray(o)) return o.map(fixDeep);
+    if (typeof o === 'object') {
+      for (const k in o) if (typeof o[k] === 'string') o[k] = fixUrl(o[k]);
+    }
+    return o;
+  }
+  // 富文本正文里的 <img src="https://xxx.supabase.co/...">：加载失败时补一次改写。
+  // 资源加载错误不冒泡，但会在捕获阶段经过 window，所以这里用 true。
+  window.addEventListener('error', function (ev) {
+    const el = ev.target;
+    if (!el || !el.getAttribute) return;
+    const tag = el.tagName;
+    if (tag !== 'IMG' && tag !== 'VIDEO' && tag !== 'SOURCE') return;
+    const src = el.getAttribute('src') || '';
+    const fixed = fixUrl(src);
+    if (fixed !== src) el.setAttribute('src', fixed);
+  }, true);
+
   // ISO 时间 → 「2026-10-23 13:07」
   // 固定按北京时间（Asia/Shanghai）显示：访客在哪个时区都看到中文站该有的时间，
   // 不再出现 T / Z / +00:00，也不会被浏览器时区搞成 UTC 时间。
@@ -107,7 +140,7 @@
       favedByMe = !!fv;
     }
     bumpView('article', data.id);
-    return {
+    return fixDeep({
       ok: true,
       id: data.id, title: data.title, content: data.content_html,
       author: (data.profiles && data.profiles.username) || '匿名',
@@ -115,7 +148,7 @@
       created_at: data.created_at, updated_at: data.updated_at,
       media: (data.article_media || []).sort((x, y) => x.sort - y.sort).map(m => m.file),
       likedByMe, favedByMe, canEdit: !!u && u.id === data.uid
-    };
+    });
   }
 
   async function getArticleComments(id) {
@@ -222,7 +255,7 @@
     if (uid) q = q.eq('uid', uid);
     const { data, error } = await q;
     if (error) return errRes(error, { list: [] });
-    return { ok: true, list: (data || []).map(v => ({
+    return { ok: true, list: (data || []).map(v => fixDeep({
       id: v.id, title: v.title,
       author: (v.profiles && v.profiles.username) || '匿名',
       views: v.views || 0, likes: cnt(v.video_likes), favs: cnt(v.video_favs),
@@ -244,7 +277,7 @@
       favedByMe = !!fv;
     }
     bumpView('video', data.id);
-    return {
+    return fixDeep({
       ok: true,
       id: data.id, title: data.title, description: data.description,
       author: (data.profiles && data.profiles.username) || '匿名',
@@ -252,7 +285,7 @@
       poster: data.poster, video_path: data.video_path, created_at: data.created_at,
       likes: cnt(data.video_likes), favs: cnt(data.video_favs),
       likedByMe, favedByMe, canEdit: !!u && u.id === data.uid
-    };
+    });
   }
 
   async function getVideoComments(id) {
