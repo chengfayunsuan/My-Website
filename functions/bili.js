@@ -43,7 +43,7 @@ function meta(html, prop) {
 }
 
 // 1) m 站 HTML：拿封面和标题
-async function fromMobile(bv) {
+async function fromMobile(bv, dbg) {
   const res = await fetch('https://m.bilibili.com/video/' + bv, {
     headers: {
       'User-Agent': MOBILE_UA,
@@ -53,7 +53,7 @@ async function fromMobile(bv) {
     },
     redirect: 'follow'
   });
-  if (!res.ok) return null;
+  if (!res.ok) return { err: 'm站 HTTP ' + res.status };
   const html = await res.text();
 
   let pic = meta(html, 'og:image') || meta(html, 'og:image:secure_url');
@@ -61,7 +61,12 @@ async function fromMobile(bv) {
     const m = html.match(/"(?:pic|cover)"\s*:\s*"(https?:\\?\/\\?\/[^"]+\.(?:jpg|png|webp))"/i);
     if (m) pic = m[1].replace(/\\\//g, '/');
   }
-  if (!pic) return null;
+  if (!pic) {
+    return {
+      err: 'm站无 og:image（len=' + html.length + '）',
+      head: dbg ? html.slice(0, 300).replace(/\s+/g, ' ') : undefined
+    };
+  }
 
   // 去掉 @1200w_630h 这类裁剪后缀，取原图
   pic = pic.split('@')[0].replace(/^http:/, 'https:');
@@ -107,12 +112,13 @@ export async function onRequestGet(context) {
 
   let pic = '', title = '', duration = 0, via = [];
   const errs = [];
+  const dbg = url.searchParams.get('debug') === '1';
 
   // 主力：m 站 HTML
   try {
-    const m = await fromMobile(bv);
+    const m = await fromMobile(bv, dbg);
     if (m && m.pic) { pic = m.pic; title = m.title; via.push('m-html'); }
-    else errs.push('m站没找到封面');
+    else if (m && m.err) { errs.push(m.err + (m.head ? ' :: ' + m.head : '')); }
   } catch (e) { errs.push('m站 ' + String((e && e.message) || e)); }
 
   // 补时长 / 兜底封面
@@ -126,6 +132,8 @@ export async function onRequestGet(context) {
           duration = duration || a.duration || 0;
           via.push(wc ? 'api+cookie' : 'api');
           break;
+        } else {
+          errs.push('api' + (wc ? '+cookie' : '') + ' 无数据');
         }
       } catch (e) { errs.push('api ' + String((e && e.message) || e)); }
     }
