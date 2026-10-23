@@ -202,11 +202,9 @@
       pass++;
       return;
     }
-    const a = await timed(() => probeScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', 9000));
-    if (a.ok && a.val.ok) { add('supabase-js 脚本', 'ok', 'jsdelivr 加载成功', a.ms); pass++; return; }
-    const b = await timed(() => probeScript('https://unpkg.com/@supabase/supabase-js@2', 9000));
-    if (b.ok && b.val.ok) { add('supabase-js 脚本', 'warn', 'jsdelivr 不通，unpkg 兜底成功（页面能用，但慢一点）', b.ms); pass++; return; }
-    add('supabase-js 脚本', 'bad', '两个 CDN 都加载不了：jsdelivr ' + (a.val ? a.val.err : a.err) + '；unpkg ' + (b.val ? b.val.err : b.err), null);
+    const a = await timed(() => probeScript('/js/vendor/supabase-js.js', 9000));
+    if (a.ok && a.val.ok) { add('supabase-js 脚本', 'ok', '本地脚本加载成功（/js/vendor/supabase-js.js）', a.ms); pass++; return; }
+    add('supabase-js 脚本', 'bad', '本地脚本加载失败：' + (a.val ? a.val.err : a.err) + '（检查 js/vendor/supabase-js.js 是否部署上去了）', null);
     fail++;
   }
 
