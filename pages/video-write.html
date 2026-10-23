@@ -54,6 +54,15 @@
         </div>
       </div>
 
+      <div style="margin-top:12px">
+        <input class="ed-title" id="posterUrl" maxlength="600" style="margin-top:0"
+               placeholder="封面图地址（选填，自动抓不到时粘一个）"
+               autocomplete="off" data-lpignore="true" data-1p-ignore spellcheck="false">
+        <div style="font-size:12px;color:var(--text-light);margin-top:6px;line-height:1.6">
+          拿法：打开 B 站视频页 → 封面图上右键 → 复制图片地址 → 粘到这里。留空就用自动抓的。
+        </div>
+      </div>
+
       <div class="ed-bar">
         <button class="ed-btn" id="pickVideo" type="button">🎬 或者上传视频文件</button>
         <span id="fileInfo" style="font-size:13px;color:var(--text-light)">支持 mp4 / webm / ogv / mov / mkv，最大 2GB</span>
@@ -93,6 +102,7 @@ const descEl = document.getElementById('desc');
 const publishBtn = document.getElementById('publish');
 const bvidEl = document.getElementById('bvid');
 const biliHint = document.getElementById('biliHint');
+const posterEl = document.getElementById('posterUrl');
 const msgEl = document.getElementById('msg');
 const quotaEl = document.getElementById('quota');
 
@@ -143,6 +153,7 @@ bvidEl.addEventListener('input', () => {
       if (info) {
         biliInfo = info;
         if (!titleEl.value.trim() && info.title) titleEl.value = info.title;
+        if (info.pic && !posterEl.value.trim()) posterEl.value = info.pic;
         biliHint.innerHTML = '✓ ' + bv + ' · 封面和时长已抓到，直接发布就行';
       } else {
         biliInfo = null;
@@ -194,13 +205,23 @@ async function loadQuota() {
 publishBtn.addEventListener('click', async () => {
   if (!requireLogin()) return;
   const bv = biliOf(bvidEl.value);
-  if (!bv && !uploaded) return setMsg('填 B 站 BV 号，或者选个视频等它上传完', 'err');
+  if (!bv && !uploaded && !editId) return setMsg('填 B 站 BV 号，或者选个视频等它上传完', 'err');
   const title = titleEl.value.trim();
   if (!title) return alert('先写个标题');
-  publishBtn.disabled = true; setMsg('发布中…', '');
+  publishBtn.disabled = true; setMsg(editId ? '保存中…' : '发布中…', '');
   try {
     const path = bv ? 'bili:' + bv : videoUrl;
-    const poster = bv && biliInfo ? httpsUrl(biliInfo.pic) : null;
+    const poster = (posterEl.value.trim() || (bv && biliInfo ? httpsUrl(biliInfo.pic) : '')) || null;
+
+    // 编辑模式：只改标题 / 简介 / 封面，不动播放地址和时长
+    if (editId) {
+      const u = await SBAPI.updateVideo(editId, title, descEl.value.trim(), poster);
+      if (!u.ok) { publishBtn.disabled = false; return setMsg(u.error || '保存失败', 'err'); }
+      setMsg('已保存，跳转中…', 'ok');
+      setTimeout(() => { location.href = '/pages/video.html?id=' + editId; }, 500);
+      return;
+    }
+
     const dur = bv && biliInfo ? Math.round(Number(biliInfo.duration) || 0) : 0;
     const d = await SBAPI.createVideo(title, descEl.value.trim(), path, poster, dur);
     if (!d.ok) { publishBtn.disabled = false; return setMsg(d.error || '发布失败', 'err'); }
@@ -211,7 +232,33 @@ publishBtn.addEventListener('click', async () => {
   }
 });
 
+// 编辑已有视频：/pages/video-write.html?id=3
+const editId = new URLSearchParams(location.search).get('id');
+async function initEdit() {
+  if (!editId) return;
+  document.getElementById('pageTitle').textContent = '编辑视频';
+  publishBtn.textContent = '保存修改';
+  const d = await SBAPI.getVideo(editId);
+  if (!d.ok) { setMsg(d.error || '读不到这条视频', 'err'); return; }
+  if (!d.canEdit) { setMsg('这不是你发的视频', 'err'); publishBtn.disabled = true; return; }
+  titleEl.value = d.title || '';
+  descEl.value = d.description || '';
+  posterEl.value = d.poster || '';
+  const bv = biliOf(d.video_path);
+  if (bv) {
+    bvidEl.value = bv;
+    biliHint.innerHTML = '✓ 已识别 ' + bv + '（编辑模式不改播放地址）';
+    biliHint.style.color = 'var(--primary-deep)';
+  } else if (d.video_path) {
+    videoUrl = d.video_path;
+    uploaded = true;
+    fileInfo.textContent = '已有视频文件，编辑时不重传';
+  }
+  publishBtn.disabled = false;
+}
+
 loadQuota();
+initEdit();
 // 上限文案跟着当前存储后端走：R2 2GB，Supabase Storage 兜底 50MB
 (function () {
   if (!window.MEDIA) return;

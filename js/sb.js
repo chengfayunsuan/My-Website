@@ -345,9 +345,11 @@
     if (error) return errRes(error);
     return { ok: true, id: data.id };
   }
-  async function updateVideo(id, title, description) {
+  async function updateVideo(id, title, description, poster) {
+    const patch = { title, description, updated_at: new Date().toISOString() };
+    if (poster !== undefined) patch.poster = poster || null;
     const { error } = await SB.from('videos')
-      .update({ title, description, updated_at: new Date().toISOString() })
+      .update(patch)
       .eq('id', id);
     if (error) return errRes(error);
     return { ok: true, id };
@@ -746,7 +748,11 @@
 
     const store = biliStore();
     const hit = store[key];
-    if (hit && Date.now() - hit.t < 7 * 24 * 3600 * 1000) return hit.v;
+    if (hit) {
+      if (hit.v && Date.now() - hit.t < 7 * 24 * 3600 * 1000) return hit.v;
+      // 失败负缓存 1 小时：/bili 被 B 站风控时别每次翻页都打一轮空请求
+      if (!hit.v && Date.now() - hit.t < 3600 * 1000) return null;
+    }
 
     let d = null;
     try {
@@ -756,7 +762,11 @@
         if (j && j.ok && (j.pic || j.title)) d = j;
       }
     } catch (e) { /* 拿不到就返回 null */ }
-    if (!d) return null;
+    if (!d) {
+      store[key] = { t: Date.now(), v: null };
+      try { localStorage.setItem(BILI_KEY, JSON.stringify(store)); } catch (e) {}
+      return null;
+    }
 
     const v = {
       title: d.title || '',
