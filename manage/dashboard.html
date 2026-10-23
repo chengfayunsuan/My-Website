@@ -378,16 +378,19 @@
           actions = `<div class="report-actions">${btns.join('')}</div>`;
         }
 
+        const TYPE_NAME = { message: '留言', comment: '评论', article: '文章', video: '视频' };
+        const typeName = TYPE_NAME[r.targetType] || '留言';
         return `
         <div class="report-item${isDone ? ' done' : ''}">
           <div class="report-top">
             <span class="report-name">${escapeHTML(r.msgName || '（未知用户）')}</span>
+            <span class="status-pill">${typeName}</span>
             <span class="status-pill${isDone ? ' done' : ''}">${isDone ? '已处理' : '待处理'}</span>
-            <span class="report-time">举报于 ${escapeHTML(r.msgTime || '')}</span>
+            <span class="report-time">举报于 ${escapeHTML(r.reportTime || r.msgTime || '')}</span>
           </div>
           ${quoted}
           <div class="report-line"><b>举报理由：</b>${escapeHTML(r.reason || '（没写）')}</div>
-          <div class="report-line"><b>举报人：</b>${escapeHTML(r.reporter || '')}　<b>被举报人：</b>${escapeHTML(r.msgName || '')}${r.targetUid != null ? '（UID ' + escapeHTML(r.targetUid) + '）' : ''}　<b>留言时间：</b>${escapeHTML(r.msgTime || (r.reportTime ? '（原留言已删除）举报于 ' + r.reportTime : ''))}</div>
+          <div class="report-line"><b>举报人：</b>${escapeHTML(r.reporter || '')}　<b>被举报人：</b>${escapeHTML(r.msgName || '')}${r.targetUid != null ? '（UID ' + escapeHTML(r.targetUid) + '）' : ''}　<b>${typeName}时间：</b>${escapeHTML(r.msgTime || (r.reportTime ? '（原内容已删除）举报于 ' + r.reportTime : ''))}</div>
           ${actions}
         </div>`;
       }).join('');
@@ -400,7 +403,7 @@
     });
 
     const CONFIRM_TEXT = {
-      remove: '确定删掉这条留言吗？删了就找不回来了。'
+      remove: '确定删掉被举报的内容吗？删了就找不回来了。'
     };
 
     async function handleAction(id, act, btn) {
@@ -410,13 +413,11 @@
       btn.disabled = true;
       try {
         if (act === 'remove') {
-          // 先找到被举报的留言 id，软删除它
           const rd = await SBAPI.getReports();
           const rep = (rd.list || []).find(x => x.id === id);
-          if (rep && rep.messageId) {
-            const del = await SBAPI.deleteMessage(rep.messageId);
-            if (!del.ok) { btn.disabled = false; return alert(del.error || '删除留言失败'); }
-          }
+          if (!rep) { btn.disabled = false; return alert('找不到这条举报，刷新一下再试'); }
+          const del = await SBAPI.deleteReported(rep);
+          if (!del.ok) { btn.disabled = false; return alert(del.error || '删除失败'); }
         }
         const d = await SBAPI.handleReport(id, act);
         if (!d.ok) {

@@ -43,11 +43,12 @@
     <div class="card ed-card">
       <h2 class="section-title" id="pageTitle">投稿视频</h2>
 
-      <input class="ed-title" id="title" maxlength="100" placeholder="标题（最多 100 字）">
+      <input class="ed-title" id="title" maxlength="100" placeholder="标题（最多 100 字）" autocomplete="off" data-lpignore="true">
 
       <div style="margin-top:14px">
         <input class="ed-title" id="bvid" maxlength="60" style="margin-top:0"
-               placeholder="B 站 BV 号（推荐）：例 BV1xx411c7mD">
+               placeholder="B 站 BV 号（推荐）：例 BV1xx411c7mD"
+               autocomplete="one-time-code" data-lpignore="true" autocapitalize="off" spellcheck="false">
         <div id="biliHint" style="font-size:13px;color:var(--text-light);margin-top:6px;line-height:1.6">
           填了 BV 号就不用上传视频，播放直接走 B 站。<b>视频必须是「公开」</b>，仅自己可见的视频访客打不开。
         </div>
@@ -61,7 +62,7 @@
       <div class="bar-txt" id="barTxt" style="display:none;"></div>
       <input type="file" id="fileVideo" accept="video/*,.mkv" hidden>
 
-      <textarea class="ed-desc" id="desc" maxlength="2000" placeholder="简介（选填，最多 2000 字）"></textarea>
+      <textarea class="ed-desc" id="desc" maxlength="2000" placeholder="简介（选填，最多 2000 字）" autocomplete="off"></textarea>
 
       <div class="ed-foot" id="quota">素材空间 —</div>
 
@@ -100,6 +101,31 @@ let videoName = '', duration = 0, uploaded = false, videoUrl = '';
 let loggedIn = false;
 
 const BILI_TIP = '填了 BV 号就不用上传视频，播放直接走 B 站。<b>视频必须是「公开」</b>，仅自己可见的视频访客打不开。';
+let biliInfo = null;      // { pic, duration, title } —— 抓到就存下来，发布时写进库
+let biliTimer = null;
+
+// B 站接口没有 CORS 头，浏览器直连会被拦，走公共代理；三个轮流试，抓不到也不影响发布
+async function fetchBiliInfo(bv) {
+  const api = 'https://api.bilibili.com/x/web-interface/view?bvid=' + encodeURIComponent(bv);
+  const proxies = [
+    u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+    u => 'https://cors.eu.org/' + u,
+    u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u)
+  ];
+  for (const mk of proxies) {
+    try {
+      const ac = new AbortController();
+      const timer = setTimeout(() => ac.abort(), 6000);
+      const r = await fetch(mk(api), { signal: ac.signal, cache: 'no-store' });
+      clearTimeout(timer);
+      if (!r.ok) continue;
+      const j = await r.json();
+      if (j && j.code === 0 && j.data && j.data.pic) return j.data;
+    } catch (e) { /* 换下一个代理 */ }
+  }
+  return null;
+}
+function httpsUrl(u) { return String(u || '').replace(/^http:/, 'https:'); }
 function biliOf(v) {
   if (!v) return '';
   const m = String(v).trim().match(/(BV[0-9A-Za-z]{10})/);
@@ -119,13 +145,27 @@ bvidEl.addEventListener('input', () => {
   if (!raw) {
     biliHint.innerHTML = BILI_TIP; biliHint.style.color = '';
     publishBtn.disabled = !uploaded;
+    biliInfo = null;
     return;
   }
   const bv = biliOf(raw);
   if (bv) {
-    biliHint.innerHTML = '✓ 已识别 ' + bv + '，不用上传文件';
+    biliHint.innerHTML = '✓ 已识别 ' + bv + '，正在取封面…';
     biliHint.style.color = 'var(--primary-deep)';
     publishBtn.disabled = false;
+    clearTimeout(biliTimer);
+    biliTimer = setTimeout(async () => {
+      const info = await fetchBiliInfo(bv);
+      if (biliOf(bvidEl.value) !== bv) return;   // 期间又改了
+      if (info) {
+        biliInfo = info;
+        if (!titleEl.value.trim() && info.title) titleEl.value = info.title;
+        biliHint.innerHTML = '✓ ' + bv + ' · 封面和时长已抓到，直接发布就行';
+      } else {
+        biliInfo = null;
+        biliHint.innerHTML = '✓ ' + bv + '（封面没抓到，不影响播放）';
+      }
+    }, 600);
   } else {
     biliHint.textContent = '没认出来。BV 号是 BV + 10 位字母数字，总共 12 位；也可以直接粘整条视频链接';
     biliHint.style.color = '#e03e6a';
@@ -177,7 +217,9 @@ publishBtn.addEventListener('click', async () => {
   publishBtn.disabled = true; setMsg('发布中…', '');
   try {
     const path = bv ? 'bili:' + bv : videoUrl;
-    const d = await SBAPI.createVideo(title, descEl.value.trim(), path);
+    const poster = bv && biliInfo ? httpsUrl(biliInfo.pic) : null;
+    const dur = bv && biliInfo ? Math.round(Number(biliInfo.duration) || 0) : 0;
+    const d = await SBAPI.createVideo(title, descEl.value.trim(), path, poster, dur);
     if (!d.ok) { publishBtn.disabled = false; return setMsg(d.error || '发布失败', 'err'); }
     setMsg('已发布，跳转中…', 'ok');
     setTimeout(() => { location.href = '/pages/video.html?id=' + d.id; }, 600);

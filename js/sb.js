@@ -106,6 +106,7 @@
       const { data: fv } = await SB.from('article_favs').select('article_id').eq('article_id', id).eq('uid', u.id).maybeSingle();
       favedByMe = !!fv;
     }
+    bumpView('article', data.id);
     return {
       ok: true,
       id: data.id, title: data.title, content: data.content_html,
@@ -154,7 +155,7 @@
   }
   async function reportArticle(articleId, reason) {
     const u = await getCurrentUser(); if (!u) return errRes(null);
-    const { error } = await SB.from('article_reports').insert({ article_id: articleId, uid: u.id, reason });
+    const { error } = await SB.from('reports').insert({ target_type: 'article', target_id: articleId, reporter_uid: u.id, reason });
     if (error) return errRes(error); return { ok: true };
   }
   async function deleteArticle(articleId) {
@@ -242,6 +243,7 @@
       const { data: fv } = await SB.from('video_favs').select('video_id').eq('video_id', id).eq('uid', u.id).maybeSingle();
       favedByMe = !!fv;
     }
+    bumpView('video', data.id);
     return {
       ok: true,
       id: data.id, title: data.title, description: data.description,
@@ -262,7 +264,11 @@
     if (error) return { ok: false, list: [] };
     return { ok: true, list: (data || []).map(c => ({
       id: c.id, uid: c.uid, name: (c.profiles && c.profiles.username) || '匿名',
-      content: c.content, time: fmtTime(c.created_at), parent: c.parent_id || null,
+      content: c.content, text: c.content,
+      role: (c.profiles && c.profiles.role) || null,
+      bio: (c.profiles && c.profiles.bio) || '',
+      avatar: (c.profiles && c.profiles.avatar_url) || null,
+      time: fmtTime(c.created_at), parent: c.parent_id || null,
       likes: (c.comment_likes || []).length,
       likedByMe: !!(u && (c.comment_likes || []).some(l => l.uid === u.id))
     })) };
@@ -286,17 +292,22 @@
   }
   async function reportVideo(videoId, reason) {
     const u = await getCurrentUser(); if (!u) return errRes(null);
-    const { error } = await SB.from('video_reports').insert({ video_id: videoId, uid: u.id, reason });
+    const { error } = await SB.from('reports').insert({ target_type: 'video', target_id: videoId, reporter_uid: u.id, reason });
     if (error) return errRes(error); return { ok: true };
   }
   async function deleteVideo(videoId) {
     const { error } = await SB.from('videos').delete().eq('id', videoId);
     if (error) return errRes(error); return { ok: true };
   }
-  async function createVideo(title, description, videoPath, poster) {
+  async function createVideo(title, description, videoPath, poster, duration) {
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data, error } = await SB.from('videos')
-      .insert({ uid: u.id, title, description, video_path: videoPath || null, poster: poster || null })
+      .insert({
+        uid: u.id, title, description,
+        video_path: videoPath || null,
+        poster: poster || null,
+        duration: Number(duration) || 0
+      })
       .select('id').single();
     if (error) return errRes(error);
     return { ok: true, id: data.id };
@@ -366,7 +377,7 @@
   }
   async function reportComment(commentId, reason) {
     const u = await getCurrentUser(); if (!u) return errRes(null);
-    const { error } = await SB.from('message_reports').insert({ reporter_uid: u.id, reason: '评论举报 #' + commentId + '：' + (reason || '') });
+    const { error } = await SB.from('reports').insert({ target_type: 'comment', target_id: commentId, reporter_uid: u.id, reason });
     if (error) return errRes(error); return { ok: true };
   }
 
@@ -444,7 +455,7 @@
 
   async function reportMessage(id, reason) {
     const u = await getCurrentUser(); if (!u) return errRes(null);
-    const { error } = await SB.from('message_reports').insert({ message_id: id, reporter_uid: u.id, reason });
+    const { error } = await SB.from('reports').insert({ target_type: 'message', target_id: id, reporter_uid: u.id, reason });
     if (error) return errRes(error); return { ok: true };
   }
 
@@ -452,12 +463,12 @@
   async function getMyReports() {
     const u = await getCurrentUser();
     if (!u) return { ok: false, ids: [] };
-    const { data, error } = await SB.from('message_reports')
-      .select('message_id, status').eq('reporter_uid', u.id);
+    const { data, error } = await SB.from('reports')
+      .select('target_type, target_id, status').eq('reporter_uid', u.id).eq('target_type', 'message');
     if (error) return { ok: false, ids: [] };
     return {
       ok: true,
-      ids: (data || []).filter(r => r.message_id && r.status !== 'done').map(r => r.message_id)
+      ids: (data || []).filter(r => r.target_id && r.status !== 'done').map(r => r.target_id)
     };
   }
 
@@ -599,43 +610,89 @@
   }
 
   /* ============ 举报处理（staff） ============ */
+  // 四类举报统一进 reports 表（message / comment / article / video），
+  // 之前评论举报把 id 塞进 reason 字符串，导致后台永远显示"数据损坏"。
+  const REPORT_CFG = {
+    message: { table: 'messages', cols: 'id, content, uid, author_name, created_at, deleted, profiles!messages_uid_fkey(username)' },
+    comment: { table: 'comments', cols: 'id, content, uid, created_at, deleted, profiles!comments_uid_fkey(username)' },
+    article: { table: 'articles', cols: 'id, title, uid, created_at, profiles!articles_uid_fkey(username)' },
+    video:   { table: 'videos',   cols: 'id, title, uid, created_at, profiles!videos_uid_fkey(username)' }
+  };
+
   async function getReports() {
-    const { data, error } = await SB.from('message_reports')
+    const { data, error } = await SB.from('reports')
       .select('*').order('created_at', { ascending: false }).limit(200);
-    if (error) return { ok: false, list: [] };
+    if (error) return { ok: false, list: [], error: error.message };
     const rows = data || [];
-    const msgIds = [...new Set(rows.map(r => r.message_id).filter(Boolean))];
-    let msgMap = {};
-    if (msgIds.length) {
-      const { data: ms } = await SB.from('messages')
-        .select('id, content, uid, author_name, created_at, deleted, profiles!messages_uid_fkey(username)').in('id', msgIds);
-      (ms || []).forEach(m => { msgMap[m.id] = m; });
+    if (!rows.length) return { ok: true, list: [] };
+
+    // 按类型分组，每类一次查询，不逐条打接口
+    const groups = {};
+    rows.forEach(r => {
+      const t = REPORT_CFG[r.target_type] ? r.target_type : 'message';
+      if (r.target_id == null) return;
+      (groups[t] = groups[t] || new Set()).add(r.target_id);
+    });
+    const maps = {};
+    for (const t of Object.keys(groups)) {
+      const cfg = REPORT_CFG[t];
+      const { data: hit } = await SB.from(cfg.table).select(cfg.cols).in('id', [...groups[t]]);
+      const m = {};
+      (hit || []).forEach(x => { m[x.id] = x; });
+      maps[t] = m;
     }
-    const reporterIds = [...new Set(rows.map(r => r.reporter_uid).filter(Boolean))];
+    // 举报人用户名
+    const rIds = [...new Set(rows.map(r => r.reporter_uid).filter(Boolean))];
     let reporterMap = {};
-    if (reporterIds.length) {
-      const { data: rs } = await SB.from('profiles').select('id, username').in('id', reporterIds);
+    if (rIds.length) {
+      const { data: rs } = await SB.from('profiles').select('id, username').in('id', rIds);
       (rs || []).forEach(p => { reporterMap[p.id] = p.username; });
     }
+
     return { ok: true, list: rows.map(r => {
-      const m = msgMap[r.message_id];
+      const t = REPORT_CFG[r.target_type] ? r.target_type : 'message';
+      const x = (maps[t] || {})[r.target_id];
+      const gone = !x || (t !== 'article' && t !== 'video' && !!x.deleted);
+      const name = x ? (x.author_name || (x.profiles && x.profiles.username) || '（未知用户）') : '（未知用户）';
+      const text = !x ? '' : (x.content != null ? x.content : (x.title || ''));
       return {
-        id: r.id, messageId: r.message_id, status: r.status, action: r.action, reason: r.reason,
-        msgText: (m && m.content) || '',
-        alive: !!(m && !m.deleted),
-        msgName: (m && (m.author_name || (m.profiles && m.profiles.username) || '')) || '（未知用户）',
-        targetUid: m ? m.uid : null,
-        msgTime: m ? fmtTime(m.created_at) : '',
-        reportTime: fmtTime(r.created_at),
-        reporter: reporterMap[r.reporter_uid] || '（未知）'
+        id: r.id,
+        targetType: t, targetId: r.target_id,
+        messageId: t === 'message' ? r.target_id : null,
+        status: r.status, action: r.action, reason: r.reason,
+        reporter: reporterMap[r.reporter_uid] || '（未知）',
+        msgText: text, msgName: name, alive: !gone,
+        targetUid: x ? x.uid : null,
+        msgTime: x ? fmtTime(x.created_at) : '',
+        reportTime: fmtTime(r.created_at)
       };
     }) };
   }
+
+  // 按举报类型删掉被举报的东西（留言软删、其余硬删，RLS 保证只有 staff 能删别人的）
+  async function deleteReported(report) {
+    if (!report || report.targetId == null) return { ok: false, error: '这条举报没有目标' };
+    switch (report.targetType) {
+      case 'comment': return deleteComment(report.targetId);
+      case 'article': return deleteArticle(report.targetId);
+      case 'video':   return deleteVideo(report.targetId);
+      case 'message':
+      default:        return deleteMessage(report.targetId);
+    }
+  }
+
   async function handleReport(reportId, action) {
-    const { error } = await SB.from('message_reports')
+    const { error } = await SB.from('reports')
       .update({ status: 'done', action, handled_at: new Date().toISOString() })
       .eq('id', reportId);
     if (error) return errRes(error); return { ok: true };
+  }
+
+  /* ============ 浏览量 ============ */
+  // 走 RPC（security definer），否则普通访客没有 update 权限，数字永远不动
+  async function bumpView(type, id) {
+    if (!id) return;
+    try { await SB.rpc('bump_view', { p_type: type, p_id: id }); } catch (e) { /* 函数没建就算了，不阻塞页面 */ }
   }
 
   window.SBAPI = {
@@ -655,6 +712,6 @@
     getLogs, addLog,
     getProfile, getUserByUid, getAllUsers, updateProfile, changePassword,
     getRelations, follow, block, deleteMessage,
-    getReports, handleReport
+    getReports, handleReport, deleteReported, bumpView
   };
 })();
