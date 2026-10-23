@@ -150,16 +150,16 @@
     }
 
     const sorted = users.slice().sort(function (a, b) {
-      return dir * ((Number(a.uid) || 0) - (Number(b.uid) || 0));
+      return dir * ((Number(a.uid_no) || 0) - (Number(b.uid_no) || 0));
     });
 
     countEl.textContent = '一共 ' + sorted.length + ' 个人'
       + (dir === 1 ? '（UID 从小到大）' : '（UID 从大到小）');
 
     listEl.innerHTML = sorted.map(function (u) {
-      const uid = Number(u.uid) || 0;
-      // 链接用真实 uuid，显示用注册顺序号（老站点的 int uid 语义）
-      return '<a class="user-row" href="/profile/?uid=' + encodeURIComponent(u.id) + '">'
+      const uid = Number(u.uid_no) || 0;
+      // 显示用 uid_no（注册顺序号，站长=1）；链接也优先用它，profile 页两种都认
+      return '<a class="user-row" href="/profile/?uid=' + encodeURIComponent(u.uid_no || u.id) + '">'
         +   '<img class="user-row-avatar" src="' + esc(fixAvatar(u.avatar)) + '" alt="">'
         +   '<span class="user-row-info">'
         +     '<span class="user-row-name">' + esc(u.username) + '</span>'

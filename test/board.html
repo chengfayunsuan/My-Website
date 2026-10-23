@@ -293,6 +293,7 @@ function whoOf(m) {
   const u = (m.uid != null ? byUid.get(m.uid) : null) || byName.get(m.name);
   return {
     uid: (m.uid != null) ? m.uid : (u ? u.uid : null),
+    uidNo: m.uidNo || (u ? u.uid_no : null) || null,
     name: u ? u.username : (m.name || '匿名'),
     role: (m.role || (u ? u.role : null) || null),
     bio: m.bio || (u ? u.bio : '') || '',
@@ -465,7 +466,7 @@ function applyUrlAction() {
 
 /* 左边那一列：头像 */
 function avatarHTML(who) {
-  const href = '/profile/?uid=' + who.uid;
+  const href = '/profile/?uid=' + (who.uidNo || who.uid);
   const img = `<img src="${who.avatar}" alt="">`;
   return who.uid
     ? `<a class="msg-avatar" href="${href}" title="${escapeHTML(who.name)} 的主页">${img}</a>`
@@ -474,7 +475,7 @@ function avatarHTML(who) {
 
 /* 右上角：名字 +（站长/管理员的粉标） */
 function topHTML(m, who) {
-  const href = '/profile/?uid=' + who.uid;
+  const href = '/profile/?uid=' + (who.uidNo || who.uid);
   const nameHTML = who.uid
     ? `<a class="msg-name" href="${href}">${escapeHTML(who.name)}</a>`
     : `<span class="msg-name">${escapeHTML(who.name)}</span>`;

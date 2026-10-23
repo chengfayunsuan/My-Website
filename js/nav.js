@@ -211,7 +211,7 @@
     try {
       const data = await SBAPI.me();
       if (data.ok) {
-        showLoggedIn(data.role, data.avatar, data.uid);
+        showLoggedIn(data.role, data.avatar, data.uidNo || data.uid);
         const navAvatarImg = document.getElementById('avatarImg');
         if (data.username && navAvatarImg) navAvatarImg.alt = data.username;
       } else {

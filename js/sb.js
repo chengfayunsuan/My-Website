@@ -100,16 +100,16 @@
     const u = s && s.user;
     if (!u) return { ok: false };
     const { data, error } = await SB.from('profiles')
-      .select('id, username, role, avatar_url')
+      .select('*')
       .eq('id', u.id).single();
     if (error || !data) return { ok: false };
-    return { ok: true, uid: u.id, username: data.username, role: data.role, avatar: data.avatar_url };
+    return { ok: true, uid: u.id, uidNo: data.uid_no || null, username: data.username, role: data.role, avatar: data.avatar_url };
   }
 
   /* ============ 文章 ============ */
   async function getArticles({ limit = 20, offset = 0, uid = null, sort = 'new' } = {}) {
     let q = SB.from('articles')
-      .select('*, profiles!articles_uid_fkey(username), article_likes(count), article_favs(count)')
+      .select('*, profiles!articles_uid_fkey(*), article_likes(count), article_favs(count)')
       .neq('status', 'deleted')
       .order(sort === 'hot' ? 'views' : 'created_at', { descending: true })
       .range(offset, offset + limit - 1);
@@ -129,7 +129,7 @@
   async function getArticle(id) {
     const u = await getCurrentUser();
     const { data, error } = await SB.from('articles')
-      .select('*, profiles!articles_uid_fkey(username), article_media(file, sort)')
+      .select('*, profiles!articles_uid_fkey(*), article_media(file, sort)')
       .eq('id', id).single();
     if (error) return errRes(error);
     let likedByMe = false, favedByMe = false;
@@ -144,7 +144,8 @@
       ok: true,
       id: data.id, title: data.title, content: data.content_html,
       author: (data.profiles && data.profiles.username) || '匿名',
-      uid: data.uid, views: data.views || 0, chars: data.chars || 0,
+      uid: data.uid, uidNo: (data.profiles && data.profiles.uid_no) || null,
+      views: data.views || 0, chars: data.chars || 0,
       created_at: data.created_at, updated_at: data.updated_at,
       media: (data.article_media || []).sort((x, y) => x.sort - y.sort).map(m => m.file),
       likedByMe, favedByMe, canEdit: !!u && u.id === data.uid
@@ -154,7 +155,7 @@
   async function getArticleComments(id) {
     const u = await getCurrentUser();
     const { data, error } = await SB.from('comments')
-      .select('*, profiles!comments_uid_fkey(username, role, bio, avatar_url), comment_likes(uid)')
+      .select('*, profiles!comments_uid_fkey(*), comment_likes(uid)')
       .eq('target_type', 'article').eq('target_id', id).eq('deleted', false)
       .order('created_at', { ascending: true }).limit(500);
     if (error) return { ok: false, list: [] };
@@ -164,6 +165,7 @@
       role: (c.profiles && c.profiles.role) || null,
       bio: (c.profiles && c.profiles.bio) || '',
       avatar: (c.profiles && c.profiles.avatar_url) || null,
+      uidNo: (c.profiles && c.profiles.uid_no) || null,
       time: fmtTime(c.created_at), parent: c.parent_id || null,
       likes: (c.comment_likes || []).length,
       likedByMe: !!(u && (c.comment_likes || []).some(l => l.uid === u.id))
@@ -225,7 +227,7 @@
     if (error || !data.length) return { ok: true, list: [] };
     const ids = data.map(r => r.article_id);
     const { data: arts } = await SB.from('articles')
-      .select('id, title, uid, views, article_likes(count), profiles!articles_uid_fkey(username)')
+      .select('id, title, uid, views, article_likes(count), profiles!articles_uid_fkey(*)')
       .in('id', ids).neq('status', 'deleted');
     return { ok: true, list: (arts || []).map(a => ({
       id: a.id, title: a.title, author: (a.profiles && a.profiles.username) || '匿名',
@@ -237,7 +239,7 @@
     if (error || !data.length) return { ok: true, list: [] };
     const ids = data.map(r => r.article_id);
     const { data: arts } = await SB.from('articles')
-      .select('id, title, uid, views, article_favs(count), profiles!articles_uid_fkey(username)')
+      .select('id, title, uid, views, article_favs(count), profiles!articles_uid_fkey(*)')
       .in('id', ids).neq('status', 'deleted');
     return { ok: true, list: (arts || []).map(a => ({
       id: a.id, title: a.title, author: (a.profiles && a.profiles.username) || '匿名',
@@ -248,7 +250,7 @@
   /* ============ 视频 ============ */
   async function getVideos({ limit = 20, offset = 0, uid = null, sort = 'new' } = {}) {
     let q = SB.from('videos')
-      .select('*, profiles!videos_uid_fkey(username), video_likes(count), video_favs(count)')
+      .select('*, profiles!videos_uid_fkey(*), video_likes(count), video_favs(count)')
       .neq('status', 'deleted')
       .order(sort === 'hot' ? 'views' : 'created_at', { descending: true })
       .range(offset, offset + limit - 1);
@@ -266,7 +268,7 @@
   async function getVideo(id) {
     const u = await getCurrentUser();
     const { data, error } = await SB.from('videos')
-      .select('*, profiles!videos_uid_fkey(username), video_likes(count), video_favs(count)')
+      .select('*, profiles!videos_uid_fkey(*), video_likes(count), video_favs(count)')
       .eq('id', id).single();
     if (error) return errRes(error);
     let likedByMe = false, favedByMe = false;
@@ -281,7 +283,8 @@
       ok: true,
       id: data.id, title: data.title, description: data.description,
       author: (data.profiles && data.profiles.username) || '匿名',
-      uid: data.uid, views: data.views || 0, duration: data.duration,
+      uid: data.uid, uidNo: (data.profiles && data.profiles.uid_no) || null,
+      views: data.views || 0, duration: data.duration,
       poster: data.poster, video_path: data.video_path, created_at: data.created_at,
       likes: cnt(data.video_likes), favs: cnt(data.video_favs),
       likedByMe, favedByMe, canEdit: !!u && u.id === data.uid
@@ -291,7 +294,7 @@
   async function getVideoComments(id) {
     const u = await getCurrentUser();
     const { data, error } = await SB.from('comments')
-      .select('*, profiles!comments_uid_fkey(username, role, bio, avatar_url), comment_likes(uid)')
+      .select('*, profiles!comments_uid_fkey(*), comment_likes(uid)')
       .eq('target_type', 'video').eq('target_id', id).eq('deleted', false)
       .order('created_at', { ascending: true }).limit(500);
     if (error) return { ok: false, list: [] };
@@ -301,6 +304,7 @@
       role: (c.profiles && c.profiles.role) || null,
       bio: (c.profiles && c.profiles.bio) || '',
       avatar: (c.profiles && c.profiles.avatar_url) || null,
+      uidNo: (c.profiles && c.profiles.uid_no) || null,
       time: fmtTime(c.created_at), parent: c.parent_id || null,
       likes: (c.comment_likes || []).length,
       likedByMe: !!(u && (c.comment_likes || []).some(l => l.uid === u.id))
@@ -369,7 +373,7 @@
     if (error || !data.length) return { ok: true, list: [] };
     const ids = data.map(r => r.video_id);
     const { data: vs } = await SB.from('videos')
-      .select('id, title, uid, views, video_likes(count), profiles!videos_uid_fkey(username)')
+      .select('id, title, uid, views, video_likes(count), profiles!videos_uid_fkey(*)')
       .in('id', ids).neq('status', 'deleted');
     return { ok: true, list: (vs || []).map(v => ({
       id: v.id, title: v.title, author: (v.profiles && v.profiles.username) || '匿名',
@@ -381,7 +385,7 @@
     if (error || !data.length) return { ok: true, list: [] };
     const ids = data.map(r => r.video_id);
     const { data: vs } = await SB.from('videos')
-      .select('id, title, uid, views, video_favs(count), profiles!videos_uid_fkey(username)')
+      .select('id, title, uid, views, video_favs(count), profiles!videos_uid_fkey(*)')
       .in('id', ids).neq('status', 'deleted');
     return { ok: true, list: (vs || []).map(v => ({
       id: v.id, title: v.title, author: (v.profiles && v.profiles.username) || '匿名',
@@ -394,7 +398,7 @@
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data, error } = await SB.from('comments')
       .insert({ target_type: targetType, target_id: targetId, uid: u.id, content, parent_id: parentId || null })
-      .select('*, profiles!comments_uid_fkey(username)').single();
+      .select('*, profiles!comments_uid_fkey(*)').single();
     if (error) return errRes(error);
     return { ok: true, comment: { id: data.id, uid: data.uid, author: (data.profiles && data.profiles.username) || '匿名', content: data.content, time: data.created_at, likes: 0 } };
   }
@@ -419,7 +423,7 @@
   /* ============ 留言板 ============ */
   // 页面（test/board.html）用的是 m.text / m.name / whoOf(m) 这套字段，
   // 这里统一把 content/author 做别名，并带上真实赞数 + 我赞过没 + 作者资料。
-  const MSG_SELECT = '*, profiles!messages_uid_fkey(username, role, bio, avatar_url), message_likes(uid)';
+  const MSG_SELECT = '*, profiles!messages_uid_fkey(*), message_likes(uid)';
 
   function mapMessage(m, me, floorMap) {
     const p = m.profiles || {};
@@ -433,7 +437,7 @@
       floor: isRoot ? (floorMap ? floorMap.get(m.id) : m.floor) : null,
       parent: m.parent, pinned: !!m.pinned,
       time: fmtTime(m.created_at), created_at: m.created_at,
-      role: p.role || null, bio: p.bio || '', avatar: p.avatar_url || null,
+      role: p.role || null, bio: p.bio || '', avatar: p.avatar_url || null, uidNo: p.uid_no || null,
       likes: likes.length,
       likedByMe: !!(me && likes.some(l => l.uid === me.id))
     };
@@ -560,23 +564,35 @@
   /* ============ 用户 / 资料 / 关系 ============ */
   async function getProfile(uid) {
     const { data, error } = await SB.from('profiles')
-      .select('id, username, role, bio, avatar_url').eq('id', uid).single();
+      .select('*').eq('id', uid).single();
     if (error) return errRes(error);
     return { ok: true, profile: data };
   }
   async function getUserByUid(uid) {
     const { data, error } = await SB.from('profiles')
-      .select('id, username, role, bio, avatar_url, created_at').eq('id', uid).single();
+      .select('*').eq('id', uid).single();
     if (error) return { ok: false };
     return {
-      ok: true, uid: data.id, username: data.username, role: data.role,
+      ok: true, uid: data.id, uidNo: data.uid_no || null, username: data.username, role: data.role,
+      bio: data.bio, avatar: data.avatar_url, createdAt: (data.created_at || '').slice(0, 10)
+    };
+  }
+  // 按「数字 UID」查（/profile/?uid=1 这种），站长是 1
+  async function getUserByUidNo(n) {
+    const num = Number(n);
+    if (!num) return { ok: false };
+    const { data, error } = await SB.from('profiles')
+      .select('*').eq('uid_no', num).maybeSingle();
+    if (error || !data) return { ok: false };
+    return {
+      ok: true, uid: data.id, uidNo: data.uid_no, username: data.username, role: data.role,
       bio: data.bio, avatar: data.avatar_url, createdAt: (data.created_at || '').slice(0, 10)
     };
   }
   async function getAllUsers() {
     const { data, error } = await SB.from('profiles')
-      .select('id, username, role, bio, avatar_url, created_at')
-      .order('created_at', { ascending: true }).limit(500);
+      .select('*')
+      .order('uid_no', { ascending: true }).limit(500);
     if (error) return { ok: false, list: [] };
     return { ok: true, list: data || [] };
   }
@@ -648,10 +664,10 @@
   // 四类举报统一进 reports 表（message / comment / article / video），
   // 之前评论举报把 id 塞进 reason 字符串，导致后台永远显示"数据损坏"。
   const REPORT_CFG = {
-    message: { table: 'messages', cols: 'id, content, uid, author_name, created_at, deleted, profiles!messages_uid_fkey(username)' },
-    comment: { table: 'comments', cols: 'id, content, uid, created_at, deleted, profiles!comments_uid_fkey(username)' },
-    article: { table: 'articles', cols: 'id, title, uid, created_at, profiles!articles_uid_fkey(username)' },
-    video:   { table: 'videos',   cols: 'id, title, uid, created_at, profiles!videos_uid_fkey(username)' }
+    message: { table: 'messages', cols: 'id, content, uid, author_name, created_at, deleted, profiles!messages_uid_fkey(*)' },
+    comment: { table: 'comments', cols: 'id, content, uid, created_at, deleted, profiles!comments_uid_fkey(*)' },
+    article: { table: 'articles', cols: 'id, title, uid, created_at, profiles!articles_uid_fkey(*)' },
+    video:   { table: 'videos',   cols: 'id, title, uid, created_at, profiles!videos_uid_fkey(*)' }
   };
 
   async function getReports() {
@@ -794,7 +810,7 @@
     getMessages, postMessage, likeMessage, reportMessage, getMyReports, pinMessage,
     getNotifications, markRead,
     getLogs, addLog,
-    getProfile, getUserByUid, getAllUsers, updateProfile, changePassword,
+    getProfile, getUserByUid, getUserByUidNo, getAllUsers, updateProfile, changePassword,
     getRelations, follow, block, deleteMessage,
     getReports, handleReport, deleteReported, bumpView
   };

@@ -167,8 +167,11 @@
       return (window.MEDIA_BASE || '').replace(/\/+$/, '') + '/' + a.replace(/^\/+/, '');
     }
 
-    // 从网址里读 uid： /profile/?uid=3   （没有就是看自己）
-    const wantedUid = parseInt(new URLSearchParams(location.search).get('uid'), 10) || null;
+    // 从网址里读 uid：/profile/?uid=1（数字 UID，站长是 1）
+    // 也兼容早期分享出去的 uuid 链接；都没有就是看自己
+    const rawUid = (new URLSearchParams(location.search).get('uid') || '').trim();
+    const wantedNo = /^\d+$/.test(rawUid) ? Number(rawUid) : null;
+    const wantedUuid = rawUid && !wantedNo ? rawUid : null;
 
     let editing = false;
     let originalBio = '';
@@ -218,12 +221,21 @@
       const s = await SBAPI.getSession();
       if (!s) return null;
       const d = await SBAPI.me();
-      return d.ok ? { uid: d.uid, username: d.username, role: d.role } : null;
+      return d.ok ? { uid: d.uid, uidNo: d.uidNo, username: d.username, role: d.role } : null;
     }
 
     async function getUserByUid(uid) {
       const d = await SBAPI.getUserByUid(uid);
       return d.ok ? d : null;
+    }
+    // 网址里给的是数字 UID 就按 uid_no 查，给的是 uuid 就按 id 查
+    async function getUserByWanted() {
+      if (wantedNo) {
+        const d = await SBAPI.getUserByUidNo(wantedNo);
+        return d.ok ? d : null;
+      }
+      if (wantedUuid) return await getUserByUid(wantedUuid);
+      return null;
     }
 
     /* ---------- 入口：决定看谁的主页 ---------- */
@@ -233,7 +245,7 @@
       if (me) myUid = me.uid;
 
       // 情况一：网址没写 uid → 看自己
-      if (!wantedUid) {
+      if (!rawUid) {
         if (!me) {
           alert('请先登录');
           location.href = '/';
@@ -242,26 +254,27 @@
         isSelf = true;
         const profile = await getUserByUid(me.uid) || me;
         // 把 uid 补进网址，方便复制给别人
-        if (me.uid) history.replaceState(null, '', '/profile/?uid=' + me.uid);
+        if (profile.uidNo || me.uidNo) history.replaceState(null, '', '/profile/?uid=' + (profile.uidNo || me.uidNo));
+        else if (me.uid) history.replaceState(null, '', '/profile/?uid=' + me.uid);
         render(profile);
         return;
       }
 
       // 情况二：网址写的就是自己 → 看自己（可编辑）
-      if (me && me.uid === wantedUid) {
+      if (me && ((wantedUuid && me.uid === wantedUuid) || (wantedNo && me.uidNo === wantedNo))) {
         isSelf = true;
         render(await getUserByUid(me.uid) || me);
         return;
       }
 
       // 情况三：看别人的主页（不需要登录）
-      const other = await getUserByUid(wantedUid);
+      const other = await getUserByWanted();
       if (!other) {
         el.name.textContent = '找不到这个用户';
         el.roleTag.style.display = 'none';
-        el.uid.textContent = wantedUid;
+        el.uid.textContent = rawUid;
         el.createdAt.textContent = '—';
-        el.bioText.textContent = 'UID ' + wantedUid + ' 不存在，可能还没注册。';
+        el.bioText.textContent = 'UID ' + rawUid + ' 不存在，可能还没注册。';
         el.myMessages.innerHTML = '<p class="empty-hint">—</p>';
         el.myArticles.innerHTML = '<p class="empty-hint">—</p>';
         el.editFab.style.display = 'none';
@@ -277,7 +290,7 @@
       currentUsername = data.username;
       el.name.textContent = data.username;
       document.title = isSelf ? '个人主页 · 乘法' : (data.username + ' 的主页 · 乘法');
-      el.uid.textContent = data.uid || '—';
+      el.uid.textContent = data.uidNo || '—';
       el.createdAt.textContent = data.createdAt || '—';
 
       const role = data.role || 'user';
@@ -418,13 +431,14 @@
       el.genericBody.innerHTML = uids.map(uid => {
         const u = map.get(uid);
         const name = u ? u.username : ('UID ' + uid);
+        const shownUid = u ? (u.uid_no || uid) : uid;
         const meMark = (uid === myUid) ? ' <span class="user-row-you">（我）</span>' : '';
         return `
-          <a class="user-row" href="/profile/?uid=${encodeURIComponent(uid)}">
+          <a class="user-row" href="/profile/?uid=${encodeURIComponent(shownUid)}">
             <img class="user-row-avatar" src="${fixAvatar(u && u.avatar_url)}" alt="">
             <span class="user-row-info">
               <span class="user-row-name">${escapeHTML(name)}${meMark}</span>
-              <span class="user-row-uid">UID: ${escapeHTML(uid)}</span>
+              <span class="user-row-uid">UID: ${escapeHTML(String(shownUid))}</span>
             </span>
           </a>`;
       }).join('');
@@ -468,7 +482,7 @@
           <div class="my-art-item">
             <a class="my-art-title" href="/pages/article.html?id=${a.id}">${escapeHTML(a.title)}</a>
             <div class="my-art-meta">
-              <span>${escapeHTML(a.created_at || '')}</span>
+              <span>${escapeHTML(SBAPI.fmtTime(a.created_at))}</span>
               <span>${a.chars || 0} 字</span>
               <span>♥ ${a.likes || 0}</span>
               <span>★ ${a.favs || 0}</span>

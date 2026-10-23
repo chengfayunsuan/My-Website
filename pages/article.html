@@ -275,7 +275,7 @@ function render() {
   box.innerHTML = `
     <h1 class="art-title">${escapeHTML(a.title)}</h1>
     <div class="art-sub">
-      ${a.uid ? `<a href="/profile/?uid=${a.uid}">${escapeHTML(a.author || '匿名')}</a>` : `<span>${escapeHTML(a.author || '匿名')}</span>`}
+      ${a.uid ? `<a href="/profile/?uid=${a.uidNo || a.uid}">${escapeHTML(a.author || '匿名')}</a>` : `<span>${escapeHTML(a.author || '匿名')}</span>`}
       <span>${escapeHTML(SBAPI.fmtTime(a.updated_at || a.created_at))}</span>
       <span>${a.chars || 0} 字</span>
       <span>👁 ${a.views || 0}</span>
@@ -412,8 +412,8 @@ function headHTML(c) {
   if (c.uid && c.avatar) userAvatars[c.uid] = c.avatar;   // 评论接口已带回头像，省一次请求
   const av = fixAvatar(userAvatars[c.uid]);
   const img = `<img src="${av}" alt="">`;
-  const a = c.uid ? `<a class="cmt-avatar" href="/profile/?uid=${c.uid}">${img}</a>` : `<span class="cmt-avatar">${img}</span>`;
-  const name = c.uid ? `<a class="cmt-name" href="/profile/?uid=${c.uid}">${cmtEsc(c.name)}</a>` : `<span class="cmt-name">${cmtEsc(c.name)}</span>`;
+  const a = c.uid ? `<a class="cmt-avatar" href="/profile/?uid=${c.uidNo || c.uid}">${img}</a>` : `<span class="cmt-avatar">${img}</span>`;
+  const name = c.uid ? `<a class="cmt-name" href="/profile/?uid=${c.uidNo || c.uid}">${cmtEsc(c.name)}</a>` : `<span class="cmt-name">${cmtEsc(c.name)}</span>`;
   return `<div class="cmt-side">${a}</div><div class="cmt-main"><div class="cmt-top">${name}${plateHTML(c)}</div>`;
 }
 
