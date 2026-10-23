@@ -13,7 +13,11 @@
   /* B 站播放器很重（一个完整 SPA + 弹幕），先摆个占位，点了才真加载 */
   .vid-lazy { width: 100%; aspect-ratio: 16 / 9; background: #000; display: flex;
     flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    background-size: cover; background-position: center; position: relative;
     cursor: pointer; user-select: none; }
+  .vid-lazy::before { content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45)); pointer-events: none; }
+  .vid-lazy > * { position: relative; z-index: 1; }
   .vid-lazy-btn { width: 64px; height: 64px; border-radius: 50%; border: 0; cursor: pointer;
     background: rgba(251, 114, 153, .92); color: #fff; font-size: 22px; line-height: 64px;
     padding: 0 0 0 4px; box-shadow: 0 6px 20px rgba(251, 114, 153, .35); transition: transform .15s; }
@@ -171,7 +175,7 @@ function render() {
   const bili = biliOf(v.video_path);
   const localSrc = bili ? '' : mediaUrl(v.video_path);
   const player = bili
-    ? `<div class="vid-lazy" id="vidLazy" role="button" tabindex="0" aria-label="播放视频">
+    ? `<div class="vid-lazy" id="vidLazy" role="button" tabindex="0" aria-label="播放视频"${posterUrl ? ` style="background-image:url('${posterUrl}')"` : ''}>
          <button class="vid-lazy-btn" type="button" tabindex="-1">▶</button>
          <div class="vid-lazy-tip">点击播放 · B 站外链最高 720P，登录 B 站可提升</div>
        </div>`
@@ -221,6 +225,15 @@ function render() {
 function bindBili(bv) {
   const el = document.getElementById('vidLazy');
   if (!el || !bv) return;
+
+  // 老数据 poster 是 null，现取 B 站封面当背景，避免播放器一大块黑
+  if (!el.style.backgroundImage) {
+    SBAPI.fetchBili(bv).then(info => {
+      const box2 = document.getElementById('vidLazy');
+      if (box2 && info && info.pic) box2.style.backgroundImage = `url("${info.pic}")`;
+    });
+  }
+
   const mount = () => {
     el.outerHTML = `<iframe class="vid-bili"
       src="https://player.bilibili.com/player.html?bvid=${bv}&page=1&autoplay=1&high_quality=1&danmaku=0"

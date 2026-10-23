@@ -728,8 +728,42 @@
     try { await SB.rpc('bump_view', { p_type: type, p_id: id }); } catch (e) { /* 函数没建就算了，不阻塞页面 */ }
   }
 
+  // ---------- B 站信息（封面/时长） ----------
+  // 走本站 /bili 边缘函数，避免第三方 CORS 代理在国内被墙导致 poster 存成 null。
+  // 结果缓存 7 天：封面基本不会变，列表页批量补图也不会重复打接口。
+  const BILI_KEY = 'biliCache.v1';
+  let biliMem = null;
+  function biliStore() {
+    if (biliMem) return biliMem;
+    try { biliMem = JSON.parse(localStorage.getItem(BILI_KEY) || '{}'); }
+    catch (e) { biliMem = {}; }
+    return biliMem;
+  }
+  async function fetchBili(bv) {
+    const key = String(bv || '').trim().toUpperCase();
+    if (!/^BV[0-9A-Za-z]{10}$/.test(key)) return null;
+    const store = biliStore();
+    const hit = store[key];
+    if (hit && Date.now() - hit.t < 7 * 24 * 3600 * 1000) return hit.v;
+    try {
+      const r = await fetch('/bili?bv=' + encodeURIComponent(key));
+      if (!r.ok) return null;
+      const j = await r.json();
+      if (!j || !j.ok) return null;
+      const v = {
+        title: j.title || '',
+        pic: String(j.pic || '').replace(/^http:/, 'https:'),
+        duration: Number(j.duration) || 0
+      };
+      store[key] = { t: Date.now(), v };
+      try { localStorage.setItem(BILI_KEY, JSON.stringify(store)); } catch (e) { /* 存不下就算了 */ }
+      return v;
+    } catch (e) { return null; }
+  }
+
   window.SBAPI = {
     SB, DOMAIN,
+    fetchBili,
     getSession, getCurrentUser, signIn, signUp, signOut, onAuthChange, me, fmtTime,
     getArticles, getArticle, getArticleComments,
     toggleArticleLike, toggleArticleFav, reportArticle, deleteArticle,

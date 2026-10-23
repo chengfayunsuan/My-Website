@@ -150,7 +150,11 @@ function cardHTML(v) {
   return `
     <a class="vb" href="/pages/video.html?id=${v.id}">
       <div class="vb-cover">
-        ${cover ? `<img src="${escapeHTML(cover)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : '<span class="vb-ph">▶</span>'}
+        ${cover
+          ? `<img src="${escapeHTML(cover)}" alt="" loading="lazy" referrerpolicy="no-referrer">`
+          : (bili
+              ? `<span class="vb-ph vb-lazy" data-bv="${escapeHTML(String(v.video_path || '').replace(/^bili:/i, ''))}">▶</span>`
+              : '<span class="vb-ph">▶</span>')}
         ${fmtDur(v.duration) ? `<span class="vb-dur">${fmtDur(v.duration)}</span>` : ''}
         ${bili ? '<span class="vb-tag">B 站</span>' : ''}
       </div>
@@ -164,6 +168,21 @@ function cardHTML(v) {
     </a>`;
 }
 
+// 老数据 poster 存成 null（当年第三方代理抓不到），这里按 BV 号现取封面补上
+async function fillLazyPosters() {
+  const els = [...document.querySelectorAll('.vb-lazy[data-bv]')];
+  await Promise.all(els.map(async el => {
+    const info = await SBAPI.fetchBili(el.getAttribute('data-bv'));
+    if (!info || !info.pic) return;
+    const img = document.createElement('img');
+    img.src = info.pic;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.setAttribute('referrerpolicy', 'no-referrer');
+    el.replaceWith(img);
+  }));
+}
+
 async function load(append) {
   if (!append) { offset = 0; listEl.innerHTML = '<p class="vid-empty">加载中…</p>'; }
   try {
@@ -174,6 +193,7 @@ async function load(append) {
     if (!d.list.length && !append) listEl.innerHTML = '<p class="vid-empty">还没有人传视频，来当第一个吧~</p>';
     offset += d.list.length;
     moreBtn.style.display = d.list.length < STEP ? 'block' : 'none';
+    fillLazyPosters();
   } catch {
     listEl.innerHTML = '<p class="vid-empty">加载失败，刷新试试</p>';
   }
