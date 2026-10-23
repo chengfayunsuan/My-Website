@@ -173,7 +173,7 @@ function render() {
   const player = bili
     ? `<div class="vid-lazy" id="vidLazy" role="button" tabindex="0" aria-label="播放视频">
          <button class="vid-lazy-btn" type="button" tabindex="-1">▶</button>
-         <div class="vid-lazy-tip">点击加载 B 站播放器（不点不会拖慢页面）</div>
+         <div class="vid-lazy-tip">点击播放 · B 站外链最高 720P，登录 B 站可提升</div>
        </div>`
     : (localSrc
         ? `<video id="vid" src="${localSrc}" ${posterUrl ? `poster="${posterUrl}"` : ''} controls preload="metadata"></video>`
