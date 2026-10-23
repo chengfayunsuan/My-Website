@@ -225,7 +225,7 @@
       id: v.id, title: v.title,
       author: (v.profiles && v.profiles.username) || '匿名',
       views: v.views || 0, likes: cnt(v.video_likes), favs: cnt(v.video_favs),
-      poster: v.poster, created_at: v.created_at
+      poster: v.poster, video_path: v.video_path, created_at: v.created_at
     })) };
   }
 

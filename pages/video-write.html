@@ -45,8 +45,16 @@
 
       <input class="ed-title" id="title" maxlength="100" placeholder="标题（最多 100 字）">
 
+      <div style="margin-top:14px">
+        <input class="ed-title" id="bvid" maxlength="60" style="margin-top:0"
+               placeholder="B 站 BV 号（推荐）：例 BV1xx411c7mD">
+        <div id="biliHint" style="font-size:13px;color:var(--text-light);margin-top:6px;line-height:1.6">
+          填了 BV 号就不用上传视频，播放直接走 B 站。<b>视频必须是「公开」</b>，仅自己可见的视频访客打不开。
+        </div>
+      </div>
+
       <div class="ed-bar">
-        <button class="ed-btn" id="pickVideo" type="button">🎬 选择视频</button>
+        <button class="ed-btn" id="pickVideo" type="button">🎬 或者上传视频文件</button>
         <span id="fileInfo" style="font-size:13px;color:var(--text-light)">支持 mp4 / webm / ogv / mov / mkv，最大 2GB</span>
       </div>
       <div class="bar" id="prog" style="display:none;"><i id="barFill"></i></div>
@@ -83,12 +91,20 @@ const fileInfo = document.getElementById('fileInfo');
 const titleEl = document.getElementById('title');
 const descEl = document.getElementById('desc');
 const publishBtn = document.getElementById('publish');
+const bvidEl = document.getElementById('bvid');
+const biliHint = document.getElementById('biliHint');
 const msgEl = document.getElementById('msg');
 const quotaEl = document.getElementById('quota');
 
 let videoName = '', duration = 0, uploaded = false, videoUrl = '';
 let loggedIn = false;
 
+const BILI_TIP = '填了 BV 号就不用上传视频，播放直接走 B 站。<b>视频必须是「公开」</b>，仅自己可见的视频访客打不开。';
+function biliOf(v) {
+  if (!v) return '';
+  const m = String(v).trim().match(/(BV[0-9A-Za-z]{10})/);
+  return m ? m[1] : '';
+}
 function requireLogin() {
   if (loggedIn) return true;
   const m = document.getElementById('loginModal');
@@ -97,6 +113,25 @@ function requireLogin() {
 }
 (async () => { const s = await SBAPI.getSession(); loggedIn = !!s; })();
 function setMsg(text, cls) { msgEl.textContent = text; msgEl.className = 'ed-msg' + (cls ? ' ' + cls : ''); }
+
+bvidEl.addEventListener('input', () => {
+  const raw = bvidEl.value.trim();
+  if (!raw) {
+    biliHint.innerHTML = BILI_TIP; biliHint.style.color = '';
+    publishBtn.disabled = !uploaded;
+    return;
+  }
+  const bv = biliOf(raw);
+  if (bv) {
+    biliHint.innerHTML = '✓ 已识别 ' + bv + '，不用上传文件';
+    biliHint.style.color = 'var(--primary-deep)';
+    publishBtn.disabled = false;
+  } else {
+    biliHint.textContent = '没认出来。BV 号是 BV + 10 位字母数字，总共 12 位；也可以直接粘整条视频链接';
+    biliHint.style.color = '#e03e6a';
+    publishBtn.disabled = !uploaded;
+  }
+});
 
 document.getElementById('pickVideo').addEventListener('click', () => fileVideo.click());
 fileVideo.addEventListener('change', e => { if (e.target.files[0]) handleVideo(e.target.files[0]); e.target.value = ''; });
@@ -108,7 +143,7 @@ async function handleVideo(file) {
   }
   if (file.size > VID_MAX) return alert('这个视频 ' + (file.size / 1024 / 1024 / 1024).toFixed(2) + 'GB，超过 2GB 上限');
   videoName = file.name; videoUrl = ''; uploaded = false;
-  publishBtn.disabled = true;
+  publishBtn.disabled = !biliOf(bvidEl.value);
   fileInfo.textContent = file.name + ' · ' + (file.size / 1048576).toFixed(1) + 'MB';
   progEl.style.display = ''; barTxt.style.display = ''; barFill.style.width = '0%';
   barTxt.textContent = '上传中… 0%';
@@ -130,17 +165,19 @@ async function handleVideo(file) {
 }
 
 async function loadQuota() {
-  quotaEl.textContent = '媒体直传 R2 · 视频上限 2GB';
+  quotaEl.textContent = '推荐 B 站嵌入（不限大小、不占本站流量）';
 }
 
 publishBtn.addEventListener('click', async () => {
   if (!requireLogin()) return;
-  if (!uploaded) return setMsg('先选个视频并等它上传完', 'err');
+  const bv = biliOf(bvidEl.value);
+  if (!bv && !uploaded) return setMsg('填 B 站 BV 号，或者选个视频等它上传完', 'err');
   const title = titleEl.value.trim();
   if (!title) return alert('先写个标题');
   publishBtn.disabled = true; setMsg('发布中…', '');
   try {
-    const d = await SBAPI.createVideo(title, descEl.value.trim(), videoUrl);
+    const path = bv ? 'bili:' + bv : videoUrl;
+    const d = await SBAPI.createVideo(title, descEl.value.trim(), path);
     if (!d.ok) { publishBtn.disabled = false; return setMsg(d.error || '发布失败', 'err'); }
     setMsg('已发布，跳转中…', 'ok');
     setTimeout(() => { location.href = '/pages/video.html?id=' + d.id; }, 600);
@@ -156,7 +193,7 @@ loadQuota();
   const big = MEDIA.limitOf('video') >= 1073741824;
   fileInfo.textContent = big
     ? '支持 mp4 / webm / ogv / mov / mkv，最大 2GB'
-    : '支持 mp4 / webm / ogv / mov / mkv，当前最大 50MB（R2 未接入，先用 Storage 兜底）';
+    : '支持 mp4 / webm / ogv / mov / mkv，当前最大 50MB；长视频请用 B 站 BV 号';
 })();
 </script>
 </body>
