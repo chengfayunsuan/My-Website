@@ -143,16 +143,31 @@
   });
 
   /* ========== 5. 获取 IP ========== */
-  fetch('https://api.ip.sb/ip')
-    .then(r => r.text())
-    .then(ip => {
-      const el = document.getElementById('ip');
-      if (el) el.textContent = ip.trim();
-    })
-    .catch(() => {
-      const el = document.getElementById('ip');
-      if (el) el.textContent = '获取失败';
-    });
+  (function showIP() {
+    const sources = [
+      'https://api.ipify.org?format=text',
+      'https://ipapi.co/ip/',
+      'https://api.ip.sb/ip'
+    ];
+    const el = () => document.getElementById('ip');
+    let i = 0;
+    function next() {
+      if (i >= sources.length) { const e = el(); if (e) e.textContent = '获取失败'; return; }
+      const url = sources[i++];
+      const ac = new AbortController();
+      const timer = setTimeout(() => ac.abort(), 3000);   // 3 秒不回来就换下一个，不让它挂着
+      fetch(url, { signal: ac.signal, cache: 'no-store' })
+        .then(r => r.text())
+        .then(tp => {
+          clearTimeout(timer);
+          const ip = (tp || '').trim().split('\n')[0].slice(0, 60);
+          if (!/^[0-9a-fA-F.:]+$/.test(ip)) throw new Error('格式不对');
+          const e = el(); if (e) e.textContent = ip;
+        })
+        .catch(() => { clearTimeout(timer); next(); });
+    }
+    next();
+  })();
 
   /* ========== 6. 登录状态判断 ========== */
   function showLoggedIn(role, avatar, uid) {

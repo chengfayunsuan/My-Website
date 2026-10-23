@@ -18,14 +18,24 @@
   // 一对多关系的 count 取数（supabase 嵌入返回 [{count:N}]）
   function cnt(arr) { return (arr && arr[0] && arr[0].count) || 0; }
 
-  // ISO 时间 → 「2026-10-22 14:24」（页面直接显示，不再出现 T / Z）
+  // ISO 时间 → 「2026-10-23 13:07」
+  // 固定按北京时间（Asia/Shanghai）显示：访客在哪个时区都看到中文站该有的时间，
+  // 不再出现 T / Z / +00:00，也不会被浏览器时区搞成 UTC 时间。
   function fmtTime(s) {
     if (!s) return '';
     const d = new Date(s);
     if (isNaN(d.getTime())) return String(s);
-    const p = n => (n < 10 ? '0' + n : '' + n);
-    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) +
-      ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+    try {
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hour12: false
+      }).formatToParts(d).reduce((o, x) => (o[x.type] = x.value, o), {});
+      return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}`;
+    } catch (e) {
+      const p = n => (n < 10 ? '0' + n : '' + n);
+      return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) +
+        ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+    }
   }
 
   /* ============ auth ============ */
@@ -52,7 +62,9 @@
 
   // 当前用户资料（兼容旧 /me 结构）
   async function me() {
-    const u = await getCurrentUser();
+    // 用 session 里的 user 就够，省掉一次 auth/v1/user 往返（国内这条最慢）
+    const s = await getSession();
+    const u = s && s.user;
     if (!u) return { ok: false };
     const { data, error } = await SB.from('profiles')
       .select('id, username, role, avatar_url')
@@ -108,13 +120,17 @@
   async function getArticleComments(id) {
     const u = await getCurrentUser();
     const { data, error } = await SB.from('comments')
-      .select('*, profiles!comments_uid_fkey(username), comment_likes(uid)')
+      .select('*, profiles!comments_uid_fkey(username, role, bio, avatar_url), comment_likes(uid)')
       .eq('target_type', 'article').eq('target_id', id).eq('deleted', false)
       .order('created_at', { ascending: true }).limit(500);
     if (error) return { ok: false, list: [] };
     return { ok: true, list: (data || []).map(c => ({
       id: c.id, uid: c.uid, name: (c.profiles && c.profiles.username) || '匿名',
-      content: c.content, time: fmtTime(c.created_at), parent: c.parent_id || null,
+      content: c.content, text: c.content,          // 页面渲染读的是 text
+      role: (c.profiles && c.profiles.role) || null,
+      bio: (c.profiles && c.profiles.bio) || '',
+      avatar: (c.profiles && c.profiles.avatar_url) || null,
+      time: fmtTime(c.created_at), parent: c.parent_id || null,
       likes: (c.comment_likes || []).length,
       likedByMe: !!(u && (c.comment_likes || []).some(l => l.uid === u.id))
     })) };
@@ -240,7 +256,7 @@
   async function getVideoComments(id) {
     const u = await getCurrentUser();
     const { data, error } = await SB.from('comments')
-      .select('*, profiles!comments_uid_fkey(username), comment_likes(uid)')
+      .select('*, profiles!comments_uid_fkey(username, role, bio, avatar_url), comment_likes(uid)')
       .eq('target_type', 'video').eq('target_id', id).eq('deleted', false)
       .order('created_at', { ascending: true }).limit(500);
     if (error) return { ok: false, list: [] };
@@ -592,7 +608,7 @@
     let msgMap = {};
     if (msgIds.length) {
       const { data: ms } = await SB.from('messages')
-        .select('id, content, uid, author_name, created_at, deleted').in('id', msgIds);
+        .select('id, content, uid, author_name, created_at, deleted, profiles!messages_uid_fkey(username)').in('id', msgIds);
       (ms || []).forEach(m => { msgMap[m.id] = m; });
     }
     const reporterIds = [...new Set(rows.map(r => r.reporter_uid).filter(Boolean))];
@@ -607,9 +623,10 @@
         id: r.id, messageId: r.message_id, status: r.status, action: r.action, reason: r.reason,
         msgText: (m && m.content) || '',
         alive: !!(m && !m.deleted),
-        msgName: (m && (m.author_name || '')) || '（未知用户）',
+        msgName: (m && (m.author_name || (m.profiles && m.profiles.username) || '')) || '（未知用户）',
         targetUid: m ? m.uid : null,
-        msgTime: m ? m.created_at : '',
+        msgTime: m ? fmtTime(m.created_at) : '',
+        reportTime: fmtTime(r.created_at),
         reporter: reporterMap[r.reporter_uid] || '（未知）'
       };
     }) };
@@ -623,7 +640,7 @@
 
   window.SBAPI = {
     SB, DOMAIN,
-    getSession, getCurrentUser, signIn, signUp, signOut, onAuthChange, me,
+    getSession, getCurrentUser, signIn, signUp, signOut, onAuthChange, me, fmtTime,
     getArticles, getArticle, getArticleComments,
     toggleArticleLike, toggleArticleFav, reportArticle, deleteArticle,
     createArticle, updateArticle,

@@ -387,7 +387,7 @@
           </div>
           ${quoted}
           <div class="report-line"><b>举报理由：</b>${escapeHTML(r.reason || '（没写）')}</div>
-          <div class="report-line"><b>举报人：</b>${escapeHTML(r.reporter || '')}　<b>被举报人：</b>${escapeHTML(r.msgName || '')}${r.targetUid != null ? '（UID ' + escapeHTML(r.targetUid) + '）' : ''}　<b>留言时间：</b>${escapeHTML(r.msgTime || '')}</div>
+          <div class="report-line"><b>举报人：</b>${escapeHTML(r.reporter || '')}　<b>被举报人：</b>${escapeHTML(r.msgName || '')}${r.targetUid != null ? '（UID ' + escapeHTML(r.targetUid) + '）' : ''}　<b>留言时间：</b>${escapeHTML(r.msgTime || (r.reportTime ? '（原留言已删除）举报于 ' + r.reportTime : ''))}</div>
           ${actions}
         </div>`;
       }).join('');

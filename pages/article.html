@@ -154,6 +154,14 @@
   .cmt-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .cmt-name { font-size: 13px; font-weight: 500; color: var(--primary-deep); text-decoration: none; }
   .cmt-name:hover { text-decoration: underline; }
+  .cmt-plate {
+    display: inline-block; padding: 0 6px; height: 18px; line-height: 18px;
+    font-size: 11px; border-radius: 4px; vertical-align: 1px;
+    max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    background: rgba(91, 155, 213, .16); color: var(--primary-deep);
+  }
+  .cmt-plate.staff { background: rgba(251, 114, 153, .18); color: #e03e6a; }
+  .art-btn.coin { opacity: .75; }
   .cmt-text { margin-top: 4px; font-size: 15px; line-height: 1.7; color: var(--text); white-space: pre-wrap; word-break: break-word; }
   .cmt-to { color: var(--primary-deep); }
   .cmt-foot { display: flex; align-items: center; gap: 2px; margin-top: 6px; flex-wrap: wrap; }
@@ -269,7 +277,7 @@ function render() {
     <h1 class="art-title">${escapeHTML(a.title)}</h1>
     <div class="art-sub">
       ${a.uid ? `<a href="/profile/?uid=${a.uid}">${escapeHTML(a.author || '匿名')}</a>` : `<span>${escapeHTML(a.author || '匿名')}</span>`}
-      <span>${escapeHTML(a.updated_at || a.created_at || '')}</span>
+      <span>${escapeHTML(SBAPI.fmtTime(a.updated_at || a.created_at))}</span>
       <span>${a.chars || 0} 字</span>
       <span>👁 ${a.views || 0}</span>
     </div>
@@ -278,6 +286,7 @@ function render() {
 
     <div class="art-actions">
       <button class="art-btn like${a.likedByMe ? ' on' : ''}" data-act="like">♥ <span id="likeN">${a.likes || 0}</span></button>
+      <button class="art-btn coin" data-act="coin" title="投币（开发中）">🪙 <span id="coinN">0</span></button>
       <button class="art-btn fav${a.favedByMe ? ' on' : ''}" data-act="fav">★ <span id="favN">${a.favs || 0}</span></button>
       <button class="art-btn danger" data-act="report">举报</button>
       ${a.canEdit ? `<button class="art-btn" data-act="edit">编辑</button>` : ''}
@@ -321,6 +330,8 @@ box.addEventListener('click', async e => {
   const act = btn.dataset.act;
 
   if (act === 'edit') { location.href = '/pages/write.html?id=' + article.id; return; }
+
+  if (act === 'coin') { setTip('投币系统还在做，先占个位 🪙'); return; }
 
   if (!requireLogin()) return;
 
@@ -385,12 +396,26 @@ function fixAvatar(a) {
   return (window.MEDIA_BASE || '').replace(/\/+$/, '') + '/' + a.replace(/^\/+/, '');
 }
 
+/* 铭牌：有签名显示签名，没签名才显示身份；站长/管理员红色，普通人不显示 */
+function plateHTML(c) {
+  const staff = c.role === 'owner' || c.role === 'admin';
+  const bio = String(c.bio || '').trim();
+  if (bio) {
+    const t = bio.length > 20 ? bio.slice(0, 20) + '…' : bio;
+    return `<span class="cmt-plate${staff ? ' staff' : ''}" title="${cmtEsc(bio)}">${cmtEsc(t)}</span>`;
+  }
+  if (c.role === 'owner') return '<span class="cmt-plate staff">站长</span>';
+  if (c.role === 'admin') return '<span class="cmt-plate staff">管理</span>';
+  return '';
+}
+
 function headHTML(c) {
+  if (c.uid && c.avatar) userAvatars[c.uid] = c.avatar;   // 评论接口已带回头像，省一次请求
   const av = fixAvatar(userAvatars[c.uid]);
   const img = `<img src="${av}" alt="">`;
   const a = c.uid ? `<a class="cmt-avatar" href="/profile/?uid=${c.uid}">${img}</a>` : `<span class="cmt-avatar">${img}</span>`;
   const name = c.uid ? `<a class="cmt-name" href="/profile/?uid=${c.uid}">${cmtEsc(c.name)}</a>` : `<span class="cmt-name">${cmtEsc(c.name)}</span>`;
-  return `<div class="cmt-side">${a}</div><div class="cmt-main"><div class="cmt-top">${name}</div>`;
+  return `<div class="cmt-side">${a}</div><div class="cmt-main"><div class="cmt-top">${name}${plateHTML(c)}</div>`;
 }
 
 function footHTML(c, isReply) {
