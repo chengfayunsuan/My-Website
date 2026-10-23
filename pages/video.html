@@ -10,6 +10,17 @@
   .vid-player { width: 100%; background: #000; border-radius: 12px; overflow: hidden; }
   .vid-player video { width: 100%; max-height: 70vh; display: block; background: #000; }
   .vid-bili { width: 100%; aspect-ratio: 16 / 9; display: block; border: 0; background: #000; }
+  /* B 站播放器很重（一个完整 SPA + 弹幕），先摆个占位，点了才真加载 */
+  .vid-lazy { width: 100%; aspect-ratio: 16 / 9; background: #000; display: flex;
+    flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    cursor: pointer; user-select: none; }
+  .vid-lazy-btn { width: 64px; height: 64px; border-radius: 50%; border: 0; cursor: pointer;
+    background: rgba(251, 114, 153, .92); color: #fff; font-size: 22px; line-height: 64px;
+    padding: 0 0 0 4px; box-shadow: 0 6px 20px rgba(251, 114, 153, .35); transition: transform .15s; }
+  .vid-lazy:hover .vid-lazy-btn { transform: scale(1.06); }
+  .vid-lazy-tip { font-size: 13px; color: rgba(255, 255, 255, .55); }
+  a.vid-src { text-decoration: none; }
+  a.vid-src:hover { text-decoration: none; opacity: .8; }
   .vid-src { display: inline-block; padding: 0 6px; height: 18px; line-height: 18px; font-size: 11px;
     border-radius: 4px; background: rgba(251, 114, 153, .16); color: #e03e6a; vertical-align: 1px; }
   .art-title { font-size: 24px; line-height: 1.4; color: var(--text); margin: 16px 0 10px; word-break: break-word; }
@@ -160,9 +171,10 @@ function render() {
   const bili = biliOf(v.video_path);
   const localSrc = bili ? '' : mediaUrl(v.video_path);
   const player = bili
-    ? `<iframe class="vid-bili" src="https://player.bilibili.com/player.html?bvid=${bili}&page=1&high_quality=1&danmaku=0"
-         scrolling="no" frameborder="0" allowfullscreen
-         allow="fullscreen; autoplay; encrypted-media; picture-in-picture"></iframe>`
+    ? `<div class="vid-lazy" id="vidLazy" role="button" tabindex="0" aria-label="播放视频">
+         <button class="vid-lazy-btn" type="button" tabindex="-1">▶</button>
+         <div class="vid-lazy-tip">点击加载 B 站播放器（不点不会拖慢页面）</div>
+       </div>`
     : (localSrc
         ? `<video id="vid" src="${localSrc}" ${posterUrl ? `poster="${posterUrl}"` : ''} controls preload="metadata"></video>`
         : `<div style="padding:40px;text-align:center;color:#fff">视频文件不见了</div>`);
@@ -173,7 +185,7 @@ function render() {
       ${v.uid ? `<a href="/profile/?uid=${v.uid}">${escapeHTML(v.author || '匿名')}</a>` : `<span>${escapeHTML(v.author || '匿名')}</span>`}
       <span>${escapeHTML(SBAPI.fmtTime(v.created_at))}</span>
       ${fmtDur(v.duration) ? `<span>时长 ${fmtDur(v.duration)}</span>` : ''}
-      ${bili ? `<span class="vid-src">B 站 · ${bili}</span>` : ''}
+      ${bili ? `<a class="vid-src" href="https://www.bilibili.com/video/${bili}" target="_blank" rel="noopener">B 站 · ${bili} ↗</a>` : ''}
       <span>👁 ${v.views || 0}</span>
     </div>
 
@@ -201,7 +213,24 @@ function render() {
       </div>
       <div class="cmt-list" id="cmtList"><div class="cmt-empty">加载中…</div></div>
     </div>`;
+  bindBili(bili);
   bindComments();
+}
+
+/* 点了才创建 iframe：B 站播放器首屏不加载，页面就不卡 */
+function bindBili(bv) {
+  const el = document.getElementById('vidLazy');
+  if (!el || !bv) return;
+  const mount = () => {
+    el.outerHTML = `<iframe class="vid-bili"
+      src="https://player.bilibili.com/player.html?bvid=${bv}&page=1&autoplay=1&high_quality=1&danmaku=0"
+      scrolling="no" frameborder="0" allowfullscreen
+      allow="fullscreen; autoplay; encrypted-media; picture-in-picture"></iframe>`;
+  };
+  el.addEventListener('click', mount);
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mount(); }
+  });
 }
 
 function setTip(t) { const el = document.getElementById('tip'); if (el) el.textContent = t || ''; }
