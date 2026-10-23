@@ -729,37 +729,10 @@
   }
 
   // ---------- B 站信息（封面/时长） ----------
-  // 为什么用 JSONP 而不是 fetch：
-  //  1) api.bilibili.com 不返 CORS 头，fetch 读不到内容；
-  //  2) 走 Cloudflare 边缘函数会被 B 站风控拦（-412 request was banned，数据中心 IP 段）；
-  //  3) 浏览器在国内直连 B 站是通的，JSONP 用 <script> 注入正好绕过 CORS。
-  // 边缘函数 /bili 留作海外访客的兜底。
-  function biliJSONP(bv, timeout) {
-    return new Promise(resolve => {
-      const cb = '__bili_cb_' + Math.random().toString(36).slice(2);
-      const s = document.createElement('script');
-      let done = false;
-      const finish = v => {
-        if (done) return;
-        done = true;
-        try { delete window[cb]; } catch (e) { window[cb] = undefined; }
-        if (s.parentNode) s.parentNode.removeChild(s);
-        clearTimeout(timer);
-        resolve(v);
-      };
-      const timer = setTimeout(() => finish(null), timeout || 8000);
-      window[cb] = j => {
-        if (j && j.code === 0 && j.data) finish(j.data);
-        else finish(null);
-      };
-      s.onerror = () => finish(null);
-      s.src = 'https://api.bilibili.com/x/web-interface/view?bvid=' + encodeURIComponent(bv) +
-        '&jsonp=jsonp&callback=' + cb;
-      document.head.appendChild(s);
-    });
-  }
-
-  const BILI_KEY = 'biliCache.v1';
+  // 只能走本站边缘函数 /bili：api.bilibili.com 不返 CORS 头（fetch 读不到），
+  // 响应又是 application/json，<script> JSONP 会被浏览器按 MIME 拒绝执行。
+  // 结果缓存 7 天，列表页批量补封面不会重复打接口。
+  const BILI_KEY = 'biliCache.v2';
   let biliMem = null;
   function biliStore() {
     if (biliMem) return biliMem;
@@ -775,18 +748,14 @@
     const hit = store[key];
     if (hit && Date.now() - hit.t < 7 * 24 * 3600 * 1000) return hit.v;
 
-    // 1) 浏览器直连（JSONP）
-    let d = await biliJSONP(key);
-    // 2) 兜底：本站边缘函数
-    if (!d) {
-      try {
-        const r = await fetch('/bili?bv=' + encodeURIComponent(key));
-        if (r.ok) {
-          const j = await r.json();
-          if (j && j.ok) d = j;
-        }
-      } catch (e) { /* 两路都挂就返回 null */ }
-    }
+    let d = null;
+    try {
+      const r = await fetch('/bili?bv=' + encodeURIComponent(key));
+      if (r.ok) {
+        const j = await r.json();
+        if (j && j.ok && (j.pic || j.title)) d = j;
+      }
+    } catch (e) { /* 拿不到就返回 null */ }
     if (!d) return null;
 
     const v = {
@@ -794,8 +763,6 @@
       pic: String(d.pic || '').replace(/^http:/, 'https:'),
       duration: Number(d.duration) || 0
     };
-    if (!v.pic && !v.title) return null;
-
     store[key] = { t: Date.now(), v };
     try { localStorage.setItem(BILI_KEY, JSON.stringify(store)); } catch (e) { /* 存不下就算了 */ }
     return v;
