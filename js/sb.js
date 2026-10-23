@@ -64,7 +64,7 @@
   /* ============ 文章 ============ */
   async function getArticles({ limit = 20, offset = 0, uid = null, sort = 'new' } = {}) {
     let q = SB.from('articles')
-      .select('*, profiles(username), article_likes(count), article_favs(count)')
+      .select('*, profiles!articles_uid_fkey(username), article_likes(count), article_favs(count)')
       .neq('status', 'deleted')
       .order(sort === 'hot' ? 'views' : 'created_at', { descending: true })
       .range(offset, offset + limit - 1);
@@ -84,7 +84,7 @@
   async function getArticle(id) {
     const u = await getCurrentUser();
     const { data, error } = await SB.from('articles')
-      .select('*, profiles(username), article_media(file, sort)')
+      .select('*, profiles!articles_uid_fkey(username), article_media(file, sort)')
       .eq('id', id).single();
     if (error) return errRes(error);
     let likedByMe = false, favedByMe = false;
@@ -108,7 +108,7 @@
   async function getArticleComments(id) {
     const u = await getCurrentUser();
     const { data, error } = await SB.from('comments')
-      .select('*, profiles(username), comment_likes(uid)')
+      .select('*, profiles!comments_uid_fkey(username), comment_likes(uid)')
       .eq('target_type', 'article').eq('target_id', id).eq('deleted', false)
       .order('created_at', { ascending: true }).limit(500);
     if (error) return { ok: false, list: [] };
@@ -175,7 +175,7 @@
     if (error || !data.length) return { ok: true, list: [] };
     const ids = data.map(r => r.article_id);
     const { data: arts } = await SB.from('articles')
-      .select('id, title, uid, views, article_likes(count), profiles(username)')
+      .select('id, title, uid, views, article_likes(count), profiles!articles_uid_fkey(username)')
       .in('id', ids).neq('status', 'deleted');
     return { ok: true, list: (arts || []).map(a => ({
       id: a.id, title: a.title, author: (a.profiles && a.profiles.username) || '匿名',
@@ -187,7 +187,7 @@
     if (error || !data.length) return { ok: true, list: [] };
     const ids = data.map(r => r.article_id);
     const { data: arts } = await SB.from('articles')
-      .select('id, title, uid, views, article_favs(count), profiles(username)')
+      .select('id, title, uid, views, article_favs(count), profiles!articles_uid_fkey(username)')
       .in('id', ids).neq('status', 'deleted');
     return { ok: true, list: (arts || []).map(a => ({
       id: a.id, title: a.title, author: (a.profiles && a.profiles.username) || '匿名',
@@ -198,7 +198,7 @@
   /* ============ 视频 ============ */
   async function getVideos({ limit = 20, offset = 0, uid = null, sort = 'new' } = {}) {
     let q = SB.from('videos')
-      .select('*, profiles(username), video_likes(count), video_favs(count)')
+      .select('*, profiles!videos_uid_fkey(username), video_likes(count), video_favs(count)')
       .neq('status', 'deleted')
       .order(sort === 'hot' ? 'views' : 'created_at', { descending: true })
       .range(offset, offset + limit - 1);
@@ -216,7 +216,7 @@
   async function getVideo(id) {
     const u = await getCurrentUser();
     const { data, error } = await SB.from('videos')
-      .select('*, profiles(username), video_likes(count), video_favs(count)')
+      .select('*, profiles!videos_uid_fkey(username), video_likes(count), video_favs(count)')
       .eq('id', id).single();
     if (error) return errRes(error);
     let likedByMe = false, favedByMe = false;
@@ -240,7 +240,7 @@
   async function getVideoComments(id) {
     const u = await getCurrentUser();
     const { data, error } = await SB.from('comments')
-      .select('*, profiles(username), comment_likes(uid)')
+      .select('*, profiles!comments_uid_fkey(username), comment_likes(uid)')
       .eq('target_type', 'video').eq('target_id', id).eq('deleted', false)
       .order('created_at', { ascending: true }).limit(500);
     if (error) return { ok: false, list: [] };
@@ -307,7 +307,7 @@
     if (error || !data.length) return { ok: true, list: [] };
     const ids = data.map(r => r.video_id);
     const { data: vs } = await SB.from('videos')
-      .select('id, title, uid, views, video_likes(count), profiles(username)')
+      .select('id, title, uid, views, video_likes(count), profiles!videos_uid_fkey(username)')
       .in('id', ids).neq('status', 'deleted');
     return { ok: true, list: (vs || []).map(v => ({
       id: v.id, title: v.title, author: (v.profiles && v.profiles.username) || '匿名',
@@ -319,7 +319,7 @@
     if (error || !data.length) return { ok: true, list: [] };
     const ids = data.map(r => r.video_id);
     const { data: vs } = await SB.from('videos')
-      .select('id, title, uid, views, video_favs(count), profiles(username)')
+      .select('id, title, uid, views, video_favs(count), profiles!videos_uid_fkey(username)')
       .in('id', ids).neq('status', 'deleted');
     return { ok: true, list: (vs || []).map(v => ({
       id: v.id, title: v.title, author: (v.profiles && v.profiles.username) || '匿名',
@@ -332,7 +332,7 @@
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data, error } = await SB.from('comments')
       .insert({ target_type: targetType, target_id: targetId, uid: u.id, content, parent_id: parentId || null })
-      .select('*, profiles(username)').single();
+      .select('*, profiles!comments_uid_fkey(username)').single();
     if (error) return errRes(error);
     return { ok: true, comment: { id: data.id, uid: data.uid, author: (data.profiles && data.profiles.username) || '匿名', content: data.content, time: data.created_at, likes: 0 } };
   }
@@ -357,7 +357,7 @@
   /* ============ 留言板 ============ */
   // 页面（test/board.html）用的是 m.text / m.name / whoOf(m) 这套字段，
   // 这里统一把 content/author 做别名，并带上真实赞数 + 我赞过没 + 作者资料。
-  const MSG_SELECT = '*, profiles(username, role, bio, avatar_url), message_likes(uid)';
+  const MSG_SELECT = '*, profiles!messages_uid_fkey(username, role, bio, avatar_url), message_likes(uid)';
 
   function mapMessage(m, me, floorMap) {
     const p = m.profiles || {};
