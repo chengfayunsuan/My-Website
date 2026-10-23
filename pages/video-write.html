@@ -105,38 +105,9 @@ let biliInfo = null;      // { pic, duration, title } —— 抓到就存下来�
 let biliTimer = null;
 
 // B 站接口没有 CORS 头，浏览器直连会被拦，走公共代理；三个轮流试，抓不到也不影响发布
+// 统一走 SBAPI.fetchBili（JSONP 直连 B 站，失败再走 /bili 边缘函数）
 async function fetchBiliInfo(bv) {
-  // 首选本站边缘函数 /bili（同域，Cloudflare 边缘去抓，不依赖任何第三方代理）
-  try {
-    const ac = new AbortController();
-    const timer = setTimeout(() => ac.abort(), 8000);
-    const r = await fetch('/bili?bv=' + encodeURIComponent(bv), { signal: ac.signal, cache: 'no-store' });
-    clearTimeout(timer);
-    if (r.ok) {
-      const j = await r.json();
-      if (j && j.ok && (j.pic || j.title)) return j;
-    }
-  } catch (e) { /* 落到下面的老办法 */ }
-
-  // 兜底：公共 CORS 代理（国内经常不通，能用算赚）
-  const api = 'https://api.bilibili.com/x/web-interface/view?bvid=' + encodeURIComponent(bv);
-  const proxies = [
-    u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
-    u => 'https://cors.eu.org/' + u,
-    u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u)
-  ];
-  for (const mk of proxies) {
-    try {
-      const ac = new AbortController();
-      const timer = setTimeout(() => ac.abort(), 6000);
-      const r = await fetch(mk(api), { signal: ac.signal, cache: 'no-store' });
-      clearTimeout(timer);
-      if (!r.ok) continue;
-      const j = await r.json();
-      if (j && j.code === 0 && j.data && j.data.pic) return j.data;
-    } catch (e) { /* 换下一个代理 */ }
-  }
-  return null;
+  try { return await SBAPI.fetchBili(bv); } catch (e) { return null; }
 }
 function httpsUrl(u) { return String(u || '').replace(/^http:/, 'https:'); }
 function biliOf(v) {
