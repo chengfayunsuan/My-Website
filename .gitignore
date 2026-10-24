@@ -1,2 +1,11 @@
 # 本地预览服务器脚本（开发用，不属于网站，不提交）
 preview-server.js
+
+# 大体积媒体：只在本机预览时用，不进仓库。
+# 原因：① Cloudflare Pages 单文件上限 25MB，超了整次部署直接失败；
+#       ② 198MB 视频进 git 会把仓库永久撑爆，之后每次 clone/push 都痛苦；
+#       ③ 视频由 Pages/CDN 分发违反 Cloudflare 自助订阅协议 2.8 条（会被封 zone）。
+# 线上需要背景视频时，走 js/bg.js 的 IndexedDB 方案（存你自己浏览器，零流量）。
+*.mp4
+*.webm
+*.mov
