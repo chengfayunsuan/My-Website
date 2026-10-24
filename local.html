@@ -390,10 +390,11 @@
 
 <!-- <body> 里放的是「真正显示在屏幕上的内容」 -->
 <body>
-  <!-- 动态视频背景：同目录的 大肥鱼_ai.mp4，自动循环静音播放。
-       若文件缺失，下方 JS 会把它移除，露出 body 的 gif/png/jpg 静态背景兜底。 -->
+  <!-- 动态视频背景：assets/local/bg.mp4，自动循环静音播放。
+       这个视频只属于本页（assets/local/ 是 local.html 的专属资源目录，别的页面不引用）。
+       文件不在（线上仓库里没有）时，下方 JS 会把它移除，露出静态背景兜底。 -->
   <video id="bgVideo" autoplay loop muted playsinline>
-    <source src="大肥鱼_ai.mp4" type="video/mp4">
+    <source src="assets/local/bg.mp4" type="video/mp4">
   </video>
   <!-- 顶部横幅：左边是站名链接，右边是 IP 显示位 -->
   <div class="banner">
@@ -560,7 +561,7 @@
 
   <!-- <script> 里写 JavaScript，负责页面上的「行为/交互」（不是样式）。 -->
   <script>
-    // ================= 视频背景：只认同目录的 大肥鱼_ai.mp4 =================
+    // ================= 视频背景：只认 assets/local/bg.mp4 =================
     // 这个视频只给本页用，不进仓库、不上线（198MB，传不上 Pages，也不允许经 CDN 分发）。
     // 本机预览时文件在 → 正常播放；线上没这个文件 → 静默移除 video，露出下面的静态背景。
     (function () {

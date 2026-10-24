@@ -9,3 +9,7 @@ preview-server.js
 *.mp4
 *.webm
 *.mov
+
+# assets/local/ 只属于 local.html（个人主页那一页）的专属资源目录。
+# 放这里的视频同样不进仓库，逻辑同上：本机能看，线上回退静态背景。
+# 别的页面不要引用这个目录，保持「视频只给 Local 用」。
