@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=24">
+<link rel="stylesheet" href="/style.css?v=25">
 <style>
   .art-title {
     font-size: 28px;
@@ -152,8 +152,8 @@
   .cmt-avatar img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--card); border: 1px solid var(--border); }
   .cmt-main { flex: 1; min-width: 0; }
   .cmt-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-  .cmt-name { font-size: 13px; font-weight: 500; color: var(--primary-deep); text-decoration: none; }
-  .cmt-name:hover { text-decoration: underline; }
+  .cmt-name { font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; transition: color .18s; }
+  .cmt-name:hover { color: var(--primary-deep); text-decoration: none; }
   .cmt-plate {
     display: inline-block; padding: 0 6px; height: 18px; line-height: 18px;
     font-size: 11px; border-radius: 4px; vertical-align: 1px;
@@ -192,7 +192,7 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, .16);
+    box-shadow: none;
   }
   .cmt-menu.show { display: block; }
   .cmt-menu button {

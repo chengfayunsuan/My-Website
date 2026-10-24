@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>视频 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=24">
+<link rel="stylesheet" href="/style.css?v=25">
 <style>
   .vid-head {
     display: flex;
@@ -72,7 +72,7 @@
     overflow: hidden; background: var(--field); }
   .vb-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .vb-ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-    font-size: 26px; color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary-deep)); }
+    font-size: 26px; color: #fff; background: var(--primary); }
   .vb-dur { position: absolute; right: 6px; bottom: 6px; padding: 1px 5px; border-radius: 4px;
     background: rgba(0, 0, 0, .74); color: #fff; font-size: 12px; line-height: 16px; }
   .vb-tag { position: absolute; left: 6px; top: 6px; padding: 1px 6px; border-radius: 4px;
@@ -192,7 +192,7 @@ async function load(append) {
     listEl.innerHTML = (append ? listEl.innerHTML.replace(/<p class="vid-empty">.*?<\/p>/s, '') : '') + rows;
     if (!d.list.length && !append) listEl.innerHTML = '<p class="vid-empty">还没有人传视频，来当第一个吧~</p>';
     offset += d.list.length;
-    moreBtn.style.display = d.list.length < STEP ? 'block' : 'none';
+    moreBtn.style.display = d.list.length < STEP ? 'none' : 'block';
     fillLazyPosters();
   } catch {
     listEl.innerHTML = '<p class="vid-empty">加载失败，刷新试试</p>';

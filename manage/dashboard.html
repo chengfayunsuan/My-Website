@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>管理面板 · Chengfa</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=24">
+<link rel="stylesheet" href="/style.css?v=25">
 <style>
   /* ===== 管理后台 =====
      默认跟随全站的「深空磨砂」；这里只把主色换成偏紫的紫罗兰，
@@ -36,10 +36,7 @@
   }
   .manage-title {
     font-size: 38px;
-    background: var(--grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: azure;
     display: inline-block;
     margin: 0 0 8px;
     font-weight: 700;
@@ -72,20 +69,20 @@
     font-weight: 500;
     padding: 20px 12px;
     cursor: default;
-    transition: background .2s, transform .2s, box-shadow .2s;
-    box-shadow: 0 3px 10px rgba(155,107,242,.14);
+    transition: background .2s, transform .2s;
+    box-shadow: none;
   }
   .manage-btn:hover {
     background: #8A5CE0;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(155,107,242,.22);
+    transform: scale(1.03);        /* Local 按钮悬停是放大一点，不做上浮发光 */
+    box-shadow: none;
   }
   /* 还没做的按钮：灰一点、点不动 */
   .manage-btn.todo { opacity: .55; }
   .manage-btn.todo:hover {
     background: #9b6bf2;
     transform: none;
-    box-shadow: 0 3px 10px rgba(155,107,242,.14);
+    box-shadow: none;
   }
   .manage-btn.live { cursor: pointer; }
   .manage-btn .badge {
@@ -102,7 +99,7 @@
     line-height: 24px;
     text-align: center;
     font-weight: 700;
-    box-shadow: 0 2px 6px rgba(240,68,56,.4);
+    box-shadow: none;
   }
 
   /* 无权限提示 */

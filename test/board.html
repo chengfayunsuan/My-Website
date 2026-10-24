@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>留言板 · 乘法</title>
-<link rel="stylesheet" href="/style.css?v=24">
+<link rel="stylesheet" href="/style.css?v=25">
 <style>
   /* ===== 发表框（B 站风格：圆角输入框 + 右下角发布按钮）===== */
   .post-box {
@@ -90,10 +90,11 @@
   .msg-name {
     font-size: 13px;
     font-weight: 500;
-    color: var(--primary-deep);
+    color: var(--text);
     text-decoration: none;
+    transition: color .18s;
   }
-  a.msg-name:hover { text-decoration: underline; }
+  a.msg-name:hover { color: var(--primary-deep); text-decoration: none; }
   /* 站长 / 管理员的粉标，位置跟 B 站的 UP 标识一样 */
   .msg-badge {
     flex: none;
@@ -121,7 +122,8 @@
     padding-left: 12px;
     padding-right: 12px;
     border-radius: 10px;
-    background: var(--primary-soft);
+    background: rgba(138, 43, 226, .12);
+    border-left: 3px solid var(--primary);
   }
 
   .msg-text {

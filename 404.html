@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>404 · 页面走丢了</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=24">
+<link rel="stylesheet" href="/style.css?v=25">
 <style>
   body {
     margin: 0;
@@ -30,11 +30,7 @@
     letter-spacing: 6px;
     margin: 0 0 8px;
     line-height: 1;
-    background: var(--grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    filter: drop-shadow(0 8px 40px rgba(138, 43, 226, .45));
+    color: azure;
   }
   p {
     color: var(--text-light);
@@ -44,19 +40,19 @@
   a.lx-btn {
     display: inline-block;
     padding: 12px 30px;
-    background: var(--grad-primary);
+    background: var(--primary);
     color: #fff;
     text-decoration: none;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 15px;
     font-weight: 600;
-    box-shadow: 0 12px 32px rgba(138, 43, 226, .4);
-    transition: transform .2s, filter .2s, box-shadow .2s;
+    box-shadow: none;
+    transition: background .2s;
   }
   a.lx-btn:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-    box-shadow: 0 16px 42px rgba(138, 43, 226, .55);
+    background: var(--primary-deep);
+    transform: none;
+    filter: none;
   }
 </style>
 </head>

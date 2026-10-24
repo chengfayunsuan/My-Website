@@ -7,12 +7,12 @@
 <link rel="icon" href="/favicon.ico">
 <style>
   :root {
-    /* 跟随全站「深空磨砂」配色 */
-    --bg: #06070b;
-    --card: rgba(22, 24, 33, .55);
-    --border: rgba(255, 255, 255, .10);
-    --text: #E9EEF9;
-    --dim: #95A1B7;
+    /* 跟随 Local.html 的扁平磨砂配色 */
+    --bg: #121212;
+    --card: rgba(30, 30, 30, .5);
+    --border: #333;
+    --text: #f0f0f0;
+    --dim: #cccccc;
     --ok: #57D68A;
     --okbg: rgba(53, 199, 119, .16);
     --bad: #FF7B6B;
@@ -26,7 +26,7 @@
     padding: 28px 18px 60px;
     background: transparent;
     color: var(--text);
-    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-family: "Orbitron", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
     font-size: 15px;
     line-height: 1.6;
   }
@@ -34,21 +34,18 @@
   h1 {
     font-size: 22px;
     margin: 0 0 6px;
-    background: linear-gradient(120deg, #C9A7FF 0%, #9B4DF0 45%, #5B8DEF 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: azure;                 /* Local 标题：azure 纯色，不用渐变 */
     display: inline-block;
   }
   .sub { color: var(--dim); font-size: 13px; margin: 0 0 22px; word-break: break-all; }
   .card {
     background: var(--card);
-    -webkit-backdrop-filter: blur(22px) saturate(150%);
-    backdrop-filter: blur(22px) saturate(150%);
-    border: 1px solid var(--border);
-    border-radius: 16px;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: none;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 14px 44px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.16);
+    box-shadow: none;
   }
   .row {
     display: flex;
@@ -90,17 +87,17 @@
     margin-top: 14px;
     padding: 9px 22px;
     border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #8A2BE2 0%, #5B8DEF 100%);
+    border-radius: 8px;
+    background: #8A2BE2;
     color: #fff;
     font-family: inherit;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(138,43,226,.35);
-    transition: filter .2s, transform .2s;
+    box-shadow: none;
+    transition: background .2s;
   }
-  button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  button:hover { background: #9B4DF0; transform: none; }
 </style>
 </head>
 <body>

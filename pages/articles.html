@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=24">
+<link rel="stylesheet" href="/style.css?v=25">
 <style>
   .art-head {
     display: flex;
@@ -173,7 +173,7 @@ async function load(append) {
     listEl.innerHTML = (append ? listEl.innerHTML.replace(/<div class="art-empty">.*?<\/div>/s, '') : '') + rows;
     if (!d.list.length && !append) listEl.innerHTML = '<div class="art-empty">还没有人写文章，来当第一个吧~</div>';
     offset += d.list.length;
-    moreBtn.style.display = d.list.length < STEP ? 'block' : 'none';
+    moreBtn.style.display = d.list.length < STEP ? 'none' : 'block';
   } catch {
     listEl.innerHTML = '<div class="art-empty">加载失败，刷新试试</div>';
   }
