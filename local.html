@@ -560,18 +560,103 @@
 
   <!-- <script> 里写 JavaScript，负责页面上的「行为/交互」（不是样式）。 -->
   <script>
-    // ================= 视频背景：只认 assets/local/bg.mp4 =================
-    // 这个视频只给本页用，不进仓库、不上线（198MB，传不上 Pages，也不允许经 CDN 分发）。
-    // 本机预览时文件在 → 正常播放；线上没这个文件 → 静默移除 video，露出下面的静态背景。
+    // ================= 视频背景：三级回退 =================
+    // ① ./大肥鱼_ai.mp4  → 只在本机磁盘上有，双击页面 / 本地服务时生效
+    // ② IndexedDB        → 线上域名下，你浏览器里「设置」过一次就有；
+    //                       别人的浏览器没有这个文件 → 他们看不到，也不产生任何服务器流量
+    // ③ 都没有           → 静默移除 video，露出 body 的静态背景
     (function () {
       const bgv = document.getElementById('bgVideo');
       if (!bgv) return;
-      // <source> 加载失败时 video 不一定触发 error，这里同时监听并延时自检
-      bgv.addEventListener('error', () => bgv.remove(), true);
-      setTimeout(() => {
-        // readyState 为 0 表示完全没加载到任何数据，判定为失败
-        if (bgv.readyState === 0) bgv.remove();
-      }, 3000);
+
+      // 和全站 js/bg.js 共用同一个库，所以在首页设置过的视频这里也认
+      const DB_NAME = 'site.bg.db', STORE = 'files', REC_KEY = 'current';
+
+      function idbOpen() {
+        return new Promise((resolve, reject) => {
+          if (!window.indexedDB) return reject(new Error('浏览器不支持 IndexedDB'));
+          const req = indexedDB.open(DB_NAME, 1);
+          req.onupgradeneeded = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE);
+          };
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      }
+      function idbGet() {
+        return idbOpen().then(db => new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE, 'readonly');
+          const req = tx.objectStore(STORE).get(REC_KEY);
+          req.onsuccess = () => resolve(req.result || null);
+          req.onerror = () => reject(req.error);
+        })).catch(() => null);
+      }
+      function idbPut(rec) {
+        return idbOpen().then(db => new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE, 'readwrite');
+          tx.objectStore(STORE).put(rec, REC_KEY);
+          tx.oncomplete = () => resolve(true);
+          tx.onerror = () => reject(tx.error);
+        }));
+      }
+
+      let objUrl = '';
+      function playBlob(blob) {
+        if (!blob) return;
+        // video 里若还留着 <source>，浏览器会优先用它，所以先清掉再设 src
+        bgv.querySelectorAll('source').forEach(s => s.remove());
+        if (objUrl) { try { URL.revokeObjectURL(objUrl); } catch (e) { /* 忽略 */ } }
+        objUrl = URL.createObjectURL(blob);   // blob 地址：浏览器直接从内存/磁盘读，不走网络
+        bgv.style.display = '';               // 之前可能被藏起来，这里恢复
+        bgv.src = objUrl;
+        bgv.play().catch(() => { /* 自动播放被拦就算了，muted 一般不会被拦 */ });
+      }
+
+      // 本地文件和浏览器存储都没有时，才出现这个低调的小入口
+      function showPicker() {
+        if (document.getElementById('bgPick')) return;
+        const btn = document.createElement('button');
+        btn.id = 'bgPick';
+        btn.textContent = '设置本页背景视频';
+        btn.style.cssText = 'position:fixed;right:14px;bottom:14px;z-index:9;padding:6px 12px;' +
+          'font-size:12px;border-radius:8px;border:1px solid rgba(255,255,255,.18);' +
+          'background:rgba(30,30,30,.55);color:#ddd;cursor:pointer;backdrop-filter:blur(8px)';
+        const file = document.createElement('input');
+        file.type = 'file';
+        file.accept = 'video/*';
+        file.style.display = 'none';
+        file.onchange = async () => {
+          const f = file.files && file.files[0];
+          if (!f) return;
+          try {
+            await idbPut({ name: f.name, size: f.size, type: f.type, blob: f, t: Date.now() });
+            btn.remove();
+            playBlob(f);
+          } catch (e) {
+            alert('存不进浏览器（多半是空间不够）：' + e.message);
+          }
+        };
+        btn.onclick = () => file.click();
+        document.body.appendChild(btn);
+        document.body.appendChild(file);
+      }
+
+      let done = false;
+      // 本地文件能播就到此为止
+      bgv.addEventListener('canplay', () => { done = true; }, { once: true });
+
+      async function fallback() {
+        if (done) return;                 // 本地文件已经播起来了，别动它
+        done = true;
+        const rec = await idbGet();       // ② 浏览器本机存储里找
+        if (rec && rec.blob) { playBlob(rec.blob); return; }
+        bgv.style.display = 'none';       // ③ 都没有，先藏起来露出静态背景（不删，等下选文件还要用）
+        showPicker();
+      }
+
+      bgv.addEventListener('error', fallback, true);   // <source> 404 时触发
+      setTimeout(() => { if (bgv.readyState < 2) fallback(); }, 3000); // 兜底自检
     })();
 
     // ================= 一、留言板功能 =================
