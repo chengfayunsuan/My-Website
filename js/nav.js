@@ -129,17 +129,23 @@
 
   const forceDark = document.body.hasAttribute('data-force-dark');
 
-  if (forceDark || localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    themeIcon.innerHTML = sunSVG;
+  /* 全站默认就是「深空磨砂」，点小太阳切成「磨砂白」。
+     以前是默认浅色、加 .dark 变深；现在反过来，用 .light 标记浅色。
+     网址加 ?theme=light 可以直接预览浅色。 */
+  function applyLight(on) {
+    document.body.classList.toggle('light', on);
+    document.body.classList.remove('dark');
+    if (themeIcon) themeIcon.innerHTML = on ? moonSVG : sunSVG;
   }
+  var qLight = false;
+  try { qLight = new URLSearchParams(location.search).get('theme') === 'light'; } catch (e) { qLight = false; }
+  applyLight(!forceDark && (qLight || localStorage.getItem('theme') === 'light'));
+
   themeBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-    const isDark = document.body.classList.contains('dark');
-    themeIcon.innerHTML = isDark ? sunSVG : moonSVG;
-    if (!forceDark) {
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    }
+    if (forceDark) return;
+    const nextLight = !document.body.classList.contains('light');
+    applyLight(nextLight);
+    localStorage.setItem('theme', nextLight ? 'light' : 'dark');
   });
 
   /* ========== 5. 获取 IP ========== */

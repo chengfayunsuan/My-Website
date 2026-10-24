@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>写文章 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=23">
+<link rel="stylesheet" href="/style.css?v=24">
 <style>
   .ed-card { padding: 24px; }
   .ed-title {
@@ -16,7 +16,7 @@
     font-family: inherit;
     font-size: 20px;
     font-weight: 600;
-    background: var(--bg);
+    background: var(--field);
     color: var(--text);
     outline: none;
   }
@@ -32,7 +32,7 @@
     padding: 6px;
     border: 1px solid var(--border);
     border-radius: 8px;
-    background: var(--bg);
+    background: var(--field);
   }
   .ed-bar .sep {
     width: 1px; height: 20px;
@@ -103,7 +103,7 @@
     width: 14px; height: 14px;
     margin: -7px 0 0 -7px;
     border-radius: 3px;
-    background: var(--primary);
+    background: var(--grad-primary);
     border: 2px solid #fff;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .35);
     cursor: nwse-resize;
@@ -122,7 +122,7 @@
     margin: 10px 0;
     padding: 12px;
     border-radius: 8px;
-    background: var(--bg);
+    background: var(--field);
     border: 1px solid var(--border);
     font-family: Consolas, Menlo, monospace;
     font-size: 14px;
@@ -145,7 +145,7 @@
     padding: 9px 26px;
     border: none;
     border-radius: 8px;
-    background: var(--primary);
+    background: var(--grad-primary);
     color: #fff;
     font-family: inherit;
     font-size: 15px;
@@ -240,6 +240,7 @@
   <input type="file" id="fileAudio" accept="audio/*" hidden>
 
   <script src="/js/config.js"></script>
+<script src="/js/bg.js?v=1"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/upload.js"></script>

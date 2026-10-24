@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>视频 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=23">
+<link rel="stylesheet" href="/style.css?v=24">
 <style>
   .vid-player { width: 100%; background: #000; border-radius: 12px; overflow: hidden; }
   .vid-player video { width: 100%; max-height: 70vh; display: block; background: #000; }
@@ -33,7 +33,7 @@
   .art-sub a { color: var(--primary-deep); text-decoration: none; font-weight: 600; }
   .art-sub a:hover { text-decoration: underline; }
   .vid-desc { font-size: 15px; line-height: 1.8; color: var(--text); white-space: pre-wrap; word-break: break-word;
-    background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; }
+    background: var(--field); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; }
 
   .art-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 18px; padding-top: 16px;
     border-top: 1px solid var(--border); }
@@ -52,13 +52,13 @@
   .cmt-wrap { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--border); }
   .cmt-title { font-size: 16px; color: var(--text); margin-bottom: 12px; position: relative; padding-left: 12px; }
   .cmt-title::before { content: ""; position: absolute; left: 0; top: 5px; width: 3px; height: 16px; background: var(--primary-deep); border-radius: 2px; }
-  .cmt-post { padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); }
+  .cmt-post { padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--field); }
   .cmt-post textarea { width: 100%; min-height: 64px; padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px;
     font-family: inherit; font-size: 14px; line-height: 1.6; background: var(--card); color: var(--text); outline: none; resize: vertical; }
   .cmt-post textarea:focus { border-color: var(--primary); }
   .cmt-post-bar { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
   .cmt-post-bar .n { font-size: 12px; color: var(--text-light); }
-  .cmt-post-bar button { margin-left: auto; padding: 7px 20px; border: none; border-radius: 8px; background: var(--primary); color: #fff;
+  .cmt-post-bar button { margin-left: auto; padding: 7px 20px; border: none; border-radius: 8px; background: var(--grad-primary); color: #fff;
     font-family: inherit; font-size: 14px; cursor: pointer; }
   .cmt-post-bar button:hover { background: var(--primary-deep); }
   .cmt-list { margin-top: 14px; display: flex; flex-direction: column; }
@@ -102,13 +102,13 @@
   .cmt-item.is-reply .cmt-avatar img { width: 26px; height: 26px; }
   .cmt-item.is-reply .cmt-text { font-size: 14px; margin-top: 2px; }
   .cmt-empty { padding: 26px 10px; text-align: center; font-size: 14px; color: var(--text-light); }
-  .cmt-reply-box { margin: 8px 0 2px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); }
+  .cmt-reply-box { margin: 8px 0 2px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--field); }
   .cmt-reply-box textarea { width: 100%; min-height: 54px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
     font-family: inherit; font-size: 14px; line-height: 1.6; background: var(--card); color: var(--text); outline: none; resize: vertical; }
   .cmt-reply-actions { display: flex; gap: 8px; margin-top: 8px; }
   .cmt-reply-actions button { padding: 5px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--text-light);
     font-family: inherit; font-size: 13px; cursor: pointer; }
-  .cmt-reply-actions button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .cmt-reply-actions button.primary { background: var(--grad-primary); border-color: var(--primary); color: #fff; }
   .cmt-reply-actions button.primary:hover { background: var(--primary-deep); }
 </style>
 </head>
@@ -126,6 +126,7 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+<script src="/js/bg.js?v=1"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>

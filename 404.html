@@ -4,42 +4,69 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>404 · 页面走丢了</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style.css?v=24">
 <style>
   body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: #f7f9fc;
-    color: #333;
+    text-align: center;
+    padding: 20px;
+  }
+  .lx-card {
+    max-width: 460px;
+    width: 100%;
+    padding: 48px 32px 40px;
+    text-align: center;
   }
   h1 {
-    font-size: 120px;
-    margin: 0;
-    color: #4A90D9;
+    font-family: var(--font-num);
+    font-size: 110px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    margin: 0 0 8px;
     line-height: 1;
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 8px 40px rgba(138, 43, 226, .45));
   }
   p {
-    color: #666;
-    margin: 16px 0 32px;
+    color: var(--text-light);
+    margin: 6px 0 30px;
+    font-size: 15px;
   }
-  a {
-    padding: 12px 28px;
-    background: #4A90D9;
+  a.lx-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: var(--grad-primary);
     color: #fff;
     text-decoration: none;
-    border-radius: 8px;
-    transition: background .2s;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 12px 32px rgba(138, 43, 226, .4);
+    transition: transform .2s, filter .2s, box-shadow .2s;
   }
-  a:hover { background: #3a7bc0; }
+  a.lx-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 16px 42px rgba(138, 43, 226, .55);
+  }
 </style>
 </head>
 <body>
-  <h1>404</h1>
-  <p>这个页面去乘法运算了，没算出来。</p>
-  <a href="/">回到首页</a>
+  <div class="lx-card glass">
+    <h1>404</h1>
+    <p>这个页面去乘法运算了，没算出来。</p>
+    <a class="lx-btn" href="/">回到首页</a>
+  </div>
+<script src="/js/config.js"></script>
+<script src="/js/bg.js?v=1"></script>
 </body>
 </html>

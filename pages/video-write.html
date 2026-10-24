@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>投稿视频 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=23">
+<link rel="stylesheet" href="/style.css?v=24">
 <style>
   .ed-card { padding: 24px; }
   .ed-title {
     width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
-    font-family: inherit; font-size: 20px; font-weight: 600; background: var(--bg); color: var(--text); outline: none; box-sizing: border-box;
+    font-family: inherit; font-size: 20px; font-weight: 600; background: var(--field); color: var(--text); outline: none; box-sizing: border-box;
   }
   .ed-title:focus { border-color: var(--primary); }
   .ed-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 14px 0 6px; }
@@ -21,15 +21,15 @@
   .ed-btn:hover { background: var(--primary-soft); border-color: var(--primary); color: var(--primary-deep); }
   .ed-desc {
     width: 100%; min-height: 120px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
-    font-family: inherit; font-size: 15px; background: var(--bg); color: var(--text); outline: none; box-sizing: border-box; resize: vertical; margin-top: 14px;
+    font-family: inherit; font-size: 15px; background: var(--field); color: var(--text); outline: none; box-sizing: border-box; resize: vertical; margin-top: 14px;
   }
   .ed-desc:focus { border-color: var(--primary); }
-  .bar { height: 8px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); overflow: hidden; margin-top: 10px; }
-  .bar > i { display: block; height: 100%; width: 0; background: var(--primary); transition: width .2s; }
+  .bar { height: 8px; border-radius: 6px; background: var(--field); border: 1px solid var(--border); overflow: hidden; margin-top: 10px; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--grad-primary); transition: width .2s; }
   .bar-txt { font-size: 13px; color: var(--text-light); margin-top: 6px; }
   .ed-foot { margin-top: 12px; font-size: 13px; color: var(--text-light); }
   .ed-actions { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
-  .ed-submit { padding: 9px 26px; border: none; border-radius: 8px; background: var(--primary); color: #fff; font-family: inherit; font-size: 15px; cursor: pointer; }
+  .ed-submit { padding: 9px 26px; border: none; border-radius: 8px; background: var(--grad-primary); color: #fff; font-family: inherit; font-size: 15px; cursor: pointer; }
   .ed-submit:hover { background: var(--primary-deep); }
   .ed-submit:disabled { opacity: .6; cursor: not-allowed; }
   .ed-msg { font-size: 14px; }
@@ -85,6 +85,7 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+<script src="/js/bg.js?v=1"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/upload.js"></script>

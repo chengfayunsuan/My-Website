@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>留言板 · 乘法</title>
-<link rel="stylesheet" href="/style.css?v=23">
+<link rel="stylesheet" href="/style.css?v=24">
 <style>
   /* ===== 发表框（B 站风格：圆角输入框 + 右下角发布按钮）===== */
   .post-box {
@@ -21,7 +21,7 @@
     font-family: inherit;
     font-size: 15px;
     line-height: 1.6;
-    background: var(--bg);
+    background: var(--field);
     color: var(--text);
     outline: none;
     resize: vertical;
@@ -38,7 +38,7 @@
     padding: 7px 22px;
     border: none;
     border-radius: 8px;
-    background: var(--primary);
+    background: var(--grad-primary);
     color: #fff;
     font-family: inherit;
     font-size: 14px;
@@ -184,7 +184,7 @@
     padding: 10px;
     border: 1px solid var(--border);
     border-radius: 10px;
-    background: var(--bg);
+    background: var(--field);
   }
   .reply-input {
     width: 100%;
@@ -203,7 +203,7 @@
   .reply-input:focus { border-color: var(--primary); }
   .reply-actions { display: flex; gap: 8px; margin-top: 8px; }
   .reply-actions .act-btn { background: var(--card); }
-  .reply-actions .act-btn.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .reply-actions .act-btn.on { background: var(--grad-primary); border-color: var(--primary); color: #fff; }
   .reply-actions .act-btn.on:hover { background: var(--primary-deep); color: #fff; }
 
   /* 楼中楼：缩进跟正文对齐，头像小一号，不加分隔线 */
@@ -242,6 +242,7 @@
   </section>
 
   <script src="/js/config.js"></script>
+<script src="/js/bg.js?v=1"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>

@@ -5,46 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>管理面板 · Chengfa</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=23">
+<link rel="stylesheet" href="/style.css?v=24">
 <style>
-  /* ===== 管理后台 · 灰色背景 + 紫色导航/按钮 =====
-     所有颜色都走变量，夜间模式才能整体跟着换。
-     （以前这里把它自己的一套 --bg/--text 写死在 body.manage 上，
-       style.css 里的 body.dark 被覆盖掉，所以开了夜间模式背景还是白的、字还是黑的。） */
+  /* ===== 管理后台 =====
+     默认跟随全站的「深空磨砂」；这里只把主色换成偏紫的紫罗兰，
+     并补齐后台专用变量。浅色模式（body.light）由 style.css 统一接管。 */
   body.manage {
-    --bg: #EEF1F5;
-    --nav-bg: #7b5ea7;
     --primary: #9b6bf2;
-    --primary-deep: #8A5CE0;
+    --primary-deep: #A87BFF;
     --primary-soft: rgba(155,107,242,.18);
-    --text: #333333;
-    --text-light: #777777;
-    --card: #ffffff;
-    --border: #e3e6ec;
-    --field: #ffffff;        /* 小按钮 / 输入框底色 */
-    --quote: #f7f8fa;        /* 引用块底色 */
-    --ok-text: #3d8b40;      /* 绿色文字（已处理 / 已禁言） */
-    --danger: #f04438;       /* 红色文字（待处理 / 删评 / 封号） */
-    --toast-bg: #333333;
-    --toast-text: #ffffff;
+    --field: rgba(255,255,255,.055);
+    --quote: rgba(255,255,255,.05);
+    --ok-text: #57D68A;
+    --danger: #FF5A5A;
+    --toast-bg: rgba(16,18,26,.94);
+    --toast-text: #E9EEF9;
   }
-
-  /* 夜间模式：把上面那一整套换成深色。
-     选择器 body.manage.dark 比 body.manage 多一个类，优先级更高，一定赢。 */
-  body.manage.dark {
-    --bg: #18191C;
-    --card: #222327;
-    --nav-bg: #3b2f57;       /* 紫色导航压暗，但不变成一块灰 */
-    --text: #E0E0E0;
-    --text-light: #9499A0;
-    --border: #2f3033;
-    --field: #2a2b30;
-    --quote: #2a2b30;
-    --primary-soft: rgba(155,107,242,.28);
-    --ok-text: #7cc47f;
-    --danger: #ff6b60;       /* 深色底上要亮一点的红色才看得清 */
-    --toast-bg: #E0E0E0;
-    --toast-text: #18191C;
+  body.manage.light {
+    --field: rgba(255,255,255,.72);
+    --quote: rgba(20,30,60,.04);
+    --ok-text: #2E7D32;
+    --danger: #D93025;
+    --toast-bg: rgba(26,31,43,.92);
+    --toast-text: #FFFFFF;
   }
 
   .manage-header {
@@ -53,7 +36,11 @@
   }
   .manage-title {
     font-size: 38px;
-    color: var(--text);
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
     margin: 0 0 8px;
     font-weight: 700;
     letter-spacing: 1px;
@@ -270,6 +257,7 @@
   <div class="toast" id="toast"></div>
 
   <script src="/js/config.js"></script>
+<script src="/js/bg.js?v=1"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
