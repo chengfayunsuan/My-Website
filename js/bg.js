@@ -181,9 +181,14 @@
           /* —— 推荐方式：本地文件存进浏览器 —— */
           '<div style="border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:14px">' +
             '<div style="font-size:14px;font-weight:600;margin-bottom:4px">本机视频（推荐 · 别人看不到）</div>' +
-            '<p style="font-size:12px;color:var(--text-light);line-height:1.6;margin:0 0 10px">' +
+            '<p style="font-size:12px;color:var(--text-light);line-height:1.6;margin:0 0 8px">' +
               '文件存在你这个浏览器的 IndexedDB 里，不经过任何服务器，<b>零流量</b>。' +
               '刷新后依然有效；换设备或换浏览器就没有了。' +
+            '</p>' +
+            /* 浏览器按「域名」隔离存储：localhost 存的，pages.dev 看不到。先讲清楚免得以为没生效 */
+            '<p style="font-size:12px;color:#FFB020;line-height:1.6;margin:0 0 10px">' +
+              '只在当前域名生效：<b>' + esc(location.host || location.hostname) + '</b>' +
+              '　其它域名 / 换端口都要重新选一次。' +
             '</p>' +
             '<p id="bgLocalInfo" style="font-size:12.5px;margin:0 0 10px;color:var(--text-light)">读取中…</p>' +
             '<label class="log-submit" style="display:inline-flex;align-items:center;cursor:pointer">' +
