@@ -733,12 +733,12 @@
     // 默认占位头像：一段内嵌的 SVG 图（图片都加载失败时兜底）。
     const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><rect width='120' height='120' fill='%232ECC71'/><circle cx='60' cy='46' r='20' fill='%23ffffff'/><path d='M18 112 Q60 72 102 112 Z' fill='%23ffffff'/></svg>";
     // 优先用你「点圆圈上传」存过的头像；否则读同目录下的图片文件，没有再兜底 SVG。
-    // 搬进本站后改名为 local-avatar.jpg（避免中文文件名在 URL 里出问题）。
+    // 直接用全站同一张 avatar.jpg（和原来的 local-avatar.jpg 是同一张图，没必要留两份）。
     const savedAvatar = localStorage.getItem('myAvatar');
     if (savedAvatar) {
       avatarImg.src = savedAvatar;
     } else {
-      avatarImg.src = 'local-avatar.jpg';
+      avatarImg.src = 'avatar.jpg';
       avatarImg.onerror = function () {         // 图片缺失才显示占位 SVG
         this.onerror = null;
         this.src = DEFAULT_AVATAR;
