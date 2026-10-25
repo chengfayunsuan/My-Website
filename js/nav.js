@@ -129,110 +129,152 @@
   const mailDot   = document.getElementById('mailDot');
 
   /* ========== 4. 主题切换 ========== */
-  const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-  const sunSVG  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+  /* 两个图标：月亮和太阳，本质就是两段 SVG 字符串（矢量图，放大不糊）。
+     切主题时把按钮里的图标换成另一个，用户就看得见「变了」。 */
+  const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';   // 【const】月亮的 SVG 路径
+  const sunSVG  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';   // 【const】太阳（圆 + 8 根光芒线）
 
-  const forceDark = document.body.hasAttribute('data-force-dark');
+  const forceDark = document.body.hasAttribute('data-force-dark');   // 检查 <body> 上有没有 data-force-dark 这个属性：
+                                                                     // 有 = 这页强制深色，禁止切换（比如鼠标特效页，浅色下看不见轨迹）。
+                                                                     // hasAttribute 返回 true / false。
 
   /* 全站默认就是「深空磨砂」，点小太阳切成「磨砂白」。
      以前是默认浅色、加 .dark 变深；现在反过来，用 .light 标记浅色。
      网址加 ?theme=light 可以直接预览浅色。 */
-  function applyLight(on) {
-    document.body.classList.toggle('light', on);
-    document.body.classList.remove('dark');
-    if (themeIcon) themeIcon.innerHTML = on ? moonSVG : sunSVG;
+  function applyLight(on) {                          // 【function】切换主题的函数，on = true 变浅色，false 变深色。
+    document.body.classList.toggle('light', on);     // 【classList】元素身上的 class 列表。toggle(名字, 要不要有)：
+                                                     // on 为 true 就加上 light 类，false 就移除。不用自己写 if/else。
+    document.body.classList.remove('dark');          // 顺便把老的 dark 类清掉，避免两套主题类同时存在打架。
+    if (themeIcon) themeIcon.innerHTML = on ? moonSVG : sunSVG;   // 【if】按钮图标跟着换：
+                                                                  // 现在是浅色 → 显示月亮（提示「点我变深」）；深色 → 显示太阳。
+                                                                  // 三元运算符：条件 ? 真时 : 假时。
   }
-  var qLight = false;
+  var qLight = false;                                // 【var】老式声明（这里历史遗留）。先假设网址没带 ?theme=light。
   try { qLight = new URLSearchParams(location.search).get('theme') === 'light'; } catch (e) { qLight = false; }
+                                                     // 【try/catch】URLSearchParams 解析网址参数，个别老浏览器不支持会抛错，
+                                                     // 所以包一层 try；出错就当没有参数（false）。
+                                                     // location.search = 问号后面那一串，如 "?theme=light"。
+                                                     // === 'light' 得到 true / false，存进 qLight。
   applyLight(!forceDark && (qLight || localStorage.getItem('theme') === 'light'));
+                                                     // 这一行决定「页面一打开是什么主题」，括号从里往外读：
+                                                     // ① qLight：网址上写了要浅色；
+                                                     // ② localStorage.getItem('theme') === 'light'：上次手动选过浅色（浏览器本地记着）；
+                                                     // ③ 两者满足一个就行（||）；
+                                                     // ④ 【!】强制深色的页面一律不算（!forceDark）；
+                                                     // ⑤ 最后把结果交给 applyLight。
 
-  themeBtn.addEventListener('click', () => {
-    if (forceDark) return;
-    const nextLight = !document.body.classList.contains('light');
-    applyLight(nextLight);
-    localStorage.setItem('theme', nextLight ? 'light' : 'dark');
+  themeBtn.addEventListener('click', () => {         // 【事件】给主题按钮装点击监听。
+    if (forceDark) return;                           // 【if】强制深色的页面，点了也什么都不做（【return】直接结束）。
+    const nextLight = !document.body.classList.contains('light');   // 【const】取反当前状态：
+                                                                    // 现在是深色（没有 light 类）→ nextLight = true → 下次变浅。
+    applyLight(nextLight);                           // 应用。
+    localStorage.setItem('theme', nextLight ? 'light' : 'dark');    // 记住选择。localStorage 只能存字符串，
+                                                                    // 下次打开页面时上面那行会读它，实现「记住我的偏好」。
   });
 
   /* ========== 5. 获取 IP ========== */
-  (function showIP() {
-    const sources = [
+  /* 思路：准备三个公共查 IP 的接口，挨个试；谁先成功就用谁，全失败就显示「获取失败」。
+     为什么要三个？单个接口经常被墙、限流、或临时挂掉，多准备几个才稳。 */
+  (function showIP() {                               // IIFE：这块逻辑自成一体，变量不外泄。
+    const sources = [                                // 【const】接口地址列表，按顺序尝试。
       'https://api.ipify.org?format=text',
       'https://ipapi.co/ip/',
       'https://api.ip.sb/ip'
     ];
-    const el = () => document.getElementById('ip');
-    let i = 0;
-    function next() {
+    const el = () => document.getElementById('ip');  // 【箭头函数】每次调用都重新找一次元素。
+                                                     // 为什么不存下来？因为导航栏可能是后来才插进页面的，
+                                                     // 提前找会拿到 null。用函数「现用现找」最保险。
+    let i = 0;                                       // 【let】当前试到第几个接口，从 0 开始。
+    function next() {                                // 【function】试下一个接口。
       if (i >= sources.length) { const e = el(); if (e) e.textContent = '获取失败'; return; }
-      const url = sources[i++];
-      const ac = new AbortController();
-      const timer = setTimeout(() => ac.abort(), 3000);   // 3 秒不回来就换下一个，不让它挂着
-      fetch(url, { signal: ac.signal, cache: 'no-store' })
-        .then(r => r.text())
-        .then(tp => {
-          clearTimeout(timer);
+                                                     // 【if】所有接口都试完了 → 显示「获取失败」；
+                                                     // 【return】结束，不再往下。
+      const url = sources[i++];                      // 【const】取出当前地址；i++ 是「先用 i 的值，再把 i 加 1」。
+      const ac = new AbortController();              // 【new】AbortController 是浏览器提供的「中断器」，
+                                                     // 可以强行掐断一个还没返回的 fetch 请求。
+      const timer = setTimeout(() => ac.abort(), 3000);   // 3 秒不回来就掐断，换下一个，不让它一直挂着。
+                                                          // setTimeout(要执行的函数, 毫秒) 是定时器。
+      fetch(url, { signal: ac.signal, cache: 'no-store' })   // 【fetch】发网络请求：
+                                                             // signal 绑上中断器（上面掐断的就是它）；
+                                                             // cache:'no-store' = 别用浏览器缓存，要最新的。
+        .then(r => r.text())                         // 【.then】请求成功后，把响应内容读成纯文本（IP 就是一行文字）。
+        .then(tp => {                                // 【.then】拿到文本后接着处理。tp = text 的缩写。
+          clearTimeout(timer);                       // 成功了就取消那个 3 秒定时器，别误伤。
           const ip = (tp || '').trim().split('\n')[0].slice(0, 60);
+                                                     // 三步清洗：去掉首尾空白（trim）→ 按换行切开取第一行（split('\n')[0]）→
+                                                     // 最多留 60 个字符（slice(0,60)），防止接口返回一大段 HTML。
           if (!/^[0-9a-fA-F.:]+$/.test(ip)) throw new Error('格式不对');
-          const e = el(); if (e) e.textContent = ip;
+                                                     // 【正则】只允许数字、a-f、点、冒号（IPv4 和 IPv6 都用得上）。
+                                                     // 【throw】主动抛错 → 直接跳到下面的 catch，等于「这个接口的结果不能用」。
+          const e = el(); if (e) e.textContent = ip; // 【if】把 IP 写进页面上那个 <span id="ip">。
         })
-        .catch(() => { clearTimeout(timer); next(); });
+        .catch(() => { clearTimeout(timer); next(); });   // 【catch】任何一步失败（超时、网络错、格式不对）：
+                                                          // 取消定时器，然后试下一个接口。
     }
-    next();
+    next();                                          // 启动：先试第一个。
   })();
 
   /* ========== 6. 登录状态判断 ========== */
-  function showLoggedIn(role, avatar, uid) {
-    loginBtn.style.display = 'none';
-    avatarBox.style.display = 'block';
-    gearLogout.style.display = 'block';
-    gearEmpty.style.display = 'none';
+  /* 两个函数，分别对应「已登录」和「未登录」两种界面状态。
+     核心思路：登录框 / 头像 / 退出项 / 后台按钮 / 信箱，统统靠改 display 来显示或隐藏。 */
+  function showLoggedIn(role, avatar, uid) {         // 【function】已登录：role 角色、avatar 头像、uid 用户编号。
+    loginBtn.style.display = 'none';                 // 藏掉「登录」按钮。
+    avatarBox.style.display = 'block';               // 显示头像。
+    gearLogout.style.display = 'block';              // 齿轮菜单里显示「退出登录」。
+    gearEmpty.style.display = 'none';                // 藏掉「请先登录」那行提示。
 
     // 头像点进去 = 自己的主页
-    if (uid) {
-      avatarBox.href = '/profile/?uid=' + uid;
-      avatarBox.title = '我的主页';
+    if (uid) {                                       // 【if】有用户编号才做（老数据可能没有）。
+      avatarBox.href = '/profile/?uid=' + uid;       // 改链接地址：个人主页 + ?uid=编号。
+                                                     // 字符串用 + 拼接。
+      avatarBox.title = '我的主页';                   // 鼠标悬停时显示的提示文字。
     }
 
-    const navAvatarImg = document.getElementById('avatarImg');
-    if (navAvatarImg && avatar) navAvatarImg.src = fixAvatar(avatar);
-
+    const navAvatarImg = document.getElementById('avatarImg');   // 头像那张 <img>。
+    if (navAvatarImg && avatar) navAvatarImg.src = fixAvatar(avatar);   // 【if】两者都有才设地址。
+                                                                        // fixAvatar 是文件最上面那个函数，
+                                                                        // 负责把「只有文件名」补成完整网址。
     if (adminBtn) {
       adminBtn.style.display = (role === 'owner' || role === 'admin') ? 'flex' : 'none';
+                                                     // 【if + 三元】站长或管理员才显示后台按钮，
+                                                     // 普通人设成 none（等于没有）。
     }
-    if (mailWrap) mailWrap.style.display = 'block';
+    if (mailWrap) mailWrap.style.display = 'block';  // 登录了才显示信箱入口。
     loadMail();               // 看一眼有没有未读，好显示小红点
   }
-  function showLoggedOut() {
-    loginBtn.style.display = '';
+  function showLoggedOut() {                          // 【function】未登录：把上面那些全反过来。
+    loginBtn.style.display = '';                      // 赋空字符串 = 恢复 CSS 里的默认显示方式（最省心的写法）。
     avatarBox.style.display = 'none';
     gearLogout.style.display = 'none';
-    gearEmpty.style.display = 'block';
+    gearEmpty.style.display = 'block';                // 齿轮菜单里显示「请先登录」。
     if (adminBtn) adminBtn.style.display = 'none';
     if (mailWrap) mailWrap.style.display = 'none';
-    if (mailPanel) mailPanel.classList.remove('show');
-    if (mailDot) mailDot.style.display = 'none';
-    mailAll = [];
-    const mm = document.getElementById('mailModal');
-    if (mm) mm.classList.remove('show');
+    if (mailPanel) mailPanel.classList.remove('show');   // 【classList.remove】收起信箱面板（去掉 show 类）。
+    if (mailDot) mailDot.style.display = 'none';         // 藏掉未读小红点。
+    mailAll = [];                                        // 清空本地缓存的消息列表（别人登出后不该看到上一个账号的消息）。
+    const mm = document.getElementById('mailModal');     // 消息详情弹窗。
+    if (mm) mm.classList.remove('show');                 // 一起关掉。
   }
 
-  async function checkLogin() {
-    const s = await SBAPI.getSession();
-    if (!s) return showLoggedOut();
-    try {
-      const data = await SBAPI.me();
-      if (data.ok) {
-        showLoggedIn(data.role, data.avatar, data.uidNo || data.uid);
+  async function checkLogin() {                       // 【async function】去问后端「我现在登录了吗」。
+    const s = await SBAPI.getSession();               // 【await】等结果。没登录会得到 null。
+    if (!s) return showLoggedOut();                   // 【if】没登录 → 直接把界面切到未登录状态（return 后面跟函数调用 = 执行完就结束）。
+    try {                                             // 【try】后面要请求用户资料，可能失败。
+      const data = await SBAPI.me();                  // 【await】拿「我」的资料（角色、头像、编号、用户名）。
+      if (data.ok) {                                  // 后端说成功。
+        showLoggedIn(data.role, data.avatar, data.uidNo || data.uid);   // 切到已登录界面。
+                                                     // uidNo || uid：优先用 uidNo，没有就退回 uid（兼容新旧两种字段）。
         const navAvatarImg = document.getElementById('avatarImg');
-        if (data.username && navAvatarImg) navAvatarImg.alt = data.username;
+        if (data.username && navAvatarImg) navAvatarImg.alt = data.username;   // alt 是图片的替代文字：
+                                                                              // 图挂了时显示，也供读屏软件念出来。
       } else {
-        showLoggedOut();
+        showLoggedOut();                              // 后端说不行（token 过期等）→ 当未登录处理。
       }
-    } catch {
+    } catch {                                         // 【catch】网络错也当未登录。
       showLoggedOut();
     }
   }
-  checkLogin();
+  checkLogin();                                       // 页面一加载就执行一次，决定顶部显示什么。
 
   /* ========== 7. 后台按钮：平滑跳转 ========== */
   if (adminBtn) {
