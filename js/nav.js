@@ -277,69 +277,86 @@
   checkLogin();                                       // 页面一加载就执行一次，决定顶部显示什么。
 
   /* ========== 7. 后台按钮：平滑跳转 ========== */
-  if (adminBtn) {
-    adminBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      const href = this.getAttribute('href');
-      document.body.style.transition = 'opacity .18s';
-      document.body.style.opacity = '0';
-      setTimeout(() => { location.href = href; }, 180);
+  /* 为什么不用普通的 <a> 直接跳？因为想做一个「淡出再跳」的效果，显得不那么生硬。 */
+  if (adminBtn) {                                     // 【if】按钮存在才绑事件。
+    adminBtn.addEventListener('click', function (e) {   // 【事件】点击时执行。这里用 function 而不是箭头函数，
+                                                        // 因为下面要用 this —— 箭头函数没有自己的 this。
+      e.preventDefault();                             // 【方法】阻止链接的默认跳转行为（不然页面立刻就跑了，看不到淡出）。
+      const href = this.getAttribute('href');          // 【this】= 被点击的那个元素本身（adminBtn）。
+                                                        // getAttribute('href') = 读出它身上 href 属性的值。
+      document.body.style.transition = 'opacity .18s'; // 给整页加一条过渡：opacity 变化时用 0.18 秒平滑过去。
+      document.body.style.opacity = '0';               // 把整页改成全透明（开始淡出）。
+      setTimeout(() => { location.href = href; }, 180);   // 等 180 毫秒（和上面的过渡时长对齐）再真跳转。
+                                                          // location.href = 地址 = 让浏览器去那个页面。
     });
   }
 
   /* ========== 8. 齿轮菜单 ========== */
-  gearBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    closeMail();
-    gearMenu.classList.toggle('show');
+  /* 这是「点一下打开、点别处关掉」的经典套路：
+     打开按钮上要 stopPropagation（阻止事件往上冒），否则同一瞬间就被下面的「点别处关掉」给关了。 */
+  gearBtn.addEventListener('click', e => {            // 【事件】点齿轮。
+    e.stopPropagation();                              // 【事件对象】stopPropagation = 阻止事件继续往上冒泡，
+                                                      // 不然会立刻触发 document 上的「点一下就关」。
+    closeMail();                                      // 先把信箱面板收起，两个浮层别叠一起。
+    gearMenu.classList.toggle('show');                // 【classList.toggle】有 show 类就去掉，没有就加上 ——
+                                                      // 一行实现「开/关」切换。
   });
-  document.addEventListener('click', e => {
-    gearMenu.classList.remove('show');
+  document.addEventListener('click', e => {           // 在整个页面上监听点击（因为点哪里都要判断）。
+    gearMenu.classList.remove('show');                // 任何点击都先关齿轮菜单。
     // 点信箱面板里面（滚动、看内容）不该把它关掉
-    if (!e.target.closest('.mail-wrap')) closeMail();
+    if (!e.target.closest('.mail-wrap')) closeMail(); // 【closest】从被点的元素开始，往上层找最近的
+                                                      // 「带 .mail-wrap 的祖先元素」，找到就返回它，找不到返回 null。
+                                                      // 所以 !e.target.closest('.mail-wrap') = 「点的不是信箱区域」→ 才关信箱。
   });
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', e => {         // 【事件】键盘按下。
     if (e.key === 'Escape') { gearMenu.classList.remove('show'); closeMail(); closeMailModal(); }
+                                                      // 按 Esc 一键收起所有浮层，符合用户习惯。
   });
-  gearLogout.addEventListener('click', async () => {
-    await SBAPI.signOut();
-    location.reload();
+  gearLogout.addEventListener('click', async () => {  // 【async】退出登录要发请求，所以是异步。
+    await SBAPI.signOut();                            // 【await】等后端把会话清掉（清本地 token）。
+    location.reload();                                // 刷新页面，让所有状态回到未登录。
   });
 
   /* ========== 9. 信箱（被点赞 / 被回复 / 举报结果）========== */
-  function esc(s) {
-    return String(s == null ? '' : s)
+  function esc(s) {                                   // 【function】转义函数（和 main.js 里那个一样，每个文件各写一份，避免依赖）。
+    return String(s == null ? '' : s)                 // 【return】【三元】空值 → 空字符串，其余 → 转成字符串。
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                                                      // 连续调用四次 replace，把 & < > 换成 HTML 实体。
+                                                      // 注意 & 必须第一个换，否则会把后面生成的 &amp; 里的 & 又换一遍。
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');   // 再换双引号和单引号，防止属性被截断。
   }
 
   /* 信箱五栏：我的点赞 / 我的回复 / 我的@ / 我的举报 / 系统消息 */
-  const CATS = [
+  const CATS = [                                      // 【const】一个数组，每一项描述一个栏目。
     { key: 'like',    label: '我的点赞', ico: '♥', cls: 'like',    empty: '还没有人赞过你的留言' },
+                                                      // key = 后端数据里的类型值（用来筛选）；
+                                                      // label = 显示的名字；ico = 图标字符；cls = CSS 类名（决定颜色）；
+                                                      // empty = 这一栏没有消息时显示的文案。
     { key: 'reply',   label: '我的回复', ico: '↩', cls: 'reply',   empty: '还没有人回复过你' },
     { key: 'mention', label: '我的@',    ico: '@', cls: 'mention', empty: '还没有人在留言里 @ 过你' },
     { key: 'report',  label: '我的举报', ico: '!', cls: 'report',  empty: '你还没有举报过谁' },
     { key: 'system',  label: '系统消息', ico: '⚙', cls: 'system',  empty: '没有系统消息' }
   ];
 
-  let mailAll = [];        // 后端给的全部通知，切栏目时在这里面筛
-  let mailKey = 'like';    // 小窗现在开着哪一栏
+  let mailAll = [];        // 【let】后端给的全部通知，切栏目时在这里面筛
+  let mailKey = 'like';    // 【let】小窗现在开着哪一栏（默认点赞那一栏）
 
-  function mailLine(n) {
-    const who = '<b>' + esc(n.fromName || '有人') + '</b>';
-    if (n.type === 'like')    return who + ' 赞了你的留言';
+  function mailLine(n) {                              // 【function】把一条通知变成一行文字。n = 这一条通知对象。
+    const who = '<b>' + esc(n.fromName || '有人') + '</b>';   // 【const】发起人名字，用 <b> 加粗。
+                                                              // n.fromName || '有人'：没名字就显示「有人」。
+    if (n.type === 'like')    return who + ' 赞了你的留言';    // 【if】按类型拼不同的话；【return】直接交出结果。
     if (n.type === 'mention') return who + ' 在留言里 @ 了你';
     if (n.type === 'report')  return '你的举报处理好了：<b>' + esc(n.action || '') + '</b>';
     if (n.type === 'system')  return esc(n.note || '有一条系统消息');
-    return who + ' 回复了你的留言';
+    return who + ' 回复了你的留言';                        // 上面都没命中时，默认当成「回复」。
   }
 
-  function mailIcon(type) {
+  function mailIcon(type) {                           // 【function】按类型返回一个带颜色的小图标 HTML。
     if (type === 'like')    return '<span class="mail-ico like">♥</span>';
     if (type === 'mention') return '<span class="mail-ico mention">@</span>';
     if (type === 'report')  return '<span class="mail-ico report">!</span>';
     if (type === 'system')  return '<span class="mail-ico system">⚙</span>';
-    return '<span class="mail-ico reply">↩</span>';
+    return '<span class="mail-ico reply">↩</span>';    // 默认回复图标。
   }
 
   function mailItemHTML(n) {
@@ -405,59 +422,69 @@
   }
 
   /* 点某一栏 → 弹小窗看详细内容，看过就算已读 */
-  function openCat(key) {
-    if (!CATS.some(x => x.key === key)) return;
-    mailKey = key;
+  function openCat(key) {                             // 【function】打开某一类消息（key = like / reply / mention…）。
+    if (!CATS.some(x => x.key === key)) return;       // 【if】.some(条件) = 数组里「有没有任意一项满足条件」。
+                                                      // 这里判断 key 是不是合法栏目；不合法就【return】退出，防止乱传参数。
+    mailKey = key;                                    // 记住当前看的是哪一栏（小窗刷新时要用）。
 
-    const modal = document.getElementById('mailModal');
-    if (!modal) return;
-    paintModal();
-    modal.classList.add('show');
-    closeMail();
+    const modal = document.getElementById('mailModal');   // 【const】找消息小窗那个元素。
+    if (!modal) return;                               // 【if】页面上没有就退出。
+    paintModal();                                     // 先把内容画好，再显示，避免闪一下空白。
+    modal.classList.add('show');                      // 【classList.add】加上 show 类 = CSS 里控制它显示出来。
+    closeMail();                                      // 收起下拉面板，两者别同时开。
 
-    const unreadIds = mailAll
-      .filter(n => (n.type || 'reply') === key && !n.read)
-      .map(n => n.id);
-    if (!unreadIds.length) return;
-    mailAll.forEach(n => { if ((n.type || 'reply') === key) n.read = true; });
-    renderMail();
-    markRead({ ids: unreadIds });
+    const unreadIds = mailAll                         // 【const】准备「哪些消息要标记已读」：
+      .filter(n => (n.type || 'reply') === key && !n.read)   // 【filter】筛出「属于这一栏、并且还没读」的。
+                                                      // (n.type || 'reply')：老数据可能没有 type 字段，默认当回复处理。
+      .map(n => n.id);                                // 【map】把筛出来的每条通知，转成它的 id（只留 id 传给后端）。
+    if (!unreadIds.length) return;                    // 【if】没有未读，就不用发请求了。
+    mailAll.forEach(n => { if ((n.type || 'reply') === key) n.read = true; });   // 本地先把这一栏全部标记成已读，
+                                                                                // 界面立刻更新，不用等服务器。
+    renderMail();                                     // 重画（红点数字会跟着变）。
+    markRead({ ids: unreadIds });                     // 再告诉服务器「这些 id 我读过了」。
+                                                      // { ids: unreadIds } 是对象字面量，作为参数打包传进去。
   }
 
-  function closeMailModal() {
+  function closeMailModal() {                         // 【function】关掉消息小窗。
     const modal = document.getElementById('mailModal');
-    if (modal) modal.classList.remove('show');
+    if (modal) modal.classList.remove('show');        // 去掉 show 类 = 隐藏。
   }
 
-  async function markRead(payload) {
+  async function markRead(payload) {                  // 【async】发给后端标记已读。payload = 要传的数据。
     try { await SBAPI.markRead(payload); } catch { /* 忽略 */ }
+                                                      // 【try/catch】标记失败不影响界面（本地已经标过了），
+                                                      // 所以静默吞掉错误，避免弹窗打扰。
   }
 
-  let mailBusy = false;
-  async function loadMail() {
-    const s = await SBAPI.getSession();
-    if (!s || mailBusy) return;
-    mailBusy = true;
-    try {
-      const d = await SBAPI.getNotifications();
-      if (!d || !d.ok) return;
-      mailAll = d.list || [];
-      renderMail();
+  let mailBusy = false;                               // 【let】「正在请求中」的开关，防止同时发多个请求。
+  async function loadMail() {                         // 【async】拉取信箱数据。
+    const s = await SBAPI.getSession();               // 【await】先确认登录状态。
+    if (!s || mailBusy) return;                       // 【if】没登录、或正在请求 → 直接退出（这就是防抖）。
+    mailBusy = true;                                  // 上锁。
+    try {                                             // 【try】下面可能失败。
+      const d = await SBAPI.getNotifications();       // 【await】向后端要通知列表。
+      if (!d || !d.ok) return;                        // 【if】失败就退出（但 finally 仍会执行，锁会解开）。
+      mailAll = d.list || [];                         // 存进变量；万一 list 不存在，给空数组兜底。
+      renderMail();                                   // 重画红点和五栏。
 
       // 信箱一打开就算「看过了」，红圈数字不再一直挂着
       if (mailPanel && mailPanel.classList.contains('show') && mailAll.some(n => !n.read)) {
-        mailAll.forEach(n => { n.read = true; });
-        renderMail();
-        markRead({ all: true });
+                                                      // 【if】三个条件：
+                                                      // ① 面板元素存在；
+                                                      // ② 面板正开着（有 show 类）；
+                                                      // ③ 里面有未读（some 只要有一条未读就为真）。
+        mailAll.forEach(n => { n.read = true; });     // 全部标记已读。
+        renderMail();                                 // 重画。
+        markRead({ all: true });                      // 告诉服务器「全读了」。
       }
 
       // 小窗正开着的话跟着刷新（比如刚处理完举报）
       const modal = document.getElementById('mailModal');
-      if (modal && modal.classList.contains('show')) paintModal();
+      if (modal && modal.classList.contains('show')) paintModal();   // 【if】小窗开着就重画内容，保持同步。
     } catch {
       /* 隧道抖一下就忽略，点开信箱时会重试 */
-    } finally {
-      mailBusy = false;
+    } finally {                                       // 【finally】不管成功失败，最后一定执行。
+      mailBusy = false;                               // 解锁，否则以后再也拉不到消息了。
     }
   }
 
