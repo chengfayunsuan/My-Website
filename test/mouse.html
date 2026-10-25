@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>鼠标特效 · 乘法</title>
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="/style.css?v=25">
+<link rel="stylesheet" href="/style.css?v=26">
 <style>
   html, body { min-height: 100vh; overflow: hidden; }
 
@@ -128,8 +128,12 @@
 
   function loop() {
     if (!ctx.running) return;
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = 'rgba(24,25,28,0.4)';
+    /* 每帧「擦掉」一点旧轨迹，而不是铺一层黑。
+       destination-out = 按 alpha 从画布上抠掉像素：
+       canvas 一直是透明的，底下的背景视频就能透出来，拖尾照样自然淡出。
+       （原先用 rgba(24,25,28,.4) 填满，等于给整页糊了一层黑，视频全被盖住了） */
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.globalCompositeOperation = 'lighter';
     ctx.strokeStyle = 'hsla(' + Math.round(hue.update()) + ',90%,50%,0.25)';
