@@ -558,7 +558,7 @@
     const { error } = await SB.from('comments').delete().eq('id', commentId);
     if (error) return errRes(error); return { ok: true };
   }
-  async function likeComment(commentId) {
+  async function likeComment(commentId) {          // 【async function】给评论点赞/取消（和文章点赞一个模子）。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data: ex } = await SB.from('comment_likes').select('comment_id').eq('comment_id', commentId).eq('uid', u.id).maybeSingle();
     if (ex) { await SB.from('comment_likes').delete().eq('comment_id', commentId).eq('uid', u.id); }
@@ -566,7 +566,7 @@
     const { count } = await SB.from('comment_likes').select('*', { count: 'exact', head: true }).eq('comment_id', commentId);
     return { ok: true, on: !ex, count: count || 0 };
   }
-  async function reportComment(commentId, reason) {
+  async function reportComment(commentId, reason) {   // 【async function】举报评论。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { error } = await SB.from('reports').insert({ target_type: 'comment', target_id: commentId, reporter_uid: u.id, reason });
     if (error) return errRes(error); return { ok: true };
@@ -576,100 +576,134 @@
   // 页面（test/board.html）用的是 m.text / m.name / whoOf(m) 这套字段，
   // 这里统一把 content/author 做别名，并带上真实赞数 + 我赞过没 + 作者资料。
   const MSG_SELECT = '*, profiles!messages_uid_fkey(*), message_likes(uid)';
+  // 【const】留言板要查的字段，抽成一个常量反复用。
+  // 好处：以后加字段只改这一处，不用在三个函数里各改一遍。
+  // 内容是：留言本身 + 作者资料 + 每条赞是谁点的（只要 uid）。
 
   function mapMessage(m, me, floorMap) {
+  // 【function】把数据库的一行留言，转成页面用的结构。
+  // m = 原始行，me = 当前用户（用来判断我赞过没），floorMap = 楼层对照表（可选）。
     const p = m.profiles || {};
+    // 【const】作者资料。关联查不到时给空对象，避免下面 p.username 报错。
     const name = m.author_name || p.username || '匿名';
+    // 【||】三级兜底：留言里存的名字 → 用户资料里的用户名 → 「匿名」。
     const likes = m.message_likes || [];
+    // 【const】点赞记录数组。
     const isRoot = m.parent == null;
+    // 【const】parent 为空 = 这是主楼（顶层留言），不是回复。
+    // 用 == 而不是 === 是有意的：数据库可能给 null，也可能给 undefined，两个都算「空」。
     return {
       id: m.id, uid: m.uid,
       author: name, name: name,                       // 新字段名 + 旧页面字段名
-      content: m.content, text: m.content,
+      content: m.content, text: m.content,            // 同上，一份数据两个名字，兼容老页面
       floor: isRoot ? (floorMap ? floorMap.get(m.id) : m.floor) : null,
+      // 【三元嵌套】只有主楼才有楼层号：优先查 floorMap，没有就退回数据库里的 floor。
       parent: m.parent, pinned: !!m.pinned,
+      // 【!!】把可能为 null 的 pinned 统一成 true / false。
       time: fmtTime(m.created_at), created_at: m.created_at,
+      // time 是给人看的（2026-10-23 13:07），created_at 是原始值（给前端排序用）。
       role: p.role || null, bio: p.bio || '', avatar: p.avatar_url || null, uidNo: p.uid_no || null,
       likes: likes.length,
       likedByMe: !!(me && likes.some(l => l.uid === me.id))
+      // 【some】点赞记录里有没有一条是当前用户点的。
     };
   }
 
-  async function getMessages() {
+  async function getMessages() {                   // 【async function】取全部留言（最多 500 条）。
     const u = await getCurrentUser();
     const { data, error } = await SB.from('messages')
-      .select(MSG_SELECT).eq('deleted', false)
+      .select(MSG_SELECT).eq('deleted', false)     // 用上面那个常量；排除软删除的。
       .order('created_at', { ascending: true }).limit(500);
+      // 按时间正序（老留言在前，符合论坛习惯）。
     if (error) return { ok: false, list: [] };
     const rows = data || [];
-    // schema 里 floor 没有自动编号，新留言补一个：主楼按时间顺序 1..N（已有 floor 的保持原样）
+    // 下面这段是「补楼层号」：数据库里 floor 字段可能是空的（老数据），
+    // 这里按主楼的先后顺序现场编一个号。
     const floorMap = new Map();
-    let n = 0;
-    rows.forEach(m => {
-      if (m.parent != null) return;
-      n += 1;
+    // 【new Map()】键值对集合。和对象相比，它的键可以是任意类型（这里用留言 id）。
+    let n = 0;                                     // 【let】计数器，代表当前编到第几楼。
+    rows.forEach(m => {                            // 【forEach】遍历每一行。
+      if (m.parent != null) return;                // 【if】是回复，不参与楼层编号（return 只跳过这一轮）。
+      n += 1;                                      // 是主楼，计数加一。
       floorMap.set(m.id, m.floor != null ? m.floor : n);
+      // 【.set(键, 值)】数据库里已有 floor 就沿用，没有就用刚才算的序号。
+      // 这样新旧数据混在一起也不会乱。
     });
     return { ok: true, list: rows.map(m => mapMessage(m, u, floorMap)) };
+    // 最后统一转成页面结构。
   }
 
-  async function postMessage(content, parent) {
+  async function postMessage(content, parent) {    // 【async function】发留言。parent 有值 = 回复某条。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const patch = { uid: u.id, content, parent: parent || null };
-    if (!parent) {
+    // 【const】要插入的数据。parent 为空就存 null（表示主楼）。
+    if (!parent) {                                 // 【if】是主楼，需要算楼层号。
       // 主楼排到最后一层
       const { data: last } = await SB.from('messages').select('floor')
         .not('floor', 'is', null).order('floor', { ascending: false }).limit(1);
+        // 【.not(字段, 'is', null)】= 「floor 不是空」。
+        // 【order 降序 + limit 1】= 取楼层号最大的那一条（也就是当前最后一楼）。
       patch.floor = ((last && last[0] && Number(last[0].floor)) || 0) + 1;
+      // 【链式 && + ||】三层保护后转数字，取不到就当 0，再 +1 得到新楼层。
     }
     const { data, error } = await SB.from('messages')
       .insert(patch).select(MSG_SELECT).single();
+      // 插入后立刻把「带作者资料」的完整行查回来，页面就能直接显示新留言，不用刷新。
     if (error) return errRes(error);
     return { ok: true, msg: mapMessage(data, u) };
+    // 注意这里没传 floorMap：新留言的 floor 已经在数据库里了，直接用就行。
   }
 
   // 点赞是「赞 / 取消赞」切换，返回 {liked, likes}
-  async function likeMessage(id) {
+  async function likeMessage(id) {                 // 【async function】留言点赞/取消。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data: ex } = await SB.from('message_likes').select('message_id')
       .eq('message_id', id).eq('uid', u.id).maybeSingle();
     if (ex) {
       const { error } = await SB.from('message_likes').delete().eq('message_id', id).eq('uid', u.id);
-      if (error) return errRes(error);
+      if (error) return errRes(error);             // 【if】删除失败要报错，不能当作成功。
     } else {
       const { error } = await SB.from('message_likes').insert({ message_id: id, uid: u.id });
       if (error) return errRes(error);
     }
     const { count } = await SB.from('message_likes').select('*', { count: 'exact', head: true }).eq('message_id', id);
     return { ok: true, liked: !ex, likes: count || 0 };
+    // 这里返回的字段叫 liked（留言板的叫法），文章那边叫 on —— 历史上不统一，页面按各自的名字读。
   }
 
-  async function reportMessage(id, reason) {
+  async function reportMessage(id, reason) {       // 【async function】举报留言。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { error } = await SB.from('reports').insert({ target_type: 'message', target_id: id, reporter_uid: u.id, reason });
     if (error) return errRes(error); return { ok: true };
   }
 
   // 我在留言板上举报过、还没被处理的留言 id（board 里禁用「举报」按钮用）
-  async function getMyReports() {
+  async function getMyReports() {                  // 【async function】查「我举报过哪些留言」。
     const u = await getCurrentUser();
     if (!u) return { ok: false, ids: [] };
     const { data, error } = await SB.from('reports')
       .select('target_type, target_id, status').eq('reporter_uid', u.id).eq('target_type', 'message');
+      // 只要三个字段：类型、目标 id、处理状态。
     if (error) return { ok: false, ids: [] };
     return {
       ok: true,
       ids: (data || []).filter(r => r.target_id && r.status !== 'done').map(r => r.target_id)
+      // 【filter】筛出「有目标 id」且「还没处理完」的（status 不是 done）。
+      // 【map】再只保留 target_id。
+      // 结果是一个 id 数组，页面用它把对应留言的「举报」按钮置灰，防止重复举报。
     };
   }
 
   // 置顶 / 取消置顶（只有 is_staff() 能过 RLS）
-  async function pinMessage(id) {
+  async function pinMessage(id) {                  // 【async function】切换置顶状态。
     const { data: cur, error: e1 } = await SB.from('messages').select('pinned').eq('id', id).single();
+    // 【解构重命名】error: e1 —— 把 error 改名成 e1，避免和下面的 error 撞名。
+    // 先读当前状态。
     if (e1) return errRes(e1);
-    const next = !cur.pinned;
+    const next = !cur.pinned;                      // 【const】取反：原来置顶就取消，原来没置顶就置顶。
     const { error } = await SB.from('messages')
       .update({ pinned: next, pin_time: next ? new Date().toISOString() : null }).eq('id', id);
+      // 【三元】置顶时记下时间，取消时清空。
     if (error) return errRes(error);
     return { ok: true, pinned: next };
   }
