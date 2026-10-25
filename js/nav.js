@@ -544,52 +544,63 @@
     }
   }
 
-  function closeMail() {
-    if (mailPanel) mailPanel.classList.remove('show');
+  function closeMail() {                              // 【function】收起信箱下拉面板。
+    if (mailPanel) mailPanel.classList.remove('show');   // 【if】元素存在才操作（不存在直接跳过，避免报错）。
   }
 
-  if (mailBtn) {
-    mailBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      gearMenu.classList.remove('show');
-      const open = mailPanel.classList.contains('show');
-      if (open) return closeMail();
-      mailPanel.classList.add('show');
+  if (mailBtn) {                                      // 【if】信箱按钮存在才绑事件（未登录时是隐藏的，但元素还在）。
+    mailBtn.addEventListener('click', e => {          // 【事件】点信封图标。
+      e.stopPropagation();                            // 【方法】阻止冒泡，否则会被 document 上那个「点别处关闭」立刻关掉。
+      gearMenu.classList.remove('show');              // 顺手收起齿轮菜单，两个浮层不要同时开。
+      const open = mailPanel.classList.contains('show');   // 【const】先看现在是不是开着的（是否含 show 类）。
+      if (open) return closeMail();                   // 【if】开着 → 这次点击当「收起」，然后结束。
+      mailPanel.classList.add('show');                // 关着 → 打开。
       loadMail();              // 只拉最新的，算已读要等你点进某一栏
     });
   }
 
   // 点五栏里任意一栏 → 弹小窗看这一类的消息
-  const mailCats = document.getElementById('mailCats');
+  /* 这里用「事件委托」：不给五个按钮分别绑事件，而是给它们的父容器绑一个。
+     好处：五栏是动态生成的，绑在父容器上就不用管它们什么时候被重建。 */
+  const mailCats = document.getElementById('mailCats');   // 【const】五栏的父容器。
   if (mailCats) {
-    mailCats.addEventListener('click', e => {
-      const b = e.target.closest('.mail-cat');
-      if (b) openCat(b.dataset.cat);
+    mailCats.addEventListener('click', e => {        // 【事件】点父容器，但事件会从真正被点的子元素冒上来。
+      const b = e.target.closest('.mail-cat');       // 【closest】从被点元素往上找最近的 .mail-cat（也就是那一栏按钮）。
+      if (b) openCat(b.dataset.cat);                 // 【if】确实点在某栏里 → 读它身上存的自定义属性 data-cat，打开对应栏目。
+                                                     // dataset.cat 对应 HTML 里的 data-cat="like" 这种写法。
     });
   }
 
-  const mailModal = document.getElementById('mailModal');
+  const mailModal = document.getElementById('mailModal');   // 【const】消息小窗。
   if (mailModal) {
     mailModal.addEventListener('click', e => {
       if (e.target === mailModal || e.target.closest('.mail-modal-close')) closeMailModal();
+                                                     // 【if】两种情况都关闭：
+                                                     // ① 点的就是遮罩本身（点在外面）；
+                                                     // ② 点的是那个 × 按钮（往上找有 .mail-modal-close）。
     });
   }
 
-  const mailReadAll = document.getElementById('mailReadAll');
+  const mailReadAll = document.getElementById('mailReadAll');   // 【const】信件面板里的「全部已读」按钮。
   if (mailReadAll) {
     mailReadAll.addEventListener('click', e => {
-      e.stopPropagation();
-      if (!mailAll.some(n => !n.read)) return;
-      mailAll.forEach(n => { n.read = true; });
-      renderMail();
+      e.stopPropagation();                           // 阻止冒泡，免得这一下点击把面板关掉。
+      if (!mailAll.some(n => !n.read)) return;       // 【if】一条未读都没有 → 什么都不用做，直接结束。
+      mailAll.forEach(n => { n.read = true; });      // 本地全部标记已读（界面先变，不等服务器）。
+      renderMail();                                  // 重画红点和五栏。
       const modal = document.getElementById('mailModal');
-      if (modal && modal.classList.contains('show')) paintModal();
-      markRead({ all: true });
+      if (modal && modal.classList.contains('show')) paintModal();   // 【if】小窗开着就同步刷新。
+      markRead({ all: true });                       // 告诉服务器：全部已读。
     });
   }
 
   // 每 60 秒偷偷看一眼有没有新消息，好更新小红点
   setInterval(() => { if (!mailPanel.classList.contains('show')) loadMail(); }, 60000);
+                                                  // 【setInterval(函数, 毫秒)】每隔一段时间执行一次，会一直重复。
+                                                  // 60000 毫秒 = 60 秒。
+                                                  // 【if】面板正开着就不拉（避免刚点开又被刷新打断），
+                                                  // 关着的时候才在后台悄悄检查。
+                                                  // 这种做法叫「轮询」：不建立长连接，定时问一句「有新的吗」。
 
   /* ========== 10. 登录弹窗 ========== */
   /* 登录和注册共用同一个弹窗、同一个输入框，只是点了不同按钮走不同接口。
