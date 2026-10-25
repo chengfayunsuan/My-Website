@@ -6,138 +6,223 @@
 // js/sb.js — Supabase 前端数据层（方案 A：前端直连 + RLS）
 // 所有页面通过 window.SBAPI 访问。返回结构尽量对齐旧 server.js，减少页面 DOM 改动。
 // 必须在 supabase-js（CDN）和 config.js 之后引入。
-(function () {
+//
+// ★ 这个文件是「数据层」：页面上所有「读写数据库」的动作都从这里走。
+//   好处：页面里只写 SBAPI.getArticles() 这种一句话，不用关心请求怎么发、错误怎么处理。
+// ★ 本文件出现的专有名词（0 基础版）：
+//   · Supabase —— 现成的后端服务：数据库 + 登录 + 文件存储，不用自己写服务器。
+//   · RLS（行级权限）—— 数据库里配的规则，决定「哪个用户能读/写哪几行」。
+//   · createClient —— 用地址和 key 建一个客户端对象，之后所有请求都通过它发。
+//   · 链式调用 —— 一行接一行 .xxx().yyy()，每一步都返回一个「还能继续调」的对象。
+//   · then / await —— 等异步结果。
+//   · 解构 —— const { data, error } = ... 一次取出对象里的两个字段。
+//   · 时间戳 / ISO 时间 —— 2026-10-23T13:07:00+00:00 这种国际标准写法。
+(function () {                                    // 【IIFE】整份代码包在自己的作用域里，只对外暴露 window.SBAPI。
   if (!window.supabase || !window.SUPABASE_URL) {
+  // 【if】依赖检查：supabase-js 这个库、以及 config.js 里的地址，必须都存在。
+  // ! 是取反；|| 是「或者」：缺一个就进这个分支。
     console.error('[sb] supabase-js 未加载或 config.js 未配置');
-    return;
+    // console.error 会在浏览器 F12 控制台里打红字，方便排查「为什么页面没数据」。
+    return;                                     // 【return】直接结束整个 IIFE，后面的代码不执行。
   }
   const SB = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-  window.SB = SB;
+  // 【const】创建客户端。两个参数：
+  //   ① 地址（走 /sb 反代后的同域地址，或直连 Supabase）
+  //   ② 公开 key（anon key，可公开，权限由 RLS 控制）
+  // 之后所有数据库/登录操作都通过这个 SB 对象。
+  window.SB = SB;                               // 挂到全局，方便在控制台里手动调试，比如 SB.from('articles')。
 
   // 用户名登录 → 虚拟 email（Supabase Auth 只认 email+password）
   const DOMAIN = '@chengfa.app';
+  // 【const】Supabase 的登录只支持邮箱，所以这里约定：
+  // 用户输入「chengfa」，实际拿去登录的是「chengfa@chengfa.app」。
+  // 这样界面上是用户名，底层是邮箱，两全其美。
 
-  function errRes(e, extra) {
+  function errRes(e, extra) {                   // 【function】统一造一个「失败结果」对象。
     return Object.assign({ ok: false, error: (e && e.message) || '请求失败' }, extra || {});
+    // Object.assign 把两个对象合并：
+    //   ① { ok:false, error: 错误信息 } —— 错误信息优先用后端给的 message
+    //   ② extra —— 调用方想额外返回的字段（比如 list: []，失败时也别让页面拿到 undefined）
   }
   // 一对多关系的 count 取数（supabase 嵌入返回 [{count:N}]）
   function cnt(arr) { return (arr && arr[0] && arr[0].count) || 0; }
+  // 【function】Supabase 查「点赞数/收藏数」时，返回的是 [{ count: 3 }] 这种数组。
+  // 这一行连续用 && 做「短路」保护：任何一层不存在就返回 0，绝不报错。
 
   // ---------- 媒体地址修正 ----------
   // 数据库里存过 https://xxx.supabase.co/storage/... 的绝对地址，国内直连不通。
   // 走反代后统一改写成 https://当前站点/sb/storage/...，历史数据不用回炉。
   const UPSTREAM = (window.SB_UPSTREAM || '').replace(/\/+$/, '');
-  function fixUrl(u) {
+  // 【const】Supabase 原始地址，去掉结尾斜杠（/\/+$/ = 结尾一个或多个斜杠）。
+  function fixUrl(u) {                          // 【function】把「直连地址」改写成「反代地址」。
     if (!u || typeof u !== 'string' || !UPSTREAM) return u;
+    // 【if】空值、不是字符串、没配原始地址 → 原样返回（没什么可改的）。
     if (window.SUPABASE_URL === UPSTREAM) return u;          // 没开反代，原样返回
-    if (u.indexOf(UPSTREAM) === 0) {
+    if (u.indexOf(UPSTREAM) === 0) {            // 【if】地址确实以上面的原始域开头（indexOf 返回 0 = 在开头）。
       return window.SUPABASE_URL.replace(/\/+$/, '') + u.slice(UPSTREAM.length);
+      // 【slice】把开头那段域名字符串切掉，只留后面的路径，再拼上新的域名。
+      // 例：https://xxx.supabase.co/storage/v1/a.jpg
+      //   → /storage/v1/a.jpg（切掉域名）+ https://chengfa-761.pages.dev/sb → 新地址。
     }
     return u;
   }
-  function fixDeep(o) {
-    if (!o) return o;
+  function fixDeep(o) {                         // 【function】递归地把对象/数组里所有字符串都改一遍。
+    if (!o) return o;                           // 【if】空值直接返回。
     if (typeof o === 'string') return fixUrl(o);
+    // 【if】是字符串 → 直接改（这就是递归的「到底了」的情况）。
     if (Array.isArray(o)) return o.map(fixDeep);
+    // 【if】是数组 → 每个元素都递归处理一遍。
     if (typeof o === 'object') {
+    // 【if】是对象 → 遍历它的每个字段，是字符串的就改掉。
       for (const k in o) if (typeof o[k] === 'string') o[k] = fixUrl(o[k]);
+      // 【for...in】遍历对象的键名；k 是键名，o[k] 是对应的值。
+      // 这一行把 for 和 if 写在一起，等价于「对每个字段判断一下再赋值」。
     }
     return o;
   }
   // 富文本正文里的 <img src="https://xxx.supabase.co/...">：加载失败时补一次改写。
   // 资源加载错误不冒泡，但会在捕获阶段经过 window，所以这里用 true。
   window.addEventListener('error', function (ev) {
-    const el = ev.target;
-    if (!el || !el.getAttribute) return;
-    const tag = el.tagName;
+  // 【addEventListener】在 window 上监听「资源加载错误」（图片、视频加载失败都会触发）。
+  // 这类错误不会冒泡，但会在「捕获阶段」经过 window，所以第三个参数必须写 true。
+    const el = ev.target;                       // 【const】出错的那个元素（不是事件绑定的元素）。
+    if (!el || !el.getAttribute) return;        // 【if】不是元素、或没有 getAttribute 方法 → 跳过。
+    const tag = el.tagName;                     // 【const】标签名，比如 'IMG'、'VIDEO'（注意是大写）。
     if (tag !== 'IMG' && tag !== 'VIDEO' && tag !== 'SOURCE') return;
-    const src = el.getAttribute('src') || '';
-    const fixed = fixUrl(src);
+    // 【if】只处理这三种媒体标签。
+    const src = el.getAttribute('src') || '';   // 【const】取它当前的地址。
+    const fixed = fixUrl(src);                  // 改写成反代地址。
     if (fixed !== src) el.setAttribute('src', fixed);
-  }, true);
+    // 【if】地址真的变了 → 写回去，浏览器会用新地址重新加载一次。
+    // 这样就实现了「历史数据不用改，加载失败自动补救」。
+  }, true);                                     // true = 在捕获阶段监听（关键）。
 
   // ISO 时间 → 「2026-10-23 13:07」
   // 固定按北京时间（Asia/Shanghai）显示：访客在哪个时区都看到中文站该有的时间，
   // 不再出现 T / Z / +00:00，也不会被浏览器时区搞成 UTC 时间。
-  function fmtTime(s) {
-    if (!s) return '';
-    const d = new Date(s);
-    if (isNaN(d.getTime())) return String(s);
-    try {
+  function fmtTime(s) {                         // 【function】把数据库里的时间字符串变成好看的样子。
+    if (!s) return '';                          // 【if】没有时间 → 空字符串。
+    const d = new Date(s);                      // 【new Date】把字符串解析成日期对象。
+    if (isNaN(d.getTime())) return String(s);   // 【if】解析失败（getTime 是 NaN）→ 原样返回，别显示 Invalid Date。
+    try {                                       // 【try】Intl 格式化在老环境可能报错，包一层。
       const parts = new Intl.DateTimeFormat('en-CA', {
+      // 【Intl.DateTimeFormat】国际化时间格式化工具。
+      // 'en-CA'（加拿大英语）的格式正好是 2026-10-23，符合我们要的样式。
         timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
         hour: '2-digit', minute: '2-digit', hour12: false
+        // 固定时区为上海；hour12:false = 24 小时制。
       }).formatToParts(d).reduce((o, x) => (o[x.type] = x.value, o), {});
+      // 【formatToParts】返回 [{type:'year',value:'2026'}, ...] 这样的数组；
+      // 【reduce】把它折叠成一个对象：{ year:'2026', month:'10', ... }。
+      // 箭头函数里用逗号表达式 (o[x.type] = x.value, o)：先赋值，再把 o 返回，一行搞定。
       return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}`;
-    } catch (e) {
+      // 【返回】拼成「2026-10-23 13:07」。
+    } catch (e) {                               // 【catch】老浏览器不支持时的兜底写法。
       const p = n => (n < 10 ? '0' + n : '' + n);
+      // 【箭头函数】补零：小于 10 就在前面加 0。
       return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) +
+      // 注意 getMonth() 从 0 开始（0 = 一月），所以必须 +1。
         ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
     }
   }
 
-  /* ============ auth ============ */
-  async function getSession() {
-    const { data } = await SB.auth.getSession();
-    return data.session;
+  /* ============ auth（登录注册）============ */
+  /* Supabase 的登录状态存在浏览器里（localStorage 里存 token），
+     getSession() 只是「读一下本地有没有登录凭证」，不发网络请求，所以很快。 */
+  async function getSession() {                 // 【async function】取当前会话。
+    const { data } = await SB.auth.getSession();   // 【解构】只关心 data，error 用不上就丢掉。
+    return data.session;                       // 【return】没登录时是 null。
   }
-  async function getCurrentUser() {
+  async function getCurrentUser() {             // 【async function】取当前用户（会向服务器验证 token）。
     const { data } = await SB.auth.getUser();
-    return data.user;
+    return data.user;                          // 【return】没登录时是 null。
   }
-  async function signIn(username, password) {
+  async function signIn(username, password) {   // 【async function】登录。
     return SB.auth.signInWithPassword({ email: username + DOMAIN, password });
+    // 用户名拼上虚拟域名当邮箱。返回 { data, error }，error 非空就是失败。
   }
-  async function signUp(username, password) {
+  async function signUp(username, password) {   // 【async function】注册。
     return SB.auth.signUp({
       email: username + DOMAIN,
       password,
       options: { data: { username } }
+      // options.data 是「附加信息」，会存进用户资料里，之后能在 profiles 表里看到。
+      // { username } 是简写，等于 { username: username }。
     });
   }
-  async function signOut() { return SB.auth.signOut(); }
+  async function signOut() { return SB.auth.signOut(); }   // 【async function】退出登录，清掉本地凭证。
   function onAuthChange(cb) { return SB.auth.onAuthStateChange(cb); }
+  // 【function】订阅登录状态变化：登录/退出时自动调用 cb 回调。cb = callback 的缩写。
 
   // 当前用户资料（兼容旧 /me 结构）
-  async function me() {
+  async function me() {                         // 【async function】拿「我」的资料：编号、用户名、角色、头像。
     // 用 session 里的 user 就够，省掉一次 auth/v1/user 往返（国内这条最慢）
-    const s = await getSession();
-    const u = s && s.user;
-    if (!u) return { ok: false };
+    const s = await getSession();               // 先读本地会话。
+    const u = s && s.user;                      // 【&&】有会话才取 user，否则得到 null。
+    if (!u) return { ok: false };               // 【if】没登录 → 直接返回失败（不浪费一次请求）。
     const { data, error } = await SB.from('profiles')
-      .select('*')
+    // 【.from('profiles')】选中 profiles 表。
+      .select('*')                              // 【.select('*')】要所有字段。
       .eq('id', u.id).single();
-    if (error || !data) return { ok: false };
+      // 【.eq(字段, 值)】筛选条件：id 等于当前用户 id。
+      // 【.single()】只取一条（如果查不到会返回 error，而不是空数组）。
+    if (error || !data) return { ok: false };   // 【if】查不到就当失败。
     return { ok: true, uid: u.id, uidNo: data.uid_no || null, username: data.username, role: data.role, avatar: data.avatar_url };
+    // 【return】整理成页面好用的结构：
+    // uid = 内部唯一 id（一串字母数字）；uidNo = 给用户看的数字编号；
+    // role = owner/admin/user；avatar = 头像地址。
   }
 
   /* ============ 文章 ============ */
+  /* 下面这个函数是「链式查询」的典型例子，读懂它，全站其他查询都是同一个套路：
+       SB.from('表名')            —— 选中哪张表
+         .select('要哪些字段')     —— 要什么
+         .neq('status','deleted') —— 过滤条件
+         .order('created_at')     —— 排序
+         .range(0, 19)            —— 分页（第 0 到 19 条）
+       最后 await 它才会真正发请求。 */
   async function getArticles({ limit = 20, offset = 0, uid = null, sort = 'new' } = {}) {
-    let q = SB.from('articles')
+  // 【解构 + 默认值】参数是一个对象，里面四个字段各有默认值。
+  // 末尾的 = {} 很关键：调用时不传参数（getArticles()）也不会报错。
+    let q = SB.from('articles')                 // 【let】开始一次查询，先存进 q（因为后面可能还要继续加条件）。
       .select('*, profiles!articles_uid_fkey(*), article_likes(count), article_favs(count)')
-      .neq('status', 'deleted')
+      // 【select】要什么：
+      //   * 文章所有字段；
+      //   profiles!articles_uid_fkey(*) —— 顺着外键把作者资料也带出来（!后面的名字是外键名）；
+      //   article_likes(count) / article_favs(count) —— 只要点赞数、收藏数的「数量」，不要全部明细。
+      .neq('status', 'deleted')                 // 【.neq】不等于：排除已删除的文章。
       .order(sort === 'hot' ? 'views' : 'created_at', { descending: true })
+      // 【.order】排序。三元：sort 是 'hot' 就按浏览量排，否则按创建时间排。
+      // descending:true = 从大到小 / 从新到旧。
       .range(offset, offset + limit - 1);
-    if (uid) q = q.eq('uid', uid);
-    const { data, error } = await q;
+      // 【.range】分页：从第 offset 条开始，到 offset+limit-1 条结束（下标包含两端）。
+      // 例：offset=0、limit=20 → 第 0~19 条，正好 20 条。
+    if (uid) q = q.eq('uid', uid);              // 【if】传了 uid 就再加一个条件：只看这个用户的文章。
+    const { data, error } = await q;            // 【await】到这里才真正发请求。
     if (error) return errRes(error, { list: [] });
+    // 【if】失败返回统一结构；list:[] 保证页面拿到的是数组，不会因为 undefined 报错。
     return { ok: true, list: (data || []).map(a => ({
+    // 【.map】把数据库返回的原始结构，转换成页面要的干净结构（这一步叫「数据整形」）。
       id: a.id, title: a.title,
       author: (a.profiles && a.profiles.username) || '匿名',
+      // 作者名；关联数据可能为空，所以先判断再用，最后兜底「匿名」。
       views: a.views || 0,
       likes: cnt(a.article_likes), favs: cnt(a.article_favs),
+      // 用 cnt() 从 [{count:3}] 里把数字取出来。
       chars: a.chars || 0, created_at: a.created_at
     })) };
   }
 
   // 文章详情（含正文 + 媒体 + 作者 + 当前用户互动状态）
-  async function getArticle(id) {
-    const u = await getCurrentUser();
+  async function getArticle(id) {               // 【async function】按 id 取一篇文章的完整信息。
+    const u = await getCurrentUser();           // 先拿当前用户（可能没登录，那就是 null）。
     const { data, error } = await SB.from('articles')
       .select('*, profiles!articles_uid_fkey(*), article_media(file, sort)')
-      .eq('id', id).single();
-    if (error) return errRes(error);
-    let likedByMe = false, favedByMe = false;
+      // 比列表多查了 article_media（文章里的图片/视频，按 sort 排序）。
+      .eq('id', id).single();                   // 【.single()】只取一条。
+    if (error) return errRes(error);            // 出错统一返回失败结构。
+    let likedByMe = false, favedByMe = false;   // 【let】准备两个「我有没有点过赞/收过藏」的标记。
+
     if (u) {
       const { data: lk } = await SB.from('article_likes').select('article_id').eq('article_id', id).eq('uid', u.id).maybeSingle();
       likedByMe = !!lk;
