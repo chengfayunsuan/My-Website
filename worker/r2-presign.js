@@ -21,6 +21,11 @@
  * R2 桶要配 CORS（R2 → 桶 → Settings → CORS Policy），允许前端 PUT：
  *   [{"AllowedOrigins":["https://chengfa-761.pages.dev"],"AllowedMethods":["PUT","GET"],"AllowedHeaders":["*"],"ExposeHeaders":["ETag"],"MaxAgeSeconds":3600}]
  */
+/* ============================================================
+   文件：worker/r2-presign.js（Cloudflare Worker：R2 上传签名）
+   作用：校验登录 token 后，为客户端签发一个限时的 R2 上传地址，让大文件直传对象存储，不经过业务服务器。
+   ============================================================ */
+
 
 const MAX = { img: 8 * 1024 * 1024, audio: 30 * 1024 * 1024, video: 2 * 1024 * 1024 * 1024 };
 
