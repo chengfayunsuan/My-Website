@@ -3,23 +3,51 @@
    作用：每个页面都会引入。负责：生成顶部导航栏、登录/注册弹窗、登录状态与头像、齿轮菜单、信箱红点、深色模式切换。
    ============================================================ */
 
-(function () {
+(function () {                                    // 【IIFE】立即执行函数：整份代码包在自己的作用域里，
+                                                  // 里面的变量不会和别的 js 文件重名打架。
   /* 后端已切 Supabase 直连，主调用走 window.SBAPI（见 js/sb.js）。 */
 
   /* 头像字段有两种可能：新后端给完整网址（…/avatar/uid1.jpg?v=123），
      旧后端只给文件名（uid1.jpg）。两种都要能正常显示。 */
-  function fixAvatar(a) {
-    if (!a) return '/avatar-default.jpg';
+  function fixAvatar(a) {                         // 【function】把「头像字段」统一成一个能直接放进 <img src> 的地址。
+    if (!a) return '/avatar-default.jpg';         // 【if】没有头像（null / 空字符串）→ 用默认头像。
     if (a.startsWith('data:') || /^https?:\/\//.test(a)) return a;
+                                                  // 【if】两种情况直接原样返回：
+                                                  // ① a.startsWith('data:')：这是 base64 内嵌图片，本身就是完整地址；
+                                                  // ② /^https?:\/\//.test(a) 是正则：以 http:// 或 https:// 开头的完整网址。
+                                                  // || 表示满足一个就行。
     if (a.indexOf('"') !== -1 || a.indexOf('<') !== -1) return '/avatar-default.jpg';
+                                                  // 【if】安全兜底：字段里出现引号或尖括号，说明有人在尝试注入代码，
+                                                  // 一律不要，换成默认头像。
+                                                  // indexOf('x') !== -1 = 「字符串里有 x 这个字符」。
     return (window.MEDIA_BASE || '').replace(/\/+$/, '') + '/' + a.replace(/^\/+/, '');
+                                                  // 剩下的情况 = 只有文件名，要拼成完整地址：
+                                                  // ① window.MEDIA_BASE 是媒体前缀（在 config.js 里配），没有就用空字符串；
+                                                  // ② .replace(/\/+$/, '') 去掉结尾的斜杠（正则 /\/+$/ = 结尾处一个或多个 /）；
+                                                  // ③ 加一个 / 再拼上文件名；
+                                                  // ④ a.replace(/^\/+/, '') 去掉文件名开头多余的斜杠（/^\/+/ = 开头处一个或多个 /）。
+                                                  // 这样无论前缀带不带斜杠、文件名带不带斜杠，拼出来都不会出现 // 或缺斜杠。
   }
 
   /* ========== 1. 生成导航栏 ========== */
+  /* 思路：导航栏不写在每个 HTML 里，而是这里用 JS 生成再塞进页面。
+     好处：十几个页面只需要维护这一份，改一次全站生效。 */
   const isManage = location.pathname.indexOf('/manage') === 0;
+                                                  // 【const】location.pathname = 当前网址的路径部分，比如 /manage/dashboard.html。
+                                                  // indexOf('/manage') === 0 = 「/manage 出现在第 0 个位置」= 路径以 /manage 开头。
+                                                  // 结果：当前是不是管理后台页面（true / false）。
   const adminHref = isManage ? '/' : '/manage/dashboard';
+                                                  // 【三元】在后台 → 按钮回首页；在普通页面 → 按钮进后台。
   const adminTitle = isManage ? '返回普通界面' : '管理后台';
+                                                  // 【三元】按钮的提示文字也跟着变。
 
+  /* 下面这一大段是【模板字符串】：反引号 ` 包住整段 HTML，${} 里可以插变量。
+     因为里面的每个字符都会被当成真实 HTML，所以内部不能写 // 注释。
+     结构速览（从上往下）：
+       <nav> 里面是 .nav-inner
+         ├─ .logo          左边「乘法」两个字，点回首页
+         └─ .nav-right     右边一排：传视频 / IP / 登录 / 头像 / 后台 / 信箱 / 主题 / 齿轮
+     带 style="display:none" 的元素默认是藏着的，等 JS 判断完登录状态再决定要不要露出来。 */
   const navHTML = `
     <nav>
       <div class="nav-inner">
@@ -73,9 +101,13 @@
         </div>
       </div>
     </nav>
-  `;
+  `;                                              // 模板字符串结束，回到普通 JS。
 
   /* ========== 2. 生成登录弹窗 ========== */
+  /* 这里生成两个东西：
+       ① .login-modal  登录 / 注册弹窗；
+       ② .mail-modal   点开信箱某一栏后，看详细消息的小窗。
+     它们默认是隐藏的（CSS 里没有 .show 类就不显示），靠 JS 加 show 类才弹出来。 */
   const modalHTML = `
     <div class="login-modal" id="loginModal">
       <div class="login-box">
@@ -100,33 +132,41 @@
         <div class="mail-modal-body" id="mailModalBody"></div>
       </div>
     </div>
-  `;
+  `;                                              // type="password" 会让输入框显示成圆点；
+                                                  // placeholder 是输入框里的灰色提示文字。
 
-  const navRoot = document.getElementById('navbar');
-  if (navRoot) navRoot.innerHTML = navHTML;
+  /* 把上面拼好的 HTML 真正塞进页面，分两步： */
+  const navRoot = document.getElementById('navbar');   // 【const】每个页面都留了一个空壳 <div id="navbar"></div>。
+  if (navRoot) navRoot.innerHTML = navHTML;            // 【if】把导航栏 HTML 塞进这个空壳里。
   document.body.insertAdjacentHTML('beforeend', modalHTML);
+                                                  // 【insertAdjacentHTML】在指定位置插入 HTML。
+                                                  // 'beforeend' = 插到 body 内部的末尾（也就是页面最后）。
+                                                  // 和 innerHTML 的区别：innerHTML 会覆盖原有内容，这个只是追加。
 
   /* ========== 3. 元素引用 ========== */
-  const themeBtn  = document.getElementById('themeBtn');
-  const themeIcon = document.getElementById('themeIcon');
-  const loginBtn  = document.getElementById('loginBtn');
-  const avatarBox = document.getElementById('userAvatar');
-  const gearBtn   = document.getElementById('gearBtn');
-  const gearMenu  = document.getElementById('gearMenu');
-  const gearLogout = document.getElementById('gearLogout');
-  const gearEmpty  = document.getElementById('gearEmpty');
-  const modal     = document.getElementById('loginModal');
-  const closeBtn  = document.getElementById('loginClose');
-  const userInput = document.getElementById('loginUser');
-  const passInput = document.getElementById('loginPass');
-  const loginSubmit    = document.getElementById('loginSubmit');
-  const registerSubmit = document.getElementById('registerSubmit');
-  const msgBox    = document.getElementById('loginMsg');
-  const adminBtn  = document.getElementById('adminBtn');
-  const mailWrap  = document.getElementById('mailWrap');
-  const mailBtn   = document.getElementById('mailBtn');
-  const mailPanel = document.getElementById('mailPanel');
-  const mailDot   = document.getElementById('mailDot');
+  /* 导航栏和弹窗刚插进页面，现在才能按 id 找到它们。
+     先把常用的元素统统存进变量，后面用起来就短一些：直接写 themeBtn，不用每次都 getElementById。
+     注意：这些元素必须在上面插入 HTML 之后才存在，顺序不能颠倒。 */
+  const themeBtn  = document.getElementById('themeBtn');     // 主题切换按钮（太阳/月亮）
+  const themeIcon = document.getElementById('themeIcon');    // 按钮里的那个图标 <svg>
+  const loginBtn  = document.getElementById('loginBtn');     // 顶部「登录」按钮
+  const avatarBox = document.getElementById('userAvatar');   // 登录后显示的头像链接
+  const gearBtn   = document.getElementById('gearBtn');      // 齿轮按钮
+  const gearMenu  = document.getElementById('gearMenu');     // 齿轮展开的菜单
+  const gearLogout = document.getElementById('gearLogout');  // 菜单里的「退出登录」
+  const gearEmpty  = document.getElementById('gearEmpty');   // 菜单里的「请先登录」提示
+  const modal     = document.getElementById('loginModal');   // 登录弹窗整体
+  const closeBtn  = document.getElementById('loginClose');   // 弹窗的关闭按钮
+  const userInput = document.getElementById('loginUser');    // 用户名输入框
+  const passInput = document.getElementById('loginPass');    // 密码输入框
+  const loginSubmit    = document.getElementById('loginSubmit');     // 「登录」按钮
+  const registerSubmit = document.getElementById('registerSubmit');  // 「注册」按钮
+  const msgBox    = document.getElementById('loginMsg');     // 弹窗里的提示文字
+  const adminBtn  = document.getElementById('adminBtn');     // 后台入口按钮
+  const mailWrap  = document.getElementById('mailWrap');     // 信箱整体（按钮 + 下拉面板）
+  const mailBtn   = document.getElementById('mailBtn');      // 信箱按钮（信封图标）
+  const mailPanel = document.getElementById('mailPanel');    // 信箱下拉面板
+  const mailDot   = document.getElementById('mailDot');      // 信封右上角的未读小红点
 
   /* ========== 4. 主题切换 ========== */
   /* 两个图标：月亮和太阳，本质就是两段 SVG 字符串（矢量图，放大不糊）。
@@ -359,66 +399,82 @@
     return '<span class="mail-ico reply">↩</span>';    // 默认回复图标。
   }
 
-  function mailItemHTML(n) {
-    const cls = 'mail-item' + (n.read ? '' : ' new');
-    const body = mailIcon(n.type) +
+  function mailItemHTML(n) {                          // 【function】把一条通知变成一行 HTML。n = 一条通知对象。
+    const cls = 'mail-item' + (n.read ? '' : ' new');  // 【const】CSS 类名：基础类 + （已读 ? 什么都不加 : 加一个 new）。
+                                                       // n.read 为 true 表示已读；没读的会多一个 new 类，样式上加个高亮。
+    const body = mailIcon(n.type) +                    // 【const】拼出这一行的「主体」：左边小图标
       '<div class="mail-body">' +
-        '<div class="mail-line">' + mailLine(n) + '</div>' +
+        '<div class="mail-line">' + mailLine(n) + '</div>' +   // 中间那句话（谁赞了你…）
         (n.text ? '<div class="mail-ex">' + esc(String(n.text).slice(0, 80)) + '</div>' : '') +
-        '<div class="mail-time">' + esc(n.time || '') + '</div>' +
+                                                       // 那行灰色原文预览：
+                                                       // n.text ? ... : '' = 有原文才显示，没有就留空（三元运算）。
+                                                       // String(...) 保证是字符串才能 .slice();
+                                                       // slice(0, 80) 只取前 80 个字符，太长会撑破布局。
+        '<div class="mail-time">' + esc(n.time || '') + '</div>' +   // 时间；没有就给空字符串。
       '</div>';
     // href 由后端算好（能回复的就带上 ?reply= 和 @对象）
-    return n.href
-      ? '<a class="' + cls + '" href="' + esc(n.href) + '">' + body + '</a>'
-      : '<div class="' + cls + '">' + body + '</div>';
+    return n.href                                      // 【return】【三元】最终决定这一行是「能点的链接」还是「普通块」：
+      ? '<a class="' + cls + '" href="' + esc(n.href) + '">' + body + '</a>'   // 有 href → 用 <a> 包起来，点了能跳过去回复。
+      : '<div class="' + cls + '">' + body + '</div>';                        // 没有 → 用 <div>，不可点。
   }
 
-  function paintDot() {
-    if (!mailDot) return;
-    const un = mailAll.filter(n => !n.read).length;
-    mailDot.textContent = un > 99 ? '99+' : String(un);
-    mailDot.style.display = un > 0 ? 'inline-flex' : 'none';
+  function paintDot() {                               // 【function】画信封右上角的小红点（未读数量）。
+    if (!mailDot) return;                             // 【if】元素不存在就退出。
+    const un = mailAll.filter(n => !n.read).length;    // 【const】筛选出所有未读，再取长度 = 未读条数。
+                                                       // filter 不改变原数组，只是筛一份新的。
+    mailDot.textContent = un > 99 ? '99+' : String(un);   // 【三元】超过 99 就显示 99+，否则显示真实数字。
+                                                          // String() 是必要的：textContent 赋值会隐式转换，但显式写更清楚。
+    mailDot.style.display = un > 0 ? 'inline-flex' : 'none';   // 【三元】有未读才显示，没未读藏起来。
   }
 
   /* 信箱下拉里那五栏，右边的数字是未读数（都读过了就显示总数） */
-  function renderCats() {
-    const box = document.getElementById('mailCats');
-    if (!box) return;
+  function renderCats() {                             // 【function】画下拉面板里的五个栏目按钮。
+    const box = document.getElementById('mailCats');   // 【const】装五栏的容器。
+    if (!box) return;                                 // 【if】没有就退出。
     if (!mailAll.length) { box.innerHTML = '<p class="mail-empty">还没有消息</p>'; return; }
-
-    box.innerHTML = CATS.map(c => {
+                                                      // 【if】一条消息都没有 → 显示占位文字，然后【return】结束。
+    /* 下面用 map + join 拼 HTML，这是「批量生成列表」的标准套路：
+       map：把每栏数据变成一个 HTML 字符串（得到数组）
+       join('')：把数组拼成一个长字符串（中间不加任何分隔符） */
+    box.innerHTML = CATS.map(c => {                   // CATS.map(函数) → 遍历五个栏目，c 是当前这一栏的数据对象。
       const items = mailAll.filter(n => (n.type || 'reply') === c.key);
-      const un = items.filter(n => !n.read).length;
+                                                      // 【const】这一栏的所有消息（老数据没 type 就按回复算）。
+      const un = items.filter(n => !n.read).length;    // 【const】其中未读有几条。
       // 看过了（没有未读）就干脆不挂数字，别老顶着个圆圈
-      const badge = un
-        ? '<span class="mail-cat-n">' + (un > 99 ? '99+' : un) + '</span>'
-        : '';
+      const badge = un                                // 【const】小红圈 HTML：有未读才生成。
+        ? '<span class="mail-cat-n">' + (un > 99 ? '99+' : un) + '</span>'   // 三元套三元：超过 99 显示 99+
+        : '';                                          // 没有未读 → 空字符串（等于什么都不加）。
       return '<button type="button" class="mail-cat" data-cat="' + c.key + '">' +
-        '<span class="mail-ico ' + c.cls + '">' + c.ico + '</span>' +
-        '<span class="mail-cat-label">' + c.label + '</span>' +
-        badge +
-        '<span class="mail-cat-go">›</span>' +
+             // data-cat 是「自定义属性」：把栏目名存进 DOM，点击时能通过 dataset 读出来。
+        '<span class="mail-ico ' + c.cls + '">' + c.ico + '</span>' +     // 图标（颜色由 c.cls 决定）
+        '<span class="mail-cat-label">' + c.label + '</span>' +           // 栏目名
+        badge +                                                           // 未读小红圈（可能为空）
+        '<span class="mail-cat-go">›</span>' +                            // 右边的 › 箭头，暗示「能点进去」
       '</button>';
-    }).join('');
+    }).join('');                                      // 【join('')】把五段 HTML 拼成一整段，空字符串表示中间不加分隔符。
   }
 
-  function renderMail() {
-    paintDot();
-    renderCats();
-  }
+  function renderMail() {                             // 【function】重画整个信箱（红点 + 五栏）。
+    paintDot();                                       // 先画红点。
+    renderCats();                                     // 再画五栏。
+  }                                                   // 把「哪些要一起变」收在一个函数里，改数据后只调它一个就行。
 
   /* 小窗内容（只画，不负责开关） */
-  function paintModal() {
-    const c = CATS.filter(x => x.key === mailKey)[0];
-    const title = document.getElementById('mailModalTitle');
-    const body  = document.getElementById('mailModalBody');
-    if (!c || !title || !body) return;
+  function paintModal() {                             // 【function】画弹出的小窗内容。
+    const c = CATS.filter(x => x.key === mailKey)[0];  // 【const】从五个栏目里找出当前这一栏。
+                                                       // filter 返回数组，[0] 取第一个（也就是唯一那个）。
+                                                       // 这是「按条件找一个」的常见写法（用 find 也行）。
+    const title = document.getElementById('mailModalTitle');   // 小窗标题
+    const body  = document.getElementById('mailModalBody');    // 小窗内容区
+    if (!c || !title || !body) return;                 // 【if】三者缺一个就退出，防止报错。
 
-    const items = mailAll.filter(n => (n.type || 'reply') === c.key);
+    const items = mailAll.filter(n => (n.type || 'reply') === c.key);   // 【const】这一栏的所有消息。
     title.textContent = c.label + (items.length ? '（' + items.length + '）' : '');
-    body.innerHTML = items.length
-      ? items.map(mailItemHTML).join('')
-      : '<p class="mail-empty">' + c.empty + '</p>';
+                                                       // 【三元】有消息就显示「我的点赞（3）」，没有就只显示名字。
+    body.innerHTML = items.length                      // 【三元】有消息 → 逐条生成 HTML；没消息 → 显示空状态文案。
+      ? items.map(mailItemHTML).join('')               // 【map】注意这里直接写了函数名 mailItemHTML：
+                                                       // map 会把每条消息依次传给它，不用写成 n => mailItemHTML(n)。
+      : '<p class="mail-empty">' + c.empty + '</p>';   // c.empty 就是 CATS 里配的那句「还没有人赞过你的留言」。
   }
 
   /* 点某一栏 → 弹小窗看详细内容，看过就算已读 */
