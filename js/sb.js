@@ -887,47 +887,77 @@
   async function getReports() {
     const { data, error } = await SB.from('reports')
       .select('*').order('created_at', { ascending: false }).limit(200);
+      // 取最近的 200 条举报，新的在上。
     if (error) return { ok: false, list: [], error: error.message };
+    // 【注意】这里把 error.message 也带回去了 —— 后台需要知道具体原因，方便排查。
     const rows = data || [];
-    if (!rows.length) return { ok: true, list: [] };
+    if (!rows.length) return { ok: true, list: [] };   // 【if】一条举报都没有 → 直接回空列表。
 
     // 按类型分组，每类一次查询，不逐条打接口
-    const groups = {};
-    rows.forEach(r => {
+    /* 这段是本文件里最值得学的「性能优化」：
+       假设有 30 条举报，如果逐条去查「被举报的留言是什么」，
+       就要发 30 次请求，页面会卡好几秒。这里的做法是：
+         ① 先把要查的 id 按类型分组（留言一堆、文章一堆、视频一堆）；
+         ② 每种类型只发 1 次 in(...) 查询；
+         ③ 查回来做成「id → 内容」的对照表，最后拼装时直接查表。
+       3 次请求搞定 30 条，这叫「批量查询」，也叫避免 N+1 问题。 */
+    const groups = {};                                // 【const】按类型收集 id：{ message:Set, article:Set }。
+    rows.forEach(r => {                               // 遍历每条举报。
       const t = REPORT_CFG[r.target_type] ? r.target_type : 'message';
-      if (r.target_id == null) return;
+      // 【三元】类型不认识就当留言处理（兜底，防止旧数据把页面搞崩）。
+      if (r.target_id == null) return;                // 【if】没有目标 id 的脏数据跳过。
       (groups[t] = groups[t] || new Set()).add(r.target_id);
+      // 【括号包住赋值表达式】这一行做了三件事：
+      //   groups[t] || new Set()  —— 这个类型还没建集合就新建一个
+      //   groups[t] = ...         —— 存回去
+      //   .add(r.target_id)       —— 把 id 加进集合
+      // 用 Set 而不是数组，是为了自动去重（同一条留言被举报 3 次只查 1 次）。
     });
-    const maps = {};
+    const maps = {};                                  // 【const】最后装「类型 → (id → 内容)」的对照表。
     for (const t of Object.keys(groups)) {
-      const cfg = REPORT_CFG[t];
+    // 【Object.keys(对象)】取出对象所有键名，返回数组，比如 ['message','article']。
+    // 【for...of】遍历这些键。
+      const cfg = REPORT_CFG[t];                      // 拿到这个类型的配置（表名、要查的字段）。
       const { data: hit } = await SB.from(cfg.table).select(cfg.cols).in('id', [...groups[t]]);
-      const m = {};
-      (hit || []).forEach(x => { m[x.id] = x; });
-      maps[t] = m;
+      // 【...展开】把 Set 展开成数组，.in 才能用。
+      // 这是「每种类型只查一次」的关键。
+      const m = {};                                   // 【const】准备一张 id → 内容 的表。
+      (hit || []).forEach(x => { m[x.id] = x; });     // 把查到的每一条按 id 存进表里。
+      maps[t] = m;                                    // 记到总表上。
     }
     // 举报人用户名
     const rIds = [...new Set(rows.map(r => r.reporter_uid).filter(Boolean))];
-    let reporterMap = {};
-    if (rIds.length) {
+    // 这一行串了四个操作，从里往外读：
+    //   rows.map(...)     取出所有举报人 id（会有重复）
+    //   .filter(Boolean)  去掉空值（Boolean 当函数用：有值 true、空值 false）
+    //   new Set(...)      去重
+    //   [... ]            展开成数组
+    let reporterMap = {};                             // 【let】存「用户 id → 用户名」。
+    if (rIds.length) {                                // 【if】有举报人才查（避免空 in() 查询）。
       const { data: rs } = await SB.from('profiles').select('id, username').in('id', rIds);
       (rs || []).forEach(p => { reporterMap[p.id] = p.username; });
     }
 
-    return { ok: true, list: rows.map(r => {
+    return { ok: true, list: rows.map(r => {          // 最后把每条举报拼成页面要的样子。
       const t = REPORT_CFG[r.target_type] ? r.target_type : 'message';
-      const x = (maps[t] || {})[r.target_id];
+      const x = (maps[t] || {})[r.target_id];         // 从对照表里取「被举报的内容」。
       const gone = !x || (t !== 'article' && t !== 'video' && !!x.deleted);
+      // 【三元 + &&】判断内容是不是「已经没了」：
+      //   查不到（!x）→ 没了；
+      //   或者不是文章/视频、并且标记了 deleted → 软删除的也算没了。
       const name = x ? (x.author_name || (x.profiles && x.profiles.username) || '（未知用户）') : '（未知用户）';
       const text = !x ? '' : (x.content != null ? x.content : (x.title || ''));
+      // 留言/评论用 content，文章/视频用 title —— 这里兼容两种情况。
       return {
         id: r.id,
         targetType: t, targetId: r.target_id,
         messageId: t === 'message' ? r.target_id : null,
+        // 留言板页面以前只认 messageId 这个字段，这里给它留一份兼容。
         status: r.status, action: r.action, reason: r.reason,
         reporter: reporterMap[r.reporter_uid] || '（未知）',
         msgText: text, msgName: name, alive: !gone,
-        targetUid: x ? x.uid : null,
+        // alive = 内容还在不在，后台据此决定「删除」按钮要不要能点。
+        targetUid: x ? x.uid : null,                  // 被举报内容的作者 id。
         msgTime: x ? fmtTime(x.created_at) : '',
         reportTime: fmtTime(r.created_at)
       };
@@ -935,81 +965,100 @@
   }
 
   // 按举报类型删掉被举报的东西（留言软删、其余硬删，RLS 保证只有 staff 能删别人的）
-  async function deleteReported(report) {
+  async function deleteReported(report) {          // 【async function】按举报类型，转给对应的删除函数。
     if (!report || report.targetId == null) return { ok: false, error: '这条举报没有目标' };
-    switch (report.targetType) {
-      case 'comment': return deleteComment(report.targetId);
+    switch (report.targetType) {                    // 【switch】多分支判断，比一串 if/else 更清楚。
+      case 'comment': return deleteComment(report.targetId);   // 【case】匹配到这个值就执行，return 直接结束。
       case 'article': return deleteArticle(report.targetId);
       case 'video':   return deleteVideo(report.targetId);
       case 'message':
       default:        return deleteMessage(report.targetId);
+      // 【default】所有 case 都不匹配时走这里；这里和 'message' 共用同一段代码。
     }
   }
 
-  async function handleReport(reportId, action) {
+  async function handleReport(reportId, action) {   // 【async function】把举报标记为「已处理」。
     const { error } = await SB.from('reports')
       .update({ status: 'done', action, handled_at: new Date().toISOString() })
+      // 记下处理结果（action 是处理方式，比如「已删除」）和处理时间。
       .eq('id', reportId);
     if (error) return errRes(error); return { ok: true };
   }
 
   /* ============ 浏览量 ============ */
   // 走 RPC（security definer），否则普通访客没有 update 权限，数字永远不动
-  async function bumpView(type, id) {
-    if (!id) return;
+  async function bumpView(type, id) {               // 【async function】给文章/视频的浏览量 +1。
+    if (!id) return;                                 // 【if】没有 id 直接返回。
     try { await SB.rpc('bump_view', { p_type: type, p_id: id }); } catch (e) { /* 函数没建就算了，不阻塞页面 */ }
+    // 【RPC】rpc 就是「调用数据库里预先写好的函数」。
+    // 为什么不用 .update({views: views+1})？因为普通访客没有 update 权限，
+    // 而且「读出来再+1写回去」两个人同时点会少算。数据库函数能原子地完成这件事。
+    // 整个包在 try 里：这个函数万一没建，页面也不该报错。
   }
 
   // ---------- B 站信息（封面/时长） ----------
   // 只能走本站边缘函数 /bili：api.bilibili.com 不返 CORS 头（fetch 读不到），
   // 响应又是 application/json，<script> JSONP 会被浏览器按 MIME 拒绝执行。
   // 结果缓存 7 天，列表页批量补封面不会重复打接口。
-  const BILI_KEY = 'biliCache.v2';
-  let biliMem = null;
-  function biliStore() {
-    if (biliMem) return biliMem;
+  const BILI_KEY = 'biliCache.v2';                  // 【const】localStorage 的键名。v2 表示缓存结构改过版。
+  let biliMem = null;                                // 【let】内存缓存：同一个页面里不用反复读 localStorage。
+  function biliStore() {                            // 【function】拿到整个缓存对象。
+    if (biliMem) return biliMem;                    // 【if】内存里有就直接用（最快）。
     try { biliMem = JSON.parse(localStorage.getItem(BILI_KEY) || '{}'); }
-    catch (e) { biliMem = {}; }
+    // 【JSON.parse】把存的字符串还原成对象；没存过就给 '{}' 当空对象。
+    catch (e) { biliMem = {}; }                      // 【catch】数据坏了就当空的，别让页面崩。
     return biliMem;
   }
-  async function fetchBili(bv) {
+  async function fetchBili(bv) {                     // 【async function】拿 B 站视频的封面/标题/时长。
     const key = String(bv || '').trim().toUpperCase();
-    if (!/^BV[0-9A-Za-z]{10}$/.test(key)) return null;
+    // 统一转大写、去空格 —— BV 号是大小写敏感的，但用户常输错，这里统一成大写便于比对。
+    if (!/^BV[0-9A-Za-z]{10}$/.test(key)) return null;   // 【if】格式不对直接返回 null。
 
-    const store = biliStore();
-    const hit = store[key];
+    const store = biliStore();                       // 拿缓存表。
+    const hit = store[key];                          // 看这个 BV 号有没有缓存。
     if (hit) {
       if (hit.v && Date.now() - hit.t < 7 * 24 * 3600 * 1000) return hit.v;
-      // 失败负缓存 1 小时：/bili 被 B 站风控时别每次翻页都打一轮空请求
+      // 【if】成功结果：7 天内直接用。7*24*3600*1000 = 7 天换算成毫秒。
+      // 「失败负缓存 1 小时」：/bili 被 B 站风控时别每次翻页都打一轮空请求
       if (!hit.v && Date.now() - hit.t < 3600 * 1000) return null;
+      // 【if】失败结果（v 为 null）：1 小时内不再重试，避免疯狂打接口又被封。
+      // 这就是「负缓存」：把失败也记下来。
     }
 
-    let d = null;
+    let d = null;                                    // 【let】准备装结果。
     try {
       const r = await fetch('/bili?bv=' + encodeURIComponent(key));
-      if (r.ok) {
-        const j = await r.json();
-        if (j && j.ok && (j.pic || j.title)) d = j;
+      // 【encodeURIComponent】把参数做 URL 编码，防止特殊字符破坏地址。
+      if (r.ok) {                                    // 【if】HTTP 成功。
+        const j = await r.json();                    // 解析 JSON。
+        if (j && j.ok && (j.pic || j.title)) d = j;  // 【if】业务上也成功、并且至少有封面或标题，才采用。
       }
-    } catch (e) { /* 拿不到就返回 null */ }
-    if (!d) {
-      store[key] = { t: Date.now(), v: null };
+    } catch (e) { /* 拿不到就返回 null */ }          // 网络错误静默处理。
+    if (!d) {                                        // 【if】没拿到 → 记一条「失败负缓存」。
+      store[key] = { t: Date.now(), v: null };       // t = 时间戳，v = 结果（null 表示失败）。
       try { localStorage.setItem(BILI_KEY, JSON.stringify(store)); } catch (e) {}
+      // 【try/catch】存不进去（比如隐私模式、空间满）也不影响主流程。
       return null;
     }
 
-    const v = {
+    const v = {                                      // 【const】整理成干净结构。
       title: d.title || '',
-      pic: String(d.pic || '').replace(/^http:/, 'https:'),
-      duration: Number(d.duration) || 0
+      pic: String(d.pic || '').replace(/^http:/, 'https:'),   // 强制 https，避免被浏览器当混合内容拦掉。
+      duration: Number(d.duration) || 0                // 秒数。
     };
-    store[key] = { t: Date.now(), v };
+    store[key] = { t: Date.now(), v };               // 记进缓存。
     try { localStorage.setItem(BILI_KEY, JSON.stringify(store)); } catch (e) { /* 存不下就算了 */ }
     return v;
   }
 
+  /* ============ 对外出口 ============ */
+  /* 整个文件写了三十多个函数，但外面只认 window.SBAPI 这一个对象。
+     这叫「只暴露一个入口」：页面不用关心内部怎么分文件、怎么命名，
+     只要记住 SBAPI.方法名() 就行。
+     注意这边的写法 { getName, getAge } 是对象简写，
+     等价于 { getName: getName, getAge: getAge }。 */
   window.SBAPI = {
-    SB, DOMAIN,
+    SB, DOMAIN,                                      // 把客户端对象和虚拟邮箱域名也暴露出去（调试用）
     fetchBili,
     getSession, getCurrentUser, signIn, signUp, signOut, onAuthChange, me, fmtTime,
     getArticles, getArticle, getArticleComments,
@@ -1027,5 +1076,6 @@
     getProfile, getUserByUid, getUserByUidNo, getAllUsers, updateProfile, changePassword,
     getRelations, follow, block, deleteMessage,
     getReports, handleReport, deleteReported, bumpView
+    // 每一行末尾的逗号可以不写，写上以后增删更方便（少一行报错）。
   };
-})();
+})();                                                // IIFE 结束：整份数据层到此封闭，只留 SBAPI 一个出口。
