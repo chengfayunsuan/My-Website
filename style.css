@@ -11,106 +11,146 @@
 
 /* 本地托管的数字字体（不依赖 Google，国内可直连） */
 @font-face {
-  font-family: 'Orbitron';
-  font-style: normal;
-  font-weight: 400 900;
-  font-display: swap;
+/* 【@font-face】自己定义一个字体名，让浏览器去加载对应的字体文件。
+   为什么要自托管？因为 Google Fonts 在国内经常连不上，页面会一直转圈等字体。 */
+  font-family: 'Orbitron';          /* 给这个字体起的名字，下面用 font-family: 'Orbitron' 就能用它 */
+  font-style: normal;               /* 常规体（不是斜体） */
+  font-weight: 400 900;             /* 支持的字重范围：400（正常）到 900（特粗）。
+                                       写一个范围表示「这一个文件里包含多个字重」——可变字体特性。 */
+  font-display: swap;               /* 字体还没下载完时，先用系统字体显示文字，下载好再替换。
+                                       不写这句的话，字体会「隐身」到下载完成，页面会闪白。 */
   src: url('/fonts/orbitron.woff2') format('woff2');
+  /* 字体文件地址；format('woff2') 告诉浏览器文件格式，它能提前判断支不支持。
+     woff2 是目前压缩率最高、兼容性也够好的网页字体格式。 */
 }
 
 :root {
+/* 【:root】= 整个文档的根元素（<html>）。在这里定义的东西全局都能用。
+   下面这些 --xxx 叫「CSS 变量 / 自定义属性」，用 var(--xxx) 取。
+   好处：换主题只改这里，全站几百处引用自动跟着变。 */
   /* —— 背景：Local 同款纯暗底（真实背景交给 #site-bg 的视频/图片）—— */
-  --bg: #121212;
-  --bg-2: #121212;
+  --bg: #121212;                    /* 页面底色：接近纯黑的深灰 */
+  --bg-2: #121212;                  /* 第二层底色（留着备用，目前和上面一样） */
 
   /* —— 玻璃：Local 同款磨砂（半透明底 + 12px 模糊，无边框无阴影）—— */
-  --card: rgba(30, 30, 30, .5);
-  --card-solid: #1a1a1a;
-  --glass-border: transparent;
-  --glass-hi: transparent;
-  --glass-blur: 12px;
+  --card: rgba(30, 30, 30, .5);     /* 卡片底色：深灰 + 50% 透明（rgba 最后一位是不透明度） */
+  --card-solid: #1a1a1a;            /* 不透明的卡片色（需要挡住背后内容时用） */
+  --glass-border: transparent;      /* 玻璃边框：透明 = 不要边框 */
+  --glass-hi: transparent;          /* 玻璃高光：透明 = 不要高光 */
+  --glass-blur: 12px;               /* 磨砂模糊强度，越大越糊 */
 
   /* —— 文字 —— */
-  --text: #f0f0f0;
-  --text-light: #cccccc;
+  --text: #f0f0f0;                  /* 主文字：接近白 */
+  --text-light: #cccccc;            /* 次要文字：浅灰 */
 
   /* —— 主色（紫）—— */
-  --primary: #8A2BE2;
-  --primary-deep: #9B4DF0;
-  --primary-soft: rgba(138, 43, 226, .18);
+  --primary: #8A2BE2;               /* 主色：蓝紫（按钮、链接、强调） */
+  --primary-deep: #9B4DF0;          /* 主色的浅一档（悬停时用） */
+  --primary-soft: rgba(138, 43, 226, .18);   /* 主色的 18% 透明版（做淡背景） */
   --grad-primary: #8A2BE2;                 /* Local 用纯色紫，不用渐变 */
   --grad-text: #F0FFFF;                    /* Local 标题是 azure 淡蓝白 */
 
   /* —— 辅助色 —— */
-  --accent: #26A5E4;
-  --pink: #FB7299;
-  --success: #35C777;
-  --success-hover: #40D886;
-  --danger: #FF5A5A;
-  --ok-text: #57D68A;
-  --warn: #F0B400;
+  --accent: #26A5E4;                /* 强调蓝（链接、信息提示） */
+  --pink: #FB7299;                  /* 粉色（B 站风格的标签） */
+  --success: #35C777;               /* 成功绿 */
+  --success-hover: #40D886;         /* 成功绿的悬停版 */
+  --danger: #FF5A5A;                /* 危险红（删除、错误） */
+  --ok-text: #57D68A;               /* 成功提示文字（比背景色亮，保证可读） */
+  --warn: #F0B400;                  /* 警告黄（重要提示） */
 
   /* —— 面 —— */
-  --nav-bg: rgba(30, 30, 30, .5);
-  --border: #333;
-  --field: rgba(255, 255, 255, .08);
-  --quote: rgba(255, 255, 255, .06);
-  --toast-bg: rgba(30, 30, 30, .95);
-  --toast-text: #f0f0f0;
+  --nav-bg: rgba(30, 30, 30, .5);   /* 导航栏底色（半透明，让背景透出来） */
+  --border: #333;                   /* 常规边框色：深灰 */
+  --field: rgba(255, 255, 255, .08); /* 输入框底色：8% 白（在深色背景上微微发亮） */
+  --quote: rgba(255, 255, 255, .06); /* 引用块底色 */
+  --toast-bg: rgba(30, 30, 30, .95); /* 浮动提示条的底色（几乎不透明，保证看得清） */
+  --toast-text: #f0f0f0;            /* 浮动提示条的文字色 */
 
   /* —— 阴影 / 圆角：Local 不用阴影，只用圆角 —— */
-  --shadow-sm: none;
-  --shadow: none;
-  --shadow-glow: none;
-  --radius: 12px;
-  --radius-sm: 8px;
+  --shadow-sm: none;                /* 小阴影：不要 */
+  --shadow: none;                   /* 常规阴影：不要 */
+  --shadow-glow: none;              /* 发光效果：不要 */
+  --radius: 12px;                   /* 大圆角（卡片） */
+  --radius-sm: 8px;                 /* 小圆角（按钮、输入框） */
 
   /* Local 同款字体：Orbitron 打头，中文自动回落苹方/雅黑 */
   --font-main: "Orbitron", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  /* 【字体回退链】从左往右找：有 Orbitron 就用它（只有数字和英文）；
+     中文它没有，就自动落到苹方（Mac）→ 微软雅黑（Windows）→ Arial → 系统无衬线。
+     这样中英文都能正常显示，不会出现方块乱码。 */
   --font-num: 'Orbitron', "JetBrains Mono", ui-monospace, monospace;
-  --page-width: 1200px;
+  /* 专门给数字用：时钟、IP、编号这些，等宽字体对齐才好看。 */
+  --page-width: 1200px;             /* 内容区最大宽度（居中显示） */
 }
 
 /* 磨砂白（点右上角小太阳切换） */
 body.light {
-  --bg: #EDF0F7;
+/* 【主题实现原理】只覆盖变量值，不重写任何具体样式。
+   深色时 --bg 是 #121212，浅色时变成 #EDF0F7；
+   所有用了 var(--bg) 的地方自动跟着变 —— 这是 CSS 变量最爽的地方。
+   注意选择器是 body.light（body 上有 light 这个类时才生效），优先级比 :root 高。 */
+  --bg: #EDF0F7;                    /* 浅色底：很浅的蓝灰，比纯白柔和 */
   --bg-2: #E4E9F4;
-  --card: rgba(255, 255, 255, .62);
+  --card: rgba(255, 255, 255, .62); /* 浅色卡片：白 + 62% 透明 */
   --card-solid: #FFFFFF;
   --glass-border: transparent;
   --glass-hi: transparent;
-  --text: #1A1F2B;
-  --text-light: #5F6B80;
+  --text: #1A1F2B;                  /* 浅色下文字要变深，否则看不见 */
+  --text-light: #5F6B80;            /* 次要文字：中灰蓝 */
   --nav-bg: rgba(255, 255, 255, .62);
-  --primary-soft: rgba(138, 43, 226, .10);
-  --border: rgba(20, 30, 60, .12);
+  --primary-soft: rgba(138, 43, 226, .10);   /* 浅色下紫色更淡一点，不然糊成一团 */
+  --border: rgba(20, 30, 60, .12);  /* 浅色边框：用低透明度深色，比纯灰自然 */
   --field: rgba(255, 255, 255, .7);
   --quote: rgba(20, 30, 60, .04);
-  --toast-bg: rgba(26, 31, 43, .92);
+  --toast-bg: rgba(26, 31, 43, .92);/* 浅色模式下提示条反而是深色（对比更强） */
   --toast-text: #FFFFFF;
   --grad-text: #1A1F2B;
 }
 /* 兼容旧类名 */
 body.dark { }
+/* 【空规则】留着是为了兼容旧代码里加 body.dark 的地方，不写也没事。 */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+/* 【*】通配符选择器：选中页面上所有元素。
+   margin/padding 清零 —— 浏览器给每个标签都自带内外边距（比如 <p> <h1>），不清掉布局会到处是缝。
+   box-sizing:border-box —— 让 width 把 padding 和 border 也算进去：
+     写 width:100px 就真的是 100px，不会因为加了 padding 变成 120px。这是最省心的盒模型。 */
 
 html { overflow-y: scroll; }
+/* 【强制显示竖向滚动条轨道】不管内容够不够长都留出位置。
+   为什么？因为滚动条出现/消失会让内容区宽度突然变化，页面会「跳一下」。
+   强制占位就没这个问题。 */
 @supports (scrollbar-gutter: stable) {
+/* 【@supports】能力检测：浏览器支持某个 CSS 特性才应用里面的样式。
+   比用 JS 判断简单得多。 */
   html { overflow-y: auto; scrollbar-gutter: stable; }
+  /* 【现代写法】scrollbar-gutter:stable 会把滚动条位置预留出来，
+     同时又不会像上面那样永远显示一条灰条 —— 只有需要滚动时才出现，但宽度不跳。 */
 }
 
 /* ---------- 文字选中 / 滚动条 ---------- */
 ::selection { background: rgba(138, 43, 226, .35); color: var(--text); }
+/* 【::selection】鼠标框选文字时那块高亮的样式。
+   默认是蓝色，这里改成半透明紫，和主题一致。 */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
+/* 【::-webkit-scrollbar】滚动条整体：宽 10px（横向滚动条则是高 10px）。
+   这是 WebKit 系（Chrome / Edge / Safari）的私有写法，Firefox 不认，会用系统默认。 */
 ::-webkit-scrollbar-track { background: transparent; }
+/* 滚动条的「轨道」（滑块后面的槽）：透明，让页面背景透出来。 */
 ::-webkit-scrollbar-thumb {
+/* 滚动条的「滑块」（你拖的那个东西）。 */
   background: linear-gradient(180deg, rgba(138,43,226,.55), rgba(91,141,239,.55));
-  border-radius: 999px;
-  border: 2px solid transparent;
+  /* 【linear-gradient(方向, 起色, 终色)】从上到下，紫 → 蓝的渐变。
+     后面的 .55 是透明度，让滑块半透明，更轻。 */
+  border-radius: 999px;             /* 999px 足够大 = 完全圆角（药丸形状） */
+  border: 2px solid transparent;    /* 给滑块加透明边框，看起来更细、更精致 */
   background-clip: padding-box;
+  /* 【background-clip:padding-box】背景只画到边框内侧。
+     配合上面的透明边框，滑块视觉上会变细 —— 这是「用边框做内缩」的小技巧。 */
 }
 ::-webkit-scrollbar-thumb:hover {
+/* 【:hover】鼠标悬停在滑块上时，颜色加深，给出「可以拖」的反馈。 */
   background: linear-gradient(180deg, rgba(155,77,240,.85), rgba(91,141,239,.85));
   background-clip: padding-box;
 }
@@ -119,30 +159,42 @@ html { overflow-y: scroll; }
    背景层：极光 + 噪点 +（可选）视频，由 js/bg.js 注入
    ============================================================ */
 #site-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  overflow: hidden;
-  pointer-events: none;
-  background: var(--bg);
+/* 这一层由 js/bg.js 动态创建（div#site-bg），专门放背景视频 / 极光 / 噪点。
+   所有页面内容都盖在它上面。 */
+  position: fixed;                  /* 固定在屏幕上，页面滚动时它不动（像壁纸） */
+  inset: 0;                         /* 【简写】top/right/bottom/left 全为 0 = 铺满整个视口 */
+  z-index: -2;                      /* 压到所有内容下面（-1 是视频，-2 是这一层） */
+  overflow: hidden;                 /* 里面的东西超出范围就裁掉，别撑出滚动条 */
+  pointer-events: none;             /* 不接收鼠标事件 —— 否则会挡住页面上的点击 */
+  background: var(--bg);            /* 底色：深色主题是 #121212，浅色主题是 #EDF0F7 */
 }
 body.light #site-bg {
-  background: var(--bg);
+  background: var(--bg);            /* 浅色主题下 --bg 已经变了，这里保持一致 */
 }
 
 /* Local 没有极光团，直接隐藏（bg.js 仍会注入，但不再显示） */
 #site-bg .aurora {
-  display: none;
+/* 【注意】下面的样式虽然写了，但 display:none 让它根本不会显示。
+   这是历史遗留：原来有极光效果，改成 Local 风格后关掉了。
+   保留代码是为了以后想恢复时改一个 display 就行。 */
+  display: none;                    /* 隐藏 —— 就是这一行关掉了极光 */
   position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  opacity: .55;
-  will-change: transform;
+  border-radius: 50%;               /* 圆形光团 */
+  filter: blur(70px);               /* 大半径模糊，让光团边缘柔和地散开 */
+  opacity: .55;                     /* 半透明，叠在一起更有层次 */
+  will-change: transform;           /* 【性能提示】告诉浏览器「这个元素会动」，
+                                       浏览器会提前把它提升到独立图层，动画更顺滑。 */
 }
 #site-bg .a1 {
   width: 46vw; height: 46vw; left: -8vw; top: -10vh;
+  /* 【vw / vh】视口宽/高的百分比：1vw = 屏幕宽度的 1%。
+     用 vw 做尺寸，光团会随屏幕大小自动缩放。
+     负的 left/top 让它一半露在屏幕外，只看到柔和的一角。 */
   background: radial-gradient(circle, rgba(138,43,226,.62) 0%, rgba(138,43,226,0) 68%);
+  /* 【radial-gradient(circle, 中心色 0%, 边缘色 68%)】从中心向外扩散的圆形渐变。
+     末端用透明度 0，就得到一个边缘完全化开的紫色光团。 */
   animation: floatA 26s ease-in-out infinite;
+  /* 【animation】26 秒一轮、缓入缓出、无限循环，调用下面的 @keyframes floatA。 */
 }
 #site-bg .a2 {
   width: 42vw; height: 42vw; right: -6vw; top: 4vh;
@@ -155,8 +207,14 @@ body.light #site-bg {
   animation: floatC 38s ease-in-out infinite;
 }
 @keyframes floatA {
+/* 【@keyframes】定义动画的关键帧：动画进行到某个百分比时，元素该是什么状态。
+   下面两个关键帧的意思：起点和终点在原点、原大小，走到一半时向右下移动并放大 12%。
+   浏览器会自动补全中间的过渡。 */
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  /* 【0%, 100%】用逗号可以一次写多个关键帧 —— 起点和终点状态一样，动画就能无缝循环。 */
   50%      { transform: translate3d(6vw, 5vh, 0) scale(1.12); }
+  /* 【translate3d(x, y, z)】三维位移。虽然 z 是 0，但用 3d 版本会触发 GPU 加速，
+     比 translate() 更流畅（在老设备上差别明显）。 */
 }
 @keyframes floatB {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
@@ -169,20 +227,22 @@ body.light #site-bg {
 
 /* 背景视频：铺满、循环、静音、不挡鼠标 */
 #site-bg video {
-  position: absolute;
-  inset: 0;
+  position: absolute;               /* 相对 #site-bg 定位（那一层已经是 fixed 了） */
+  inset: 0;                         /* 四边贴满 */
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover;                /* 【关键】视频等比缩放并裁掉超出部分，铺满不留黑边。
+                                       视频比例和屏幕比例不一致时，要么留黑边（contain），
+                                       要么裁掉一部分（cover）—— 壁纸显然选 cover。 */
   opacity: 1;               /* 不再压暗：视频原样露出，和 Local 的观感一致 */
-  transition: opacity .8s ease;
+  transition: opacity .8s ease;     /* 视频出现/消失时用 0.8 秒淡入淡出，不突兀 */
 }
 /* 视频上压一层暗幕，保证文字始终看得清 */
 #site-bg .veil {
   display: none;            /* Local 的视频上不压暗幕 */
   position: absolute;
   inset: 0;
-  background: none;
+  background: none;                 /* 暗幕颜色为「无」—— 又是关掉状态 */
 }
 body.light #site-bg .veil {
   background: none;
@@ -190,12 +250,16 @@ body.light #site-bg .veil {
 
 /* Local 没有噪点层 */
 #site-bg .noise {
-  display: none;
+  display: none;                    /* 同样被关掉了 */
   position: absolute;
-  inset: -50%;
+  inset: -50%;                      /* 【负值】向外扩一圈，动画移动时不会露出边缘 */
   opacity: .035;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  /* 【data URI】直接把一张 SVG 图片写进 CSS，不用额外的图片文件。
+     里面是一个 SVG 滤镜 feTurbulence 生成的「噪点纹理」（像老电视的雪花）。
+     注意 # 要写成 %23，否则会被当成颜色的井号。 */
   animation: noiseShift 8s steps(6) infinite;
+  /* 【steps(6)】让动画分 6 步跳变而不是平滑过渡 —— 噪点一闪一闪的才像胶片颗粒。 */
 }
 body.light #site-bg .noise { opacity: .05; }
 @keyframes noiseShift {
@@ -205,333 +269,358 @@ body.light #site-bg .noise { opacity: .05; }
   60%  { transform: translate(-2%, -2%); }
   80%  { transform: translate(3%, 1%); }
   100% { transform: translate(0, 0); }
+  /* 六个关键帧让噪点四处跳动，最后回到原点 —— 循环时不会突然跳一下。 */
 }
 
 /* 不做磨砂的降级方案：浏览器不支持 backdrop-filter 时用更实的底 */
 @supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
+/* 【@supports not (...)】= 「浏览器不支持这个特性时」才应用里面的样式。
+   这是「优雅降级」：老浏览器看不到磨砂玻璃，但至少卡片背景不透明、文字还是看得清。 */
   :root { --card: rgba(20, 22, 30, .92); }
   body.light { --card: rgba(255, 255, 255, .94); }
+  /* 【换变量值】比写一堆覆盖样式聪明：只改 --card，全站所有卡片自动变实心。 */
 }
 
 body {
-  font-family: var(--font-main);
-  background: transparent;
-  color: var(--text);
-  line-height: 1.7;
+  font-family: var(--font-main);    /* 全局字体（Orbitron + 中文回退链） */
+  background: transparent;          /* 【透明】页面本身不画背景，露出下面的 #site-bg */
+  color: var(--text);               /* 文字色跟着主题变量走 */
+  line-height: 1.7;                 /* 行高 1.7 倍字号，中文段落读起来不挤 */
   -webkit-font-smoothing: antialiased;
+  /* 【抗锯齿】让文字在 macOS / 高分辨率屏上更细腻（字会稍微变细一点）。 */
   transition: background .3s, color .3s;
+  /* 【主题切换过渡】切深浅色时，背景色和文字色用 0.3 秒渐变，不会「啪」地一下。 */
 }
 
 /* 正文里的裸链接默认是浏览器蓝，在深色底上很跳，统一成紫色系。
    只处理没写 class 的链接，带 class 的（卡片/按钮）各自有配色，不打扰。 */
 a:not([class]) { color: #A87BFF; text-decoration: none; }
+/* 【a:not([class])】= 所有「没有 class 属性」的 <a>。
+   :not() 是「否定伪类」，非常实用：既想统一某类元素，又不想影响已经单独定制过的。
+   text-decoration:none 去掉默认下划线。 */
 a:not([class]):hover { color: #C9A7FF; }
+/* 【链式伪类】:not(...) 再叠 :hover = 「没 class 的链接，鼠标悬停时」。
+   颜色变亮一点作为反馈。 */
 body.light a:not([class]) { color: var(--primary); }
 body.light a:not([class]):hover { color: var(--primary-deep); }
 
 /* 复用工具类：任何块加 .glass 就是一块磨砂玻璃 */
-.glass {
-  background: var(--card);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+.glass {                                         /* 【工具类】不是给某个具体位置的，是「谁想变磨砂就在 class 里加 glass」。 */
+  background: var(--card);                       /* 半透明底色，透出后面的视频/背景 */
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);   /* 给 Safari 写的同一句（老 Safari 只认带前缀的） */
   backdrop-filter: blur(var(--glass-blur)) saturate(150%);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
+  /* 【backdrop-filter】把「元素背后的画面」拿来做模糊 —— 这就是毛玻璃的原理。
+     blur(12px) 模糊半径，saturate(150%) 顺便把背后的颜色调得更艳一点，
+     不然暗背景下模糊完就是一片灰。这两个可以叠着写。 */
+  border: 1px solid var(--glass-border);         /* 现在这个变量是 transparent（Local 风格不描边） */
+  border-radius: var(--radius);                  /* 圆角 12px */
   box-shadow: var(--shadow), inset 0 1px 0 var(--glass-hi);
+  /* 【inset】把阴影画在元素内部；这里现在是 transparent，等于没效果。
+     当年做玻璃质感时用「顶部一条 1px 亮线」模拟玻璃的高光边缘。 */
 }
 
 /* ============================================================
    导航栏
    ============================================================ */
-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--nav-bg);
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  backdrop-filter: blur(var(--glass-blur));
-  border-bottom: none;
-  box-shadow: none;
-  transition: background .3s;
+nav {                                            /* 直接写标签名 = 选中页面里所有 <nav>，理论上只有一个 */
+  position: sticky;                              /* 【sticky 粘性定位】滚到 top:0 就「粘」在顶上，继续往下滚也不走 */
+  top: 0;                                        /* 粘在距离视口顶部 0px 的位置 */
+  z-index: 100;                                  /* 【层级】数字越大越靠上。导航要压住页面内容，所以给 100 */
+  background: var(--nav-bg);                     /* 半透明深色，下面内容滚动时会被磨砂糊住 */
+  -webkit-backdrop-filter: blur(var(--glass-blur));  /* Safari 前缀版 */
+  backdrop-filter: blur(var(--glass-blur));      /* 磨砂：滚动的文字从导航下面经过时会被虚化 */
+  border-bottom: none;                           /* Local 没有下边框 */
+  box-shadow: none;                              /* 也没有投影 */
+  transition: background .3s;                    /* 切深浅色时背景淡入淡出 */
 }
 /* Local 的 banner 没有底部紫光 */
-nav::after { display: none; }
+nav::after { display: none; }                    /* ::after 是「假元素」，这里直接关掉 */
+/* 【::after / ::before】CSS 自带的伪元素：不用在 HTML 里加标签，
+   就能凭空造一个盒子出来做装饰。display:none 就是让它彻底不出现。 */
 
-.nav-inner {
-  max-width: var(--page-width);
-  margin: 0 auto;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  gap: 14px;
+.nav-inner {                                     /* 导航内部的那一条，用来把内容限制在 1200px 宽并居中 */
+  max-width: var(--page-width);                  /* 【max-width】最多 1200px，屏幕再宽也不撑开 */
+  margin: 0 auto;                                /* 【0 auto】上下 0、左右自动 = 水平居中（块级元素居中的经典写法） */
+  padding: 12px 20px;                            /* 上下 12px、左右 20px，让内容不贴边 */
+  display: flex;                                 /* 【flex】开启弹性布局，子元素自动排成一行 */
+  justify-content: space-between;                /* 主轴（横向）两端对齐：logo 靠左、按钮组靠右 */
+  align-items: center;                           /* 交叉轴（纵向）居中对齐，避免一边高一边低 */
+  position: relative;                            /* 为内部的绝对定位元素提供「坐标系」 */
+  gap: 14px;                                     /* 子元素之间的最小间距，比用 margin 一个个写省事 */
 }
 
 .logo {
-  font-family: var(--font-num);
-  font-size: 30px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  text-decoration: none;
-  cursor: pointer;
+  font-family: var(--font-num);                  /* 用数字字体（Orbitron），「乘法」两字会回退到中文字体 */
+  font-size: 30px;                               /* 字号 30px */
+  font-weight: 400;                              /* 常规粗细（不加粗才有那种细线科技感） */
+  letter-spacing: 2px;                           /* 字间距拉开 2px，标题更透气 */
+  text-decoration: none;                         /* 去掉链接默认下划线 */
+  cursor: pointer;                               /* 鼠标变小手，暗示可点 */
   color: azure;                 /* Local 的 banner 标题：azure 淡蓝白、30px、常规粗细 */
+  /* 【azure】CSS 内置的颜色名，就是「天蓝色 / 淡蓝白」，等价于 #F0FFFF。 */
 }
-.logo:hover { opacity: .8; }
+.logo:hover { opacity: .8; }                     /* 悬停时整体变淡一点（0.8 = 80% 不透明）当反馈 */
 
-.nav-link {
-  color: var(--text-light);
-  text-decoration: none;
+.nav-link {                                      /* 导航里的文字链接（比如「🎬 传视频」） */
+  color: var(--text-light);                      /* 次要文字色，比正文暗一档 */
+  text-decoration: none;                         /* 去下划线 */
   font-size: 14px;
   cursor: pointer;
-  padding: 7px 12px;
-  border-radius: 9px;
-  white-space: nowrap;
-  border: 1px solid transparent;
-  transition: color .2s, background .2s, border-color .2s;
+  padding: 7px 12px;                             /* 上下 7、左右 12，撑出一块可点区域 */
+  border-radius: 9px;                            /* 圆角，hover 时背景才有圆润的块感 */
+  white-space: nowrap;                           /* 【nowrap】禁止换行，窗口变窄也不把「传视频」拆成两行 */
+  border: 1px solid transparent;                 /* 平时是无色边框 —— 为了 hover 变色时不发生「尺寸跳动」 */
+  transition: color .2s, background .2s, border-color .2s;   /* 三个属性分别做 0.2 秒过渡 */
 }
 .nav-link:hover {
-  color: var(--text);
-  background: rgba(138, 43, 226, .16);
-  border-color: rgba(138, 43, 226, .35);
+  color: var(--text);                            /* 文字提亮 */
+  background: rgba(138, 43, 226, .16);           /* 【rgba】红绿蓝 + 透明度。这是紫色 16% 透明度，很淡的一层底 */
+  border-color: rgba(138, 43, 226, .35);         /* 边框稍微明显一点 */
 }
 
-.nav-right {
+.nav-right {                                     /* 右侧那一组按钮的容器 */
   display: flex;
-  align-items: center;
+  align-items: center;                           /* 竖向居中对齐（图标按钮 36px、文字按钮更矮，不居中会歪） */
   gap: 12px;
   font-size: 14px;
   color: var(--text-light);
 }
 
-#ip {
+#ip {                                            /* 显示访客 IP 的那个小胶囊 */
   padding: 4px 11px;
   border-radius: 8px;
-  background: var(--field);
+  background: var(--field);                      /* 半透明白底，做出「输入框」那种浅色块 */
   border: 1px solid var(--border);
   color: var(--text-light);
-  font-family: var(--font-num);
+  font-family: var(--font-num);                  /* IP 是数字和点，用等宽数字字体更整齐 */
   font-size: 12px;
-  letter-spacing: .5px;
+  letter-spacing: .5px;                          /* 字间距 0.5px，一串数字不至于挤成一团 */
   font-variant-numeric: tabular-nums;
+  /* 【tabular-nums】等宽数字：让每个数字占一样宽。
+     IP 变化（1 → 11 → 111）时宽度就不会忽宽忽窄，导航栏不会跟着抖。 */
 }
 
 /* 圆形图标按钮 */
-.theme-btn,
+.theme-btn,                                      /* 【多选择器用逗号】这一组四个类共用同一份样式，写一遍就够。 */
 .admin-btn,
 .mail-btn,
 .gear-btn {
   width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  height: 36px;                                  /* 宽高相等 + 50% 圆角 = 正圆 */
+  border-radius: 50%;                            /* 【50%】半径取一半，正方形变圆形 */
   border: 1px solid var(--glass-border);
   background: var(--field);
-  color: var(--text);
+  color: var(--text);                            /* 文字色会被里面的 svg 通过 currentColor 继承 */
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex;                                 /* 让里面的图标能居中 */
+  align-items: center;                           /* 纵向居中 */
+  justify-content: center;                       /* 横向居中 */
   transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
-  text-decoration: none;
-  flex-shrink: 0;
+  text-decoration: none;                         /* 这几个按钮有的是 <a>（管理后台），得去下划线 */
+  flex-shrink: 0;                                /* 【flex-shrink:0】窗口变窄时不许被压缩变形 */
 }
 .theme-btn:hover,
 .admin-btn:hover,
 .mail-btn:hover,
 .gear-btn:hover {
-  background: var(--primary-soft);
-  border-color: rgba(138, 43, 226, .55);
-  transform: translateY(-1px);
-  box-shadow: 0 0 18px rgba(138, 43, 226, .35);
+  background: var(--primary-soft);               /* 淡紫底 */
+  border-color: rgba(138, 43, 226, .55);         /* 边框变紫 */
+  transform: translateY(-1px);                   /* 往上抬 1px，做出「被按起来」的错觉 */
+  box-shadow: 0 0 18px rgba(138, 43, 226, .35);  /* 【0 0 18px】x偏移 y偏移 模糊半径 —— 四周均匀散开的紫色光晕 */
 }
-.theme-btn svg,
+.theme-btn svg,                                  /* 里面那枚图标 */
 .admin-btn svg,
 .mail-btn svg,
 .gear-btn svg {
   width: 19px;
   height: 19px;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke: currentColor;                          /* 【currentColor】= 用父元素的 color 值。父元素文字是白的，描边就是白的，切主题自动跟着变 */
+  stroke-width: 2;                               /* 线条粗细 2px */
+  fill: none;                                    /* 不填充，只要线框（描边风格图标） */
+  stroke-linecap: round;                         /* 线条两端画成圆头，比方头柔和 */
+  stroke-linejoin: round;                        /* 折角处也画成圆的，不出现尖角 */
 }
 
-.login-btn {
+.login-btn {                                     /* 右上角「登录」按钮 */
   padding: 7px 17px;
-  border-radius: 999px;
-  background: var(--grad-primary);
+  border-radius: 999px;                          /* 【999px】给一个远超半径的值，浏览器会当成「胶囊形」（两头半圆） */
+  background: var(--grad-primary);               /* 紫色（变量名叫 grad 但现在是纯色） */
   color: #fff;
   text-decoration: none;
   font-size: 14px;
   cursor: pointer;
-  border: none;
-  box-shadow: 0 6px 20px rgba(138, 43, 226, .35);
+  border: none;                                  /* 去掉按钮默认边框 */
+  box-shadow: 0 6px 20px rgba(138, 43, 226, .35);/* 往下 6px 的紫色投影，让按钮「浮」起来 */
   transition: transform .2s, box-shadow .2s, filter .2s;
 }
 .login-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 28px rgba(138, 43, 226, .5);
-  filter: brightness(1.08);
+  transform: translateY(-1px);                   /* 悬停上浮 1px */
+  box-shadow: 0 10px 28px rgba(138, 43, 226, .5);/* 投影更大更散 = 抬得更高 */
+  filter: brightness(1.08);                      /* 【filter:brightness】整体提亮 8%，比换颜色省事 */
 }
 
-.user-avatar {
+.user-avatar {                                   /* 登录后右上角的小圆头像 */
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, .28);
-  display: block;
+  overflow: hidden;                              /* 【overflow:hidden】超出的部分裁掉 —— 图片是方的，靠这行才被裁成圆 */
+  border: 2px solid rgba(255, 255, 255, .28);   /* 白色 28% 的一圈边框 */
+  display: block;                                /* 它是 <a>，默认是行内元素，改成块才能正常设宽高 */
   transition: border-color .2s, box-shadow .2s, transform .2s;
   flex-shrink: 0;
 }
 .user-avatar:hover {
-  border-color: rgba(155, 77, 240, .9);
-  box-shadow: 0 0 0 3px rgba(138, 43, 226, .18);
-  transform: scale(1.05);
+  border-color: rgba(155, 77, 240, .9);          /* 边框变紫 */
+  box-shadow: 0 0 0 3px rgba(138, 43, 226, .18); /* 【0 0 0 3px】模糊半径 0 = 一圈实心描边，向外扩 3px */
+  transform: scale(1.05);                        /* 【scale】放大到 1.05 倍，微微「弹」一下 */
 }
 .user-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 图片填满容器；object-fit:cover 保证不变形（裁掉多余部分而不是拉扁）；
+   最后 display:block 是为了去掉行内图片底部那 3~4px 的「基线空隙」。 */
 
 /* ============================================================
    头部（头像 + 站名）
    ============================================================ */
 header {
-  position: relative;
-  max-width: var(--page-width);
-  margin: 68px auto 44px;
+  position: relative;                            /* 给下面的 ::before 当定位基准 */
+  max-width: var(--page-width);                  /* 同样最宽 1200px */
+  margin: 68px auto 44px;                        /* 【三个值】上 68px、左右自动居中、下 44px */
   padding: 0 20px;
-  text-align: center;
+  text-align: center;                            /* 内部文字、图片全部水平居中 */
 }
 /* 头像与站名后面压一层柔和暗场：有背景视频时保证文字始终够清晰 */
 /* Local 不压暗场，标题直接叠在背景上 */
 header::before {
-  display: none;
-  content: "";
-  position: absolute;
-  inset: -50px -10px -20px;
-  z-index: -1;
-  pointer-events: none;
+  display: none;                                 /* 现在整体关掉了（Local 风格不需要） */
+  content: "";                                   /* 【必须有】伪元素默认没有内容、不显示，content:"" 才能让它存在 */
+  position: absolute;                            /* 相对 header 绝对定位 */
+  inset: -50px -10px -20px;                      /* 四边分别外扩，比 header 大一圈 */
+  z-index: -1;                                   /* 压到 header 内容后面 */
+  pointer-events: none;                          /* 不接收鼠标事件，否则会挡住点击 */
   background: none;
 }
 body.light header::before {
-  background: none;
+  background: none;                              /* 浅色主题下也不需要 */
 }
-.avatar {
+.avatar {                                        /* 大号头像（首页头部的 120px 那张） */
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: cover;                             /* 不变形地填满圆形 */
   border: none;
-  background: var(--card-solid);
+  background: var(--card-solid);                 /* 图片加载出来之前先显示一块底色，避免闪白 */
   box-shadow: none;
-  animation: none;
+  animation: none;                               /* 关掉下面的浮动动画（Local 风格是静止的） */
 }
-@keyframes avatarFloat {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-7px); }
+@keyframes avatarFloat {                         /* 【@keyframes】定义一段动画的关键帧，配合上面的 animation 使用 */
+  0%, 100% { transform: translateY(0); }         /* 起点和终点都在原位 */
+  50%      { transform: translateY(-7px); }      /* 中间浮起 7px —— 所以看起来是一上一下地「呼吸」 */
 }
+/* 注意：这条动画现在没被使用（.avatar 里写了 animation:none），
+   留着以后想恢复浮动效果只要把 animation 改回 avatarFloat 4s infinite。 */
 
-.name {
+.name {                                          /* 站名「乘法」大字 */
   font-size: 42px;
-  font-weight: 800;
+  font-weight: 800;                              /* 很粗的字重 */
   letter-spacing: 2px;
-  margin: 22px 0 10px;
+  margin: 22px 0 10px;                           /* 上 22px 与头像拉开、下 10px 靠近副标题 */
   color: azure;                 /* Local 的标题是 azure 淡蓝白，不用渐变 */
 }
-.tagline {
+.tagline {                                       /* 副标题 / 一句话签名 */
   font-size: 16px;
   color: #cccccc;
   letter-spacing: .5px;
 }
-body.light .tagline { color: var(--text-light); }
+body.light .tagline { color: var(--text-light); }/* 浅色主题下这个灰太浅了，换成主题里的次要文字色 */
 
 /* ============================================================
    区块 / 玻璃卡
    ============================================================ */
-section {
-  max-width: var(--page-width);
-  margin: 0 auto 46px;
-  padding: 0 20px;
+section {                                        /* 页面里的每个 <section> 就是一「段」内容 */
+  max-width: var(--page-width);                  /* 最宽 1200px */
+  margin: 0 auto 46px;                           /* 左右居中，底部留 46px 与下一段隔开 */
+  padding: 0 20px;                               /* 左右内缩 20px，手机上内容不贴屏幕边 */
 }
 
-.card {
-  position: relative;
-  background: var(--card);
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  backdrop-filter: blur(var(--glass-blur));
+.card {                                          /* 一块磨砂卡片的完整定义 */
+  position: relative;                            /* 给内部伪元素做定位基准 */
+  background: var(--card);                       /* 半透明深色（Light 主题会自动换成白色） */
+  -webkit-backdrop-filter: blur(var(--glass-blur));  /* Safari 前缀 */
+  backdrop-filter: blur(var(--glass-blur));      /* 背后内容模糊 = 毛玻璃 */
   border: none;
-  border-radius: var(--radius);
-  padding: 24px;
+  border-radius: var(--radius);                  /* 12px 圆角 */
+  padding: 24px;                                 /* 内边距，内容不贴边 */
   box-shadow: none;
-  transition: background .3s;
+  transition: background .3s;                    /* 只对背景色做过渡，切主题时更顺 */
 }
 body.light .card {
-  background: var(--card);
+  background: var(--card);                       /* 其实上面已经是 var(--card)，这句是历史遗留的重复声明 */
 }
 /* Local 卡片没有顶部高光 */
-.card::before { display: none; }
-.card:hover { transform: none; box-shadow: none; }
+.card::before { display: none; }                 /* 关掉那条假装玻璃高光的 1px 亮线 */
+.card:hover { transform: none; box-shadow: none; }  /* 明确禁止悬停放大/发光（老版本有，现在不要） */
 
-.section-title {
+.section-title {                                 /* 每个板块的小标题，左边有一根紫色竖条 */
   font-size: 21px;
   font-weight: 700;
   letter-spacing: .5px;
   color: var(--text);
-  margin-bottom: 18px;
-  position: relative;
-  padding-left: 16px;
+  margin-bottom: 18px;                           /* 与下方内容拉开距离 */
+  position: relative;                            /* 作为下面竖条的定位基准 */
+  padding-left: 16px;                            /* 左边留 16px 空位，给竖条让路 */
 }
-.section-title::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 5px;
-  width: 4px;
-  height: 21px;
-  border-radius: 3px;
-  background: var(--grad-primary);
-  box-shadow: 0 0 12px rgba(138, 43, 226, .7);
+.section-title::before {                         /* 那根紫色竖条本身（用伪元素画，不用真标签） */
+  content: "";                                   /* 伪元素必须有 content 才显示 */
+  position: absolute;                            /* 相对 .section-title 定位 */
+  left: 0;                                       /* 贴左边 */
+  top: 5px;                                      /* 从顶部往下 5px 起 */
+  width: 4px;                                    /* 宽 4px 的一条 */
+  height: 21px;                                  /* 高 21px ≈ 字号，所以看起来和文字齐高 */
+  border-radius: 3px;                            /* 两端稍圆 */
+  background: var(--grad-primary);               /* 紫色 */
+  box-shadow: 0 0 12px rgba(138, 43, 226, .7);   /* 四周 12px 的紫色光晕，有点霓虹味 */
 }
 
 /* ============================================================
    按钮
    ============================================================ */
-.art-entry-btn {
-  display: inline-block;
+.art-entry-btn {                                 /* 「进入文章区 / 视频区」这类入口按钮 */
+  display: inline-block;                         /* 【inline-block】像文字一样横排，但能设宽高和内边距 */
   margin-top: 14px;
-  margin-right: 10px;
+  margin-right: 10px;                            /* 右边留 10px，两个按钮并排时才有间隔 */
   padding: 9px 22px;
   border-radius: 10px;
-  background: var(--field);
+  background: var(--field);                      /* 半透明浅底 */
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 14.5px;
-  text-decoration: none;
+  text-decoration: none;                         /* 它是 <a>，去掉下划线 */
   transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
 }
 .art-entry-btn:hover {
-  background: var(--primary-soft);
+  background: var(--primary-soft);               /* 悬停变淡紫 */
   border-color: rgba(138, 43, 226, .6);
   color: var(--text);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(138, 43, 226, .28);
+  transform: translateY(-1px);                   /* 上浮 1px */
+  box-shadow: 0 8px 24px rgba(138, 43, 226, .28);/* 紫色投影，浮起来才有立体感 */
 }
 
 /* ============================================================
    首页：文章 / 视频小方框
    ============================================================ */
-.art-box {
+.art-box {                                       /* 首页那两块「最新文章 / 最新视频」小框 */
   margin-top: 16px;
   padding: 16px 18px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--field);
-  -webkit-backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);           /* 比卡片更轻的模糊，因为框很小 */
   backdrop-filter: blur(10px);
 }
-.art-box-head {
+.art-box-head {                                  /* 小框的标题行：「最新文章」+ 右边「更多 ›」 */
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between;                /* 一左一右顶到两端 */
   margin-bottom: 10px;
 }
 .art-box-title {
@@ -540,17 +629,20 @@ body.light .card {
   color: var(--text);
   letter-spacing: .5px;
 }
-.art-box-more {
+.art-box-more {                                  /* 右上角「更多 ›」链接 */
   font-size: 13px;
   color: var(--primary-deep);
   text-decoration: none;
   transition: color .2s;
 }
 .art-box-more:hover { color: #C9A7FF; text-shadow: 0 0 12px rgba(155,77,240,.8); }
+/* 【text-shadow】文字阴影：x偏移 y偏移 模糊半径 颜色。
+   模糊半径大、颜色亮，就是文字在发光。 */
 .art-box-list { display: flex; flex-direction: column; gap: 4px; }
-.art-box-row {
+/* 【flex-direction:column】把「一行行」改成「一列行」—— 竖着排。 */
+.art-box-row {                                   /* 小框里每一行文章 */
   display: flex;
-  align-items: baseline;
+  align-items: baseline;                         /* 【baseline】按文字基线对齐，字号不同的标题和日期看起来才在一行上 */
   gap: 8px;
   padding: 8px 10px;
   border-radius: 9px;
@@ -560,22 +652,23 @@ body.light .card {
   transition: background .18s, transform .18s;
 }
 .art-box-row:hover {
-  background: var(--primary-soft);
-  transform: translateX(3px);
+  background: var(--primary-soft);               /* 悬停整行变淡紫底，比只变文字色更好点 */
+  transform: translateX(3px);                    /* 【translateX】向右移 3px，像被「推」出来一点 */
 }
-.art-box-row .t {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.art-box-row .t {                                /* 行里的标题文字 */
+  flex: 1;                                       /* 【flex:1】占满剩余空间，把右边的元信息挤到最右边 */
+  overflow: hidden;                              /* 超出容器的部分隐藏 */
+  text-overflow: ellipsis;                       /* 显示省略号「…」 */
+  white-space: nowrap;                           /* 不换行 */
 }
-.art-box-row .m {
-  flex: none;
+/* 上面三行是「一行文字超出就显示省略号」的标准三件套，缺一行都不生效。 */
+.art-box-row .m {                                /* 行里的元信息（阅读数 / 时间） */
+  flex: none;                                    /* 【flex:none】不参与伸缩，保持原宽度，否则会被标题挤扁 */
   font-size: 12px;
   color: var(--text-light);
-  font-family: var(--font-num);
+  font-family: var(--font-num);                  /* 数字用等宽字体，多个数字上下对齐 */
 }
-.art-box-empty, .art-box-none {
+.art-box-empty, .art-box-none {                  /* 「还没有文章」这类空状态提示 */
   padding: 10px 4px;
   font-size: 13px;
   color: var(--text-light);
@@ -584,28 +677,28 @@ body.light .card {
 /* ============================================================
    视频卡片（首页小方框）
    ============================================================ */
-.v-grid { display: flex; flex-direction: column; gap: 6px; }
-.v-card {
+.v-grid { display: flex; flex-direction: column; gap: 6px; }   /* 竖排，卡片之间 6px 缝 */
+.v-card {                                        /* 一条视频卡片：左边缩略块 + 中间标题 + 右边数据 */
   display: flex;
-  align-items: center;
+  align-items: center;                           /* 三块竖向居中对齐 */
   gap: 12px;
   padding: 10px 12px;
-  width: 100%;
+  width: 100%;                                   /* 占满父容器整行 */
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: rgba(255, 255, 255, .03);
+  background: rgba(255, 255, 255, .03);         /* 只加 3% 白，几乎看不见，只是比纯黑底稍亮一点 */
   text-decoration: none;
   color: var(--text);
   transition: border-color .2s, background .2s, transform .2s;
 }
-body.light .v-card { background: rgba(255, 255, 255, .55); }
+body.light .v-card { background: rgba(255, 255, 255, .55); }   /* 浅色主题下白底要更实才看得见 */
 .v-card:hover {
   border-color: rgba(138, 43, 226, .55);
   background: var(--primary-soft);
-  transform: translateX(3px);
+  transform: translateX(3px);                    /* 右移 3px，鼠标扫过时有一串「流动」的感觉 */
 }
-.v-thumb {
-  flex: none;
+.v-thumb {                                       /* 左边那个 52×40 的圆角块（没有封面时就是个紫色块） */
+  flex: none;                                    /* 固定尺寸，不被压缩 */
   width: 52px;
   height: 40px;
   border-radius: 8px;
@@ -613,20 +706,23 @@ body.light .v-card { background: rgba(255, 255, 255, .55); }
   color: #fff;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center;                       /* 里面的播放符号居中 */
   font-size: 16px;
-  line-height: 1;
+  line-height: 1;                                /* 【line-height:1】行高等于字号，去掉符号上下多余空隙 */
   box-shadow: 0 6px 18px rgba(138, 43, 226, .35);
 }
 .v-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.v-info .t {
+/* 【min-width:0】flex 子项的隐藏坑：默认最小宽度是「内容宽度」，
+   所以里面文字再长也不会触发省略号，会把整张卡片撑破。
+   加上 min-width:0 之后，子项才允许被压缩得比内容更窄，省略号才会生效。 */
+.v-info .t {                                     /* 视频标题 */
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: nowrap;                           /* 单行 + 省略号三件套 */
   color: var(--text);
 }
-.v-info .m {
+.v-info .m {                                     /* 标题下面那行小字（时长 / 作者 / 播放数） */
   font-size: 12px;
   color: var(--text-light);
   margin-top: 2px;
@@ -637,10 +733,10 @@ body.light .v-card { background: rgba(255, 255, 255, .55); }
 /* ============================================================
    测试页网格
    ============================================================ */
-.test-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+.test-grid {                                     /* 首页那 7 个入口按钮组成的网格 */
+  display: grid;                                 /* 【grid 网格布局】比 flex 更适合做「等宽多列」 */
+  grid-template-columns: repeat(3, 1fr);         /* 【repeat(3,1fr)】分成 3 列，每列 1 份（fr = 分数单位），自动等宽 */
+  gap: 14px;                                     /* 行列间距都是 14px */
   margin-top: 6px;
 }
 /* 每格一个色相，像一排彩绘玻璃砖 */
@@ -650,14 +746,19 @@ body.light .v-card { background: rgba(255, 255, 255, .55); }
 .test-item:nth-child(6n+4) { --tint: 53, 199, 119; }   /* 绿 */
 .test-item:nth-child(6n+5) { --tint: 240, 180, 0; }    /* 金 */
 .test-item:nth-child(6n+6) { --tint: 91, 141, 239; }   /* 蓝 */
+/* 【:nth-child(6n+1)】第 1、7、13… 个孩子；
+   6n+2 就是第 2、8、14… 个。六种颜色循环一遍再从头来。
+   这里只设了一个自定义变量 --tint，存的是「R, G, B」三个数字（不带 rgb() 包装），
+   因为下面要用 rgb(var(--tint)) 拼成颜色 —— 变量里没法直接塞一个函数调用。 */
 .test-item {
-  --tint: 138, 43, 226;
+  --tint: 138, 43, 226;                          /* 默认值：万一 nth-child 没匹配上（比如第 0 个），就是紫色 */
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 22px 12px;
+  justify-content: center;                       /* 按钮文字居中 */
+  padding: 22px 12px;                            /* 上下 22px 撑高，左右 12px */
   background: rgb(var(--tint));   /* Local 的按钮是实的品牌色，不用渐变 */
+  /* 【rgb(var(--tint))】变量展开后就是 rgb(138, 43, 226) —— 一种用变量拼颜色的写法。 */
   border: none;
   color: #fff;
   text-decoration: none;
@@ -665,101 +766,110 @@ body.light .v-card { background: rgba(255, 255, 255, .55); }
   font-size: 20px;
   font-weight: 500;
   letter-spacing: 1px;
-  text-align: center;
-  overflow: hidden;
+  text-align: center;                            /* 文字可能换行，换行后也居中对齐 */
+  overflow: hidden;                              /* 裁掉超出的部分（hover 放大时靠它不溢出） */
   transition: transform .2s, filter .2s;
 }
 body.light .test-item {
-  background: rgb(var(--tint));
+  background: rgb(var(--tint));                  /* 浅色主题下颜色不变，仍是实心品牌色 */
 }
 /* Local 的按钮没有底部填充动画 */
-.test-item::after { display: none; }
+.test-item::after { display: none; }             /* 老版本有个「从下往上灌色」的伪元素动画，现在关掉 */
 .test-item:hover {
   transform: scale(1.05);         /* 和 Local 的 .box:hover 一致：放大 1.05 */
-  filter: brightness(1.08);
+  filter: brightness(1.08);                      /* 同时提亮 8% */
   box-shadow: none;
   color: #fff;
 }
 .test-item > * { position: relative; z-index: 1; }
+/* 让按钮里的子元素（比如小图标）浮在背景之上，避免被背景色盖住。 */
 
 /* ============================================================
    社交图标
    ============================================================ */
-.socials {
+.socials {                                       /* 页面底部一排圆形社交图标 */
   display: flex;
-  justify-content: center;
+  justify-content: center;                       /* 整排水平居中 */
   gap: 16px;
   margin-top: 24px;
 }
 .socials a {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center;                       /* 图标在圆里居中 */
   width: 50px;
   height: 50px;
-  border-radius: 50%;
+  border-radius: 50%;                            /* 正圆 */
   background: var(--field);
   border: 1px solid var(--border);
-  color: var(--text-light);
+  color: var(--text-light);                      /* 图标颜色继承这个值（svg 用 currentColor） */
   text-decoration: none;
   transition: background .25s, color .25s, transform .25s, box-shadow .25s, border-color .25s;
 }
 .socials a:hover {
-  background: var(--grad-primary);
-  border-color: transparent;
-  color: #fff;
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(138, 43, 226, .45);
+  background: var(--grad-primary);               /* 悬停时整个圆变紫 */
+  border-color: transparent;                     /* 边框藏起来（如果只是设 none 会引起 1px 抖动） */
+  color: #fff;                                   /* 图标变白 */
+  transform: translateY(-4px);                   /* 抬起 4px */
+  box-shadow: 0 12px 30px rgba(138, 43, 226, .45);   /* 下方大投影，显得浮在半空 */
 }
-.socials svg { width: 22px; height: 22px; }
+.socials svg { width: 22px; height: 22px; }      /* 图标本身 22px */
 
 footer {
   text-align: center;
-  padding: 34px 20px 44px;
+  padding: 34px 20px 44px;                       /* 上留白多、下留白更多，页脚不显拥挤 */
   color: var(--text-light);
   font-size: 13.5px;
 }
-footer p { margin: 4px 0; }
+footer p { margin: 4px 0; }                      /* 段间距压到 4px，几行小字排得紧一点 */
 
 /* ============================================================
    登录弹窗 / 通用弹窗
    ============================================================ */
-.login-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(3, 4, 8, .62);
+.login-modal {                                   /* 弹窗最外层 = 铺满全屏的半透明遮罩 */
+  display: none;                                 /* 默认隐藏，等 JS 加 .show 才出现 */
+  position: fixed;                               /* 【fixed】固定在视口上，不随页面滚动 */
+  inset: 0;                                      /* 四边贴满 = 整屏 */
+  background: rgba(3, 4, 8, .62);                /* 近乎黑的 62% 遮罩，把背后的内容压暗 */
   -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  z-index: 999;
+  backdrop-filter: blur(6px);                    /* 遮罩本身也磨砂，背后的内容糊掉更聚焦 */
+  z-index: 999;                                  /* 比导航（100）高得多，一定盖在最上面 */
   align-items: center;
-  justify-content: center;
-  padding: 20px;
+  justify-content: center;                       /* 让里面的白框正中 */
+  padding: 20px;                                 /* 屏幕很窄时，框和边缘留 20px 缝 */
 }
 .login-modal.show { display: flex; }
-.login-box {
-  position: relative;
-  width: 340px;
-  max-width: 92vw;
-  background: rgba(18, 20, 28, .92);
+/* 【开关弹窗的核心技巧】平时 display:none，要显示时换成 display:flex。
+   为什么不用 opacity:0？因为 opacity:0 的元素仍然占着位置、仍然能点，
+   会挡住下面的整个页面。display:none 才是真正「不存在」。 */
+.login-box {                                     /* 登录框本体 */
+  position: relative;                            /* 给右上角 × 按钮当定位基准 */
+  width: 340px;                                  /* 固定宽 340 */
+  max-width: 92vw;                               /* 【vw】视口宽度的百分之一。92vw = 屏幕宽的 92%，手机上不会超出 */
+  background: rgba(18, 20, 28, .92);             /* 深色 92% 不透明 */
   -webkit-backdrop-filter: blur(28px) saturate(160%);
-  backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);    /* 大半径模糊，做出很厚的一块玻璃 */
   color: var(--text);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 30px 26px 26px;
+  border-radius: 20px;                           /* 20px 大圆角，弹窗显得更柔 */
+  padding: 30px 26px 26px;                       /* 顶部多留 6px 给 × 按钮让位 */
   box-shadow: 0 30px 80px rgba(0, 0, 0, .6), inset 0 1px 0 var(--glass-hi);
+  /* 一个往下 30px 的大黑投影，让弹窗明显浮在遮罩之上 */
   animation: popIn .32s cubic-bezier(.16, 1, .3, 1) both;
+  /* 【animation】名字 时长 缓动 填充模式。
+     cubic-bezier(.16,1,.3,1) 是「先快后慢、末尾轻轻一顿」的曲线，比 linear 自然得多。
+     both = 动画开始前用第一帧、结束后停在最后一帧。 */
 }
 body.light .login-box { background: rgba(255, 255, 255, .92); }
-@keyframes popIn {
+@keyframes popIn {                               /* 弹窗出现的动画：从「略小 + 偏下 + 透明」弹到正常 */
   from { opacity: 0; transform: translateY(16px) scale(.96); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
+  /* 【transform 可以叠写】translateY 和 scale 用空格连起来，会按顺序一起生效。 */
 }
-.login-close {
-  position: absolute;
+.login-close {                                   /* 右上角的 × */
+  position: absolute;                            /* 脱离文档流，摆在父元素角上 */
   top: 12px; right: 16px;
-  border: none; background: none;
+  border: none; background: none;                /* 去掉按钮默认的灰底和边框 */
   font-size: 24px; line-height: 1;
   color: var(--text-light);
   cursor: pointer;
@@ -774,27 +884,29 @@ body.light .login-box { background: rgba(255, 255, 255, .92); }
   color: var(--text);
   letter-spacing: 1px;
 }
-.login-input {
-  width: 100%;
+.login-input {                                   /* 用户名 / 密码输入框 */
+  width: 100%;                                   /* 撑满弹窗宽度（父元素有 padding，所以不会溢出） */
   padding: 11px 14px;
-  margin-bottom: 12px;
+  margin-bottom: 12px;                           /* 两个输入框之间的间距 */
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: var(--field);
+  background: var(--field);                      /* 半透明浅底 */
   color: var(--text);
   font-size: 15px;
-  font-family: inherit;
-  outline: none;
+  font-family: inherit;                          /* 【inherit】继承父元素的字体 —— 不写这行，输入框会用浏览器默认的宋体 */
+  outline: none;                                 /* 去掉浏览器默认的蓝色聚焦框，改用下面的自定义样式 */
   transition: border-color .2s, box-shadow .2s;
 }
 .login-input::placeholder { color: var(--text-light); opacity: .7; }
-.login-input:focus {
+/* 【::placeholder】专门选「输入框里那段灰色提示文字」。 */
+.login-input:focus {                             /* 【:focus】元素被点中、正在输入时的状态 */
   border-color: rgba(138, 43, 226, .75);
   box-shadow: 0 0 0 3px rgba(138, 43, 226, .18);
+  /* 【0 0 0 3px】模糊为 0 的阴影 = 一圈实心光带，看起来像「聚焦光环」，比 outline 好看。 */
 }
 .login-actions { display: flex; gap: 10px; margin-top: 6px; }
 .login-submit {
-  flex: 1;
+  flex: 1;                                       /* 两个按钮各占一半宽 */
   padding: 11px;
   border: none;
   border-radius: 10px;
@@ -809,11 +921,14 @@ body.light .login-box { background: rgba(255, 255, 255, .92); }
 }
 .login-submit:hover { filter: brightness(1.1); transform: translateY(-1px); }
 .login-submit.reg { background: linear-gradient(135deg, #26A5E4, #5B8DEF); }
+/* 【两个类连写】.login-submit.reg = 「同时有这两个 class」，比单独 .reg 优先级高，能覆盖上面的紫色。
+   linear-gradient(135deg, A, B) = 沿 135 度角从 A 渐变到 B（左上到右下）。 */
 .login-msg { margin-top: 12px; font-size: 14px; text-align: center; min-height: 20px; }
-.login-msg.ok { color: var(--success); }
-.login-msg.err { color: var(--danger); }
+/* 【min-height】先占好一行的高度：这样出现提示文字时弹窗不会突然被撑高、按钮乱跳。 */
+.login-msg.ok { color: var(--success); }         /* 成功：绿 */
+.login-msg.err { color: var(--danger); }         /* 失败：红 */
 
-.generic-modal {
+.generic-modal {                                 /* 通用弹窗（举报、删除确认这类复用同一个壳） */
   display: none;
   position: fixed;
   inset: 0;
@@ -825,12 +940,12 @@ body.light .login-box { background: rgba(255, 255, 255, .92); }
   justify-content: center;
   padding: 20px;
 }
-.generic-modal.show { display: flex; }
+.generic-modal.show { display: flex; }           /* 和登录弹窗同一套开关机制 */
 .generic-box {
   position: relative;
-  width: 420px;
+  width: 420px;                                  /* 比登录框宽一点，里面要放正文 */
   max-width: 92vw;
-  max-height: 72vh;
+  max-height: 72vh;                              /* 【max-height】最高只占屏幕 72%，超出就在内部滚动 */
   background: rgba(18, 20, 28, .94);
   -webkit-backdrop-filter: blur(28px) saturate(160%);
   backdrop-filter: blur(28px) saturate(160%);
@@ -840,7 +955,7 @@ body.light .login-box { background: rgba(255, 255, 255, .92); }
   padding: 28px 24px 22px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, .6), inset 0 1px 0 var(--glass-hi);
   display: flex;
-  flex-direction: column;
+  flex-direction: column;                        /* 标题在上、正文在下，竖着排 */
   animation: popIn .32s cubic-bezier(.16, 1, .3, 1) both;
 }
 body.light .generic-box { background: rgba(255, 255, 255, .95); }
@@ -861,39 +976,42 @@ body.light .generic-box { background: rgba(255, 255, 255, .95); }
   color: var(--text);
 }
 .generic-body { overflow-y: auto; flex: 1; }
+/* 【overflow-y:auto】内容超出高度时，只让正文区内部出现纵向滚动条，
+   标题和 × 永远固定在框里 —— 这是弹窗里长内容的通用做法。 */
 
 /* ============================================================
    更新日志
    ============================================================ */
 .log-list { list-style: none; padding: 0; margin: 0; }
-.log-list li {
+/* 【list-style:none】去掉 <ul><li> 默认的小圆点。 */
+.log-list li {                                   /* 每一条日志：左边日期 + 右边内容 */
   display: flex;
   gap: 14px;
-  padding: 13px 0;
-  border-bottom: 1px solid var(--border);
+  padding: 13px 0;                               /* 上下留白做行距，左右不留（靠父容器 padding） */
+  border-bottom: 1px solid var(--border);        /* 一条细分隔线 */
   font-size: 15px;
 }
-.log-list li:last-child { border-bottom: none; }
+.log-list li:last-child { border-bottom: none; }  /* 【:last-child】最后一条不要线，否则底部会多出一道悬空的横线 */
 .log-date {
-  color: var(--primary-deep);
-  font-family: var(--font-num);
+  color: var(--primary-deep);                    /* 日期用紫色，和数据区的灰色区分开 */
+  font-family: var(--font-num);                  /* 等宽数字，多条日志的日期能对齐 */
   font-size: 12.5px;
   letter-spacing: .3px;
-  white-space: nowrap;
-  padding-top: 4px;
+  white-space: nowrap;                           /* 日期不许折行 */
+  padding-top: 4px;                              /* 往下压 4px，和右边正文的第一行对齐（不然会偏高） */
 }
 .log-text { color: var(--text); }
 
-.log-more {
+.log-more {                                      /* 「查看更多」按钮 */
   display: block;
-  margin: 18px auto 0;
+  margin: 18px auto 0;                           /* 【auto 左右】块级元素水平居中 */
   padding: 9px 26px;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--field);
   color: var(--text-light);
   font-size: 14px;
-  font-family: inherit;
+  font-family: inherit;                          /* 按钮默认字体和页面不一样，必须继承回来 */
   cursor: pointer;
   transition: background .2s, border-color .2s, color .2s;
 }
@@ -903,21 +1021,23 @@ body.light .generic-box { background: rgba(255, 255, 255, .95); }
   color: var(--text);
 }
 .log-more:disabled { opacity: .5; cursor: default; }
+/* 【:disabled】按钮被 JS 设成 disabled 时（比如已经到底了）：
+   变半透明 + 鼠标不再显示小手，用户一看就知道点不动了。 */
 
-.log-head {
+.log-head {                                      /* 「更新日志」标题 + 右边「+ 发布」按钮 */
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
 }
-.log-head .section-title { margin-bottom: 0; }
+.log-head .section-title { margin-bottom: 0; }   /* 标题在 flex 里不需要自带下边距，否则会把按钮撑歪 */
 
-.log-add {
-  display: inline-flex;
+.log-add {                                       /* 「+ 发布」小按钮 */
+  display: inline-flex;                          /* 【inline-flex】本身当行内元素，内部却能用 flex 对齐图标和文字 */
   align-items: center;
-  gap: 5px;
-  flex: none;
+  gap: 5px;                                      /* + 号和文字之间 5px */
+  flex: none;                                    /* 在父 flex 里不被压缩 */
   padding: 7px 15px;
   border: none;
   border-radius: 10px;
@@ -931,14 +1051,14 @@ body.light .generic-box { background: rgba(255, 255, 255, .95); }
 }
 .log-add:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
-.log-editor {
+.log-editor {                                    /* 展开的「写日志」小面板 */
   margin-bottom: 16px;
   padding: 16px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--field);
 }
-.log-input {
+.log-input {                                     /* 多行输入框（<textarea>） */
   display: block;
   width: 100%;
   padding: 12px 14px;
@@ -949,11 +1069,11 @@ body.light .generic-box { background: rgba(255, 255, 255, .95); }
   font-size: 15px;
   font-family: inherit;
   line-height: 1.6;
-  resize: vertical;
+  resize: vertical;                              /* 【resize】允许用户拖右下角改高度，但只能上下拖（不许左右拖变形） */
   outline: none;
   transition: border-color .2s, box-shadow .2s;
 }
-body.light .log-input { background: #fff; }
+body.light .log-input { background: #fff; }      /* 浅色主题下 4% 白几乎看不见，直接给纯白 */
 .log-input:focus {
   border-color: rgba(138, 43, 226, .7);
   box-shadow: 0 0 0 3px rgba(138, 43, 226, .16);
@@ -964,7 +1084,7 @@ body.light .log-input { background: #fff; }
   gap: 10px;
   margin-top: 10px;
 }
-.log-submit, .log-cancel {
+.log-submit, .log-cancel {                       /* 发布 / 取消 两个按钮的公共部分 */
   padding: 7px 20px;
   border-radius: 9px;
   border: 1px solid var(--border);
@@ -975,42 +1095,44 @@ body.light .log-input { background: #fff; }
 }
 .log-submit {
   background: var(--grad-primary);
-  border-color: transparent;
+  border-color: transparent;                     /* 有背景色就不需要边框了 */
   color: #fff;
 }
 .log-submit:hover { filter: brightness(1.1); }
-.log-submit:disabled { opacity: .6; cursor: default; }
+.log-submit:disabled { opacity: .6; cursor: default; }   /* 提交中禁用，防重复提交 */
 .log-cancel { background: var(--field); color: var(--text); }
 .log-cancel:hover { background: var(--primary-soft); border-color: rgba(138, 43, 226, .5); }
 .log-editor-msg { font-size: 13px; }
-.log-editor-msg.ok { color: var(--success); }
+.log-editor-msg.ok { color: var(--success); }    /* 同一元素 + 不同状态类，靠 JS 换 class 就换颜色 */
 .log-editor-msg.err { color: var(--danger); }
 
 /* ============================================================
    齿轮菜单
    ============================================================ */
-.gear-wrap { position: relative; }
-.gear-menu {
-  display: none;
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  min-width: 150px;
+.gear-wrap { position: relative; }               /* 只作为下面下拉面板的「坐标系」 */
+.gear-menu {                                     /* 点齿轮后弹出的那个小面板 */
+  display: none;                                 /* 默认收起 */
+  position: absolute;                            /* 相对 .gear-wrap 定位，所以会贴在齿轮下方 */
+  top: calc(100% + 10px);                        /* 【calc()】把「父元素高度的 100%」再加上 10px，
+                                                    意思就是：齿轮底边再往下 10px。
+                                                    calc 里 + 和 - 两边必须有空格，否则不生效。 */
+  right: 0;                                      /* 右边缘对齐父元素右边，下拉菜单不会往屏幕外跑 */
+  min-width: 150px;                              /* 最窄 150px，里面文字短也不至于挤成一个窄条 */
   background: rgba(18, 20, 28, .94);
   -webkit-backdrop-filter: blur(24px) saturate(160%);
   backdrop-filter: blur(24px) saturate(160%);
   border: 1px solid var(--glass-border);
   border-radius: 14px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, .5), inset 0 1px 0 var(--glass-hi);
-  overflow: hidden;
-  z-index: 200;
+  overflow: hidden;                              /* 配合圆角裁掉内部 hover 底色的直角 */
+  z-index: 200;                                  /* 比导航（100）高，弹出时盖在导航栏之上 */
   padding: 6px;
-  animation: popIn .2s ease both;
+  animation: popIn .2s ease both;                /* 复用弹窗的 popIn，只是更快（0.2 秒） */
 }
 body.light .gear-menu { background: rgba(255, 255, 255, .96); }
-.gear-menu.show { display: block; }
-.gear-item {
-  display: block;
+.gear-menu.show { display: block; }              /* JS 加 show 就展开 */
+.gear-item {                                     /* 菜单里的一项（比如「退出登录」） */
+  display: block;                                /* <a> 默认行内，改成块才能整行可点 */
   padding: 10px 14px;
   font-size: 14px;
   color: var(--text);
@@ -1019,7 +1141,7 @@ body.light .gear-menu { background: rgba(255, 255, 255, .96); }
   transition: background .15s, color .15s;
 }
 .gear-item:hover { background: var(--primary-soft); color: var(--primary-deep); }
-.gear-empty {
+.gear-empty {                                    /* 没登录时显示的「请先登录」 */
   display: block;
   padding: 10px 14px;
   font-size: 13px;
@@ -1030,22 +1152,24 @@ body.light .gear-menu { background: rgba(255, 255, 255, .96); }
    个人主页
    ============================================================ */
 .profile-wrap { display: flex; gap: 20px; align-items: flex-start; }
-.profile-left {
-  flex: 3;
+/* 【align-items:flex-start】顶部对齐。默认是 stretch（拉满等高），
+   那样右栏会被拉得和左栏一样长，卡片底部留一大块空白。 */
+.profile-left {                                  /* 左栏：资料卡 + 动态列表 */
+  flex: 3;                                       /* 占 3 份宽 */
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0;
+  flex-direction: column;                        /* 内部卡片竖着堆 */
+  gap: 20px;                                     /* 卡片之间 20px */
+  min-width: 0;                                  /* 允许被压缩，否则长标题会把布局撑破 */
 }
-.profile-right {
-  flex: 1;
+.profile-right {                                 /* 右栏：统计、签名等 */
+  flex: 1;                                       /* 占 1 份宽 —— 3:1 的比例 */
   display: flex;
   flex-direction: column;
   gap: 20px;
   min-width: 0;
 }
 
-.profile-head {
+.profile-head {                                  /* 顶部那块大头像 + 名字 */
   display: flex;
   gap: 24px;
   align-items: flex-start;
@@ -1053,6 +1177,7 @@ body.light .gear-menu { background: rgba(255, 255, 255, .96); }
   width: 100%;
 }
 .profile-avatar-box { position: relative; flex-shrink: 0; }
+/* 【flex-shrink:0】头像绝不许被文字挤压变形（很关键，否则名字一长头像就变椭圆）。 */
 .profile-avatar {
   width: 108px;
   height: 108px;
@@ -1061,29 +1186,31 @@ body.light .gear-menu { background: rgba(255, 255, 255, .96); }
   border: 3px solid rgba(255, 255, 255, .16);
   background: var(--card-solid);
   box-shadow: 0 0 0 1px rgba(138, 43, 226, .3), 0 0 44px rgba(138, 43, 226, .3);
+  /* 两个阴影叠着：一个 1px 的紫色细圈贴着边缘，一个 44px 的大范围紫光晕开。 */
   display: block;
 }
-.avatar-upload {
-  position: absolute;
-  bottom: -8px;
+.avatar-upload {                                 /* 头像下方那个「换头像」小胶囊 */
+  position: absolute;                            /* 相对 .profile-avatar-box 定位，压在头像下沿 */
+  bottom: -8px;                                  /* 往下溢出 8px，挂在头像边上 */
   left: 50%;
   transform: translateX(-50%);
+  /* 【水平居中口诀】left:50% 先把左边缘挪到中线，再用 translateX(-50%) 把自己往左拉回半个宽度。 */
   background: var(--grad-primary);
   color: #fff;
   padding: 4px 13px;
   border-radius: 20px;
   font-size: 12px;
   cursor: pointer;
-  white-space: nowrap;
+  white-space: nowrap;                           /* 不许折行 */
   box-shadow: 0 6px 18px rgba(138, 43, 226, .4);
   transition: filter .2s;
 }
 .avatar-upload:hover { filter: brightness(1.12); }
 
-.profile-info {
+.profile-info {                                  /* 名字、铭牌、签名那一竖列 */
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-start;                       /* 左对齐（默认会被拉满，导致铭牌变成通栏） */
   gap: 10px;
   min-width: 0;
 }
@@ -1091,19 +1218,21 @@ body.light .gear-menu { background: rgba(255, 255, 255, .96); }
   font-size: 27px;
   font-weight: 800;
   line-height: 1.2;
-  word-break: break-word;
+  word-break: break-word;                        /* 【break-word】超长英文/无空格串也强制换行，不会溢出卡片 */
   margin: 0;
   background: var(--grad-text);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  /* 【渐变文字三件套】给背景设渐变 → 把背景裁剪成「文字形状」→ 文字本身变透明。
+     于是你看到的就是渐变填充的字。现在 --grad-text 是纯色，所以看起来只是「用变量控制字色」。 */
 }
 
 /* 身份铭牌 */
-.role-tag {
-  display: inline-block;
+.role-tag {                                      /* 名字旁边那个小圆角标签（站长 / 管理员 / 普通用户） */
+  display: inline-block;                         /* 行内块：能和文字排在一行，又能设内边距 */
   padding: 3px 13px;
-  border-radius: 999px;
+  border-radius: 999px;                          /* 胶囊形 */
   font-size: 12.5px;
   font-weight: 600;
   letter-spacing: .4px;
@@ -1111,41 +1240,41 @@ body.light .gear-menu { background: rgba(255, 255, 255, .96); }
   border: 1px solid var(--border);
   color: var(--text);
 }
-.role-tag.role-user {
-  background: rgba(91, 141, 239, .18);
-  border-color: rgba(91, 141, 239, .45);
-  color: #9DC0FF;
+.role-tag.role-user {                            /* 普通用户：蓝 */
+  background: rgba(91, 141, 239, .18);           /* 蓝色 18% 透明度打底 */
+  border-color: rgba(91, 141, 239, .45);         /* 同色但更实的边框 */
+  color: #9DC0FF;                                /* 浅蓝文字，在深底上够亮 */
 }
-.role-tag.role-admin {
+.role-tag.role-admin {                           /* 管理员：绿 */
   background: rgba(53, 199, 119, .16);
   border-color: rgba(53, 199, 119, .45);
   color: #6FE3A3;
 }
-.role-tag.role-owner {
+.role-tag.role-owner {                           /* 站长：金 + 一圈光晕，比另外两个更「贵」 */
   background: rgba(240, 180, 0, .16);
   border-color: rgba(240, 180, 0, .5);
   color: #FFD24A;
   box-shadow: 0 0 18px rgba(240, 180, 0, .22);
 }
-.role-tag.role-bio {
+.role-tag.role-bio {                             /* 这其实不是身份，是「签名」也复用同一个样式 */
   background: var(--primary-soft);
   border-color: rgba(138, 43, 226, .5);
   color: #C9A7FF;
-  max-width: 260px;
+  max-width: 260px;                              /* 限宽，签名太长不至于把整行占满 */
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: bottom;
+  white-space: nowrap;                           /* 太长就省略号（三件套） */
+  vertical-align: bottom;                        /* 和前面的名字底部对齐，不会被抬到半空 */
 }
-body.light .role-tag.role-bio { color: #8A2BE2; }
+body.light .role-tag.role-bio { color: #8A2BE2; }/* 浅色主题下 #C9A7FF 太浅看不清，换成深紫 */
 
-.profile-feed { padding: 28px 32px; width: 100%; }
+.profile-feed { padding: 28px 32px; width: 100%; }/* 主页里「我的留言 / 我的文章」那块大卡 */
 .my-msg-item { padding: 13px 0; border-bottom: 1px solid var(--border); }
-.my-msg-item:last-child { border-bottom: none; }
+.my-msg-item:last-child { border-bottom: none; } /* 最后一条不要分隔线 */
 .my-msg-text {
   font-size: 15px;
   color: var(--text);
-  line-height: 1.75;
+  line-height: 1.75;                             /* 行高放宽，多行留言更好读 */
   word-break: break-word;
 }
 .my-msg-time {
@@ -1158,7 +1287,7 @@ body.light .role-tag.role-bio { color: #8A2BE2; }
 .my-art-item { padding: 13px 0; border-bottom: 1px solid var(--border); }
 .my-art-item:last-child { border-bottom: none; }
 .my-art-title {
-  display: block;
+  display: block;                                /* 标题整行都能点，点击区域更大 */
   font-size: 16px;
   font-weight: 600;
   color: var(--text);
@@ -1168,9 +1297,9 @@ body.light .role-tag.role-bio { color: #8A2BE2; }
   transition: color .2s;
 }
 .my-art-title:hover { color: var(--primary-deep); text-shadow: 0 0 14px rgba(155, 77, 240, .5); }
-.my-art-meta {
+.my-art-meta {                                   /* 标题下面那行元信息（阅读 / 赞 / 时间） */
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap;                               /* 【wrap】装不下就换行，窄屏时不会挤出卡片 */
   align-items: center;
   gap: 10px;
   margin-top: 6px;
@@ -1178,28 +1307,31 @@ body.light .role-tag.role-bio { color: #8A2BE2; }
   color: var(--text-light);
 }
 .my-art-ops { display: inline-flex; gap: 8px; margin-left: auto; }
-.empty-hint {
+/* 【margin-left:auto】在 flex 里 = 把这组操作按钮推到最右边。 */
+.empty-hint {                                    /* 「还没有内容」的占位提示 */
   color: var(--text-light);
   font-size: 14px;
   padding: 20px 0;
   text-align: center;
 }
 
-.profile-side { padding: 24px; }
-.side-section + .side-section {
-  border-top: 1px solid var(--border);
+.profile-side { padding: 24px; }                 /* 右栏那张卡的统一内边距 */
+.side-section + .side-section {                  /* 【相邻兄弟选择器 +】只有「前面还有一段」的 .side-section 才加这些 */
+  border-top: 1px solid var(--border);           /* 所以第一段顶部不会多出一条线 */
   margin-top: 20px;
   padding-top: 20px;
 }
+/* 【.a + .b】= 紧跟在 .a 后面的 .b。用来「除了第一个之外都加上边框」，比 :first-child 反向写更直观。 */
 .profile-bio {
   color: var(--text);
   font-size: 14px;
   line-height: 1.75;
-  min-height: 40px;
+  min-height: 40px;                              /* 空签名也占位，右栏高度不会因为有没有签名而跳一下 */
   white-space: pre-wrap;
+  /* 【pre-wrap】保留用户输入里的换行和空格，同时超长行仍然自动换行（pre 是只保留换行不换行）。 */
   word-break: break-word;
 }
-.profile-bio-input {
+.profile-bio-input {                             /* 编辑签名时的多行输入框 */
   width: 100%;
   min-height: 82px;
   padding: 11px 13px;
@@ -1219,9 +1351,9 @@ body.light .role-tag.role-bio { color: #8A2BE2; }
   box-shadow: 0 0 0 3px rgba(138, 43, 226, .16);
 }
 
-.profile-stat {
+.profile-stat {                                  /* 右栏「关注 / 粉丝 / 拉黑」这些统计行 */
   display: flex;
-  align-items: baseline;
+  align-items: baseline;                         /* 标签和数字按文字基线对齐 */
   gap: 8px;
   padding: 9px 10px;
   cursor: pointer;
@@ -1230,21 +1362,22 @@ body.light .role-tag.role-bio { color: #8A2BE2; }
 }
 .profile-stat:hover { background: var(--primary-soft); transform: translateX(2px); }
 .stat-label { font-size: 14px; color: var(--text-light); }
-.stat-num {
+.stat-num {                                      /* 数字要醒目 */
   font-size: 19px;
   font-weight: 700;
   font-family: var(--font-num);
   color: var(--primary-deep);
-  text-shadow: 0 0 16px rgba(155, 77, 240, .45);
+  text-shadow: 0 0 16px rgba(155, 77, 240, .45);  /* 数字自带紫色微光 */
 }
 
 .profile-meta { font-size: 14px; color: var(--text-light); padding: 4px 0; }
 .profile-meta span { color: var(--text); font-family: var(--font-num); }
+/* 「注册于 2026-01-01」这类：外层是说明文字（灰），内层的 <span> 才是数据（亮 + 等宽数字）。 */
 
-.edit-fab {
-  position: fixed;
+.edit-fab {                                      /* 右下角那个圆形「编辑」悬浮按钮（FAB = Floating Action Button） */
+  position: fixed;                               /* 固定在视口上，页面滚动也跟着走 */
   right: 30px;
-  bottom: 30px;
+  bottom: 30px;                                  /* 距右下角各 30px */
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -1255,12 +1388,12 @@ body.light .role-tag.role-bio { color: #8A2BE2; }
   box-shadow: 0 14px 40px rgba(138, 43, 226, .5);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center;                       /* 里面的笔图标居中 */
   transition: transform .22s, box-shadow .22s, filter .22s;
-  z-index: 500;
+  z-index: 500;                                  /* 高于内容、低于弹窗（999） */
 }
 .edit-fab:hover {
-  transform: scale(1.07) rotate(6deg);
+  transform: scale(1.07) rotate(6deg);           /* 放大 7% 同时转 6 度，很轻的一点俏皮感 */
   box-shadow: 0 18px 50px rgba(138, 43, 226, .65);
   filter: brightness(1.1);
 }
@@ -1274,12 +1407,12 @@ body.light .role-tag.role-bio { color: #8A2BE2; }
   stroke-linejoin: round;
 }
 
-.edit-actions {
+.edit-actions {                                  /* 编辑模式下右下角那一竖排按钮（保存 / 取消 / 改密码） */
   position: fixed;
   right: 30px;
-  bottom: 100px;
+  bottom: 100px;                                 /* 比圆形按钮高 100px，正好落在它上方，不会重叠 */
   display: flex;
-  flex-direction: column;
+  flex-direction: column;                        /* 竖着排 */
   gap: 10px;
   z-index: 500;
 }
@@ -1295,32 +1428,33 @@ body.light .role-tag.role-bio { color: #8A2BE2; }
 }
 .edit-actions button:hover { transform: translateY(-1px); }
 .edit-save { background: linear-gradient(135deg, #2FB86A, #35C777); color: #fff; }
+/* 绿 = 安全 / 确认。所有站点都这么用，别反过来。 */
 .edit-save:hover { filter: brightness(1.1); }
-.edit-cancel { background: var(--field); color: var(--text); }
+.edit-cancel { background: var(--field); color: var(--text); }   /* 取消做成「低调的透明款」，不抢主按钮的风头 */
 .edit-pwd { background: var(--grad-primary); color: #fff; }
 .edit-pwd:hover { filter: brightness(1.1); }
 
 /* ============================================================
    互动按钮：关注 / 拉黑 / 举报
    ============================================================ */
-.msg-actions {
+.msg-actions {                                   /* 一条留言右侧那一组小按钮 */
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: auto;
-  position: relative;
+  margin-left: auto;                             /* 整组推到最右 */
+  position: relative;                            /* 给「⋯」弹出的菜单当定位基准 */
 }
 .act-btn {
-  font-family: inherit;
+  font-family: inherit;                          /* 按钮默认字体不继承，必须显式写 */
   font-size: 13px;
   line-height: 1.5;
   padding: 5px 13px;
-  border-radius: 999px;
+  border-radius: 999px;                          /* 胶囊 */
   cursor: pointer;
   white-space: nowrap;
   border: 1px solid var(--border);
   background: var(--field);
-  color: var(--text-light);
+  color: var(--text-light);                      /* 默认是「次要」的灰色 */
   transition: background .15s, color .15s, border-color .15s, box-shadow .15s;
 }
 .act-btn:hover {
@@ -1328,7 +1462,7 @@ body.light .role-tag.role-bio { color: #8A2BE2; }
   color: var(--primary-deep);
   box-shadow: 0 0 16px rgba(138, 43, 226, .18);
 }
-.act-btn.on {
+.act-btn.on {                                    /* 已经关注 / 已点赞的「激活态」 */
   background: var(--primary-soft);
   border-color: rgba(138, 43, 226, .7);
   color: #C9A7FF;
@@ -1336,19 +1470,22 @@ body.light .role-tag.role-bio { color: #8A2BE2; }
 }
 body.light .act-btn.on { color: #8A2BE2; }
 .act-btn.danger:hover { border-color: rgba(229, 83, 75, .7); color: var(--danger); box-shadow: 0 0 16px rgba(229, 83, 75, .2); }
+/* .danger 只改 hover 状态：平时不红，鼠标移上去才变红，避免整页都是危险色。 */
 .act-btn:disabled { opacity: .45; cursor: default; }
 .act-btn:disabled:hover { border-color: var(--border); color: var(--text-light); box-shadow: none; }
-.act-btn.dots {
+/* 【重要】:hover 的样式会盖住 :disabled，所以必须再写一条 :disabled:hover 把hover效果压回去。
+   否则「已禁止点击」的按钮鼠标移上去还是会变色，用户会以为能点。 */
+.act-btn.dots {                                  /* 那个「⋯」更多按钮 */
   padding: 3px 10px;
   font-size: 16px;
   line-height: 1.1;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 1px;                           /* 三个点之间拉开一点，更像图标 */
 }
 
-.act-menu {
+.act-menu {                                      /* 「⋯」点开后的下拉菜单 */
   position: absolute;
-  right: 0;
+  right: 0;                                      /* 右对齐，往左展开，不会跑出屏幕 */
   top: calc(100% + 8px);
   min-width: 132px;
   z-index: 40;
@@ -1360,13 +1497,13 @@ body.light .act-btn.on { color: #8A2BE2; }
   border: 1px solid var(--glass-border);
   border-radius: 13px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, .5);
-  animation: popIn .18s ease both;
+  animation: popIn .18s ease both;               /* 0.18 秒，快一点，下拉菜单拖太久会显卡 */
 }
 body.light .act-menu { background: rgba(255, 255, 255, .97); }
 .act-menu.show { display: block; }
 .act-menu button {
-  display: block;
-  width: 100%;
+  display: block;                                /* 每个选项占一整行 */
+  width: 100%;                                   /* 撑满，整行都能点（比只点文字友好得多） */
   text-align: left;
   border: none;
   background: none;
@@ -1378,15 +1515,16 @@ body.light .act-menu { background: rgba(255, 255, 255, .97); }
   cursor: pointer;
 }
 .act-menu button:hover { background: var(--primary-soft); }
-.act-menu button.danger { color: var(--danger); }
+.act-menu button.danger { color: var(--danger); }     /* 这里的危险项是常红的，因为它藏在菜单里，不会污染页面 */
 .act-menu button.danger:hover { background: rgba(255, 90, 90, .12); }
 .act-menu button:disabled { color: var(--text-light); cursor: default; }
 .act-menu button:disabled:hover { background: none; }
 
-.blocked-item { opacity: .55; }
+.blocked-item { opacity: .55; }                  /* 被拉黑的人发的留言：整条变淡，视觉上「降级」 */
 .blocked-item .msg-text { font-size: 13px; color: var(--text-light); font-style: italic; }
+/* 【font-style:italic】斜体，配合变淡一起表达「这条被折叠了」。 */
 
-.social-tip {
+.social-tip {                                    /* 关注/拉黑等操作后弹出的提示条 */
   display: none;
   margin-top: 12px;
   padding: 11px 15px;
@@ -1398,23 +1536,24 @@ body.light .act-menu { background: rgba(255, 255, 255, .97); }
 }
 .social-tip.show { display: block; }
 
-.warn-bar {
+.warn-bar {                                      /* 「你已被禁言」这类警告条 */
   display: none;
   margin-bottom: 14px;
   padding: 11px 15px;
   border-radius: 10px;
   font-size: 14px;
-  color: #FFD24A;
-  background: rgba(240, 180, 0, .12);
+  color: #FFD24A;                                /* 黄字 */
+  background: rgba(240, 180, 0, .12);            /* 黄底很淡 */
   border: 1px solid rgba(240, 180, 0, .45);
 }
 .warn-bar.show { display: block; }
 
 .profile-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+/* 【flex-wrap:wrap】按钮多、屏幕窄时自动换行，不会挤成一坨或者撑出横向滚动条。 */
 .profile-actions .act-btn { font-size: 14px; padding: 7px 19px; border-radius: 10px; }
 
 /* 用户列表行 */
-.user-row {
+.user-row {                                      /* 用户列表（/test/users）里的每一行 */
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1432,46 +1571,49 @@ body.light .act-menu { background: rgba(255, 255, 255, .97); }
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  flex: none;
+  flex: none;                                    /* 头像固定 40px，绝不被名字挤小 */
   background: var(--card-solid);
   border: 1px solid var(--border);
 }
 .user-row-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .user-row-name { font-weight: 700; font-size: 15px; }
-.user-row-you { font-weight: normal; font-size: 13px; color: var(--text-light); }
+.user-row-you { font-weight: normal; font-size: 13px; color: var(--text-light); }   /* 名字后面的「（你）」用小字弱化 */
 .user-row-uid { font-size: 12.5px; color: var(--text-light); font-family: var(--font-num); }
 
 /* ============================================================
    信箱
    ============================================================ */
 .mail-wrap { position: relative; display: flex; align-items: center; }
-.mail-btn { position: relative; padding: 0; }
-.mail-dot {
+/* 外层当定位基准，里面 .mail-panel 用 position:absolute 挂到它下面。 */
+.mail-btn { position: relative; padding: 0; }    /* 信封按钮本身；relative 是为了让红点能压在它右上角 */
+.mail-dot {                                      /* 未读数那个红色小圆点 */
   position: absolute;
-  top: -4px;
-  right: -5px;
-  min-width: 17px;
+  top: -4px;                                     /* 往上溢出 4px，压在按钮边缘外 */
+  right: -5px;                                   /* 往右溢出 5px */
+  min-width: 17px;                               /* 最小 17px：数字是一位数时也是圆圈 */
   height: 17px;
-  padding: 0 4px;
+  padding: 0 4px;                                /* 数字变成两位数时靠 padding 撑宽，变成胶囊 */
   border-radius: 9px;
-  background: linear-gradient(135deg, #FF5A5A, #FF8A3D);
+  background: linear-gradient(135deg, #FF5A5A, #FF8A3D);   /* 红到橙的渐变，比纯红更「报警」 */
   color: #fff;
   font-size: 11px;
   font-weight: bold;
-  line-height: 17px;
+  line-height: 17px;                             /* 行高等于高度 = 单行文字垂直居中 */
   text-align: center;
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 0 2px rgba(10, 12, 18, .85), 0 0 12px rgba(255, 90, 90, .6);
+  /* 第一个阴影 2px 深色描边：让红点在深色导航上「抠」出一个边，不至于糊在一起；
+     第二个是红色光晕。 */
 }
-.mail-panel {
+.mail-panel {                                    /* 点信封后弹出的下拉面板 */
   position: absolute;
-  right: 0;
-  top: calc(100% + 12px);
+  right: 0;                                      /* 右对齐信封 */
+  top: calc(100% + 12px);                        /* 信封下方 12px */
   width: 330px;
-  max-width: 86vw;
+  max-width: 86vw;                               /* 手机上最多占 86% 屏宽，不撑出屏幕 */
   z-index: 60;
-  display: none;
+  display: none;                                 /* 默认收起 */
   background: rgba(18, 20, 28, .95);
   -webkit-backdrop-filter: blur(26px) saturate(160%);
   backdrop-filter: blur(26px) saturate(160%);
@@ -1483,7 +1625,7 @@ body.light .act-menu { background: rgba(255, 255, 255, .97); }
 }
 body.light .mail-panel { background: rgba(255, 255, 255, .97); }
 .mail-panel.show { display: block; }
-.mail-head {
+.mail-head {                                     /* 面板顶部「信箱 + 全部已读」 */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1493,7 +1635,7 @@ body.light .mail-panel { background: rgba(255, 255, 255, .97); }
   font-size: 15px;
   color: var(--text);
 }
-.mail-readall {
+.mail-readall {                                  /* 「全部已读」文字按钮 */
   border: none;
   background: none;
   color: var(--primary-deep);
@@ -1506,14 +1648,16 @@ body.light .mail-panel { background: rgba(255, 255, 255, .97); }
 }
 .mail-readall:hover { background: var(--primary-soft); }
 .mail-list { max-height: 380px; overflow-y: auto; }
-.mail-empty {
-  margin: 0;
+/* 【max-height + auto】列表最多 380px 高，消息多了就在面板内部滚动，
+   不会把面板拉成一整屏、也不会顶到屏幕外面去。 */
+.mail-empty {                                    /* 「还没有消息」占位 */
+  margin: 0;                                     /* <p> 自带上下外边距，清掉才不会把面板撑歪 */
   padding: 26px 14px;
   text-align: center;
   font-size: 14px;
   color: var(--text-light);
 }
-.mail-item {
+.mail-item {                                     /* 一条消息 */
   display: flex;
   gap: 10px;
   padding: 12px 15px;
@@ -1525,7 +1669,9 @@ body.light .mail-panel { background: rgba(255, 255, 255, .97); }
 .mail-item:last-child { border-bottom: none; }
 .mail-item:hover { background: var(--primary-soft); }
 .mail-item.new { background: rgba(138, 43, 226, .10); }
-.mail-ico {
+/* 【.mail-item.new】多个 class 连写 = 必须同时具备。
+   JS 给未读的那几条加上 new，整行带一点淡紫底，一眼能看出哪条没看过。 */
+.mail-ico {                                      /* 左边那枚圆形小图标（♥ / ↩ / @ / ! / ⚙） */
   flex: none;
   width: 27px;
   height: 27px;
@@ -1536,21 +1682,21 @@ body.light .mail-panel { background: rgba(255, 255, 255, .97); }
   font-size: 14px;
   font-weight: bold;
   color: #fff;
-  background: var(--grad-primary);
+  background: var(--grad-primary);               /* 默认紫色，下面按类型覆盖 */
 }
-.mail-ico.like { background: linear-gradient(135deg, #FF5A5A, #FB7299); }
-.mail-ico.report { background: linear-gradient(135deg, #F0B400, #FF8A3D); }
-.mail-ico.mention { background: linear-gradient(135deg, #8A2BE2, #C9A7FF); }
-.mail-ico.system { background: linear-gradient(135deg, #26A5E4, #5B8DEF); }
-.mail-body { flex: 1; min-width: 0; }
+.mail-ico.like { background: linear-gradient(135deg, #FF5A5A, #FB7299); }     /* 赞 = 红粉 */
+.mail-ico.report { background: linear-gradient(135deg, #F0B400, #FF8A3D); }   /* 举报 = 橙黄 */
+.mail-ico.mention { background: linear-gradient(135deg, #8A2BE2, #C9A7FF); }  /* @ = 紫 */
+.mail-ico.system { background: linear-gradient(135deg, #26A5E4, #5B8DEF); }   /* 系统 = 蓝 */
+.mail-body { flex: 1; min-width: 0; }            /* min-width:0 见前面解释：不写这行省略号不生效 */
 .mail-line { font-size: 14px; line-height: 1.45; }
-.mail-ex {
+.mail-ex {                                       /* 消息下面引用的原文摘录 */
   margin-top: 3px;
   font-size: 12.5px;
   color: var(--text-light);
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: nowrap;                           /* 摘录只显示一行，太长就省略 */
 }
 .mail-time {
   margin-top: 3px;
@@ -1559,12 +1705,12 @@ body.light .mail-panel { background: rgba(255, 255, 255, .97); }
   font-family: var(--font-num);
 }
 
-.mail-cats { padding: 7px; }
-.mail-cat {
+.mail-cats { padding: 7px; }                     /* 信箱五栏分类的容器 */
+.mail-cat {                                      /* 一栏：图标 + 名称 + 未读数 + 箭头 */
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 100%;
+  width: 100%;                                   /* 整行可点，不是只有文字 */
   padding: 10px;
   border: none;
   border-radius: 10px;
@@ -1572,13 +1718,13 @@ body.light .mail-panel { background: rgba(255, 255, 255, .97); }
   font-family: inherit;
   font-size: 14.5px;
   color: var(--text);
-  text-align: left;
+  text-align: left;                              /* 按钮默认文字居中，必须改回左对齐 */
   cursor: pointer;
   transition: background .15s;
 }
 .mail-cat:hover { background: var(--primary-soft); }
-.mail-cat-label { flex: 1; }
-.mail-cat-n {
+.mail-cat-label { flex: 1; }                     /* 名称占满中间，把数字和箭头挤到最右 */
+.mail-cat-n {                                    /* 红色数字角标 */
   flex: none;
   min-width: 20px;
   padding: 1px 7px;
@@ -1591,9 +1737,10 @@ body.light .mail-panel { background: rgba(255, 255, 255, .97); }
   font-family: var(--font-num);
 }
 .mail-cat-n.zero { background: var(--border); color: var(--text-light); font-weight: normal; }
-.mail-cat-go { flex: none; color: var(--text-light); font-size: 16px; }
+/* 未读为 0 时换成灰色 —— 虽然大部分情况 JS 直接不渲染这个数字，这条是兜底。 */
+.mail-cat-go { flex: none; color: var(--text-light); font-size: 16px; }   /* 右边那个「›」箭头 */
 
-.mail-modal {
+.mail-modal {                                    /* 点某一栏后弹出的大窗口（看详细消息） */
   position: fixed;
   inset: 0;
   z-index: 300;
@@ -1609,9 +1756,9 @@ body.light .mail-panel { background: rgba(255, 255, 255, .97); }
 .mail-modal-box {
   width: 520px;
   max-width: 100%;
-  max-height: 76vh;
+  max-height: 76vh;                              /* 最高 76% 屏高，剩下留给遮罩，视觉上「框是浮着的」 */
   display: flex;
-  flex-direction: column;
+  flex-direction: column;                        /* 头部固定 + 正文滚动 */
   background: rgba(18, 20, 28, .96);
   -webkit-backdrop-filter: blur(28px) saturate(160%);
   backdrop-filter: blur(28px) saturate(160%);
@@ -1644,41 +1791,51 @@ body.light .mail-modal-box { background: rgba(255, 255, 255, .97); }
   cursor: pointer;
 }
 .mail-modal-close:hover { color: var(--text); background: var(--primary-soft); }
-.mail-modal-body { flex: 1; overflow-y: auto; }
-.mail-modal-body .mail-item { padding: 13px 17px; }
+.mail-modal-body { flex: 1; overflow-y: auto; }  /* 【flex:1】吃掉剩余高度；内容超了就在这里滚 */
+.mail-modal-body .mail-item { padding: 13px 17px; }   /* 大窗口里行距稍微放宽一点 */
 
 /* ============================================================
    响应式
    ============================================================ */
+/* 【@media】媒体查询：只有满足括号里的条件时，里面的样式才生效。
+   max-width:900px = 「浏览器窗口宽度小于等于 900px」。
+   写响应式的标准套路：先写桌面样式，再用几个断点往里收。 */
+
 @media (max-width: 900px) {
-  .test-grid { grid-template-columns: repeat(2, 1fr); }
+  .test-grid { grid-template-columns: repeat(2, 1fr); }   /* 平板：入口按钮从 3 列改 2 列 */
 }
 @media (max-width: 700px) {
-  .profile-wrap { flex-direction: column; }
+  .profile-wrap { flex-direction: column; }      /* 手机：左右两栏改成上下堆叠（默认是横向 row） */
   .profile-left { padding-top: 24px; }
-  .profile-avatar { width: 118px; height: 118px; }
-  .msg-head { flex-wrap: wrap; }
-  .mail-panel { right: -70px; width: 290px; }
+  .profile-avatar { width: 118px; height: 118px; }   /* 竖排后横向有空间了，头像可以放大一点 */
+  .msg-head { flex-wrap: wrap; }                 /* 一行放不下就换行，不要硬挤 */
+  .mail-panel { right: -70px; width: 290px; }    /* 往左挪 70px：手机上信封贴着屏幕右边缘，不挪会有一截露到屏幕外 */
 }
 @media (max-width: 600px) {
   .nav-inner { flex-direction: column; gap: 10px; padding: 10px 16px; }
-  .ip-wrap { display: none; }
-  header { margin: 42px auto 30px; }
-  .name { font-size: 31px; }
+  /* 手机上导航从「左右两端」改成「上下两行」：logo 一行、按钮一行。 */
+  .ip-wrap { display: none; }                    /* 手机直接不显示 IP，省地方 */
+  header { margin: 42px auto 30px; }             /* 上下留白收紧 */
+  .name { font-size: 31px; }                     /* 标题字号缩小，避免「乘法」两字撑爆一行 */
   .avatar { width: 108px; height: 108px; }
-  .card { padding: 22px; }
+  .card { padding: 22px; }                       /* 屏幕小，卡片内边距也收一点 */
   .test-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .test-item { font-size: 15px; padding: 18px 8px; }
-  #site-bg .aurora { filter: blur(50px); }
+  .test-item { font-size: 15px; padding: 18px 8px; }   /* 按钮文字变小、左右变窄 */
+  #site-bg .aurora { filter: blur(50px); }       /* 大光团模糊半径调小，省 GPU */
 }
 
 /* 尊重「减少动态效果」偏好：关掉所有漂移与浮动 */
 @media (prefers-reduced-motion: reduce) {
+  /* 【prefers-reduced-motion】是操作系统级无障碍设置。
+     有人在系统里勾了「减少动画」，说明动效可能让他头晕/不适，
+     这时必须把动画关掉 —— 这不是可选优化，是基本礼貌。 */
   #site-bg .aurora,
   #site-bg .noise,
   .avatar,
   .card { animation: none !important; }
   * { transition-duration: .01ms !important; }
+  /* 【!important】强制覆盖其他所有声明。这里只能用：要压住全站几百条 transition，
+     没可能逐个去改。平时别乱用，会让样式彻底没法维护。 */
 }
 
 /* ============================================================
@@ -1688,6 +1845,9 @@ body.light .mail-modal-box { background: rgba(255, 255, 255, .97); }
    圆角（8~12px）、纯色紫（#8A2BE2 / #9B4DF0）。
    这一层负责把所有组件的阴影、渐变、发光清掉，保证全站同款观感。
    ============================================================ */
+/* 【为什么放在最后】CSS 同样优先级时，后写的赢。这一层在文件末尾统一覆盖，
+   比回头去每个组件里删 box-shadow 省事得多，哪天想恢复也只要删掉这一段。 */
+
 .login-btn,
 .login-submit,
 .log-add,
@@ -1704,7 +1864,7 @@ body.light .mail-modal-box { background: rgba(255, 255, 255, .97); }
 .mail-btn:hover,
 .gear-btn:hover,
 .test-item:hover {
-  box-shadow: none !important;
+  box-shadow: none !important;                   /* 一处把上面所有组件的光晕/投影清零 */
 }
 
 .section-title::before,
@@ -1718,6 +1878,9 @@ body.light .mail-modal-box { background: rgba(255, 255, 255, .97); }
 .mail-cat-n,
 .socials a:hover {
   background-image: none !important;
+  /* 【background-image:none】只清「渐变」这一层，保留 background-color。
+     因为 linear-gradient 在 CSS 里算 image 不算 color，
+     清掉它，组件的纯色底就自动露出来了。 */
 }
 
 /* 图标按钮悬停：Local 不做位移/发光，只换底色 */
@@ -1726,7 +1889,7 @@ body.light .mail-modal-box { background: rgba(255, 255, 255, .97); }
 .mail-btn:hover,
 .gear-btn:hover,
 .user-avatar:hover {
-  transform: none;
+  transform: none;                               /* 取消所有「抬起 / 放大」的悬停位移 */
 }
 
 /* 弹窗 / 菜单 / 信箱：统一磨砂，去掉厚重投影 */
@@ -1736,17 +1899,17 @@ body.light .mail-modal-box { background: rgba(255, 255, 255, .97); }
 .act-menu,
 .mail-panel,
 .mail-modal-box {
-  box-shadow: none !important;
+  box-shadow: none !important;                   /* 弹窗不再靠投影分层，改用磨砂 + 遮罩 */
 }
 
 /* 滚动条：Local 没有渐变，改成纯紫 */
 ::-webkit-scrollbar-thumb {
   background: var(--primary);
-  border: 2px solid transparent;
+  border: 2px solid transparent;                 /* 透明边框 + padding-box = 滑块两边留 2px 空隙，看起来更细 */
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-deep);
+  background: var(--primary-deep);               /* 悬停换深一点的紫 */
   background-clip: padding-box;
 }
 
