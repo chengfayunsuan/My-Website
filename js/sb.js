@@ -442,15 +442,21 @@
     })) };
   }
 
-  async function toggleVideoLike(videoId) {
-    const u = await getCurrentUser(); if (!u) return errRes(null);
+  /* ---------- 视频：点赞 / 收藏 / 举报 / 增删改 ----------
+     下面这一整段，和上面文章的版本是「同一个模子」：
+     把 article 换成 video、把 article_likes 换成 video_likes，逻辑一个字都没变。
+     这正是「数据层」的价值：页面上的按钮长得一样，底下的代码也就长得一样。 */
+  async function toggleVideoLike(videoId) {        // 【async function】视频点赞/取消。
+    const u = await getCurrentUser(); if (!u) return errRes(null);   // 【if】没登录直接失败。
     const { data: ex } = await SB.from('video_likes').select('video_id').eq('video_id', videoId).eq('uid', u.id).maybeSingle();
-    if (ex) { await SB.from('video_likes').delete().eq('video_id', videoId).eq('uid', u.id); }
-    else { const { error } = await SB.from('video_likes').insert({ video_id: videoId, uid: u.id }); if (error) return errRes(error); }
+    // 查「我赞过这个视频吗」；maybeSingle 查不到返回 null 不报错。
+    if (ex) { await SB.from('video_likes').delete().eq('video_id', videoId).eq('uid', u.id); }   // 赞过 → 删掉
+    else { const { error } = await SB.from('video_likes').insert({ video_id: videoId, uid: u.id }); if (error) return errRes(error); }   // 没赞过 → 插入
     const { count } = await SB.from('video_likes').select('*', { count: 'exact', head: true }).eq('video_id', videoId);
-    return { ok: true, on: !ex, count: count || 0 };
+    // 只取数量（head:true），不把明细传回来。
+    return { ok: true, on: !ex, count: count || 0 };   // 【!ex】原来有 = 现在是取消，on:false。
   }
-  async function toggleVideoFav(videoId) {
+  async function toggleVideoFav(videoId) {         // 【async function】视频收藏/取消，同上的表换成 video_favs。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data: ex } = await SB.from('video_favs').select('video_id').eq('video_id', videoId).eq('uid', u.id).maybeSingle();
     if (ex) { await SB.from('video_favs').delete().eq('video_id', videoId).eq('uid', u.id); }
@@ -458,60 +464,66 @@
     const { count } = await SB.from('video_favs').select('*', { count: 'exact', head: true }).eq('video_id', videoId);
     return { ok: true, on: !ex, count: count || 0 };
   }
-  async function reportVideo(videoId, reason) {
+  async function reportVideo(videoId, reason) {    // 【async function】举报视频，写进 reports 表。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { error } = await SB.from('reports').insert({ target_type: 'video', target_id: videoId, reporter_uid: u.id, reason });
     if (error) return errRes(error); return { ok: true };
   }
-  async function deleteVideo(videoId) {
+  async function deleteVideo(videoId) {            // 【async function】删除视频记录（数据库里的行，不是 R2 里的文件）。
     const { error } = await SB.from('videos').delete().eq('id', videoId);
     if (error) return errRes(error); return { ok: true };
   }
   async function createVideo(title, description, videoPath, poster, duration) {
+  // 【async function】新建视频。参数：标题、简介、视频文件路径、封面图、时长（秒）。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data, error } = await SB.from('videos')
       .insert({
-        uid: u.id, title, description,
-        video_path: videoPath || null,
-        poster: poster || null,
-        duration: Number(duration) || 0
+        uid: u.id, title, description,               // 对象简写：title 就是 title: title
+        video_path: videoPath || null,               // 字段名是下划线风格（数据库），变量名是驼峰（JS），要手动对应
+        poster: poster || null,                      // 没传封面就存 null（而不是空字符串）
+        duration: Number(duration) || 0              // 【Number】强制转数字，转不出来给 0
       })
-      .select('id').single();
+      .select('id').single();                        // 让数据库把新行 id 返回，页面才能跳转
     if (error) return errRes(error);
     return { ok: true, id: data.id };
   }
   async function updateVideo(id, title, description, poster) {
+  // 【async function】改视频信息。注意这里是「部分更新」的思路。
     const patch = { title, description, updated_at: new Date().toISOString() };
+    // 【const】patch = 「要改哪些字段」的对象。先把一定会改的放进去。
     if (poster !== undefined) patch.poster = poster || null;
+    // 【if】只有传了 poster（哪怕传的是空字符串）才改封面。
+    // 为什么用 !== undefined 而不是 if (poster)？因为「传空字符串」表示「我要清空封面」，
+    // 如果用 if (poster)，空字符串是假值，就改不掉了 —— 这是很常见的坑。
     const { error } = await SB.from('videos')
-      .update(patch)
+      .update(patch)                                 // 【.update】只更新 patch 里带的字段，其他字段保持不变。
       .eq('id', id);
     if (error) return errRes(error);
     return { ok: true, id };
   }
-  async function likedByVideos(uid) {
+  async function likedByVideos(uid) {              // 【async function】这个用户赞过哪些视频 id。
     const { data, error } = await SB.from('video_likes').select('video_id').eq('uid', uid);
     if (error) return { ok: false, ids: [] };
     return { ok: true, ids: (data || []).map(r => r.video_id) };
   }
-  async function favedByVideos(uid) {
+  async function favedByVideos(uid) {              // 【async function】收藏过哪些视频 id。
     const { data, error } = await SB.from('video_favs').select('video_id').eq('uid', uid);
     if (error) return { ok: false, ids: [] };
     return { ok: true, ids: (data || []).map(r => r.video_id) };
   }
-  async function getLikedVideos(uid) {
+  async function getLikedVideos(uid) {             // 【async function】赞过的视频完整信息（个人主页展示用）。
     const { data, error } = await SB.from('video_likes').select('video_id').eq('uid', uid);
     if (error || !data.length) return { ok: true, list: [] };
-    const ids = data.map(r => r.video_id);
+    const ids = data.map(r => r.video_id);         // 先拿 id 集合。
     const { data: vs } = await SB.from('videos')
       .select('id, title, uid, views, video_likes(count), profiles!videos_uid_fkey(*)')
-      .in('id', ids).neq('status', 'deleted');
+      .in('id', ids).neq('status', 'deleted');     // 【.in】一次查多条，同时排除已删除的。
     return { ok: true, list: (vs || []).map(v => ({
       id: v.id, title: v.title, author: (v.profiles && v.profiles.username) || '匿名',
       views: v.views || 0, likes: cnt(v.video_likes)
     })) };
   }
-  async function getFavedVideos(uid) {
+  async function getFavedVideos(uid) {             // 【async function】收藏的视频完整信息。
     const { data, error } = await SB.from('video_favs').select('video_id').eq('uid', uid);
     if (error || !data.length) return { ok: true, list: [] };
     const ids = data.map(r => r.video_id);
@@ -525,13 +537,22 @@
   }
 
   /* ============ 评论（文章/视频通用） ============ */
+  /* 关键设计：评论表用 target_type + target_id 两个字段，
+     既能挂文章也能挂视频，不用建两张表。这叫「多态关联」。 */
   async function postComment(targetType, targetId, content, parentId) {
+  // 【async function】发一条评论。parentId 有值就表示这是「回复某条评论」。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data, error } = await SB.from('comments')
       .insert({ target_type: targetType, target_id: targetId, uid: u.id, content, parent_id: parentId || null })
+      // 【对象简写】content 就是 content: content。
+      // parentId || null：没传父评论就存 null（表示这是顶层评论）。
       .select('*, profiles!comments_uid_fkey(*)').single();
+      // 【关键】插入后再 .select()，让数据库把「刚插入的那一行 + 作者资料」返回，
+      // 这样页面不用再查一次就能立刻把新评论显示出来。
     if (error) return errRes(error);
     return { ok: true, comment: { id: data.id, uid: data.uid, author: (data.profiles && data.profiles.username) || '匿名', content: data.content, time: data.created_at, likes: 0 } };
+    // 返回的字段名（author/time）是页面那套，和数据库字段名不一样 —— 这一层就是做「翻译」的。
+    // likes: 0 因为刚发出来肯定没人赞。
   }
   async function deleteComment(commentId) {
     const { error } = await SB.from('comments').delete().eq('id', commentId);
