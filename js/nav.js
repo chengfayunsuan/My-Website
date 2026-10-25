@@ -536,65 +536,80 @@
   setInterval(() => { if (!mailPanel.classList.contains('show')) loadMail(); }, 60000);
 
   /* ========== 10. 登录弹窗 ========== */
-  function openModal() {
-    modal.classList.add('show');
+  /* 登录和注册共用同一个弹窗、同一个输入框，只是点了不同按钮走不同接口。
+     这是很常见的省事做法：少写一套界面，用户也不用跳页。 */
+  function openModal() {                               // 【function】打开登录弹窗。
+    modal.classList.add('show');                       // 【classList.add】加上 show 类 → CSS 里 .login-modal.show 才显示出来。
+    msgBox.textContent = '';                           // 清空上次的提示文字。
+    msgBox.className = 'login-msg';                    // 类名复位（去掉上一轮的 ok / err 颜色）。
+  }
+  function closeModal() {                              // 【function】关闭弹窗。
+    modal.classList.remove('show');                    // 【classList.remove】去掉 show 类 → 隐藏。
+    userInput.value = '';                              // 【value】输入框里的内容，赋空 = 清空。
+    passInput.value = '';                              // 密码也清空 —— 安全习惯：密码不留在页面上。
     msgBox.textContent = '';
     msgBox.className = 'login-msg';
   }
-  function closeModal() {
-    modal.classList.remove('show');
-    userInput.value = '';
-    passInput.value = '';
-    msgBox.textContent = '';
-    msgBox.className = 'login-msg';
-  }
-  loginBtn.addEventListener('click', openModal);
-  closeBtn.addEventListener('click', closeModal);
-  modal.addEventListener('click', e => {
-    if (e.target === modal) closeModal();
+  loginBtn.addEventListener('click', openModal);       // 顶部「登录」按钮 → 打开弹窗。
+  closeBtn.addEventListener('click', closeModal);      // 弹窗右上角 × → 关闭。
+  modal.addEventListener('click', e => {               // 【事件】点弹窗区域。
+    if (e.target === modal) closeModal();              // 【if】e.target = 真正被点的那个元素：
+                                                       // 如果点的就是遮罩本身（而不是里面的白框），才关闭。
+                                                       // 这是判断「点里还是点外」最常用的技巧。
   });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
+  document.addEventListener('keydown', e => {          // 【事件】键盘按下。
+    if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();   // 【if】Esc 且弹窗开着 → 关闭。
   });
 
-  function showMsg(text, ok) {
+  function showMsg(text, ok) {                         // 【function】弹窗里的提示行。ok = true 绿字，false 红字。
     msgBox.textContent = text;
-    msgBox.className = 'login-msg ' + (ok ? 'ok' : 'err');
+    msgBox.className = 'login-msg ' + (ok ? 'ok' : 'err');   // 拼接类名：中间的空格不能少，
+                                                             // 否则会拼成 login-msgok 这种根本不存在的类名，样式就不生效。
   }
 
-  loginSubmit.addEventListener('click', async () => {
-    const username = userInput.value.trim();
-    const password = passInput.value;
+  loginSubmit.addEventListener('click', async () => {   // 【事件 + async】点「登录」，要发请求所以是异步。
+    const username = userInput.value.trim();            // 【const】取用户名并去掉首尾空格。
+    const password = passInput.value;                   // 【const】取密码（不能 trim，空格也可能属于密码）。
     if (!username || !password) return showMsg('用户名密码必填', false);
-    try {
+                                                        // 【if】有一个为空就提示；【return】立刻结束函数。
+                                                        // return showMsg(...) = 先执行 showMsg，再把它的返回值（undefined）交出去并结束。
+    try {                                               // 【try】请求可能出错。
       const { data, error } = await SBAPI.signIn(username, password);
+                                                        // 【解构赋值】把返回对象里的 data、error 两个字段直接拆成两个变量。
+                                                        // 等价于：const r = await ...; const data = r.data; const error = r.error;
+                                                        // 【await】等登录结果。
       if (error) return showMsg(error.message || '登录失败', false);
-      showMsg('登录成功', true);
-      setTimeout(() => location.reload(), 400);
-    } catch {
+                                                        // 【if】有错误就显示原因（优先用后端返回的 message，没有就用默认文案）。
+      showMsg('登录成功', true);                          // 走到这里 = 成功。
+      setTimeout(() => location.reload(), 400);          // 【setTimeout】等 400 毫秒（让用户看清提示）再刷新整页。
+                                                         // 为什么刷新？导航栏、权限、内容都要按登录状态重画，
+                                                         // 刷一次最省事、最不容易出 bug。
+    } catch {                                            // 【catch】断网、跨域这类网络层错误。
       showMsg('网络错误，请重试', false);
     }
   });
 
-  registerSubmit.addEventListener('click', async () => {
+  registerSubmit.addEventListener('click', async () => {   // 【事件 + async】点「注册」。
     const username = userInput.value.trim();
     const password = passInput.value;
     if (!username || !password) return showMsg('用户名密码必填', false);
     try {
-      const { data, error } = await SBAPI.signUp(username, password);
+      const { data, error } = await SBAPI.signUp(username, password);   // 【解构】这次调的是注册接口。
       if (error) return showMsg(error.message || '注册失败', false);
-      if (!data.session) {
+      if (!data.session) {                                // 【if】注册成功但没拿到 session：
+                                                          // 说明 Supabase 开了「邮箱验证」，要先去邮箱点确认链接。
         showMsg('注册成功，请去邮箱完成验证后再登录', true);
-      } else {
+      } else {                                            // 否则就是没开邮箱验证，已经直接登录了。
         showMsg('注册成功，已自动登录', true);
-        setTimeout(() => location.reload(), 400);
+        setTimeout(() => location.reload(), 400);         // 刷新，让界面切到已登录状态。
       }
     } catch {
       showMsg('网络错误，请重试', false);
     }
   });
 
-  passInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') loginSubmit.click();
+  passInput.addEventListener('keydown', e => {         // 【事件】在密码框里按键。
+    if (e.key === 'Enter') loginSubmit.click();        // 【if】按回车 = 点一下「登录」按钮。
+                                                      // .click() 让元素「假装被点」，会触发它绑定的所有事件。
   });
-})();
+})();                                                  // 最外层 IIFE 结束：} 关闭函数体，) 关闭包裹括号，() 表示执行。
