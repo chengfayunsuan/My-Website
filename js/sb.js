@@ -242,35 +242,61 @@
     });
   }
 
-  async function getArticleComments(id) {
-    const u = await getCurrentUser();
+  async function getArticleComments(id) {          // 【async function】取某篇文章的所有评论。
+    const u = await getCurrentUser();              // 先拿当前用户（用来判断「我点过赞没」）。
     const { data, error } = await SB.from('comments')
       .select('*, profiles!comments_uid_fkey(*), comment_likes(uid)')
+      // 要评论本身 + 评论者资料 + 每个赞是谁点的（只要 uid）。
       .eq('target_type', 'article').eq('target_id', id).eq('deleted', false)
+      // 三个筛选条件串起来（相当于 SQL 里 AND）：
+      //   类型是文章、目标是这篇、并且没被删除。
       .order('created_at', { ascending: true }).limit(500);
-    if (error) return { ok: false, list: [] };
+      // 按时间正序（老的在上，符合评论习惯）；最多 500 条（防止一次拉太多把页面卡死）。
+    if (error) return { ok: false, list: [] };     // 出错也给空数组，页面不会崩。
     return { ok: true, list: (data || []).map(c => ({
       id: c.id, uid: c.uid, name: (c.profiles && c.profiles.username) || '匿名',
       content: c.content, text: c.content,          // 页面渲染读的是 text
-      role: (c.profiles && c.profiles.role) || null,
-      bio: (c.profiles && c.profiles.bio) || '',
+      // 同一个值给两个字段名，是为了兼容新旧页面（老页面读 content，新页面读 text）。
+      role: (c.profiles && c.profiles.role) || null,     // 身份（决定铭牌颜色）
+      bio: (c.profiles && c.profiles.bio) || '',          // 个性签名
       avatar: (c.profiles && c.profiles.avatar_url) || null,
       uidNo: (c.profiles && c.profiles.uid_no) || null,
-      time: fmtTime(c.created_at), parent: c.parent_id || null,
+      time: fmtTime(c.created_at), parent: c.parent_id || null,   // 格式化时间；parent 是回复的父评论 id
       likes: (c.comment_likes || []).length,
+      // 【.length】评论的赞数 = 关联出来的点赞记录有几条。
       likedByMe: !!(u && (c.comment_likes || []).some(l => l.uid === u.id))
+      // 【!!】两个感叹号 = 强制转成布尔值（true/false）：
+      // 【.some】点赞记录里有没有一条是当前用户点的。
+      // 必须写 !! 是因为 some 可能返回 undefined（u 为空时短路），统一转成 true/false 更好判断。
     })) };
   }
 
-  async function toggleArticleLike(articleId) {
+  /* ============ 点赞 / 收藏 / 举报 / 增删改 ============ */
+  /* 注意这三个「切换」函数的套路完全一样，学会一个就会三个：
+       1. 查「我有没有点过」；
+       2. 有就删掉，没有就插入；
+       3. 重新数一下总数，返回给页面。 */
+  async function toggleArticleLike(articleId) {   // 【async function】点赞 / 取消点赞（点一下切换）。
     const u = await getCurrentUser(); if (!u) return errRes(null);
+    // 【if】没登录直接返回失败（errRes(null) 会给出默认文案「请求失败」）。
     const { data: ex } = await SB.from('article_likes').select('article_id').eq('article_id', articleId).eq('uid', u.id).maybeSingle();
+    // 【解构重命名】data: ex —— 把 data 这个字段取出来但改名叫 ex（existing 的缩写）。
+    // 【.maybeSingle()】和 single() 的区别：
+    //   single()      查不到会报错；
+    //   maybeSingle() 查不到返回 null，不报错。适合「可能没有」的场景。
     if (ex) { await SB.from('article_likes').delete().eq('article_id', articleId).eq('uid', u.id); }
+    // 【if】已经赞过 → 删掉那条记录（取消赞）。
     else { const { error } = await SB.from('article_likes').insert({ article_id: articleId, uid: u.id }); if (error) return errRes(error); }
+    // 【else】没赞过 → 插入一条新记录。
+    // 【.insert(对象)】新增一行，对象的键就是字段名。
     const { count } = await SB.from('article_likes').select('*', { count: 'exact', head: true }).eq('article_id', articleId);
+    // 【计数查询】select('*', { count:'exact', head:true })：
+    //   head:true 表示「只要数量，不要把数据本身传回来」，省流量；
+    //   count:'exact' 表示要精确数量。
     return { ok: true, on: !ex, count: count || 0 };
+    // 【!ex】取反：原来有记录（ex 为真）→ 现在取消 → on:false；原来没有 → 现在点上 → on:true。
   }
-  async function toggleArticleFav(articleId) {
+  async function toggleArticleFav(articleId) {    // 【async function】收藏 / 取消收藏（逻辑同上，表名换成 article_favs）。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data: ex } = await SB.from('article_favs').select('article_id').eq('article_id', articleId).eq('uid', u.id).maybeSingle();
     if (ex) { await SB.from('article_favs').delete().eq('article_id', articleId).eq('uid', u.id); }
@@ -278,53 +304,68 @@
     const { count } = await SB.from('article_favs').select('*', { count: 'exact', head: true }).eq('article_id', articleId);
     return { ok: true, on: !ex, count: count || 0 };
   }
-  async function reportArticle(articleId, reason) {
+  async function reportArticle(articleId, reason) {   // 【async function】举报文章。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { error } = await SB.from('reports').insert({ target_type: 'article', target_id: articleId, reporter_uid: u.id, reason });
+    // 【.insert】往举报表写一条：举报的是什么类型、哪个对象、谁举报的、理由。
     if (error) return errRes(error); return { ok: true };
+    // 注意这里用了「一行两个语句」的紧凑写法：出错就返回错误，没错就返回成功。
   }
-  async function deleteArticle(articleId) {
+  async function deleteArticle(articleId) {       // 【async function】删除文章。
     const { error } = await SB.from('articles').delete().eq('id', articleId);
+    // 【.delete()】删除符合条件的所有行。这里条件精确到一个 id，所以只删一条。
     if (error) return errRes(error); return { ok: true };
   }
-  async function createArticle(title, html, chars) {
+  async function createArticle(title, html, chars) {   // 【async function】新建文章。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { data, error } = await SB.from('articles')
       .insert({ uid: u.id, title, content_html: html, chars: chars || 0 })
+      // 【对象简写】{ title, } 等于 { title: title }。
+      // uid 取当前用户，防止伪造作者。
       .select('id').single();
+      // 【关键】insert 之后接 .select('id')：让数据库把新插入那行的 id 返回给我们。
+      // 不写这句，插入成功但你拿不到 id，就没法跳转到新文章页。
     if (error) return errRes(error);
     return { ok: true, id: data.id };
   }
-  async function updateArticle(id, title, html, chars) {
+  async function updateArticle(id, title, html, chars) {   // 【async function】修改文章。
     const { error } = await SB.from('articles')
       .update({ title, content_html: html, chars: chars || 0, updated_at: new Date().toISOString() })
-      .eq('id', id);
+      // 【.update(对象)】把符合条件的行改掉。
+      // new Date().toISOString() = 当前时间的 ISO 字符串，手动更新「修改时间」。
+      .eq('id', id);                            // 条件是 id 匹配。
     if (error) return errRes(error);
     return { ok: true, id };
   }
-  async function likedByArticles(uid) {
+
+  /* 下面两个函数是「查我赞过 / 收藏过哪些文章」的第一步：先拿到 id 列表。 */
+  async function likedByArticles(uid) {           // 【async function】这个用户赞过哪些文章（只返回 id）。
     const { data, error } = await SB.from('article_likes').select('article_id').eq('uid', uid);
     if (error) return { ok: false, ids: [] };
     return { ok: true, ids: (data || []).map(r => r.article_id) };
+    // 【.map】把 [{article_id:'a'}, {article_id:'b'}] 变成 ['a','b']。
   }
-  async function favedByArticles(uid) {
+  async function favedByArticles(uid) {           // 【async function】同上，收藏的 id 列表。
     const { data, error } = await SB.from('article_favs').select('article_id').eq('uid', uid);
     if (error) return { ok: false, ids: [] };
     return { ok: true, ids: (data || []).map(r => r.article_id) };
   }
-  async function getLikedArticles(uid) {
+  async function getLikedArticles(uid) {          // 【async function】拿「赞过的文章」完整信息（给个人主页展示）。
     const { data, error } = await SB.from('article_likes').select('article_id').eq('uid', uid);
     if (error || !data.length) return { ok: true, list: [] };
-    const ids = data.map(r => r.article_id);
+    // 【if】出错、或者一条都没有 → 回空列表（注意这里 ok 仍然是 true，因为「没有」不是错误）。
+    const ids = data.map(r => r.article_id);       // 先取出 id 数组。
     const { data: arts } = await SB.from('articles')
       .select('id, title, uid, views, article_likes(count), profiles!articles_uid_fkey(*)')
       .in('id', ids).neq('status', 'deleted');
+      // 【.in(字段, 数组)】相当于 SQL 的 WHERE id IN (...)，一次查出多条。
+      // 注意仍然排除了已删除的文章 —— 赞过的文章被删了就不该出现在列表里。
     return { ok: true, list: (arts || []).map(a => ({
       id: a.id, title: a.title, author: (a.profiles && a.profiles.username) || '匿名',
       views: a.views || 0, likes: cnt(a.article_likes)
     })) };
   }
-  async function getFavedArticles(uid) {
+  async function getFavedArticles(uid) {          // 【async function】拿「收藏的文章」，逻辑和上面一模一样。
     const { data, error } = await SB.from('article_favs').select('article_id').eq('uid', uid);
     if (error || !data.length) return { ok: true, list: [] };
     const ids = data.map(r => r.article_id);
