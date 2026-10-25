@@ -709,104 +709,132 @@
   }
 
   /* ============ 通知 ============ */
-  async function getNotifications() {
+  /* 这里的数据就是导航栏「信箱」里那五栏的来源。 */
+  async function getNotifications() {               // 【async function】取当前用户的通知。
     const u = await getCurrentUser();
-    if (!u) return { ok: false, list: [] };
+    if (!u) return { ok: false, list: [] };         // 【if】没登录 → 空列表（不报错，页面显示空信箱即可）。
     const { data, error } = await SB.from('notifications')
       .select('*').eq('uid', u.id).order('created_at', { ascending: false }).limit(200);
+      // 只要自己的通知；倒序（新的在上）；最多 200 条。
     if (error) return errRes(error, { list: [] });
     return { ok: true, list: (data || []).map(n => ({
       id: n.id, type: n.type, fromName: n.from_name, action: n.action,
+      // 数据库是下划线命名（from_name），页面用驼峰（fromName）—— 这里做一次转换。
       text: n.text, time: n.created_at, read: n.read, href: n.href
+      // href 是后端算好的跳转地址（带上 ?reply= 和 @对象），页面直接拿来当链接用。
     })) };
   }
-  async function markRead(payload) {
+  async function markRead(payload) {                // 【async function】标记已读。payload 决定是「全部」还是「指定几条」。
     const u = await getCurrentUser();
     if (!u) return { ok: false };
     let q = SB.from('notifications').update({ read: true }).eq('uid', u.id);
+    // 【let】先把「要改哪些行」的范围限定成「我的通知」，具体改哪几条后面再加条件。
     if (payload && payload.all) { /* 全部已读 */ }
+    // 【if】传了 { all:true } → 不加额外条件，等于把我的通知全改了。
+    // 这个分支里故意不写代码，因为范围已经由上面的 eq('uid') 限定住了。
     else if (payload && payload.ids && payload.ids.length) q = q.in('id', payload.ids);
-    else return { ok: false };
-    const { error } = await q;
-    return error ? errRes(error) : { ok: true };
+    // 【else if】传了 id 数组 → 只改这几条。【.in】= 在这批 id 里面。
+    else return { ok: false };                       // 【else】两个都没传 → 拒绝，防止误把全部标记已读。
+    const { error } = await q;                       // 【await】这时才真正执行更新。
+    return error ? errRes(error) : { ok: true };     // 【三元】有错返回错误，没错返回成功。
   }
 
-  /* ============ 日志 ============ */
-  async function getLogs() {
+  /* ============ 日志（首页更新日志）============ */
+  async function getLogs() {                        // 【async function】取更新日志。
     const { data, error } = await SB.from('logs')
       .select('*').order('created_at', { ascending: false }).limit(200);
-    if (error) return [];
+    if (error) return [];                            // 【注意】这里失败时返回的是「空数组」而不是 {ok:false}。
+    // 为什么不一样？因为 js/main.js 里写的是 Array.isArray(data) 判断，
+    // 它期望直接拿到数组。历史上两个模块约定不同，所以这里要配合它。
     return (data || []).map(l => ({ date: (l.created_at || '').slice(0, 10), text: l.detail || l.action || '' }));
+    // 【slice(0,10)】从 '2026-10-23T13:07:00+00:00' 里只取前 10 个字符 = '2026-10-23'（日期）。
+    // text 优先用 detail（详细描述），没有就退回 action（动作名）。
   }
-  async function addLog(text) {
+  async function addLog(text) {                     // 【async function】发布一条更新日志（只有站长会用到）。
     const u = await getCurrentUser();
     if (!u) return errRes(null);
     const { data, error } = await SB.from('logs')
       .insert({ actor_uid: u.id, action: 'add_log', detail: text }).select().single();
+      // 【.select() 不写参数】= 返回整行（而不是只返回 id）。
     if (error) return errRes(error);
     return { ok: true, date: (data.created_at || '').slice(0, 10), text: data.detail };
   }
 
   /* ============ 用户 / 资料 / 关系 ============ */
-  async function getProfile(uid) {
+  async function getProfile(uid) {                  // 【async function】按内部 id 取用户资料（原始结构）。
     const { data, error } = await SB.from('profiles')
       .select('*').eq('id', uid).single();
     if (error) return errRes(error);
     return { ok: true, profile: data };
   }
-  async function getUserByUid(uid) {
+  async function getUserByUid(uid) {                // 【async function】按内部 id 取资料（整理成页面结构）。
     const { data, error } = await SB.from('profiles')
       .select('*').eq('id', uid).single();
     if (error) return { ok: false };
     return {
       ok: true, uid: data.id, uidNo: data.uid_no || null, username: data.username, role: data.role,
       bio: data.bio, avatar: data.avatar_url, createdAt: (data.created_at || '').slice(0, 10)
+      // 注册日期只留年月日，页面显示「2026-10-01 加入」这种。
     };
   }
   // 按「数字 UID」查（/profile/?uid=1 这种），站长是 1
-  async function getUserByUidNo(n) {
+  async function getUserByUidNo(n) {                // 【async function】按「人看的数字编号」查用户。
     const num = Number(n);
+    // 【Number】把网址参数（一定是字符串）转成数字。
     if (!num) return { ok: false };
+    // 【if】转换失败是 NaN，!NaN 为 true；传 0 也进这里 —— 两种情况都不合法。
     const { data, error } = await SB.from('profiles')
       .select('*').eq('uid_no', num).maybeSingle();
+      // 【maybeSingle】这个编号可能不存在（用户乱输），用 maybeSingle 不报错。
     if (error || !data) return { ok: false };
     return {
       ok: true, uid: data.id, uidNo: data.uid_no, username: data.username, role: data.role,
       bio: data.bio, avatar: data.avatar_url, createdAt: (data.created_at || '').slice(0, 10)
     };
   }
-  async function getAllUsers() {
+  async function getAllUsers() {                    // 【async function】所有用户（用户名单页用）。
     const { data, error } = await SB.from('profiles')
       .select('*')
       .order('uid_no', { ascending: true }).limit(500);
+      // 按编号升序，站长（1 号）排最前。
     if (error) return { ok: false, list: [] };
     return { ok: true, list: data || [] };
   }
-  async function updateProfile(patch) {
+  async function updateProfile(patch) {             // 【async function】改自己的资料。
     const u = await getCurrentUser(); if (!u) return errRes(null);
     const { error } = await SB.from('profiles').update(patch).eq('id', u.id);
+    // 【patch】是「要改的字段」对象，页面想改什么就传什么（比如 { bio:'...' }）。
+    // 只更新自己的行（eq uid），改别人的会被 RLS 拦。
     if (error) return errRes(error); return { ok: true };
   }
-  async function changePassword(newPassword) {
+  async function changePassword(newPassword) {      // 【async function】改密码。
     const { error } = await SB.auth.updateUser({ password: newPassword });
+    // 改密码走的是 Auth 模块，不是数据库表。
     if (error) return errRes(error); return { ok: true };
   }
-  async function getRelations(uid) {
+  async function getRelations(uid) {                // 【async function】取某个用户的「关注 / 粉丝 / 拉黑」关系。
     const u = await getCurrentUser();
-    const viewerId = u ? u.id : null;
+    const viewerId = u ? u.id : null;               // 【三元】当前看页面的人（可能没登录）。
     const { data: following } = await SB.from('follows').select('following_uid').eq('follower_uid', uid);
+    // 「我关注了谁」：follower 是我，following 是对方。
     const { data: followers } = await SB.from('follows').select('follower_uid').eq('following_uid', uid);
+    // 「谁关注了我」：反过来查。
     const { data: blocked } = await SB.from('blocks').select('blocked_uid').eq('blocker_uid', uid);
+    // 「我拉黑了谁」。
     const fIds = (following || []).map(r => r.following_uid);
     const foIds = (followers || []).map(r => r.follower_uid);
     const bIds = (blocked || []).map(r => r.blocked_uid);
-    let meFollowing = false, meBlocked = false;
-    if (viewerId) {
+    // 三个数组都从对象数组里把 id 抽出来。
+    let meFollowing = false, meBlocked = false;     // 【let】「我」和这个人的关系状态。
+    if (viewerId) {                                 // 【if】登录了才有「我」这个概念。
       meFollowing = foIds.includes(viewerId);
+      // 【.includes】粉丝列表里有没有我 = 我有没有关注 TA。
       const { data: myBlocked } = await SB.from('blocks').select('blocked_uid').eq('blocker_uid', viewerId);
       meBlocked = ((myBlocked || []).map(r => r.blocked_uid)).includes(uid);
+      // 我自己拉黑名单里有没有 TA。
     }
     return { ok: true, following: fIds, followers: foIds, blocked: bIds, meFollowing, meBlocked };
+    // 【对象简写】meFollowing: meFollowing 写成 meFollowing 就行。
   }
   // 关注 / 取消关注（切换），返回 {following}
   async function follow(targetUid) {
