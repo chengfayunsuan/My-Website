@@ -1,65 +1,244 @@
 <!DOCTYPE html>
 <!-- ============================================================
      文件：pages/video.html（视频播放页）
-     作用：播放器 + 视频信息 + 评论区 + 点赞/收藏/举报。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：播视频 + 显示信息 + 评论区 + 点赞/收藏/举报。
+           两种播放方式：
+             ① 本站视频 → 原生 <video> 播放器
+             ② B 站视频 → 先摆个「封面 + 播放按钮」占位，点了才真加载 iframe
+     说明：这一整段尖括号叹号包起来的是注释，不会显示在页面上。
      ============================================================ -->
 <html lang="zh-CN">
+<!-- 【lang="zh-CN"】声明语言是简体中文。
+     影响：朗读软件选哪种口音、浏览器要不要提示翻译、中文怎么断行。 -->
+
 <head>
+<!-- 【head】给浏览器看的信息区，页面上不显示。 -->
+
 <meta charset="UTF-8">
+<!-- 【charset】字符编码，UTF-8 才能正常显示中文和 emoji。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【viewport】手机上的虚拟窗口宽度。
+     width=device-width = 等于手机实际宽度；initial-scale=1.0 = 初始不缩放。
+     不写这两句，手机上会显示成桌面版缩微版，字小到看不清。 -->
+
 <title>视频 · 乘法</title>
+<!-- 标签页上那行字。等 JS 拿到数据后会改成「真正的标题 · 乘法」。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 标签页左边的小图标。路径开头的 / 表示从网站根目录开始找。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 引入全站公共样式。
+     【?v=26】缓存版本号：改完 CSS 把它加 1，浏览器才会重新下载。
+     否则用户可能一直在看你几个月前缓存的旧样式。 -->
+
 <style>
+  /* 本页专属样式。 */
+
   .vid-player { width: 100%; background: #000; border-radius: 12px; overflow: hidden; }
+  /* 播放器容器。
+     【background:#000】黑色底 —— 视频还没加载出来时那块区域是黑的，
+       符合所有人对「播放器」的预期。如果留白会显得很怪。
+     【overflow:hidden】配合圆角用：让里面的 video / iframe 也被圆角裁掉，
+       否则它们的直角会从圆角里戳出来。 */
+
   .vid-player video { width: 100%; max-height: 70vh; display: block; background: #000; }
+  /* 原生视频元素。
+     【max-height:70vh】最高占屏幕高度的 70%。
+       【vh 是什么】viewport height，视口高度的 1%。
+       70vh = 屏幕高度的 70%。
+       【为什么需要】竖拍的视频（手机拍的）如果宽度铺满，
+       高度会超出屏幕好几倍，用户得滚动才能看全，非常难受。
+       限制高度让竖视频也能一屏看完。
+     【display:block】去掉图片/视频底部那几像素「基线空隙」
+       （它们是行内元素，默认按文字基线摆放，底下会多出一点空白）。 */
+
   .vid-bili { width: 100%; aspect-ratio: 16 / 9; display: block; border: 0; background: #000; }
+  /* B 站播放器 iframe。
+     【aspect-ratio: 16 / 9】宽高比锁死为 16:9。
+       iframe 必须有明确高度才能显示，但宽度是随容器的（100%），
+       用这个属性让高度自动按比例算 —— 不用 JS 计算，也不用老式的 padding 撑高技巧。
+     【border:0】iframe 默认有 1px 立体边框，去掉。 */
+
   /* B 站播放器很重（一个完整 SPA + 弹幕），先摆个占位，点了才真加载 */
   .vid-lazy { width: 100%; aspect-ratio: 16 / 9; background: #000; display: flex;
     flex-direction: column; align-items: center; justify-content: center; gap: 10px;
     background-size: cover; background-position: center; position: relative;
     cursor: pointer; user-select: none; }
+  /* 【这是本页最有设计感的一个元素：懒加载占位】
+     【为什么要懒加载】B 站播放器不是简单一个 video 标签 ——
+       它是一整套网页应用（加载弹幕、评论、推荐视频、各种脚本），
+       一加载就是好几 MB 的流量和一堆 JS 执行。
+       如果每个访客一进来就自动加载，页面会明显卡好几百毫秒。
+       而且很多人只是来看简介和评论的，根本没打算播。
+       【做法】先放一张封面图 + 一个大播放按钮，用户点了才真的创建 iframe。
+       这叫「点击加载（click-to-load）」，是嵌入第三方重内容的标准做法。
+
+     逐个属性看：
+     【aspect-ratio: 16 / 9】占位块跟真播放器尺寸完全一样，
+       这样点了之后不会突然「撑大」导致页面跳动。这点很重要 ——
+       布局跳动（layout shift）是很影响体验的。
+     【display:flex + flex-direction:column + align-items:center
+       + justify-content:center】让播放按钮和提示文字在中间竖直排列、居中。
+       这是「水平垂直都居中」最标准的三行组合（flex 版）。
+     【gap:10px】按钮和文字之间的间距。
+     【background-size:cover + background-position:center】
+       封面图作为背景时：铺满整个块（超出裁掉、不变形）、居中显示。
+       如果封面是宽图，这样能保证中间最重要的部分露出来。
+     【position:relative】给下面 ::before 的遮罩层当坐标原点。
+     【cursor:pointer】鼠标变小手，暗示「这里可以点」—— 
+       因为它其实是 div，不是 button，浏览器不会自动给这个手势。
+     【user-select:none】禁止选中文字。
+       不然用户想点播放，结果不小心拖选了一片文字，很难看。
+       按钮类元素基本都该加这个。 */
+
   .vid-lazy::before { content: ''; position: absolute; inset: 0;
     background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45)); pointer-events: none; }
+  /* 【::before】伪元素：用 CSS 凭空造一个「不存在于 HTML 里」的层。
+     【content:''】**必须写**，哪怕内容是空的；不写这个伪元素根本不会生成。
+     【inset:0】= 上下左右全部贴边，等于「铺满父元素」。
+       这个属性相当于 top:0; right:0; bottom:0; left:0 四个写一起，很省事。
+     【linear-gradient(180deg, 上, 下)】线性渐变：
+       180deg 表示从上往下（0deg 是向上，90deg 是向右）。
+       上面 15% 黑、下面 45% 黑 → 底部暗一些。
+     【为什么要这层渐变】因为封面图颜色不可控，
+       如果是一张很亮的图，白色的播放按钮和提示文字就完全看不清了。
+       加一层从上到下渐深的半透明黑，能保证任何图上的文字都可读。
+       （这就是视频网站给字幕加的那层「底下暗一点」的东西。）
+     【pointer-events:none】**关键**：让鼠标事件「穿透」这一层。
+       不加的话这层会盖住下面，用户点到的永远是遮罩而不是播放按钮。 */
+
   .vid-lazy > * { position: relative; z-index: 1; }
+  /* 【> 子代选择器】只选直接子元素，不含孙子及更深层。
+     【为什么需要这一行】因为上面那个 ::before 遮罩是绝对定位的，
+       它在层叠顺序上会盖住普通的静态子元素。
+       把子元素设成 relative + z-index:1，它们就会跑到遮罩上面去。
+       【这是「遮罩 + 内容」的标准层级处理】
+         遮罩：position:absolute（不设 z-index，默认 0 层）
+         内容：position:relative + z-index:1（跑到上面）
+       顺序不能反，否则内容被遮罩盖住，看着像「整个块都灰了」。 */
+
   .vid-lazy-btn { width: 64px; height: 64px; border-radius: 50%; border: 0; cursor: pointer;
     background: rgba(251, 114, 153, .92); color: #fff; font-size: 22px; line-height: 64px;
     padding: 0 0 0 4px; box-shadow: none; transition: transform .15s; }
+  /* 大播放按钮。
+     【border-radius:50%】宽高都是 64px（正方形）→ 正圆。
+     【border:0】去掉浏览器给 button 的默认边框。
+     【line-height:64px】让「▶」符号在 64px 高的圆里竖直居中。
+       这是 flex 普及前最通用的单行居中法，至今仍很好用。
+     【padding:0 0 0 4px】只给左边加 4px 内边距。
+       【为什么要这么做】因为「▶」这个三角形符号在字形框里是偏左的
+       （右边留了多余的空白）。左边补 4px 能让它视觉上正好居中。
+       这种「肉眼对齐」的微调，是排版里非常常见的细节。
+       严格说这不算 bug 修复，是「视觉平衡」的手工补偿。
+     【transition:transform .15s】为下面的 hover 缩放加过渡，
+       让放大是「渐变」而不是「跳变」。 */
+
   .vid-lazy:hover .vid-lazy-btn { transform: scale(1.06); }
+  /* 悬停在整块区域上时，按钮放大到 1.06 倍。
+     【为什么监听的是 .vid-lazy 而不是按钮自己】
+     因为用户感知的「可点区域」是整个封面块，反馈也应该是整块都有反应。
+     如果只在按钮上生效，用户鼠标移到封面其他位置就没有任何提示，
+     会以为「只有那个小圆圈能点」。
+     【scale(1.06)】6% 的放大幅度 —— 足够让人察觉，又不至于夸张到像故障。
+       一般 hover 的缩放都在 1.03~1.10 之间。 */
+
   .vid-lazy-tip { font-size: 13px; color: rgba(255, 255, 255, .55); }
+  /* 按钮下面的小提示文字。
+     【rgba(255,255,255,.55)】白色 55% 不透明度 —— 
+       淡淡的，不抢按钮的视觉焦点，但压在深色遮罩上仍然读得清。 */
+
   a.vid-src { text-decoration: none; }
+  /* 【a.vid-src】标签 + 类 的组合选择器：是 <a> 且有 vid-src 类。
+     为什么限定 a：因为下面 .vid-src 也可能用在非链接元素上，
+     那种就不该有链接的悬停效果。 */
   a.vid-src:hover { text-decoration: none; opacity: .8; }
+  /* 悬停时微微变淡。
+     【为什么用 opacity 而不是改颜色】因为它的颜色已经定死了（B 站粉），
+     变淡是最不破坏配色的反馈方式。 */
+
   .vid-src { display: inline-block; padding: 0 6px; height: 18px; line-height: 18px; font-size: 11px;
     border-radius: 4px; background: rgba(251, 114, 153, .16); color: #e03e6a; vertical-align: 1px; }
+  /* 「B 站 · BV1xx」那个小标签。
+     【height + line-height 相等】让单行文字在固定高度里竖直居中。
+     【vertical-align:1px】给行内元素做垂直微调 —— 
+       11px 的小标签跟 13px 的文字放一行，默认基线对齐会显得偏下，往上挪 1px 更平。 */
+
   .art-title { font-size: 24px; line-height: 1.4; color: var(--text); margin: 16px 0 10px; word-break: break-word; }
+  /* 视频标题。
+     【word-break:break-word】长单词/长链接放不下时允许在必要时断开换行，
+       否则会溢出容器把布局撑破。标题尤其需要 —— 用户什么标题都可能写。
+     【line-height:1.4】大标题行高要比正文小（正文 1.8~1.9），
+       因为标题字大、行数少，行高太大反而显得散。 */
+
   .art-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-bottom: 14px;
     margin-bottom: 14px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-light); }
+  /* 标题下面那行：作者、时间、时长、来源、播放量。
+     【flex-wrap:wrap】窄屏上元素多了自动换行，不会挤在一起或溢出。 */
+
   .art-sub a { color: var(--primary-deep); text-decoration: none; font-weight: 600; }
+  /* 【.art-sub a】后代选择器：找 .art-sub 里面的所有链接。
+     【为什么不用单独的类名】这一行里只有作者和来源是链接，
+     用「后代 + 标签」已经足够精确，不必再给每个加类。 */
   .art-sub a:hover { text-decoration: underline; }
+  /* 悬停时出现下划线，明确告诉用户「可以点」。 */
+
   .vid-desc { font-size: 15px; line-height: 1.8; color: var(--text); white-space: pre-wrap; word-break: break-word;
     background: var(--field); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; }
+  /* 视频简介。做成一个有底色的块，跟正文区分开。
+     【white-space:pre-wrap】保留换行和空格，同时还能自动换行。
+       用户写简介时换的行，显示时也换行 —— 不写的话所有换行都被压成一个空格。 */
 
   .art-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 18px; padding-top: 16px;
     border-top: 1px solid var(--border); }
+  /* 按钮区，用上边框跟上面的简介分开。 */
   .art-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border: 1px solid var(--border);
     border-radius: 999px; background: var(--card); color: var(--text-light); font-family: inherit; font-size: 14px; cursor: pointer; transition: all .15s; }
+  /* 胶囊按钮。
+     【display:inline-flex 而不是 flex】flex 会让每个按钮独占一行；
+       inline-flex 才能让它们排成一行，同时内部还能用 flex 的 gap 对齐。
+     【border-radius:999px】足够大的值 → 两端半圆的胶囊形。
+       用 50% 会让长条变成椭圆，所以必须写个大数。
+     【font-family:inherit】button 默认不继承网页字体，必须显式写。 */
   .art-btn:hover { border-color: var(--primary); color: var(--primary); }
   .art-btn.on { background: var(--primary-soft); border-color: var(--primary); color: var(--primary-deep); font-weight: 600; }
+  /* 【.on = 已激活】比如「已收藏」。JS 用 classList.toggle('on', 布尔) 加/删。 */
   .art-btn.like.on { color: #fb7299; border-color: #fb7299; background: rgba(251,114,153,.12); }
+  /* 【三个类连写（无空格）】= 同一个元素同时有这三个类。
+     这是 CSS 表达「状态组合」的标准方式：基础类 + 类型类 + 状态类。
+     【优先级怎么算】类选择器每个 10 分，三个类 = 30 分，
+       比上面 .art-btn.on（20 分）高，所以这条能赢。
+       记住：权重高者胜；权重相同，后写的赢。 */
   .art-btn.fav.on  { color: #f0b400; border-color: #f0b400; background: rgba(240,180,0,.14); }
+  /* 收藏用金色，跟点赞的粉色区分开 —— 用户一眼能认出是哪种操作。 */
   .art-btn.danger:hover { border-color: #e5534b; color: #e5534b; }
+  /* 【.danger】危险操作，红色。用类名表达「危险」比到处写内联样式好维护得多。 */
   .art-back { margin-left: auto; color: var(--text-light); text-decoration: none; font-size: 14px; }
+  /* 【margin-left:auto】在 flex 里把它推到最右边。
+     这是「一行里最后一个元素靠右」最省事的写法。 */
   .art-back:hover { color: var(--primary); }
   .art-tip { margin-top: 12px; font-size: 14px; color: var(--text-light); }
+  /* 操作结果的小提示（「已点赞」「举报已提交」）。 */
 
   /* ===== 评论区（同文章页）===== */
+  /* 【整段都跟 article.html 里的评论样式一模一样】
+     这是「复制粘贴」的结果。
+     【为什么不抽到公共 style.css 里】
+     因为只有一个页面（现在是两个）用，抽出去反而增加了「改一处影响多处」的风险。
+     【什么时候该抽】三个以上的页面都用，或者样式很复杂容易改错 —— 
+     那时候抽成公共类才划算。两个文件重复，先忍。 */
   .cmt-wrap { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--border); }
   .cmt-title { font-size: 16px; color: var(--text); margin-bottom: 12px; position: relative; padding-left: 12px; }
+  /* 【position:relative】给下面 ::before 的竖线当坐标原点，不写竖线会跑到屏幕角落。 */
   .cmt-title::before { content: ""; position: absolute; left: 0; top: 5px; width: 3px; height: 16px; background: var(--primary-deep); border-radius: 2px; }
+  /* 【content:""】伪元素必须写 content，哪怕空的，否则根本不生成。 */
   .cmt-post { padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--field); }
   .cmt-post textarea { width: 100%; min-height: 64px; padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px;
     font-family: inherit; font-size: 14px; line-height: 1.6; background: var(--card); color: var(--text); outline: none; resize: vertical; }
+  /* 【min-height】用 min 不用 height：打多了自己长高，锁死 height 就得自己滚。
+     【resize:vertical】只允许上下拖。允许横向拖的话用户能拉出容器撑破布局。
+     【outline:none】关掉默认焦点框 —— 但下面 :focus 补了边框变色，不是完全没有提示。 */
   .cmt-post textarea:focus { border-color: var(--primary); }
   .cmt-post-bar { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
   .cmt-post-bar .n { font-size: 12px; color: var(--text-light); }
@@ -67,12 +246,26 @@
     font-family: inherit; font-size: 14px; cursor: pointer; }
   .cmt-post-bar button:hover { background: var(--primary-deep); }
   .cmt-list { margin-top: 14px; display: flex; flex-direction: column; }
+  /* 【flex-direction:column】把主轴改成竖向，一条条往下排。
+     不写的话所有评论会横着挤成一排。 */
   .cmt-item { display: flex; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--border); }
   .cmt-item:last-child { border-bottom: none; }
+  /* 【:last-child】最后一个孩子。最后一条不再画线 —— 
+     否则会跟容器底边贴在一起变成双线，很难看。 */
   .cmt-side { flex: none; }
+  /* 【flex:none】= flex: 0 0 auto，不放大不缩小。
+     【为什么必须写】flex 子元素默认可以收缩，名字太长时头像列会被压扁变形。 */
   .cmt-avatar { display: block; line-height: 0; }
+  /* 【line-height:0】去掉图片底部那几像素的「基线空隙」。 */
   .cmt-avatar img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--card); border: 1px solid var(--border); }
+  /* 【object-fit:cover】填满框、超出裁掉、不拉伸变形。
+     用户头像长宽比五花八门，必须用 cover，否则会变成扁脸。 */
   .cmt-main { flex: 1; min-width: 0; }
+  /* 【flex:1】占满剩余空间。
+     【min-width:0】flex 布局最经典的坑：
+       子元素的 min-width 默认是 auto（不能小于内容最小宽度），
+       结果长文字撑破容器、省略号永远不生效。
+       必须显式写 min-width:0，允许它缩到比内容还窄。 */
   .cmt-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .cmt-name { font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; transition: color .18s; }
   .cmt-name:hover { color: var(--primary-deep); text-decoration: none; }
@@ -82,28 +275,61 @@
     max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     background: rgba(91, 155, 213, .16); color: var(--primary-deep);
   }
+  /* 【单行省略号三件套】overflow:hidden + text-overflow:ellipsis + white-space:nowrap。
+     三个缺一不可 —— 只写前两个，文字会先折行，永远不触发省略号。 */
   .cmt-plate.staff { background: rgba(251, 114, 153, .18); color: #e03e6a; }
+  /* 【.cmt-plate.staff】连写 = 同时有这两个类 → 站长/管理员用粉色。
+     注意没有空格；写成 .cmt-plate .staff（有空格）意思就变成「里面的后代」了。 */
   .art-btn.coin { opacity: .75; }
+  /* 投币按钮半透明 —— 因为功能还没做，视觉上暗示「不完整」。
+     比藏起来好（用户知道有这功能），比正常显示好（用户不会以为它坏了）。 */
   .cmt-text { margin-top: 4px; font-size: 15px; line-height: 1.7; color: var(--text); white-space: pre-wrap; word-break: break-word; }
+  /* 【white-space:pre-wrap】保留换行和空格，同时能自动换行。 */
   .cmt-to { color: var(--primary-deep); }
+  /* 「回复 @某某 :」那部分用主色区分。 */
   .cmt-foot { display: flex; align-items: center; gap: 2px; margin-top: 6px; flex-wrap: wrap; }
   .cmt-time { font-size: 12px; color: var(--text-light); margin-right: 8px; }
   .cmt-floor { margin-left: auto; font-size: 12px; color: var(--text-light); }
+  /* 【margin-left:auto】把楼层号推到最右边。
+     【为什么交给 floor 而不是别的元素】因为 like/reply/menu 是动态生成的
+     （可能有也可能没有），只有 floor 每次都存在，把「推右」的责任交给它最可靠。 */
   .cmt-btn { padding: 4px 8px; border: none; background: none; font-family: inherit; font-size: 13px; color: var(--text-light); cursor: pointer; border-radius: 6px; }
+  /* 【background:none】无底色无边框，纯文字按钮，像 B 站那种风格。
+     【为什么无底色还要设 border-radius】因为 hover 时要加底色，
+     提前把圆角设好，hover 时就不会突然出现直角。 */
   .cmt-btn:hover { background: var(--primary-soft); color: var(--primary-deep); }
   .cmt-btn.on { color: #fb7299; background: rgba(251, 114, 153, .12); }
   .cmt-btn.danger:hover { color: #e5534b; background: rgba(229, 83, 75, .12); }
+  /* 【为什么这条能压住上面的 .cmt-btn:hover】两条选择器权重相同
+     （都是两个类的组合），所以靠「后写的赢」—— 这条必须排在后面才生效。 */
   .cmt-more { position: relative; display: inline-block; }
+  /* 【position:relative】给绝对定位的弹出菜单当坐标原点。
+     【display:inline-block】因为它是 <span>（行内元素），
+     为了让里面的绝对定位元素有正确的参照尺寸，需要变成 inline-block。 */
   .cmt-menu { position: absolute; right: 0; top: calc(100% + 4px); min-width: 120px; z-index: 40; padding: 4px;
     display: none; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: none; }
+  /* 【top: calc(100% + 4px)】100%（父元素高度）+ 4px 空隙。
+     【加号两边必须有空格】**这是 CSS 的硬性规定**：
+       正确 calc(100% + 4px)
+       错误 calc(100%+4px)   ← 整条声明会被浏览器直接忽略
+     因为 CSS 要把 +4px 和 +4 区分开（后者是正数）。没空格没法解析。
+     这个坑非常隐蔽：出错时样式「静默失效」，控制台也不报错。
+     【right:0】菜单右边缘贴按钮右边，不会跑出屏幕。
+     【display:none】默认隐藏，加 .show 才显示。
+       【为什么不用 opacity:0】那样只是透明，元素还在、还能点、还能被 Tab 到 —— 
+       不是真的隐藏。 */
   .cmt-menu.show { display: block; }
   .cmt-menu button { display: block; width: 100%; text-align: left; border: none; background: none; font-family: inherit; font-size: 14px;
     color: var(--text); padding: 8px 12px; border-radius: 7px; cursor: pointer; }
+  /* 【width:100%】占满菜单宽度，整个区域都能点。
+     【text-align:left】按钮文字默认居中，改左对齐 —— 菜单项左对齐更像菜单。 */
   .cmt-menu button:hover { background: var(--primary-soft); }
   .cmt-menu button.danger { color: #e5534b; }
   .cmt-menu button.danger:hover { background: rgba(229,83,75,.12); }
   .cmt-children { margin-top: 10px; }
+  /* 楼中楼回复的容器。 */
   .cmt-item.is-reply { gap: 8px; padding: 10px 0 0; border-bottom: none; }
+  /* 【.is-reply】标记「这是回复不是主楼」，尺寸小一号、不要分隔线。 */
   .cmt-item.is-reply .cmt-avatar img { width: 26px; height: 26px; }
   .cmt-item.is-reply .cmt-text { font-size: 14px; margin-top: 2px; }
   .cmt-empty { padding: 26px 10px; text-align: center; font-size: 14px; color: var(--text-light); }
@@ -114,15 +340,25 @@
   .cmt-reply-actions button { padding: 5px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--text-light);
     font-family: inherit; font-size: 13px; cursor: pointer; }
   .cmt-reply-actions button.primary { background: var(--grad-primary); border-color: var(--primary); color: #fff; }
+  /* 【.primary】主操作按钮。
+     【为什么分主次】一个区域里只该有一个最突出的操作 —— 
+       发送是主（有底色），取消是次（无底色），用户扫一眼就知道该点哪个。 */
   .cmt-reply-actions button.primary:hover { background: var(--primary-deep); }
 </style>
 </head>
 <body>
+<!-- 从这里开始才是用户看得见的内容。 -->
+
   <div id="navbar"></div>
+  <!-- 导航栏占位。真正的导航由 js/nav.js 加载后塞进来。 -->
 
   <section style="margin-top:36px;">
+    <!-- 【section】语义标签，表示独立内容区块。外观跟 div 一样，
+         区别只是「告诉人和搜索引擎这里是什么」。 -->
     <div class="card">
+      <!-- .card 是公共样式里的卡片外观：圆角、半透明底、细边框。 -->
       <div id="box">
+        <!-- 播放器、标题、简介、按钮、评论区全由 JS 通过 box.innerHTML 生成。 -->
         <div style="padding:40px;text-align:center;color:var(--text-light)">加载中…</div>
       </div>
     </div>
@@ -131,54 +367,176 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+  <!-- 依次引入 5 个脚本，顺序绝不能乱，每个都依赖前一个：
+         config.js        → 全站配置（含 MEDIA_BASE），挂到 window 上
+         bg.js            → 背景图/视频（IndexedDB 取，零流量）
+         supabase-js.js   → Supabase 官方 SDK
+         sb.js            → 业务层，提供 window.SBAPI
+         nav.js           → 导航栏 + 登录弹窗 + 信箱
+       【为什么都放 body 末尾】浏览器解析到 script 会停下先执行它。
+       放在末尾时上面的 HTML 已解析完，脚本里 getElementById 才找得到元素。
+       放 head 里执行的话元素还不存在，拿到的全是 null。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
 const MEDIA = window.MEDIA_BASE || '';
+/* 【window.MEDIA_BASE】config.js 里挂到全局的「媒体文件基地址」，
+   可能是 https://pub-xxx.r2.dev 这种 CDN 地址。
+   【|| ''】没配置时兜底成空字符串（= 用相对路径），
+     这样本地开发没 CDN 也能跑，不会直接崩。
+   【为什么用 window. 前缀】明确表示「这是全局变量」，
+   而且变量不存在时只返回 undefined 而不会抛错。 */
+
 // 媒体地址：库里的值可能是绝对地址（R2 直传后存的就是整条 URL），也可能是旧的相对路径
 const mediaUrl = p => {
+  /* 【const 存箭头函数】箭头函数也能赋给变量，调用方式一样：mediaUrl(值)。
+     【和 function 声明的区别】
+       ① 箭头函数不会「提升」—— 必须先定义后使用
+       ② 箭头函数没有自己的 this
+     这里用在上面已经定义过的位置，所以提升不提升无所谓。 */
   if (!p) return '';
+  /* 空值返回空字符串。调用方会判断「是空就不显示这个元素」。 */
   if (/^(https?:|data:|\/\/)/.test(p)) return p;
+  /* 三种「已经是完整地址」的情况，原样返回：
+       ① http:// 或 https:// 开头
+       ② data: 开头（内嵌的 base64 数据）
+       ③ // 开头（协议相对地址，自动跟随当前页面的 http/https）
+     【/^(https?:|data:|\/\/)/】拆开看：
+       /        → 正则的开始和结束分隔符
+       ^        → 必须从字符串开头匹配
+       (A|B|C)  → 分组 + 或，三个里任一都行
+       https?:  → http 后面那个 s 可以出现 0 次或 1 次
+       \/\/     → 两道斜杠。斜杠在正则里必须写 \/ 转义，
+                  因为普通斜杠是正则的分隔符，不转义会被当成正则结束。 */
   return MEDIA.replace(/\/+$/, '') + '/' + String(p).replace(/^\/+/, '');
+  /* 【安全拼路径的经典写法，两个 replace 各管一头】
+     【MEDIA.replace(/\/+$/, '')】去掉基地址末尾所有斜杠（$ = 结尾）。
+       不做这一步：基地址 ".../" + 路径 "/abc.mp4" 会变成 "...//abc.mp4"，
+       多数服务器能忍，但严格的会 404。
+     【String(p).replace(/^\/+/, '')】去掉路径开头所有斜杠（^ = 开头）。
+     【合起来】不管两边带不带斜杠，拼出来永远只有一个斜杠。
+       比用 if/else 判断四种组合干净得多。这个技巧拼 URL 时非常常用。 */
 };
 // B 站外部播放：库里 video_path 存成 bili:BV1xx411c7mD，文件不在本站
 function biliOf(p) {
+  /* 从播放路径里提取 BV 号。 */
   if (!p) return '';
   const m = String(p).match(/(BV[0-9A-Za-z]{10})/);
+  /* 【.match(正则)】在字符串里搜索匹配部分。
+     找到返回数组（第 0 项是整段匹配，第 1 项起是括号捕获的内容）；找不到返回 null。
+     【/(BV[0-9A-Za-z]{10})/】拆开看：
+       (          → 捕获组开始，匹配到的这段会单独放进数组
+       BV         → 字面量 BV 两个字母
+       [0-9A-Za-z] → 字符类：任意一个数字或大小写字母
+       {10}       → 前面那个字符类重复 10 次
+       )          → 捕获组结束
+     合起来 = BV + 10 位字母数字 = 12 位标准 BV 号。
+     【为什么没有 ^ 和 $】故意的 —— 这样既能匹配纯 BV 号，
+     也能从 "bili:BV1xx411c7mD" 或完整链接里提取出来。 */
   return m ? m[1] : '';
+  /* 【m[1]】取捕获组内容（不含前后多余字符）。
+     【m ? ... : ''】匹配失败时 m 是 null（假值），返回空字符串。 */
 }
 const id = parseInt(new URLSearchParams(location.search).get('id'), 10);
+/* 【三层嵌套，从里往外读】
+   ① location.search           → 地址里问号开始那段，例如 "?id=3"
+   ② new URLSearchParams(...)  → 解析成参数表
+   ③ .get('id')                → 取 id 的值（字符串），不存在时是 null
+   ④ parseInt(值, 10)           → 转整数
+   【第二个参数 10 必须写】它是进制。不写的话以 0 开头的字符串
+     会被当成八进制（"010" 变成 8），这是 JS 出了名的历史坑。
+   【没有 id 时得到 NaN】下面 load() 用 if (!id) 判断 —— NaN 是假值，会被拦下。 */
 const box = document.getElementById('box');
+/* 【const】声明不可重新赋值的变量。
+   规则：默认 const，确定要改才 let。
+   【注意】const 管的是「不能整体换成另一个对象」，
+   box.innerHTML = '...' 这种「改内容」完全允许。 */
 
 let video = null;
+/* 【为什么要存成全局变量】点赞、删除、举报都要用 video.id，
+   点赞后还要更新 video.likedByMe —— 存一份在内存里，各处读写同一份数据。
+   【这是最朴素的状态管理】数据放一处，谁要用谁来读。数据多了会难维护，
+   那时候才需要 Vue/React 那类框架。 */
 let loggedIn = false;
+/* 是否已登录。初始 false，loadMe() 会去查会话然后改它。 */
 
 function escapeHTML(s) {
+  /* 【XSS 跨站脚本攻击】
+     如果有人把视频标题写成一段「图片标签 + onerror 里塞脚本」的代码，
+     网站直接当 HTML 插进页面，浏览器会真的解析并执行 ——
+     攻击者就能偷登录凭证、冒充你操作。
+     根治办法：所有用户输入在显示前转义，
+     把尖括号引号换成「实体」（< 变成 &lt;），浏览器就只当普通文字。
+     【必须转 5 个字符】< > & " ' —— 漏一个都可能被绕过。 */
   return String(s == null ? '' : s)
+  /* 【s == null】宽松比较同时挡住 null 和 undefined（undefined == null 为 true）。
+     【String(...)】强制转字符串，因为下面 .replace 是字符串方法。 */
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    /* 【/&/g】正则里的 g 表示「全局」——替换所有出现的地方。
+       不加 g 只替换第一个，剩下的漏掉，转义就白做了。
+       【&amp; 必须第一个转】因为 & 是实体编号的开头。
+       如果先转 < 变 &lt;，那个 & 再被转一次就成了 &amp;lt;，
+       页面上会原样显示 "&lt;" 这几个字符。顺序错了整套就废了。 */
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  /* 引号也要转：内容往 HTML 属性里塞时（比如 poster="..."），
+     属性里的引号不转就能提前闭合属性、注入新属性。
+     【&#39; 是什么】HTML 实体的数字写法：# + 字符的 Unicode 码点，单引号码点 39。 */
 }
 function requireLogin() {
+  /* 检查是否登录，没登录就把登录框怼到用户脸上。
+     返回 true = 可以继续；false = 已经拦下来了。 */
   if (loggedIn) return true;
   const m = document.getElementById('loginModal');
   if (m) m.classList.add('show'); else alert('请先登录');
+  /* 【classList.add('show')】加 show 类 → CSS 把 display:none 改成 flex 显示出来。
+     【为什么要 else】登录弹窗不一定存在（nav.js 没加载成功时），
+     有弹窗就弹，没有只能 alert 兜底。 */
   return false;
 }
 function fmtDur(s) {
+  /* 【fmtDur】把「秒数」格式化成「X分Y秒」。
+     注意跟 videos.html 里的同名函数**不一样** —— 那个输出「1:02:05」这种冒号格式，
+     这个输出「1分2秒」这种中文格式。同一个名字两套实现，
+     是因为两处场景需求不同（列表要紧凑，详情页要 readable）。 */
   s = Number(s) || 0;
+  /* 【Number(s)】转数字（可能是字符串 "125"）。
+     【|| 0】转出来是 NaN 时兜底成 0（NaN 是假值，|| 会切到右边）。
+     【注意这里是给参数 s 重新赋值】参数是局部变量，改它不影响外面。 */
   if (!s) return '';
+  /* 0 秒或没时长 → 返回空字符串，调用方会判断「是空就不显示这一项」。
+     【为什么返回空而不是 "0秒"】没时长的视频显示 "0秒" 是误导，什么都不显示更诚实。 */
   const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+  /* 【Math.floor】向下取整（3.9 → 3）。
+     【为什么不用四舍五入】时长说 3 秒就别说 4 秒，向上取整会显得比实际长。
+     【%】取余运算符，算「除完剩多少」。
+       假设 s = 125 秒：
+         m   = 125 / 60 = 2.08 → floor → 2 分钟
+         sec = 125 % 60 = 5 秒
+         结果 "2分5秒" ✓
+       【为什么要取余】不取余的话 125 / 60 得到 2，但要算秒数必须知道「去掉 2 分钟还剩多少」，
+       那就是取余。这个套路在时间换算里一定会用到。 */
   return (m ? m + '分' : '') + sec + '秒';
+  /* 【m ? m + '分' : ''】有分钟才显示分钟部分。
+     0 分 30 秒 → 只显示「30秒」，不显示「0分30秒」（后者很啰嗦）。 */
 }
 
 function render() {
+  /* 把 video 数据变成整页 HTML。 */
   const v = video;
+  /* 【起别名】下面要写几十次 v.xxx，比 video.xxx 短一半。 */
   document.title = v.title + ' · 乘法';
+  /* 改浏览器标签页标题，让开了很多标签页的人一眼知道这是哪个视频。 */
   const posterUrl = v.poster ? mediaUrl(v.poster) : null;
+  /* 封面图地址。没有就 null（后面用三元判断要不要加这个属性）。 */
   const bili = biliOf(v.video_path);
+  /* 提取 BV 号。有值 = 这是 B 站视频；空字符串（假值）= 本站视频。 */
   const localSrc = bili ? '' : mediaUrl(v.video_path);
+  /* 【本站视频的地址】如果是 B 站视频就空着（不需要本地源）。
+     【注意顺序】先判断 bili，再决定要不要处理 video_path —— 
+       因为 B 站视频的 video_path 是 "bili:BVxxx" 这种假路径，
+       拿去 mediaUrl 拼会拼出一个不存在的地址。 */
   const player = bili
     ? `<div class="vid-lazy" id="vidLazy" role="button" tabindex="0" aria-label="播放视频"${posterUrl ? ` style="background-image:url('${posterUrl}')"` : ''}>
          <button class="vid-lazy-btn" type="button" tabindex="-1">▶</button>
@@ -187,6 +545,43 @@ function render() {
     : (localSrc
         ? `<video id="vid" src="${localSrc}" ${posterUrl ? `poster="${posterUrl}"` : ''} controls preload="metadata"></video>`
         : `<div style="padding:40px;text-align:center;color:#fff">视频文件不见了</div>`);
+  /* 【三层嵌套三元，逐层看】
+     第一层：是 B 站视频吗？
+       是 → 输出懒加载占位块
+       不是 → 第二层：有本地视频地址吗？
+                有   → 输出原生 video 标签
+                没有 → 输出「视频文件不见了」提示
+
+     【B 站占位块上的几个属性，每个都有用】
+       id="vidLazy"     → JS 靠它找到这个元素，绑定点击
+       role="button"    → 告诉读屏软件「这是个按钮」。
+                          div 本身没有语义，加了 role 才能被正确朗读。
+       tabindex="0"     → 让它能被 Tab 键聚焦。
+                          div 默认不可聚焦，不写这个键盘用户根本选不到它 —— 
+                          那就等于这个视频键盘用户没法播。
+       aria-label       → 读屏软件念的名字。
+                          不加的话它会念一堆里面的文字（播放、点击播放…），很乱。
+       内部 button 的 tabindex="-1" → 让 Tab 键跳过这个按钮。
+                          因为外层 div 已经能被聚焦了，再加一层会「Tab 两次才能过」，
+                          形成重复停靠，非常烦人。
+       内部 type="button" → 防止以后被包进 form 时误触发提交。
+
+     【为什么 style 单独用 ${} 条件拼】
+       没封面时不该写 style="background-image:url('null')" —— 
+       那会让浏览器去请求一个叫 null 的地址。
+       所以在外面判断：有封面才拼这段 style。
+
+     【提示文案里的 720P】
+       因为 B 站 iframe 播放器对未登录用户限 720P，
+       这是它的产品策略，不是我们的 bug。写清楚免得用户以为我们的问题。
+
+     【原生 video 上的属性】
+       controls            → 显示播放控件（播放/暂停/进度条），不写就是个不能操作的画面
+       preload="metadata"  → 只预加载元数据（时长、尺寸），不下载整个视频。
+                             这个很关键：不加的话浏览器可能一开始就把整个 2GB 视频下了，
+                             而用户可能根本不打算播 —— 那是巨额流量浪费。
+       poster              → 封面图，视频加载前显示它。 */
+
   box.innerHTML = `
     <div class="vid-player">${player}</div>
     <h1 class="art-title">${escapeHTML(v.title)}</h1>
@@ -222,74 +617,250 @@ function render() {
       </div>
       <div class="cmt-list" id="cmtList"><div class="cmt-empty">加载中…</div></div>
     </div>`;
+
+  /* 【重要提醒】从反引号开始到结束，中间全是「字符串内容」而不是代码。
+     在这里面写双斜杠注释或斜杠星号注释，会被当成文字原样显示到页面上 ——
+     本项目之前实实在在踩过这个坑。要注释只能写在反引号外面。
+
+     【几个关键点】
+     ① 嵌套模板字符串 —— 外层反引号，里面的三元表达式又各用一个反引号。
+        JS 允许这样嵌套，内层的反引号会被正确配对。
+
+     ② ${escapeHTML(v.title)} 等 —— 所有用户可控的内容都转义。
+        唯一的例外是播放器那部分（player），因为它是我们自己拼的 HTML，
+        不是用户输入。
+
+     ③ ${fmtDur(v.duration) ? ... : ''} —— 
+        有才时长才显示这一项，没有就不生成这个 span。
+        【为什么要判断而不是显示空】空 span 会占掉一个 gap 的间距，
+        那一行就会多出一块莫名其妙的空白。
+
+     ④ target="_blank" rel="noopener"
+        target="_blank" → 在新标签页打开（不把当前页顶掉）
+        rel="noopener"  → 【安全必需】不让新页面通过 window.opener 
+          访问、篡改本页面。
+          【不加会怎样】新打开的页面可以用 window.opener.location = '钓鱼网站'
+          把你的原标签页悄悄跳转走 —— 而你完全没察觉。
+          现代浏览器对 target="_blank" 已经默认加 noopener 了，
+          但显式写出来才可靠（老浏览器没这个默认行为）。
+
+     ⑤ ${v.likedByMe ? ' on' : ''} —— ' on' 前面那个空格绝对不能少，
+        否则会拼成 class="art-btn likeon"，一个不存在的类名，样式全丢。 */
+
   bindBili(bili);
+  /* 【绑 B 站播放器的点击】传 BV 号，没 BV 号的话函数内部会直接返回。
+     【为什么要在 render 里调用】因为 DOM 刚被重建，那个占位块是新生成的，
+     必须立刻给它绑上点击事件。 */
   bindComments();
+  /* 绑评论区事件。同理。 */
 }
 
 /* 点了才创建 iframe：B 站播放器首屏不加载，页面就不卡 */
 function bindBili(bv) {
   const el = document.getElementById('vidLazy');
   if (!el || !bv) return;
+  /* 【!el】不是 B 站视频（页面上没有占位块）→ 直接退出。
+     【!bv】没 BV 号 → 也退出。
+     两重检查，任何一重不满足都安全返回。 */
 
   // 老数据 poster 是 null，现取 B 站封面当背景，避免播放器一大块黑
   if (!el.style.backgroundImage) {
+    /* 【为什么要这个判断】因为 render 里已经试过用数据库的 poster 设置背景了。
+       但老数据的 poster 是 null（当年抓不到），这时背景还是空的。
+       这个判断就是「如果还是空的，才去临时抓一次」。
+       【el.style.backgroundImage】**只读行内样式**。
+       如果 render 里写了 style="background-image:url(...)"，这里就有值（非空字符串）。
+       没有就返回空字符串（假值），取反就是 true，进去抓图。 */
     SBAPI.fetchBili(bv).then(info => {
+      /* 【.then(回调)】Promise 成功后执行。
+         这里没写 .catch —— 抓不到就抓不到，背景保持黑色，不影响任何功能。
+         但严格说没写 catch 会在失败时产生「未处理的 Promise 拒绝」警告。 */
       const box2 = document.getElementById('vidLazy');
+      /* 【为什么重新查一次元素，不直接用上面的 el】
+         因为这是一个异步回调，可能在几百毫秒后才执行。
+         在这期间用户可能点了播放（el 被 outerHTML 替换掉了），
+         或者页面发生了变化 —— 那 el 就成了「游离节点」（已经不在页面上）。
+         重新查一次，拿到的是「当前还在页面上的那个」；找不到就是 null，安全跳过。
+         【这是异步代码里非常容易忽略的问题】闭包捕获的 DOM 引用可能已经失效。
+         变量名叫 box2 是为了避免和外层那个全局 box 混淆。 */
       if (box2 && info && info.pic) box2.style.backgroundImage = `url("${info.pic}")`;
+      /* 【为什么要判断 box2 和 info】三层防御：
+           box2          → 元素还在（用户可能已经点了播放）
+           info          → 接口返回了数据（可能失败返回 null）
+           info.pic      → 数据里有封面地址
+         都满足才设置，否则默默跳过。
+         【url("...")】用双引号包地址，因为地址里可能含单引号或括号，
+         不加引号容易解析出错。 */
     });
   }
 
   const mount = () => {
+    /* 【mount 挂载】把占位块替换成真正的 iframe。
+       【为什么叫 mount】这个词在框架里就是「把组件挂到 DOM 上」的意思。 */
     el.outerHTML = `<iframe class="vid-bili"
       src="https://player.bilibili.com/player.html?bvid=${bv}&page=1&autoplay=1&high_quality=1&danmaku=0"
       scrolling="no" frameborder="0" allowfullscreen
       allow="fullscreen; autoplay; encrypted-media; picture-in-picture"></iframe>`;
+    /* 【el.outerHTML = 字符串】这是「把自己整个替换掉」的写法。
+       注意是 outerHTML（含元素自身），不是 innerHTML（只换内部内容）。
+       【效果】占位块消失，iframe 出现在同一个位置。
+
+       【为什么用替换而不是往里塞 iframe】
+         ① 占位块里的按钮、提示文字都得清掉
+         ② 占位块的 aspect-ratio、flex 居中等样式不适用于 iframe
+         替换最干净。
+
+       【一个隐藏的好处】outerHTML 替换后，原来的 el 元素被销毁了，
+       它身上的 click / keydown 监听器也跟着消失 —— 
+       所以不会出现「点了播放又触发一次 mount」的重复加载问题。
+       如果只替换内部内容，监听器还在，就要手动解绑。
+
+       【B 站播放器 URL 的参数】逐个说：
+         bvid=BVxxx     → 视频编号
+         page=1         → 第几个分P（多集视频用），这里固定第一集
+         autoplay=1     → 自动播放
+         high_quality=1 → 请求高清（未登录用户实际最高 720P，这是 B 站限制）
+         danmaku=0      → 关闭弹幕。0 是关、1 是开。
+                          【为什么关】弹幕默认开的话满屏飘字，第一次看的人会被吓到；
+                          想看的人自己可以在播放器里开。
+
+       【iframe 上的属性】
+         scrolling="no"   → 禁止 iframe 内部出滚动条（老属性，但兼容性好）
+         frameborder="0"  → 去掉边框（同样是老属性）
+         allowfullscreen  → 允许全屏。不写的话全屏按钮会失效。
+         allow="fullscreen; autoplay; encrypted-media; picture-in-picture"
+           → 【权限策略声明】现代浏览器要求 iframe 明确「申请」某些能力，
+             不声明就不给用。这里申请了四项：
+               全屏、自动播放、加密媒体（DRM 视频）、画中画
+             不加 autoplay 的话就算 URL 里写了 autoplay=1 也没用 ——
+             浏览器会拦住自动播放。
+     */
   };
   el.addEventListener('click', mount);
+  /* 【点击加载】用户点整块区域就挂载播放器。
+     注意不是只监听那个小按钮 —— 用户点封面任何地方都该能播，
+     这是所有人的肌肉记忆。 */
   el.addEventListener('keydown', e => {
+    /* 【键盘支持】这是无障碍的关键一环。
+       只用鼠标能操作的功能，对键盘用户（肢体障碍者、或者就是习惯用键盘的人）是残废的。 */
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mount(); }
+    /* 【e.key】按下的键名。
+         'Enter'  → 回车键
+         ' '      → 空格键（就是一个空格字符，不是 "Space"）
+       【e.preventDefault()】**必须写**。不写的话按空格会让页面往下滚动 —— 
+       用户想播放视频，结果页面滚走了。
+       【为什么要判断这两个键】因为 role="button" 的元素，
+       用户预期就是「回车或空格能触发」，这是 WAI-ARIA 规范的要求。 */
   });
 }
 
 function setTip(t) { const el = document.getElementById('tip'); if (el) el.textContent = t || ''; }
+/* 【一行函数：设置提示文字】
+   【textContent 而不是 innerHTML】安全 —— 内容里有 HTML 标签也只会当文字显示。
+   【t || ''】传空值时兜底成空字符串，不会显示 "undefined"。
+   【为什么每次重新 getElementById】因为 render() 会重建 DOM，
+   存下来的引用会失效（指向已被删除的旧元素）。每次重查虽然慢一点点，
+   但永远不会拿到过期引用 —— 这是更省心的做法。 */
 
 async function load() {
+  /* 加载视频数据并渲染。 */
   if (!id) { box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">缺少视频 id</div>'; return; }
+  /* 【!id】id 是 NaN 时也是假值 —— 说明地址栏没带 ?id=
+     直接提示「缺少 id」，比显示「加载失败」更准确（这不是失败，是压根没给参数）。 */
   try {
     const d = await SBAPI.getVideo(id);
+    /* 【await】等异步操作出结果。只暂停这个函数，不阻塞页面。 */
     if (!d.ok) { box.innerHTML = `<div style="padding:40px;text-align:center;color:var(--text-light)">${escapeHTML(d.error || '加载失败')}</div>`; return; }
+    /* 【d.error 也套了 escapeHTML】因为错误信息可能是后端拼进来的、
+       含用户输入的内容（比如「找不到视频《xxx》」里的 xxx）。
+       所有往外显示的东西都转义，是「防守到底」的态度。 */
     video = d;
+    /* 【把整个返回对象存下来】里面除视频字段，还有 canEdit / likedByMe /
+       favedByMe / likes / favs 这些「跟当前用户相关的计算结果」，
+       后端（或 RPC）算好了，前端直接用，不自己推导。 */
     render();
   } catch {
+    /* 【catch 后没写参数】现代 JS 允许省略 —— 这里不关心具体错误。 */
     box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">加载失败，刷新试试</div>';
+    /* 【好提示的标准】不只说「出错了」，还告诉用户「能怎么办」。
+       这里给了「刷新试试」这个用户自己能做的动作。 */
   }
 }
 
 box.addEventListener('click', async e => {
+  /* 【事件委托】
+     【问题】box 里的按钮是动态渲染的，每次 render() 全部销毁重建。
+     给每个按钮单独绑监听的话，每渲染一次就要绑十几个，旧的全变垃圾。
+     【解法】把监听器绑在**不会变的父容器**（box）上，
+     利用「事件冒泡」—— 点任何子按钮，事件都会冒泡到 box。
+     然后在回调里判断 e.target 是哪个按钮。
+     【关键】render() 只替换 box 的**内容**，box 元素本身没变 ——
+     所以这个监听器一直有效，不会因为重渲染而失效。选对绑定目标是重点。 */
   const btn = e.target.closest('[data-act]');
+  /* 【e.target】实际被点到的元素。
+     【为什么要 closest】按钮里有文字有图标（♥ 和数字是两个 span），
+     用户点到的可能是 span 而不是 button。
+     【[data-act]】属性选择器：有 data-act 属性的元素。
+     用属性筛选而不是只写 'button'，是为了排除评论区那些用 data-a 的按钮
+     （它们走另一个监听器）。这个写法是事件委托的标准模板。 */
   if (!btn || !video) return;
+  /* 不是操作按钮，或视频数据还没加载好 → 什么都不做。 */
   const act = btn.dataset.act;
+  /* 【dataset.act】读 data-act 的值。
+     【命名转换】data-act → dataset.act；
+       data-user-id → dataset.userId（连字符转驼峰，容易忘）。 */
 
   if (act === 'edit') { location.href = '/pages/video-write.html?id=' + video.id; return; }
-
+  /* 跳编辑页，把 id 通过问号参数带过去。 */
   if (act === 'coin') { setTip('投币系统还在做，先占个位 🪙'); return; }
+  /* 【占位功能】按钮在那儿但功能没做。
+     文案要诚实（「还在做」），不要假装能用 —— 用户点了发现是假的会更生气。 */
 
   if (!requireLogin()) return;
+  /* 【登录闸门】上面两个不需要登录，从这下开始都要改数据。 */
 
   if (act === 'like' || act === 'fav') {
+    /* 点赞和收藏合并处理：都是「切换状态 + 更新数字 + 更新本地数据」。 */
     const fn = act === 'like' ? SBAPI.toggleVideoLike : SBAPI.toggleVideoFav;
+    /* 【把函数存进变量】fn 变成了「一个函数」，下面 fn(video.id) 就是调用它。
+       【这是「函数是一等公民」的体现】函数可以像数字字符串一样被赋值、传递。
+       【好处】不用写两段几乎一样的 if/else。
+       【进阶用法】配合映射表更通用：
+         const MAP = { like: fnA, fav: fnB };  MAP[act](id) */
     const d = await fn(video.id);
     if (!d.ok) return alert(d.error || '操作失败');
     const on = !!d.on;
+    /* 【!!】两个感叹号 = 强制转布尔值。
+       !!1 → true，!!0 → false，!!undefined → false。
+       【为什么要转】因为 d.on 可能是 1 / "true" 这类值，
+       而下面 classList.toggle 需要一个明确的布尔值。
+       转成干净的真假，后面用起来才不会出意外。 */
     btn.classList.toggle('on', on);
+    /* 【.classList.toggle(类名, 布尔值)】
+       第二个参数 true → 加类；false → 去类。
+       【为什么用两参数版】单参数版是「有就删没就加」，
+       它假设当前状态跟你想的反着来。传第二个参数强制设定，更可靠。 */
     if (act === 'like') { document.getElementById('likeN').textContent = d.count; video.likedByMe = on; }
     else { document.getElementById('favN').textContent = d.count; video.favedByMe = on; }
+    /* 【两件事】
+       ① 只改那个数字 span（不整页重画 —— 这叫「最小更新范围」）
+       ② 同步内存里的 video 数据
+       【为什么必须同步】只改界面不改数据的话，下次任何原因触发 render()，
+       界面就退回旧状态 —— 用户会以为「点赞丢了」。
+       「数据是唯一真相，界面是数据的投影」这条原则是前端的根本。 */
     setTip(on ? (act === 'like' ? '已点赞' : '已收藏') : (act === 'like' ? '取消点赞' : '取消收藏'));
+    /* 【三重三元】能读但不好读。
+       更清楚：const verb = act === 'like' ? '点赞' : '收藏';
+               setTip((on ? '已' : '取消') + verb); */
     return;
   }
   if (act === 'report') {
     const reason = prompt('说说这个视频哪里有问题（可以留空）：', '');
+    /* 【prompt(提示, 默认值)】弹输入框。
+       点确定 → 返回字符串（可能为空）；点取消 → 返回 null。 */
     if (reason === null) return;
+    /* 【=== null】必须严格相等。
+       写成 if (!reason) 的话，用户点确定但没写理由也会被当成取消 —— 逻辑就错了。 */
     const d = await SBAPI.reportVideo(video.id, reason.trim());
     if (!d.ok) return alert(d.error || '举报失败');
     setTip('举报已提交，管理员会看的');
@@ -297,67 +868,155 @@ box.addEventListener('click', async e => {
   }
   if (act === 'del') {
     if (!confirm('确定删掉这个视频吗？\n里面的素材也会一起删掉，删了找不回来。')) return;
+    /* 【confirm】弹出「确定/取消」，确定返回 true。\n 是换行。
+       【为什么必须确认】删除不可逆，必须给一次后悔的机会。
+       文案里特意说了「素材也会一起删掉」，让用户知道连带后果。 */
     const d = await SBAPI.deleteVideo(video.id);
     if (!d.ok) return alert(d.error || '删除失败');
     alert('已删除');
     location.href = '/pages/videos.html';
+    /* 跳回视频列表页。 */
   }
 });
 
 /* ================= 评论区 ================= */
+/* 【整段跟 article.html 几乎一模一样】
+   区别只在于接口名（getVideoComments）和 postComment 的第一个参数（'video'）。
+   【为什么不抽成公共文件】两个页面重复还能忍；
+   三个以上、或者逻辑再复杂一点，就该抽成 js/comments.js 之类的公共模块了。
+   现在这样「复制一份改两处」，其实是风险更低的做法 —— 
+   抽公共模块如果设计不好，改动一个地方会崩掉两个页面。 */
+
 let me = null;
+/* 当前登录的我（{uid, name, role}）。null 表示没登录。 */
 let userAvatars = {};
+/* 【头像缓存表】uid → 头像地址。
+   先拉一遍所有用户，渲染评论时直接查表，不用为每条评论单独请求 —— 
+   避免「N+1 查询问题」（拿到 20 条评论就发 20 个头像请求）。 */
 let cmts = [];
+/* 所有评论数据（含主楼和回复）。 */
 let openReply = null;
+/* 【只存一个 id】表示「同一时刻只允许开一个回复框」。 */
 let cmtBound = false;
+/* 【防重复绑定的闸门】见下面 bindComments 里的详细说明。 */
 
 function cmtEsc(s) {
+  /* 【又一个转义函数，跟上面的 escapeHTML 一模一样】
+     【为什么不复用】escapeHTML 是全局的，理论上能直接用。
+     但作者在这里写了一份副本 —— 大概是「评论部分独立开发」时留下的。
+     【这种重复不算好习惯】改转义规则时容易只改一个、漏掉另一个。
+     最安全的合并方式是让 cmtEsc 直接调用 escapeHTML（行为完全一样）。 */
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 async function loadMe() {
+  /* 取当前登录的是谁。 */
   const s = await SBAPI.getSession();
   if (!s) { loggedIn = false; return; }
+  /* 没会话 = 没登录。
+     【这里只改了 loggedIn，没清 me】如果之前登录过、现在过期了，
+     me 还留着旧数据。影响不大（loggedIn 是 false，需要登录的操作都会被拦），
+     但严格说该 me = null 一起清。属于「无害但不够严谨」的小疏漏。 */
   const d = await SBAPI.me();
+  /* 有会话还得去服务器验证 —— 本地存的凭证可能是过期的。 */
   if (d.ok) { me = { uid: d.uid, name: d.username, role: d.role }; loggedIn = true; }
+  /* 【只挑三个字段存】多余字段不带，减少内存占用，也避免误用。 */
   else loggedIn = false;
+  /* 【else 没写花括号】只有一句时可以省。 */
 }
 async function loadAvatars() {
+  /* 一次性拉所有用户的头像，存成 uid → 地址 的表。 */
   try {
     const d = await SBAPI.getAllUsers();
     if (d.ok) d.list.forEach(u => { userAvatars[u.id] = u.avatar_url; });
+    /* 【对象当字典】键是 uid，值是头像地址。
+       userAvatars[uid] = 地址 就是「往字典里塞一项」。 */
   } catch { /* 拿不到就用默认头像 */ }
+  /* 【连错误都不处理】头像拿不到不影响任何功能 —— 
+     所有头像会走 fixAvatar 的兜底返回默认图。
+     这种「非关键路径的失败可以静默」的判断很重要，不是所有错误都值得弹提示。 */
 }
 function fixAvatar(a) {
+  /* 把数据库里存的头像值变成浏览器能加载的完整地址。 */
   if (!a) return '/avatar-default.jpg';
   if (a.startsWith('data:') || /^https?:\/\//.test(a)) return a;
+  /* 两种「已经是完整地址」的情况原样返回：
+       ① data: 开头 → 内嵌的 base64 图片
+       ② http(s):// 开头 → 完整网络地址
+     【/^https?:\/\//】^ 开头；https? 表示 s 可有可无；:\/\/ 是冒号加两道斜杠
+       （斜杠在正则里要写 \/ 转义，因为普通斜杠是正则的分隔符）。 */
   return (window.MEDIA_BASE || '').replace(/\/+$/, '') + '/' + a.replace(/^\/+/, '');
+  /* 【安全拼路径】两个 replace 各管一头：去掉基地址末尾的斜杠、
+     去掉路径开头的斜杠，保证拼出来只有一个斜杠。
+     比用 if/else 判断四种组合干净得多。 */
 }
 function plateHTML(c) {
+  /* 生成名字后面的小铭牌（签名或身份）。 */
   const staff = c.role === 'owner' || c.role === 'admin';
+  /* 【===】严格相等，值和类型都要一样。规则：永远用三个等号。 */
   const bio = String(c.bio || '').trim();
+  /* 【String()】强制转字符串，防止 bio 是数字时 .trim() 报错。
+     【.trim()】去首尾空格 —— 有人签名只打了空格，直接显示会是一个空色块。 */
   if (bio) {
     const t = bio.length > 20 ? bio.slice(0, 20) + '…' : bio;
+    /* 【三元】超过 20 字就截断加省略号。
+       【.slice(0, 20)】取前 20 个字符（不含第 20 位）。
+       截断了但 title 里放完整内容，悬停能看到全文 —— 这叫「优雅降级」。 */
     return `<span class="cmt-plate${staff ? ' staff' : ''}" title="${cmtEsc(bio)}">${cmtEsc(t)}</span>`;
   }
   if (c.role === 'owner') return '<span class="cmt-plate staff">站长</span>';
   if (c.role === 'admin') return '<span class="cmt-plate staff">管理</span>';
+  /* 【为什么有签名就不显示「站长」】因为签名信息量更大。
+     站长身份可以从颜色（粉色）看出来，不用再占文字。 */
   return '';
+  /* 普通人又没签名 → 不显示。
+     【返回空字符串而不是 null】因为上面会直接插进模板，
+     null 会被转成字符串 "null" 显示出来，空字符串才是「什么都不显示」。 */
 }
 function headHTML(c) {
+  /* 生成「左侧头像 + 右侧顶部名字」。
+     【注意这个函数不闭合标签】它只输出开标签，由调用方补 </div></div>。
+     【为什么要这么设计】因为头像+名字在「主楼」和「回复」里完全一样，
+     但后面的内容不同。拆成「头 + 可变内容 + 尾」最自然。
+     【代价】可读性差 —— 在 topItem 里看到孤零零的 </div></div>，
+     得回头数 headHTML 开了几个标签。更容易出错，也不好改。 */
   if (c.uid && c.avatar) userAvatars[c.uid] = c.avatar;
+  /* 【顺手存进缓存】评论接口本身就带了作者头像，
+     存起来的话就算 loadAvatars 失败了，评论里的头像照样能显示。 */
   const av = fixAvatar(userAvatars[c.uid]);
   const img = `<img src="${av}" alt="">`;
+  /* 【alt=""】空替代文字 —— 因为旁边就有名字，信息不丢失。
+     读屏软件遇到空 alt 会直接跳过这张图，不念「图片」打断阅读。
+     【判断标准】这张图删掉，信息有没有丢？没丢就写空 alt。 */
   const a = c.uid ? `<a class="cmt-avatar" href="/profile/?uid=${c.uidNo || c.uid}">${img}</a>` : `<span class="cmt-avatar">${img}</span>`;
   const name = c.uid ? `<a class="cmt-name" href="/profile/?uid=${c.uidNo || c.uid}">${cmtEsc(c.name)}</a>` : `<span class="cmt-name">${cmtEsc(c.name)}</span>`;
+  /* 有 uid → 包成链接能点进主页；没有 → 用 span 不给点（否则 href 会是 null，点进去 404）。
+     【为什么没有 uid 也要包一层】因为排版要靠 .cmt-avatar / .cmt-name 控制尺寸和样子，
+     结构统一，两种情况的样式才一致。 */
   return `<div class="cmt-side">${a}</div><div class="cmt-main"><div class="cmt-top">${name}${plateHTML(c)}</div>`;
+  /* 【返回值开了三个标签】
+       cmt-side → 立即闭合
+       cmt-main → **故意不闭合**
+       cmt-top  → 立即闭合
+     所以调用方最后只需要补两个 </div>（一个闭 cmt-main、一个闭 cmt-item）。 */
 }
 function footHTML(c, isReply) {
+  /* 生成评论底部那一行：时间、点赞、回复、三个点菜单、楼层号。 */
   const mine = me && c.uid != null && c.uid === me.uid;
+  /* 【三段逻辑】① 登录了 ② 这条评论有作者 id ③ 两者相同。
+     【为什么必须写 c.uid != null】因为匿名评论的 uid 是 undefined，
+     如果 me.uid 也碰巧是 undefined，`undefined === undefined` 会得到 true ——
+     于是把别人的匿名评论当成自己的，显示「删除」按钮。很危险。
+     这种「两个都为空所以相等」的坑，在比较 id 时特别常见。 */
   const staff = me && (me.role === 'owner' || me.role === 'admin');
   const likeBtn = `<button class="cmt-btn${c.likedByMe ? ' on' : ''}" data-a="like" data-id="${c.id}">♥ ${c.likes || 0}</button>`;
+  /* 【data-a 而不是 data-act】故意跟文章按钮的 data-act 区分开，
+     这样两个事件监听器各管各的，不会互相误触发。 */
   const replyBtn = `<button class="cmt-btn" data-a="reply" data-id="${c.id}" data-name="${cmtEsc(c.name)}">回复</button>`;
+  /* 【data-name 必须转义】因为它要塞进 HTML 属性里。
+     如果用户名带双引号（比如 'a"b'），不转义就能提前闭合属性、注入新属性 ——
+     这是属性型 XSS。 */
   const menu = `<span class="cmt-more">
       <button class="cmt-btn" data-a="menu" aria-label="更多操作" title="更多操作">⋯</button>
       <div class="cmt-menu">
@@ -365,11 +1024,20 @@ function footHTML(c, isReply) {
         <button data-a="report" data-id="${c.id}" class="danger">举报</button>
       </div>
     </span>`;
+  /* 【缩进看起来很奇怪是正常的】渲染到页面上之后 HTML 里的空白会被合并成一个空格，
+     在浏览器里看不会歪。这里的缩进只是为了让源码可读。
+     【aria-label】给读屏软件念的名字 ——「⋯」这个符号读屏软件念不出来，
+     用 aria-label 明确告诉它「这是更多操作」。这是无障碍的基本要求。
+     【(mine || staff) ? ... : ''】自己的能删，管理员能删所有人的。
+       注意这只是「界面上显不显示」—— 真正的权限在数据库的 RLS 策略里。 */
   const floor = (!isReply && c.floor) ? `<span class="cmt-floor">#${c.floor}</span>` : '';
+  /* 【回复不显示楼层号】因为回复不占楼层。 */
   return `<div class="cmt-foot"><span class="cmt-time">${cmtEsc(c.time)}</span>${likeBtn}${replyBtn}${menu}${floor}</div>`;
 }
 function replyItem(c) {
+  /* 生成一条「楼中楼回复」。 */
   const to = c.toName ? `<span class="cmt-to">回复 @${cmtEsc(c.toName)} :</span> ` : '';
+  /* 【末尾那个空格在 </span> 外面】让「：」和正文之间有个空隙，不挤成「：内容」。 */
   return `<div class="cmt-item is-reply" id="cmt${c.id}">
     ${headHTML(c)}
       <div class="cmt-text">${to}${cmtEsc(c.text)}</div>
@@ -377,10 +1045,30 @@ function replyItem(c) {
       ${openReply === c.id ? replyBoxHTML(c) : ''}
     </div>
   </div>`;
+  /* 【id="cmt${c.id}"> 有什么用】给「从信箱/通知点过来定位到某条评论」用的，
+     跳转后可以用 getElementById('cmt123') 找到并滚动过去。
+     【为什么前面加 cmt 前缀】因为纯数字开头的 id 在 CSS 选择器里必须转义
+     （#123 是非法的），加前缀就绕开了这个问题。
+     【${openReply === c.id ? replyBoxHTML(c) : ''}】如果「当前要回复的正是这一条」，
+     就在这儿插入回复框。这就是「点回复按钮就在那条下面弹输入框」的原理 ——
+     靠一个变量 + 条件渲染，不用手动创建/删除 DOM。 */
 }
 function topItem(c) {
+  /* 生成一条「主楼」（含它下面的所有回复）。 */
   const kids = cmts.filter(x => x.parent === c.id).sort((a, b) => a.id - b.id);
+  /* 【.filter(条件)】筛出所有满足条件的元素，返回新数组（不改原数组）。
+     【.sort(比较函数)】排序会原地修改数组。
+     【顺序很重要：先 filter 再 sort 才安全】filter 已经生成了新数组，
+     所以 sort 不会污染原始 cmts。直接对 cmts 排序会把原始顺序搞乱。
+     【a.id - b.id】按 id 升序 = 先发的回复在上面（对话按时间顺序读）。
+       记这个：a - b 升序，b - a 降序。 */
   const kidsHTML = kids.length ? `<div class="cmt-children">${kids.map(replyItem).join('')}</div>` : '';
+  /* 【kids.length ? ... : ''】有回复才生成容器，没有就不生成空 div。
+     【.map(replyItem)】把每条回复数据变成一段 HTML。
+       直接把函数名传给 map，map 会把每个元素当参数传进去，刚好对得上。
+     【.join('')】用空字符串把数组拼成一个长字符串。
+       【必须写 join】不写的话数组转字符串默认用逗号连接，
+       页面上每条回复之间就会多出一堆逗号。这是新手最容易踩的坑之一。 */
   return `<div class="cmt-item" id="cmt${c.id}">
     ${headHTML(c)}
       <div class="cmt-text">${cmtEsc(c.text)}</div>
@@ -389,8 +1077,12 @@ function topItem(c) {
       ${kidsHTML}
     </div>
   </div>`;
+  /* 【跟 replyItem 只差三处】① 没有 is-reply 类 ② 多了 kidsHTML ③ 正文没有 @某某 前缀。
+     【为什么不合并成一个函数加参数】可以合并，但差异已经不少，
+     合并后要写一堆 if，反而更难读。判断标准是「差异让代码变成什么样」。 */
 }
 function replyBoxHTML(c) {
+  /* 生成回复输入框。 */
   return `<div class="cmt-reply-box">
     <textarea data-for="${c.id}" placeholder="回复 ${cmtEsc(c.name)}…">@${cmtEsc(c.name)} </textarea>
     <div class="cmt-reply-actions">
@@ -398,97 +1090,247 @@ function replyBoxHTML(c) {
       <button data-a="cancel">取消</button>
     </div>
   </div>`;
+  /* 【textarea 的预填内容写在开始和结束标签之间】不像 input 用 value 属性。
+     这里预填「@某某 」，末尾那个空格很重要 ——
+     不带空格用户接着打字就是「@张三你好」，@ 不到人。
+     【.primary】主按钮类 → 有底色的「发送」跟无底色的「取消」形成主次。 */
 }
 function renderComments() {
+  /* 只重画评论区（不动播放器和标题）。 */
   const b = document.getElementById('cmtList');
   if (!b) return;
+  /* 评论区可能在视频加载失败时根本不存在，不判断会报 null 错。 */
   const tops = cmts.filter(c => !c.parent).sort((a, b) => (b.floor || 0) - (a.floor || 0) || b.id - a.id);
+  /* 【筛出主楼】!c.parent = 没有父级 = 主楼。
+     【排序，两个条件用 || 串起来】
+       ① (b.floor || 0) - (a.floor || 0) → 楼层降序 = 新的在上面
+       ② || b.id - a.id                  → 楼层相同时按 id 降序兜底
+     【|| 的作用】前面算出 0 时（楼层相同），0 是假值，|| 就取右边的值。
+       这是「多重排序」的经典写法：主条件算出 0 就自动用次条件。
+     【(b.floor || 0)】楼层可能是 null（老数据），兜底成 0 防止 NaN ——
+       NaN 参与比较永远是 false，排序会完全乱掉。
+
+     【一个缺口：孤儿回复】
+     只筛 !c.parent 的话，如果一条回复的「父级主楼被删了」，
+     它既不是主楼（有 parent），又挂不到任何主楼下面（父级不存在）——
+     于是永远不显示，等于凭空消失。
+     正确做法是 `!c.parent || !exists(c.parent)`（board.html 里就是这么写的），
+     这个文件漏了。影响不大（删主楼时一般会连带删回复），但逻辑不够严谨。 */
   const cnt = document.getElementById('cmtCount'); if (cnt) cnt.textContent = cmts.length;
+  /* 【一行写两条语句用分号隔开】只在很短时这么写。
+     【评论数用 cmts.length】包含主楼 + 回复。
+     为什么不用 tops.length —— 因为「评论 12」应该把楼中楼也算进去，
+     这是 B 站 / 知乎的惯例。 */
   b.innerHTML = tops.length
     ? tops.map(topItem).join('')
     : '<div class="cmt-empty">还没有评论，来说两句吧~</div>';
+  /* 【空状态文案很重要】「还没有评论，来说两句吧~」比「暂无数据」友好得多 ——
+     它给了用户一个行动建议，而不是冷冰冰地宣告「什么都没有」。 */
 }
 async function loadComments() {
   try {
     const d = await SBAPI.getVideoComments(id);
+    /* 【跟文章页唯一的区别】这里调的是 getVideoComments。 */
     if (!d.ok) throw new Error();
+    /* 【throw new Error()】主动抛错跳到 catch —— 接口返回了但 ok 是 false 也算失败。 */
     cmts = d.list || [];
+    /* 【|| []】接口没给 list 时兜底成空数组，避免后面 cmts.filter 报错。 */
     renderComments();
   } catch {
     const b = document.getElementById('cmtList');
     if (b) b.innerHTML = '<div class="cmt-empty">评论加载失败</div>';
+    /* 【为什么在 catch 里重新查一次】因为 try 里可能还没执行到那一步就抛错了，
+       b 变量在 try 外面没定义。这是常见的处理方式。 */
   }
 }
 function bindComments() {
+  /* 给评论区绑事件。
+     【这是在 render() 里被调用的】因为 render 会重建整个 DOM，
+     旧的事件监听跟着旧元素一起没了，必须重新绑。 */
   const b = document.getElementById('cmtList');
   const textEl = document.getElementById('cmtText');
   const sendBtn = document.getElementById('cmtSend');
   const charsEl = document.getElementById('cmtChars');
   if (!b || cmtBound) return;
+  /* 【防重复绑定】读法：b 不存在，**或者已经绑定过了** → 直接退出。
+     【为什么要防】同一个元素上挂两份一样的监听器，
+     结果就是点一下按钮执行两次 —— 发出两条一样的评论。这种 bug 特别难查，
+     所以在入口挡住最省心。
+     【为什么是 cmtBound 而不是 !cmtBound】我们要判断「已经绑过了吗」，是就退出。
+       写成 !cmtBound 就完全反了：第一次进来 false 取反成 true 直接退出，永远绑不上。
+       这种「多一个感叹号逻辑就反转」的地方，看代码时最容易看错。
+     【这个方案有个前提】它假设 cmtList 从头到尾是同一个元素。
+       但 render() 其实把 box 的 innerHTML 整体替换了 ——
+       cmtList 会被销毁重建，成为**新元素**。
+       所以第二次 render 之后，新元素没有任何监听器，而 cmtBound 还是 true —— 
+       评论区的按钮会全失效。
+     【为什么目前没出问题】render() 只在页面加载时调用一次，
+       之后再没地方调它（点赞、回复都只调 loadComments，它不重建外层）。
+     【更稳的写法】把标记打在元素自己身上，换元素就自动失效：
+         if (!b || b.dataset.bound) return;
+         b.dataset.bound = '1'; */
   cmtBound = true;
 
   textEl.addEventListener('input', () => { charsEl.textContent = textEl.value.length + '/500'; });
+  /* 【'input' 事件】内容一变就触发（每敲一个字），实时字数统计必须用它。
+     【'change' 不行】那个只在「失去焦点且内容变了」时触发一次。 */
   sendBtn.addEventListener('click', async () => {
+    /* 【async 回调】允许在里面用 await。
+       【注意】addEventListener 不管回调是不是 async，它只是「调一下就走」，
+       不会等回调执行完 —— 所以异步错误不会冒泡到外面，必须在内部处理。 */
     if (!requireLogin()) return;
     const t = textEl.value.trim();
     if (!t) return alert('评论不能为空');
+    /* 【.trim()】只打了空格不算内容。 */
     sendBtn.disabled = true;
+    /* 【禁用按钮，防重复提交】不禁的话用户可能连点三下发出三条一样的评论。 */
     const d = await SBAPI.postComment('video', id, t);
+    /* 【三个参数】① 'video' 表示评论挂在视频上（文章是 'article'）
+                     ② id 具体是哪一个 ③ t 评论正文
+       【为什么用第一个参数区分类型】这样一张评论表能同时服务文章和视频，
+       不用建两张结构一样的表。这种设计叫「多态关联」。
+       【第四个参数（parent）没传】不传 = 这是主楼，不是回复。 */
     sendBtn.disabled = false;
+    /* 【为什么不放在 finally 里】因为下面出错时会 alert 然后 return，
+       disable 已经恢复了。但更严谨的写法是 try/finally —— 
+       万一 await 抛了异常，这行就不会执行，按钮永远灰着。这是个隐患。 */
     if (!d.ok) return alert(d.error || '发送失败');
     textEl.value = ''; charsEl.textContent = '0/500';
+    /* 【一行两个语句】清空输入框和字数。 */
     await loadComments();
+    /* 【await】等评论重新加载完。
+       用 await 是为了让「清空输入框」发生在「重新渲染」之前 ——
+       反过来的话重新渲染会重建 textarea，用户会看到字被清掉的过程，闪一下。 */
   });
 
   b.addEventListener('click', async e => {
+    /* 【评论区的事件委托】原理同上面 —— 绑在不变的外层（cmtList）上。 */
     const btn = e.target.closest('[data-a]');
     if (!btn) return;
+    /* 【[data-a]】属性选择器。用 data-a 而不是 data-act，
+       是为了跟文章按钮区分开，两个监听器互不干扰。 */
     const a = btn.dataset.a;
     const cid = parseInt(btn.dataset.id, 10);
+    /* 【parseInt(值, 10)】转整数。第二个参数 10（十进制）必须写 ——
+       不写的话以 0 开头的字符串会被当成八进制。
+       【注意 cid 可能是 NaN】因为「取消」按钮没有 data-id，
+       dataset.id 是 undefined，parseInt 得到 NaN。
+       但 cancel 那个分支根本不用 cid，所以没问题。 */
     if (a === 'menu') {
       const m = btn.parentElement.querySelector('.cmt-menu');
+      /* 【.parentElement】父元素（这个「⋯」按钮的父元素是 .cmt-more），
+         菜单就在它里面。 */
       const wasOpen = m.classList.contains('show');
+      /* 【先记下「之前开着吗」】因为下面要先把所有菜单关掉。 */
       document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
+      /* 关掉所有打开的菜单，保证同一时刻只开一个。 */
       if (!wasOpen) m.classList.add('show');
+      /* 【这个逻辑很巧妙】之前关着 → 打开它；
+         之前开着 → 已经被上面关掉了，不再打开（实现「点一下关掉」）。
+         一个按钮同时是开关，不用写两套逻辑。 */
       return;
     }
     document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
+    /* 点了别的按钮，顺带把菜单关掉。 */
     if (a === 'cancel') { openReply = null; return renderComments(); }
+    /* 【清状态 + 重画】必须重画 —— 回复框是靠 renderComments 生成的，
+       状态改了不重画，那个框还在页面上。 */
     if (a === 'reply') { openReply = cid; renderComments();
       const ta = document.querySelector(`.cmt-reply-box textarea[data-for="${cid}"]`);
+      /* 【模板字符串 + 属性选择器组合】
+         `.cmt-reply-box textarea[data-for="123"]`
+         = 「cmt-reply-box 里面的、data-for 等于 123 的 textarea」。
+         加属性筛选最保险，不会误选到别的回复框。 */
       if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+      /* 【.focus()】让输入框获得焦点，光标进去可以直接打字 —— 
+         用户点「回复」最想做的事就是打字，自动聚焦能省一次点击。
+         【setSelectionRange(长度, 长度)】把光标放到最后一个字符后面。
+         为什么必须这么做：focus 之后光标位置各浏览器行为不同（有的全选、有的放开头），
+         显式设置才能保证用户点开就能接着写「@张三 |」。 */
       return; }
     if (!requireLogin()) return;
+    /* 【登录闸门】打开/关闭回复框不用登录（先让他写），
+       从这里往下都要改数据，必须登录。 */
     if (a === 'send') {
       const ta = btn.closest('.cmt-reply-box').querySelector('textarea');
+      /* 【.closest】从按钮往上找最近的 .cmt-reply-box 容器。
+         这样不用 id 也能定位到「这个按钮所在的那个回复框」。 */
       const t = ta.value.trim();
       if (!t) return alert('回复不能为空');
       const d = await SBAPI.postComment('video', id, t, cid);
+      /* 【第四个参数 cid】= parent，把这条评论挂到 cid 那条下面，不新开主楼。
+         这是主楼和回复的唯一区别。 */
       if (!d.ok) return alert(d.error || '发送失败');
       openReply = null; await loadComments(); return;
+      /* 【一行三个语句】清状态、重画、返回。
+         注意这里用的是 loadComments（只重画评论），不是 render（重画整页）—— 
+         重画整页会导致播放器重新加载，视频从头开始播，那就糟了。 */
     }
     if (a === 'like') { const d = await SBAPI.likeComment(cid); if (!d.ok) return alert(d.error||'操作失败'); await loadComments(); return; }
+    /* 【整块重画，没有像文章点赞那样只改一个数字】
+       【为什么】因为评论列表结构复杂（有嵌套回复），单独找出那个按钮要绕好几层；
+       重画最省事。
+       【代价】如果正好开着一个回复框，重画后框会重新出现，但里面写的内容丢了
+       （因为 openReply 变量还在，框会重建，但 textarea 的草稿没保存）。
+       这是「简单」和「体验」的取舍。 */
     if (a === 'del') {
       if (!confirm('确定删掉这条评论？它下面的回复也会一起删掉。')) return;
+      /* 【破坏性操作必须确认，并告知连带后果。】 */
       const d = await SBAPI.deleteComment(cid);
       if (!d.ok) return alert(d.error || '删除失败'); await loadComments(); return;
+      /* 【一行写两条语句】`if (...) return ...; await ...; return;` 挤在一行。
+         能跑，但读起来要停顿一下。这种「一行多语句」超过两个就该换行了。 */
     }
     if (a === 'report') {
       const reason = prompt('说说这条评论哪里有问题（可以留空）：', '');
       if (reason === null) return;
+      /* 【=== null】必须严格相等 —— 用户点确定但没写理由是空字符串（合法），
+         只有点取消才是 null。 */
       const d = await SBAPI.reportComment(cid, reason.trim());
       if (!d.ok) return alert(d.error || '举报失败');
       alert('举报已提交，管理员会看的');
+      /* 【为什么用 alert 而不是 setTip】因为举报是评论区的操作，
+         而 setTip 改的是文章区那个提示条 —— 视线距离太远，用户可能注意不到。 */
     }
   });
   document.addEventListener('click', e => {
     if (e.target.closest('.cmt-more')) return;
+    /* 【为什么要有这一句】点在菜单区域内部（比如点了菜单里的某一项）时，
+       不该在这里收菜单 —— 那件事由上面的 b 监听器负责。直接 return 让权。 */
     document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
   });
+  /* 【注意这个监听器每次 bindComments 都会新加一个】
+     如果 bindComments 被调用多次，document 上会挂上多个一模一样的监听器。
+     结果「关闭菜单」被执行好几遍 —— 功能上没坏（重复关没副作用），
+     但属于「事件监听器泄漏」，长期运行会越积越多。
+     【正确做法】要么把这段放到 bindComments 外面只绑一次，
+     要么在加之前先 removeEventListener。这类问题在真实项目里非常常见。 */
 }
 
 loadMe().then(loadAvatars).then(loadComments);
+/* 【Promise 链式调用】
+   【loadMe()】返回 Promise（因为它是 async 函数）。
+   【.then(loadAvatars)】等 loadMe 完成后执行 loadAvatars，并把它返回的 Promise 接下去。
+     【为什么能直接传函数名】因为 loadAvatars 不需要参数（或忽略参数）。
+     如果需要参数就得写 .then(() => loadAvatars(参数))。
+   【三步必须串行】loadMe 设 loggedIn / me（评论里判断「我的」要用），
+     loadAvatars 建头像缓存（渲染评论要用），loadComments 渲染。顺序错了会出问题。
+   【为什么不用 async/await 写】那样更好读：
+     await loadMe(); await loadAvatars(); await loadComments();
+     作者用 Promise 链大概是早期写法留下的。两者完全等价。 */
 load();
+/* 【跟上面那一串并行执行】
+   【为什么可以并行】load() 只依赖 id，跟「我登录没」无关。
+   并行能让播放器和评论同时加载，总时间约等于较慢那个，而不是两者之和。
+   【但有个潜在竞态】load() 里的 render() 会重建整个 DOM，
+   而 loadComments() 可能在这之前/之后执行 ——
+   如果 loadComments 先完成，它渲染的评论会被 render() 冲掉！
+   【实际会怎样】render() 里 cmtList 一开始只有「加载中…」，
+   然后 loadComments 填进去，最终结果正确。
+   但如果反过来（render 在 loadComments 之后），评论就没了，只剩「加载中…」。
+   【目前因为网络时间差，实际总是 loadComments 更慢，所以没出问题】
+   但这属于「靠概率活着」的代码 —— 网络快慢一变就可能暴露。
+   这类问题在线上才发现的 bug 里占比很高。 */
 </script>
 </body>
 </html>
