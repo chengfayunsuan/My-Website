@@ -19,7 +19,7 @@
                                        写一个范围表示「这一个文件里包含多个字重」——可变字体特性。 */
   font-display: swap;               /* 字体还没下载完时，先用系统字体显示文字，下载好再替换。
                                        不写这句的话，字体会「隐身」到下载完成，页面会闪白。 */
-  src: url('/fonts/orbitron.woff2') format('woff2');
+  src: url('/fonts/orbitron.woff2') format('woff2');  /* 字体文件路径 + 格式声明 */
   /* 字体文件地址；format('woff2') 告诉浏览器文件格式，它能提前判断支不支持。
      woff2 是目前压缩率最高、兼容性也够好的网页字体格式。 */
 }
@@ -140,19 +140,19 @@ html { overflow-y: scroll; }
 /* 滚动条的「轨道」（滑块后面的槽）：透明，让页面背景透出来。 */
 ::-webkit-scrollbar-thumb {
 /* 滚动条的「滑块」（你拖的那个东西）。 */
-  background: linear-gradient(180deg, rgba(138,43,226,.55), rgba(91,141,239,.55));
+  background: linear-gradient(180deg, rgba(138,43,226,.55), rgba(91,141,239,.55));  /* 滑块：紫→蓝竖向渐变，55% 透明，看起来轻 */
   /* 【linear-gradient(方向, 起色, 终色)】从上到下，紫 → 蓝的渐变。
      后面的 .55 是透明度，让滑块半透明，更轻。 */
   border-radius: 999px;             /* 999px 足够大 = 完全圆角（药丸形状） */
   border: 2px solid transparent;    /* 给滑块加透明边框，看起来更细、更精致 */
-  background-clip: padding-box;
+  background-clip: padding-box;  /* 背景只画到边框内侧，配合透明边框把滑块「缩细」 */
   /* 【background-clip:padding-box】背景只画到边框内侧。
      配合上面的透明边框，滑块视觉上会变细 —— 这是「用边框做内缩」的小技巧。 */
 }
 ::-webkit-scrollbar-thumb:hover {
 /* 【:hover】鼠标悬停在滑块上时，颜色加深，给出「可以拖」的反馈。 */
-  background: linear-gradient(180deg, rgba(155,77,240,.85), rgba(91,141,239,.85));
-  background-clip: padding-box;
+  background: linear-gradient(180deg, rgba(155,77,240,.85), rgba(91,141,239,.85));  /* 悬停时同款渐变，透明度提到 85%，颜色更实 */
+  background-clip: padding-box;  /* 裁切必须重复写，否则换背景后失效 */
 }
 
 /* ============================================================
@@ -178,7 +178,7 @@ body.light #site-bg {
    这是历史遗留：原来有极光效果，改成 Local 风格后关掉了。
    保留代码是为了以后想恢复时改一个 display 就行。 */
   display: none;                    /* 隐藏 —— 就是这一行关掉了极光 */
-  position: absolute;
+  position: absolute;  /* 相对 #site-bg 定位（那一层已经是 fixed） */
   border-radius: 50%;               /* 圆形光团 */
   filter: blur(70px);               /* 大半径模糊，让光团边缘柔和地散开 */
   opacity: .55;                     /* 半透明，叠在一起更有层次 */
@@ -186,25 +186,25 @@ body.light #site-bg {
                                        浏览器会提前把它提升到独立图层，动画更顺滑。 */
 }
 #site-bg .a1 {
-  width: 46vw; height: 46vw; left: -8vw; top: -10vh;
+  width: 46vw; height: 46vw; left: -8vw; top: -10vh;  /* 直径 46% 视口宽；往左上挪出去一截，只露柔和的一角 */
   /* 【vw / vh】视口宽/高的百分比：1vw = 屏幕宽度的 1%。
      用 vw 做尺寸，光团会随屏幕大小自动缩放。
      负的 left/top 让它一半露在屏幕外，只看到柔和的一角。 */
-  background: radial-gradient(circle, rgba(138,43,226,.62) 0%, rgba(138,43,226,0) 68%);
+  background: radial-gradient(circle, rgba(138,43,226,.62) 0%, rgba(138,43,226,0) 68%);  /* 紫色光团：中心实、边缘透明化开 */
   /* 【radial-gradient(circle, 中心色 0%, 边缘色 68%)】从中心向外扩散的圆形渐变。
      末端用透明度 0，就得到一个边缘完全化开的紫色光团。 */
-  animation: floatA 26s ease-in-out infinite;
+  animation: floatA 26s ease-in-out infinite;  /* 26 秒一轮、缓入缓出、无限循环，调用 @keyframes floatA */
   /* 【animation】26 秒一轮、缓入缓出、无限循环，调用下面的 @keyframes floatA。 */
 }
 #site-bg .a2 {
-  width: 42vw; height: 42vw; right: -6vw; top: 4vh;
-  background: radial-gradient(circle, rgba(38,165,228,.52) 0%, rgba(38,165,228,0) 68%);
-  animation: floatB 32s ease-in-out infinite;
+  width: 42vw; height: 42vw; right: -6vw; top: 4vh;  /* 第二个光团：稍小一点，贴右上角 */
+  background: radial-gradient(circle, rgba(38,165,228,.52) 0%, rgba(38,165,228,0) 68%);  /* 蓝色光团（和 --accent 同色系） */
+  animation: floatB 32s ease-in-out infinite;  /* 32 秒一轮，比 a1 慢 —— 不同步才自然 */
 }
 #site-bg .a3 {
-  width: 38vw; height: 38vw; left: 28vw; bottom: -16vh;
-  background: radial-gradient(circle, rgba(251,114,153,.40) 0%, rgba(251,114,153,0) 68%);
-  animation: floatC 38s ease-in-out infinite;
+  width: 38vw; height: 38vw; left: 28vw; bottom: -16vh;  /* 第三个光团：最小，压在下方 */
+  background: radial-gradient(circle, rgba(251,114,153,.40) 0%, rgba(251,114,153,0) 68%);  /* 粉色光团（和 --pink 同色系），透明度最低，最含蓄 */
+  animation: floatC 38s ease-in-out infinite;  /* 38 秒一轮，最慢，三层叠出层次 */
 }
 @keyframes floatA {
 /* 【@keyframes】定义动画的关键帧：动画进行到某个百分比时，元素该是什么状态。
@@ -229,8 +229,8 @@ body.light #site-bg {
 #site-bg video {
   position: absolute;               /* 相对 #site-bg 定位（那一层已经是 fixed 了） */
   inset: 0;                         /* 四边贴满 */
-  width: 100%;
-  height: 100%;
+  width: 100%;  /* 宽 = 父容器 100%（#site-bg 已铺满视口） */
+  height: 100%;  /* 高同样 100%，配合 object-fit 才能真正铺满 */
   object-fit: cover;                /* 【关键】视频等比缩放并裁掉超出部分，铺满不留黑边。
                                        视频比例和屏幕比例不一致时，要么留黑边（contain），
                                        要么裁掉一部分（cover）—— 壁纸显然选 cover。 */
@@ -240,25 +240,25 @@ body.light #site-bg {
 /* 视频上压一层暗幕，保证文字始终看得清 */
 #site-bg .veil {
   display: none;            /* Local 的视频上不压暗幕 */
-  position: absolute;
-  inset: 0;
+  position: absolute;  /* 相对 #site-bg 定位 */
+  inset: 0;  /* 四边贴满，和视频完全重合 */
   background: none;                 /* 暗幕颜色为「无」—— 又是关掉状态 */
 }
 body.light #site-bg .veil {
-  background: none;
+  background: none;  /* 浅色主题下同样不要暗幕 */
 }
 
 /* Local 没有噪点层 */
 #site-bg .noise {
   display: none;                    /* 同样被关掉了 */
-  position: absolute;
+  position: absolute;  /* 相对 #site-bg 定位 */
   inset: -50%;                      /* 【负值】向外扩一圈，动画移动时不会露出边缘 */
-  opacity: .035;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  opacity: .035;  /* 3.5% 不透明度 —— 噪点必须极淡，浓了就像画质差 */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");  /* 内联 SVG 噪点图，不用额外图片文件 */
   /* 【data URI】直接把一张 SVG 图片写进 CSS，不用额外的图片文件。
      里面是一个 SVG 滤镜 feTurbulence 生成的「噪点纹理」（像老电视的雪花）。
      注意 # 要写成 %23，否则会被当成颜色的井号。 */
-  animation: noiseShift 8s steps(6) infinite;
+  animation: noiseShift 8s steps(6) infinite;  /* 8 秒内分 6 步跳动，无限循环（steps 让颗粒一闪一闪，像胶片） */
   /* 【steps(6)】让动画分 6 步跳变而不是平滑过渡 —— 噪点一闪一闪的才像胶片颗粒。 */
 }
 body.light #site-bg .noise { opacity: .05; }
@@ -286,9 +286,9 @@ body {
   background: transparent;          /* 【透明】页面本身不画背景，露出下面的 #site-bg */
   color: var(--text);               /* 文字色跟着主题变量走 */
   line-height: 1.7;                 /* 行高 1.7 倍字号，中文段落读起来不挤 */
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;  /* 让字体渲染更细腻（Mac / 高分屏效果明显） */
   /* 【抗锯齿】让文字在 macOS / 高分辨率屏上更细腻（字会稍微变细一点）。 */
-  transition: background .3s, color .3s;
+  transition: background .3s, color .3s;  /* 切深浅色时背景和文字用 0.3 秒过渡，不会「啪」地跳 */
   /* 【主题切换过渡】切深浅色时，背景色和文字色用 0.3 秒渐变，不会「啪」地一下。 */
 }
 
@@ -308,13 +308,13 @@ body.light a:not([class]):hover { color: var(--primary-deep); }
 .glass {                                         /* 【工具类】不是给某个具体位置的，是「谁想变磨砂就在 class 里加 glass」。 */
   background: var(--card);                       /* 半透明底色，透出后面的视频/背景 */
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);   /* 给 Safari 写的同一句（老 Safari 只认带前缀的） */
-  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(150%);  /* 标准写法：背后画面模糊 12px + 饱和度提 50%，不然模糊完是一片灰 */
   /* 【backdrop-filter】把「元素背后的画面」拿来做模糊 —— 这就是毛玻璃的原理。
      blur(12px) 模糊半径，saturate(150%) 顺便把背后的颜色调得更艳一点，
      不然暗背景下模糊完就是一片灰。这两个可以叠着写。 */
   border: 1px solid var(--glass-border);         /* 现在这个变量是 transparent（Local 风格不描边） */
   border-radius: var(--radius);                  /* 圆角 12px */
-  box-shadow: var(--shadow), inset 0 1px 0 var(--glass-hi);
+  box-shadow: var(--shadow), inset 0 1px 0 var(--glass-hi);  /* 外面投影 + 内部顶边 1px 高光（两个变量现在都是空值，等于没有） */
   /* 【inset】把阴影画在元素内部；这里现在是 transparent，等于没效果。
      当年做玻璃质感时用「顶部一条 1px 亮线」模拟玻璃的高光边缘。 */
 }
@@ -364,8 +364,8 @@ nav::after { display: none; }                    /* ::after 是「假元素」�
 .nav-link {                                      /* 导航里的文字链接（比如「🎬 传视频」） */
   color: var(--text-light);                      /* 次要文字色，比正文暗一档 */
   text-decoration: none;                         /* 去下划线 */
-  font-size: 14px;
-  cursor: pointer;
+  font-size: 14px;  /* 字号 14px，比 logo 小，不抢风头 */
+  cursor: pointer;  /* 鼠标变小手，告诉用户这里能点 */
   padding: 7px 12px;                             /* 上下 7、左右 12，撑出一块可点区域 */
   border-radius: 9px;                            /* 圆角，hover 时背景才有圆润的块感 */
   white-space: nowrap;                           /* 【nowrap】禁止换行，窗口变窄也不把「传视频」拆成两行 */
@@ -379,23 +379,23 @@ nav::after { display: none; }                    /* ::after 是「假元素」�
 }
 
 .nav-right {                                     /* 右侧那一组按钮的容器 */
-  display: flex;
+  display: flex;  /* 弹性布局：IP、头像、按钮排成一行 */
   align-items: center;                           /* 竖向居中对齐（图标按钮 36px、文字按钮更矮，不居中会歪） */
-  gap: 12px;
-  font-size: 14px;
-  color: var(--text-light);
+  gap: 12px;  /* 子元素间距 12px，比挨个写 margin 省事 */
+  font-size: 14px;  /* 这一组的基础字号 */
+  color: var(--text-light);  /* 基础文字色，子元素大多会自己覆盖 */
 }
 
 #ip {                                            /* 显示访客 IP 的那个小胶囊 */
-  padding: 4px 11px;
-  border-radius: 8px;
+  padding: 4px 11px;  /* 上下 4px、左右 11px，撑出一个小胶囊 */
+  border-radius: 8px;  /* 圆角 8px */
   background: var(--field);                      /* 半透明白底，做出「输入框」那种浅色块 */
-  border: 1px solid var(--border);
-  color: var(--text-light);
+  border: 1px solid var(--border);  /* 1px 细边框，深色主题下是 #333 */
+  color: var(--text-light);  /* IP 文字用次要色，不抢眼 */
   font-family: var(--font-num);                  /* IP 是数字和点，用等宽数字字体更整齐 */
-  font-size: 12px;
+  font-size: 12px;  /* 12px，比正文小，不占地方 */
   letter-spacing: .5px;                          /* 字间距 0.5px，一串数字不至于挤成一团 */
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums;  /* 等宽数字：IP 位数变化时宽度不变，导航栏不抖 */
   /* 【tabular-nums】等宽数字：让每个数字占一样宽。
      IP 变化（1 → 11 → 111）时宽度就不会忽宽忽窄，导航栏不会跟着抖。 */
 }
@@ -405,17 +405,17 @@ nav::after { display: none; }                    /* ::after 是「假元素」�
 .admin-btn,
 .mail-btn,
 .gear-btn {
-  width: 36px;
+  width: 36px;  /* 宽 36px */
   height: 36px;                                  /* 宽高相等 + 50% 圆角 = 正圆 */
   border-radius: 50%;                            /* 【50%】半径取一半，正方形变圆形 */
-  border: 1px solid var(--glass-border);
-  background: var(--field);
+  border: 1px solid var(--glass-border);  /* 边框（变量现在是 transparent，等于没有） */
+  background: var(--field);  /* 半透明白底，在深色导航上看得出是个按钮 */
   color: var(--text);                            /* 文字色会被里面的 svg 通过 currentColor 继承 */
-  cursor: pointer;
+  cursor: pointer;  /* 鼠标变小手 */
   display: flex;                                 /* 让里面的图标能居中 */
   align-items: center;                           /* 纵向居中 */
   justify-content: center;                       /* 横向居中 */
-  transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
+  transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;  /* 四个属性各做 0.2 秒过渡，hover 才顺滑 */
   text-decoration: none;                         /* 这几个按钮有的是 <a>（管理后台），得去下划线 */
   flex-shrink: 0;                                /* 【flex-shrink:0】窗口变窄时不许被压缩变形 */
 }
@@ -432,8 +432,8 @@ nav::after { display: none; }                    /* ::after 是「假元素」�
 .admin-btn svg,
 .mail-btn svg,
 .gear-btn svg {
-  width: 19px;
-  height: 19px;
+  width: 19px;  /* 图标宽 19px */
+  height: 19px;  /* 图标高 19px，正方形不变形 */
   stroke: currentColor;                          /* 【currentColor】= 用父元素的 color 值。父元素文字是白的，描边就是白的，切主题自动跟着变 */
   stroke-width: 2;                               /* 线条粗细 2px */
   fill: none;                                    /* 不填充，只要线框（描边风格图标） */
@@ -442,16 +442,16 @@ nav::after { display: none; }                    /* ::after 是「假元素」�
 }
 
 .login-btn {                                     /* 右上角「登录」按钮 */
-  padding: 7px 17px;
+  padding: 7px 17px;  /* 上下 7px、左右 17px */
   border-radius: 999px;                          /* 【999px】给一个远超半径的值，浏览器会当成「胶囊形」（两头半圆） */
   background: var(--grad-primary);               /* 紫色（变量名叫 grad 但现在是纯色） */
-  color: #fff;
-  text-decoration: none;
-  font-size: 14px;
-  cursor: pointer;
+  color: #fff;  /* 紫底上必须用纯白，对比度才够 */
+  text-decoration: none;  /* 它是 <a>，去掉默认下划线 */
+  font-size: 14px;  /* 字号 14px，和导航其他元素一致 */
+  cursor: pointer;  /* 鼠标变小手 */
   border: none;                                  /* 去掉按钮默认边框 */
   box-shadow: 0 6px 20px rgba(138, 43, 226, .35);/* 往下 6px 的紫色投影，让按钮「浮」起来 */
-  transition: transform .2s, box-shadow .2s, filter .2s;
+  transition: transform .2s, box-shadow .2s, filter .2s;  /* 位移 / 投影 / 亮度三个属性做过渡 */
 }
 .login-btn:hover {
   transform: translateY(-1px);                   /* 悬停上浮 1px */
@@ -460,14 +460,14 @@ nav::after { display: none; }                    /* ::after 是「假元素」�
 }
 
 .user-avatar {                                   /* 登录后右上角的小圆头像 */
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
+  width: 34px;  /* 宽 34px */
+  height: 34px;  /* 高 34px，正方形 + 50% 圆角 = 正圆 */
+  border-radius: 50%;  /* 圆形 */
   overflow: hidden;                              /* 【overflow:hidden】超出的部分裁掉 —— 图片是方的，靠这行才被裁成圆 */
   border: 2px solid rgba(255, 255, 255, .28);   /* 白色 28% 的一圈边框 */
   display: block;                                /* 它是 <a>，默认是行内元素，改成块才能正常设宽高 */
-  transition: border-color .2s, box-shadow .2s, transform .2s;
-  flex-shrink: 0;
+  transition: border-color .2s, box-shadow .2s, transform .2s;  /* 三个属性各 0.2 秒过渡 */
+  flex-shrink: 0;  /* 导航被挤窄时不许压缩头像 */
 }
 .user-avatar:hover {
   border-color: rgba(155, 77, 240, .9);          /* 边框变紫 */
@@ -485,7 +485,7 @@ header {
   position: relative;                            /* 给下面的 ::before 当定位基准 */
   max-width: var(--page-width);                  /* 同样最宽 1200px */
   margin: 68px auto 44px;                        /* 【三个值】上 68px、左右自动居中、下 44px */
-  padding: 0 20px;
+  padding: 0 20px;  /* 左右 20px 内缩，手机上文字不贴边 */
   text-align: center;                            /* 内部文字、图片全部水平居中 */
 }
 /* 头像与站名后面压一层柔和暗场：有背景视频时保证文字始终够清晰 */
@@ -497,19 +497,19 @@ header::before {
   inset: -50px -10px -20px;                      /* 四边分别外扩，比 header 大一圈 */
   z-index: -1;                                   /* 压到 header 内容后面 */
   pointer-events: none;                          /* 不接收鼠标事件，否则会挡住点击 */
-  background: none;
+  background: none;  /* 暗场颜色为「无」（反正 display:none 已经关掉了） */
 }
 body.light header::before {
   background: none;                              /* 浅色主题下也不需要 */
 }
 .avatar {                                        /* 大号头像（首页头部的 120px 那张） */
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+  width: 120px;  /* 宽 120px，页面上最大的头像 */
+  height: 120px;  /* 高 120px，正方形 */
+  border-radius: 50%;  /* 圆形 */
   object-fit: cover;                             /* 不变形地填满圆形 */
-  border: none;
+  border: none;  /* 不要边框（Local 风格更干净） */
   background: var(--card-solid);                 /* 图片加载出来之前先显示一块底色，避免闪白 */
-  box-shadow: none;
+  box-shadow: none;  /* 不要投影 */
   animation: none;                               /* 关掉下面的浮动动画（Local 风格是静止的） */
 }
 @keyframes avatarFloat {                         /* 【@keyframes】定义一段动画的关键帧，配合上面的 animation 使用 */
@@ -520,16 +520,16 @@ body.light header::before {
    留着以后想恢复浮动效果只要把 animation 改回 avatarFloat 4s infinite。 */
 
 .name {                                          /* 站名「乘法」大字 */
-  font-size: 42px;
+  font-size: 42px;  /* 42px 大字，这是页面的主视觉 */
   font-weight: 800;                              /* 很粗的字重 */
-  letter-spacing: 2px;
+  letter-spacing: 2px;  /* 字间距 2px，两个大字不挤在一起 */
   margin: 22px 0 10px;                           /* 上 22px 与头像拉开、下 10px 靠近副标题 */
   color: azure;                 /* Local 的标题是 azure 淡蓝白，不用渐变 */
 }
 .tagline {                                       /* 副标题 / 一句话签名 */
-  font-size: 16px;
-  color: #cccccc;
-  letter-spacing: .5px;
+  font-size: 16px;  /* 16px，比正文略大一点点 */
+  color: #cccccc;  /* 浅灰，弱于主标题 */
+  letter-spacing: .5px;  /* 轻微字间距，读起来透气 */
 }
 body.light .tagline { color: var(--text-light); }/* 浅色主题下这个灰太浅了，换成主题里的次要文字色 */
 
@@ -547,10 +547,10 @@ section {                                        /* 页面里的每个 <section>
   background: var(--card);                       /* 半透明深色（Light 主题会自动换成白色） */
   -webkit-backdrop-filter: blur(var(--glass-blur));  /* Safari 前缀 */
   backdrop-filter: blur(var(--glass-blur));      /* 背后内容模糊 = 毛玻璃 */
-  border: none;
+  border: none;  /* 不描边（Local 风格） */
   border-radius: var(--radius);                  /* 12px 圆角 */
   padding: 24px;                                 /* 内边距，内容不贴边 */
-  box-shadow: none;
+  box-shadow: none;  /* 不投影，只靠半透明底色区分层次 */
   transition: background .3s;                    /* 只对背景色做过渡，切主题时更顺 */
 }
 body.light .card {
@@ -561,10 +561,10 @@ body.light .card {
 .card:hover { transform: none; box-shadow: none; }  /* 明确禁止悬停放大/发光（老版本有，现在不要） */
 
 .section-title {                                 /* 每个板块的小标题，左边有一根紫色竖条 */
-  font-size: 21px;
-  font-weight: 700;
-  letter-spacing: .5px;
-  color: var(--text);
+  font-size: 21px;  /* 21px，比正文大一档，但不至于喧宾夺主 */
+  font-weight: 700;  /* 加粗到 700，视线更容易抓住标题 */
+  letter-spacing: .5px;  /* 字间距 0.5px */
+  color: var(--text);  /* 主题主文字色 */
   margin-bottom: 18px;                           /* 与下方内容拉开距离 */
   position: relative;                            /* 作为下面竖条的定位基准 */
   padding-left: 16px;                            /* 左边留 16px 空位，给竖条让路 */
@@ -595,7 +595,7 @@ body.light .card {
   color: var(--text);                            /* 文字用主题主色（深色主题下是近白） */
   font-size: 14.5px;                             /* 字号（可以写小数，浏览器会按比例渲染） */
   text-decoration: none;                         /* 它是 <a>，去掉下划线 */
-  transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
+  transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;  /* 四个属性各 0.2 秒过渡，hover 才顺滑 */
   /* 【transition】列出「哪个属性、花多久」做渐变。这样 hover 时不会「啪」地跳变。 */
 }
 .art-entry-btn:hover {
@@ -616,7 +616,7 @@ body.light .card {
   border-radius: 14px;                           /* 圆角比卡片稍大，小框看起来更圆润 */
   background: var(--field);                      /* 半透明浅底 */
   -webkit-backdrop-filter: blur(10px);           /* 比卡片更轻的模糊，因为框很小 */
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);  /* 标准写法；上面那行是给老 Safari 的等价版本 */
 }
 .art-box-head {                                  /* 小框的标题行：「最新文章」+ 右边「更多 ›」 */
   display: flex;                                 /* 横向排成一行 */
@@ -642,15 +642,15 @@ body.light .card {
 .art-box-list { display: flex; flex-direction: column; gap: 4px; }
 /* 【flex-direction:column】把「一行行」改成「一列行」—— 竖着排。 */
 .art-box-row {                                   /* 小框里每一行文章 */
-  display: flex;
+  display: flex;  /* 标题、日期、元信息横排一行 */
   align-items: baseline;                         /* 【baseline】按文字基线对齐，字号不同的标题和日期看起来才在一行上 */
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 9px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 14px;
-  transition: background .18s, transform .18s;
+  gap: 8px;  /* 三块之间 8px 间距 */
+  padding: 8px 10px;  /* 上下 8、左右 10：撑出一整行可点区域 */
+  border-radius: 9px;  /* 圆角 9px，hover 时背景块才圆润 */
+  text-decoration: none;  /* 它是 <a>，去下划线 */
+  color: var(--text);  /* 文字用主题主色 */
+  font-size: 14px;  /* 14px，小框里字不宜太大 */
+  transition: background .18s, transform .18s;  /* 背景和位移各做 0.18 秒过渡 */
 }
 .art-box-row:hover {
   background: var(--primary-soft);               /* 悬停整行变淡紫底，比只变文字色更好点 */
@@ -665,14 +665,14 @@ body.light .card {
 /* 上面三行是「一行文字超出就显示省略号」的标准三件套，缺一行都不生效。 */
 .art-box-row .m {                                /* 行里的元信息（阅读数 / 时间） */
   flex: none;                                    /* 【flex:none】不参与伸缩，保持原宽度，否则会被标题挤扁 */
-  font-size: 12px;
-  color: var(--text-light);
+  font-size: 12px;  /* 12px 小字，元信息要弱化 */
+  color: var(--text-light);  /* 次要色 */
   font-family: var(--font-num);                  /* 数字用等宽字体，多个数字上下对齐 */
 }
 .art-box-empty, .art-box-none {                  /* 「还没有文章」这类空状态提示 */
-  padding: 10px 4px;
-  font-size: 13px;
-  color: var(--text-light);
+  padding: 10px 4px;  /* 上下 10、左右 4，撑出一点高度 */
+  font-size: 13px;  /* 13px，比正文小 */
+  color: var(--text-light);  /* 灰色，空状态不该抢眼 */
 }
 
 /* ============================================================
@@ -680,13 +680,13 @@ body.light .card {
    ============================================================ */
 .v-grid { display: flex; flex-direction: column; gap: 6px; }   /* 竖排，卡片之间 6px 缝 */
 .v-card {                                        /* 一条视频卡片：左边缩略块 + 中间标题 + 右边数据 */
-  display: flex;
+  display: flex;  /* 三块横排：缩略块 / 标题区 */
   align-items: center;                           /* 三块竖向居中对齐 */
-  gap: 12px;
-  padding: 10px 12px;
+  gap: 12px;  /* 两块之间 12px 间距 */
+  padding: 10px 12px;  /* 上下 10、左右 12，卡片不挤 */
   width: 100%;                                   /* 占满父容器整行 */
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  border: 1px solid var(--border);  /* 细边框勾出卡片轮廓 */
+  border-radius: 12px;  /* 圆角 12px */
   background: rgba(255, 255, 255, .03);         /* 只加 3% 白，几乎看不见，只是比纯黑底稍亮一点 */
   text-decoration: none;                         /* 它是 <a>，去下划线 */
   color: var(--text);                            /* 文字继承主题色 */
@@ -741,7 +741,7 @@ body.light .v-card { background: rgba(255, 255, 255, .55); }   /* 浅色主题�
   display: grid;                                 /* 【grid 网格布局】比 flex 更适合做「等宽多列」 */
   grid-template-columns: repeat(3, 1fr);         /* 【repeat(3,1fr)】分成 3 列，每列 1 份（fr = 分数单位），自动等宽 */
   gap: 14px;                                     /* 行列间距都是 14px */
-  margin-top: 6px;
+  margin-top: 6px;  /* 与上面按钮只留 6px，让它紧贴 */
 }
 /* 每格一个色相，像一排彩绘玻璃砖 */
 .test-item:nth-child(6n+1) { --tint: 138, 43, 226; }   /* 紫 */
@@ -782,8 +782,8 @@ body.light .test-item {
 .test-item:hover {
   transform: scale(1.05);         /* 和 Local 的 .box:hover 一致：放大 1.05 */
   filter: brightness(1.08);                      /* 同时提亮 8% */
-  box-shadow: none;
-  color: #fff;
+  box-shadow: none;  /* 不要投影（放大 + 提亮已经够明显了） */
+  color: #fff;  /* 白字保持不变 */
 }
 .test-item > * { position: relative; z-index: 1; }
 /* 让按钮里的子元素（比如小图标）浮在背景之上，避免被背景色盖住。 */
@@ -808,7 +808,7 @@ body.light .test-item {
   border: 1px solid var(--border);               /* 细边框 */
   color: var(--text-light);                      /* 图标颜色继承这个值（svg 用 currentColor） */
   text-decoration: none;                         /* 去下划线 */
-  transition: background .25s, color .25s, transform .25s, box-shadow .25s, border-color .25s;
+  transition: background .25s, color .25s, transform .25s, box-shadow .25s, border-color .25s;  /* 五个属性一起渐变，悬停时整体「活」起来 */
   /* 五个属性一起渐变，悬停时整体「活」起来。 */
 }
 .socials a:hover {
@@ -821,10 +821,10 @@ body.light .test-item {
 .socials svg { width: 22px; height: 22px; }      /* 图标本身 22px */
 
 footer {
-  text-align: center;
+  text-align: center;  /* 页脚所有文字居中 */
   padding: 34px 20px 44px;                       /* 上留白多、下留白更多，页脚不显拥挤 */
-  color: var(--text-light);
-  font-size: 13.5px;
+  color: var(--text-light);  /* 页脚用次要色，视觉上退到后面 */
+  font-size: 13.5px;  /* 小字，不抢正文 */
 }
 footer p { margin: 4px 0; }                      /* 段间距压到 4px，几行小字排得紧一点 */
 
@@ -836,10 +836,10 @@ footer p { margin: 4px 0; }                      /* 段间距压到 4px，几行
   position: fixed;                               /* 【fixed】固定在视口上，不随页面滚动 */
   inset: 0;                                      /* 四边贴满 = 整屏 */
   background: rgba(3, 4, 8, .62);                /* 近乎黑的 62% 遮罩，把背后的内容压暗 */
-  -webkit-backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);  /* Safari 前缀版（老 Safari 只认这个） */
   backdrop-filter: blur(6px);                    /* 遮罩本身也磨砂，背后的内容糊掉更聚焦 */
   z-index: 999;                                  /* 比导航（100）高得多，一定盖在最上面 */
-  align-items: center;
+  align-items: center;  /* 纵向居中 —— 只在父元素是 flex 时生效 */
   justify-content: center;                       /* 让里面的白框正中 */
   padding: 20px;                                 /* 屏幕很窄时，框和边缘留 20px 缝 */
 }
@@ -852,15 +852,15 @@ footer p { margin: 4px 0; }                      /* 段间距压到 4px，几行
   width: 340px;                                  /* 固定宽 340 */
   max-width: 92vw;                               /* 【vw】视口宽度的百分之一。92vw = 屏幕宽的 92%，手机上不会超出 */
   background: rgba(18, 20, 28, .92);             /* 深色 92% 不透明 */
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);  /* Safari 前缀版 */
   backdrop-filter: blur(28px) saturate(160%);    /* 大半径模糊，做出很厚的一块玻璃 */
-  color: var(--text);
-  border: 1px solid var(--glass-border);
+  color: var(--text);  /* 框内文字色 */
+  border: 1px solid var(--glass-border);  /* 边框（变量现在是 transparent，等于不描边） */
   border-radius: 20px;                           /* 20px 大圆角，弹窗显得更柔 */
   padding: 30px 26px 26px;                       /* 顶部多留 6px 给 × 按钮让位 */
-  box-shadow: 0 30px 80px rgba(0, 0, 0, .6), inset 0 1px 0 var(--glass-hi);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .6), inset 0 1px 0 var(--glass-hi);  /* 大黑投影让弹窗浮在遮罩之上（逗号可叠多层阴影） */
   /* 一个往下 30px 的大黑投影，让弹窗明显浮在遮罩之上 */
-  animation: popIn .32s cubic-bezier(.16, 1, .3, 1) both;
+  animation: popIn .32s cubic-bezier(.16, 1, .3, 1) both;  /* 出现时「弹」一下，调用 @keyframes popIn */
   /* 【animation】名字 时长 缓动 填充模式。
      cubic-bezier(.16,1,.3,1) 是「先快后慢、末尾轻轻一顿」的曲线，比 linear 自然得多。
      both = 动画开始前用第一帧、结束后停在最后一帧。 */
@@ -873,25 +873,25 @@ body.light .login-box { background: rgba(255, 255, 255, .92); }
 }
 .login-close {                                   /* 右上角的 × */
   position: absolute;                            /* 脱离文档流，摆在父元素角上 */
-  top: 12px; right: 16px;
+  top: 12px; right: 16px;  /* 距上 12、距右 16 */
   border: none; background: none;                /* 去掉按钮默认的灰底和边框 */
-  font-size: 24px; line-height: 1;
-  color: var(--text-light);
-  cursor: pointer;
-  transition: color .2s;
+  font-size: 24px; line-height: 1;  /* 去掉按钮默认的灰底和边框 */
+  color: var(--text-light);  /* × 字号 24，行高压到 1 不撑高 */
+  cursor: pointer;  /* 灰色 ×，不抢眼 */
+  transition: color .2s;  /* 鼠标变小手 */
 }
 .login-close:hover { color: var(--text); }
 .login-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-align: center;
-  color: var(--text);
-  letter-spacing: 1px;
+  font-size: 20px;  /* 标题 20px */
+  font-weight: 700;  /* 加粗 */
+  margin-bottom: 20px;  /* 与输入框拉开 20px */
+  text-align: center;  /* 标题居中 */
+  color: var(--text);  /* 主文字色 */
+  letter-spacing: 1px;  /* 字间距 1px */
 }
 .login-input {                                   /* 用户名 / 密码输入框 */
   width: 100%;                                   /* 撑满弹窗宽度（父元素有 padding，所以不会溢出） */
-  padding: 11px 14px;
+  padding: 11px 14px;  /* 上下 11、左右 14，输入框够高好点 */
   margin-bottom: 12px;                           /* 两个输入框之间的间距 */
   border: 1px solid var(--border);               /* 细边框，暗底上才看得出输入框在哪 */
   border-radius: 10px;                           /* 圆角 10px */
@@ -905,8 +905,8 @@ body.light .login-box { background: rgba(255, 255, 255, .92); }
 .login-input::placeholder { color: var(--text-light); opacity: .7; }
 /* 【::placeholder】专门选「输入框里那段灰色提示文字」。 */
 .login-input:focus {                             /* 【:focus】元素被点中、正在输入时的状态 */
-  border-color: rgba(138, 43, 226, .75);
-  box-shadow: 0 0 0 3px rgba(138, 43, 226, .18);
+  border-color: rgba(138, 43, 226, .75);  /* 边框变紫，明确告诉用户「现在在这里输入」 */
+  box-shadow: 0 0 0 3px rgba(138, 43, 226, .18);  /* 外圈 3px 淡紫光带，比浏览器默认的蓝框好看 */
   /* 【0 0 0 3px】模糊为 0 的阴影 = 一圈实心光带，看起来像「聚焦光环」，比 outline 好看。 */
 }
 .login-actions { display: flex; gap: 10px; margin-top: 6px; }
@@ -952,13 +952,13 @@ body.light .login-box { background: rgba(255, 255, 255, .92); }
   max-width: 92vw;                               /* 手机上最多 92% 屏宽 */
   max-height: 72vh;                              /* 【max-height】最高只占屏幕 72%，超出就在内部滚动 */
   background: rgba(18, 20, 28, .94);             /* 深色 94% 不透明 */
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);  /* Safari 前缀版 */
   backdrop-filter: blur(28px) saturate(160%);    /* 厚玻璃 */
   color: var(--text);                            /* 文字色 */
   border: 1px solid var(--glass-border);         /* 现在是透明边框 */
   border-radius: 20px;                           /* 大圆角 */
   padding: 28px 24px 22px;                       /* 顶部多留，给 × 让位 */
-  box-shadow: 0 30px 80px rgba(0, 0, 0, .6), inset 0 1px 0 var(--glass-hi);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .6), inset 0 1px 0 var(--glass-hi);  /* 大黑投影 + 顶部内高光 */
   display: flex;                                 /* 竖排：标题 + 正文 */
   flex-direction: column;                        /* 标题在上、正文在下，竖着排 */
   animation: popIn .32s cubic-bezier(.16, 1, .3, 1) both;   /* 弹入动画 */
@@ -990,18 +990,18 @@ body.light .generic-box { background: rgba(255, 255, 255, .95); }
 .log-list { list-style: none; padding: 0; margin: 0; }
 /* 【list-style:none】去掉 <ul><li> 默认的小圆点。 */
 .log-list li {                                   /* 每一条日志：左边日期 + 右边内容 */
-  display: flex;
-  gap: 14px;
+  display: flex;  /* 日期和内容横排 */
+  gap: 14px;  /* 日期与内容之间 14px */
   padding: 13px 0;                               /* 上下留白做行距，左右不留（靠父容器 padding） */
   border-bottom: 1px solid var(--border);        /* 一条细分隔线 */
-  font-size: 15px;
+  font-size: 15px;  /* 15px，日志正文稍大更好读 */
 }
 .log-list li:last-child { border-bottom: none; }  /* 【:last-child】最后一条不要线，否则底部会多出一道悬空的横线 */
 .log-date {
   color: var(--primary-deep);                    /* 日期用紫色，和数据区的灰色区分开 */
   font-family: var(--font-num);                  /* 等宽数字，多条日志的日期能对齐 */
-  font-size: 12.5px;
-  letter-spacing: .3px;
+  font-size: 12.5px;  /* 12.5px，日期要小 */
+  letter-spacing: .3px;  /* 轻微字间距 */
   white-space: nowrap;                           /* 日期不许折行 */
   padding-top: 4px;                              /* 往下压 4px，和右边正文的第一行对齐（不然会偏高） */
 }
@@ -1123,15 +1123,15 @@ body.light .log-input { background: #fff; }      /* 浅色主题下 4% 白几乎
                                                     calc 里 + 和 - 两边必须有空格，否则不生效。 */
   right: 0;                                      /* 右边缘对齐父元素右边，下拉菜单不会往屏幕外跑 */
   min-width: 150px;                              /* 最窄 150px，里面文字短也不至于挤成一个窄条 */
-  background: rgba(18, 20, 28, .94);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  backdrop-filter: blur(24px) saturate(160%);
-  border: 1px solid var(--glass-border);
-  border-radius: 14px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, .5), inset 0 1px 0 var(--glass-hi);
+  background: rgba(18, 20, 28, .94);  /* 深色 94% 不透明（面板要够实，才压得住背后的内容） */
+  -webkit-backdrop-filter: blur(24px) saturate(160%);  /* Safari 前缀版 */
+  backdrop-filter: blur(24px) saturate(160%);  /* 24px 大半径模糊：面板背后的一切都糊掉 */
+  border: 1px solid var(--glass-border);  /* 边框（变量现在是 transparent，等于不描边） */
+  border-radius: 14px;  /* 圆角 14px */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .5), inset 0 1px 0 var(--glass-hi);  /* 大黑投影让它浮起来（逗号可叠多层阴影） */
   overflow: hidden;                              /* 配合圆角裁掉内部 hover 底色的直角 */
   z-index: 200;                                  /* 比导航（100）高，弹出时盖在导航栏之上 */
-  padding: 6px;
+  padding: 6px;  /* 内边距 6px：让里面的菜单项和面板边缘留一点缝 */
   animation: popIn .2s ease both;                /* 复用弹窗的 popIn，只是更快（0.2 秒） */
 }
 body.light .gear-menu { background: rgba(255, 255, 255, .96); }
@@ -1190,7 +1190,7 @@ body.light .gear-menu { background: rgba(255, 255, 255, .96); }
   object-fit: cover;                             /* 不变形地填满，多余部分裁掉 */
   border: 3px solid rgba(255, 255, 255, .16);   /* 3px 白色半透明边框 */
   background: var(--card-solid);                 /* 图片没加载出来时先显示一块底色 */
-  box-shadow: 0 0 0 1px rgba(138, 43, 226, .3), 0 0 44px rgba(138, 43, 226, .3);
+  box-shadow: 0 0 0 1px rgba(138, 43, 226, .3), 0 0 44px rgba(138, 43, 226, .3);  /* 1px 紫圈 + 44px 紫光晕，头像在暗底上有「发光」感 */
   /* 两个阴影叠着：一个 1px 的紫色细圈贴着边缘，一个 44px 的大范围紫光晕开。 */
   display: block;                                /* 去掉行内图片底部的基线空隙 */
 }
@@ -1251,23 +1251,23 @@ body.light .gear-menu { background: rgba(255, 255, 255, .96); }
   color: #9DC0FF;                                /* 浅蓝文字，在深底上够亮 */
 }
 .role-tag.role-admin {                           /* 管理员：绿 */
-  background: rgba(53, 199, 119, .16);
-  border-color: rgba(53, 199, 119, .45);
-  color: #6FE3A3;
+  background: rgba(53, 199, 119, .16);  /* 绿色 16% 透明度打底 */
+  border-color: rgba(53, 199, 119, .45);  /* 同色但更实的边框 */
+  color: #6FE3A3;  /* 亮绿文字，深底上够显眼 */
 }
 .role-tag.role-owner {                           /* 站长：金 + 一圈光晕，比另外两个更「贵」 */
-  background: rgba(240, 180, 0, .16);
-  border-color: rgba(240, 180, 0, .5);
-  color: #FFD24A;
-  box-shadow: 0 0 18px rgba(240, 180, 0, .22);
+  background: rgba(240, 180, 0, .16);  /* 金色 16% 透明度打底 */
+  border-color: rgba(240, 180, 0, .5);  /* 金色 50% 的边框 */
+  color: #FFD24A;  /* 亮金文字 */
+  box-shadow: 0 0 18px rgba(240, 180, 0, .22);  /* 额外一圈 18px 金色光晕 —— 站长标签要更「贵」一点 */
 }
 .role-tag.role-bio {                             /* 这其实不是身份，是「签名」也复用同一个样式 */
-  background: var(--primary-soft);
-  border-color: rgba(138, 43, 226, .5);
-  color: #C9A7FF;
+  background: var(--primary-soft);  /* 淡紫底（复用主色变量） */
+  border-color: rgba(138, 43, 226, .5);  /* 紫色边框 */
+  color: #C9A7FF;  /* 浅紫文字 */
   max-width: 260px;                              /* 限宽，签名太长不至于把整行占满 */
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: hidden;  /* 超出部分裁掉 */
+  text-overflow: ellipsis;  /* 裁掉的地方显示「…」 */
   white-space: nowrap;                           /* 太长就省略号（三件套） */
   vertical-align: bottom;                        /* 和前面的名字底部对齐，不会被抬到半空 */
 }
@@ -1315,10 +1315,10 @@ body.light .role-tag.role-bio { color: #8A2BE2; }/* 浅色主题下 #C9A7FF 太�
 .my-art-ops { display: inline-flex; gap: 8px; margin-left: auto; }
 /* 【margin-left:auto】在 flex 里 = 把这组操作按钮推到最右边。 */
 .empty-hint {                                    /* 「还没有内容」的占位提示 */
-  color: var(--text-light);
-  font-size: 14px;
-  padding: 20px 0;
-  text-align: center;
+  color: var(--text-light);  /* 灰色，占位提示不该抢眼 */
+  font-size: 14px;  /* 14px，比正文小一号 */
+  padding: 20px 0;  /* 上下各留 20px，空状态也有呼吸感 */
+  text-align: center;  /* 居中显示 */
 }
 
 .profile-side { padding: 24px; }                 /* 右栏那张卡的统一内边距 */
@@ -1333,7 +1333,7 @@ body.light .role-tag.role-bio { color: #8A2BE2; }/* 浅色主题下 #C9A7FF 太�
   font-size: 14px;                               /* 14px 正文 */
   line-height: 1.75;                             /* 行高放宽，多行签名好读 */
   min-height: 40px;                              /* 空签名也占位，右栏高度不会因为有没有签名而跳一下 */
-  white-space: pre-wrap;
+  white-space: pre-wrap;  /* 保留用户输入的换行和空格 */
   /* 【pre-wrap】保留用户输入里的换行和空格，同时超长行仍然自动换行（pre 是只保留换行不换行）。 */
   word-break: break-word;                        /* 超长串强制换行 */
 }
@@ -1461,7 +1461,7 @@ body.light .role-tag.role-bio { color: #8A2BE2; }/* 浅色主题下 #C9A7FF 太�
   border: 1px solid var(--border);               /* 细边框 */
   background: var(--field);                      /* 半透明浅底 */
   color: var(--text-light);                      /* 默认是「次要」的灰色 */
-  transition: background .15s, color .15s, border-color .15s, box-shadow .15s;
+  transition: background .15s, color .15s, border-color .15s, box-shadow .15s;  /* 四个属性各做 0.15 秒过渡 */
 }
 .act-btn:hover {
   border-color: rgba(138, 43, 226, .55);         /* 边框变紫 */
@@ -1594,13 +1594,13 @@ body.light .act-menu { background: rgba(255, 255, 255, .97); }
 /* 外层当定位基准，里面 .mail-panel 用 position:absolute 挂到它下面。 */
 .mail-btn { position: relative; padding: 0; }    /* 信封按钮本身；relative 是为了让红点能压在它右上角 */
 .mail-dot {                                      /* 未读数那个红色小圆点 */
-  position: absolute;
+  position: absolute;  /* 相对 .mail-btn 定位 */
   top: -4px;                                     /* 往上溢出 4px，压在按钮边缘外 */
   right: -5px;                                   /* 往右溢出 5px */
   min-width: 17px;                               /* 最小 17px：数字是一位数时也是圆圈 */
-  height: 17px;
+  height: 17px;  /* 高 17px，和上面的 min-width 相等 = 正圆 */
   padding: 0 4px;                                /* 数字变成两位数时靠 padding 撑宽，变成胶囊 */
-  border-radius: 9px;
+  border-radius: 9px;  /* 圆角 9px = 高度 17 的一半，两位数时自动变成胶囊 */
   background: linear-gradient(135deg, #FF5A5A, #FF8A3D);   /* 红到橙的渐变，比纯红更「报警」 */
   color: #fff;                                   /* 白字 */
   font-size: 11px;                               /* 11px，红点里的数字要小 */
@@ -1609,7 +1609,7 @@ body.light .act-menu { background: rgba(255, 255, 255, .97); }
   text-align: center;                            /* 两位数时水平居中 */
   align-items: center;                           /* flex 纵向居中（虽然这里没 display:flex，留着无害） */
   justify-content: center;                       /* flex 横向居中 */
-  box-shadow: 0 0 0 2px rgba(10, 12, 18, .85), 0 0 12px rgba(255, 90, 90, .6);
+  box-shadow: 0 0 0 2px rgba(10, 12, 18, .85), 0 0 12px rgba(255, 90, 90, .6);  /* 深色描边 + 红色光晕（逗号叠两层） */
   /* 第一个阴影 2px 深色描边：让红点在深色导航上「抠」出一个边，不至于糊在一起；
      第二个是红色光晕。 */
 }
@@ -1884,7 +1884,7 @@ body.light .mail-modal-box { background: rgba(255, 255, 255, .97); }
 .edit-fab,
 .mail-cat-n,
 .socials a:hover {
-  background-image: none !important;
+  background-image: none !important;  /* 清掉渐变这一层，保留纯色底（!important 压住前面所有写法） */
   /* 【background-image:none】只清「渐变」这一层，保留 background-color。
      因为 linear-gradient 在 CSS 里算 image 不算 color，
      清掉它，组件的纯色底就自动露出来了。 */
@@ -1911,13 +1911,13 @@ body.light .mail-modal-box { background: rgba(255, 255, 255, .97); }
 
 /* 滚动条：Local 没有渐变，改成纯紫 */
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
+  background: var(--primary);  /* Local 风格：滚动条滑块用纯紫，不用渐变 */
   border: 2px solid transparent;                 /* 透明边框 + padding-box = 滑块两边留 2px 空隙，看起来更细 */
-  background-clip: padding-box;
+  background-clip: padding-box;  /* 裁到边框内侧，滑块看起来更细 */
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-deep);               /* 悬停换深一点的紫 */
-  background-clip: padding-box;
+  background-clip: padding-box;  /* 悬停时同样要写，否则会被上面的写法盖回去 */
 }
 
 /* 浅色模式：azure 在浅底上看不清，标题改用深色（Local 本身只有暗色，这里只保证可读） */
