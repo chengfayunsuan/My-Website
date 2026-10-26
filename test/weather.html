@@ -1,170 +1,332 @@
 <!DOCTYPE html>
+<!-- 【<!DOCTYPE html>】固定第一行，声明 HTML5 文档。 -->
+
 <!-- ============================================================
      文件：test/weather.html（天气预报页）
-     作用：调第三方天气接口，展示当前天气与未来几天预报。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：调第三方天气接口（Open-Meteo，免费免注册），
+           展示当前天气与实况数据。支持按城市名查、按定位查。
+     说明：这里写的注释不会显示在页面上，只给看代码的人（也就是你）看。
      ============================================================ -->
+
 <html lang="zh-CN">
+<!-- 【lang="zh-CN"】声明内容为简体中文。 -->
+
 <head>
+<!-- 【<head>】设置区，内容不显示在页面上。 -->
+
 <meta charset="UTF-8">
+<!-- 声明 UTF-8 编码，否则中文变乱码。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 手机适配：页面宽度 = 屏幕宽度，初始不缩放。 -->
+
 <title>天气预报 · 乘法</title>
+<!-- 标签页标题。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 标签页小图标；开头的 / 表示从网站根目录算起。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 引入公共样式表；?v=26 是防缓存版本号。 -->
+
 <style>
+/* 下面只放这一页专属的样式。从 style 开始标签到结束标签之间是 CSS 语法，
+   注释必须用斜杠加星号，HTML 那种尖括号叹号写法在这块区域无效。 */
+
   .weather-search {
+  /* 搜索栏容器：输入框 + 两个按钮横排。 */
     display: flex;
+    /* 弹性布局。 */
     gap: 10px;
+    /* 子元素之间统一留 10px，比挨个写 margin 省事。 */
     margin-bottom: 20px;
+    /* 与下面提示文字的间距。 */
     flex-wrap: wrap;
+    /* 【wrap】装不下就换行。手机上输入框和按钮挤在一行会变形，允许换行才正常。 */
   }
+
   .weather-search input {
+  /* 城市名输入框。注意选择器是「.weather-search 里面的 input」。 */
     flex: 1;
+    /* 【flex:1】占满剩余空间，按钮保持原宽，输入框自动拉伸。 */
     min-width: 200px;
+    /* 最窄 200px，太窄了没法输入 —— 配合上面的 wrap，空间不够时它会先换行。 */
     padding: 10px 14px;
+    /* 上下 10、左右 14，输入框够高好点。 */
     border: 1px solid var(--border);
+    /* 细边框，暗底上才看得出输入框在哪。 */
     border-radius: 8px;
+    /* 圆角 8px。 */
     background: var(--card);
+    /* 半透明底色，和卡片风格统一。 */
     color: var(--text);
+    /* 输入文字的颜色。 */
     font-size: 15px;
+    /* 15px：小于 16px 时 iOS 会自动放大页面，所以别写太小。 */
     font-family: inherit;
+    /* 【inherit】继承父元素字体。不写这行输入框会用浏览器默认的宋体，和全站不搭。 */
     outline: none;
+    /* 去掉浏览器默认的蓝色聚焦框，改用下面自定义的边框变色。 */
   }
+
   .weather-search input:focus { border-color: var(--primary); }
+  /* 【:focus】点中、正在输入时的状态：边框变紫，明确告诉用户「焦点在这里」。 */
+
   .weather-search button {
+  /* 两个按钮共用。 */
     padding: 10px 24px;
     border: none;
+    /* 去掉按钮默认的立体边框。 */
     border-radius: 8px;
     background: var(--grad-primary);
+    /* 紫色主按钮。 */
     color: #fff;
+    /* 紫底配白字，对比度最高。 */
     font-size: 15px;
     cursor: pointer;
+    /* 鼠标变小手，暗示可点。 */
     font-family: inherit;
+    /* 按钮默认不继承字体，必须手动写。 */
     transition: background .2s;
+    /* 背景色变化用 0.2 秒过渡，hover 时不突兀。 */
   }
+
   .weather-search button:hover { background: var(--primary-deep); }
+  /* 悬停换成深一档的紫。 */
 
   .weather-hint {
+  /* 「数据来源」那行小字。 */
     font-size: 13px;
     color: var(--text-light);
+    /* 次要色，弱化。 */
     margin-bottom: 18px;
   }
 
   .weather-card {
+  /* 查询成功后显示的那张天气卡（由 JS 动态生成）。 */
     background: var(--field);
+    /* 比卡片再淡一层的底色，形成层次。 */
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 26px;
+    /* 内边距，内容不贴边。 */
     text-align: center;
+    /* 卡里所有内容居中。 */
   }
+
   .weather-city {
+  /* 城市名。 */
     font-size: 22px;
     font-weight: bold;
+    /* 加粗。 */
     color: var(--text);
     margin-bottom: 6px;
   }
+
   .weather-temp {
+  /* 那个巨大的温度数字，页面的视觉主角。 */
     font-size: 64px;
     font-weight: bold;
     color: var(--primary-deep);
+    /* 用紫色，比白色更有记忆点。 */
     line-height: 1.1;
+    /* 行高略微放宽，大字号不会觉得上下憋。 */
     margin: 14px 0;
+    /* 上下各 14px，把它单独撑成一块。 */
   }
+
   .weather-desc {
+  /* 「晴 / 多云」这种描述。 */
     font-size: 18px;
     color: var(--text);
     margin-bottom: 18px;
   }
+
   .weather-details {
+  /* 体感、湿度、风向、风速这一行。 */
     display: flex;
     justify-content: center;
+    /* 整行居中。 */
     gap: 24px;
+    /* 项与项之间 24px。 */
     flex-wrap: wrap;
+    /* 窄屏时换行，不会挤成一行看不清。 */
     font-size: 14px;
     color: var(--text-light);
     margin-top: 12px;
   }
+
   .weather-details span b { color: var(--text); font-weight: 600; }
+  /* 【选择器套娃】.weather-details 里面的 span 里面的 b（加粗标签）。
+     数值用主文字色 + 半粗，和前面的「体感」等标签区分开。 */
+
   .weather-error { color: #e74c3c; text-align: center; padding: 20px; }
+  /* 出错提示：红字、居中、留白。 */
   .weather-loading { color: var(--text-light); text-align: center; padding: 20px; }
+  /* 加载中提示：灰字、居中、留白。 */
 </style>
 </head>
+
 <body>
 
     <div id="navbar"></div>
+    <!-- 导航栏占位，由 js/nav.js 注入。 -->
 
   <header>
+  <!-- 【<header>】页头语义化标签。 -->
     <img class="avatar" src="/avatar.jpg" alt="头像" onerror="this.style.display='none'">
+    <!-- 【<img>】图片标签。src 是地址（开头的 / 表示从网站根目录算）。
+         【alt】图片加载不出来时的替代文字，也是读屏软件念的内容。
+         【onerror】加载失败时执行的一小段 JS：this 指这张图自己，
+           display='none' 把它藏起来，避免显示一个破图标。 -->
     <h1 class="name">天气预报</h1>
+    <!-- 【h1】一级标题，一页只该有一个。 -->
     <p class="tagline">查询全国各大城市实时天气</p>
+    <!-- 副标题。 -->
   </header>
 
   <section>
+  <!-- 【<section>】内容区块语义化标签。 -->
     <div class="card">
+    <!-- 磨砂玻璃卡片。 -->
       <h2 class="section-title">查询天气</h2>
 
       <div class="weather-search">
         <input id="cityInput" type="text" placeholder="输入城市名，如：开封 / 北京 / 上海" />
+        <!-- 【<input>】输入框，没有结束标签，末尾的斜杠是自闭合写法。
+             【type="text"】普通文本框。
+             【placeholder】没输入时显示的灰色提示文字。
+             【id="cityInput"】给 JS 一个抓手，用 document.getElementById 精确定位。 -->
         <button id="searchBtn">查询</button>
+        <!-- 【<button>】按钮标签。不写 type 属性在表单里可能默认提交表单，
+             这里没有 <form>，所以无所谓，但规范写法建议加上 type="button"。 -->
         <button id="locateBtn">📍 定位我</button>
+        <!-- 📍 是 Unicode 字符，直接写在 HTML 里即可，不需要图片。 -->
       </div>
       <p class="weather-hint">数据来源：Open-Meteo · 无需注册</p>
 
       <div id="weatherResult">
+      <!-- 结果容器。里面现在是「请输入城市名」的占位，
+           JS 拿到数据后会整个替换掉里面的内容。 -->
         <p class="weather-loading">请输入城市名，或点「定位我」自动获取当前位置</p>
       </div>
     </div>
   </section>
 
   <footer><p>© 2026 CHENGFA</p></footer>
-  
+  <!-- 【<footer>】页脚语义化标签。 -->
+
  <script src="/js/config.js"></script>
+ <!-- 【<script src>】引入外部 JS 文件。顺序不能乱：
+      config（配置）→ bg（背景）→ supabase 库 → sb（数据层）→ nav（导航），
+      后面的代码可能用到前面定义的全局变量。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
  <script src="/js/sb.js"></script>
  <script src="/js/nav.js?v=23"></script>
-<script>
 
+<script>
 /* ========== 天气 ========== */
+/* 下面这段是本页自己的逻辑。从 script 开始标签到它的结束标签之间全是 JavaScript，
+   注释要用斜杠加星号或双斜杠，HTML 那种尖括号叹号写法在这块区域无效。 */
+
 const resultBox = document.getElementById('weatherResult');
+// 【const】声明常量，之后不能再给它重新赋值（但对象内部可以改）。
+// 【document.getElementById('weatherResult')】按 id 找元素，找不到返回 null。
+//   这个变量在整段脚本里反复用，所以提到最外面声明一次。
 
 // 天气代码 → 中文描述（Open-Meteo 用 WMO code）
 const WMO = {
+// 【对象字面量】一对大括号包住「键: 值」的集合，相当于一个小字典。
+//   这里的键是世界气象组织规定的天气代码，值是中文说法。
   0: '晴', 1: '少云', 2: '多云', 3: '阴',
+  // 【键可以不加引号】数字和英文单词当键时，引号可省略。
+  //   数字键在内部会被自动转成字符串 '0'、'1'，取值时写 WMO[0] 或 WMO['0'] 都行。
   45: '雾', 48: '雾凇',
   51: '小毛毛雨', 53: '毛毛雨', 55: '大毛毛雨',
   61: '小雨', 63: '中雨', 65: '大雨',
   71: '小雪', 73: '中雪', 75: '大雪',
   80: '阵雨', 81: '强阵雨', 82: '暴雨',
   95: '雷暴', 96: '雷暴伴冰雹', 99: '强雷暴伴冰雹'
+  // 【最后一项不加逗号】这是好习惯，虽然后面再加一项时容易忘。
 };
 
 async function queryByName(name) {
+// 【async function】声明一个「异步函数」。它有两个特点：
+//   ① 里面可以用 await 等异步操作；② 它一定返回一个 Promise。
+// 这一版的分工：这个函数负责「城市名 → 经纬度」，再交给下面那个函数查天气。
+
   resultBox.innerHTML = '<p class="weather-loading">查询中…</p>';
+  // 【innerHTML】把字符串当成 HTML 塞进去，原来的内容整体替换。
+  //   先显示「查询中…」，用户不会对着空屏发呆。
+
   try {
+  // 【try { ... } catch(err) { ... }】错误捕获。
+  //   把可能出错的代码放进 try，一旦抛错就跳到 catch，
+  //   程序不会崩掉整个页面 —— 这是处理网络请求的标配写法。
+
     // 1. 城市名 → 经纬度
     const geoRes = await fetch(
+    // 【fetch(url)】发起一个网络请求，返回 Promise。
+    // 【await】等它真正完成，把结果拿出来。
+    //   await 只能在 async 函数里用，否则语法错误。
+    //   没有 await 的话，你拿到的是一个 Promise 对象而不是真正的数据。
       `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=1&language=zh`
+      // 【模板字符串】反引号包起来，能换行、能嵌 ${表达式}。
+      // 【encodeURIComponent(name)】把用户输入的中文、空格、特殊符号转成 URL 安全的形式。
+      //   不转的话，输入「a&b」会把 URL 参数截断，甚至能构造出恶意请求。
+      //   【?name=...&count=1&language=zh】问号后面是查询参数，& 分隔多个。
+      //   count=1 只要一个匹配结果，language=zh 返回中文城市名。
     );
+
     const geo = await geoRes.json();
+    // 【.json()】把响应体解析成 JS 对象。这个动作本身也是异步的，所以也要 await。
+    //   常见误区：以为 fetch 完就能直接读数据，其实还要再解析一次。
+
     if (!geo.results || !geo.results.length) throw new Error('找不到这个城市');
+    // 【|| 短路】geo.results 为空就直接判定为真，不再看后面。
+    // 【throw new Error('...')】主动抛出一个错误。
+    //   抛出后，下面的代码不再执行，直接跳到 catch（err.message 就是这句话）。
+
     const loc = geo.results[0];
+    // 【[0]】取数组第一个。上面已经确认过数组非空，所以这里安全。
     await queryByCoord(loc.latitude, loc.longitude, loc.name);
+    // 【await 一个 async 函数】等它跑完再继续。
+    //   三个参数：纬度、经度、城市名。
   } catch (err) {
+  // 【err】捕获到的错误对象，.message 是错误说明。
+
     resultBox.innerHTML = `<p class="weather-error">查询失败：${err.message}</p>`;
+    // 把错误原因显示给用户。要转义的话更严谨，但这里是自家文案，风险可控。
   }
 }
 
 async function queryByCoord(lat, lon, cityName) {
+// 按经纬度查天气。定位按钮和城市名搜索最后都走这里，避免写两遍。
   try {
     const wRes = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m&timezone=auto`
+      // 【这个接口的参数】latitude / longitude 是坐标；
+      //   current=... 用逗号列出「我要哪些实时字段」（温度、湿度、体感、天气码、风速、风向）；
+      //   timezone=auto 让服务端按坐标自动推断时区。
     );
     const w = await wRes.json();
     const c = w.current;
-    const dirs = ['北','东北','东','东南','南','西南','西','西北'];
-    const dir = dirs[Math.round(c.wind_direction_10m / 45) % 8];
+    // 把 w.current 存成短名字 c，下面写起来短一些。
 
+    const dirs = ['北','东北','东','东南','南','西南','西','西北'];
+    // 八个风向对应的中文，从正北开始顺时针排列。
+    const dir = dirs[Math.round(c.wind_direction_10m / 45) % 8];
+    // 【这个换算分三步】
+    //   ① c.wind_direction_10m 是气象风向：0 度 = 正北，90 = 正东，180 = 正南，270 = 正西。
+    //   ② 除以 45：把一个圆分成 8 份（45 × 8 = 360），得到 0~8 之间的数。
+    //   ③ Math.round() 四舍五入取整，再用 % 8 ---- % 是「取余数」，
+    //      因为 360 度除以 45 等于 8，而数组只有 0~7 八个位置，8 % 8 = 0，正好绕回正北。
+    // 【% 取余】10 % 3 = 1（10 除以 3 商 3 余 1）。用来做「循环取值」最合适。
+
+    // 【下面这块是拼 HTML】内嵌的 ${} 会把变量值填进去。
+    //   注意：从反引号开始到结束之间是字符串内容，不是代码，
+    //   在里面写注释符号会被原样输出到页面上，所以注释都放在外面。
     resultBox.innerHTML = `
       <div class="weather-card">
         <div class="weather-city">${cityName || '当前位置'}</div>
@@ -178,6 +340,11 @@ async function queryByCoord(lat, lon, cityName) {
         </div>
       </div>
     `;
+    // 【上面用到的小技巧】
+    //   ${cityName || '当前位置'}  有城市名就显示名字，没有就写「当前位置」。
+    //   ${Math.round(...)}          温度带小数，四舍五入成整数更好看。
+    //   ${WMO[c.weather_code] || '未知'}  用接口给的代码去字典里取中文；
+    //     如果碰到字典里没收录的代码（比如 200 之类的），就显示「未知」而不是 undefined。
   } catch (err) {
     resultBox.innerHTML = `<p class="weather-error">查询失败：${err.message}</p>`;
   }
@@ -185,23 +352,45 @@ async function queryByCoord(lat, lon, cityName) {
 
 /* ========== 按钮 ========== */
 document.getElementById('searchBtn').addEventListener('click', () => {
+// 【addEventListener('click', 函数)】给按钮挂「点击」监听。
+//   【() => {}】是箭头函数，等价于 function(){}，写起来更短。
+//   回调函数：不立刻执行，等事件发生时才被调用。
   const city = document.getElementById('cityInput').value.trim();
+  // 【.value】读出输入框里的文字。
+  // 【.trim()】去掉首尾空格。用户手滑打了空格，不去掉就会搜「 北京 」搜不到。
   if (!city) return alert('请输入城市名');
+  // 【alert】弹一个系统提示框。
+  // 【return alert(...)】一种偷懒写法：先执行 alert，然后立刻 return 退出函数。
+  //   等价于 { alert('...'); return; }，只是省了几行。
   queryByName(city);
+  // 调上面那个函数去查。
 });
+
 document.getElementById('cityInput').addEventListener('keydown', e => {
+// 【keydown】按键按下的瞬间触发。
+// 【e】事件对象，里面带着「按了哪个键」等信息。
   if (e.key === 'Enter') document.getElementById('searchBtn').click();
+  // 【===】严格相等：值和类型都要一样。永远用三个等号，别用两个。
+  // 【.click()】用代码「模拟点击」这个按钮 —— 这样就不用把查询逻辑再写一遍。
+  //   这是很实用的小技巧：复用按钮已有的行为。
 });
 
 document.getElementById('locateBtn').addEventListener('click', () => {
   if (!navigator.geolocation) return alert('你的浏览器不支持定位');
+  // 【navigator.geolocation】浏览器提供的定位能力。老浏览器可能没有这个对象，
+  //   不加判断直接用会报错崩掉。
   resultBox.innerHTML = '<p class="weather-loading">正在获取你的位置…</p>';
   navigator.geolocation.getCurrentPosition(
+  // 【getCurrentPosition(成功回调, 失败回调, 选项)】浏览器弹窗问用户「允许定位吗」。
     pos => queryByCoord(pos.coords.latitude, pos.coords.longitude, '当前位置'),
+    // 用户同意后：pos.coords 里是经纬度，直接拿去查天气。
     err => {
       resultBox.innerHTML = `<p class="weather-error">定位失败：${err.message}<br>请手动输入城市名。</p>`;
+      // 【<br>】换行标签。用户拒绝授权时给出替代方案，体验才完整。
     },
     { timeout: 10000 }
+    // 【选项对象】timeout: 10000 表示最多等 10 秒（毫秒），超时就当失败。
+    //   不设的话可能一直转圈，用户不知道发生了什么。
   );
 });
 </script>
