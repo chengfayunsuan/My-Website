@@ -1100,8 +1100,14 @@ function renderComments() {
   const b = document.getElementById('cmtList');
   if (!b) return;
   /* 评论区可能在视频加载失败时根本不存在，不判断会报 null 错。 */
-  const tops = cmts.filter(c => !c.parent).sort((a, b) => (b.floor || 0) - (a.floor || 0) || b.id - a.id);
-  /* 【筛出主楼】!c.parent = 没有父级 = 主楼。
+  const ids = new Set(cmts.map(c => String(c.id)));
+  /* 【收集所有评论 id，用来判断「父级还在不在」】
+     用 Set 而不是数组：has() 是哈希查找 O(1)，
+     数组 includes 是逐个比对 O(n)，评论多了整体会变成 O(n²)。
+     套 String() 是因为 id 和 parent 的类型可能不统一
+     （数字 vs 字符串），统一成字符串才不会漏判。 */
+  const tops = cmts.filter(c => !c.parent || !ids.has(String(c.parent))).sort((a, b) => (b.floor || 0) - (a.floor || 0) || b.id - a.id);
+  /* 【筛出主楼】原来只写 !c.parent（没有父级 = 主楼）。
      【排序，两个条件用 || 串起来】
        ① (b.floor || 0) - (a.floor || 0) → 楼层降序 = 新的在上面
        ② || b.id - a.id                  → 楼层相同时按 id 降序兜底
@@ -1110,12 +1116,14 @@ function renderComments() {
      【(b.floor || 0)】楼层可能是 null（老数据），兜底成 0 防止 NaN ——
        NaN 参与比较永远是 false，排序会完全乱掉。
 
-     【一个缺口：孤儿回复】
-     只筛 !c.parent 的话，如果一条回复的「父级主楼被删了」，
+     【孤儿回复这个缺口，已经修好了】
+     原来只筛 !c.parent，如果一条回复的「父级主楼被删了」，
      它既不是主楼（有 parent），又挂不到任何主楼下面（父级不存在）——
      于是永远不显示，等于凭空消失。
-     正确做法是 `!c.parent || !exists(c.parent)`（board.html 里就是这么写的），
-     这个文件漏了。影响不大（删主楼时一般会连带删回复），但逻辑不够严谨。 */
+     现在多了一个条件 !ids.has(String(c.parent))：
+     「父级不在当前评论列表里」也当主楼处理，尸体至少能浮上来。
+     位置会有点怪（本该缩进在某条不存在的评论下面），
+     但比数据人间蒸发好得多。 */
   const cnt = document.getElementById('cmtCount'); if (cnt) cnt.textContent = cmts.length;
   /* 【一行写两条语句用分号隔开】只在很短时这么写。
      【评论数用 cmts.length】包含主楼 + 回复。

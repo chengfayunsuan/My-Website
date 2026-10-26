@@ -296,7 +296,7 @@
     //   直接 users.sort() 会把原始顺序改掉，之后再想恢复就难了。
     // 【.sort(比较函数)】按比较函数的返回值排序：
     //   返回负数 → a 排前面；返回正数 → b 排前面；返回 0 → 位置不变。
-      return dir * ((Number(a.uid_no) || 0) - (Number(b.uid_no) || 0));
+      return dir * ((Number(a.uid) || 0) - (Number(b.uid) || 0));
       // 【核心技巧】这里其实是「升序公式 × dir」：
       //   升序就是 a - b（a 小就返回负数，a 排前面）。
       //   乘 dir：dir = 1 时结果不变 = 正序；dir = -1 时正负颠倒 = 倒序。
@@ -304,12 +304,14 @@
       // 【Number(...)】强制转数字，防止字段是字符串时用减法出现奇怪结果。
       // 【|| 0】字段可能是 undefined，兜底成 0。
       //
-      // 【注意这里有个字段名不一致的隐患】
-      //   下面 load() 里构造的对象字段叫 uid，但这里读的是 uid_no。
+      // 【这里原来写的是 uid_no，是个字段名不一致的 bug，已修正】
+      //   下面 load() 里构造的对象字段叫 uid，这里原来读的是 uid_no。
       //   uid_no 不存在 → Number(undefined) 是 NaN → NaN || 0 得到 0
-      //   → 所有人的值都是 0 → 减法结果是 0 → 排序实际上完全没生效。
-      //   要修的话把这里两处 uid_no 都改成 uid 即可（改动很小，但属于逻辑修改，
-      //   本次只做注释，没有擅自改动，留给你自己决定）。
+      //   → 所有人的值都是 0 → 减法结果是 0 → 排序实际上完全没生效，
+      //   点「切换顺序」看着提示文字变了，列表却纹丝不动。
+      //   这类 bug 特别隐蔽：不报错、不崩，只是「功能静默失效」。
+      //   教训：JS 里读一个不存在的属性只得到 undefined，永远不报错，
+      //        所以字段改名之后，凡是还在用旧名字的地方都得全局搜一遍。
     });
 
     countEl.textContent = '一共 ' + sorted.length + ' 个人'
@@ -320,16 +322,16 @@
     listEl.innerHTML = sorted.map(function (u) {
     // 【.map(回调)】把数组里每一项「变成」另一个东西，返回等长的新数组。
     //   这里把每个用户对象 u 变成一段 HTML 字符串。
-      const uid = Number(u.uid_no) || 0;
-      // 同上面的问题：字段名应该是 uid，这里写 uid_no 会一直得到 0，
-      //   结果页面上一律显示「UID 0」。这也是同一个字段名不一致引起的。
-      // 显示用 uid_no（注册顺序号，站长=1）；链接也优先用它，profile 页两种都认
-      return '<a class="user-row" href="/profile/?uid=' + encodeURIComponent(u.uid_no || u.id) + '">'
+      const uid = Number(u.uid) || 0;
+      // 【这里原来也是 uid_no，同一个 bug，已跟着改成 uid】
+      //   不改的话页面上一律显示「UID 0」，因为读不到值就兜底成 0。
+      // 显示用 uid（注册顺序号，load() 里按索引算出来的，站长=1）
+      return '<a class="user-row" href="/profile/?uid=' + encodeURIComponent(u.uid || u.id) + '">'
       // 【用 + 拼长字符串】这行断成多行时，每行开头要留一个 + 号，
       //   否则语法错误（这也是为什么很多人更喜欢用反引号模板字符串）。
       // 【encodeURIComponent】把值转成 URL 安全形式。
       //   ID 里万一有特殊字符（& / # / 空格），不转义会把链接搞坏。
-      // 【u.uid_no || u.id】优先用注册序号，没有就用数据库 id 兜底。
+      // 【u.uid || u.id】优先用注册序号，没有就用数据库 id 兜底。
         +   '<img class="user-row-avatar" src="' + esc(fixAvatar(u.avatar)) + '" alt="">'
         // 头像地址先过 fixAvatar 清洗，再过 esc 转义 —— 双重保险。
         // 【alt=""】空字符串：这是纯装饰性图片，读屏软件可以跳过。
@@ -404,8 +406,8 @@
           role: u.role,
           avatar: u.avatar_url
           // 【注意字段改名】数据库里叫 avatar_url，这里改成 avatar。
-          //   改名本身没问题，但下面 paint() 里读的是 uid_no（这里定义的是 uid），
-          //   字段名没对上 —— 这就是上面提到的那个隐患。
+          //   改名本身没问题，但改完必须把「所有读它的地方」一起改 ——
+          //   paint() 里原来还在读 uid_no，就是漏改的后果（已修正为 uid）。
         };
       });
       paint();

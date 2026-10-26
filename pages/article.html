@@ -1144,7 +1144,21 @@ function renderComments() {
   if (!box) return;
   /* 【为什么要判断】因为评论区可能在文章加载失败时根本不存在。
      不判断的话下面 box.innerHTML 会报 null 错。 */
-  const tops = cmts.filter(c => !c.parent).sort((a, b) => (b.floor || 0) - (a.floor || 0) || b.id - a.id);
+  const ids = new Set(cmts.map(c => String(c.id)));
+  /* 【先把所有评论 id 收进一个 Set】
+     为了下面判断「某个父级还在不在」。
+     【为什么用 Set 而不是数组 + includes】
+       Set.has() 是哈希查找，接近 O(1)；
+       数组的 includes 是逐个比对，O(n)。
+       评论有 n 条时，数组方案整体是 O(n²)，Set 是 O(n)。
+       评论量小的时候看不出差别，但这是「本来就该这么写」的习惯。
+     【为什么套一层 String()】
+       因为 id 和 parent 的类型不一定统一 ——
+       数据库里可能是数字，某些接口返回的又是字符串。
+       String(1) 和 String('1') 都是 '1'，这样比对才不会因为类型不同而漏判。
+       （如果直接 Set.has(1) 去查一个 '1'，会返回 false，
+         孤儿回复还是显示不出来，等于白改。） */
+  const tops = cmts.filter(c => !c.parent || !ids.has(String(c.parent))).sort((a, b) => (b.floor || 0) - (a.floor || 0) || b.id - a.id);
   /* 【筛出主楼】!c.parent = 没有父级 = 是主楼（不是回复）。
      【排序，两个条件用 || 串起来】
        ① (b.floor || 0) - (a.floor || 0) → 楼层号降序 = 新的在上面
@@ -1156,14 +1170,19 @@ function renderComments() {
      【(b.floor || 0)】楼层号可能是 null（老数据），
        兜底成 0 防止 NaN —— NaN 参与比较永远是 false，排序会完全乱掉。
 
-     【注意这里有个缺口：孤儿回复】
-     只筛 !c.parent 的话，如果一条回复的「父级主楼被删了」，
+     【孤儿回复这个问题，已经修好了】
+     原来只筛 !c.parent 的话，如果一条回复的「父级主楼被删了」，
      它就既不是主楼（有 parent），又挂不到任何主楼下面（因为父级不存在）——
      于是这条回复永远不会显示，等于凭空消失了。
-     正确的做法是：`!c.parent || !exists(c.parent)`，
-     也就是「没有父级，或者父级已经不存在」的，都当主楼处理。
-     （board.html 里就是这么处理的，这个文件漏了。
-       影响不大 —— 删主楼时后端一般会连带删回复 —— 但属于逻辑不严谨。） */
+     现在判断改成了 `!c.parent || !ids.has(String(c.parent))`：
+     「没有父级，或者父级已经不在 cmts 里了」，两种情况都当主楼处理。
+     这样孤儿回复会作为独立一楼显示出来，虽然位置有点怪（它本来该缩进在
+     某条已经不存在的评论下面），但至少内容还在，不会人间蒸发。
+     【为什么不能取「把它挂到原来的父级下面」】
+       因为父级对象已经不存在了，渲染时根本找不到挂载点 ——
+       总不能凭空造一个「已删除」的占位楼出来。
+       真要做得更漂亮，可以在孤儿回复上加一句「原回复的评论已删除」的提示，
+       这里先保证「不丢数据」这个底线。 */
   document.getElementById('cmtCount').textContent = cmts.length;
   /* 【评论数用的是 cmts.length】包含主楼 + 回复的总数。
      【为什么不用 tops.length】因为「评论 12」应该把楼中楼也算进去，

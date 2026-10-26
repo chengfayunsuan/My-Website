@@ -1299,13 +1299,59 @@ editor.addEventListener('paste', e => {
      但那样会丢掉「从本站复制自己的文章」时的格式。是个需要权衡的设计问题。
      这里选择「不管」，因为本站文章都是自己写自己发，脏一点能接受。 */
 });
-/* 【注释里提到的「拖入」其实没实现】
-   文件名叫「粘贴 / 拖入图片直接上传」，但代码里只监听了 paste 事件，
-   没有监听 drop / dragover。
-   【写「拖入」要补的代码】大概是：
-     editor.addEventListener('dragover', e => e.preventDefault());
-     editor.addEventListener('drop', e => { ... 从 e.dataTransfer.files 取文件 ... });
-   这是「注释和代码不同步」的情况，读代码时要留意这种不一致。 */
+/* 【拖入图片直接上传 —— 这段代码原来只写在注释里，现在真的补上了】
+   之前文件名和注释都写着「粘贴 / 拖入图片直接上传」，
+   但代码里只监听了 paste，拖进来完全没反应。
+   这是典型的「文档超前于实现」，用户按提示操作会失望。
+
+   【拖拽的三件套事件，缺一不可】
+     dragenter / dragover —— 拖到元素上方时持续触发
+     drop                  —— 松手那一刻触发
+   关键点：必须在 dragover 里调用 preventDefault()，
+   否则浏览器认为「这个位置不接受放置」，drop 事件根本不会触发。
+   这是拖拽最容易卡住的地方 —— 写了 drop 却永远不执行，八成是漏了这句。 */
+
+editor.addEventListener('dragover', e => {
+  /* 【只对「拖文件」放行，拖文字不拦】
+     e.dataTransfer.types 是一个列表，里面是这次拖拽携带的数据类型。
+     拖文件时里面会有 'Files'；拖一段选中的文字时是 'text/plain' 之类。
+     【为什么不全无脑 preventDefault】
+       如果对什么都放行，用户想「把一段文字拖进编辑器」也会被我们接管，
+       但我们的 drop 只处理图片、不处理文字 —— 结果就是文字拖不进去了，
+       相当于为了加一个功能，弄坏了另一个功能。
+     【[...].includes 的写法】types 可能是数组也可能是 DOMStringList，
+       用扩展运算符统一转成真数组，才能安全调用 includes。 */
+  const types = [...((e.dataTransfer && e.dataTransfer.types) || [])];
+  if (types.includes('Files')) {
+    e.preventDefault();
+    /* 【dropEffect = 'copy'】让鼠标指针显示成「复制」图标（带加号）。
+       纯视觉提示，不设也能用，但用户能更明确地知道「松手就会上传」。 */
+    e.dataTransfer.dropEffect = 'copy';
+  }
+});
+
+editor.addEventListener('drop', e => {
+  /* 【drop 里也要 preventDefault】
+     不拦的话，浏览器会用默认方式处理这个文件 ——
+     通常是「直接打开它」，当前页面就被导航走了，写了一半的文章全丢。
+     这个坑比想象中更常见，所以即使 dragover 已经拦过，这里还要再拦一次。 */
+  const files = (e.dataTransfer && e.dataTransfer.files) || [];
+  for (const f of files) {
+    if (f.type && f.type.startsWith('image/')) {
+      e.preventDefault();
+      if (!requireLogin()) return;
+      uploadFile(f, 'img');
+      /* 【只传第一个图片就收工】和粘贴那边保持一致 ——
+         一次拖十张图，串行上传会让用户等很久，而且光标位置也难处理。 */
+      return;
+    }
+  }
+  /* 【拖进来的不是图片（比如 PDF、视频）】
+     这里什么都不做，也不 preventDefault ——
+     浏览器会按它自己的方式处理（可能是下载，可能是打开）。
+     其实更好的做法是提示一句「只支持图片」，
+     但沉默的降级也不算错，至少不会打乱编辑器的内容。 */
+});
 
 function setMsg(text, cls) {
   /* 设置页面上的结果提示文字。 */

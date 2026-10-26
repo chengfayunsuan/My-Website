@@ -58,7 +58,10 @@ const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, 
 //   .join('')            全部拼成一个长字符串
 
 async function sha256(str) {
-// 【async function】算 SHA-256 哈希。名字叫 sha256 是历史遗留，改不改都行。
+// 【async function】算 SHA-256 哈希。函数名就叫 sha256，名副其实 ——
+//   它干的就是 SHA-256，没有任何历史包袱。
+//   （之前我在这一行写过「名字是历史遗留」，那是误判，已撤回：
+//     排查环境回显时把这串字符显示成了别的词，实际文件一直是对的。）
   return hex(await crypto.subtle.digest('SHA-256', enc.encode(str)));
   // 【await】crypto.subtle.digest(算法, 数据) = 算摘要（哈希）：把任意长度的内容变成固定长度的指纹。
   // 同样的输入永远得到同样的输出，输入变一个字结果就完全不同 —— 签名就靠这个特性。

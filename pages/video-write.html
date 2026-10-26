@@ -328,16 +328,25 @@ const quotaEl = document.getElementById('quota');
      跟普通的数据变量区分开。团队协作时这种约定很有用。 */
 
 /* ============ 3. 状态变量 ============ */
-let videoName = '', duration = 0, uploaded = false, videoUrl = '';
-/* 【一行声明四个变量】用逗号分隔。
-   【每个的含义】
-     videoName → 上传的视频文件名
-     duration  → 时长（秒）
+let uploaded = false, videoUrl = '';
+/* 【这两个是真正在用的状态】
      uploaded  → 视频文件是否已经上传成功（布尔）
      videoUrl  → 上传成功后的可访问地址
-   【为什么 videoName 和 duration 声明了但基本没用】
-   这是历史遗留：早期版本会显示文件名和读取时长，后来改成「只认 BV 号」就不再用了。
-   不影响功能，属于「代码里的死变量」。看到这种可以安心删掉。 */
+
+   【这里原本还声明了 videoName 和 duration，已经删掉了】
+     它们从头到尾只被赋值、从没被读取过 —— 典型的死变量：
+       videoName 在选文件时被赋成 file.name，然后再也没人看它。
+       duration  更彻底，声明之后一次都没被碰过。
+     为什么用不上？
+       ① 文件名：现在发布只认 BV 号或已上传的地址，
+          文件名信息本来就包含在 videoUrl 的路径里，不需要单独存。
+       ② 时长：直接从 B 站抓（biliInfo.duration），
+          或者由后端按视频文件自己解析，前端不用管。
+     【判断死变量的方法】
+       在编辑器里搜这个变量名，看出现的每一处是「赋值」还是「读取」。
+       只有赋值没有读取 = 死变量，删掉不会有任何影响。
+       （注意：删之前要确认没有用字符串的方式动态引用它，
+         比如 window['video' + 'Name']，这种情况静态搜索搜不出来。） */
 let loggedIn = false;
 /* 是否已登录。初始 false，下面那个 IIFE 会去查一次会话然后改它。 */
 
@@ -578,8 +587,10 @@ async function handleVideo(file) {
      【换算是这样的】file.size / 1024 → KB，再 /1024 → MB，再 /1024 → GB。
      【.toFixed(2)】保留 2 位小数，返回字符串。
        不处理的话可能显示成 "2.384185791015625GB"，一长串数字看着像 bug。 */
-  videoName = file.name; videoUrl = ''; uploaded = false;
-  /* 【一行三个赋值】用分号隔开。
+  videoUrl = ''; uploaded = false;
+  /* 【一行两个赋值】用分号隔开。
+     （原来这里还有一句 videoName = file.name，
+       那个变量已经删了 —— 它赋值之后从来没被读过。）
      【为什么 videoUrl 要清空】因为现在选的是新文件，上一次上传的地址必须作废，
      否则可能拿旧地址去发布。 */
   publishBtn.disabled = !biliOf(bvidEl.value);
