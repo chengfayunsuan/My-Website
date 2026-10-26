@@ -1,108 +1,290 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     文件：manage/dashboard.html（管理后台）
-     作用：站长 / 管理员专用。用户管理、内容审核、举报处理的入口面板。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     文件：manage/dashboard.html（管理后台 / 管理面板）
+     路径：/manage/dashboard.html
+
+     作用：站长 / 管理员专用的入口面板。两件事：
+           1. 一排功能入口按钮（15 个格子，目前只有第 1 个「举报处理」能点）
+           2. 点开之后出现的「举报处理」面板：放行 / 删评
+
+     权限：进页面先验身份，只有 role 是 owner（站长）或 admin（管理员）才放行。
+
+     注释说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
      ============================================================ -->
+<!-- 【DOCTYPE】给浏览器看的版本声明，意思是「按 HTML5 标准解析」。
+     不写会退回怪异模式，盒模型和行高的算法都会变，页面直接错位。
+     必须是文件最靠上的一行（注释在它下面可以，但标签不能跑到它前面）。 -->
 <html lang="zh-CN">
+<!-- 【html 标签】整个网页最外层的大盒子。
+     lang="zh-CN" 告诉浏览器「这是简体中文」，
+     影响屏幕阅读器发音、翻译提示、以及中文标点的排版规则。 -->
 <head>
+<!-- 【head】这个盒子里的东西都不直接显示在页面上，
+     装的是给浏览器和搜索引擎看的说明书：编码、视口、标题、样式、脚本。
+     可以理解为快递箱上的面单——不是商品本身，但决定这件货怎么送。 -->
+
 <meta charset="UTF-8">
+<!-- 【字符编码】UTF-8 是国际通用编码，能装下所有文字。
+     写错或不写，中文就会变成乱码。这一行必须尽量靠前。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【视口设置】手机适配的第一条底线，逐项拆：
+       width=device-width   → 页面宽度等于设备物理宽度，不做缩放
+       initial-scale=1.0    → 初始缩放 1 倍
+     不写的话手机浏览器会假装自己是 980px 宽的桌面屏，
+     把整页缩小塞进手机，字小到必须双指放大。 -->
+
 <title>管理面板 · Chengfa</title>
+<!-- 【标题】浏览器标签页显示的文字，也是收藏夹里存的名字。
+     这里写死了「Chengfa」，因为这是站长的后台，不会有第二个人用。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 【网页图标】标签页左边那个小图。不写浏览器也会去根目录找，
+     但显式声明更保险。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 【引入公共样式表】/ 开头表示从网站根目录算起，不是相对当前文件夹。
+     【?v=26 版本号】破浏览器缓存用的：浏览器会缓存 css，
+     你改了内容它可能还用旧的。把 26 改成 27 就当成新文件强制重新下载。
+     每次大改样式记得 +1。 -->
+
 <style>
+  /* ============================================================
+     本页专属样式。公共的（导航、卡片、按钮基础样式）都在 style.css 里。
+     ============================================================ */
+
   /* ===== 管理后台 =====
      默认跟随全站的「深空磨砂」；这里只把主色换成偏紫的紫罗兰，
      并补齐后台专用变量。浅色模式（body.light）由 style.css 统一接管。 */
+
   body.manage {
+  /* 【body.manage】中间的空格是【后代选择器】？
+       不是——这里没有空格，body.manage 表示「同时是 body 标签、又带 manage 类」。
+       所以它只命中 <body class="manage"> 这一个元素，
+       而 CSS 变量写在 body 上，会被 body 内部的所有元素继承。
+       这就是「在根节点定义变量、全站到处用」的做法。
+
+     【CSS 变量（自定义属性）的作用域】这是本段最关键的知识点：
+       变量定义在哪个元素上，就只对「那个元素及其所有后代」有效。
+       所以这里定义在 body 上 = 整个页面都能用。
+       如果定义在某个 .card 里，就只有那张卡片内部能读到。
+       而 style.css 里可能也在 :root 上定义了同名变量，
+       这里的定义会「就近覆盖」——因为 body 比 :root（也就是 html）更靠里。
+       这就是「浅色/深色主题」和「模块换配色」的实现原理：
+       不用改一堆具体样式，只换一组变量值。 */
+
     --primary: #9b6bf2;
+    /* 主色：偏紫的紫罗兰。按钮、链接、悬停边框都用它。
+       这个色值比全站的蓝紫更偏紫，一眼就能看出「这是后台，不是前台」。 */
+
     --primary-deep: #A87BFF;
+    /* 主色的「更亮一档」，用在需要强调的地方（渐变、发光）。 */
+
     --primary-soft: rgba(155,107,242,.18);
+    /* 【rgba】红绿蓝 + 透明度。前三个是 0-255，最后一个是 0-1 的透明度。
+       .18 就是 18% 不透明。这种「主色 + 低透明度」是给背景色用的经典配方：
+       既带上了主色的色相，又不会盖过上面的文字。 */
+
     --field: rgba(255,255,255,.055);
+    /* 输入框、次要按钮的底色：5.5% 的白。
+       深色主题里，「比背景亮一点点」就等于「凹进去的区域」。 */
+
     --quote: rgba(255,255,255,.05);
+    /* 引用块、已处理条目的底色，比 field 再淡一点。 */
+
     --ok-text: #57D68A;
+    /* 「成功 / 已处理」的绿色。
+       注意它叫 ok-text 不是 ok，说明它是【专门给文字用】的颜色——
+       绿底白字和绿字深底需要的亮度不一样，
+       文字颜色必须保证和背景有足够对比度才看得清。 */
+
     --danger: #FF5A5A;
+    /* 危险操作（删除）的红色。 */
+
     --toast-bg: rgba(16,18,26,.94);
     --toast-text: #E9EEF9;
+    /* 小提示条的底色和文字色。.94 接近不透明，
+       但留一点点透明能让它在任何背景上都显得「浮在上面」。 */
   }
+
   body.manage.light {
+  /* 【同时有两个类】body 上有 manage 和 light 两个类时才命中。
+     这是「主题切换」的标准写法：
+       <body class="manage">        → 深色后台
+       <body class="manage light">  → 浅色后台
+     下面这组变量会覆盖上面那组，其他样式一个字都不用改。 */
     --field: rgba(255,255,255,.72);
+    /* 浅色主题下，「凹进去」变成了「比背景更白、更不透明」。 */
     --quote: rgba(20,30,60,.04);
+    /* 浅色主题下，引用块的底色要用「一点点黑」而不是一点点白。 */
     --ok-text: #2E7D32;
+    /* 浅色背景上的绿色必须加深，否则浅绿配白底根本看不清。 */
     --danger: #D93025;
+    /* 同理，红色也要压暗。这是「同一个语义、两套色值」的典型场景：
+       颜色不是绝对的，是相对背景决定的。 */
     --toast-bg: rgba(26,31,43,.92);
     --toast-text: #FFFFFF;
+    /* 浅色主题下提示条反而用深底白字——因为它是浮层，
+       深色浮层在浅色页面上对比度更强，更抓注意力。 */
   }
 
   .manage-header {
     text-align: center;
+    /* 【text-align:center】让内部的文字和行内元素水平居中。
+       注意它只对「行内内容」有效，对块级子元素无效——
+       下面 .manage-title 之所以要写 display:inline-block，就是为了配合它。 */
     margin-bottom: 10px;
   }
   .manage-title {
     font-size: 38px;
     color: azure;
+    /* 【azure】一个 CSS 预定义的颜色名，浅天蓝（#F0FFFF）。
+       用在这里有点特殊：它是写死的颜色，不跟主题变量走，
+       所以浅色模式下这个浅蓝标题在白底上几乎看不见。
+       这算一个真实的可用性问题，标注在这里不改代码。 */
     display: inline-block;
+    /* 【为什么要 inline-block？】h1 默认是块级元素，独占一整行，
+       宽度撑满父容器。块级元素设 text-align:center 是没用的（它自己不居中）。
+       改成 inline-block 之后，它就变成「像文字一样」的元素，
+       宽度由内容撑开，于是父元素的 text-align:center 就能把它居中了。
+       这是「让块级元素居中」最常用的一招。 */
     margin: 0 0 8px;
+    /* 【margin 四个值】上 右 下 左。这里上 0、右 0、下 8px、左 0。
+       h1 默认有上下外边距，不清掉会多出一大块空白。 */
     font-weight: 700;
+    /* 字重 700 = 粗体。 */
     letter-spacing: 1px;
+    /* 【字间距】每个字之间额外加 1px。
+       中文大标题加一点字间距会显得更大气、更「标题感」。 */
   }
   .manage-sub {
     font-size: 15px;
     color: var(--text-light);
+    /* 【var()】读取 CSS 变量的值。变量名必须带两个减号。
+       这个 --text-light 是 style.css 里定义的，表示「次要文字颜色」。 */
     margin: 0;
   }
 
   /* 15 个按钮：三列五行 */
   .manage-grid {
     display: grid;
+    /* 【grid 网格布局】比 flex 更适合「规整的表格状排列」。
+       flex 是「一条线排下去」，grid 是「先画格子再往里放」。 */
     grid-template-columns: repeat(3, 1fr);
+    /* 【repeat(3, 1fr)】= 1fr 1fr 1fr，也就是「三列，每列平分剩余空间」。
+       【fr】是 fraction（份数）的缩写，1fr 表示「占一份」。
+       三列各 1fr 就是三等分。
+       用它而不是写 33.33%，是因为 fr 会自动扣掉 gap 的宽度，
+       永远不会出现「三列加起来超过 100% 导致换行」的问题。 */
     gap: 26px;
+    /* 【gap】格子之间的横竖间距，横竖都 26px。
+       这是 grid 和 flex 都支持的属性，比给每个子元素算 margin 干净得多。 */
     margin-top: 10px;
   }
   .manage-btn {
     position: relative;
+    /* 【position:relative】给自己的「定位上下文」。
+       作用只有一个：让内部的绝对定位元素（下面那个角标 badge）
+       以这个按钮为参照物，而不是跑到整个页面上去。
+       不加这句，角标会飞到页面右上角——这是新手最常遇到的定位问题。 */
     display: flex;
     align-items: center;
     justify-content: center;
+    /* 【flex + 两个居中】这是「让内容在盒子里水平垂直都居中」的万能组合：
+         display:flex             → 开启弹性布局
+         align-items:center       → 交叉轴上居中（默认主轴是横的，所以这是垂直居中）
+         justify-content:center   → 主轴上居中（水平居中）
+       记住这个三件套，比调 line-height 或 padding 靠谱得多，
+       而且不管内容是一行还是一行半都工作。 */
     border: none;
+    /* 按钮默认有边框，清掉。 */
     border-radius: 8px;
     background: #9b6bf2;
+    /* 注意这里写死了色值，没有用 var(--primary)。
+       功能上没问题，但主题切换时这个按钮不会跟着变——
+       属于「可以用变量但没用」的地方。 */
     color: #fff;
     font-size: 20px;
     font-family: inherit;
+    /* 【font-family: inherit】继承父元素的字体。
+       为什么必须写？因为浏览器给 button 的默认字体是系统 UI 字体，
+       它【不会】自动继承 body 的字体。不写这行，按钮里的字和页面上其他字不一样，
+       这是「按钮看起来总是怪怪的」最常见的原因。
+       input、textarea、select 也有同样的问题，都该加这一句。 */
     font-weight: 500;
     padding: 20px 12px;
+    /* 上下 20px、左右 12px。上下比左右大，按钮就显得「高一些、敦实」。 */
     cursor: default;
+    /* 【cursor:default】鼠标移上去是普通箭头，不是小手。
+       这里是有意的：大部分按钮是「还没做」的，不该给人可点的暗示。
+       真正能点的按钮由下面的 .live 改成 pointer（小手）。
+       这个细节很值得学——鼠标指针形状是「这里能点吗」最重要的暗示之一。 */
     transition: background .2s, transform .2s;
+    /* 【transition】属性变化时做平滑过渡。
+       只对 background 和 transform 做动画，其他属性还是瞬间变化。
+       为什么不用 all？因为 all 会把布局相关的属性也拿去做动画，
+       容易卡顿，而且容易产生意外效果。指定属性是更好的习惯。 */
     box-shadow: none;
   }
   .manage-btn:hover {
     background: #8A5CE0;
     transform: scale(1.03);        /* Local 按钮悬停是放大一点，不做上浮发光 */
+    /* 【transform: scale(1.03)】整体放大到 1.03 倍（3%）。
+       transform 的好处是它【不影响布局】：
+       元素放大后不会把旁边的元素挤开，只是在视觉上变大。
+       如果用 width/height 做同样的事，整个网格都会跟着抖动。 */
     box-shadow: none;
   }
   /* 还没做的按钮：灰一点、点不动 */
   .manage-btn.todo { opacity: .55; }
+  /* 【opacity】整体透明度，包括文字和背景。
+       0.55 = 55% 不透明，看起来「灰掉」了。
+       这是表达「禁用」最直观的视觉手段。 */
   .manage-btn.todo:hover {
     background: #9b6bf2;
     transform: none;
     box-shadow: none;
+    /* 【为什么要专门写这三行？】
+       因为上面的 .manage-btn:hover 会对所有按钮生效（包括 todo 的）。
+       不覆盖的话，鼠标移到灰按钮上它也会放大变亮，
+       给人「这个能点」的错误暗示。
+       这三行就是把 hover 效果「撤销」掉。
+       这也说明了一个 CSS 的坑：hovers 是会叠加的，
+       写新状态时要想清楚要不要重置旧状态。 */
   }
   .manage-btn.live { cursor: pointer; }
+  /* 真正能点的按钮才给小手。 */
   .manage-btn .badge {
+    /* 【.manage-btn .badge】中间有空格 = 后代选择器，
+       表示「.manage-btn 里面的 .badge」。 */
     position: absolute;
+    /* 【绝对定位】相对于最近的「定位祖先」定位。
+       而 .manage-btn 上面写了 position:relative，所以就是相对按钮定位。
+       绝对定位的元素会脱离文档流，不占空间，可以叠在其他内容上面。 */
     top: 6px;
     right: 8px;
+    /* 距按钮上边 6px、右边 8px，也就是贴在右上角。
+       为什么上下和左右的值不一样？因为视觉上，
+       右边留 8px 看起来才和上面留 6px「等距」（人眼对右边距更敏感）。 */
     min-width: 24px;
+    /* 【min-width 而不是 width】让它能容下两位数。
+       写死 width:24px 的话，显示「10」就会溢出。
+       min-width 是「至少这么宽，内容多了就撑开」。 */
     height: 24px;
     padding: 0 7px;
+    /* 左右各 7px 的呼吸空间，配合 min-width 让胶囊形状不会太挤。 */
     border-radius: 12px;
+    /* 【胶囊形】高度是 24px，圆角设成半径 12px（正好一半），
+       就得到了两端全圆的胶囊形状。这是「圆角 = 高度 ÷ 2」的经典用法。 */
     background: #f04438;
     color: #fff;
     font-size: 13px;
     line-height: 24px;
+    /* 【line-height 等于 height】这是「单行文字垂直居中」的老办法：
+       行高和盒子高度一样，文字就会正好落在中间。
+       注意它只对【单行】有效，多行会乱。 */
     text-align: center;
+    /* 水平居中。配合上面的 line-height 就完成了双向居中。 */
     font-weight: 700;
     box-shadow: none;
   }
@@ -114,6 +296,7 @@
     padding: 30px 0;
   }
   .access-tip a { color: var(--primary); }
+  /* 链接用主色，让它看起来可点。 */
 
   /* ===== 举报处理面板 ===== */
   .report-head-row {
@@ -121,11 +304,23 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 14px;
+    /* 一行里并排放「标题」和「刷新按钮」。 */
   }
   .report-head-row .section-title { margin-bottom: 0; }
+  /* 【为什么要清零？】section-title 这个公共样式自带下外边距，
+       放进 flex 行里会让整行高度对不齐，所以要在这里覆盖掉。
+       这种「用更具体的选择器覆盖公共样式」是 CSS 最常见的调整手段。
+       注意它的优先级比单独的 .section-title 高（多了一层类），所以能覆盖成功。 */
   .report-refresh {
     margin-left: auto;
+    /* 【margin-left:auto】这是 flex 布局里的经典技巧：
+       在一行 flex 子里，给它一个自动的左边距，
+       浏览器会把剩余空间全部分配给这个 margin，
+       效果就是「把这个元素推到最右边」。
+       不需要任何 justify-content 或绝对定位。
+       （前提是父元素是 flex，这里 .report-head-row 是。） */
     font-family: inherit;
+    /* 按钮必须手动继承字体，同前面解释。 */
     font-size: 14px;
     padding: 6px 16px;
     border-radius: 8px;
@@ -133,8 +328,10 @@
     background: var(--field);
     color: var(--text);
     cursor: pointer;
+    /* 这里给了小手，因为刷新按钮真的能点。 */
   }
   .report-refresh:hover { border-color: var(--primary); color: var(--primary); }
+  /* 悬停时边框和文字一起变主题色，作为「可点」的反馈。 */
 
   .report-item {
     border: 1px solid var(--border);
@@ -142,14 +339,24 @@
     padding: 14px 16px;
     margin-bottom: 14px;
     background: var(--card);
+    /* 每一条举报是一个独立的小卡片。 */
   }
   .report-item.done { background: var(--quote); }
+  /* 已处理的条目换一个淡一点的底色，视觉上「退到后面」。
+       这是「已完成事项弱化」的通用手法，用户一眼就能跳过它们。 */
   .report-item.done .report-quote { opacity: .7; }
+  /* 已处理的引用内容再淡一点。
+       两层弱化叠加，已处理和待处理的区分度就非常明显了。 */
   .report-top {
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
+    /* 【flex-wrap: wrap】关键的一行：
+       空间不够时允许换行，而不是硬挤在一行里溢出。
+       手机上这一行（名字、类型、状态、时间）肯定放不下，
+       不写这句就会横向溢出，把整个页面撑出滚动条。
+       这是「一行多元素」布局必须考虑的。 */
     margin-bottom: 8px;
   }
   .report-name { font-weight: 700; font-size: 16px; color: var(--text); }
@@ -157,26 +364,52 @@
     font-size: 12px;
     padding: 2px 10px;
     border-radius: 999px;
+    /* 【999px】一个「足够大」的圆角值，效果就是完全圆头。
+       比算「高度除以 2」省事，而且高度变了也不用改。 */
     background: rgba(240,68,56,.16);
     color: var(--danger);
     font-weight: 600;
+    /* 红色系小标签 = 待处理（有事情要做，需要被注意）。 */
   }
   .status-pill.done { background: rgba(76,175,80,.18); color: var(--ok-text); }
+  /* 绿色系 = 已处理。
+       注意同一句 .status-pill 既用于「类型」（留言/评论/文章/视频）
+       又用于「状态」（待处理/已处理），
+       所以类型标签也会是红色的——这在语义上有点误导
+       （类型不是「有问题」的意思）。属于可以优化的设计，标注不改。 */
   .report-time { font-size: 13px; color: var(--text-light); margin-left: auto; }
+  /* 又是 margin-left:auto 把时间推到这一行的最右边。 */
   .report-quote {
     border-left: 3px solid var(--border);
+    /* 【只设左边框】做出「引用块」的标志性竖线。
+       这是引用样式最常见的形式，用户一看就知道「这是引用的原话」。 */
     padding: 8px 12px;
     margin: 8px 0;
     color: var(--text);
     background: var(--quote);
     border-radius: 0 8px 8px 0;
+    /* 【四个圆角值】左上 右上 右下 左下。
+       左上写 0 是因为左边要贴着那条竖线，圆角会显得断裂。
+       只让右侧两个角圆，视觉上就更像「从左边延伸出来的一段引用」。 */
     white-space: pre-wrap;
+    /* 【pre-wrap】保留原文里的换行和空格，同时超长时仍正常折行。
+       为什么需要？因为用户留言里的换行如果不保留，
+       一段有段落结构的留言会变成一大坨，读起来很痛苦。
+       相关的值还有 pre（保留但绝不折行，会溢出）、nowrap（全不换行）。
+       pre-wrap 是最适合展示用户输入的那个。 */
     word-break: break-word;
+    /* 【断词规则】遇到长到一行放不下的「词」（比如一长串网址或英文），
+       允许在任意位置断开，避免溢出容器。
+       中文本来就能随处断，所以这条主要是防英文和网址。 */
     font-size: 15px;
   }
   .report-quote.gone { color: var(--text-light); font-style: italic; }
+  /* 留言已经被删除时加 .gone：文字变淡 + 斜体，
+       表达「这段内容是已经不存在的」。斜体是「引述/已失效」的常见视觉语言。 */
   .report-line { font-size: 14px; color: var(--text-light); margin: 4px 0; word-break: break-word; }
   .report-line b { color: var(--text); }
+  /* 一行里的小标签（举报理由、举报人）用正文色加粗，
+       后面的内容用次要色。这样扫一眼就能分清「标签」和「值」。 */
   .report-actions {
     display: flex;
     gap: 8px;
@@ -197,178 +430,568 @@
   }
   .report-btn:hover { border-color: var(--primary); color: var(--primary); }
   .report-btn.ok:hover { border-color: var(--ok-text); color: var(--ok-text); }
+  /* 【.report-btn.ok】两个类连写、没有空格 = 「同时有这两个类」。
+       注意和 .report-btn .ok（带空格）的区别：
+         带空格 → 找 .report-btn 里面的 .ok 子元素
+         不带空格 → 找同时属于两个类的同一个元素
+       这个区别在 CSS 里极其重要，写错就完全失效且不报错。 */
   .report-btn.warn:hover { border-color: #d9a200; color: #d9a200; }
   .report-btn.danger { color: var(--danger); border-color: rgba(240,68,56,.35); }
   .report-btn.danger:hover { background: #f04438; color: #fff; border-color: #f04438; }
+  /* 危险按钮的悬停是「整块变红底白字」——后果越重的操作，
+       视觉反馈应该越强烈，让用户在下手前多犹豫半秒。 */
   .report-btn:disabled { opacity: .45; cursor: default; }
+  /* 【:disabled 伪类】只命中被禁用的按钮。
+       这个状态在「点击后、请求返回前」用得上，防止连点。 */
   .report-btn:disabled:hover { border-color: var(--border); color: var(--text); background: var(--field); }
+  /* 禁用状态下把 hover 效果也撤销掉，否则鼠标移上去按钮还会变色，
+       看起来像是「能点但点了没用」，很困惑。 */
   .report-done { font-size: 14px; color: var(--ok-text); }
   .report-empty { text-align: center; color: var(--text-light); padding: 26px 0; }
 
   /* 小提示条 */
   .toast {
     position: fixed;
+    /* 【fixed】固定在视口上，不随页面滚动移动。
+       常用来做「浮在最上层」的元素：提示条、悬浮按钮、遮罩。 */
     left: 50%;
     top: 24px;
     transform: translate(-50%, -20px);
+    /* 【居中 + 上移】这是「水平居中一个定宽元素」的标准组合：
+         left:50%                  → 元素左边缘移到屏幕中间
+         translate(-50%, ...)      → 再把自己向左挪自身宽度的一半
+       两个合起来，元素才是真正居中（只写 left:50% 会偏右半个宽度）。
+       第二个值 -20px 是「往上挪 20px」，为下面那个入场动画做准备——
+       提示条会从上方 20px 处滑下来。 */
     background: var(--toast-bg);
     color: var(--toast-text);
     font-size: 14px;
     padding: 10px 20px;
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    /* 【box-shadow 三个值 + 颜色】水平偏移 0、垂直偏移 8px、模糊 24px。
+       阴影往下偏、又很模糊，看起来就像「浮起来了」。 */
     opacity: 0;
+    /* 【默认完全透明】看不见，但它还在页面上占位置（fixed 不占文档流）。
+       为什么用 opacity 而不是 display:none？
+       因为 display:none 到 display:block 是「瞬间」的，动画没机会播放；
+       而 opacity 变化可以被 transition 平滑过渡。
+       这是「要做淡入淡出就必须用 opacity」的原因。 */
     pointer-events: none;
+    /* 【事件穿透】让鼠标点击穿过这个元素，不会挡住下面的东西。
+       为什么需要？因为提示条是浮在全屏最上层的，
+       如果它不可见却还挡着鼠标，用户点屏幕上方就会莫名其妙点不动。
+       这条属性在不做交互的浮层上几乎必须加。 */
     transition: opacity .2s, transform .2s;
     z-index: 999;
+    /* 【层叠顺序】数字越大越靠上。999 是个习惯用的「大到能盖住一切」的值。
+       注意 z-index 只对「已经定位的元素」生效（这里是 fixed，满足条件）。 */
   }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  /* 【.show 类】加上它 → 不透明 + 回到原位。
+       配合上面的初始状态，浏览器会自动把「透明 → 不透明」
+       和「上移 20px → 原位」做成动画。
+       这就是这个提示条的全部动画原理：改一个类，两行 CSS 就自动过渡。 */
 
   @media (max-width: 700px) {
+  /* 【媒体查询】屏幕宽度 ≤700px 时，下面这些规则才生效。
+       这是响应式设计的基础语法：先写桌面样式，再用 max-width 覆盖移动端。 */
     .manage-grid { grid-template-columns: repeat(2, 1fr); }
+    /* 手机上三列太挤，改成两列。 */
     .manage-title { font-size: 30px; }
+    /* 手机上标题缩小，否则 38px 的五个字会把屏幕撑爆。 */
   }
 </style>
 </head>
 <body class="manage">
+<!-- 【class="manage"】这个类是本页配色的开关：
+     上面所有 body.manage 开头的变量都靠它生效。
+     如果哪天调试想看看没有它是什么样，删掉这个类就行——
+     整个后台会立刻退回全站的默认蓝紫配色。 -->
 
   <div id="navbar"></div>
+  <!-- 【空占位】导航栏不写死在这里，由 nav.js 生成后塞进来。
+       好处：几十个页面共用一份导航代码，改一处全站生效。
+       代价：页面打开的一瞬间这里是空的，脚本跑完才出现。 -->
 
   <header class="manage-header">
+  <!-- 【header 语义标签】表示「页头 / 引言区」。
+       和 div 长得一样、行为也一样，区别纯粹是语义：
+       div 是「一个盒子」，header 是「这里是块的开头」。
+       屏幕阅读器能识别它并允许快速跳转，对无障碍有价值。 -->
     <h1 class="manage-title">管理面板</h1>
+    <!-- 【h1】页面主标题，一个页面最好只有一个。 -->
     <p class="manage-sub">Chengfa · 网站管理后台</p>
+    <!-- 【·】间隔号，用来分隔两段并列信息，比破折号轻、比空格清楚。 -->
   </header>
 
   <section>
     <div class="card">
+    <!-- 【card】公共卡片样式：背景、圆角、阴影、内边距。
+         全站凡是「一块一块的内容」都用它，保证视觉统一。 -->
       <h2 class="section-title">功能入口</h2>
       <div class="manage-grid" id="manageGrid"></div>
+      <!-- 【空的网格容器】15 个按钮由 JS 循环生成后塞进来。
+           为什么不在 HTML 里老老实实写 15 个 button？
+             因为那 15 个按钮里有 14 个是完全一样的（灰的、写「测试中」、禁用），
+             只在 HTML 里复制 14 遍，既啰嗦又难改。
+             用循环生成，以后要加第 16 个按钮只改一个数字。
+           【代价】JS 没跑起来的话这里就是空白。所以下面还有个 deny() 兜底提示。 -->
     </div>
   </section>
 
   <section id="reportSection" style="display:none;">
+  <!-- 【默认隐藏】举报面板一进页面不显示，
+       点「举报处理」按钮才把它变成 block 并滚动过来。
+       这样做的好处：管理面板首屏保持干净，只有一排入口，
+       不会一进来就被一大堆举报内容淹没。 -->
     <div class="card">
       <div class="report-head-row">
         <h2 class="section-title">举报处理</h2>
         <button type="button" class="report-refresh" id="reportRefresh">刷新</button>
+        <!-- 【type="button"】一定要写。不写的话，万一以后这个按钮被包进 <form>，
+             它的默认 type 是 submit，点一下整个页面就提交刷新了，
+             你写的 JS 根本没机会执行。稳妥起见永远写上。 -->
       </div>
       <div id="reportList">加载中…</div>
+      <!-- 占位文案「加载中…」而不是留空：
+           万一 JS 出错，用户看到的是「加载中」而不是一片空白，
+           你排查时也能立刻分辨「数据没到」还是「布局塌了」。 -->
     </div>
   </section>
 
   <div class="toast" id="toast"></div>
+  <!-- 【提示条】平时完全透明而且鼠标穿透，用户看不见也点不到。
+       要显示时由 JS 加 .show 类，2.6 秒后再移除。
+       为什么不用 alert()？因为 alert 会打断用户、必须手动点确定，
+       而这个提示只是「操作成功了」的轻量反馈，不该打断操作节奏。 -->
 
   <script src="/js/config.js"></script>
+  <!-- 【script src】引入外部 JS。
+       所有 script 都放在 body 最底部，这是有讲究的：
+       浏览器从上往下解析 HTML，遇到不带 async/defer 的 script 会
+       立刻停下、下载、执行，然后才继续解析后面的 HTML。
+       放在 head 里的话，用户要盯着白屏等脚本下载完，这叫【阻塞渲染】。
+       放底部就避开了：HTML 已经渲染完，脚本最后跑，
+       而且脚本跑的时候上面的元素全都存在了（不用等 DOMContentLoaded）。 -->
+
 <script src="/js/bg.js?v=2"></script>
+<!-- 【bg.js】背景相关脚本（背景图/背景视频）。
+     ?v=2 和 css 的 ?v=26 一个道理：破浏览器缓存。
+     注意这行缩进没对齐，只是格式瑕疵，不影响功能。 -->
+
 <script src="/js/vendor/supabase-js.js"></script>
+<!-- 【vendor 目录】约定俗成的「第三方代码」目录。
+     这个不是自己写的，是 Supabase 官方 SDK 的本地副本。
+     放本地而不是用 CDN 的三个理由：
+       1. 不依赖别人的服务器，别人挂了你不受影响
+       2. 同域加载更快（省一次 DNS 查询和 TLS 握手）
+       3. 版本锁死，不会某天官方更新把接口改了导致网站崩 -->
+
   <script src="/js/sb.js"></script>
+  <!-- 【sb.js】自己封装的数据库接口层。
+       里面把操作包成 SBAPI.getReports()、SBAPI.me() 这样的函数。
+       为什么要包一层？因为直接写 Supabase SDK 的代码会散落在几十个文件里，
+       哪天要换数据库就得全站改。封装之后只改 sb.js 一个文件。
+       这叫【抽象层】，或者说「中间人」。代价是多一层跳转，稍微绕一点。 -->
+
   <script src="/js/nav.js?v=23"></script>
+  <!-- 生成顶部导航栏，塞进上面那个 id="navbar" 的空 div。 -->
+
   <script>
+  /* 注意：从这一行开始，内容都是 JavaScript，不是 HTML 了。
+     脚本块内部，浏览器解析规则完全切换：
+       - 不再把尖括号当标签开始（除非遇到脚本块的结束标签）
+       - 注释必须用 JS 的写法（两斜杠 或 斜杠星号）
+       - 在这里写 HTML 的注释符号会被当成 JS 代码执行，直接报语法错误 */
+
   (function () {
+  /* ============================================================
+     【IIFE 立即执行函数表达式】整个文件最外层的一层包装：
+       (function () { ... })()
+       └─┬─────────────────┘ └┬┘
+         │                     └─ 最后这对括号 = 「立刻调用」
+         └─ 第一对括号，把函数声明变成表达式
+
+     为什么要包这一层？两个理由：
+     1. 【不污染全局】内部的 grid、deny、toast、escapeHTML 这些名字
+        全都关在函数里，外面看不见。否则它们会跑到 window 上，
+        容易和别的脚本撞名（这个后台还引了 nav.js、bg.js、sb.js）。
+     2. 【避免变量泄漏】在浏览器里，顶层用 var 声明、或者给未声明的变量赋值，
+        都会自动变成 window 的属性。包一层就全关住了。
+
+     顺带说明：内部没有 return，所以这个 IIFE 返回 undefined，也没人接。
+     ============================================================ */
+
     const grid = document.getElementById('manageGrid');
+    /* 【const】声明一个不能再重新赋值的变量。
+       这里存的是「那个网格容器」的引用——拿到一次就够了，
+       不需要每次都 document.getElementById（那是在整棵 DOM 树里搜索）。
+       把查找结果存起来，是这个文件里最常见的优化手法。 */
 
     function deny(text) {
+    /* 【拒绝访问的提示函数】没登录、登录失效、权限不够时都调它。
+       把「造一个提示元素并塞进页面」的逻辑收在一处，
+       三处调用只需要传一句不同的文案。 */
       const msg = document.createElement('div');
+      /* 【createElement】凭空造一个新元素，此时它还不存在于页面上。
+         造出来的东西只是一个「孤儿节点」，必须 append 到某个已有元素上才显示。 */
       msg.className = 'access-tip';
+      /* 【className】设置 class 属性。
+         注意它是「整个替换」，不是追加——
+         如果元素原本有别的类，会被覆盖掉。要追加得用 classList.add。 */
       msg.innerHTML = text + '<br><a href="/">返回首页</a>';
+      /* 【innerHTML】把字符串当 HTML 代码解析后填进元素。
+         【<br>】换行标签，因为 div 里的文字不会自动换行。
+         【<a href="/">】回到首页的链接，给用户一条出路——
+         被拦在门外的人最需要的就是「那我该去哪」。
+         【安全说明】这里的 text 是代码里写死的常量（比如「请先登录后再进入管理面板」），
+         不是用户输入，所以用 innerHTML 拼接没有 XSS 风险。
+         如果 text 来自 URL 参数或接口，就必须先转义，否则用户能注入脚本。 */
       grid.appendChild(msg);
+      /* 【appendChild】把新元素挂到父元素内部的末尾。
+         到这一步为止，元素才真正出现在页面上。 */
     }
 
     (async function boot() {
+    /* 【命名 IIFE + async 立即执行】逐部分拆：
+         async function boot() {...}  → 一个异步函数（内部能用 await）
+         ( ... )()                     → 立刻调用它
+       【为什么给它起名字 boot？】函数表达式的名字只在函数内部可见，
+       外面的作用域里没有 boot 这个变量。
+       好处是报错时错误堆栈里会显示「boot」而不是「anonymous」。
+       这种函数在调试时省很多事——堆栈里能看到是谁抛的错。 */
+
       const s = await SBAPI.getSession();
+      /* 【await】等这个异步操作完成，拿到结果再往下走。
+         关键理解：await 并没有把浏览器卡死，它只是把这个函数「暂停」了，
+         浏览器照样能响应用户点击、渲染动画，等网络请求回来了再接着跑。
+         像厨师炖汤：放上锅之后不等，转去做别的菜，汤好了再回来处理。
+         【注意】因为用了 await，这个函数一定返回 Promise，
+         所以外面必须立刻调用（IIFE 就是干这个的）。 */
       if (!s) { deny('请先登录后再进入管理面板'); return; }
+      /* 【!s】没人登录时 getSession 返回 null，取反为 true。
+         提前返回（early return）是个值得刻意养成的习惯：
+         把特殊情况在开头一口气处理掉，主流程就能保持一路平铺，
+         不用层层嵌套 if。 */
       const me = await SBAPI.me();
+      /* 拿当前登录用户的详细信息（用户名、角色、UID）。 */
       if (!me.ok) { deny('登录已失效，请重新登录'); return; }
+      /* 【必须显式检查 me.ok】这是个非常重要的坑：
+         即使请求失败，服务器通常也会返回一个 JSON（比如 {ok:false,error:...}），
+         它依然是个「真值对象」。
+         如果你写 if (!me) 判断，请求失败时 me 是有值的，判断不成立，
+         你就把错误数据当成功用了。前后端交互必须显式看 ok 字段。 */
       // 这个面板：管理员(admin) 和 站长(owner) 都能进
       const okRole = (me.role === 'owner' || me.role === 'admin');
+      /* 【=== 严格相等】要求类型和值都一样。
+         用 == 会做类型转换（'0' == false 是 true），是无数 bug 的源头。
+         现代 JS 里 === 是唯一正确选择。
+         【把判断结果存成变量 okRole 而不是直接写进 if】
+         好处：这行的意图「什么角色算有权限」一目了然，
+         以后要加第三种角色（比如 moderator），只改这一行。
+         这叫「给表达式起个名字」，是提升可读性最便宜的手段。 */
       if (!okRole) { deny('你还没有权限访问管理后台'); return; }
+      /* 【注意：权限判断只发生在前端】这意味着懂技术的人可以绕过它
+         （改一下浏览器里的 JS 就行）。
+         所以真正的权限校验【必须】在服务器端也做一遍——
+         前端这层只是「不给普通用户看入口」，不是安全防线。
+         这是刚学后端最容易搞错的一件事。 */
       renderGrid();
+      /* 所有检查都过了，才开始画界面。
+         注意顺序：先验身份，再渲染。
+         如果反过来先渲染再验身份，用户会看到一闪而过的按钮。 */
     })();
 
     /* ===== 15 个功能入口：第 1 个是举报处理，其余待做 ===== */
     function renderGrid() {
       for (let i = 0; i < 15; i++) {
+      /* 【for 循环】初始化 i=0；条件 i<15；每轮结束 i++。
+         所以 i 取 0 到 14，正好 15 次。
+         【为什么用 let 不用 var？】
+           var 是函数级作用域，整个函数共用一个 i；
+           let 是块级作用域，每轮循环都是一个【新的】i。
+           下面虽然没在回调里用 i，但养成用 let 的习惯能避免未来的坑
+           （经典的 var 闭包陷阱：三个监听器都记住最后一个 i）。 */
         const b = document.createElement('button');
+        /* 每轮都造一个新的 button 元素。 */
         b.type = 'button';
+        /* 逐字解释：给这个按钮设 type 属性为 button。
+           等价于 HTML 里写 type="button"。
+           为什么用 JS 属性赋值而不是 setAttribute('type','button')？
+           对于标准属性，直接赋值更简洁，效果一样。
+           只有 data-* 自定义属性才必须用 setAttribute 或 dataset。 */
 
         if (i === 0) {
+          /* 第 0 个（也就是第一个）是真正能用的那个。 */
           b.className = 'manage-btn live';
+          /* 【live 这个类】就是上面 CSS 里给它 cursor:pointer 的那个。
+             所以「能不能点」在视觉上是靠类名区分的。 */
           b.innerHTML = '<span>举报处理</span><span class="badge" id="reportBadge" style="display:none;">0</span>';
+          /* 【两个 span】一个是按钮文字，一个是右上角的数字角标。
+             【style="display:none"】角标初始隐藏——没有待处理举报时不该显示「0」。
+             【id="reportBadge"】给它一个 id，好让后面的代码
+               document.getElementById('reportBadge') 找到它并改数字。
+             注意这个 id【只在页面里唯一一份】，因为只有第一个按钮会生成它。 */
           b.addEventListener('click', openReports);
+          /* 【addEventListener】挂点击监听器。
+             【openReports 后面没加括号】这是关键：
+               写 openReports   → 把函数「本身」交出去，等点击时才调用
+               写 openReports() → 现在就调用一次，然后把返回值当监听器（错的）
+             判断标准：加括号=立刻执行，不加括号=交出去让别人执行。 */
         } else {
           b.className = 'manage-btn todo';
+          /* todo = 还没做的按钮，CSS 里做了半透明 + 撤销 hover 效果。 */
           b.textContent = '测试中';
+          /* 【textContent】把内容当【纯文本】放进去。
+             和 innerHTML 的区别：textContent 不会解析标签，最安全。
+             这里只是纯文字，用 textContent 就够了，也更规范。 */
           b.disabled = true;
+          /* 【disabled = true】禁用按钮：
+               1. 变灰（浏览器默认样式）
+               2. 完全不可点击，连 hover 都不太有反应
+             比「挂一个什么都不做的监听器」正规得多。 */
         }
         grid.appendChild(b);
+        /* 【必须 append】到这一步按钮才真的出现在页面上。
+           只 createElement 不 append，等于造了个零件放在桌上不用。
+           这是新手最常犯的错误之一——代码不报错，但页面上什么都没有。 */
       }
       refreshBadge();
+      /* 循环完再去看一眼有多少待处理举报，给角标填数字。
+         注意这是个 async 函数但没有 await——故意不等它，
+         因为它不影响按钮的显示，让它自己在后台跑完就行。 */
     }
 
     /* ===== 小提示 ===== */
     let toastTimer = null;
+    /* 【用来存定时器 id】setTimeout 会返回一个数字 id，
+       把它存下来才能用 clearTimeout 取消。
+       【为什么要取消？】用户连续点两次操作，
+         第一次设的「2.6 秒后隐藏」还没执行，第二次又设了一个。
+         不取消的话，第一个定时器会提前把第二次的提示关掉——
+         用户看到提示闪一下就没了。 */
     function toast(text) {
       const t = document.getElementById('toast');
+      /* 每次现查而不是缓存，因为只有一处用，代价可以忽略。 */
       t.textContent = text;
       t.classList.add('show');
+      /* 【classList.add】追加一个 class。
+         和 className = 'show' 的区别：add 是追加，
+         不会覆盖掉元素上原有的类（这里原本是 'toast'）。
+         用 className 覆盖会把 toast 这个类的样式全丢掉。 */
       clearTimeout(toastTimer);
+      /* 取消上一个还没到点的定时器，防止它提前把提示关掉。 */
       toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+      /* 【setTimeout】等 2600 毫秒（2.6 秒）后执行一次。
+         【回调包成箭头函数】因为要传参数（动画效果是 remove('show')），
+           直接写 t.classList.remove('show') 是「立刻执行」，不是「等会儿执行」。
+         2600ms 是「刚好能读完一句话」的经验值：
+           2 秒太赶，3 秒以上会让人等得烦。 */
     }
 
     /* ===== 举报处理 ===== */
     function openReports() {
       const sec = document.getElementById('reportSection');
       sec.style.display = 'block';
+      /* 【把 display:none 改成 block】让原本隐藏的面板显示出来。
+         为什么改 style.display 而不是加 class？
+         因为这里只是「显示/隐藏」，没有动画需求，
+         直接改 style 最快最直接。要动画的话才需要用 class + transition。 */
       sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      /* 【scrollIntoView】把元素滚动到视野里。
+         【参数对象两个选项】
+           behavior: 'smooth' → 平滑滚动（不加就是「瞬间跳过去」，很生硬）
+           block: 'start'     → 让元素的顶部对齐视口顶部
+         还有一个 inline 选项控制水平方向。
+         这个 API 很好用，不需要手算滚动距离（那种算法在响应式布局里极难写对）。 */
       loadReports();
+      /* 加载举报数据。注意没有 await——
+         滚动和加载同时进行，用户看到的是「面板滑进来的时候数据也填好了」。 */
     }
 
     document.getElementById('reportRefresh').addEventListener('click', loadReports);
+    /* 【直接传函数名，不加括号】
+         加括号 → 立刻执行一次，然后把返回值（Promise）当监听器，错的
+         不加   → 把函数本身交出去，点击时才调用，对的
+       这个区别和上面 openReports 那处完全一样。
+       【为什么这行写在函数定义之前也行？】
+         因为 function loadReports() {...} 这种「函数声明」会被【提升】——
+         整个函数在代码执行前就已经被创建好了。
+         所以哪怕调用写在定义上面也没问题。
+         但如果是 const loadReports = () => {...} 就不行，那叫「暂时性死区」。 */
 
     async function loadReports() {
       const box = document.getElementById('reportList');
       try {
         const d = await SBAPI.getReports();
         renderReports(d.list || []);
+        /* 【d.list || []】兜底成空数组。
+           如果后端没返回 list 字段（d.list 是 undefined），
+           下面的 renderReports 里调 .filter 就会抛错。
+           传个空数组进去，至少能显示「还没有人举报过」而不是整块空白。 */
       } catch {
         box.innerHTML = '<p class="report-empty">加载失败，检查一下网络。</p>';
+        /* 【catch {} 省略错误参数】ES2019 的「可选 catch 绑定」语法，
+           以前必须写 catch (e) {}，那个 e 没用还得声明。
+           【提示文案要具体】「加载失败，检查一下网络」比「出错了」有用得多——
+           它告诉用户「大概率是你的网络问题」，而不是「网站坏了」。
+           文案里带方向，能省掉大量用户求助。 */
       }
     }
 
     function renderReports(list) {
+    /* 把举报数组变成一屏 HTML。注意它是个「纯渲染」函数：
+       只接收数据、只画界面，内部不去请求任何东西
+       （除了下面会读一个 DOM 元素）。
+       这种设计的好处：想调样式，随便造个假数组传进来就能预览，不用搭后端。 */
       const box = document.getElementById('reportList');
       const pending = list.filter(r => r.status !== 'done');
+      /* 【filter】筛出符合条件的元素，返回一个【新数组】，原数组不动。
+         【!==】严格不等。
+         【为什么用 !== 'done' 而不是 === 'pending'？】
+         因为如果后端以后加了第三种状态（比如 'ignored'），
+         用 !== 'done' 会把它也算进待处理（宁可多显示，不可漏掉）；
+         用 === 'pending' 就会把它漏掉，用户永远看不到这条。 */
       const done = list.filter(r => r.status === 'done');
 
       // 按钮角标 = 待处理条数
       const badge = document.getElementById('reportBadge');
       badge.textContent = pending.length;
       badge.style.display = pending.length ? 'inline-block' : 'none';
+      /* 【三元】条件 ? 成立的值 : 不成立的值。
+         这里：有待处理 → 显示角标；一条都没有 → 隐藏。
+         为什么不显示「0」？因为红色的「0」还在视觉上制造紧张感，
+         但用户点进去发现没事可做，会很困惑。
+         【为什么要 inline-block 而不是 block？】
+         因为 badge 是绝对定位的，其实 block/inline-block 都能用，
+         但 inline-block 更符合它「一小块内容」的本质。 */
+      /* 【这里有个真实的隐患，必须说明】
+         如果这个函数在 renderGrid 之前被调用（比如页面最底下那个
+         预加载举报数据的立即执行函数），此时页面上还没有 reportBadge 这个元素，
+         badge 就是 null，上面那行 badge.textContent 会直接抛
+         「Cannot read properties of null」。
+         而 renderReports 内部没有 try/catch 兜住，
+         所以这次调用会整体失败，举报列表也就没画出来。
+         这个函数的最后还调用了它一次，具体会不会触发见那里的说明。
+         正确的写法是在这里加一句 if (!badge) return; 或者 if (!badge) 就跳过这两行。
+         我在这里标注，不改你的代码。 */
 
       if (!list.length) {
         box.innerHTML = '<p class="report-empty">还没有人举报过，很清静。</p>';
         return;
+        /* 【先判断空，再渲染】提前返回，避免后面白跑一遍 map。
+           文案「还没有人举报过，很清静」比「暂无数据」好——它带情绪，
+           让管理员看到会心一笑，这在后台这种枯燥界面里是很廉价的体验加分。 */
       }
 
       const all = pending.concat(done);
+      /* 【concat】把两个数组合并成一个新数组。
+         为什么要把待处理放前面？用户进后台的目的是「处理事情」，
+         处理完的记录只是参考，所以该沉到下面。
+         注意 concat 不会修改原数组，返回的是新的。 */
       box.innerHTML = all.map(r => {
+      /* 【map】把数组里的每个元素「转换」成另一个东西，返回新数组。
+         这里把每条举报数据转换成一串 HTML。
+         最后 .join('') 拼成一整串再赋给 innerHTML。
+         （下面那行 .join('') 在 map 结束的括号后面。） */
+
         const isDone = (r.status === 'done');
+        /* 先算好，下面要用三次，不用每次都写一长串比较。 */
+
+        /* 【下面这个三元的两个分支都是反引号模板字符串。
+           反引号内部不能写注释——里面的任何字符都会变成页面上的文字。
+           所以这部分的解释全部写在这里。】
+           r.alive 表示「被举报的那条内容还在不在」：
+             还在 → 正常显示引用块
+             已被删除 → 加一个 .gone 类（变淡 + 斜体），并在后面追加说明
+           【　】中间那个是全角空格，用来和正文拉开距离。
+           为什么不用普通空格？因为 HTML 会把连续空白压缩成一个，
+           而在两个 span 之间想留一个明显的空隙，全角空格更可靠。 */
         const quoted = r.alive
           ? `<div class="report-quote">${escapeHTML(r.msgText || '')}</div>`
           : `<div class="report-quote gone">${escapeHTML(r.msgText || '')}　（这条留言已经不在了）</div>`;
 
         let actions;
+        /* 【let 而不是 const】因为下面两个分支各赋一次值，
+           而且只在其中一个分支里赋值。用 let 才能先声明后赋值。 */
         if (isDone) {
+          /* 已处理的条目，只显示一个「✓ 处理方式」的静态文字，没有按钮。 */
           actions = `<div class="report-actions"><span class="report-done">✓ ${escapeHTML(r.action || '已处理')}</span></div>`;
+          /* 【r.action || '已处理'】兜底：
+               如果这条记录没存处理方式（老数据），就显示「已处理」。
+               永远不要把一个可能是 undefined 的值直接插进模板——
+               页面上会冒出个「undefined」，用户看了以为网站坏了。 */
         } else {
           const btns = [];
+          /* 用数组攒按钮，最后 join 起来。
+             为什么不用字符串累加？因为累加要处理「最后一个不加分隔」的问题，
+             而数组 + join 天然干净。三个以上按钮时差别更明显。 */
           btns.push(`<button type="button" class="report-btn ok" data-id="${r.id}" data-act="approve">放行</button>`);
           btns.push(`<button type="button" class="report-btn danger" data-id="${r.id}" data-act="remove"${r.alive ? '' : ' disabled'}>删评</button>`);
+          /* 【data-id / data-act】两个自定义属性，是给下面那个委托点击事件读的：
+               data-id  → 这条举报的编号
+               data-act → 要做什么操作（approve 放行 / remove 删评）
+             按钮本身不挂监听器，全靠父容器委托处理（下面详细讲）。
+
+             【${r.alive ? '' : ' disabled'}】这个写法有点绕，拆开看：
+               内容还在（alive 为真）→ 插入空字符串
+               内容已经被删 → 插入「 disabled」，按钮就变成禁用状态
+             为什么要禁用「删评」？因为内容都不存在了，再删一次没有意义，
+             而且可能让后端报错。禁用比「点了弹个错误」友好得多——
+             最好的错误处理就是让用户根本走不到那个错误上。
+
+             【注意 disabled 前面那个空格不能省】
+               没有空格会拼成 class="... "disabled"，属性名和引号粘在一起，
+               浏览器可能解析成别的属性，按钮就不会被禁用。 */
           actions = `<div class="report-actions">${btns.join('')}</div>`;
+          /* 【join('')】用空字符串连接，两个按钮直接挨着。
+             靠父元素的 gap: 8px 产生间距，不需要在字符串里塞空格。 */
         }
 
         const TYPE_NAME = { message: '留言', comment: '评论', article: '文章', video: '视频' };
+        /* 【映射表 / 字典】把数据库里的英文类型名翻译成人话。
+           为什么在 map 内部声明？因为它只在这里用，放外面也行但没必要。
+           【性能小知识】这意味着每条举报都会重新创建一个对象。
+           数据量大时（几千条）会有明显浪费，应该把这个常量提到函数外面。
+           现在几十条无所谓，属于「知道但可以先不改」的问题。 */
         const typeName = TYPE_NAME[r.targetType] || '留言';
+        /* 【|| '留言'】兜底：遇到不认识的新类型（比如以后加了「动态」），
+           至少显示「留言」而不是 undefined。
+           更好的做法是兜底成「内容」这种中性词，但无伤大雅。 */
+
+        /* ============================================================
+           下面这个 return 里面是一大段 HTML，讲几处要点（写在反引号外面）：
+
+           1. class="report-item${isDone ? ' done' : ''}"
+              用模板插值往 class 里塞状态类。
+              已处理的条目会多一个 done 类，CSS 里给它换了淡底色。
+
+           2. 第 382 行那个超长的 div，是「举报人 / 被举报人 / 时间」这一行。
+              里面有三处值得注意：
+                · r.targetUid != null 这个判断用了【双等号】。
+                  这是少数「故意用双等号」的场景：
+                  null == undefined 为 true，所以这一个条件能同时挡住两者。
+                  如果用 !== 就得写成两个判断。
+                · '（UID ' + escapeHTML(r.targetUid) + '）'
+                  这里做了转义。targetUid 理论上是个数字，转义一下没坏处，
+                  成本极低，习惯性转义能防住「某天后端把字段类型改了」。
+                · r.msgTime 那里的兜底是个三元嵌套在模板里：
+                  有时间 → 直接显示
+                  没时间 → 如果还有举报时间，就显示「（原内容已删除）举报于 xxx」
+                           连举报时间都没有，就显示空
+                  这是在处理「原内容被删了，原始时间信息也一起没了」的情况。
+                  这类兜底看起来啰嗦，但正是它让页面在各种脏数据下都不会崩。
+
+           3. 所有来自数据库的文本（用户名、留言内容、理由、时间）
+              全都套了 escapeHTML。
+              这不是可选的——这些字段来自用户输入，
+              不转义的话用户就能在自己的留言里写一段脚本，
+              等你（管理员）一打开后台，脚本就在你的浏览器里执行了。
+              这叫【存储型 XSS】，危害最大的那种：
+              攻击者不用骗你点链接，只要提交一次内容，静静等你来看。
+              【铁律】凡是用户输入的内容要拼进 innerHTML，一律先转义。
+           ============================================================ */
         return `
         <div class="report-item${isDone ? ' done' : ''}">
           <div class="report-top">
@@ -382,73 +1005,301 @@
           <div class="report-line"><b>举报人：</b>${escapeHTML(r.reporter || '')}　<b>被举报人：</b>${escapeHTML(r.msgName || '')}${r.targetUid != null ? '（UID ' + escapeHTML(r.targetUid) + '）' : ''}　<b>${typeName}时间：</b>${escapeHTML(r.msgTime || (r.reportTime ? '（原内容已删除）举报于 ' + r.reportTime : ''))}</div>
           ${actions}
         </div>`;
+        /* 上面模板末尾那两个插值（quoted 和 actions），
+           都是前面算好的 HTML 字符串，本身已经处理过了，直接插没问题。
+           顺便注意：模板里那两行插值语句是顶到行首的，
+           因为模板字符串里的缩进会原样输出，多几个空格会挤进页面。
+           不过实际上 HTML 会压缩连续空白，所以影响很小。 */
       }).join('');
+      /* 【.join('')】把 map 得到的字符串数组拼成一整串。
+         参数 '' 表示用空字符串连接。
+         【为什么必须 join？】因为 innerHTML 需要的是「一个字符串」，
+         而 map 返回的是「一个数组」。
+         不 join 直接赋值的话，数组会被自动转成字符串，
+         元素之间自动加逗号——页面上就会莫名出现一堆逗号。
+         这是新手非常常见的翻车点。 */
     }
 
     document.getElementById('reportList').addEventListener('click', (e) => {
+    /* 【事件委托 Event Delegation】本文件最重要的技术点，讲透它：
+       问题：举报列表里的按钮是动态生成的，而且每次刷新都会整个重建。
+             如果给每个按钮单独挂监听器：
+               1. 每次渲染都要遍历一遍挂上去，麻烦
+               2. 旧按钮被覆盖后，它们的监听器还占着内存（内存泄漏）
+       解法：把监听器挂在【它们的父容器】（reportList）上，靠事件冒泡工作。
+       【事件冒泡】你点了一个按钮，这个点击事件会沿着
+             按钮 → 父元素 → 祖父元素 → …… → document 一层层往上传播。
+             所以在父容器上挂一个监听器，就能「接住」所有子元素的点击。
+             好比公司前台安排一个人，所有来访者都要经过前台登记，
+             不用在每间办公室门口都安排一个人。
+       好处：只挂一次，永久有效；内存友好；代码集中好维护。
+       这是所有「动态列表」的标准做法，必须掌握。 */
+
       const btn = e.target.closest('button[data-act]');
+      /* 【两个重点】
+         1. e.target
+            【事件目标】实际被点击的那个元素。
+            它可能是按钮本身，也可能是按钮里的文字节点。
+            所以不能假设 e.target 就是按钮。
+         2. .closest('button[data-act]')
+            【closest】从当前元素开始，往上逐层找祖先，
+            返回第一个匹配选择器的元素；找不到返回 null。
+            'button[data-act]' 是【属性选择器 + 标签名】的组合：
+              命中「button 标签、并且带 data-act 属性」的元素。
+            为什么用 closest 而不是直接读 e.target.dataset.act？
+              因为如果按钮里包了一层 span，用户点到的是 span，
+              span 上没有 data-act，就读不到了。closest 会往上找到 button。
+         【整行含义】不管点到按钮的哪个部位，都往上找到那个按钮；
+           点到列表空白处（没有符合条件的祖先）就返回 null。
+         这个模式可以当模板背下来，写任何「动态列表 + 按钮」都用它。 */
       if (!btn) return;
+      /* 点到的地方不是按钮，什么也不做。
+         这个判断必须有，否则下面 btn.dataset 会抛「Cannot read properties of null」。
+         这就是「事件委托」要付出的一点代价：你得自己过滤无关点击。
+         而逐个挂监听器就不需要这一步。两种方案各有取舍。 */
       handleAction(Number(btn.dataset.id), btn.dataset.act, btn);
+      /* 【dataset】读 data-* 自定义属性的标准方式：
+           元素上写 data-id="5"，代码里写 el.dataset.id
+         【注意连字符会变驼峰】data-art-edit → dataset.artEdit。
+           而 data-id 只有一个词，所以还是 dataset.id。
+         【Number()】把字符串转成数字。
+           dataset 读出来的永远是字符串（HTML 属性都是文本），
+           而下面的 find(x => x.id === id) 用的是严格相等，
+           '5' === 5 是 false，不转换就永远找不到。
+           这就是「类型转换」在真实代码里最典型的出场理由。
+         【为什么不写 parseInt(值, 10)？】Number() 更严格，
+           它不接受 "5abc" 这种半截数字，会直接返回 NaN。
+           对 id 这种「必须是纯数字」的场景，Number 更合适。 */
     });
 
     const CONFIRM_TEXT = {
       remove: '确定删掉被举报的内容吗？删了就找不回来了。'
     };
+    /* 【配置和逻辑分离】把「需要二次确认的操作 + 提示文案」集中成一张表。
+       好处：以后要给「放行」也加确认，只在这张表里加一行，
+             不需要动 handleAction 里任何逻辑。
+       现在表里只有 remove 一项，所以放行是「点了就执行」。
+       这合理吗？放行意味着「判定这条举报不成立，内容保留」，
+       是个可逆操作（还能再举报），所以不确认也说得过去。
+       而删评不可逆，必须确认。 */
 
     async function handleAction(id, act, btn) {
       if (!id) return alert('这条举报没有编号。');
+      /* 【!id】这个判断把 0、null、undefined、NaN 都当成「没编号」。
+         对举报 id 来说没问题（从 1 开始）。
+         但如果这个字段可能合法地等于 0，这样写就会误判——
+         那时候必须写成 id == null 或 Number.isNaN(id)。
+         【return alert(...)】利用 alert 返回 undefined（假值）直接结束函数。
+         功能正确，但可读性一般——一眼看像「返回 alert 的结果」。
+         更清楚的写法是 { alert(...); return; }。 */
       if (CONFIRM_TEXT[act] && !confirm(CONFIRM_TEXT[act])) return;
+      /* 【这行是「条件确认」的通用写法】
+           1. CONFIRM_TEXT[act]
+              查表：这个操作需不需要确认。不需要时是 undefined（假值），
+              整个 && 短路，直接跳过确认。
+           2. !confirm(...)
+              【confirm】弹出一个带「确定/取消」的框，返回 true/false。
+              取反后：用户点取消 → !false = true → 进入 if → return 中止。
+         【这样做的好处】不需要写 if (act === 'remove') { if(!confirm(..)) return; }
+           这种把操作名写死进逻辑的代码。以后加新操作只要往表里加一行。 */
 
       btn.disabled = true;
+      /* 【防重复提交】两件事同时发生：
+           1. 按钮变灰，用户看得出「正在处理」
+           2. 按钮不再响应点击
+         不加的话：用户点一下没反应、再点一下——
+         两个请求同时在飞，可能变成「删了两次」或者报奇怪的错。
+         这类 bug 在弱网下极容易触发，而开发者本机网速快永远测不出来。
+         【更严谨还需要超时】万一请求永远不回来，按钮就永久禁用了，
+         用户只能刷新页面。这里没做这个兜底。 */
       try {
         if (act === 'remove') {
           const rd = await SBAPI.getReports();
+          /* 【为什么删之前要先重新拉一次举报列表？】
+             因为删评需要「被举报内容的完整信息」（类型、目标 id 等），
+             而点击事件只传了举报 id。
+             两个办法：
+               a) 渲染时把这些信息塞进按钮的 data-* 属性
+               b) 重新拉一次数据，按 id 找
+             作者选了 b。好处是数据一定是最新的（不会因为列表放久了而过时）；
+             坏处是多一次网络请求，慢一点。
+             更好的做法是 a（少一次往返），或者干脆让后端
+             只凭举报 id 就能自己查出要删什么。
+             这属于「能工作但不够高效」的写法，标注不改。 */
           const rep = (rd.list || []).find(x => x.id === id);
+          /* 【find】找到第一个符合条件的元素，找不到返回 undefined。
+             【顺序注意】find 是数组方法，所以要先 (rd.list || []) 兜底，
+             不能写成 rd.list.find(...)——如果 list 是 undefined 直接报错。 */
           if (!rep) { btn.disabled = false; return alert('找不到这条举报，刷新一下再试'); }
+          /* 【失败必须恢复按钮】否则按钮永久禁用。
+             提示里带「刷新一下再试」，给了用户明确的下一步——
+             比单纯说「找不到」有用得多。 */
           const del = await SBAPI.deleteReported(rep);
+          /* 把整条举报记录传给后端，让它自己去判断该删哪个类型的哪条内容。 */
           if (!del.ok) { btn.disabled = false; return alert(del.error || '删除失败'); }
+          /* 【d.error || 兜底】如果服务器没给错误信息，
+             显示「删除失败」而不是「undefined」。
+             用户看到 undefined 会以为网站彻底坏了。 */
         }
         const d = await SBAPI.handleReport(id, act);
+        /* 【为什么删完还要再调一次 handleReport？】
+           因为「删掉内容」和「把这条举报标记为已处理」是两件事，
+           需要两个接口。删了内容但没标记，这条举报会一直留在待处理里，
+           管理员下次看到又要处理一遍。
+           【顺序也不能反】必须先删内容再标记，
+           否则标记成功但删除失败，这条举报就永远消失了，
+           而被举报的内容还挂在站上——这是最糟糕的结果。
+           先做不可逆的、必须成功的操作，再做状态标记，是这类流程的基本原则。 */
         if (!d.ok) {
           btn.disabled = false;
           return alert(d.error || '操作失败');
+          /* 【这里有个小缺口】如果删内容成功了、但标记失败，
+             用户看到「操作失败」，内容其实已经被删了。
+             用户会以为没删掉又去点一次，然后发现内容没了。
+             严谨的做法是区分这两种失败，提示不同的文案。
+             标注在这里。 */
         }
         toast('处理好了');
+        /* 【轻量提示】用自己做的提示条而不是 alert：
+           这是「成功」的反馈，不该打断用户的操作节奏。 */
         await loadReports();
+        /* 【重新加载列表】不是手动改本地状态，而是重新问服务器。
+           为什么？因为服务器可能做了额外的事（比如同时删了相关评论），
+           重新拉一次「所见即服务器所说」，永远不会两边不一致。
+           代价是多一次请求，但换来准确性，值。 */
       } catch {
         btn.disabled = false;
+        /* 【catch 里必须再恢复一次】
+           上面那行 btn.disabled = false 在 try 里，
+           如果请求抛错，那行根本执行不到，按钮就永久禁用了。
+           凡是「禁用 → 操作 → 启用」的模式，catch 里必须重复写一次。
+           更优雅的写法是用 finally，那样无论成功失败都会执行：
+             finally { btn.disabled = false; }
+           而且用 finally 还能省掉上面那几处手写的 btn.disabled = false，
+           代码会少一大截。这属于「知道有更好的写法」的改进点。 */
         alert('网络错误，请重试');
       }
     }
 
     /* 只看一眼待处理几条，用来给按钮打角标 */
     async function refreshBadge() {
+    /* 【和 renderReports 里的角标逻辑重复了】
+       同一个功能写了两遍，以后改规则（比如「已忽略」不算待处理）
+       必须记得两个地方都改。这种重复是重构的首要信号。
+       不过程序上没错，属于「可以合并成一个函数」的优化点。 */
       try {
         const d = await SBAPI.getReports();
         const list = d.list || [];
         const n = list.filter(x => x.status !== 'done').length;
         const badge = document.getElementById('reportBadge');
         if (!badge) return;
+        /* 【这里做了 null 检查，值得表扬】
+           因为 refreshBadge 可能在 renderGrid 之前被调用
+           （不，实际是 renderGrid 末尾调它，所以一定有）。
+           但加了这个检查，函数就变成「找不到元素也不会崩」，
+           抗复用性更好。
+           【对比】renderReports 里就没做这个检查，那是个真实的隐患。 */
         badge.textContent = n;
         badge.style.display = n ? 'inline-block' : 'none';
       } catch {}
+      /* 【空 catch】网络失败就静默忽略。
+         合理，因为角标只是个「顺便显示」的辅助信息，
+         加载失败不该弹窗打扰用户。
+         但要清楚：静默失败会让问题难以被发现，
+         核心数据失败时至少要 console.warn 一下方便排查。 */
     }
 
     function escapeHTML(s) {
+    /* 【本文件的安全基石】防 XSS。原理：
+         innerHTML 会把字符串当 HTML 代码解析。
+         如果用户输入的内容里有尖括号，浏览器会老实执行它。
+         解法是把 5 个有特殊含义的字符换成 HTML 实体——
+         实体就是「用另一种写法表示同一个字符」，
+         浏览器渲染时会把实体显示成原字符，但不会把它当标签解析。 */
       return String(s == null ? '' : s)
+      /* 【s == null】同时判断 null 和 undefined
+           （null == undefined 为 true）。
+           这是 JS 里少数建议用双等号的场景，但必须明确写 v == null。
+           另一种现代写法是 s ?? ''（空值合并），更清楚。
+         【为什么先 String()】如果 s 是数字，下面的 .replace 会报错
+           （数字没有 replace 方法）。先转字符串就安全了。 */
         .replace(/&/g, '&amp;')
+        /* 【第一步必须是 & ，而且必须第一个执行】这是本函数最关键的一点。
+           原因：后面几步生成的实体本身都包含 &。
+           如果先换了尖括号再换 &，那刚生成的实体符号会被第二次替换，
+           页面上就会真的显示实体文本而不是符号本身。
+           顺序只能是「先处理 & ，再处理其他的」。
+           这个坑在很多手写转义函数里都出现过，值得记牢。 */
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
+        /* 尖括号是最危险的，它们是 HTML 标签的开始和结束。 */
         .replace(/"/g, '&quot;')
+        /* 【为什么双引号也要转？】因为在 HTML 属性里，
+           如果值里混进双引号，攻击者就能提前闭合属性，
+           再塞进一个事件属性（比如 onerror），
+           这叫【属性型 XSS】。转义双引号就防住了。 */
         .replace(/'/g, '&#39;');
+        /* 单引号同理。
+           【为什么用 &#39; 而不是 &apos;？】
+           &apos; 是老版本 IE 不支持的实体，&#39; 是数字实体，
+           所有浏览器都认。虽然现在不用管 IE，但这是历史惯例。 */
+      /* 【/g 标志】正则末尾的 g 是【全局】。
+         不加 g 的话 replace 只替换【第一个】匹配，
+         后面的全不管——这是极其常见的 bug：
+         用户输入里有两个尖括号，只转义了第一个，攻击照样成立。
+         凡是做转义、替换所有出现的场景，/g 绝对不能忘。 */
     }
 
     // 进页面就先看一眼有没有待处理的，好在按钮上显示角标
     (async () => {
+    /* 【上一个 async 箭头函数的立即执行】
+         (async () => {...})()
+       这是 IIFE 的箭头函数版本。和上面 boot 那个是同一个套路，
+       只是没用 function 关键字，更短。
+       【为什么不用命名】因为它只跑一次，没有递归调用自己的需求。 */
       const d = await SBAPI.getReports();
       if (d.list) renderReports(d.list);
+      /* 【提前把举报数据加载好，用户点开面板时就已经有内容了】
+         想法是好的，但这里有几个问题，必须说清楚：
+
+         1. 【可能崩溃】这个 IIFE 在脚本末尾立刻开始执行，
+            它只等一次网络请求；而 boot() 要等两次
+            （先 getSession 再 me）。
+            所以这个 IIFE 极有可能【先】跑完，
+            而那时候 renderGrid 还没执行，
+            页面上根本没有 id 为 reportBadge 的元素。
+            于是 renderReports 里那行 badge.textContent 会抛
+            「Cannot read properties of null」，
+            整个 renderReports 就断了，列表也没画出来。
+            表现就是：点开「举报处理」时又转了一圈「加载中」
+            （因为 openReports 会再调一次 loadReports），
+            用户基本察觉不到，但这个预加载其实是白做的。
+
+         2. 【重复请求】这次请求 + refreshBadge 里的那次请求，
+            拿的是同一份数据，等于页面一打开就请求了两遍。
+
+         3. 【重复渲染】如果它真的跑成功了，
+            renderReports 会往一个 display:none 的面板里写内容，
+            然后用户点开时 loadReports 又整个重写一遍。
+            等于画了两遍。
+
+         【怎么改才对】把这段逻辑合并进 boot()：
+           在 renderGrid() 之后，直接用 refreshBadge 已经拿到的数据
+           去渲染列表（而不是再请求一次）。
+           或者干脆删掉这段，让 openReports 负责加载——
+           反正用户点开时会看到「加载中」，体验也没差多少。
+
+         我按你的要求只标注、不改逻辑。 */
     })();
-  })();  </script>
+  })();
+  /* 【收尾两次】
+       }  → 关闭 function 的函数体
+       )  → 关闭开头那层包装的括号
+       () → 立刻调用（注意它写在上一行的末尾附近，别漏看）
+     因为是 IIFE，内部所有变量到此为止，外面再也访问不到。
+     在浏览器控制台里试 escapeHTML 或 renderReports，会得到 undefined——
+     这是对的，不是 bug。 */
+  </script>
 
 </body>
 </html>
