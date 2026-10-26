@@ -1,124 +1,275 @@
 <!DOCTYPE html>
 <!-- ============================================================
      文件：test/board.html（留言板页）
-     作用：按 B 站评论格式做的留言板：发表、回复、置顶、删除、举报，按身份显示不同铭牌颜色。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：按 B 站评论区的样子做的留言板：发主楼、楼中楼回复、置顶、删除、举报、点赞、关注、拉黑。
+           还按身份给名字后面挂不同颜色的「铭牌」（站长粉、管理员粉、有签名的用主题蓝）。
+     数据来源：全部走 window.SBAPI（Supabase 直连），没有自建后端。
+     说明：尖括号叹号包起来的这段是注释，不会显示在页面上，只给看代码的人看。
      ============================================================ -->
 <html lang="zh-CN">
+<!-- 【lang="zh-CN"】声明这是简体中文页面。
+     影响：朗读软件念中文、浏览器问不问你要不要翻译、中文标点怎么断行。 -->
+
 <head>
+<!-- 【head】给浏览器看的信息区，页面上不显示。 -->
+
 <meta charset="UTF-8">
+<!-- 【charset】字符编码。UTF-8 才能正确显示中文和 emoji，写错会变乱码方块。 -->
+
 <title>留言板 · 乘法</title>
+<!-- 标签页上那行字。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 引入全站公共样式。
+     【?v=26】缓存版本号：改了 CSS 就把它加 1，浏览器才会重新下载。
+     不这么做，用户的浏览器可能一直用几个月前缓存的旧样式。 -->
+
 <style>
+  /* 本页专属样式。公共部分（导航、卡片、按钮）都在 /style.css 里。 */
+
   /* ===== 发表框（B 站风格：圆角输入框 + 右下角发布按钮）===== */
   .post-box {
+    /* 最上面那个写留言的盒子。 */
     padding: 14px;
+    /* 内边距，四边都是 14px。盒子边缘和里面的输入框之间留出呼吸空间。 */
     border: 1px solid var(--border);
+    /* 【1px solid 颜色】细边框。solid 是实线，另外还有 dashed 虚线、dotted 点线。 */
     border-radius: 10px;
+    /* 圆角。数值越大越圆，超过短边一半就不再变圆了。 */
     background: var(--card);
+    /* 【var(--card)】用变量取颜色。变量定义在公共样式最顶部的 :root 里，
+       切深色/浅色主题时这里自动跟着变，不用改代码。 */
   }
+
   .post-box textarea {
+    /* 【textarea】多行输入框。这里指 post-box 里面那个。 */
     width: 100%;
+    /* 【100%】跟父容器一样宽。
+       【注意】默认盒模型下 100% 宽 + padding + border 会超出父容器（撑破）。
+       本项目在公共样式里设了 box-sizing:border-box，意思是「宽度包含边框和内边距」，
+       所以 100% 刚好装得下，不会溢出。这个属性几乎每个项目开头都会设。 */
     min-height: 74px;
+    /* 【min-height】最小高度，大约 3 行。
+       用 min 不用 height：用户打字多了它会自己长高，用 height 就锁死了。 */
     padding: 10px 12px;
+    /* 【上下 左右】内边距。顺序记法：从上开始顺时针 = 上 右 下 左；
+       两个值时就是「先上下、后左右」。 */
     border: 1px solid var(--border);
     border-radius: 8px;
     font-family: inherit;
+    /* 【inherit】继承父元素的字体。
+       【必须写】输入框、按钮、下拉框这些「表单控件」浏览器默认用系统字体，
+       不会自动跟网页字体一致，不写就会跟你精心挑的字体格格不入。 */
     font-size: 15px;
     line-height: 1.6;
+    /* 【line-height】行高。1.6 是「字号的 1.6 倍」——
+       单位less 的数值表示倍数，不是像素。
+       中文正文 1.6~1.8 最舒服，行距太密会闷，太散会散架。 */
     background: var(--field);
     color: var(--text);
     outline: none;
+    /* 【outline】轮廓线。浏览器给获得焦点的元素默认加一圈奇怪颜色的虚线，
+       这里关掉。但注意：关掉之后必须自己加别的焦点提示（下面就做了 border-color 变化），
+       完全不给提示会让键盘用户不知道光标在哪，是无障碍上的错误。 */
     resize: vertical;
+    /* 【resize】能不能拖动右下角改大小。
+       vertical = 只能上下拉高，不能拉宽。
+       别的值：none 不能拖、horizontal 只能拉宽、both 都能拖。
+       【为什么限制成只能竖着拉】允许横向拉的话，用户能把它拉出容器撑破布局。 */
   }
+
   .post-box textarea:focus { border-color: var(--primary); }
+  /* 【:focus】元素获得焦点时（被点中、或 Tab 键跳过来）。
+     边框换成主色，这就是上面说的「自己补的焦点提示」。 */
+
   .post-bar { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  /* 输入框下面那一行：左边字数、右边发布按钮。
+     【一行写完多个属性】只写 4 个短属性，挤一行更好读，不用每行一个花括号。
+     【align-items:center】竖直居中，让字数文字和按钮在一条水平线上。 */
+
   .post-count {
+    /* 「0/200」那个字数。 */
     font-size: 12px;
     color: var(--text-light);
     font-variant-numeric: tabular-nums;
+    /* 【tabular-nums】等宽数字。
+       【为什么】普通字体里 1 比 8 窄，字数从 9 变到 10 时整块宽度会跳一下。
+       改成等宽数字后，每个数字占同样宽度，字数变化时不会抖。 */
   }
+
   .post-bar button {
     margin-left: auto;
+    /* 【margin-left:auto】左边外边距自动 = 尽可能大。
+       在 flex 布局里，这等于把按钮「推到最右边」。
+       这是最省事的「左一个右一个」做法，不用 justify-content。 */
     padding: 7px 22px;
     border: none;
+    /* 去掉浏览器给按钮的默认边框。 */
     border-radius: 8px;
     background: var(--grad-primary);
+    /* 渐变背景。 */
     color: #fff;
+    /* #fff = #ffffff，每两位相同的十六进制可以缩写成 3 位。 */
     font-family: inherit;
+    /* 同上面 textarea 的道理，按钮也必须显式继承字体。 */
     font-size: 14px;
     cursor: pointer;
     transition: background .15s;
+    /* 【transition】过渡：属性变化时不瞬间跳变，而是平滑过渡。
+       background .15s = 背景色变化用 0.15 秒渐变完成。
+       配合下面的 :hover 用。 */
   }
+
   .post-bar button:hover { background: var(--primary-deep); }
+  /* 【:hover】鼠标悬停。换成深一档的主色，给「可以点」的反馈。 */
 
   .list-title {
+    /* 「全部评论 12」那一行。 */
     display: flex;
     align-items: baseline;
+    /* 【baseline】按「基线」对齐 —— 就是字母底部那条看不见的线。
+       【为什么不用 center】标题是 18px、数字是 13px，用 center 会让小字悬在半空；
+       用 baseline 大字小字的底部在一条线上，看起来才自然。这是排版细节。 */
     gap: 8px;
     margin: 30px 0 2px;
+    /* 【上 右 下 左】四个值。
+       上面 30px 跟发表框拉开距离，右边 0，下面 2px，左边 0。 */
     font-size: 18px;
     color: var(--text);
   }
+
   .list-title .n {
+    /* 【.list-title .n】中间有空格 = 后代选择器：
+       找 .list-title 里面的 .n 元素（就是那个数字）。
+       如果写成 .list-title.n（无空格）意思完全不同：既是 list-title 又是 n 的元素。 */
     font-size: 13px;
     font-weight: normal;
+    /* 把标题的粗体改回正常，小数字不需要加粗。 */
     color: var(--text-light);
     font-variant-numeric: tabular-nums;
   }
 
   /* ===== 评论列表：B 站布局 —— 头像单独一列，名字/正文/操作依次往下 ===== */
   .msg-item {
+    /* 一条留言的整体容器。 */
     display: flex;
+    /* 横向排：左边头像，右边内容。 */
     gap: 12px;
     padding: 18px 0;
     border-bottom: 1px solid var(--border);
+    /* 只有下边框当分隔线，左右不要，看起来更干净。 */
   }
+
   .msg-item:last-child { border-bottom: none; }
+  /* 【:last-child】最后一个孩子。
+     【为什么】最后一条底下再画横线，跟卡片底边会贴在一起变成双线，难看。
+     这种「除了最后一个都加线」的套路还可以写成 .msg-item + .msg-item { border-top: ... }，
+     就是「跟前面相邻的兄弟」——第一个没有前面的兄弟，所以不加。两种思路都常见。 */
+
   .msg-item.hl { background: var(--primary-soft); border-radius: 10px; }
+  /* 【.msg-item.hl】两个类连写（无空格）= 同时具备这两个类。
+     hl = highlight 高亮。从信箱点过来定位到某条留言时，临时加上这个类闪一下。 */
+
   .msg-side { flex: none; }
+  /* 【flex:none】等于 flex: 0 0 auto —— 不放大、不缩小、按内容尺寸。
+     【为什么必须写】flex 子元素默认可以收缩（flex-shrink:1），
+     名字太长时头像列会被压扁变形。设成 none 就钉死宽度。 */
+
   .msg-main { flex: 1; min-width: 0; }
+  /* 【flex:1】占满剩下的空间。
+     【min-width:0】这是 flex 布局最经典的坑：
+     flex 子元素的 min-width 默认是 auto，意思是「不能小于内容的最小宽度」，
+     结果就是长文字撑破容器、省略号永远不生效。
+     必须显式写 min-width:0，告诉浏览器「允许我缩到比内容还窄」，截断才有机会发生。 */
 
   .msg-avatar { display: block; line-height: 0; }
+  /* 头像的外层容器（可能是 <a> 也可能是 <span>）。
+     【display:block】让它能设宽高、独占一块。
+     【line-height:0】去掉行内元素底部那几像素的「基线空隙」——
+     图片是行内元素，默认按文字基线摆放，底下会多出一点空白，
+     导致头像跟旁边文字对不齐。这是排版里非常常见的小问题。 */
+
   .msg-avatar img {
+    /* 头像图片本身。 */
     width: 44px;
     height: 44px;
+    /* 宽高都写死 44px。只写一个的话另一边会按原图比例算，可能拉变形。 */
     border-radius: 50%;
+    /* 50% = 圆。前提是宽高相等（正方形），否则是椭圆。 */
     object-fit: cover;
+    /* 【object-fit】图片「塞进」这个框里的方式：
+         cover   → 填满框、超出部分裁掉（不变形）← 这里用
+         contain → 完整显示、留白边（不变形）
+         fill    → 强行拉伸填满（会变形，是默认值）
+       用户上传的头像长宽比五花八门，必须用 cover 才不会变成扁脸。 */
     display: block;
     background: var(--card);
+    /* 图还没加载出来时先露个底色，不会闪一块透明。 */
     border: 1px solid var(--border);
   }
+
   a.msg-avatar:hover { opacity: .85; }
+  /* 【a.msg-avatar】只针对「<a> 标签且有 msg-avatar 类」的元素。
+     为什么限定 a：只有能点头像跳主页的那些才需要悬停反馈，
+     没登录的匿名留言头像是个 <span>，点了没反应，就不该有悬停变化。
+     【opacity:.85】稍微变淡，是「这张图可以点」的弱提示，比放大改边框更克制。 */
 
   .msg-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  /* 名字那一行：名字 + 铭牌 + 置顶标。
+     【flex-wrap:wrap】名字特别长（或铭牌很长）时，后面的元素换到下一行，
+     而不是挤在一起或被挤出屏幕。 */
+
   .msg-name {
+    /* 用户名。 */
     font-size: 13px;
     font-weight: 500;
+    /* 500 是「中等」粗细。400 正常、700 加粗。
+       用可变字体时 500 这种中间值才有效果；用普通字体可能直接落到 400 或 700。 */
     color: var(--text);
     text-decoration: none;
+    /* 去掉链接的下划线。 */
     transition: color .18s;
   }
+
   a.msg-name:hover { color: var(--primary-deep); text-decoration: none; }
+  /* 悬停变主色。这里再写一次 text-decoration:none 是保险 ——
+     有些浏览器/用户样式表会在悬停时把下划线加回来。 */
+
   /* 站长 / 管理员的粉标，位置跟 B 站的 UP 标识一样 */
   .msg-badge {
+    /* 铭牌/小标签的通用样式。 */
     flex: none;
+    /* 不参与收缩，长名字不能把标签压扁。 */
     padding: 3px 5px;
     border-radius: 3px;
     background: #fb7299;
+    /* B 站标志性的粉色。 */
     color: #fff;
     font-size: 11px;
     line-height: 1;
+    /* 行高 1 = 跟字号一样高，标签能贴得比较紧。 */
   }
+
   .msg-badge.pin { background: #ff7f24; }
+  /* 【.msg-badge.pin】连写 = 既是徽章又是「置顶」标签 → 橙色。
+     它排在 .msg-badge 后面，所以能把粉色盖掉（同优先级，后写的赢）。 */
+
   /* 写了签名的：铭牌显示签名，普通人用主题蓝 */
   .msg-badge.plate {
     background: var(--primary-deep);
     max-width: 200px;
+    /* 最宽 200px，超了就省略号。防止有人写一段超长签名把整个版面撑开。 */
     overflow: hidden;
+    /* 超出部分裁掉。 */
     text-overflow: ellipsis;
+    /* 被裁掉的地方显示「…」。
+       【注意】这个属性必须配合 overflow:hidden 才生效，
+       而且要单行还得加下面的 white-space:nowrap —— 三个一起用，缺一不可。
+       我习惯叫它「单行省略号三件套」。 */
     white-space: nowrap;
+    /* 不换行。不写的话文字会先折行，永远不会触发省略号。 */
   }
+
   /* 站长 / 管理员：一律红色 */
   .msg-badge.staff { background: #fb7299; }
 
@@ -126,20 +277,36 @@
   .msg-item.pinned {
     padding-left: 12px;
     padding-right: 12px;
+    /* 上下 padding 沿用 .msg-item 的 18px 0，这里只补左右。 */
     border-radius: 10px;
     background: rgba(138, 43, 226, .12);
+    /* 【rgba(红,绿,蓝,透明度)】三个 0~255 的颜色值 + 一个 0~1 的透明度。
+       .12 = 12% 不透明度 → 极淡的一层紫，既能区分又不抢戏。 */
     border-left: 3px solid var(--primary);
+    /* 左边加一条 3px 的粗色条，这是「置顶」最直观的视觉信号。 */
   }
 
   .msg-text {
+    /* 留言正文。 */
     margin-top: 5px;
     font-size: 15px;
     line-height: 1.7;
     color: var(--text);
     word-break: break-word;
+    /* 【word-break:break-word】长单词/长链接放不下时允许断开换行。
+       【为什么需要】一行超长的英文或一串没有空格的链接，
+       默认规则认为「单词不能拆」，它宁可溢出容器把布局撑破。
+       这个属性让它能在必要时断开。
+       【和 break-all 的区别】break-all 会在任意字符处断（更暴力，单词被拆得难看）；
+       break-word 先尝试放到下一行，实在放不下才断，更温柔。正文用 break-word 更合适。 */
     white-space: pre-wrap;
+    /* 【pre-wrap】保留换行和空格，同时该换行时还能自动换。
+       用户输入时换的行，显示时也换行 —— 不写的话所有换行都被压成一个空格。
+       对比：pre 保留但不自动换行（会横向溢出）、nowrap 完全不换行。 */
   }
+
   .msg-to { color: var(--primary-deep); }
+  /* 「回复 @某某 :」那部分，用主色区分，一眼看出这条在回谁。 */
 
   /* 底部一行：时间 → 操作 → 楼层号 */
   .msg-foot {
@@ -149,51 +316,94 @@
     margin-top: 8px;
     flex-wrap: wrap;
   }
+
   .msg-time {
+    /* 「3 分钟前」。 */
     font-size: 12px;
     color: var(--text-light);
     margin-right: 8px;
+    /* 跟后面的操作按钮拉开一点，不然时间跟「回复」两字贴在一起。 */
   }
+
   .msg-floor {
+    /* 右下角的「#12」楼层号。 */
     margin-left: auto;
+    /* 【margin-left:auto】在 flex 里把它推到最右边。
+       这是「一行里最后一个元素靠右」最省事的写法。 */
     flex: none;
     color: var(--text-light);
     font-size: 12px;
     font-variant-numeric: tabular-nums;
+    /* 等宽数字，楼层号从 #9 变 #10 时不会左右抖。 */
   }
+
   /* 操作按钮用 B 站那种无边框的图标文字按钮 */
   .msg-foot .msg-actions { margin-left: 0; position: relative; }
+  /* 【position:relative】给下面那个绝对定位的弹出菜单（.act-menu）当坐标原点。
+     【为什么必须写】绝对定位元素会一路上找「最近的已定位祖先」，
+     找不到就以整页为参照，菜单位置会跑到屏幕角落去。
+     这里写 relative，菜单才会贴着按钮组弹出。
+     【margin-left:0】覆盖掉公共样式里 .msg-actions 可能带的左边距。 */
+
   .msg-foot .act-btn {
+    /* 【.msg-foot .act-btn】限定在留言底部那排里的按钮，
+       避免影响回复框里同名的按钮。 */
     padding: 4px 8px;
     border: none;
     background: none;
+    /* 【background:none】去掉背景。B 站那种「只有文字、没有框」的按钮。 */
     font-size: 13px;
     color: var(--text-light);
   }
+
   .msg-foot .act-btn:hover {
     background: var(--primary-soft);
+    /* 悬停时才出现淡淡的背景块，给个可点的暗示。 */
     border-color: transparent;
     color: var(--primary-deep);
   }
+
   .msg-foot .act-btn.on {
+    /* 【.on】这个类表示「已激活」的状态 —— 已关注、已点赞这类。
+       跟 .msg-badge.pin 一样是「状态类」，通常由 JS 动态加上/去掉。 */
     background: var(--primary-soft);
     border-color: transparent;
     color: var(--primary-deep);
     font-weight: 600;
+    /* 再加粗一点，让「已关注」比「关注」更醒目。 */
   }
+
   .like-btn { font-size: 14px; line-height: 1; }
+  /* line-height:1 让心形图标贴着按钮上沿，不上下晃。 */
+
   .like-btn .like-n { font-size: 13px; margin-left: 3px; }
+  /* 心形后面的数字。 */
+
   .like-btn.on { color: #fb7299; background: rgba(251,114,153,.12); }
+  /* 已点赞：B 站粉 + 淡粉底。 */
+
   .like-btn.on:hover { color: #fb7299; background: rgba(251,114,153,.18); }
+  /* 【为什么还要单独写 :hover】
+     因为上面 .msg-foot .act-btn:hover 会把颜色改成主题色（紫），
+     而「已点赞」状态下应该保持粉色。
+     这两条选择器的「权重」需要比较：
+       .msg-foot .act-btn:hover  → 两个类 + 一个伪类
+       .like-btn.on:hover        → 两个类 + 一个伪类
+     权重相同 → 后写的赢。所以这条必须排在前面那条之后，才能压住它。
+     【规律】CSS 冲突时不是「更详细的赢」，而是「权重高者赢；权重相同后写的赢」。
+     这行代码就是活例子。 */
 
   .reply-box {
+    /* 展开的回复输入框的外壳。 */
     margin: 10px 0 2px;
     padding: 10px;
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--field);
   }
+
   .reply-input {
+    /* 回复输入框。跟上面的 .post-box textarea 几乎一样，只是小一号。 */
     width: 100%;
     min-height: 58px;
     padding: 8px 10px;
@@ -207,164 +417,414 @@
     outline: none;
     resize: vertical;
   }
+
   .reply-input:focus { border-color: var(--primary); }
+  /* 同上：补偿被去掉的 outline。 */
+
   .reply-actions { display: flex; gap: 8px; margin-top: 8px; }
+  /* 「发送回复 / 取消」两个按钮排一行。 */
+
   .reply-actions .act-btn { background: var(--card); }
+  /* 回复框里的按钮要有底色（因为外面的按钮是 background:none 透明的，
+     在灰色回复框里会看不清边界）。 */
+
   .reply-actions .act-btn.on { background: var(--grad-primary); border-color: var(--primary); color: #fff; }
+  /* 「发送回复」按钮带 on 类 → 变成主色实心按钮，跟「取消」区分主次。
+     这叫「视觉层级」：一个区域里只该有一个最突出的主操作。 */
+
   .reply-actions .act-btn.on:hover { background: var(--primary-deep); color: #fff; }
+  /* 悬停时换成深色主色。
+     又得单独写一次是因为上面 `.msg-foot .act-btn:hover` 之类会改颜色，
+     这里要保持白字不被改掉。CSS 的「谁压谁」永远是这套权重规则。 */
 
   /* 楼中楼：缩进跟正文对齐，头像小一号，不加分隔线 */
   .msg-children { margin-top: 12px; }
+  /* 回复列表的容器。 */
+
   .msg-item.is-reply { gap: 8px; padding: 10px 0 0; border-bottom: none; }
+  /* 【.is-reply】标记「这是一条回复而不是主楼」。
+     回复之间不要分隔线（border-bottom:none），否则一长串回复会变成一堆横线。 */
+
   .msg-item.is-reply .msg-avatar img { width: 26px; height: 26px; }
+  /* 回复里的头像缩小到 26px，视觉上「次一级」。 */
+
   .msg-item.is-reply .msg-name { font-size: 12px; }
   .msg-item.is-reply .msg-text { font-size: 14px; margin-top: 3px; }
   .msg-item.is-reply .msg-foot { margin-top: 5px; }
   .msg-item.is-reply .msg-foot .act-btn { font-size: 12px; }
   .msg-item.is-reply .msg-time { font-size: 12px; }
+  /* 这一串都是同一件事：把回复里的所有字号和间距统一调小一档。
+     【为什么用「后代选择器」一层层覆盖而不用新类名】
+     因为 HTML 是 JS 拼出来的，少加一个类就少一处出错机会；
+     用 CSS 后代选择器直接按结构缩小，HTML 不用改。 */
 </style>
 </head>
 <body>
+<!-- 从这里开始才是页面上看得见的内容。 -->
 
     <div id="navbar"></div>
+    <!-- 导航栏占位。真正的导航内容由 js/nav.js 在页面加载后塞进来，
+         这样几十个页面只维护一份导航代码。 -->
 
   <section style="margin-top:40px;">
+    <!-- 【style="..."】行内样式：直接写在标签上。
+         【为什么这里用行内】就这一个页面要往下挪 40px（因为没放页头大标题），
+         不值得为它加一条 CSS 规则。
+         【代价】行内样式优先级极高，以后想用 CSS 覆盖它很麻烦（得加 !important）。
+         所以只在「一次性微调」时用，别滥用。 -->
     <div class="card">
+      <!-- .card 是公共样式里的卡片外观：圆角、半透明底、细边框、阴影。 -->
       <h2 class="section-title">留言板</h2>
+      <!-- 【h2】二级标题。整个页面没有 h1（因为这是个子页面，顶部导航已经代表了站点），
+           严格来说该有一个，但视觉大小是由 .section-title 控制的，
+           标签层级只影响「结构语义」和读屏软件的跳读，不影响显示的字体大小。
+           这一点新手最容易误会：以为 h1 一定比 h2 大 —— 不是的，全靠 CSS。 -->
+
       <p style="margin-bottom:16px;">当前用户：<b id="who">未登录</b> <a href="javascript:;" id="goLogin">去登录</a></p>
+      <!-- 【&lt;b&gt;】加粗，纯视觉用途（语义上的「强调」应该用 strong）。
+           【href="javascript:;"】一个「什么都不做」的链接。
+             为什么不用 href="#"? 因为 # 会让页面跳到顶部（地址栏多一个 #），体验差。
+             javascript:; 是一个空的 JS 语句，点了完全没反应，纯当按钮用。
+             【但更好的做法】直接用 &lt;button&gt; 标签，天生可聚焦、可回车触发。
+             这里用 a 大概是为了继承链接样式。
+           【id="goLogin"】JS 靠它找到这个元素绑点击事件。 -->
 
       <div class="post-box">
         <textarea id="text" placeholder="发一条友善的评论…（最多 200 字）" maxlength="200"></textarea>
+        <!-- 【textarea】多行文本框。
+             【placeholder】输入框空着时显示的灰色提示字。它只是提示，不是值，
+               用户一打字就消失，也不会被提交。
+             【maxlength="200"】最多只能输入 200 个字符，超了打不进去。
+               这是「第一道防线」，但 JS 里还得再判一次 ——
+               因为用户可以改网页代码绕过它，前端校验永远只是「体验」，不能当「安全」。 -->
         <div class="post-bar">
           <span class="post-count" id="postCount">0/200</span>
+          <!-- 字数提示，会随输入实时更新。 -->
           <button id="submitBtn">发布</button>
+          <!-- 【没写 type】button 在表单里的默认类型是 submit。
+               这里不在 form 里，所以没影响。但如果以后包进 form，
+               点它可能意外触发表单提交导致页面刷新。规范写法是显式写 type="button"。 -->
         </div>
       </div>
 
       <div class="social-tip" id="tip"></div>
+      <!-- 一个空的提示条容器。JS 往里填文字再给它加 .show 类让它滑出来，
+           5 秒后自动收回去。这种「操作完给个反馈」的组件叫 toast（吐司提示）。 -->
 
       <h3 class="list-title">全部评论 <span class="n" id="msgCount">0</span></h3>
       <div id="list">加载中…</div>
+      <!-- 留言列表的容器，内容全部由 JS 渲染。 -->
     </div>
   </section>
 
   <script src="/js/config.js"></script>
+  <!-- 【script src】引入外部 JS。
+       【顺序不能乱】下面每个文件都依赖上面的：
+         config.js        → 全站配置（Supabase 地址、密钥），挂到 window 上
+         bg.js            → 背景图/视频（从 IndexedDB 取，零流量）
+         supabase-js.js   → Supabase 官方 SDK
+         sb.js            → 基于 SDK 封装的业务层，提供 window.SBAPI
+         nav.js           → 导航栏 + 登录弹窗 + 信箱
+       【为什么都放在 body 末尾】浏览器解析到 script 会停下来先执行它。
+       放在这里，上面的 HTML 已经解析完了，下面脚本里的 getElementById 才找得到元素。
+       放 head 里执行的话元素还不存在，拿到的全是 null。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
 /* 数据全走 window.SBAPI（Supabase 直连 + RLS），不再有任何自建后端 */
+/* 【RLS】Row Level Security，行级安全。
+   Supabase（基于 PostgreSQL）可以在数据库层面规定
+   「哪一行数据、谁能读、谁能写」。比如「只能删自己的留言」这条规则，
+   是写在数据库里的，不是写在 JS 里的。
+   【为什么重要】前端代码用户随时能改，JS 里的权限判断形同虚设；
+   真正的权限必须在数据库层面拦。这叫「永远不要相信客户端」。 */
 
+/* ---------- 1. 「去登录」按钮 ---------- */
 const goLogin = document.getElementById('goLogin');
+/* 【const】声明一个不可重新赋值的变量。
+   规则：默认用 const，确定要改才用 let。这样读代码的人一眼知道它不会变。
+   【getElementById】按 id 找元素，找不到返回 null。 */
+
 if (goLogin) {
+  /* 【为什么要判断】万一以后模板改了、这个元素被删了，
+     不判断的话下一行对 null 调 addEventListener 会直接抛错，
+     整个脚本从这里往下全部不执行 —— 整个页面就是死的。
+     这种「先用 if 挡住 null」的写法叫防御性编程。 */
   goLogin.addEventListener('click', () => {
+    /* 【addEventListener('click', 回调)】用户点这个元素时执行这个函数。
+       【为什么不用 onclick 属性】addEventListener 可以绑多个监听器互不覆盖；
+       onclick 赋两次值，前一个会被静静地丢掉。
+       【() => {}】箭头函数，等价于 function() {}，只是更短。 */
     const modal = document.getElementById('loginModal');
+    /* 登录弹窗，是 nav.js 生成的。 */
     if (modal) modal.classList.add('show');
+    /* 【classList】元素的类名集合，有几个好用的方法：
+         add / remove / toggle（有则删无则加）/ contains（判断有没有）
+       【为什么加个 show 就能显示】弹窗默认是 display:none（隐藏），
+       CSS 里 .login-modal.show 会把 display 改成 flex（显示）。
+       【为什么不用 opacity 控制】opacity:0 的元素只是「透明」，它仍然占位置、
+       仍然能点、仍然会被键盘 Tab 到。用 display 切换才是真的消失。 */
   });
 }
 
 /* 把 uid 和用户名都对到一个用户上：
    新留言带了 uid，直接用；老留言没 uid，就用用户名去对 */
 let byName = null, byUid = null;
+/* 【一次声明两个变量】用逗号分隔。等价于写两行 let。
+   【为什么先给 null】表示「还没加载」。
+   下面 loadUsers() 里用 if (byName) return 来判断是否已经加载过，
+   避免每次刷新都重新拉一遍所有用户。这叫「懒加载 + 缓存」。 */
 
 async function loadUsers() {
+  /* 【async function】异步函数：内部可以用 await，调用它返回一个 Promise。
+     【Promise】代表「将来才有结果的操作」，像餐厅给的取餐号。 */
   if (byName) return;
+  /* 已经加载过了就直接返回（这叫「幂等」：调一次和调十次效果一样）。 */
+
   byName = new Map();
   byUid  = new Map();
+  /* 【Map】一种「键值对」集合，比普通对象 {} 更强的地方：
+       ① 键可以是任意类型（对象也能当键），对象的键只能是字符串
+       ② 有 .size 拿大小、有 .has() 判断存在、遍历顺序严格按插入顺序
+     这里用两个 Map 建「双向索引」：
+       byName：用户名 → 用户记录
+       byUid ：uid   → 用户记录
+     为什么要两个？因为老数据只有用户名、新数据带了 uid，得从两头都能查到。 */
+
   try {
     const d = await SBAPI.getAllUsers();
+    /* 【await】等这个异步操作出结果再往下走。
+       【注意】它暂停的只是这个函数，不是整个页面 —— 页面照常能点能滚，这叫非阻塞。
+       【SBAPI】sb.js 挂到全局对象上的业务方法集合。 */
     if (d && d.ok) {
+      /* 双重检查：d 存在，并且 d.ok 为真（约定 ok:true 表示成功）。 */
       d.list.forEach(u => {
+        /* 【.forEach(回调)】遍历数组每一项。
+           【和 .map 的区别】map 会把返回值收集成新数组；forEach 不收集（返回值被丢掉），
+           只用来「做副作用」（往 Map 里塞东西）。这里就是纯副作用。 */
         const rec = {
           uid: u.id, username: u.username, role: u.role,
           bio: u.bio || '', avatar: u.avatar_url || null
         };
+        /* 【对象字面量】花括号里写「键: 值」。
+           【u.id 和 u.uid 的命名差异】数据库列名是 id，这里转成 uid，统一前端叫法。
+           【|| ''】给默认值：字段是 null/undefined（假值）时用空字符串，
+             避免后面 String(null) 变成 "null" 这种字符串的尴尬。
+           【这种「把数据库字段转成前端字段」的一层叫「适配层/映射层」，
+             好处是以后数据库改名，只改这里，别处不用动。】 */
         byName.set(u.username, rec);
+        /* 【.set(键, 值)】往 Map 里存。同名会覆盖，正好符合「以用户名建索引」的需求。 */
         byUid.set(u.id, rec);
       });
     }
   } catch {
     /* 拿不到名单就统一显示默认头像 */
+    /* 【catch 后面没写 (err)】现代 JS 允许省略参数，如果不打算用这个错误对象。
+       【为什么这里敢直接吞掉错误】因为这一步只是「优化显示」：
+       拿不到用户名单，页面照样能用，只是头像都变成默认图、名字变成留言里存的那个。
+       这种「非关键路径」的失败可以静默处理。
+       【反过来】如果是「加载留言」失败，就必须告诉用户，不能吞。 */
   }
 }
 
 function safeAvatar(a) {
+  /* 头像地址的安全性校验。返回一个「保证能用」的图片地址。 */
   if (typeof a !== 'string' || !a) return '/avatar-default.jpg';
+  /* 【typeof】返回一个值的类型字符串：'string'、'number'、'object'、'undefined' 等。
+     【为什么不用 instanceof】typeof 是判断基本类型的标准方式，对字符串最可靠。
+     【!a】空字符串也是假值，一起挡掉。 */
   const s = a.trim();
+  /* 【.trim()】去掉首尾空白。防止有人存了 " /avatar.jpg " 这种带空格的值。 */
+
   // 默认头像也可以是 data: / 完整网址；旧后端的文件名头像已经没地方取了，退回默认图
   if (s.startsWith('data:image/') || /^https?:\/\//.test(s) || s.charAt(0) === '/') return s;
+  /* 三种允许的形式：
+     ① data:image/...  → 内嵌的 base64 图片（直接写在字符串里的图）
+     ② http:// 或 https:// 开头 → 完整的网络地址
+        【/^https?:\/\//】这是正则表达式。拆开看：
+          /        → 正则的开始和结束分隔符
+          ^        → 开头
+          http     → 字面 http
+          s?       → s 出现 0 次或 1 次（于是 http 和 https 都能匹配）
+          :\/\/    → 冒号加两道斜杠；斜杠在正则里要写成 \/ 转义，因为普通斜杠是分隔符
+        最后 .test(s) 判断这个字符串符不符合这个模式。
+     ③ 以 / 开头 → 本站的绝对路径
+     【这个函数在防什么】防 javascript: 这种伪协议。
+     如果黑客把头像地址改成 "javascript:alert(1)"，直接塞进 img 的 src 里
+     在某些浏览器里会被执行。白名单校验是最稳的防法。
+     【为什么用白名单不用黑名单】黑名单永远列不全（总有人想到新花样），
+     白名单只放行确定的几种，安全得多。 */
   return '/avatar-default.jpg';
+  /* 其他一律退回默认图。 */
 }
 
 function whoOf(m) {
+  /* 把一条留言（m）整理成「作者信息」对象。
+     【为什么需要这层】因为留言里可能存了作者信息，也可能需要去用户表里查。
+     两种情况都得兼容，所以统一在这里处理，别处就不用管数据从哪来了。 */
   const u = (m.uid != null ? byUid.get(m.uid) : null) || byName.get(m.name);
+  /* 【m.uid != null】注意是「不等于 null」而不是「为真」。
+     【为什么】因为 uid 可能真是 0 或者其他假值，用 != 判断更安全。
+     【!= 而不是 !==】这里用宽松比较是为了同时挡住 undefined 和 null
+     （undefined == null 是 true，所以一个 != null 就把两个都挡了），
+     这是少数几个用宽松比较的合理场景。
+     【整行逻辑】先按 uid 查 → 查不到（或没有 uid）再按用户名查。 */
   return {
+    /* 【return { ... }】直接返回一个新对象字面量。 */
     uid: (m.uid != null) ? m.uid : (u ? u.uid : null),
+    /* 【三元运算符 条件 ? 值1 : 值2】条件为真取值1，为假取值2。
+       这里：有 uid 就用留言里的，否则用查到的，再没有就 null。 */
     uidNo: m.uidNo || (u ? u.uid_no : null) || null,
+    /* 【a || b || c】链式兜底：从左到右，第一个「真值」胜出。
+       uidNo 是「用户编号」，用来拼个人主页地址。 */
     name: u ? u.username : (m.name || '匿名'),
+    /* 有用户记录就用最新的用户名（用户可能改过名），否则用留言里存的，再没有就「匿名」。 */
     role: (m.role || (u ? u.role : null) || null),
+    /* 身份：owner 站长 / admin 管理员 / user 普通用户 / null 匿名。 */
     bio: m.bio || (u ? u.bio : '') || '',
+    /* 个性签名，显示成铭牌。 */
     avatar: safeAvatar(m.avatar || (u && u.avatar))
+    /* 【u && u.avatar】如果 u 是空就直接返回空，不再往下取，
+       避免「Cannot read property avatar of null」这种报错。这叫「短路求值」。 */
   };
 }
 
 /* 文本和属性里都能安全用的转义（'"' 在属性里必须转，所以不能用 innerHTML 那套） */
 function escapeHTML(s) {
+  /* 【XSS】跨站脚本攻击。
+     如果有人在留言里写一段「图片标签 + onerror 里塞 alert」的代码，
+     网站直接把它插进页面，浏览器会当成真的 HTML 解析并执行 ——
+     攻击者就能偷走你的登录凭证、冒充你发东西。
+     唯一的根治办法：所有用户输入在显示前都转义，
+     把尖括号引号换成「实体」（比如 < 变成 &lt;），浏览器就只当普通文字。
+     【为什么不用之前那种「createElement + textContent + innerHTML」的巧办法】
+     因为那种办法虽然省事，但它连单引号和双引号都不转，
+     而这里的内容要往 HTML 属性里塞（比如 data-name="..."），
+     属性里的引号不转就会把属性值提前截断，反而造成新的注入漏洞。
+     所以这个项目故意自己手写一份更严格的。 */
   return String(s == null ? '' : s)
+  /* 【s == null】宽松比较，同时挡住 null 和 undefined（undefined == null 为 true）。
+     【String(...)】强制转字符串，因为下面的 .replace 是字符串方法，
+     传进来数字会报错。 */
     .replace(/&/g, '&amp;')
+    /* 【.replace(/&/g, '&amp;')】
+       【/&/g】正则：斜杠包起来是正则，g 表示「全局」，替换所有出现的地方。
+         不加 g 只会替换第一个，后面漏掉的就成了漏洞。
+       【&amp; 必须第一个转】因为 & 是实体编号的开始，
+         如果先转 < 变 &lt;，那个 & 再被转一次就变成 &amp;lt; 显示成 "&lt;" 原文。
+         「先转 & 是铁律」，这个顺序错了整套转义就废了。 */
     .replace(/</g, '&lt;')
+    /* 小于号是标签的开始，最关键的字符。 */
     .replace(/>/g, '&gt;')
+    /* 大于号。其实单转 < 已经够防注入了，但转了更保险，
+       而且能让「用户就是想显示一个标签长相」的场景正常。 */
     .replace(/"/g, '&quot;')
+    /* 双引号。属性值用双引号包，里面的双引号不转就能提前闭合属性并注入新属性。 */
     .replace(/'/g, '&#39;');
+  /* 单引号同理，属性也可能用单引号包。
+     【&#39; 是什么】HTML 实体编号写法：# + 字符的 Unicode 码点。
+     单引号的码点是 39，所以写成 &#39;。 */
 }
 
 /* ===== 我自己的状态 ===== */
 let me = null;                    // {uid, username, role}
+/* 当前登录的我。null 表示没登录。
+   【把「当前用户」叫 me】是个很常见的命名习惯，读代码时一看就知道指自己。 */
 let followSet  = new Set();       // 我关注的人
+/* 【Set】集合：一组不重复的值。
+   为什么用 Set 不用数组？因为 .has() 判断「我关注没关注他」是瞬间完成的，
+   数组的 .includes() 要一项项比，用户多了会明显变慢。 */
 let blockedSet = new Set();       // 我拉黑的人
 let reportedSet = new Set();      // 我举报过、还没处理的留言 id
 let likeCount = {};               // { 留言id: 赞数 }
+/* 【{}】普通对象当「字典」用。键是留言 id，值是赞数。
+   【用 const 声明的对象还能改内容】const 管的是「不能整体换成另一个对象」，
+   往里加键改值完全没问题。 */
 let likeSet   = new Set();        // 我赞过的留言 id
 let openReplyId = null;           // 当前打开着回复框的那条留言 id
+/* 【为什么只存一个 id】因为「同一时刻只允许开一个回复框」。
+   如果允许同时开好几个，用户可能在一个里写一半又去写另一个，体验混乱。
+   这种「单例状态」用一个变量就够了。 */
 let replyDraft = '';              // 回复框里预填的内容（@某某 ）
 let msgsCache = [];
+/* 【cache 缓存】把所有留言存在内存里。
+   【为什么需要】渲染、找某条、数回复条数都要反复用到这份数据，
+   每次都重新请求接口太慢。存在本地，随时能查。 */
 let urlActionDone = false;        // ?reply= / ?msg= 只处理一次，别每次重画都跳
+/* 【为什么要这个标志】地址栏的 ?reply=123 参数会一直存在。
+   如果不加标志，每次 render() 重画后都会再去处理一次，
+   页面就会莫名其妙地不停滚动、不停打开回复框。这个变量就是「只干一次」的闸门。 */
 
 function ensureLogin() {
+  /* 「确保已登录」，没登录就把登录框怼到用户脸上。
+     返回 true 表示已登录可以继续，false 表示已经拦下来了。 */
   if (me) return true;
   const m = document.getElementById('loginModal');
   if (m) m.classList.add('show');
+  /* 有登录弹窗就弹出来。 */
   else alert('请先登录');
+  /* 【else 后面直接跟语句】可以省花括号。但只在「只有一句」时省，
+     多了必须加，不然容易出错。
+     【alert】浏览器原生弹窗，会阻塞页面。现在很少用了（丑、打断操作），
+     但做「必须让用户知道」的关键提示还行。正规项目一般用自定义 toast。 */
   return false;
 }
 
 async function loadMe() {
+  /* 取当前登录的是谁。 */
   const s = await SBAPI.getSession();
+  /* 【session】会话。登录后 Supabase 会在浏览器本地存一份「登录凭证」，
+     这个函数就是去读它。 */
   if (!s) { me = null; return; }
+  /* 没有会话 = 没登录，直接结束。 */
+
   const d = await SBAPI.me();
+  /* 有会话还不够，得去服务器验证并取出用户资料
+     （因为本地存的可能是过期的、或者被篡改的）。 */
   if (d && d.ok) {
     me = { uid: d.uid, username: d.username, role: d.role };
+    /* 存成一个干净的三个字段的对象，多余字段一概不带。 */
     const who = document.getElementById('who');
     if (who) who.textContent = d.username;
+    /* 【.textContent】设置纯文本内容。安全 —— 哪怕塞进 HTML 标签也只会当文字显示。
+       【对比 innerHTML】那个会把字符串当 HTML 解析，用在用户数据上就是 XSS 漏洞。
+       规律：**内容来自用户，一律 textContent；只有自己拼的固定 HTML 才用 innerHTML**。 */
     if (goLogin) goLogin.style.display = 'none';
+    /* 登录了就把「去登录」链接藏起来。
+       【.style.display】直接改行内样式。'none' = 不显示且不占位。 */
   } else {
     me = null;
+    /* 验证失败 → 当作没登录。可能是会话过期了。 */
   }
 }
 
 async function loadRelations() {
+  /* 取「我关注了谁、我拉黑了谁」。 */
   if (!me) return;
+  /* 没登录就没有关系，直接返回。 */
+
   try {
     const d = await SBAPI.getRelations(me.uid);
     if (d && d.ok) {
       followSet  = new Set(d.following || []);
+      /* 【|| []】接口没给这个字段时用空数组兜底，
+         否则 new Set(undefined) 会抛错。
+         【为什么整个重新赋值 new Set(...)】因为要「整体替换成最新状态」，
+         而不是往旧集合里追加（旧的可能已经不准了）。 */
       blockedSet = new Set(d.blocked || []);
     }
   } catch { /* 忽略 */ }
+  /* 这里连错误都不处理，直接忽略。
+     因为关注/拉黑关系只影响「按钮显示成已关注还是关注」，
+     拿不到最多是按钮状态不准，不影响看留言、发留言。
+     【判断标准】非关键路径的失败可以静默，关键路径必须提示。 */
 }
 
 async function loadReports() {
+  /* 取「我举报过哪些留言」，用来把举报按钮显示成「已举报」并禁用，
+     防止同一条被反复举报刷屏。 */
   if (!me) return;
   try {
     const d = await SBAPI.getMyReports();
@@ -376,33 +836,75 @@ async function loadReports() {
 /* 每条留言右边的按钮： 关注 | 回复 | ♡赞 | ⋯
    —— 自己的留言也有「回复 / 赞 / 三个点」，只是三个点里没有关注和拉黑 */
 function actionsHTML(m, who) {
+  /* 【命名习惯】函数名后面带 HTML 的，表示「返回一段 HTML 字符串」。
+     这种「函数拼字符串」的渲染方式叫模板拼接，简单直接，
+     适合这种不需要复杂数据绑定的场景。 */
   if (!me) return '';
+  /* 没登录 → 一个操作按钮都不显示。
+     【为什么】没登录点关注/点赞也没意义，不如藏起来减少干扰。
+     （回复框的「打开」倒是允许，但发送时会拦。） */
   if (m.id == null) return '';
+  /* 没有 id 的留言没法操作（点赞要 id、删除要 id）。
+     【这种数据通常是什么】就是还在加载中的占位、或者格式不对的脏数据。
+     挡掉比带着 null 往下跑安全。 */
 
   const mine = who.uid != null && who.uid === me.uid;
+  /* 【===】三个等号是「严格相等」：值相等 **并且** 类型相等。
+     1 == '1' 是 true（宽松比较会偷偷转类型），1 === '1' 是 false。
+     规则：永远用三个等号，两个等号是 bug 制造机。
+     这行：作者有 uid，并且跟我一样 → 这条是我自己发的。 */
   const hasUid = who.uid != null;
+  /* 作者有没有 uid。老数据可能只有用户名没有 uid，那种就没法关注/拉黑。 */
   const followed = hasUid && followSet.has(who.uid);
   const liked = likeSet.has(m.id);
   const n = likeCount[m.id] || 0;
+  /* 【|| 0】一个赞都没有时 likeCount 里可能没有这个键（undefined），
+     兜底成 0，页面才不会显示 "undefined"。 */
   const reported = reportedSet.has(m.id);
 
   const followBtn = (!mine && hasUid)
     ? `<button type="button" class="act-btn${followed ? ' on' : ''}" data-act="follow" data-uid="${who.uid}">${followed ? '已关注' : '关注'}</button>`
     : '';
+  /* 【!mine && hasUid】两个条件都满足才生成按钮：不是我自己、并且作者有 uid。
+     【条件 ? 值1 : 值2】三元运算符，相当于 if/else 的简写。
+     【反引号】模板字符串：可以换行、可以嵌 ${表达式}，比用加号拼字符串好读太多。
+     【${followed ? ' on' : ''}】在字符串中间做条件判断：
+       已关注就多加一个空格加 on（激活样式），否则加空字符串。
+       【' on' 前面的空格绝对不能少】否则会拼成 class="act-btnon"，那就变成一个不存在的类名。
+     【data-act / data-uid】自定义数据属性（data- 开头是规范）。
+       JS 里用 btn.dataset.act 就能读到，比自己解析字符串强得多。
+       【为什么要往 HTML 里塞数据】因为按钮是动态生成的，
+       事件监听是统一挂在父元素上的（事件委托），得靠这些属性知道「点的是哪条、对谁操作」。 */
+
   // 拉黑只对别人开放（RLS 也拦着自己拉黑自己）
   const blockItem = (!mine && hasUid)
     ? `<button type="button" data-act="block" data-uid="${who.uid}" class="danger">拉黑 TA</button>`
     : '';
+  /* 【TA】网络用语，指代第三人，避免暴露性别。
+     【class="danger"】公共样式里定义的「危险操作」红色样式。
+     这是把「语义」写进类名的好习惯：以后想把所有危险按钮改成橙色，
+     只改一处 CSS 就行。 */
 
   // 置顶：只有站长和管理员，而且只能置顶主楼（有楼层号的才是主楼）
   const isStaff = me.role === 'owner' || me.role === 'admin';
+  /* 【||】或：两边有一个为真就是真。
+     【owner vs admin】owner 是站长（你），admin 是管理员（你任命的人）。 */
   const pinItem = (isStaff && typeof m.floor === 'number')
     ? `<button type="button" data-act="pin" data-id="${m.id}">${m.pinned ? '取消置顶' : '置顶'}</button>`
     : '';
+  /* 【typeof m.floor === 'number'】判断楼层号是不是数字。
+     【为什么不直接写 m.floor 就完事】因为楼层号 0 是假值（虽然实际不会出现 #0），
+     而且用 typeof 能明确表达「我要的是数字类型」这个意图，比真假判断更严谨。
+     【typeof 返回的是字符串】'number'、'string'、'object'、'undefined' 等，
+     所以比较时那个 'number' 一定要加引号。 */
   // 删除：自己的留言，或者站长/管理员删别人的
   const delItem = (mine || isStaff)
     ? `<button type="button" data-act="del" data-id="${m.id}" class="danger">删除</button>`
     : '';
+  /* 【mine || isStaff】自己的能删，站长和管理员能删任何人的。
+     【注意】这只是「界面上显不显示按钮」。
+     真正的权限控制在数据库的 RLS 策略里 —— 
+     否则用户改一下网页代码就能给自己加个删除按钮。 */
 
   return `
         <div class="msg-actions">
@@ -417,6 +919,25 @@ function actionsHTML(m, who) {
             <button type="button" data-act="report" data-id="${m.id}"${reported ? ' disabled' : ''} class="danger">${reported ? '已举报' : '举报'}</button>
           </div>
         </div>`;
+  /* 【重要提醒】从反引号开始到结束，这中间全是「字符串内容」而不是代码。
+     在这里面写双斜杠注释或斜杠星号注释，会被当成文字原样显示到页面上 ——
+     这是本项目实实在在踩过的坑。要注释只能写在反引号外面。
+     【每一个 ${} 里用 escapeHTML 的理由】
+       who.name 来自用户输入 → 必须转义，否则就是 XSS 漏洞。
+       data-name="${escapeHTML(who.name)}" 尤其关键：
+       这里内容要塞进 HTML 属性里，属性用双引号包，
+       如果名字里本身带双引号而没转义，就能提前闭合属性并注入新属性。
+     【${reported ? ' disabled' : ''}】举报过的按钮加上 disabled 属性 → 变成不可点，
+       并且 CSS 的 :disabled 会自动把它变灰。
+       注意这里没有等号，disabled 是「布尔属性」：
+       只要出现就生效，写 disabled="false" 反而是禁用（因为它是真值字符串）。这个坑很常见。
+     【${n > 0 ? n : ''}】一个赞都没有就不显示数字，光一个心更干净。
+     【aria-label】给读屏软件念的名字。
+       「⋯」这个符号读屏软件念不出来（会念成「水平省略号」或者干脆跳过），
+       所以用 aria-label 明确告诉它「这是更多操作」。这是无障碍的基本要求。
+     【title】鼠标悬停时的小黄提示条。aria-label 和 title 一起用，鼠标和读屏都照顾到。
+     【act-menu】那个「⋯」弹出的菜单。
+       默认是 display:none，JS 给它加 .show 类才显示。 */
 }
 
 /* 回复框：预填「@某某 」 */
@@ -429,35 +950,94 @@ function replyBoxHTML(m, who) {
           <button type="button" class="act-btn" data-act="cancel-reply">取消</button>
         </div>
       </div>`;
+  /* 【data-for="${m.id}】标记这个回复框是给哪条留言用的。
+     后面 openReply() 用它去找「刚渲染出来的那个框」然后聚焦。
+     【textarea 内容放在标签中间】textarea 的值不像 input 那样用 value 属性，
+     而是写在开始标签和结束标签之间。
+     【${escapeHTML(replyDraft)}】预填的内容也必须转义 —— 
+     万一 @ 的那个人名字里有特殊字符，会把这个 textarea 结构搞坏。 */
 }
 
 /* 打开某条留言下面的回复框，并预填 @名字 */
 function openReply(id, name) {
   openReplyId = id;
+  /* 记下「现在开的是哪条」。render() 里靠这个决定在哪条下面插回复框。 */
   replyDraft = name ? '@' + name + ' ' : '';
+  /* 【'@' + name + ' '】拼字符串。最后那个空格很重要 ——
+     不带空格的话用户接着打字就是「@张三你好」，@ 不到人。 */
   render();
+  /* 【为什么要先重画】因为回复框是靠 render() 生成 HTML 才出现的，
+     不重画它就不存在，下面也就找不到它。 */
+
   const box = document.querySelector('.reply-box[data-for="' + id + '"]');
+  /* 【querySelector】按 CSS 选择器找第一个匹配的元素。
+     【.reply-box[data-for="123"]】组合选择器：
+       类选择器 .reply-box + 属性选择器 [data-for="123"]
+       意思 = 「类名是 reply-box 且 data-for 属性等于 123」。
+     【为什么要这么精确定位】因为页面上可能有多个回复框（虽然当前逻辑只开一个），
+       也可能有别的元素碰巧也叫 reply-box。加属性筛选最保险。 */
   if (!box) return;
+  /* 找不到就退出，避免下面报 null 错。 */
+
   box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  /* 【scrollIntoView】把元素滚到可视区域里。
+     【behavior:'smooth'】平滑滚动，不要「啪」一下跳过去。
+     【block:'center'】竖直方向尽量居中。
+     不写 block 的话默认是 'start'（贴到顶部），
+     但顶部有吸顶导航挡着，回复框会被导航遮住一部分 —— 这就是要居中的原因。 */
+
   const ta = box.querySelector('.reply-input');
   if (ta) {
     ta.focus();
+    /* 【.focus()】让输入框获得焦点 = 光标进去、可以直接打字。
+       用户在留言板点「回复」，最想做的事就是打字，
+       自动聚焦能省掉一次点击。这是很值得做的小优化。 */
     ta.setSelectionRange(ta.value.length, ta.value.length);   // 光标放最后，直接接着打
+    /* 【setSelectionRange(起点, 终点)】设置选区。
+       两个参数都传「值的长度」= 一个空选区，光标就停在最后一个字符后面。
+       【为什么必须这么做】上面用 focus() 之后，光标位置不一定在末尾
+       （不同浏览器行为不一样，有的会全选，有的会放开头）。
+       显式设置才能保证用户点开会话就能接着写「@张三 |」。 */
   }
 }
 
 /* 信箱点过来会带 ?reply=留言id&to=对方名字（或 ?msg=留言id 只跳过去）*/
 function applyUrlAction() {
+  /* 【URL 参数】地址栏里问号后面的部分，比如
+       /test/board.html?reply=123&to=张三
+     【为什么用这个传参】信箱里点「去回复」时，要跳到这个页面并告诉它「回复哪条」。
+     页面之间传数据，最原始也最可靠的办法就是塞在地址里。 */
   if (urlActionDone) return;
+  /* 已经处理过了，不再重复。防止每次重画都跳一次。 */
+
   const qs = new URLSearchParams(location.search);
+  /* 【location.search】当前地址里问号开始的那一段（包含问号），比如 "?reply=123&to=张三"。
+     【URLSearchParams】浏览器自带的解析器，专门处理这种参数串。
+     比自己用 split('&') 拆要可靠得多 —— 它会自动处理 URL 编码（%E5%BC%A0 这类）。 */
   const rid = parseInt(qs.get('reply'), 10);
+  /* 【qs.get('reply')】取出 reply 参数的值，是个字符串（"123"）。
+     【parseInt(值, 10)】转成整数。
+     【第二个参数 10 是进制】必须写！不写的话，
+     以 0 开头的字符串会被当成八进制（"010" 变成 8），
+     这是 JS 出了名的历史遗留坑。永远写 10。
+     【参数不存在时】get 返回 null，parseInt(null) 得到 NaN（不是数字）。 */
   const mid = parseInt(qs.get('msg'), 10);
 
   if (rid) {
+    /* 【if (NaN)】NaN 是假值，所以参数不存在时这里不会进来。
+       【NaN】Not a Number，表示「算不出一个合法数字」。它有个怪脾气：
+       NaN === NaN 是 false，判断它得用 Number.isNaN()。 */
     const m = msgsCache.find(x => x.id === rid);
+    /* 【.find(条件函数)】找出第一个满足条件的元素，找不到返回 undefined。
+       【x => x.id === rid】箭头函数，判断这一条的 id 是不是要找的那个。 */
     if (m) {
       urlActionDone = true;
+      /* 找到了才把闸门关上。没找到就先不开 —— 
+         因为可能是「数据还没加载完」，下次加载完再试。 */
       openReply(rid, qs.get('to') || whoOf(m).name);
+      /* 【A || B】有 to 参数就用它，没有就退回去用留言作者的名字。
+         【为什么要传名字】因为回复框要预填「@名字 」，
+         名字错了 @ 不到人。 */
       return;
     }
   }
@@ -466,8 +1046,14 @@ function applyUrlAction() {
     if (item) {
       urlActionDone = true;
       item.classList.add('hl');
+      /* 加上高亮类，让这条留言闪一下，用户能一眼找到。 */
       item.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(() => item.classList.remove('hl'), 2500);
+      /* 【setTimeout(回调, 毫秒)】过指定毫秒后执行一次。
+         这里 2500ms = 2.5 秒后把高亮去掉。
+         【为什么必须去掉】不去掉的话，用户下次再点过来时
+         因为类已经在了，加上去没有任何变化，就失去了「闪一下」的作用。
+         这种「临时状态必须自己清理」的思路，写动画/高亮时经常要用。 */
     }
   }
 }
@@ -475,10 +1061,26 @@ function applyUrlAction() {
 /* 左边那一列：头像 */
 function avatarHTML(who) {
   const href = '/profile/?uid=' + (who.uidNo || who.uid);
+  /* 拼个人主页地址。
+     【uidNo】用户编号（比如 1、2、3），比一长串 uuid 好看；
+     【who.uid】Supabase 的 uuid 字符串，像 'a3f9-...'。
+     优先用编号，没有才退回 uuid。 */
   const img = `<img src="${who.avatar}" alt="">`;
+  /* 【alt=""】空值。
+     【为什么这里空着】这个头像是「纯装饰」—— 旁边的名字已经说明了是谁。
+     读屏软件遇到 alt="" 会直接跳过这张图，不会念一句「图片」打断阅读。
+     【反过来说】如果一张图承载了信息（比如一张数据图表），alt 就必须写清楚内容。
+     判断标准：这张图删掉，信息有没有丢？没丢就写空 alt。 */
   return who.uid
     ? `<a class="msg-avatar" href="${href}" title="${escapeHTML(who.name)} 的主页">${img}</a>`
+    /* 有 uid → 包成链接，能点头像跳主页。
+       【注意 who.avatar 没套 escapeHTML】因为它在 safeAvatar() 里已经被白名单校验过了，
+       只可能是 data:image/、http(s)://、/ 开头这三种形式，不可能塞进引号闭合属性。
+       这说明「转义」和「白名单校验」是两种防护思路，用哪个取决于上下文。 */
     : `<span class="msg-avatar">${img}</span>`;
+  /* 没有 uid（匿名或老数据）→ 用 span 包起来，不生成链接。
+     【为什么要包一层而不是直接放 img】因为排版要靠 .msg-avatar 这个类
+     来控制 44px 尺寸和圆形。结构统一，两种情况的样式才一致。 */
 }
 
 /* 右上角：名字 +（站长/管理员的粉标） */
@@ -487,20 +1089,43 @@ function topHTML(m, who) {
   const nameHTML = who.uid
     ? `<a class="msg-name" href="${href}">${escapeHTML(who.name)}</a>`
     : `<span class="msg-name">${escapeHTML(who.name)}</span>`;
+  /* 有 uid 就是链接，没有就是普通文字。
+     【为什么要分】没 uid 的话 href 会变成 '/profile/?uid=null'，
+     点进去是一个 404 页面 —— 比不能点更糟。 */
+
   // 铭牌：有签名就显示签名，没签名才显示身份；普通用户（没签名也不是管理）不显示。
   // 颜色按身份走：站长 / 管理员是红色，普通人是蓝色。
   const staff = who.role === 'owner' || who.role === 'admin';
   const bio = String(who.bio || '').trim();
+  /* 【String(...)】强制转字符串。万一 bio 是数字或别的类型，.trim() 会报错。
+     【.trim()】去掉首尾空白。
+     【为什么】用户可能在签名里只打了几个空格，
+     那就是「有内容」但显示出来是一片空白，铭牌会变成一个空色块，很难看。
+     trim 之后空字符串是假值，就走到下面的「没签名」分支了。 */
   let plate = '';
+  /* 【let】可以重新赋值（下面三个分支都会改它）。
+     【先给空字符串】默认没有铭牌。 */
   if (bio) {
     plate = `<span class="msg-badge plate${staff ? ' staff' : ''}" title="${escapeHTML(bio)}">${escapeHTML(bio.length > 20 ? bio.slice(0, 20) + '…' : bio)}</span>`;
+    /* 【三种情况用一个表达式搞定】
+       bio.length > 20 → 截前 20 个字 + '…'
+       否则 → 原样显示
+       【.slice(0, 20)】从第 0 位取到第 20 位（不含第 20 位），就是前 20 个字符。
+       【为什么截断】签名可能很长，全显示会把整个名字行撑爆。
+       截断了但 title 里放完整内容，鼠标悬停能看到全文 —— 这是「优雅降级」。
+       【${staff ? ' staff' : ''}】站长/管理员额外加一个 staff 类换成粉色。 */
   } else if (who.role === 'owner') {
     plate = `<span class="msg-badge staff">站长</span>`;
+    /* 【else if】上一个条件不满足才判断这个。顺序很重要：
+       有签名的人永远优先显示签名，不显示「站长」两个字 —— 
+       因为签名信息量更大。 */
   } else if (who.role === 'admin') {
     plate = `<span class="msg-badge staff">管理</span>`;
   }
   const pinBadge = m.pinned ? `<span class="msg-badge pin">置顶</span>` : '';
+  /* 置顶的小橙标，跟身份铭牌同时显示（两个可以并存）。 */
   return `<div class="msg-top">${nameHTML}${plate}${pinBadge}</div>`;
+  /* 三个变量依次插进去。哪个为空字符串就相当于不存在。 */
 }
 
 /* 正文：是回复的话，像 B 站那样把「回复 @某某 :」接在内容前面 */
@@ -508,7 +1133,12 @@ function textHTML(m, isReply) {
   const to = (isReply && m.toName)
     ? `<span class="msg-to">回复 @${escapeHTML(m.toName)} :</span> `
     : '';
+  /* 【isReply && m.toName】必须是回复，并且知道在回复谁，才显示这部分。
+     【注意末尾那个空格】放在 </span> 外面，让「：」和后面的正文之间有个空隙，
+       不然会挤成「：内容」。 */
   return `<div class="msg-text">${to}${escapeHTML(m.text)}</div>`;
+  /* 【escapeHTML(m.text) 最关键的转义】正文是用户直接输入的，
+     不转义就是最典型的 XSS 入口。这一处漏了，整个留言板就是漏洞。 */
 }
 
 /* 拉黑的人的留言：折叠起来，留一个「取消拉黑」的入口，不然永远解不开 */
@@ -527,14 +1157,34 @@ function blockedHTML(m, who, idAttr, isReply) {
           </div>
         </div>
       </div>`;
+  /* 【为什么要留一个「取消拉黑」的按钮】
+     如果拉黑后整条消失得干干净净，用户就没有任何入口能解开了 ——
+     除非去别的页面找设置。这是很典型的「死角」设计问题。
+     正确做法：隐藏内容，但保留一个可见的、能反悔的开关。
+     【idAttr 而不是 m.id】因为这里可能是回复也可能是主楼，
+     调用方已经算好了 id 该用哪个（有的是 k.id、有的是 m.id），
+     统一传进来，避免这个函数里再判断一次。 */
 }
 
 /* 一条回复：挂在父留言底下，不占楼层号 */
 function replyHTML(k) {
   const who = whoOf(k);
   const idAttr = k.id == null ? '' : k.id;
+  /* 【k.id == null ? '' : k.id】id 可能是 null（还没存到数据库的乐观更新），
+     那就用空字符串，避免在 HTML 里写出 data-id="null"。
+     【== null 用的是宽松比较】因为要同时挡住 null 和 undefined。 */
   if (me && who.uid != null && who.uid !== me.uid && blockedSet.has(who.uid)) {
+    /* 四个条件一起判断：
+       ① 我登录了          me
+       ② 作者有 uid        who.uid != null
+       ③ 作者不是我本人    who.uid !== me.uid
+       ④ 我拉黑了作者      blockedSet.has(who.uid)
+       【第③条为什么必要】自己拉黑自己是不可能的（RLS 也拦着），
+       但多判一层能防止「数据显示异常时看到自己的留言被自己折叠」这种诡异情况。
+       【&& 的短路特性】从左到右判断，一旦某个为假就立刻停下不再看后面。
+       所以 blockedSet.has() 只在前面都通过时才执行。 */
     return blockedHTML(k, who, idAttr, true);
+    /* 【最后一个 true】表示「这是回复」→ 会加上 is-reply 类，样式变小一号。 */
   }
 
   return `
@@ -550,6 +1200,13 @@ function replyHTML(k) {
           ${openReplyId === k.id ? replyBoxHTML(k, who) : ''}
         </div>
       </div>`;
+  /* 【这种「小函数互相调用拼 HTML」的写法叫组件化思维】
+     avatarHTML、topHTML、textHTML 各管一块，拼起来就是一条完整留言。
+     好处：改头像样式只动 avatarHTML，改名字那块只动 topHTML，
+     不用在一个几百行的大字符串里找。
+     【${openReplyId === k.id ? replyBoxHTML(k, who) : ''}】
+     如果「当前打开回复框的 id」正好是这一条 → 就在这里插入回复框，否则什么都不插。
+     这就是「点回复按钮就在那条下面弹出输入框」的实现原理。 */
 }
 
 /* 一楼：底下挂着自己所有的回复 */
@@ -558,155 +1215,328 @@ function floorHTML(m) {
   const idAttr = m.id == null ? '' : m.id;
   if (me && who.uid != null && who.uid !== me.uid && blockedSet.has(who.uid)) {
     return blockedHTML(m, who, idAttr, false);
+    /* 【最后一个 false】表示「这是主楼」→ 不加 is-reply，尺寸正常。 */
   }
 
   const kids = msgsCache.filter(x => x.parent === m.id);
+  /* 【.filter(条件函数)】筛出所有满足条件的元素，返回新数组（不改原数组）。
+     【x.parent === m.id】找出所有「父级 id 等于这条留言」的 → 也就是它的回复。
+     【为什么每次都重新算】因为 msgsCache 会随刷新变化，
+     不做缓存能保证永远拿到最新的。数据量小的时候，这样比维护缓存更不容易出错。 */
   const kidsHTML = kids.length
     ? `<div class="msg-children">${kids.map(replyHTML).join('')}</div>`
     : '';
-
-  return `
-      <div class="msg-item${m.pinned ? ' pinned' : ''}" data-id="${idAttr}">
-        <div class="msg-side">${avatarHTML(who)}</div>
-        <div class="msg-main">
-          ${topHTML(m, who)}
-          ${textHTML(m, false)}
-          <div class="msg-foot">
-            <span class="msg-time">${escapeHTML(m.time)}</span>
-            ${actionsHTML(m, who)}
-            ${m.floor ? `<span class="msg-floor">#${m.floor}</span>` : ''}
-          </div>
-          ${openReplyId === m.id ? replyBoxHTML(m, who) : ''}
-          ${kidsHTML}
-        </div>
-      </div>`;
+  /* 【kids.length ? ... : ''】有回复才生成容器，没回复就空着（不生成空 div）。
+     【.map(replyHTML)】把每条回复数据变成一段 HTML 字符串。
+       【注意这里直接传函数名】map 会把每个元素当参数传进去，
+       而 replyHTML(k) 正需要一个参数，所以刚好对得上 ——
+       这种写法叫「point-free」风格。如果不放心可以写 x => replyHTML(x)，更直白。
+     【.join('')】把数组拼成一个长字符串，用空字符串连接。
+       【必须写 join】不写的话数组会被转成「用逗号连接」的字符串，
+       页面上每条留言之间就会多出一堆逗号。
+       这是新手最容易踩的坑之一，我在此专门标一下。 */
 }
 
 function render() {
+  /* 主渲染函数：把 msgsCache 里的数据画成页面。 */
   const list = document.getElementById('list');
   // 排法：置顶的排最前面（先置顶的靠前），其余按新 → 旧（楼层高的在上）。
   // 回复不参与排序，缩进挂在自己那条主楼底下；
   // 主楼已经被删掉的孤儿回复，自己升成一条混在里面排，不然会凭空消失
   const exists = id => msgsCache.some(x => x.id === id);
+  /* 【.some(条件)】判断「有没有至少一个满足条件」，返回 true/false。
+     【跟 find 的区别】some 只关心「有没有」，find 要拿到那个元素。
+     【为什么要判断存在】删除主楼时，它的回复可能没被一起删掉（或者删失败了）。
+     那些回复的 parent 指向一条已经不存在的留言，就成了「孤儿」。
+     不处理的话它们永远不会被显示（因为没人挂它们），用户会发现「我的回复不见了」。 */
   const rank = m => (typeof m.floor === 'number' ? m.floor : (m.id || 0));
+  /* 排序依据：有楼层号就用楼层号，没有就退回用 id。
+     【为什么要 typeof 判断】因为 floor 可能是 null 或 undefined，
+     直接拿来算数会得到 NaN，而 NaN 参与比较的结果永远是 false，排序会乱掉。 */
   const floors = msgsCache
     .filter(m => !m.parent || !exists(m.parent))
+    /* 【!m.parent】没有 parent = 是主楼；
+       【!exists(m.parent)】或者 parent 指向的留言已经不存在了 = 孤儿回复。
+       两种都当「主楼」处理，让它们参与正常排序。 */
     .sort((a, b) => {
+      /* 【.sort(比较函数)】排序会**原地修改数组**（不是返回新数组）。
+         比较函数的规则：返回负数 → a 排前面；正数 → b 排前面；0 → 顺序不变。
+         注意上面的 .filter 已经生成了新数组，所以这里 sort 不会污染 msgsCache —— 
+         这个顺序很关键：先 filter 再 sort 才安全，直接对原数组 sort 会把缓存顺序搞乱。 */
       const pa = a.pinned ? 1 : 0, pb = b.pinned ? 1 : 0;
+      /* 把「是否置顶」转成数字 1/0，方便做减法比较。 */
       if (pa !== pb) return pb - pa;                       // 置顶优先
+      /* 【pb - pa】注意是 b 减 a（降序）：
+           a 置顶(pb=0,pa=1) → 0-1 = -1 → a 排前面 ✓
+           b 置顶(pa=0,pb=1) → 1-0 = 1  → b 排前面 ✓
+         写 sort 比较函数时，b - a 是降序、a - b 是升序，记这个就行。 */
       if (pa && pb) return (a.id || 0) - (b.id || 0);      // 置顶的按置顶先后
+      /* 两个都置顶时，按 id 升序 = 先置顶的（id 小的）在上面。
+         这样新置顶的会插在已置顶的后面，不会一直往上顶，
+         用户熟悉的「置顶顺序稳定」体验。 */
       return rank(b) - rank(a);                            // 其余：新的在上
+      /* 楼层号大的在上面 = 新的在上面。
+         注意这还是降序，所以用 rank(b) - rank(a)。 */
     });
 
   list.innerHTML = floors.map(floorHTML).join('') || '还没有评论，来抢个沙发~';
+  /* 【A || B】如果前面那个是空字符串（一条留言都没有），
+     就显示后面的提示文字。
+     【空字符串是假值】所以 || 会切到右边。这是「空状态兜底」最简洁的写法。 */
 
   const c = document.getElementById('msgCount');
   if (c) c.textContent = msgsCache.length;
+  /* 【.length】数组长度，包含主楼和回复的总数。
+     注意这里用的是 msgsCache 的总数，不是 floors 的数量 ——
+     因为「全部评论 12」应该把回复也算进去。 */
 }
 
 function closeMenus() {
+  /* 关掉所有打开着的「⋯」菜单。 */
   document.querySelectorAll('.act-menu.show').forEach(x => x.classList.remove('show'));
+  /* 【querySelectorAll】找出所有匹配的元素，返回 NodeList（类数组）。
+     【.forEach】NodeList 也有 forEach 方法，可以像数组一样遍历。
+     【.act-menu.show】两个类连写（无空格）= 同时有这两个类，也就是「正在显示的菜单」。
+     只关显示中的，本来就没显示的不用管。 */
 }
 
 let tipTimer = null;
+/* 提示条的定时器编号。存在外面是为了「连续多次提示时能取消上一次的定时器」，
+   否则前一个 5 秒的倒计时会把后出现的提示提前关掉。 */
 function showTip(text) {
+  /* 显示一个 5 秒后自动消失的提示条（toast）。 */
   const t = document.getElementById('tip');
   if (!t) return;
   t.textContent = text;
+  /* 【textContent】用 textContent 而不是 innerHTML 是刻意的：
+     提示内容里可能含有用户输入的名字，用 innerHTML 就有 XSS 风险。
+     这里全部当纯文本，绝对安全。 */
   t.classList.add('show');
+  /* 加上 show 类 → CSS 里 .social-tip.show 会把它显示出来（通常是滑入 + 淡入）。 */
   clearTimeout(tipTimer);
+  /* 【clearTimeout(编号)】取消掉上一次还没执行的定时器。
+     【为什么必须取消】如果用户连续点两次关注，
+     第一次设的「5 秒后隐藏」没取消，就会在第二次提示出现 3 秒后把它关掉，
+     用户看到提示一闪就没了。这个坑叫「定时器打架」，非常常见。 */
   tipTimer = setTimeout(() => t.classList.remove('show'), 5000);
+  /* 【setTimeout(回调, 毫秒)】延迟执行一次。
+     5000ms = 5 秒后把 show 类去掉 → 提示条收起。 */
 }
 
 async function load() {
+  /* 加载全部数据并渲染。这是整个页面的「总入口」。 */
   const list = document.getElementById('list');
   list.textContent = '加载中…';
+  /* 先给个反馈，不要让用户对着白屏发呆。 */
 
   // 先认人再取留言：赞数 / 我赞过没 依赖当前登录用户
   await loadMe();
+  /* 【为什么必须先认人】因为后面的 loadRelations/loadReports 都需要 me.uid，
+     getMessages 返回的 likedByMe 也是针对当前用户的。
+     顺序错了就全拿不到数据。 */
   await Promise.all([loadUsers(), loadRelations(), loadReports()]);
+  /* 【Promise.all(数组)】等三个异步操作全部完成再往下走。
+     【为什么不等一个跑一个】那样要花三倍时间（3 个请求串行）。
+     Promise.all 让它们并发，总时间约等于最慢那一个。这是最基础的性能优化。
+     【和 allSettled 的区别】all 里只要有一个失败，整体就失败（进 catch）；
+     allSettled 会等全部结束并告诉你各自成败。
+     这里三个函数内部都自己 try/catch 了，不会往外抛错，所以用 all 没问题。 */
 
   const d = await SBAPI.getMessages();
   if (!d || !d.ok) {
     list.textContent = '加载失败：' + ((d && d.error) || '读取留言出错');
+    /* 【(d && d.error) || '默认文字'】链式兜底：
+       d 存在且有 error 字段就用它，否则用默认文案。
+       【为什么要给默认文案】只显示「加载失败」用户不知道该怎么办；
+       带上具体原因（比如「没有权限」）才有排查价值。 */
     return;
+    /* 失败就退出，不要继续往下渲染空列表 —— 
+       否则用户会以为「留言都没了」，比看到错误提示更恐慌。 */
   }
   msgsCache = d.list || [];
+  /* 存进缓存。后面排序、找回复、删留言都要用它。 */
 
   // 赞数和「我赞过没」跟着留言一起来，不用再单独请求
   likeCount = {};
   likeSet = new Set();
+  /* 先清空再重新填。为什么要清空？
+     因为可能有人在你浏览期间取消了赞，不重置的话会残留旧数据。 */
   msgsCache.forEach(m => {
     if (m.id == null) return;
+    /* 【forEach 里的 return】相当于 continue —— 跳过这一条继续下一条，
+       不会中断整个循环。这个行为跟普通函数里的 return 不一样，容易搞混。 */
     likeCount[m.id] = m.likes || 0;
     if (m.likedByMe) likeSet.add(m.id);
+    /* 【m.likedByMe】后端（Supabase 的查询）算好的「我赞过没」，
+       跟着留言一起返回，省掉 N 次单独请求 —— 避免了「N+1 查询问题」。
+       那个问题是说：拿到 10 条留言，再为每条单独查一次赞，就发了 11 个请求。 */
   });
 
   render();
+  /* 画出来。 */
   applyUrlAction();
+  /* 如果地址栏带了 ?reply= 或 ?msg=，这时候数据已经有了，可以处理了。
+     【为什么放在 render 之后】因为要操作的 DOM 元素得先存在。 */
 }
 
 /* ===== 按钮事件（用事件委托，重新渲染后不用重新绑定）===== */
 document.getElementById('list').addEventListener('click', async (e) => {
+  /* 【这是整个页面最关键的一个设计：事件委托】
+     【问题】留言列表是动态渲染的，每次 render() 都会把里面的按钮全部销毁重建。
+     如果在每个按钮上单独 addEventListener，那么每渲染一次就要绑几十个监听器，
+     旧的全变成垃圾（但可能还占着内存），性能差还容易漏绑。
+     【解法】把监听器绑在**不会变的父容器**（#list）上，
+     利用「事件冒泡」—— 点任何一个子按钮，事件都会往上冒泡到 #list。
+     然后在回调里判断 e.target 是哪个按钮。
+     【好处】① 只绑一个监听器，不管里面有多少留言
+             ② 新生成的按钮自动「继承」这个监听，不用重新绑
+             ③ 销毁旧元素时不用手动解绑，不会内存泄漏
+     【事件冒泡】点击事件的传播路径是：最深的元素 → 逐层往上 → document。
+     默认会冒泡，所以点按钮时父容器也能收到。
+     【e】事件对象，里面有 target（实际点到的元素）、currentTarget（绑监听的那个）等信息。 */
   const btn = e.target.closest('button[data-act]');
+  /* 【e.target】实际被点到的那个元素。
+     【问题】按钮里有文字有图标（比如 ♥ 和数字是两个 span），
+     用户点到的可能是那个 span 而不是 button 本身。
+     【.closest(选择器)】从这个元素开始往上找，找到最近的匹配祖先。
+       找不到返回 null。
+     【button[data-act]】标签名 + 属性选择器：
+       「是 button 标签，且有 data-act 属性」。
+       用属性筛选而不是只用 'button'，是为了排除掉列表里其他不相干的按钮。
+     【这个写法几乎是事件委托的标准模板，值得记住。】 */
   if (!btn) return;
+  /* 点到的地方不是操作按钮（比如点在正文文字上）→ 什么都不做。 */
+
   const act = btn.dataset.act;
+  /* 【dataset】读取所有 data- 开头的属性。
+     【dataset.act】对应 HTML 里的 data-act="xxx"。
+     【命名转换规则】data-后面的连字符会转成驼峰：
+       data-act      → dataset.act
+       data-user-id  → dataset.userId   ← 注意这里是驼峰！
+     这是个很容易忘的细节。 */
   const uid = btn.dataset.uid || null;     // Supabase 里是 uuid 字符串，不能再 Number()
+  /* 【|| null】参数不存在时 dataset.uid 是 undefined，统一成 null 更好判断。
+     【注释说的坑】以前后端用数字 id，代码里会 Number(uid)。
+     现在 Supabase 用 uuid 字符串（像 'a3f9c8e1-...'），
+     Number('a3f9...') 会得到 NaN，所有比较全部失效。
+     数据库换代时，这类「类型悄悄变了」的 bug 最难查。 */
   const id  = btn.dataset.id ? Number(btn.dataset.id) : null;
+  /* 【三元运算】有 id 才转数字，没有就是 null。
+     【btn.dataset.id ? ... : ...】空字符串也是假值，所以没写 id 属性时不会走到 Number('') —— 
+     顺便说，Number('') 其实是 0，这又是一个坑（空字符串会变成 0 而不是 NaN）。 */
 
   if (act === 'menu') {
+    /* 【===】字符串比较用严格相等。 */
     const menu = btn.parentElement.querySelector('.act-menu');
+    /* 【.parentElement】父元素（上一级）。
+       这里「⋯」按钮的父元素是 .msg-actions，菜单就在它里面，所以从父元素往下找。 */
     const wasOpen = menu.classList.contains('show');
+    /* 【.classList.contains(类名)】判断有没有这个类，返回 true/false。
+       先记下「之前是开着的吗」，因为下面 closeMenus() 会把它关掉。 */
     closeMenus();
+    /* 先把所有菜单都关掉 —— 保证同一时刻只开一个。 */
     if (!wasOpen) menu.classList.add('show');
+    /* 【这个逻辑很巧妙】如果之前是关着的 → 打开它（实现「点开」）；
+       如果之前是开着的 → 已经被上面关掉了，这里不再打开（实现「点一下关掉」）。
+       这样一个按钮就同时是「开关」，不用写两套逻辑。
+       【为什么不能只写 toggle】因为要先关掉别人的菜单，
+       顺序变成「先全关 → 如果原本没开就把自己打开」。 */
     return;
+    /* 处理完了，直接退出，不要继续往下执行别的动作判断。 */
   }
   closeMenus();
+  /* 点了别的按钮，顺带把菜单关掉 —— 不然菜单会一直挂在那挡视线。 */
 
   // 打开 / 收起回复框不用登录，真要发送时才拦
   if (act === 'reply') {
     openReply(id, btn.dataset.name || '');
+    /* 【btn.dataset.name || ''】名字可能不存在，兜底成空字符串，
+       这样 openReply 里 name ? ... : '' 就不会预填 @。 */
     return;
   }
   if (act === 'cancel-reply') {
     openReplyId = null;
     replyDraft = '';
+    /* 两个状态都清空，不然下次打开别的回复框会带着上次的草稿。 */
     render();
+    /* 重画 —— 因为「显示哪些回复框」是 render 决定的，
+       不重画的话 DOM 里那个框还在，不会消失。 */
     return;
   }
 
   if (!ensureLogin()) return;
+  /* 【这一行是「权限闸门」】上面「打开回复框」允许未登录，因为要让用户先写内容，
+     写完点发送时才提示登录（体验更顺）。
+     从这里往下都是「真的要改数据」的操作，必须登录。
+     【!ensureLogin()】ensureLogin 返回 true 表示已登录，
+       取反就是「没登录」→ 直接 return 拦住。
+       同时 ensureLogin 内部已经把登录框弹出来了。 */
 
   if (act === 'send-reply') {
     const box = btn.closest('.reply-box');
+    /* 【.closest】从按钮往上找最近的 .reply-box 容器。
+       这样就不用 id 也能定位到「这个按钮所在的那个回复框」。 */
     const ta = box && box.querySelector('.reply-input');
+    /* 【box && box.querySelector(...)】短路求值：
+       box 是 null 的话，后面那句根本不执行，直接得到 null。
+       这就避免了「Cannot read property of null」的报错。 */
     const text = ta ? ta.value.trim() : '';
+    /* 【.value】读输入框里用户打的内容。
+       【.trim()】去掉首尾空格 —— 只打了空格不算有效内容。 */
     if (!text) return alert('内容不能为空');
+    /* 【return alert(...)】alert 返回 undefined，
+       但 return 会在函数结束时把它返回出去，作用就是「弹窗完直接退出」。
+       这是把两行代码压成一行的写法，很常见但不建议滥用 —— 可读性会差一点。 */
     btn.disabled = true;
+    /* 发送期间禁用按钮，防止用户狂点发出多条重复回复。 */
     try {
       // parent = 被回复那条的 id，挂到对应的一楼底下，不新开一楼
       const d = await SBAPI.postMessage(text, id);
+      /* 【第二个参数 id】就是被回复那条留言的 id，作为 parent。
+         后端会用这个 parent 把回复挂到对应的主楼下面。 */
       if (!d.ok) { btn.disabled = false; return alert(d.error || '发送失败'); }
+      /* 失败了要把按钮恢复，不然用户没法重试。
+         【d.error || '发送失败'】优先用后端给的具体原因，没有就用通用文案。 */
       openReplyId = null;
       replyDraft = '';
+      /* 发送成功 → 关掉回复框、清空草稿。 */
       await load();
+      /* 【await load()】重新拉一遍全部数据。
+         【为什么整页重载而不用「乐观更新」】因为新回复的 id、时间、楼层号
+         都是数据库生成的，前端猜不出来。重新拉最准确。
+         代价是网络慢时会顿一下，数据量小的时候可以接受。 */
       showTip(uid ? '回复发出去了。' : '回复发出去了。');
+      /* 【这一行其实没必要】三元两边是一模一样的文字 ——
+         大概是以前的版本想区分「回复别人」和「回复自己」的措辞，后来改了但留下残骸。
+         不影响功能，属于「代码里的无用分支」。看到这种可以放心删。 */
     } catch { btn.disabled = false; alert('网络错误，请重试'); }
+    /* 【catch 里必须恢复按钮】否则网络一旦出错，按钮永远灰着，用户只能刷新页面。
+       这是「异常处理里也要做状态清理」的典型例子。 */
     return;
   }
 
   if (act === 'del') {
     const kids = msgsCache.filter(x => x.parent === id).length;
+    /* 数一下这条留言下面有几条回复，待会要在确认框里告诉用户。 */
     const tip = kids ? `这条留言下面还有 ${kids} 条回复，会跟着一起删掉。` : '';
     if (!confirm('确定删掉这条留言吗？' + tip + '\n删了就找不回来了。')) return;
+    /* 【confirm(文字)】弹出「确定 / 取消」对话框，点确定返回 true，取消返回 false。
+       【\n】换行符，让提示分两段更好读。
+       【为什么要弹确认】删除是「不可逆操作」，必须给用户一次后悔的机会。
+       这是交互设计的基本原则：破坏性操作要有确认。
+       【!confirm(...)】点取消就 return，不执行删除。 */
     btn.disabled = true;
     try {
       const d = await SBAPI.deleteMessage(id);
       btn.disabled = false;
       if (!d.ok) return alert(d.error || '删除失败');
       if (openReplyId === id) { openReplyId = null; replyDraft = ''; }
+      /* 【这个判断很重要】如果删掉的正好是「正开着回复框」的那条，
+         得把状态清掉。否则 openReplyId 指向一条已经不存在的留言，
+         会一直保留一个幽灵状态，下次渲染时什么都对不上。 */
       await load();
       showTip(kids ? `已删除，连同下面 ${kids} 条回复。` : '已删除。');
+      /* 把「连带删了几条回复」也告诉用户，让他确认结果符合预期。 */
     } catch { btn.disabled = false; alert('网络错误，请重试'); }
     return;
   }
@@ -719,6 +1549,8 @@ document.getElementById('list').addEventListener('click', async (e) => {
       if (!d.ok) return alert(d.error || '操作失败');
       await load();
       showTip(d.pinned ? '已经置顶，会一直排在最前面。' : '已取消置顶。');
+      /* 【d.pinned】这是接口返回的**新状态**，不是旧状态。
+         用返回值的真值来决定提示语，比自己猜更可靠。 */
     } catch { btn.disabled = false; alert('网络错误，请重试'); }
     return;
   }
@@ -731,12 +1563,33 @@ document.getElementById('list').addEventListener('click', async (e) => {
       if (!d.ok) return alert(d.error || '操作失败');
       likeCount[id] = d.likes;
       if (d.liked) likeSet.add(id); else likeSet.delete(id);
+      /* 【if...else 写在一行】没有花括号，只适合这种超短语句。多了必须换行加括号。 */
       // 只改这一个按钮，不整页重画 —— 重画会把正开着的回复框关掉
+      /* 【这是个很值得学的优化思路】
+         点赞如果走 render() 全量重画：整个列表的 DOM 全部销毁重建，
+         用户正在写的回复框会被清空（因为 textarea 是重新生成的，内容丢了）。
+         所以这里只改动这一个按钮的类名和数字 —— 用户体验就是「瞬间响应，没有任何闪动」。
+         【这条原则叫「最小更新范围」】能改一个元素就别重画整个列表。 */
       btn.classList.toggle('on', !!d.liked);
+      /* 【.classList.toggle(类名, 强制值)】
+         第二个参数是布尔值：true 就加上这个类，false 就去掉。
+         【为什么不用单参数版 toggle('on')】单参数是「有这个类就删，没就加」，
+           它会假设当前状态跟你想的相反。但万一本地状态已经不准了呢？
+           传第二个参数能强制设成指定状态，更可靠。
+         【!!d.liked】两个感叹号 = 强制转成布尔值：
+           !!'abc' → true，!!0 → false，!!null → false。
+           如果 d.liked 是 1 或者 "true"，不转的话 toggle 可能行为异常。 */
       const nEl = btn.querySelector('.like-n');
       if (nEl) nEl.textContent = d.likes > 0 ? String(d.likes) : '';
+      /* 【同样的最小更新】只改那个数字，不碰按钮本身。
+         【d.likes > 0 ? String(d.likes) : ''】
+         数字大于 0 就显示，否则显示空字符串（光一个心形更好看）。
+         【String(...)】数字转字符串。
+         （虽然 textContent 接受数字会自动转，但显式写更清楚。） */
       btn.title = d.liked ? '取消赞' : '赞一个';
+      /* 悬停提示也跟着改 —— 细节，但能让用户明确知道再点一下会发生什么。 */
       if (d.liked && uid && (!me || uid !== me.uid)) showTip('赞好了。');
+      /* 只有「赞了别人」才弹提示；给自己点赞不弹（那有点傻）。 */
     } catch { btn.disabled = false; alert('网络错误，请重试'); }
     return;
   }
@@ -748,7 +1601,14 @@ document.getElementById('list').addEventListener('click', async (e) => {
       if (!d.ok) { btn.disabled = false; return alert(d.error || '操作失败'); }
       if (d.following) { followSet.add(uid); showTip('关注好了，可以在 TA 的主页看到。'); }
       else { followSet.delete(uid); showTip('已取消关注。'); }
+      /* 【this kind of if-else 一行写法】大括号里写两条语句，用分号隔开。
+         可以，但超过两条就该换行了。 */
       render();
+      /* 【关注为什么用 render() 全量重画，点赞却不用】
+         因为关注状态影响的是按钮上的文字（「关注」↔「已关注」），
+         这个文字是在 actionsHTML 里生成的，只能靠重画更新。
+         而点赞只改类名和数字，能直接操作 DOM。
+         【取舍标准】改的是「结构/文字」就重画，改的是「样式/单个值」就直接改。 */
     } catch { btn.disabled = false; alert('网络错误，请重试'); }
     return;
   }
@@ -761,27 +1621,54 @@ document.getElementById('list').addEventListener('click', async (e) => {
       if (d.blocked) { blockedSet.add(uid); showTip('已拉黑，TA 的留言不再显示（折叠在上面那条里）。'); }
       else { blockedSet.delete(uid); showTip('已经取消拉黑了。'); }
       render();
+      /* 【注意】这里「取消拉黑」和「拉黑」共用一个 act 名（block），
+         靠接口返回的 d.blocked 来判断是新拉黑还是取消。
+         好处：HTML 里不用生成两套按钮；
+         坏处：从代码上看不出「这个按钮到底会做什么」，得看返回值才明白。 */
     } catch { btn.disabled = false; alert('网络错误，请重试'); }
     return;
   }
 
   if (act === 'report') {
     if (id == null) return alert('这条留言还没有编号，刷新一下再试。');
+    /* 【为什么可能没有 id】页面渲染后、数据还没同步时会有这种情况。
+       与其带着 null 去请求，不如明确告诉用户怎么办。 */
     const reason = prompt('说说这条留言哪里有问题（可以留空）：', '');
+    /* 【prompt(提示文字, 默认值)】弹出输入框。
+       点确定 → 返回用户输入的字符串（可能是空字符串）；
+       点取消 → 返回 null。
+       【注意这个区别】空字符串和 null 都是假值，但含义完全不同：
+         空字符串 = 用户点确定了，只是没写理由（允许）
+         null     = 用户取消了（要中止） */
     if (reason === null) return;   // 点了取消
+    /* 【=== null】必须用严格相等判断。
+       写成 if (!reason) 的话，用户点确定但没写理由也会被当成取消 —— 逻辑就错了。 */
     try {
       const d = await SBAPI.reportMessage(id, reason.trim());
+      /* 【.trim()】去掉首尾空格。用户可能只打了空格，
+         存进数据库就是一堆空白，管理员看了莫名其妙。 */
       if (!d.ok) return alert(d.error || '举报失败');
       reportedSet.add(id);
+      /* 本地也记一笔，这样重画之后按钮立刻变成「已举报」并禁用，
+         不用等重新拉数据。这叫「本地状态先行更新」。 */
       render();
       showTip('举报已经交给后台，管理员在管理面板里会看到。');
+      /* 明确告诉用户「接下来会发生什么」—— 举报完最怕的是「到底有没有用」的疑惑。 */
     } catch { alert('网络错误，请重试'); }
+    /* 【这里没恢复 btn.disabled】因为举报按钮没被禁用过，
+       而且成功后会被 render() 重画成「已举报 禁用」状态，不需要手动恢复。 */
   }
 });
 
 // 点空白处收起菜单
 document.addEventListener('click', (e) => {
+  /* 【监听整个文档的点击】这样点页面上任何地方都能感知到。 */
   if (e.target.closest('.msg-actions')) return;
+  /* 【为什么要有这一句】如果点在操作区内部（比如点了菜单里的某一项），
+     不应该收起菜单 —— 因为那个按钮自己的处理逻辑会管这件事。
+     这里直接 return，把处理权交给上面那个 #list 的监听器。
+     【这是「事件委托」的常见配合手法】外层监听负责「点别处关掉」，
+     内层监听负责「点自己执行动作」。 */
   closeMenus();
 });
 
@@ -789,32 +1676,74 @@ document.addEventListener('click', (e) => {
 const textEl = document.getElementById('text');
 const countEl = document.getElementById('postCount');
 textEl.addEventListener('input', () => {
+  /* 【'input' 事件】输入框内容变化时触发。
+     【和 'change' 的区别】change 只在「失去焦点且内容变了」时触发一次；
+     input 每敲一个字都触发。要实时字数统计必须用 input。 */
   countEl.textContent = textEl.value.length + '/200';
+  /* 【.value.length】字符个数。
+     【注意】这里 length 数的是「UTF-16 代码元」，
+     一个 emoji（比如 😀）会算成 2 个长度。
+     所以用户打 100 个 emoji 就会显示 200/200 —— 这是个已知的小偏差。
+     要精确数「人眼看到的字符」得用 [...str].length（展开运算符按码点拆）。 */
 });
 
 document.getElementById('submitBtn').onclick = async () => {
+  /* 【.onclick = 函数】直接赋值绑事件。
+     【为什么这里用 onclick 而上面用 addEventListener】
+     因为这个按钮只绑定一次、不会被重复绑定，用 onclick 更短。
+     但如果以后有第二处代码也要监听这个按钮，onclick 就会被覆盖 —— 
+     所以更推荐统一用 addEventListener，这里算是历史写法。 */
   if (!ensureLogin()) return;
+  /* 没登录就弹登录框并中止。 */
 
   const text = document.getElementById('text').value.trim();
   if (!text) return alert('内容不能为空');
+  /* 【trim() 的必要性】用户可能只敲了几个空格或回车，
+     不 trim 的话会被当成有效内容发出去，页面上就是一条空白留言。 */
 
   try {
     const d = await SBAPI.postMessage(text);
+    /* 【只传一个参数】不传 parent → 发的是主楼（新开一楼），不是回复。 */
     if (!d.ok) return alert('失败：' + (d.error || '发送失败'));
     textEl.value = '';
     countEl.textContent = '0/200';
+    /* 清空输入框和字数。 */
     load();
+    /* 【没写 await】这里不关心什么时候加载完，让它在后台跑就行。
+       但严格的代码应该写 await 或者 .catch()，
+       否则如果 load() 内部抛错，会产生一个「未处理的 Promise 拒绝」警告。 */
   } catch {
     alert('提交失败，请重试');
   }
 };
 
 load();
+/* 【页面初始化：立刻开始加载数据】
+   这一行放在所有函数定义之后、文件末尾 —— 
+   因为 JS 是从上往下执行的，函数声明虽然会「提升」（可以先调用后定义），
+   但 const/let 声明的变量不会提升，提前调用会拿到 undefined。
+   统一把「启动代码」放最后是最稳的习惯。 */
 
 // 导航栏里登录 / 登出后这个页面不会自己刷新，盯一下会话变化就重载
 if (window.SBAPI && SBAPI.onAuthChange) {
+  /* 【window.SBAPI && SBAPI.onAuthChange】双重检查：
+     ① window.SBAPI 存在（sb.js 加载成功了）
+     ② 它上面有 onAuthChange 这个方法
+     都满足才去调用，避免「sb.js 没加载成功时整个页面崩掉」。
+     【window.XXX】访问全局变量。用 window. 前缀访问全局变量，
+     比直接写 SBAPI 更明确（一眼看出这是全局的，不是局部变量），
+     而且变量不存在时不会报错（只返回 undefined）。 */
   // 回调里别再直接打 supabase，否则会和 auth 锁互等（supabase-js 的老坑），扔到下一轮事件循环
   SBAPI.onAuthChange(() => { setTimeout(load, 0); });
+  /* 【setTimeout(load, 0)】延迟 0 毫秒执行 load —— 听起来等于「立刻执行」，
+     但其实是「把它排到当前任务队列的末尾」。
+     【为什么需要这个】注释里说的坑是真的：
+     supabase-js 在通知「登录状态变了」的时候，内部还握着一把锁没放。
+     如果回调里立刻再去请求数据，那个请求也在等同一把锁 → 互相等待 → 永久卡死。
+     这叫「死锁」。
+     把请求挪到下一轮事件循环（用 setTimeout 0），那时锁已经放开了，就没事了。
+     【这个技巧叫「让出执行权」】遇到「不知道对方什么时候准备好的」场景，
+     延迟一拍再干活，是很实用的解法。 */
 }
 </script>
 
