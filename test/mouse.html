@@ -1,187 +1,376 @@
 <!DOCTYPE html>
+<!-- 【<!DOCTYPE html>】固定第一行，声明 HTML5。 -->
+
 <!-- ============================================================
      文件：test/mouse.html（鼠标特效页）
      作用：全屏 canvas 演示流光拖尾效果，鼠标（或手指）移动时产生彩色曲线。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     说明：这里写的注释不会显示在页面上，只给看代码的人（也就是你）看。
      ============================================================ -->
+
 <html lang="zh-CN">
+<!-- 【lang="zh-CN"】声明内容为简体中文，影响字体选择与朗读发音。 -->
+
 <head>
+<!-- 【<head>】设置区，内容不显示在页面上。 -->
+
 <meta charset="UTF-8">
+<!-- 声明 UTF-8 编码，否则中文乱码。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 手机适配：页面宽度等于屏幕宽度，初始缩放 1 倍。 -->
+
 <title>鼠标特效 · 乘法</title>
+<!-- 浏览器标签页上显示的文字。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 标签页小图标；开头的斜杠表示从网站根目录算起。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 引入全站公共样式表；?v=26 是防缓存版本号，改样式后把数字改大即可强制刷新。 -->
+
 <style>
+/* 下面放「只有这个页面才用」的样式。从 style 开始标签到它的结束标签之间是 CSS 语法，
+   注释必须用斜杠加星号，HTML 那种尖括号叹号写法在这里无效。 */
+
   html, body { min-height: 100vh; overflow: hidden; }
+  /* 【两个选择器用逗号】html 和 body 共用这一条规则。
+     【min-height:100vh】最小高度占满一屏（vh = 视口高度的百分之一）。
+     【overflow:hidden】把超出部分裁掉、禁止滚动。
+     为什么这一页要禁滚动？因为全屏画板一旦能滚动，鼠标坐标和画布坐标就会错位。 */
 
   #canvas {
+  /* 【#canvas】井号开头是「id 选择器」，选中 id="canvas" 的那个元素。 */
     position: fixed;
+    /* 固定在屏幕上，页面滚动它也不动（虽然这页本来就不能滚）。 */
     top: 0; left: 0;
+    /* 贴到左上角。尺寸用下面的 100% 撑满，所以右下角不用写。 */
     width: 100%; height: 100%;
+    /* 铺满整个屏幕。注意这里是 CSS 显示尺寸，和画布内部像素尺寸是两回事，
+       后者在 JS 里用 canvas.width / canvas.height 单独设。 */
     pointer-events: none;
+    /* 【关键】不接收鼠标事件。画布铺满全屏还盖在最上层，
+       如果不写这句，鼠标移到画布上就被它拦住了，底下的链接、按钮全都点不到。 */
     z-index: 1;
+    /* 层级 1：压在背景（-2)之上、导航（100）之下。 */
   }
+
   .center-tip {
+  /* 屏幕正中那行「移动鼠标试试」提示文字。 */
     position: fixed;
     top: 50%; left: 50%;
+    /* 先把左上角挪到屏幕正中。 */
     transform: translate(-50%, -50%);
+    /* 【居中口诀】元素自己的宽高未知时，用 translate(-50%,-50%)
+       把它自身的宽高往回推一半，才是真正居中。只写 top/left 50% 是「左上角在中心」，会偏。 */
     text-align: center;
     color: var(--text-light);
+    /* 取 CSS 变量里的次要文字色（浅灰）。 */
     font-size: 16px;
     pointer-events: none;
+    /* 同样不接收鼠标 —— 否则鼠标移到这里时提示文字会挡住拖尾的起点。 */
     user-select: none;
+    /* 【user-select:none】禁止用鼠标拖选这段文字。
+       不然用户一划就会选中「移动鼠标试试」几个字，蓝底一片很难看。 */
     z-index: 2;
+    /* 比画布高一层，才不会被画布盖住。 */
   }
 </style>
 </head>
+
 <body data-force-dark>
+<!-- 【data-force-dark】这是自定义的 data 属性，HTML 允许你随便给元素加 data-xxx。
+     它的作用：告诉 js/bg.js「这一页强制用深色主题」——
+     因为流光特效在亮背景上根本看不见，必须压暗。 -->
 
   <div id="navbar"></div>
+  <!-- 导航栏占位，内容由 js/nav.js 在运行时注入。 -->
 
   <canvas id="canvas"></canvas>
+  <!-- 【<canvas>】画布标签，本身是空白的一块区域，靠 JS 往下画画。
+       它必须写结束标签，不能自闭合。
+       这块画布铺满全屏，专门用来画鼠标拖尾。 -->
+
   <div class="center-tip">移动鼠标试试 ✨</div>
+  <!-- 引导用户交互的提示文字。✨ 是 Unicode 字符，直接写就行。 -->
 
    <script src="/js/config.js"></script>
+   <!-- 【<script src>】引入外部 JS；顺序不能乱，后面的可能要用前面的东西。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
    <script src="/js/sb.js"></script>
    <script src="/js/nav.js?v=23"></script>
+
 <script>
 /* ===== 流光拖尾（原版逻辑，去依赖） ===== */
+/* 下面这段是页面自己的特效代码。从 script 的开始标签到它的结束标签之间全是 JavaScript，
+   注释必须用斜杠加星号或双斜杠，HTML 那种尖括号叹号写法在这里无效。 */
+
 (function () {
+// 【IIFE 立即执行函数】函数定义完立刻执行一次。
+//   好处：里面声明的变量全被关在函数内部，不会污染全局（不会和别的文件撞名）。
+
   var ctx, hue, target = {}, tendrils = [], settings = {};
+  // 【一条语句声明多个变量】用逗号隔开。
+  //   ctx        → 画布的「画笔」，后面所有绘制都靠它
+  //   hue        → 色相振荡器，让线条颜色自己缓慢变色
+  //   target = {}→ 鼠标当前位置，{x, y} 两个字段
+  //   tendrils   → 所有「触须」的数组，每条触须就是一条拖尾线
+  //   settings   → 一堆可调参数，集中放在这里方便改手感
+  // 【var】老式声明方式。现在更推荐 let/const，但老代码里到处都是 var，要认识它。
 
   settings.friction  = 0.5;
+  // 【摩擦】每帧把速度乘 0.5。数值越小，停下得越快，尾巴越短。
   settings.trails    = 20;
+  // 【触须条数】20 条线叠在一起才显得丰满。
   settings.size      = 60;
+  // 【每条触须的节点数】节点越多，曲线越细腻，同时也越费性能。
   settings.dampening = 0.25;
+  // 【阻尼】后一个节点继承前一个节点速度的比例，决定「拖」的感觉。
   settings.tension   = 0.98;
+  // 【张力衰减】越往后的节点弹性越弱，所以尾巴尖会松下来、自然下垂。
 
   Math.TWO_PI = Math.PI * 2;
+  // 【给内置对象加自定义属性】Math 是 JS 自带的一个数学工具对象。
+  //   平时不推荐这么干（可能和别人撞名），但这里图省事，加了个「2π」常量。
+  //   π ≈ 3.14159，一整圈就是 2π，正弦函数走完一个完整周期也正好是 2π。
 
   function Oscillator(opt) {
+  // 【构造函数】JS 里用 function 加 new 来造对象。首字母大写是约定（提醒你它要配合 new 用）。
+  //   opt 是传进来的参数对象，里面可以有 phase / offset / frequency / amplitude。
     opt = opt || {};
+    // 【防御】没传参数时给个空对象，否则下一行 opt.phase 会报「读不到 undefined 的属性」。
     this.phase = opt.phase || 0;
+    // 【this】指「正在被创建的这个对象」。这里把参数存到自己身上。
+    // 【|| 默认值】没传就用后面的值，是最常用的兜底写法。
     this.offset = opt.offset || 0;
+    // 偏移：让正弦波整体上下平移，决定颜色的基准位置。
     this.frequency = opt.frequency || 0.001;
+    // 频率：每次 update 相位前进多少。数字越小变得越慢。
     this.amplitude = opt.amplitude || 1;
+    // 振幅：正弦波上下摆动的幅度，决定颜色变化范围有多大。
     this._v = 0;
+    // 下划线开头是「约定」：表示这个字段是内部用的，外面别直接碰。
+    // 它存的是「上一次算出来的值」。
   }
+
   Oscillator.prototype.update = function () {
+  // 【prototype 原型】把方法挂在原型上，所有实例共用同一份函数，省内存。
+  //   如果写在构造函数里（this.update = function(){}），每 new 一个就复制一份函数。
     this.phase += this.frequency;
+    // 相位往前推一点。+= 意思是「自己加上右边」。
     this._v = this.offset + Math.sin(this.phase) * this.amplitude;
+    // 【Math.sin】正弦函数，输入角度输出 -1 到 1 之间平滑地来回摆动。
+    //   乘振幅、加偏移，就得到一个在 offset±amplitude 之间缓缓游走的数。
+    //   用它当色相，颜色就会自然地来回渐变，不会突变。
     return this._v;
+    // 把结果返回出去，调用处就能直接拿到。
   };
+
   Oscillator.prototype.value = function () { return this._v; };
+  // 只读当前值，不推进相位。
 
   function Tendril(opt) {
+  // 一条「触须」= 一串节点用弹簧连着，鼠标一动就跟着甩出去。
     this.spring = opt.spring + (Math.random() * 0.1) - 0.05;
+    // 【Math.random()】返回 0 到 1 之间的随机小数。
+    //   这里给弹性加一个 ±0.05 的随机扰动，让 20 条线的手感各不相同，
+    //   否则它们会完全重叠成一条，看不出层次。
     this.friction = settings.friction + (Math.random() * 0.01) - 0.005;
+    // 摩擦也加一点随机，同样是制造差异。
     this.nodes = [];
+    // 节点数组，每个节点是一个 {x, y, vx, vy} 的小对象。
     for (var i = 0; i < settings.size; i++) {
+    // 【for 循环】三段式：初始化; 条件; 每次循环后执行。
+    //   这里从 0 数到 59，一共 60 次。
       this.nodes.push({ x: target.x, y: target.y, vx: 0, vy: 0 });
+      // 【.push】往数组末尾塞一个元素。
+      //   新节点初始位置全部堆在鼠标当前点，速度都是 0 —— 所以一开始是一条看不见的点。
+      //   vx / vy 是横向和纵向的速度。
     }
   }
+
   Tendril.prototype.update = function () {
+  // 每帧调用一次，重算所有节点的位置（这就是「物理模拟」）。
     var spring = this.spring;
     var node = this.nodes[0];
+    // 第 0 个节点 = 触须的头，它直接被鼠标拽着走。
     node.vx += (target.x - node.x) * spring;
+    // 【核心公式】加速度 = 距离 × 弹簧系数。
+    //   离鼠标越远，被拉得越猛；靠得越近，拉力越小 —— 这就是弹簧的胡克定律。
+    //   vx += 加速度：把加速度累加到速度上。
     node.vy += (target.y - node.y) * spring;
     for (var prev, i = 0, n = this.nodes.length; i < n; i++) {
+    // 【一次性声明 prev】var 可以在循环里声明变量（let 不行）。
+    // 【缓存 length】把 nodes.length 存进 n，避免每轮都去读一次数组长度 —— 老式性能优化。
       node = this.nodes[i];
       if (i > 0) {
+      // 第 0 个已经处理过了，跳过。
         prev = this.nodes[i - 1];
+        // 取前一个节点。
         node.vx += (prev.x - node.x) * spring;
+        // 后一个节点被前一个节点拉着走 —— 这样力就从头部一路传到尾巴。
         node.vy += (prev.y - node.y) * spring;
         node.vx += prev.vx * settings.dampening;
+        // 除了位置，速度也要继承一部分，尾巴才会「甩」起来而不是僵硬地跟着。
         node.vy += prev.vy * settings.dampening;
       }
       node.vx *= this.friction;
+      // 【摩擦】每帧速度乘 0.5，能量不断衰减，所以松手后会自动停下。
       node.vy *= this.friction;
       node.x += node.vx;
+      // 位置 += 速度：这就是欧拉法积分，最简单的位置更新。
       node.y += node.vy;
       spring *= settings.tension;
+      // 越往后的节点弹簧越软（乘 0.98 逐步衰减），尾巴才柔软。
     }
   };
+
   Tendril.prototype.draw = function () {
+  // 把算好的节点连成一条平滑曲线画到画布上。
     var x = this.nodes[0].x;
     var y = this.nodes[0].y;
+    // 从第一个节点开始画。
     var a, b;
     ctx.beginPath();
+    // 【beginPath()】告诉画笔「我要开始画一条新路径了」，之前的路径清空。
+    //   不调用它，之前画的线会和新的连在一起，出现莫名其妙的直线。
     ctx.moveTo(x, y);
+    // 【moveTo】把笔尖「提起来」放到指定坐标，不画线。
     var i, n = this.nodes.length - 2;
     for (i = 1; i < n; i++) {
       a = this.nodes[i];
       b = this.nodes[i + 1];
       x = (a.x + b.x) * 0.5;
       y = (a.y + b.y) * 0.5;
+      // 取相邻两点的中点作为「终点」。
       ctx.quadraticCurveTo(a.x, a.y, x, y);
+      // 【quadraticCurveTo(控制点x, 控制点y, 终点x, 终点y)】二次贝塞尔曲线。
+      //   用 a 当控制点、中点当终点 —— 这样每一小段都会自然弯过去，
+      //   把一串折线变成丝滑的曲线。这是「平滑折线」的经典做法。
     }
     a = this.nodes[i];
     b = this.nodes[i + 1];
+    // 循环结束后单独补最后一段，避免尾巴缺一截。
     ctx.quadraticCurveTo(a.x, a.y, b.x, b.y);
     ctx.stroke();
+    // 【stroke()】沿着路径描边（真正画出线来）。前面只是定义了路径，还没画。
     ctx.closePath();
+    // 闭合路径。这里其实已经回到终点了，主要是让状态干净。
   };
 
   function reset() {
+  // 重新生成所有触须（切换窗口尺寸、刚开始时调用）。
     tendrils = [];
     for (var i = 0; i < settings.trails; i++) {
       tendrils.push(new Tendril({ spring: 0.45 + 0.025 * (i / settings.trails) }));
+      // 【new Tendril(...)】按构造函数造一个新对象。
+      //   弹簧系数从 0.45 逐渐加到 0.475：后面的触须更硬一点，
+      //   20 条线的手感才有层次，不会糊成一团。
     }
   }
 
   function loop() {
+  // 动画主循环：每帧擦一点、画一次、再预约下一帧。
     if (!ctx.running) return;
+    // 关闭开关：某个地方把 running 设成 false 就能让动画停下。
+
     /* 每帧「擦掉」一点旧轨迹，而不是铺一层黑。
        destination-out = 按 alpha 从画布上抠掉像素：
        canvas 一直是透明的，底下的背景视频就能透出来，拖尾照样自然淡出。
        （原先用 rgba(24,25,28,.4) 填满，等于给整页糊了一层黑，视频全被盖住了） */
     ctx.globalCompositeOperation = 'destination-out';
+    // 【globalCompositeOperation 混合模式】决定新画的内容和已有内容怎么合成。
+    //   destination-out = 用新内容的透明度去「挖掉」画布上已有的像素。
+    //   这是做拖尾淡出的标准手法：每帧挖掉 40%，旧轨迹就慢慢消失。
     ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    // 【fillStyle】填充颜色。这里的黑色只是「遮盖工具」，真正的效果来自上面的挖除模式。
+    //   0.4 是挖除强度：越大消失越快，尾巴越短。
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    // 【fillRect(x, y, 宽, 高)】画一个实心矩形，这里等于铺满整块画布。
     ctx.globalCompositeOperation = 'lighter';
+    // 【lighter】叠加发光模式：颜色相互叠加会变亮，像光打在光上。
+    //   20 条线交叉的地方就会亮起来，这就是「流光」感的来源。
     ctx.strokeStyle = 'hsla(' + Math.round(hue.update()) + ',90%,50%,0.25)';
+    // 【hsla(色相, 饱和度, 亮度, 透明度)】另一种写颜色的方式，比 rgb 更直观：
+    //   色相 0~360 是色轮角度（0 红、120 绿、240 蓝）；
+    //   饱和度 90% 是很艳；亮度 50% 是不亮不暗；
+    //   最后 0.25 是很透明。
+    // 【字符串拼接】+ 号在这里是「连接字符串」。
+    //   Math.round() 取整，因为色相带一堆小数会拼出非法颜色值。
     ctx.lineWidth = 1;
+    // 线宽 1 像素，细线才有光丝的感觉。
 
     for (var i = 0, t; i < settings.trails; i++) {
       t = tendrils[i];
       t.update();
+      // 先算物理（所有节点的位置）。
       t.draw();
+      // 再画出来。先全部 update 再统一 draw 也完全可以，这里混着写更省事。
     }
     requestAnimationFrame(loop);
+    // 【requestAnimationFrame】告诉浏览器「下一帧再调我一次」。
+    //   它和屏幕刷新率同步（一般 60 次/秒），比 setTimeout 定时器流畅得多，
+    //   而且切到后台标签页时会自动暂停，省电。
+    //   这是所有 canvas 动画的标准写法 —— 自己调自己，形成无限循环。
   }
 
   function resize() {
+  // 窗口尺寸变化时，把画布的内部像素尺寸同步过去。
     ctx.canvas.width  = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
+    // 【window.innerWidth / innerHeight】浏览器窗口的内部宽高（不含工具栏）。
+    //   注意：改 canvas 的 width/height 会清空整块画布并重置所有绘制状态，
+    //   所以只能在尺寸真的变了的时候调用，不能每帧都调。
   }
 
   function mousemove(e) {
+  // 鼠标或手指移动时，更新 target 坐标。
     if (e.touches) {
+    // 【e.touches】触摸事件才有这个字段，里面是所有按在屏幕上的手指。
+    //   有它就说明是手机/平板的触摸，没有就是鼠标 —— 这是判断事件类型的常用技巧。
       target.x = e.touches[0].pageX;
       target.y = e.touches[0].pageY;
+      // 【touches[0]】第一根手指（数组从 0 开始）。
+      // 【pageX / pageY】相对整个文档的坐标。
     } else {
       target.x = e.clientX;
       target.y = e.clientY;
+      // 【clientX / clientY】相对浏览器可视区域的坐标，鼠标事件用这个。
     }
     if (e.preventDefault) e.preventDefault();
+    // 如果这个事件对象有 preventDefault 方法，就调用它 —— 阻止默认行为
+    //   （比如手机上拖动时页面跟着滚动）。加 if 是为了防止某些事件没有这个方法而报错。
   }
 
   function init(e) {
+  // 第一次交互时做「一次性初始化」：把监听器换成真正的处理函数，然后启动动画。
     document.removeEventListener('mousemove', init);
     document.removeEventListener('touchstart', init);
+    // 【removeEventListener】把之前挂的事件监听摘掉。
+    //   为什么？因为 init 只需要跑一次，摘掉后鼠标再动就不会重复初始化了。
     document.addEventListener('mousemove', mousemove);
     document.addEventListener('touchmove', mousemove, { passive: true });
     document.addEventListener('touchstart', mousemove, { passive: true });
+    // 【addEventListener(事件名, 处理函数, 选项)】注册事件监听。
+    //   { passive: true } 是给浏览器的承诺：「这个处理函数不会阻止滚动」。
+    //   浏览器收到这个承诺后就不必等 JS 跑完才滚动页面，手机上明显更跟手。
+    //   如果监听器里调用了 preventDefault 而你又写了 passive，那个调用会被忽略并报警告。
     mousemove(e);
+    // 立刻用当前这次事件更新一次坐标，避免第一帧从 (0,0) 弹过来。
     reset();
+    // 生成 20 条触须。
     loop();
+    // 启动动画循环。
   }
 
   window.addEventListener('load', function () {
+  // 【load 事件】等页面所有资源（图片、样式、脚本）都加载完才执行。
+  //   为什么不用更早的 DOMContentLoaded？因为要确保 canvas 已经存在、布局尺寸已经定下来。
     ctx = document.getElementById('canvas').getContext('2d');
+    // 【getContext('2d')】拿到画布的「2D 画笔」。
+    //   之后再怎么画，都是通过这个 ctx 对象。'2d' 指的是二维绘图上下文。
     ctx.running = true;
+    // 给画笔对象随手挂一个开关，loop() 里靠它判断要不要继续。
 
     hue = new Oscillator({
       phase: Math.random() * Math.TWO_PI,
@@ -189,15 +378,24 @@
       frequency: 0.0015,
       offset: 285
     });
+    // 【传对象当参数】比传一长串位置参数更好读，也不用记顺序。
+    //   这里配出一个：基准色相 285（紫色）、上下摆动 85 度（紫→蓝→粉之间游走）、
+    //   每帧只前进 0.0015 相位（变化非常慢）、起始相位随机（每次打开颜色都不同）。
 
     target.x = window.innerWidth  / 2;
     target.y = window.innerHeight / 2;
+    // 鼠标还没动之前，把目标点放在屏幕正中。
+    // 【注意】这里 / 两边有空格只是排版习惯，除号两边的空格可有可无。
 
     document.addEventListener('mousemove', init);
     document.addEventListener('touchstart', init);
+    // 先挂 init：用户第一次动鼠标/碰屏幕时才真正启动特效。
+    //   这样做的好处是页面刚打开不浪费性能，也符合「用户想交互了才开始」的逻辑。
     window.addEventListener('resize', resize);
+    // 窗口大小改变时重新设置画布尺寸。
 
     resize();
+    // 先手动调一次，让画布立刻就有正确的尺寸（不依赖用户去拉窗口）。
   });
 })();
 </script>
