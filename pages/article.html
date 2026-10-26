@@ -1,67 +1,142 @@
 <!DOCTYPE html>
 <!-- ============================================================
      文件：pages/article.html（文章详情页）
-     作用：展示一篇文章的正文，并带评论区、点赞、收藏、举报。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：展示一篇文章的正文，下面带完整的评论区
+           （发主楼、楼中楼回复、点赞、收藏、举报、删除），
+           还有文章本身的点赞/收藏/举报/编辑/删除按钮。
+     数据来源：window.SBAPI（Supabase 直连），没有自建后端。
+     说明：这一整段尖括号叹号包起来的是注释，不会显示在页面上。
      ============================================================ -->
 <html lang="zh-CN">
+<!-- 【lang="zh-CN"】声明语言是简体中文。
+     影响：朗读软件选哪种口音、浏览器要不要提示翻译、中文怎么断行。 -->
+
 <head>
+<!-- 【head】给浏览器看的信息区，页面上不显示。 -->
+
 <meta charset="UTF-8">
+<!-- 【charset】字符编码，UTF-8 才能正常显示中文和 emoji。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【viewport】手机上的虚拟窗口宽度。
+     width=device-width = 等于手机实际宽度；initial-scale=1.0 = 初始不缩放。
+     不写这两句，手机上会显示成桌面版缩微版，字小到看不清。 -->
+
 <title>文章 · 乘法</title>
+<!-- 标签页上那行字。
+     【注意】这里写的是静态的「文章」，
+     等 JS 拿到文章数据后会改成「真正的标题 · 乘法」（见下面 render 里的 document.title）。
+     这叫「先给一个通用标题，数据到了再改」—— 比一直显示「加载中」体面。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 标签页左边的小图标。路径开头的 / 表示从网站根目录开始找。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 引入全站公共样式。
+     【?v=26】缓存版本号：改完 CSS 把它加 1，浏览器才会重新下载。
+     否则用户可能一直在看你几个月前缓存的旧样式。 -->
+
 <style>
+  /* 本页专属样式。art- 是文章相关，cmt- 是评论相关。
+     【为什么加前缀】CSS 类名是全局的，起通用名（比如 .title）很容易跟别处撞车。
+     用模块前缀是最土但最有效的防冲突办法。 */
+
   .art-title {
+    /* 文章大标题。 */
     font-size: 28px;
     line-height: 1.4;
+    /* 【line-height:1.4】行高 = 字号的 1.4 倍。
+       大标题行高要比正文小（正文用 1.8~1.9），
+       因为标题字大、行数少，行高太大反而显得散。 */
     color: var(--text);
     margin-bottom: 10px;
     word-break: break-word;
+    /* 【word-break:break-word】长单词/长链接放不下时允许在必要时断开换行。
+       【为什么需要】一个超长的英文单词或没空格的链接，
+       默认规则认为「单词不能拆」，它宁可溢出容器把布局撑破。
+       标题尤其需要这个 —— 用户什么标题都可能写。 */
   }
+
   .art-sub {
+    /* 标题下面那行：作者、时间、字数、浏览。 */
     display: flex;
     flex-wrap: wrap;
+    /* 窄屏上元素多了自动换行。 */
     align-items: center;
     gap: 10px;
     padding-bottom: 14px;
     margin-bottom: 18px;
     border-bottom: 1px solid var(--border);
+    /* 只画下边框当分隔线。上边框和左右都不画，看起来更干净。 */
     font-size: 13px;
     color: var(--text-light);
   }
+
   .art-sub a { color: var(--primary-deep); text-decoration: none; font-weight: 600; }
+  /* 【.art-sub a】中间有空格 = 后代选择器：找 .art-sub 里面的所有链接。
+     【为什么不用 class】因为这一行里只有作者名是链接，
+     用「后代 + 标签」已经足够精确，不用再单独加类名。 */
   .art-sub a:hover { text-decoration: underline; }
+  /* 悬停时出现下划线，明确告诉用户「这是可以点的」。 */
 
   /* 正文 */
   .art-content {
+    /* 文章正文容器。
+       【重要】它的内容是用户写的富文本 HTML（在编辑器里排的版），
+       所以下面要为各种标签预设样式 —— 
+       不然用户写个引用、代码块，会显示成浏览器默认的丑样子。 */
     font-size: 16px;
     line-height: 1.9;
+    /* 正文行高 1.9，中文长文阅读最舒服的区间（1.6~1.9）。 */
     color: var(--text);
     word-break: break-word;
     overflow-x: auto;
+    /* 【overflow-x:auto】横向内容太宽时（超宽表格、长代码行）出现横向滚动条，
+       而不是把整个页面撑出横向滚动 —— 那样最右边的导航都看不见了。 */
   }
   .art-content img, .art-content video { max-width: 100%; border-radius: 8px; margin: 8px 0; }
+  /* 【max-width:100% 而不是 width:100%】
+       max 是「最宽到这儿」，小图保持原尺寸不被放大（放大就糊了）；
+       用 width 会把小图标也拉满整行。
+     【margin: 8px 0】上下留 8px，让图片不贴着文字。 */
   .art-content audio { width: 100%; margin: 8px 0; }
+  /* 音频播放器铺满整行（它本来就是个横条控件，不满宽很难看）。 */
+
   .art-content blockquote {
+    /* 引用块。 */
     margin: 12px 0;
     padding: 8px 14px;
     border-left: 4px solid var(--primary);
+    /* 只写左边框 → 得到一条竖线，这是「引用」最经典的视觉符号。 */
     background: var(--primary-soft);
     color: var(--text-light);
+    /* 引用内容用稍浅的颜色，视觉上「退后一层」。 */
   }
   .art-content pre {
+    /* 代码块。 */
     margin: 12px 0;
     padding: 12px;
     border-radius: 8px;
     background: var(--field);
     border: 1px solid var(--border);
     font-family: Consolas, Menlo, monospace;
+    /* 【等宽字体】写代码必须等宽，否则「i」和「m」宽度不同，代码根本对不齐。
+       【这一串是字体回退链】浏览器从左往右找，找到哪个用哪个：
+         Consolas  → Windows 自带
+         Menlo     → macOS 自带
+         monospace → 通用族名，任何系统都有默认等宽字体兜底
+       最后这个通用族名一定要写，不然万一前面都没有就退化成默认字体了。 */
     font-size: 14px;
     white-space: pre-wrap;
+    /* 【pre-wrap】保留换行和多余空格（pre 的默认行为），同时还能自动换行。
+       【为什么不直接用 pre】pre 默认不换行，长代码行会横向溢出，
+       用户得左右拖着看，体验极差。 */
   }
   .art-content a { color: var(--primary-deep); }
+  /* 正文里的链接用主色。不写的话会是浏览器默认的蓝色。 */
   .art-content h1, .art-content h2, .art-content h3 { margin: 18px 0 10px; }
+  /* 【逗号分隔多个选择器】这一组规则对三个选择器各自都生效。
+     省得写三遍一样的。 */
 
   /* 底部一排按钮 */
   .art-actions {
@@ -72,48 +147,106 @@
     margin-top: 26px;
     padding-top: 16px;
     border-top: 1px solid var(--border);
+    /* 上边框把「正文」和「操作区」分开。 */
   }
   .art-btn {
+    /* 点赞/收藏/举报这些胶囊按钮。 */
     display: inline-flex;
+    /* 【inline-flex 而不是 flex】因为这一排有好几个按钮，
+       flex 会让每个按钮独占一整行；inline-flex 才能让它们排成一行。
+       【和 inline-block 的区别】inline-flex 内部还能继续用 flex 对齐（如下面的 gap）。 */
     align-items: center;
     gap: 6px;
+    /* 图标（♥）和数字之间的间距。 */
     padding: 8px 18px;
     border: 1px solid var(--border);
     border-radius: 999px;
+    /* 【999px】一个足够大的值 → 两端都是半圆的胶囊形。
+       为什么不用 50%：50% 是按宽高各半算，长条会变椭圆。 */
     background: var(--card);
     color: var(--text-light);
     font-family: inherit;
+    /* 【inherit】继承父元素字体。
+       【必须写】button / input / textarea / select 这些「表单控件」
+       浏览器默认用系统字体，不会自动跟网页字体一致，不写就格格不入。 */
     font-size: 14px;
     cursor: pointer;
     transition: all .15s;
+    /* 【transition: all .15s】所有可动画的属性变化都用 0.15 秒过渡。
+       【为什么不推荐写 all】因为 all 会把所有属性都加上过渡，
+       有时候会带上不想要的（比如 width 变化也变慢了）。
+       严谨的写法是把要过渡的属性列出来，比如 transition: color .15s, border-color .15s。
+       但这里按钮的 hover 只是改颜色，用 all 也够，属于「图省事」。 */
   }
   .art-btn:hover { border-color: var(--primary); color: var(--primary); }
+  /* 悬停：边框和文字都变主色。 */
+
   .art-btn.on { background: var(--primary-soft); border-color: var(--primary); color: var(--primary-deep); font-weight: 600; }
+  /* 【.on = 已激活】比如「已收藏」。
+     JS 用 classList.toggle('on', 布尔) 来加/删。
+     【为什么要 font-weight:600】光变颜色不够明显，
+     加粗一档能让人一眼看出「这个按钮现在是开着的」。 */
+
   .art-btn.like.on { color: #fb7299; border-color: #fb7299; background: rgba(251,114,153,.12); }
+  /* 【.art-btn.like.on】三个类连写（无空格）= 同一个元素同时有这三个类。
+       这是 CSS 里表达「状态组合」的标准方式：基础类 + 类型类 + 状态类。
+     【优先级怎么算】类选择器每个算 10 分：三个类 = 30 分，
+       比上面 .art-btn.on（20 分）高，所以这条能赢。
+       【记住规则】权重高者胜；权重相同，后写的赢。
+       不是「写得越靠后越优先」—— 那是在权重相同时才成立。
+     【为什么点赞用 B 站粉】粉色是「喜欢」的通用色，
+       跟收藏的金色、举报的红色区分开，用户一眼能认出是哪种操作。 */
+
   .art-btn.fav.on  { color: #f0b400; border-color: #f0b400; background: rgba(240,180,0,.14); }
+  /* 收藏用金色（#f0b400），跟点赞的粉色明显区分。 */
+
   .art-btn.danger:hover { border-color: #e5534b; color: #e5534b; }
+  /* 【.danger】危险操作的类名，红色。
+     【为什么用类名表达「危险」而不是直接用红色】这样所有危险按钮
+     长得一样、改起来只改一处。语义化的命名比堆内联样式好维护得多。 */
+
   .art-back { margin-left: auto; color: var(--text-light); text-decoration: none; font-size: 14px; }
+  /* 「← 全部文章」返回链接。
+     【margin-left:auto】在 flex 布局里把它推到最右边。
+       这是「一行里最后一个元素靠右」最省事的写法，比用 justify-content 方便。 */
   .art-back:hover { color: var(--primary); }
   .art-tip { margin-top: 12px; font-size: 14px; color: var(--text-light); }
+  /* 操作结果的小提示（「已点赞」「举报已提交」）。 */
 
   /* ===== 评论区（B 站那套：头像一列，右边名字/正文/操作）===== */
   .cmt-wrap { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--border); }
+  /* 评论区整体，用上边框跟上面的操作区分开。 */
+
   .cmt-title {
+    /* 「评论 12」这个小标题。 */
     font-size: 16px;
     color: var(--text);
     margin-bottom: 12px;
     position: relative;
+    /* 【position:relative】给下面 ::before 的竖线当坐标原点。
+       【为什么必须写】绝对定位元素会往上找「最近的已定位祖先」，
+       找不到就以整页为参照，那条竖线会跑到屏幕角落去。 */
     padding-left: 12px;
+    /* 左边空出 12px 给竖线让位，文字不会压在线上。 */
   }
   .cmt-title::before {
+    /* 【::before】伪元素：用 CSS 凭空造一个「不存在于 HTML 里」的元素，
+       插在这个元素内容的最前面。
+       【铁律】必须写 content，哪怕内容是空的；不写这个伪元素根本不会生成。 */
     content: "";
     position: absolute;
+    /* 【absolute】绝对定位，相对于上面那个 position:relative 的父元素摆位置。 */
     left: 0; top: 5px;
+    /* 贴着左边；从顶部往下 5px（微调视觉对齐）。 */
     width: 3px; height: 16px;
+    /* 用 3px 宽的方块画一条竖线 —— 比用 border-left 更简单可控。 */
     background: var(--primary-deep);
     border-radius: 2px;
+    /* 稍微磨圆两头，像素级直角看着生硬。 */
   }
+
   .cmt-post {
+    /* 发表评论的框。 */
     padding: 12px;
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -122,6 +255,8 @@
   .cmt-post textarea {
     width: 100%;
     min-height: 64px;
+    /* 【min-height】用 min 不用 height：用户打多了它会自己长高。
+       用 height 就锁死了，写长评论要自己滚，很难受。 */
     padding: 9px 11px;
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -131,13 +266,21 @@
     background: var(--card);
     color: var(--text);
     outline: none;
+    /* 关掉浏览器默认的焦点虚线框 —— 但必须自己补一个（下面 :focus 就补了），
+       否则键盘用户不知道光标在哪，那是无障碍上的错误。 */
     resize: vertical;
+    /* 只允许上下拖动改高度。
+       允许横向拉的话，用户能把它拉出容器撑破布局。 */
   }
   .cmt-post textarea:focus { border-color: var(--primary); }
+  /* 补上的焦点提示。 */
+
   .cmt-post-bar { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
   .cmt-post-bar .n { font-size: 12px; color: var(--text-light); }
+  /* 「0/500」字数。 */
   .cmt-post-bar button {
     margin-left: auto;
+    /* 推到最右边。 */
     padding: 7px 20px;
     border: none;
     border-radius: 8px;
@@ -150,60 +293,140 @@
   .cmt-post-bar button:hover { background: var(--primary-deep); }
 
   .cmt-list { margin-top: 14px; display: flex; flex-direction: column; }
+  /* 【flex-direction:column】flex 默认横排，改成 column 才是从上往下一行一个。
+     不写的话所有评论会横着挤成一排。 */
   .cmt-item { display: flex; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  /* 一条评论：左边头像、右边内容，横排。 */
   .cmt-item:last-child { border-bottom: none; }
+  /* 【:last-child】最后一个孩子。
+     【为什么】最后一条下面再画线，会跟容器底边贴在一起变成双线，难看。 */
   .cmt-side { flex: none; }
+  /* 【flex:none】= flex: 0 0 auto，不放大不缩小、按内容尺寸。
+     【为什么必须写】flex 子元素默认可以收缩，名字太长时头像列会被压扁变形。 */
   .cmt-avatar { display: block; line-height: 0; }
+  /* 【line-height:0】去掉行内元素底部那几像素的「基线空隙」——
+     图片是行内元素，默认按文字基线摆放，底下会多出一点空白，
+     导致头像跟旁边文字对不齐。这是排版里非常常见的小问题。 */
   .cmt-avatar img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--card); border: 1px solid var(--border); }
+  /* 【object-fit:cover】图片填满框、超出裁掉、不拉伸变形。
+     用户头像长宽比五花八门，必须用 cover，否则会变成扁脸。
+     【border-radius:50%】宽高相等时就是正圆。 */
   .cmt-main { flex: 1; min-width: 0; }
+  /* 【flex:1】占满剩余空间。
+     【min-width:0】flex 布局最经典的坑：
+     flex 子元素的 min-width 默认是 auto（不能小于内容的最小宽度），
+     结果长文字会撑破容器、省略号永远不生效。
+     必须显式写 min-width:0，告诉浏览器「允许我缩到比内容还窄」。 */
   .cmt-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  /* 名字那一行：名字 + 铭牌。允许换行防止长名字挤爆。 */
   .cmt-name { font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; transition: color .18s; }
+  /* 用户名。font-weight:500 是「中等粗细」，比正文稍显眼一点但不抢戏。 */
   .cmt-name:hover { color: var(--primary-deep); text-decoration: none; }
   .cmt-plate {
+    /* 名字后面的小铭牌（签名或身份）。 */
     display: inline-block; padding: 0 6px; height: 18px; line-height: 18px;
+    /* 【height + line-height 相等】这是让单行文字在固定高度里竖直居中的老办法。
+       line-height 等于 height 时，文字正好居中 —— 
+       在 flex 普及之前，这是最通用的居中方式，至今仍很好用。 */
     font-size: 11px; border-radius: 4px; vertical-align: 1px;
+    /* 【vertical-align:1px】给行内元素做一点垂直微调。
+       为什么会需要：11px 的小标签跟 13px 的文字放在一行，
+       默认基线对齐会让标签显得偏下，往上挪 1px 视觉上更平。 */
     max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    /* 【单行省略号三件套】必须三个一起用：
+         overflow:hidden      → 超出裁掉
+         text-overflow:ellipsis → 裁掉处显示「…」
+         white-space:nowrap   → 不许换行（不写的话文字会先折行，永远不触发省略号）
+       只写其中一个或两个都没效果，这是新手最常见的困惑。 */
     background: rgba(91, 155, 213, .16); color: var(--primary-deep);
+    /* 淡蓝底 + 深蓝字，表示「普通人」。 */
   }
   .cmt-plate.staff { background: rgba(251, 114, 153, .18); color: #e03e6a; }
+  /* 【.cmt-plate.staff】连写 = 同时有这两个类 → 站长/管理员用粉色。
+     注意这里没有空格；写成 .cmt-plate .staff（有空格）意思就变成「里面的后代」了。 */
   .art-btn.coin { opacity: .75; }
+  /* 【.coin】投币按钮，半透明。
+     【为什么】因为投币功能还没做（点它只是弹个「开发中」提示），
+     半透明是在视觉上暗示「这个功能不完整」。
+     比藏起来好 —— 藏起来用户不知道有这功能；
+     比正常显示好 —— 正常显示用户会以为是坏的。 */
   .cmt-text { margin-top: 4px; font-size: 15px; line-height: 1.7; color: var(--text); white-space: pre-wrap; word-break: break-word; }
+  /* 【white-space:pre-wrap】保留换行和空格，同时还能自动换行。
+     用户评论时换的行，显示时也换行 —— 不写的话所有换行都被压成一个空格。
+     【word-break:break-word】长串没空格的内容（比如一长串字母）也能断开，
+     不会撑破容器。 */
   .cmt-to { color: var(--primary-deep); }
+  /* 「回复 @某某 :」那部分，用主色区分，一眼看出这条在回谁。 */
   .cmt-foot { display: flex; align-items: center; gap: 2px; margin-top: 6px; flex-wrap: wrap; }
+  /* 底部操作行：时间、点赞、回复、三个点、楼层号。 */
   .cmt-time { font-size: 12px; color: var(--text-light); margin-right: 8px; }
   .cmt-floor { margin-left: auto; font-size: 12px; color: var(--text-light); }
+  /* 楼层号（#12）推到最右边。
+     【为什么不用 margin-left:auto 写在一个固定元素上】因为上面的 like/reply/menu
+     是动态生成的（可能有也可能没有），只有 floor 是每次都有的，
+     所以把「推右」的责任交给它最可靠。 */
   .cmt-btn {
+    /* 评论下面的小文字按钮（♥ 3 / 回复 / ⋯）。 */
     padding: 4px 8px;
     border: none;
     background: none;
+    /* 无边框无底色，像纯文字 —— B 站那种风格。 */
     font-family: inherit;
     font-size: 13px;
     color: var(--text-light);
     cursor: pointer;
     border-radius: 6px;
+    /* 【为什么无底色还要圆角】因为 hover 时要加底色，
+       提前把圆角设好，hover 时就不会突然出现直角。 */
   }
   .cmt-btn:hover { background: var(--primary-soft); color: var(--primary-deep); }
   .cmt-btn.on { color: #fb7299; background: rgba(251, 114, 153, .12); }
+  /* 已点赞状态。 */
   .cmt-btn.danger:hover { color: #e5534b; background: rgba(229, 83, 75, .12); }
+  /* 危险操作（删除/举报）悬停时变红。
+     【为什么要单独写 .danger:hover】因为上面的 .cmt-btn:hover 会把颜色改成主色，
+       这条要压住它。两个选择器权重相同（都是两类的组合），
+       所以靠「后写的赢」—— 这条必须排在 .cmt-btn:hover 之后才生效。 */
+
   /* 「⋯」三个点菜单 */
   .cmt-more { position: relative; display: inline-block; }
+  /* 【position:relative】给下面那个绝对定位的菜单当坐标原点。
+     【display:inline-block】因为它是 <span>（行内元素），
+     为了让里面的绝对定位元素有正确的参照尺寸，需要变成 inline-block。 */
   .cmt-menu {
     position: absolute;
     right: 0; top: calc(100% + 4px);
+    /* 【calc(100% + 4px)】计算式：100%（父元素高度）+ 4px 空隙。
+       【加号两边必须有空格】**这是 CSS 的硬性规定**：
+         正确 calc(100% + 4px)
+         错误 calc(100%+4px)   ← 浏览器直接忽略这条声明
+       原因是 CSS 要把 +4px 和 +4 区分开（负数），没空格没法解析。
+       这个坑非常隐蔽，出错时样式会「静默失效」，控制台也不报错。
+     【right:0】菜单右边缘贴着按钮右边，不会跑出屏幕。 */
     min-width: 120px;
     z-index: 40;
+    /* 【z-index】层级，数字大的盖在上面。
+       40 是为了压住评论内容，但又在导航（100）和手柄（120）之下。 */
     padding: 4px;
     display: none;
+    /* 默认隐藏。 */
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 10px;
     box-shadow: none;
   }
   .cmt-menu.show { display: block; }
+  /* 【为什么用 display 切换而不是 opacity:0】
+     opacity:0 的元素只是透明 —— 它还在那儿，还能点，还能被 Tab 到。
+     用 display 才是真的不参与任何交互。
+     （这个项目整体是扁平风格，所以 box-shadow 特意设成了 none。） */
   .cmt-menu button {
+    /* 菜单里每一项。 */
     display: block;
     width: 100%;
+    /* 占满菜单宽度，整个区域都能点。 */
     text-align: left;
+    /* 按钮文字默认居中，改成左对齐 —— 菜单项左对齐更像菜单。 */
     border: none;
     background: none;
     font-family: inherit;
@@ -217,34 +440,72 @@
   .cmt-menu button.danger { color: #e5534b; }
   .cmt-menu button.danger:hover { background: rgba(229, 83, 75, .12); }
   .cmt-children { margin-top: 10px; }
+  /* 楼中楼回复的容器。 */
   .cmt-item.is-reply { gap: 8px; padding: 10px 0 0; border-bottom: none; }
+  /* 【.is-reply】标记「这是回复不是主楼」。
+     【border-bottom:none】回复之间不要分隔线，
+     否则一长串回复会变成一堆横线，看起来很乱。
+     【padding 上 10px、下 0】用上内边距当「跟上面那条的间隔」，
+     下边距交给内容自己撑。 */
   .cmt-item.is-reply .cmt-avatar img { width: 26px; height: 26px; }
   .cmt-item.is-reply .cmt-text { font-size: 14px; margin-top: 2px; }
+  /* 回复里所有元素都小一号，视觉上「次一级」。
+     【为什么用后代选择器一层层覆盖，而不是加新类名】
+     因为 HTML 是 JS 拼出来的，少加一个类就少一处出错机会；
+     用 CSS 后代选择器按结构缩小，HTML 完全不用改。 */
+
   .cmt-empty { padding: 26px 10px; text-align: center; font-size: 14px; color: var(--text-light); }
+  /* 空状态 / 加载中 / 加载失败，共用一套。 */
   .cmt-reply-box { margin: 8px 0 2px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--field); }
+  /* 展开的回复输入框。 */
   .cmt-reply-box textarea {
     width: 100%; min-height: 54px; padding: 8px 10px;
     border: 1px solid var(--border); border-radius: 8px;
     font-family: inherit; font-size: 14px; line-height: 1.6;
     background: var(--card); color: var(--text); outline: none; resize: vertical;
+    /* 一行写多个声明只为紧凑。但这一行已经很长了，超过 100 字符就该换行。 */
   }
   .cmt-reply-actions { display: flex; gap: 8px; margin-top: 8px; }
+  /* 「发送 / 取消」两个按钮。 */
   .cmt-reply-actions button {
     padding: 5px 16px; border: 1px solid var(--border); border-radius: 8px;
     background: var(--card); color: var(--text-light);
     font-family: inherit; font-size: 13px; cursor: pointer;
   }
   .cmt-reply-actions button.primary { background: var(--grad-primary); border-color: var(--primary); color: #fff; }
+  /* 【.primary】主操作按钮。
+     【为什么要有「主/次」之分】一个区域里只该有一个最突出的操作。
+       发送是主（有底色），取消是次（无底色）—— 
+       用户扫一眼就知道该点哪个。 */
   .cmt-reply-actions button.primary:hover { background: var(--primary-deep); }
 </style>
 </head>
 <body>
+<!-- 从这里开始才是用户看得见的内容。 -->
+
   <div id="navbar"></div>
+  <!-- 导航栏占位。真正的导航由 js/nav.js 加载后塞进来。 -->
 
   <section style="margin-top:36px;">
+    <!-- 【section】语义标签，表示独立内容区块。外观跟 div 一样，
+         区别只是「告诉人和搜索引擎这里是什么」。 -->
     <div class="card">
+      <!-- .card 是公共样式里的卡片外观：圆角、半透明底、细边框。 -->
       <div id="box">
+        <!-- 【这整个 div 都是「占位 + 渲染目标」】
+             文章标题、正文、按钮、评论区全都由 JS 通过 box.innerHTML 一次性生成。
+             【为什么整页都靠 JS 生成，而不是写死在 HTML 里】
+             因为文章内容是动态的（从数据库读），必须 JS 来填。
+             但这样做的代价是：JS 没加载成功时，用户只能看到一个「加载中…」，
+             而且搜索引擎也抓不到内容（SEO 不友好）。
+             【更好的做法】服务端渲染（SSR）或静态生成（SSG），
+             让 HTML 里一开始就有内容。本站规模小，用不着那么复杂。 -->
         <div class="art-empty" style="padding:40px;text-align:center;color:var(--text-light)">加载中…</div>
+        <!-- 【注意这里用了 .art-empty 这个类，但上面的样式里根本没定义它！】
+             这是个小疏漏：类名写了但没对应样式，所以实际上不起作用，
+             全靠行内 style 撑着。
+             读代码时遇到这种「用了不存在的类」不用担心 —— 它只是没效果，不会报错。
+             （CSS 就是这么宽容：选择器匹配不到任何元素，静静地什么都不做。） -->
       </div>
     </div>
   </section>
@@ -252,32 +513,95 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+  <!-- 依次引入 5 个脚本，顺序绝不能乱，每个都依赖前一个：
+         config.js        → 全站配置，挂到 window 上
+         bg.js            → 背景图/视频（IndexedDB 取，零流量）
+         supabase-js.js   → Supabase 官方 SDK
+         sb.js            → 业务层，提供 window.SBAPI
+         nav.js           → 导航栏 + 登录弹窗 + 信箱
+       【为什么都放 body 末尾】浏览器解析到 script 会停下先执行它。
+       放在末尾时上面的 HTML 已解析完，脚本里 getElementById 才找得到元素。
+       放 head 里执行的话元素还不存在，拿到的全是 null。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
+/* ============ 1. 从地址栏取文章 id ============ */
 const id = parseInt(new URLSearchParams(location.search).get('id'), 10);
+/* 【三层嵌套，从里往外读】
+   ① location.search        → 地址里问号开始那段，例如 "?id=3"
+   ② new URLSearchParams(...) → 解析成参数表
+   ③ .get('id')             → 取 id 的值，是字符串 "3"；不存在时是 null
+   ④ parseInt(值, 10)        → 转整数
+   【第二个参数 10 必须写】它是进制。
+     不写的话以 0 开头的字符串会被当成八进制（"010" 变成 8），
+     这是 JS 出了名的历史坑。永远写 10。
+   【没有 id 时得到 NaN】下面 load() 里用 if (!id) 判断 —— 
+     NaN 是假值，所以会被拦下来。 */
 const box = document.getElementById('box');
+/* 【const】声明不可重新赋值的变量。
+   规则：默认 const，确定要改才 let。读代码的人一眼知道它不会变。
+   【注意】const 管的是「不能整体换成另一个对象」，
+   box.innerHTML = '...' 这种「改内容」是完全允许的。 */
 
 let article = null;
+/* 【为什么要把文章数据存成全局变量】
+   因为点赞、删除、举报这些操作都需要用到 article.id，
+   而且点赞后要更新 article.likedByMe —— 
+   存一份在内存里，各处都能读写同一份数据。
+   【这是最简单的「状态管理」】数据放一处，谁要用谁来读。
+   数据多了之后会变得很难维护，那时候才需要 Vue/React 那类框架。 */
 let loggedIn = false;
+/* 是否已登录。初始 false，loadMe() 会去查会话然后改它。 */
 
+/* ============ 2. 两个工具函数 ============ */
 function escapeHTML(s) {
+  /* 【XSS 跨站脚本攻击】
+     如果有人把文章标题写成一段「图片标签 + onerror 里塞脚本」的代码，
+     网站直接当 HTML 插进页面，浏览器会真的解析并执行 ——
+     攻击者就能偷登录凭证、冒充你操作。
+     唯一的根治办法：所有用户输入在显示前都转义，
+     把尖括号引号换成「实体」（< 变成 &lt;），浏览器就只当普通文字。
+     【必须转 5 个字符】< > & " ' —— 漏一个都可能被绕过。 */
   return String(s == null ? '' : s)
+  /* 【s == null】宽松比较同时挡住 null 和 undefined（undefined == null 为 true）。
+     【String(...)】强制转字符串，因为下面 .replace 是字符串方法，
+     传数字或布尔值会直接报错。 */
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    /* 【/&/g】正则：斜杠包起来是正则，g 表示「全局」——替换所有出现的地方。
+       不加 g 只替换第一个，剩下的漏掉，转义就白做了。
+       【&amp; 必须第一个转】因为 & 是实体编号的开头。
+       如果先转 < 变 &lt;，那个 & 再被转一次就成了 &amp;lt;，
+       页面上会原样显示 "&lt;" 这几个字符。顺序错了整套就废了。 */
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  /* 引号也要转：内容往 HTML 属性里塞时（比如 title="..."），
+     属性里的引号不转就能提前闭合属性、注入新属性。
+     【&#39; 是什么】HTML 实体的数字写法：# + 字符的 Unicode 码点。
+     单引号码点是 39。 */
 }
 function requireLogin() {
+  /* 检查是否登录，没登录就把登录框怼到用户脸上。
+     返回 true = 可以继续；false = 已经拦下来了。 */
   if (loggedIn) return true;
   const m = document.getElementById('loginModal');
   if (m) m.classList.add('show'); else alert('请先登录');
+  /* 【classList.add('show')】加上 show 类，CSS 里会把 display:none 改成 flex。
+     【为什么要 else】登录弹窗不一定存在（nav.js 没加载成功时），
+     有弹窗就弹，没有就只能用 alert 兜底。 */
   return false;
 }
 
+/* ============ 3. 渲染整篇文章 ============ */
 function render() {
+  /* 【这个函数干的事很直接：把 article 这个数据对象变成一整页 HTML】
+     所有内容都是「拼字符串 → 塞进 innerHTML」。
+     这叫「字符串模板渲染」，最简单也最直观的方式。 */
   const a = article;
+  /* 【起个别名】下面要写几十次 a.xxx，比 article.xxx 短一半。 */
   document.title = a.title + ' · 乘法';
+  /* 【改浏览器标签页标题】让用户一眼看出「我打开的是哪篇文章」。
+     对开了很多标签页的人来说，这个细节很重要。 */
   box.innerHTML = `
     <h1 class="art-title">${escapeHTML(a.title)}</h1>
     <div class="art-sub">
@@ -312,122 +636,393 @@ function render() {
       <div class="cmt-list" id="cmtList"><div class="cmt-empty">加载中…</div></div>
     </div>`;
 
+  /* 【重要提醒】从反引号开始到结束，中间全是「字符串内容」而不是代码。
+     在这里面写双斜杠注释或斜杠星号注释，会被当成文字原样显示到页面上 ——
+     本项目之前实实在在踩过这个坑。要注释只能写在反引号外面。
+
+     【这段模板里有几个关键点，逐个说】
+
+     ① ${a.uid ? `...` : `...`} —— **模板字符串嵌套模板字符串**
+        外层用反引号，里面的三元表达式又各用一个反引号。
+        JS 允许这样嵌套，因为内层的反引号会被正确配对。
+        逻辑：有 uid 就渲染成链接（能点进作者主页），没 uid 就渲染成纯文字。
+        【为什么要区分】没 uid 的话 href 会变成 "/profile/?uid=null"，
+        点进去是 404，比不能点更糟。
+
+     ② ${a.uidNo || a.uid} —— 优先用用户编号（1、2、3 这种短的），
+        没有就退回 uuid 字符串。
+
+     ③ ${escapeHTML(SBAPI.fmtTime(a.updated_at || a.created_at))}
+        优先用「更新时间」，没有就用「创建时间」。编辑过的文章显示修改时间更合理。
+        【SBAPI.fmtTime】是公共的时间格式化函数（把时间戳变成「3 分钟前」）。
+        【为什么它的结果也要转义】因为它返回的是字符串，
+        虽然理论上不含 HTML，但「多层防御」总比「假设它一定安全」好。
+
+     ④ ${a.content || '<p ...>（这篇还没有正文）</p>'}
+        【这一处故意没转义，是有意为之】
+        因为 a.content 存的就是用户在编辑器里排好版的 HTML（带加粗、图片、段落），
+        如果转义了，用户会看到一堆 <p><strong> 这样的原始标签文字。
+        【那不怕 XSS 吗】这里的内容来自数据库，是作者自己写的。
+        作者给自己下毒没意义（他本来就是内容的拥有者）。
+        但如果以后要做「转载别人的文章」或「多人协作」，这里必须做 HTML 净化 ——
+        服务端要过滤掉 <script>、onerror 这类危险内容。
+        【这是本站唯一一处「故意不转义」的地方，值得记住】
+
+     ⑤ ${a.likedByMe ? ' on' : ''} —— 已点赞就多加一个 on 类（激活样式）。
+        注意 ' on' 前面那个空格绝对不能少，
+        否则会拼成 class="art-btn likeon"，变成一个不存在的类名，样式全丢。
+
+     ⑥ ${a.canEdit ? `...` : ''} —— 只有作者本人（或管理员）才显示编辑/删除按钮。
+        【注意】这只是「界面上显不显示」。
+        真正的权限控制在数据库的 RLS 策略里 —— 
+        否则用户改一下网页代码就能给自己加个删除按钮，
+        点了会被数据库拒绝，但至少界面上不该给他这个错觉。
+
+     ⑦ id="likeN" / id="favN" / id="cmtText" 等 —— 
+        这些是给后面「局部更新」用的锚点。
+        点赞成功后只需要改 likeN 的数字，不用整页重画。
+        这就是「最小更新范围」的思路：能改一个元素就别重画整个页面。 */
+
   bindComments();
+  /* 【渲染完必须重新绑事件】
+     因为 box.innerHTML = ... 把旧的 DOM 全销毁了，
+     旧元素上的所有事件监听也跟着没了。
+     所以每次渲染之后都要重新给新元素绑一次。
+     【这就是「手动渲染」的麻烦之处】
+     Vue/React 那种框架帮你自动处理这些，但代价是要学一整套东西。
+     页面简单的时候，手动绑反而更直白。 */
 }
 
 function setTip(t) { const el = document.getElementById('tip'); if (el) el.textContent = t || ''; }
+/* 【一行函数：设置提示文字】
+   【用 textContent 而不是 innerHTML】安全 —— 哪怕内容里有 HTML 标签也当文字显示。
+   【t || ''】传空值时兜底成空字符串，不会显示 "undefined"。
+   【为什么每次都要重新 getElementById】因为 render() 会重建 DOM，
+   存下来的引用会失效（指向一个已经被删除的旧元素）。
+   这种「每次都重新查」的写法虽然慢一点点，但永远不会拿到过期的引用。 */
 
+/* ============ 4. 加载文章数据 ============ */
 async function load() {
   if (!id) { box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">缺少文章 id</div>'; return; }
+  /* 【!id】id 是 NaN 时也是假值 —— 
+     说明地址栏没带 ?id=，直接把内容清空并提示。
+     比显示「加载失败」更准确 —— 这不是失败，是压根没给参数。 */
   try {
     const d = await SBAPI.getArticle(id);
+    /* 【await】等异步操作出结果。它只暂停这个函数，不阻塞页面 —— 
+       页面照常能点能滚，这叫「非阻塞」。 */
     if (!d.ok) { box.innerHTML = `<div style="padding:40px;text-align:center;color:var(--text-light)">${escapeHTML(d.error || '加载失败')}</div>`; return; }
+    /* 【d.error 也套了 escapeHTML】因为错误信息有可能是后端拼进来的、
+       包含用户输入的内容（比如「找不到文章《xxx》」里的 xxx）。
+       所有往外显示的东西都转义，是「防守到底」的态度。 */
     article = d;
+    /* 【把整个返回对象存下来】里面除了文章字段，还有 canEdit / likedByMe /
+       favedByMe / likes / favs 这些「跟当前用户相关的计算结果」。
+       它们是由后端（或 RPC）算好的，前端直接用，不自己推导。 */
     render();
+    /* 数据到手才开始画。 */
   } catch {
+    /* 【catch 后没写 (err)】不关心具体错误，统一提示。 */
     box.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-light)">加载失败，刷新试试</div>';
+    /* 【好提示的标准】不只说「出错了」，还告诉用户「能怎么办」。
+       这里给了「刷新试试」这个用户自己能做的动作。 */
   }
 }
 
+/* ============ 5. 文章按钮的点击（事件委托） ============ */
 box.addEventListener('click', async e => {
+  /* 【事件委托】
+     【问题】box 里的按钮是动态渲染的，每次 render() 都全部销毁重建。
+     如果给每个按钮单独绑监听，每渲染一次就要绑十几个，旧的全变垃圾。
+     【解法】把监听器绑在**不会变的父容器**（box）上，
+     利用「事件冒泡」—— 点任何子按钮，事件都会往上冒泡到 box。
+     然后在回调里判断 e.target 是哪个按钮。
+     【好处】① 只绑一个监听器 ② 新生成的按钮自动继承这个监听 
+             ③ 销毁旧元素时不用手动解绑
+     【注意】这里绑在 box 上，但 render() 只是替换 box 的**内容**，
+     box 元素本身没变 —— 所以这个监听器一直有效，不会因为重渲染而失效。
+     这是选对绑定目标的关键。 */
   const btn = e.target.closest('[data-act]');
+  /* 【e.target】实际被点到的元素。
+     【为什么要 closest】因为按钮里有文字、有图标（♥ 和数字是两个 span），
+     用户点到的可能是那个 span 而不是 button。
+     【[data-act]】属性选择器：有 data-act 属性的元素。
+       用属性筛选而不是只写 'button'，是为了排除评论区那些用 data-a 的按钮
+       （它们走另一个监听器，见下面）。
+     【这个写法几乎是事件委托的标准模板，值得记住。】 */
   if (!btn || !article) return;
+  /* 点到的地方不是操作按钮，或者文章数据还没加载好 → 什么都不做。 */
   const act = btn.dataset.act;
+  /* 【dataset.act】读 data-act 的值。
+     【命名转换】data-act → dataset.act；
+       data-user-id → dataset.userId（连字符转驼峰，这个容易忘）。 */
 
   if (act === 'edit') { location.href = '/pages/write.html?id=' + article.id; return; }
+  /* 跳到编辑页，把文章 id 通过问号参数带过去。
+     【location.href = 地址】在当前标签页跳转。 */
 
   if (act === 'coin') { setTip('投币系统还在做，先占个位 🪙'); return; }
+  /* 【占位功能】按钮在那儿，但功能没做。
+     【为什么放个按钮而不是藏起来】UI 上先留位置，等做好了直接接上，
+     不用改布局。但代价是用户点了会有点被骗的感觉 —— 
+     所以文案要诚实（「还在做」），不要假装能用。 */
 
   if (!requireLogin()) return;
+  /* 【登录闸门】上面那两个（编辑跳转、投币提示）不需要登录，
+     从这里往下都是要改数据的操作，必须先登录。 */
 
   if (act === 'like' || act === 'fav') {
+    /* 点赞和收藏逻辑几乎一样，合并处理。
+       【为什么能合并】因为都是「切换状态 + 更新数字 + 更新本地数据」三步，
+       区别只在调哪个接口、改哪个元素。 */
     const fn = act === 'like' ? SBAPI.toggleArticleLike : SBAPI.toggleArticleFav;
+    /* 【把函数存在变量里】
+       这里 fn 变成了「一个函数」，下面 fn(article.id) 就是调用它。
+       【这是 JS 里函数是一等公民的体现】函数可以像数字、字符串一样被赋值、传递。
+       【好处】不用写 if (act === 'like') { ... } else { ... } 两段几乎一样的代码。
+       【关键词】这种「按条件选函数」的写法，配合映射表用得更广：
+         const MAP = { like: fnA, fav: fnB };  MAP[act](id) */
     const d = await fn(article.id);
     if (!d.ok) return alert(d.error || '操作失败');
     btn.classList.toggle('on', d.on);
+    /* 【.classList.toggle(类名, 布尔值)】
+       第二个参数 true → 加上 on 类；false → 去掉。
+       【为什么用两参数版】单参数版是「有就删没就加」，
+       它会假设当前状态跟你想的反着来。传第二个参数能强制设定，更可靠。
+       【d.on】后端返回的**新状态**（true = 现在点了赞）。 */
     if (act === 'like') { document.getElementById('likeN').textContent = d.count; article.likedByMe = d.on; }
     else { document.getElementById('favN').textContent = d.count; article.favedByMe = d.on; }
+    /* 【两件事】
+       ① 更新页面上的数字（只改那个 span，不整页重画 —— 这叫「最小更新范围」）
+       ② 更新内存里的 article 数据（保持「数据和界面一致」，
+          下次渲染时能显示正确的状态）
+       【为什么要同步内存】因为如果只改界面不改数据，
+       下次任何原因触发 render()，界面就会退回旧状态 —— 用户会以为「点赞丢了」。
+       「数据是唯一真相，界面是数据的投影」这条原则，是前端开发的根本。 */
     setTip(d.on ? (act === 'like' ? '已点赞' : '已收藏') : (act === 'like' ? '取消点赞' : '取消收藏'));
+    /* 【三重三元运算】能读但不好读。
+       逻辑是：先判断是新点还是取消，再判断是点赞还是收藏。
+       【更清楚的写法】用一个变量先定动作词：
+         const verb = act === 'like' ? '点赞' : '收藏';
+         setTip((d.on ? '已' : '取消') + verb);
+       这是「可读性优化」的典型例子 —— 代码行数一样，但一眼就懂。 */
     return;
   }
 
   if (act === 'report') {
     const reason = prompt('说说这篇文章哪里有问题（可以留空）：', '');
+    /* 【prompt(提示, 默认值)】弹输入框。
+       点确定 → 返回字符串（可能为空）；点取消 → 返回 null。 */
     if (reason === null) return;
+    /* 【=== null】必须用严格相等。
+       写成 if (!reason) 的话，用户点确定但没写理由也会被当成取消 —— 逻辑就错了。
+       （这个功能允许不写理由，所以空字符串是合法的。） */
     const d = await SBAPI.reportArticle(article.id, reason.trim());
+    /* 【.trim()】去掉首尾空格，用户只打了空格等于没写。 */
     if (!d.ok) return alert(d.error || '举报失败');
     setTip('举报已提交，管理员会看的');
+    /* 明确告诉用户「接下来会发生什么」，比只说「成功」更有安心感。 */
     return;
   }
 
   if (act === 'del') {
     if (!confirm('确定删掉这篇文章吗？\n里面的图片视频也会一起删掉，删了找不回来。')) return;
+    /* 【confirm(文字)】弹出「确定/取消」，确定返回 true，取消返回 false。
+       【\n】换行符，让提示分段更好读。
+       【为什么要弹确认】删除是不可逆操作，必须给用户一次后悔的机会。
+       这是交互设计的基本原则：破坏性操作要有确认。
+       【文案里特意说了「图片视频也会一起删掉」】
+       因为用户可能不知道这个连带后果，知道了才可能改主意。 */
     const d = await SBAPI.deleteArticle(article.id);
     if (!d.ok) return alert(d.error || '删除失败');
     alert('已删除');
+    /* 【为什么删完要 alert 一下】因为马上要跳转，不提示的话
+       用户会觉得「怎么突然跳走了」。 */
     location.href = '/pages/articles.html';
+    /* 跳回列表页。 */
   }
 });
 
 /* ================= 评论区 ================= */
+/* 【从这里开始是评论部分，跟上面的文章部分是两套独立逻辑】
+   为什么要分开：文章只有一个，评论有几十条；文章的按钮在 box 里，
+   评论的按钮在 cmtList 里。用两个独立的监听器，互不干扰，代码也更好读。 */
+
 let me = null;
+/* 当前登录的我（{uid, name, role}）。null 表示没登录。 */
 let userAvatars = {};      // uid -> 头像地址
+/* 【头像缓存表】以减少请求：先把所有用户的头像拉一遍，
+   渲染评论时直接查表，不用为每条评论单独请求一次。
+   这就是避免「N+1 查询问题」——拿到 20 条评论就发 20 个头像请求，那是灾难。 */
 let cmts = [];
+/* 所有评论的数据（包含主楼和回复）。 */
 let openReply = null;
+/* 【只存一个 id】表示「同一时刻只允许开一个回复框」。
+   如果允许开好几个，用户可能在一个里写一半又去写另一个，体验混乱。 */
 let cmtBound = false;
+/* 【防止重复绑定的闸门】
+   【注意这里有个隐患】这个标志一旦设成 true 就再也不会变回来。
+   如果哪天代码里多了一处调用 render()（重建了整个 DOM），
+   新的 cmtList 元素就拿不到事件监听器了 —— 评论区的所有按钮会集体失效。
+   目前 render() 只在首次加载时调用一次，所以还不会出问题。
+   【更稳的写法】要么去掉这个闸门（每次渲染都重新绑），
+   要么改成用「元素是否已绑定」来标记（比如 el.dataset.bound = '1'），
+   这样换元素后自然就重新绑了。这是值得记住的一个坑。 */
 
 function cmtEsc(s) {
+  /* 【又一个转义函数，跟上面的 escapeHTML 一模一样】
+     【为什么不复用】因为 escapeHTML 定义在这个脚本块的顶部，
+     它是全局的，理论上能直接用。
+     但作者在这里写了一份副本 —— 大概是「评论部分独立开发」时留下的。
+     【这种重复不算好习惯】两个函数如果哪天要改转义规则，
+     很容易只改一个、漏掉另一个。理想做法是只保留一份。
+     （我看到这种重复代码时，会先不动它 —— 因为合并有风险，
+       万一两处行为有细微差别就会引入 bug。改成「让 cmtEsc 调用 escapeHTML」最安全。） */
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 async function loadMe() {
+  /* 取当前登录的是谁。 */
   const s = await SBAPI.getSession();
+  /* 【session 会话】登录后本地存的凭证。没有就是没登录。 */
   if (!s) { loggedIn = false; return; }
+  /* 【这里只改了 loggedIn，没清 me】
+     如果之前是登录状态、现在会话过期了，me 还留着旧数据。
+     影响不大（因为 loggedIn 是 false，所有需要登录的操作都会被拦），
+     但严格说应该 me = null 一起清掉。属于「无害但不够严谨」的小疏漏。 */
   const d = await SBAPI.me();
+  /* 有心跳还得去服务器验证，因为本地存的凭证可能是过期的。 */
   if (d.ok) { me = { uid: d.uid, name: d.username, role: d.role }; loggedIn = true; }
+  /* 【只挑三个字段存】多余字段一概不带，减少内存占用，也避免误用。 */
   else loggedIn = false;
+  /* 【else 没写花括号】只有一句时可以省。多了必须加。 */
 }
 async function loadAvatars() {
+  /* 一次性把所有用户的头像拉下来，存成「uid → 头像地址」的表。 */
   try {
     const d = await SBAPI.getAllUsers();
     if (d.ok) d.list.forEach(u => { userAvatars[u.id] = u.avatar_url; });
+    /* 【用对象当字典】键是 uid，值是头像地址。
+       【为什么不用 Map】对象字面量的语法更短（userAvatars[uid] 就能读），
+       而且这里的键都是字符串形式，没必要用 Map 的高级特性。 */
   } catch { /* 默认头像 */ }
+  /* 【连错误都不处理】因为头像拿不到不影响任何功能，
+     所有头像会走 fixAvatar 的兜底返回默认图。
+     这种「非关键路径的失败可以静默」的判断很重要 —— 不是所有错误都值得弹提示。 */
 }
 function fixAvatar(a) {
+  /* 把数据库里存的头像值，变成一个浏览器能加载的完整地址。 */
   if (!a) return '/avatar-default.jpg';
+  /* 空值 → 默认头像。 */
   if (a.startsWith('data:') || /^https?:\/\//.test(a)) return a;
+  /* 两种「已经是完整地址」的情况，原样返回：
+       ① data: 开头 → 内嵌的 base64 图片
+       ② http:// 或 https:// 开头 → 完整网络地址
+     【/^https?:\/\//】拆开看：
+       ^        → 必须从字符串开头匹配
+       https?   → http 后面 s 可有可无（? 表示 0 或 1 次）
+       :        → 冒号
+       \/\/     → 两道斜杠。斜杠在正则里必须写 \/ 转义，
+                  因为普通斜杠是正则的分隔符。
+     【注意这里没有白名单校验】跟 board.html 的 safeAvatar 不同，
+     这个函数允许任意 http 地址。风险略高一点（理论上可以指向外部追踪像素），
+     但因为是本站自己存的头像字段，可控。 */
   return (window.MEDIA_BASE || '').replace(/\/+$/, '') + '/' + a.replace(/^\/+/, '');
+  /* 【这是「安全拼路径」的经典写法，两个 replace 各管一头】
+     【(window.MEDIA_BASE || '')】
+       拿媒体基地址（比如 https://cdn.example.com），没配置就空字符串（用相对路径）。
+     【.replace(/\/+$/, '')】去掉末尾所有斜杠（$ = 结尾，\/+ = 一个或多个斜杠）。
+       不去的话：基地址是 ".../" 加上 "/abc.jpg" 会变成 "...//abc.jpg" 双斜杠，
+       多数服务器能忍，但有些严格的会 404。
+     【a.replace(/^\/+/, '')】去掉开头所有斜杠（^ = 开头）。
+     【合起来】不管两边带不带斜杠，拼出来永远只有一个斜杠。
+       这比用 if/else 判断四种组合干净得多。 */
 }
 
 /* 铭牌：有签名显示签名，没签名才显示身份；站长/管理员红色，普通人不显示 */
 function plateHTML(c) {
   const staff = c.role === 'owner' || c.role === 'admin';
+  /* 【===】三个等号是严格相等：值相等**并且**类型相等。
+     1 == '1' 是 true（宽松比较会偷偷转类型），1 === '1' 是 false。
+     规则：永远用三个等号，两个等号是 bug 制造机。 */
   const bio = String(c.bio || '').trim();
+  /* 【String(...)】强制转字符串，防止 bio 是数字时 .trim() 报错。
+     【.trim()】去首尾空格 —— 有人签名只打了空格，
+     直接显示会是一个空色块，很难看。trim 后变空字符串（假值）就走下面分支了。 */
   if (bio) {
     const t = bio.length > 20 ? bio.slice(0, 20) + '…' : bio;
+    /* 【三元】超过 20 个字就截断加省略号，否则原样。
+       【.slice(0, 20)】从第 0 位取到第 20 位（不含第 20 位），就是前 20 个字符。
+       【为什么截断】签名可能很长，全显示会把整个名字行撑爆。
+       但 title 属性里放完整内容，鼠标悬停能看到全文 —— 这叫「优雅降级」。 */
     return `<span class="cmt-plate${staff ? ' staff' : ''}" title="${cmtEsc(bio)}">${cmtEsc(t)}</span>`;
   }
   if (c.role === 'owner') return '<span class="cmt-plate staff">站长</span>';
   if (c.role === 'admin') return '<span class="cmt-plate staff">管理</span>';
+  /* 【为什么有签名就不显示「站长」了】
+     因为签名信息量更大。用户更想看到「这个人写了什么签名」，
+     而不是「他是站长」—— 站长身份可以从颜色（staff 粉色）看出来。 */
   return '';
+  /* 普通用户又没签名 → 不显示铭牌。
+     【返回空字符串而不是 null】因为上面的模板会直接 ${plateHTML(c)} 插进来，
+     null 会被转成字符串 "null" 显示出来，空字符串才是「什么都不显示」。 */
 }
 
 function headHTML(c) {
+  /* 生成一条评论的「左侧头像 + 右侧顶部名字」。
+     【注意这个函数没有闭合标签】**它故意只输出开标签，不输出闭标签**，
+     由调用方（replyItem / topItem）在末尾补上 </div></div>。
+     【为什么要这么设计】因为头像+名字在「主楼」和「回复」里的位置完全一样，
+     但后面的内容不同（回复有「@某某」前缀，主楼没有）。
+     拆开成「头 + 可变内容 + 尾」是最自然的写法。
+     【代价】**可读性很差**。你在 topItem 里看到孤零零的 </div></div> 时，
+     必须回头数 headHTML 开了几个标签才能确定配不配得上。
+     更容易出错，也不容易改。更好的做法是让 headHTML 返回完整的闭合结构。 */
   if (c.uid && c.avatar) userAvatars[c.uid] = c.avatar;   // 评论接口已带回头像，省一次请求
+  /* 【这行是个小优化】评论列表接口本身就带了每条评论作者的头像，
+     所以顺手存进缓存表。这样就算 loadAvatars() 失败了，
+     评论里的头像照样能显示（因为被这条评论补上了）。 */
   const av = fixAvatar(userAvatars[c.uid]);
   const img = `<img src="${av}" alt="">`;
+  /* 【alt=""】空替代文字。
+     【为什么空着】因为头像旁边就有名字，信息不丢失。
+     读屏软件遇到空 alt 会直接跳过这张图，不会念一句「图片」打断阅读。
+     【判断标准】这张图删掉，信息有没有丢？没丢就写空 alt。 */
   const a = c.uid ? `<a class="cmt-avatar" href="/profile/?uid=${c.uidNo || c.uid}">${img}</a>` : `<span class="cmt-avatar">${img}</span>`;
+  /* 有 uid → 包成链接能点头像跳主页；没有 → 用 span 包着不给点。
+     【为什么没有 uid 也要包一层】因为排版要靠 .cmt-avatar 类控制 38px 尺寸和圆形。
+     结构统一，两种情况的样式才一致。 */
   const name = c.uid ? `<a class="cmt-name" href="/profile/?uid=${c.uidNo || c.uid}">${cmtEsc(c.name)}</a>` : `<span class="cmt-name">${cmtEsc(c.name)}</span>`;
   return `<div class="cmt-side">${a}</div><div class="cmt-main"><div class="cmt-top">${name}${plateHTML(c)}</div>`;
+  /* 【返回值开三个标签】
+       <div class="cmt-side"> → 立即闭合 </div>
+       <div class="cmt-main"> → **不闭合**
+       <div class="cmt-top">  → 立即闭合 </div>
+     所以调用方只需要在最后补两个 </div>（一个闭 cmt-main、一个闭 cmt-item）。
+     数清楚了就不容易出错。 */
 }
 
 function footHTML(c, isReply) {
+  /* 生成评论底部那一行操作：时间、点赞、回复、三个点菜单、楼层号。 */
   const mine = me && c.uid != null && c.uid === me.uid;
+  /* 【三段逻辑】
+       ① me 存在（登录了）
+       ② c.uid 不是 null（这条评论有作者 id）
+       ③ 两者 uid 相同
+     【为什么要 c.uid != null 判断】因为匿名评论的 uid 是 undefined，
+     如果 me.uid 也碰巧是 undefined，`undefined === undefined` 会是 true，
+     于是把别人的匿名评论当成自己的 —— 那就会显示「删除」按钮，很危险。
+     这种「两个都为空所以相等」的坑在比较 id 时特别常见，务必防。 */
   const staff = me && (me.role === 'owner' || me.role === 'admin');
   const likeBtn = `<button class="cmt-btn${c.likedByMe ? ' on' : ''}" data-a="like" data-id="${c.id}">♥ ${c.likes || 0}</button>`;
+  /* 【data-a 而不是 data-act】故意跟文章按钮的 data-act 区分开，
+     这样两个事件监听器各管各的，不会互相误触发。 */
   const replyBtn = `<button class="cmt-btn" data-a="reply" data-id="${c.id}" data-name="${cmtEsc(c.name)}">回复</button>`;
+  /* 【data-name 为什么要转义】因为它要塞进 HTML 属性里。
+     如果用户名里带双引号（比如 'a"b'），不转义就能提前闭合属性并注入新属性 ——
+     这是属性型 XSS。 */
   // 三个点：举报 +（自己的或管理员）删除
   const menu = `<span class="cmt-more">
       <button class="cmt-btn" data-a="menu" aria-label="更多操作" title="更多操作">⋯</button>
@@ -436,12 +1031,28 @@ function footHTML(c, isReply) {
         <button data-a="report" data-id="${c.id}" class="danger">举报</button>
       </div>
     </span>`;
+  /* 【menu 这个模板字符串跨了多行】**缩进看起来很奇怪是正常的**：
+     渲染到页面上之后，HTML 里的空白会被合并成一个空格，
+     所以在浏览器里看不会歪。这里的缩进只是为了源码可读性。
+     【aria-label】给读屏软件念的名字。
+       「⋯」符号读屏软件念不出来，用 aria-label 明确告诉它「这是更多操作」。
+       这是无障碍的基本要求，不是可选项。
+     【(mine || staff) ? ... : ''】自己的评论能删，管理员能删所有人的。
+       注意这只是「界面上显不显示」—— 真正的权限在数据库的 RLS 策略里。
+     【举报按钮没有条件】任何人（包括作者自己）都能举报 —— 
+       这个设计有点怪（自己举报自己没意义），但也无害。 */
   const floor = (!isReply && c.floor) ? `<span class="cmt-floor">#${c.floor}</span>` : '';
+  /* 【回复不显示楼层号】因为回复不占楼层。
+     【c.floor 真假判断】floor 是 0 或者没有时不显示（0 是假值）。
+     实际楼层号从 1 开始，所以没影响。 */
   return `<div class="cmt-foot"><span class="cmt-time">${cmtEsc(c.time)}</span>${likeBtn}${replyBtn}${menu}${floor}</div>`;
 }
 
 function replyItem(c) {
+  /* 生成一条「楼中楼回复」。 */
   const to = c.toName ? `<span class="cmt-to">回复 @${cmtEsc(c.toName)} :</span> ` : '';
+  /* 【末尾那个空格放在 </span> 外面】让「：」和后面的正文之间有个空隙，
+     不然会挤成「：内容」。 */
   return `<div class="cmt-item is-reply" id="cmt${c.id}">
     ${headHTML(c)}
       <div class="cmt-text">${to}${cmtEsc(c.text)}</div>
@@ -449,11 +1060,49 @@ function replyItem(c) {
       ${openReply === c.id ? replyBoxHTML(c) : ''}
     </div>
   </div>`;
+  /* 【结构说明】
+       <div class="cmt-item is-reply" id="cmt123">   ← 开
+         headHTML 输出：<div cmt-side>...</div> <div cmt-main> <div cmt-top>...</div>
+         正文
+         底部操作
+         回复框（如果正在回复这条）
+       </div>   ← 闭 cmt-main
+     </div>     ← 闭 cmt-item
+     【缩进很误导】中间那部分没有跟着缩进，看起来像少了一层。
+     这是「函数各自输出片段」这种写法的通病，读的时候要对齐着数。
+
+     【id="cmt${c.id}"> 这个 id 有什么用】
+     给「从通知/信箱点过来定位到某条评论」用的 —— 
+     跳转后可以用 document.getElementById('cmt123') 找到它并滚动过去。
+     注意 id 前面加了 "cmt" 前缀，因为纯数字开头的 id 在 CSS 选择器里
+     必须转义（#123 是非法的），加前缀就绕开了这个问题。
+
+     【${openReply === c.id ? replyBoxHTML(c) : ''}】
+     如果「当前要回复的正是这一条」→ 在这里插入回复框，否则什么都不插。
+     这就是「点回复按钮就在那条下面弹出输入框」的实现原理 ——
+     靠一个变量 + 条件渲染，不用手动创建/删除 DOM。 */
 }
 
 function topItem(c) {
+  /* 生成一条「主楼」（包括它下面的所有回复）。 */
   const kids = cmts.filter(x => x.parent === c.id).sort((a, b) => a.id - b.id);
+  /* 【.filter(条件)】筛出所有满足条件的元素，返回新数组（不改原数组）。
+     【x.parent === c.id】找出所有「父级 id 等于这条」的 → 也就是它的回复。
+     【.sort(比较函数)】排序会原地修改数组。
+     【注意顺序很重要：先 filter 再 sort 才安全】
+     因为 filter 已经生成了新数组，所以 sort 不会污染原数据 cmts。
+     如果直接对 cmts 排序，原始顺序就乱了 —— 后面再筛选可能出问题。
+     【(a, b) => a.id - b.id】按 id 升序 = 先发的回复在上面。
+       这是评论区的惯例（对话按时间顺序读）。
+       写 sort 比较函数记这个：a - b 升序，b - a 降序。 */
   const kidsHTML = kids.length ? `<div class="cmt-children">${kids.map(replyItem).join('')}</div>` : '';
+  /* 【kids.length ? ... : ''】有回复才生成容器，没回复就不生成空 div。
+     【.map(replyItem)】把每条回复数据变成一段 HTML。
+       直接把函数名传给 map，map 会把每个元素当参数传进去，
+       而 replyItem(c) 正好需要一个参数，刚好对得上。
+     【.join('')】用空字符串把数组拼成一个长字符串。
+       【必须写 join】不写的话数组转字符串默认用逗号连接，
+       页面上每条回复之间就会多出一堆逗号。这是新手最容易踩的坑之一。 */
   return `<div class="cmt-item" id="cmt${c.id}">
     ${headHTML(c)}
       <div class="cmt-text">${cmtEsc(c.text)}</div>
@@ -462,9 +1111,17 @@ function topItem(c) {
       ${kidsHTML}
     </div>
   </div>`;
+  /* 【跟 replyItem 只差两处】
+     ① 类名没有 is-reply（所以字号正常、有分隔线）
+     ② 多了一个 ${kidsHTML}（挂自己的回复）
+     ③ 正文没有「@某某」前缀
+     【为什么不合并成一个函数加参数】可以合并，但两处差异已经不少了，
+     合并后要写一堆 if，反而更难读。这种「看起来很像但不合并」的情况，
+     判断标准是「差异让代码变成什么样」——差异少就合并，多就分开。 */
 }
 
 function replyBoxHTML(c) {
+  /* 生成回复输入框。 */
   return `<div class="cmt-reply-box">
     <textarea data-for="${c.id}" placeholder="回复 ${cmtEsc(c.name)}…">@${cmtEsc(c.name)} </textarea>
     <div class="cmt-reply-actions">
@@ -472,83 +1129,221 @@ function replyBoxHTML(c) {
       <button data-a="cancel">取消</button>
     </div>
   </div>`;
+  /* 【textarea 的预填内容写在开始和结束标签之间】
+     不像 input 用 value 属性。这里预填了「@某某 」，末尾那个空格很重要 ——
+     不带空格用户接着打字就是「@张三你好」，@ 不到人。
+     【data-for="${c.id}"]】标记这个框是给哪条评论的。
+       后面点击「发送」时靠它找对框（其实是用 closest 往上找的，
+       这个属性更多是给「定位到具体框」用的辅助）。
+     【.primary】主按钮类 → 有底色的「发送」，跟无底色的「取消」形成主次。 */
 }
 
 function renderComments() {
+  /* 只重画评论区（不动文章部分）。 */
   const box = document.getElementById('cmtList');
   if (!box) return;
+  /* 【为什么要判断】因为评论区可能在文章加载失败时根本不存在。
+     不判断的话下面 box.innerHTML 会报 null 错。 */
   const tops = cmts.filter(c => !c.parent).sort((a, b) => (b.floor || 0) - (a.floor || 0) || b.id - a.id);
+  /* 【筛出主楼】!c.parent = 没有父级 = 是主楼（不是回复）。
+     【排序，两个条件用 || 串起来】
+       ① (b.floor || 0) - (a.floor || 0) → 楼层号降序 = 新的在上面
+       ② || b.id - a.id                  → 楼层相同（或都没有）时，按 id 降序兜底
+     【|| 在这里的作用】前面那个表达式算出 0 时（楼层相同），0 是假值，
+       || 就会取右边那个表达式的值。
+       这是「多重排序」的经典写法：主条件算出 0 就自动用次条件。
+       比写 if/else 判断要短得多。
+     【(b.floor || 0)】楼层号可能是 null（老数据），
+       兜底成 0 防止 NaN —— NaN 参与比较永远是 false，排序会完全乱掉。
+
+     【注意这里有个缺口：孤儿回复】
+     只筛 !c.parent 的话，如果一条回复的「父级主楼被删了」，
+     它就既不是主楼（有 parent），又挂不到任何主楼下面（因为父级不存在）——
+     于是这条回复永远不会显示，等于凭空消失了。
+     正确的做法是：`!c.parent || !exists(c.parent)`，
+     也就是「没有父级，或者父级已经不存在」的，都当主楼处理。
+     （board.html 里就是这么处理的，这个文件漏了。
+       影响不大 —— 删主楼时后端一般会连带删回复 —— 但属于逻辑不严谨。） */
   document.getElementById('cmtCount').textContent = cmts.length;
+  /* 【评论数用的是 cmts.length】包含主楼 + 回复的总数。
+     【为什么不用 tops.length】因为「评论 12」应该把楼中楼也算进去，
+     这是 B 站 / 知乎的惯例。 */
   box.innerHTML = tops.length
     ? tops.map(topItem).join('')
     : '<div class="cmt-empty">还没有评论，来说两句吧~</div>';
+  /* 【A ? B : C】有评论就渲染，没有就显示空状态提示。
+     【空状态的文案很重要】「还没有评论，来说两句吧~」比「暂无数据」友好得多 ——
+     它给了用户一个行动建议，而不是冷冰冰地宣告「什么都没有」。 */
 }
 
 async function loadComments() {
+  /* 拉取评论并渲染。 */
   try {
     const d = await SBAPI.getArticleComments(id);
     if (!d.ok) throw new Error();
+    /* 【throw new Error()】主动抛错跳到 catch。
+       接口返回了但 ok 是 false，也算失败，应该走同一套错误处理。 */
     cmts = d.list || [];
+    /* 【|| []】接口没给 list 时兜底成空数组，
+       避免后面 cmts.filter 报「not a function」。 */
     renderComments();
   } catch {
     const box = document.getElementById('cmtList');
     if (box) box.innerHTML = '<div class="cmt-empty">评论加载失败</div>';
+    /* 【为什么这里单独查一次 box】因为 try 里可能还没执行到
+       那一步就抛错了，box 变量在 try 外面没定义。
+       这种「在 catch 里重新拿一遍需要的元素」是常见的处理方式。 */
   }
 }
 
 function bindComments() {
+  /* 给评论区绑事件。
+     【注意这是在 render() 里被调用的】因为 render 会重建整个 DOM，
+     旧的事件监听跟着旧元素一起没了，必须重新绑。 */
   const box = document.getElementById('cmtList');
   const textEl = document.getElementById('cmtText');
   const sendBtn = document.getElementById('cmtSend');
   const charsEl = document.getElementById('cmtChars');
   if (!box || cmtBound) return;
+  /* 【这一行是「防重复绑定」的闸门】
+     读法：box 不存在，**或者已经绑定过了** → 直接退出。
+     【为什么要防重复】因为 bindComments 是在 render() 里调用的，
+     如果页面某处不小心调了两次 render，或者 bindComments 被调了两遍，
+     同一个元素上就会挂上两份一模一样的监听器 —— 
+     结果点一下按钮，处理函数执行两次：发两条一样的评论。
+     这种「重复绑定导致操作执行多次」的 bug 特别难查，所以在入口就挡住最省心。
+     【为什么是 cmtBound（没有感叹号）】
+       因为我们要判断「已经绑过了吗」——是就退出。
+       如果写成 !cmtBound 就完全反了：第一次进来因为 false 取反成 true 直接退出，
+       永远绑不上，整个评论区都是死的。
+       这种「多一个感叹号逻辑就反转」的地方，是看代码时最容易看错的一类。
+     【注意这个方案有个前提】
+     它假设「cmtList 这个元素从头到尾是同一个」。
+     而 render() 其实是把 box 的 innerHTML 整体替换 —— 
+     也就是 cmtList 会被销毁重建，成为一个**全新的元素**。
+     【那么第二次 render 之后会发生什么】
+     新元素上没有任何监听器，但 cmtBound 还是 true，
+     于是 bindComments 直接 return，什么都不绑 —— 评论区的按钮全失效。
+     【为什么目前没出问题】因为 render() 只在页面加载时被调用一次，
+     之后再没有任何地方调它（点赞、回复都只调 loadComments，它不重建外层）。
+     所以现在还安全。但这是个「靠调用次数维持的平衡」，
+     以后谁要加一处 render()，这里就会静默失效。
+     【更稳的写法】把标记打在元素自己身上，换元素就自动失效：
+         if (!box || box.dataset.bound) return;
+         box.dataset.bound = '1';
+     这样「新元素 = 新标记」，天然会重新绑定。 */
   cmtBound = true;
 
   textEl.addEventListener('input', () => { charsEl.textContent = textEl.value.length + '/500'; });
+  /* 【'input' 事件】内容一变就触发（每敲一个字都触发），
+     实时字数统计必须用它。
+     【'change' 不行】那个只在「失去焦点且内容变了」时触发一次。 */
 
   sendBtn.addEventListener('click', async () => {
+    /* 【async 回调】允许在里面用 await。
+       注意：addEventListener 不管回调是不是 async，它都只是「调一下就走」，
+       不会等回调执行完。所以异步错误不会冒泡到外面，必须在内部 try/catch。 */
     if (!requireLogin()) return;
     const t = textEl.value.trim();
     if (!t) return alert('评论不能为空');
+    /* 【.trim()】只打了空格不算内容。 */
     sendBtn.disabled = true;
+    /* 【禁用按钮，防重复提交】不禁的话用户可能连点三下发出三条一样的评论。 */
     const d = await SBAPI.postComment('article', id, t);
+    /* 【三个参数】
+       ① 'article' → 评论挂在哪种东西上（视频是 'video'），
+          这样一张评论表能同时服务文章和视频，不用建两张表。
+       ② id → 具体是哪一篇
+       ③ t  → 评论正文
+       【第四个参数（parent）没传】不传 = 这是主楼，不是回复。 */
     sendBtn.disabled = false;
+    /* 【为什么这里直接恢复，不放在 finally 里】
+       因为下面出错时会 alert 然后 return，
+       disable 已经恢复了，所以不需要 finally 兜。
+       【但更严谨的写法是 try/finally】万一 await 抛了异常，
+       这行就不会执行，按钮永远灰着。这是个隐患。 */
     if (!d.ok) return alert(d.error || '发送失败');
     textEl.value = '';
     charsEl.textContent = '0/500';
+    /* 清空输入框和字数。 */
     await loadComments();
+    /* 【await】等评论重新加载完。
+       用 await 是为了让 loadComments 的错误也能被这里感知（虽然它内部自己 catch 了）。
+       更重要的是：让「清空输入框」这个动作发生在「重新渲染」之前 —— 
+       反过来的话，重新渲染会重建 textarea，把用户刚打的字清掉，
+       但那时用户已经看到字被清了，感觉会闪一下。 */
   });
 
   box.addEventListener('click', async e => {
+    /* 【评论区的事件委托】原理跟文章按钮那块一样，
+       绑在不变的外层（cmtList），靠冒泡捕获所有子按钮的点击。 */
     const btn = e.target.closest('[data-a]');
     if (!btn) return;
+    /* 【[data-a]】属性选择器，匹配有 data-a 属性的元素。
+       用 data-a 而不是 data-act，是为了跟文章按钮区分开 —— 
+       这里点到的如果是文章按钮（在外面），这个函数也不会被触发。 */
     const a = btn.dataset.a;
     const cid = parseInt(btn.dataset.id, 10);
+    /* 【parseInt(值, 10)】转整数。第二个参数 10（十进制）必须写，
+       不写的话以 0 开头的字符串会被当成八进制。 */
+    /* 【注意 cid 可能是 NaN】比如「取消」按钮没有 data-id，
+       dataset.id 是 undefined，parseInt 得到 NaN。
+       下面用到 cid 的地方都会先判断 a（动作类型），
+       而 cancel 那个分支根本不用 cid，所以没问题。 */
 
     if (a === 'menu') {
       const m = btn.parentElement.querySelector('.cmt-menu');
+      /* 【.parentElement】父元素。这个「⋯」按钮的父元素是 .cmt-more，
+         菜单就在它里面，所以从父元素往下找。 */
       const wasOpen = m.classList.contains('show');
+      /* 【先记下「之前是开着吗」】因为下面要先把所有菜单关掉。 */
       document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
+      /* 【关掉所有打开的菜单】保证同一时刻只开一个。 */
       if (!wasOpen) m.classList.add('show');
+      /* 【这个逻辑很巧妙】之前是关着的 → 打开它；
+         之前是开着的 → 已经被上面关掉了，这里不再打开（实现「点一下关掉」）。
+         一个按钮同时是「开关」，不用写两套逻辑。 */
       return;
     }
     document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
+    /* 点了别的按钮，顺带把菜单关掉。 */
 
     if (a === 'cancel') { openReply = null; return renderComments(); }
+    /* 【一行两个语句】清状态 + 重画。
+       【为什么必须重画】因为回复框是靠 renderComments 生成的，
+       状态改了不重画，那个框还在页面上。 */
     if (a === 'reply') {
       openReply = cid;
       renderComments();
+      /* 【先设状态再重画】顺序不能反 ——
+         反了的话重画时 openReply 还是旧值，框不会出现。 */
       const ta = document.querySelector(`.cmt-reply-box textarea[data-for="${cid}"]`);
+      /* 【模板字符串 + 属性选择器组合】
+         `.cmt-reply-box textarea[data-for="123"]`
+         = 「cmt-reply-box 里面的、data-for 等于 123 的 textarea」
+         【为什么这么精确定位】因为页面上可能同时存在多个回复框的元素
+         （虽然逻辑上只开一个），加属性筛选最保险。 */
       if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+      /* 【.focus()】让输入框获得焦点 = 光标进去，可以直接打字。
+         用户点「回复」最想做的事就是打字，自动聚焦能省一次点击。
+         【setSelectionRange(长度, 长度)】把光标放到最后一个字符后面。
+         为什么必须这么做：focus 之后光标位置各浏览器行为不同（有的全选、有的放开头），
+         显式设置才能保证用户点开就能接着写「@张三 |」。 */
       return;
     }
     if (!requireLogin()) return;
+    /* 【登录闸门】打开/关闭回复框不用登录（先让他写），
+       从这里往下都是要改数据的操作，必须登录。 */
 
     if (a === 'send') {
       const ta = btn.closest('.cmt-reply-box').querySelector('textarea');
+      /* 【.closest】从按钮往上找最近的 .cmt-reply-box 容器。
+         这样不用 id 也能定位到「这个按钮所在的那个回复框」。 */
       const t = ta.value.trim();
       if (!t) return alert('回复不能为空');
       const d = await SBAPI.postComment('article', id, t, cid);
+      /* 【第四个参数 cid】= parent，把这条评论挂到 cid 那条下面，
+         而不是新开一个主楼。这是主楼和回复的唯一区别。 */
       if (!d.ok) return alert(d.error || '发送失败');
       openReply = null;
       await loadComments();
@@ -558,10 +1353,19 @@ function bindComments() {
       const d = await SBAPI.likeComment(cid);
       if (!d.ok) return alert(d.error || '操作失败');
       await loadComments();
+      /* 【这里整块重画】，没有像文章点赞那样「只改一个数字」。
+         【为什么】因为评论列表结构比较复杂（有嵌套回复），
+         单独找出那个按钮再改要绕好几层；重画最省事。
+         【代价】重画会让页面滚动位置可能跳一下（如果内容高度变了），
+         而且如果正好有回复框开着，会被关掉（因为 openReply 没保存到重画后的状态？
+         其实 openReply 变量还在，所以框会重新出现，只是里面写的内容丢了）。
+         这是「简单」和「体验」的取舍。 */
       return;
     }
     if (a === 'del') {
       if (!confirm('确定删掉这条评论？它下面的回复也会一起删掉。')) return;
+      /* 【破坏性操作必须确认】告诉用户连带后果（回复也会删），
+         让他知道自己在做什么。 */
       const d = await SBAPI.deleteComment(cid);
       if (!d.ok) return alert(d.error || '删除失败');
       await loadComments();
@@ -570,21 +1374,64 @@ function bindComments() {
     if (a === 'report') {
       const reason = prompt('说说这条评论哪里有问题（可以留空）：', '');
       if (reason === null) return;
+      /* 【=== null】必须严格相等 —— 用户点确定但没写理由是空字符串，
+         那是合法的；只有点取消才是 null。 */
       const d = await SBAPI.reportComment(cid, reason.trim());
       if (!d.ok) return alert(d.error || '举报失败');
       alert('举报已提交，管理员会看的');
+      /* 【为什么这里用 alert 而不是 setTip】因为举报是评论区的操作，
+         而 setTip 是改文章区那个提示条 —— 视线距离太远，用户可能注意不到。 */
     }
   });
 
   // 点空白处收起三个点菜单
   document.addEventListener('click', e => {
     if (e.target.closest('.cmt-more')) return;
+    /* 【为什么要有这一句】如果点在菜单区域内部（比如点了菜单里的某一项），
+       不应该在这里收菜单 —— 那件事由上面的 box 监听器负责。
+       直接 return，把处理权让出去。 */
     document.querySelectorAll('.cmt-menu.show').forEach(x => x.classList.remove('show'));
   });
+  /* 【注意这个监听器每次 bindComments 都会新加一个】
+     如果 bindComments 被调用多次，document 上会挂上多个一模一样的监听器。
+     结果是「关闭菜单」这个动作被执行好几遍 —— 功能上没坏（重复关没副作用），
+     但属于「监听器泄漏」，长期运行会越积越多。
+     【正确做法】要么把这段放到 bindComments 外面只绑一次，
+     要么在加之前先 removeEventListener。
+     这类问题在真实项目里非常常见，被称为「事件监听器泄漏」。 */
 }
 
 loadMe().then(loadAvatars).then(loadComments);
+/* 【Promise 链式调用】
+   【loadMe()】返回 Promise（因为它是 async 函数）。
+   【.then(loadAvatars)】等 loadMe 完成后执行 loadAvatars，
+     并把它返回的 Promise 接下去。
+     【为什么能这么写】因为 loadAvatars 正好不接受参数（或忽略参数），
+     所以直接传函数名就行。
+     如果它需要参数，就得写 .then(() => loadAvatars(参数))。
+   【.then(loadComments)】同理，最后拉评论。
+   【三步必须串行吗】是的：loadMe 要设 loggedIn / me（评论里的「我的」判断要用），
+     loadAvatars 要建头像缓存（渲染评论时要用），
+     loadComments 要渲染。顺序错了评论会显示成「没登录」或者头像全是默认图。
+   【为什么不用 async/await 写】
+     await loadMe(); await loadAvatars(); await loadComments();
+     这样更好读。作者用了 Promise 链，可能是早期写法留下的。
+     两者完全等价，只是风格不同。 */
 load();
+/* 【跟上面那一串并行执行】
+   【为什么可以并行】因为 load() 只依赖 id，跟「我登录没」无关。
+   并行能让文章正文和评论同时加载，总时间约等于较慢那个，而不是两者之和。
+   【但有个副作用】load() 里的 render() 会重建整个 DOM，
+   而 loadComments() 可能在这之前/之后执行 —— 
+   如果 loadComments 先完成，它渲染的评论会被 render() 冲掉！
+   【实际会怎样】render() 里 cmtList 一开始只有「加载中…」，
+   然后 loadComments 填进去，最终结果正确。
+   但如果反过来（render 在 loadComments 之后），评论就没了，只剩「加载中…」。
+   【这是个潜在的竞态条件】目前因为网络请求时间差，实际总是 loadComments 更慢，
+   所以没出问题。但这是个「靠概率活着」的代码 —— 
+   严谨的做法是让 load() 完成后才调 loadComments()，
+   或者在 render() 里判断「评论已经加载过就立刻重画一次」。
+   这类问题在网络快慢变化时才会暴露，是线上 bug 的常见来源。 */
 </script>
 </body>
 </html>
