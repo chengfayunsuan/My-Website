@@ -1,206 +1,463 @@
 <!DOCTYPE html>
 <!-- ============================================================
      文件：test/dynamic.html（近期动态页）
-     作用：展示 moonbazaar 监控抓到的动态（谁在什么时候发了什么）。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：展示 moonbazaar 站点的实时资金流水 —— 谁、在哪个玩法、赚了或亏了多少。
+     它跟别的页面最大的不同：**没有自己的后端**，全靠浏览器直接去抓别人的接口，
+     所以会用到「CORS / 代理 / 轮询 / 增量更新」这几样东西。
+     说明：尖括号叹号包起来的注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     注意：【重要】样式标签（style）内部全是 CSS，那里只能用 斜杠星号 注释；
+           脚本标签（script）内部全是 JS，那里只能用 双斜杠 或 斜杠星号 注释。
+           「斜杠星号」= 一个斜杠加一个星号开头的多行注释，我下面用文字描述，不写符号本身，
+           免得解析器提前把注释切断。
+           【另一个必须小心的点】在 script 里写注释时，
+           千万别把「脚本结束标签」的原文字样写出来 —— 浏览器看到它就认为脚本到此为止了，
+           后半段代码会直接变成页面上的文字。同理，样式标签内也不能出现 HTML 注释符号。
      ============================================================ -->
 <html lang="zh-CN">
+<!-- 【<html lang="zh-CN">】整个文档的根标签。
+     【lang】language 语言。写 zh-CN 是告诉浏览器和搜索引擎「这是简体中文」，
+     影响：朗读软件选哪种口音、浏览器要不要提示翻译、中文断行规则。 -->
+
 <head>
+<!-- 【<head>】「头部」，放**给浏览器看的信息**，页面上一律不显示。
+     标题、图标、样式表、脚本引用都在这。 -->
+
 <meta charset="UTF-8">
+<!-- 【meta charset】文件用哪种字符编码读。
+     UTF-8 是万国码，中英文符号都能正常显示。
+     不写或者写错，中文会变成「锟斤拷」那种乱码方块。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【viewport 视口】手机上那个「虚拟窗口」的宽度。
+     【width=device-width】宽度 = 手机屏幕的实际宽度（不假装自己是 980px 宽的桌面）。
+     【initial-scale=1.0】初始缩放 1 倍，不要自动缩小。
+     这两句是「网页在手机上不要变成缩微版」的关键，手机上不写会显示成蚂蚁大小。 -->
+
 <title>近期动态 · 乘法</title>
+<!-- 【<title>】浏览器标签页上那行字，也是收藏夹里保存的名字。
+     中间那个「·」是间隔号，不是句号。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 【<link rel="icon">】标签页左边那个小图标。
+     【rel】relationship 关系，说明这个文件跟本页是什么关系；icon 就是「图标」。
+     路径开头的单个斜杠 / 表示「从网站根目录开始找」，不是当前文件夹。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 【rel="stylesheet"】关系 = 样式表，也就是引入 CSS 文件。
+     【?v=26】问号后面叫「查询参数」，服务器会忽略它，但浏览器会把它当成文件名的一部分。
+     作用：改了 CSS 之后把 26 改成 27，浏览器就认为这是新文件，不会继续用缓存里的旧样式。
+     这是最省事的「强制刷新缓存」土办法，比让用户手动清缓存靠谱。 -->
+
 <style>
+  /* 【样式标签】在 HTML 里直接写 CSS。
+     放在这里的样式只有本页生效；公共的（导航、卡片、页脚）都写在 /style.css 里。 */
+
   .feed-header {
+    /* 【.feed-header】点开头的叫「类选择器」，匹配 class="feed-header" 的元素。
+       这里是最上面那一行：左边「实时更新中」，右边「刷新」按钮。 */
     display: flex;
+    /* 【display:flex】弹性布局。让里面的孩子排成一行（默认），方便左右分开对齐。 */
     justify-content: space-between;
+    /* 【space-between】两端对齐：第一个孩子顶最左，最后一个顶最右，中间均分空隙。
+       这是做「左标题 + 右按钮」最常用的一行。 */
     align-items: center;
+    /* 【align-items:center】交叉轴上居中。flex 默认横排，交叉轴就是竖直方向 →
+       让左右两块高度不同时，竖直方向居中对齐，看起来才不歪。 */
     margin-bottom: 16px;
+    /* 跟下面的列表拉开 16px 距离。 */
     flex-wrap: wrap;
+    /* 【flex-wrap:wrap】允许换行。窄屏上左边文字和右边按钮挤不下时，
+       按钮会掉到第二行，而不是压在一起或溢出屏幕。 */
     gap: 10px;
+    /* 【gap】孩子之间的间距（横竖都用这个值）。
+       比给每个孩子写 margin 干净：最后一个孩子右边不会多出一块空白。 */
   }
+
   .feed-live {
+    /* 左边那个红点 + 「实时更新中」字。 */
     display: flex;
     align-items: center;
+    /* 让红点和文字在同一水平线上。不写的话红点会跟文字底部对齐，偏下。 */
     gap: 8px;
     font-size: 14px;
     color: var(--text-light);
+    /* 【var(--text-light)】用变量。--text-light 在 /style.css 顶部的 :root 里定义过，
+       是「次要文字」的灰色。好处：切深色/浅色主题时这一处不用改，变量自己变。 */
   }
+
   .live-dot {
+    /* 「直播中」那个小红点。 */
     width: 8px; height: 8px;
+    /* 一个元素要画成圆，宽高必须相等，不然是椭圆。 */
     border-radius: 50%;
+    /* 【border-radius:50%】圆角半径 = 宽高的一半 → 正方形变正圆。
+       写 50% 比写 4px 好，改尺寸时不用跟着改。 */
     background: #e53e3e;
+    /* 【#e53e3e】十六进制颜色。井号后面 6 位，两位一组是 红/绿/蓝，从 00 到 ff。
+       e5 是红、3e 是绿、3e 是蓝 → 偏暗的正红。 */
     animation: pulse 1.8s infinite;
+    /* 【animation】动画简写，三部分用空格隔开：
+       ① pulse      → 用哪个 @keyframes（关键帧）定义的动画，名字自定义
+       ② 1.8s       → 一轮播多久
+       ③ infinite   → 无限重复（不是播放次数 1）
+       中文：让这个点像呼吸一样一闪一闪，模拟「心跳/在线」。 */
   }
+
   @keyframes pulse {
+    /* 【@keyframes 动画名】定义动画有哪几个阶段、每一阶段长什么样。
+       下面用 % 表示进度：0% 是开始，100% 是结束。 */
     0%, 100% { opacity: 1; }
+    /* 【opacity】不透明度：1 = 完全不透明，0 = 完全透明（看不见），0.5 = 半透明。
+       0% 和 100% 都用 1 → 开头和结尾都是实心。 */
     50% { opacity: 0.3; }
+    /* 中间变得很淡。浏览器会自动在 1 → 0.3 → 1 之间做平滑过渡，
+       看起来就是「亮—暗—亮」的呼吸灯。 */
   }
+
   .btn-refresh {
+    /* 那个「刷新」按钮。 */
     padding: 8px 18px;
+    /* 【padding: 上下 左右】内边距 = 内容和边框之间的距离。
+       顺序千万别记反：先上下、后左右。8px 上下、18px 左右 → 扁长条按钮。 */
     border: none;
+    /* 去掉浏览器给 <button> 默认加的那圈灰色边框。 */
     border-radius: 8px;
     background: var(--grad-primary);
+    /* 【--grad-primary】一个渐变变量（linear-gradient 那类的）。
+       注意 background 是个「大杂烩」属性，能同时塞颜色、图片、渐变。 */
     color: #fff;
+    /* 字是白色。#fff 是 #ffffff 的缩写，每两位相同就能缩写。 */
     font-size: 14px;
     cursor: pointer;
+    /* 【cursor】鼠标移上去时指针的样子。
+       pointer = 一只手（表示「这里可以点」）。不写的话按钮上是箭头，用户可能以为不能点。 */
     font-family: inherit;
+    /* 【inherit】继承父元素的字体。
+       【为什么必须写】<button> 这个标签浏览器默认用系统字体，不会继承网页字体，
+       不写就会跟周围文字字体不一致，看起来像外来货。 */
     transition: background .2s;
+    /* 【transition】过渡：属性变化时不瞬间跳变，而是在指定时长内平滑过渡。
+       background .2s = 背景色变化花 0.2 秒渐变（.2s 就是 0.2s，前面的 0 能省）。
+       配合下面的 :hover 用，鼠标移上去颜色是「淡入」而不是「啪」地一变。 */
   }
+
   .btn-refresh:hover:not(:disabled) { background: var(--primary-deep); }
+  /* 【:hover】鼠标悬停在这个元素上时的样式。
+     【:disabled】被禁用（disabled 属性）时的样式。
+     【:not(...)】否定伪类：「除了括号里那种情况」。
+     连起来读：鼠标悬停 **并且** 不是禁用状态时 → 换成深一点的主色。
+     为什么不直接写 :hover？因为按钮在请求途中会被设成 disabled，
+     那时候鼠标还压在上面，如果不排除掉，颜色照样变深，用户会以为还能点。 */
+
   .btn-refresh:disabled { opacity: .6; cursor: not-allowed; }
+  /* 禁用时：半透明（看起来「灰掉了」）+ 鼠标变成禁止符号 🚫。
+     【.6】就是 0.6，小数前面的 0 可以省略，是 JS/CSS 通用的写法。 */
 
   .feed-list {
+    /* 中间那一大串动态条目。 */
     display: flex;
     flex-direction: column;
+    /* 【flex-direction:column】主轴方向改成竖直。
+       flex 默认横排（row），改成 column 之后孩子就是从上往下一行一个。
+       这里是「必须的」：不写的话所有条目会横着排成一长条挤出屏幕。 */
     gap: 8px;
+    /* 条目之间 8px 间隔。 */
     max-height: 600px;
+    /* 【max-height】最高 600px，内容再高也不超过。
+       为什么用 max 不用 height：条目少的时候列表自己缩到合适高度，
+       不会硬撑出 600px 的空白。用 height 就写死了。 */
     overflow-y: auto;
+    /* 【overflow-y:auto】竖直方向内容超出时怎么办。
+       auto = 需要时才出现滚动条（内容不多就不显示滚动条）。
+       hidden 会把超出的部分直接切掉看不见；scroll 会一直显示滚动条，哪怕没超出。 */
     padding: 4px;
+    /* 【为什么留 4px】因为 hover 时条目会往右平移 2px，
+       如果一点内边距都没有，平移后右边会被 overflow 边界切掉一点。留点余量。 */
   }
+
   .feed-item {
+    /* 单条动态：左边「谁 + 在哪」，右边「金额 + 时间」。 */
     display: flex;
     justify-content: space-between;
+    /* 左右两端对齐，同上面讲过。 */
     align-items: center;
     padding: 12px 16px;
     background: var(--field);
+    /* 【--field】表单/条目的底色变量。 */
     border: 1px solid var(--border);
+    /* 【border: 粗细 线型 颜色】三段：1px 细线、solid 实线、颜色用变量。
+       顺序其实随意（浏览器能认），但按「粗细 线型 颜色」写是行业习惯。 */
     border-radius: 8px;
     font-size: 14px;
     flex-wrap: wrap;
+    /* 窄屏时右边那块「+12.34 Gascoin / 30秒前」整体换行到下面，避免被压扁。 */
     gap: 6px 10px;
+    /* 【gap 两个值】行间距 6px、列间距 10px。
+       只有一个值时横竖相同；两个值时是「先上下后左右」——
+       跟 padding 的 4 值顺序规律一致，多值属性基本都是「先上下后左右」。 */
     transition: transform .15s;
+    /* 为下面的 hover 位移做准备，让移动看起来是「滑」过去而不是「跳」过去。 */
   }
+
   .feed-item:hover { transform: translateX(2px); }
+  /* 【transform】变换：不改布局、只改「画在哪」。
+     【translateX(2px)】往右平移 2px（负数是往左）。
+     用 transform 而不用 margin-left 的原因：transform 由显卡（GPU）处理，
+     不会触发周围元素重新排版，性能好得多，做动效优先用它。 */
+
   .feed-item.new {
+    /* 【.feed-item.new】两个类连写（中间没空格）= 「同时有这两个类」。
+       JS 里给新抓到的条目多加一个 new 类，就为了让它在插入时播个动画。
+       注意：这里没有空格；如果写成 .feed-item .new（有空格）意思就变成
+       「.feed-item 里面的 .new 后代元素」，完全不同。 */
     animation: slideIn .4s ease;
+    /* 【ease】缓动函数：动画速度曲线。
+       ease = 先快后慢（起步猛、快到终点时减速），最自然，是默认值。
+       其他常用：linear 匀速（机械感）、ease-in 慢慢起步、ease-out 慢慢刹住。 */
     border-color: var(--primary);
+    /* 新条目的边框换成主色，视觉上「亮一下」引导注意力。 */
   }
+
   @keyframes slideIn {
+    /* 新条目从上方滑入。 */
     from { opacity: 0; transform: translateY(-8px); }
+    /* 【from】= 0%，起始状态：完全透明 + 位于原位上方 8px。
+       translateY 的 Y 大写，CSS 属性值对大小写不敏感，但惯例这么写。 */
     to   { opacity: 1; transform: translateY(0); }
+    /* 【to】= 100%，结束状态：不透明 + 回到原位。
+       浏览器自动插值：透明度 0→1、位置 -8px→0，看起来就是「淡入并落下」。 */
   }
+
   .feed-item .user {
+    /* 【.feed-item .user】中间有空格 = 后代选择器：.feed-item 里面的 .user。
+       跟上面 .feed-item.new 的连写是两回事，这里一定要有空格。 */
     font-weight: 700;
+    /* 字重（粗细）。400 = 正常，700 = 加粗，900 = 最粗。
+       写数字比写 bold 更精确，可变字体还支持 450、650 这种中间值。 */
     color: var(--text);
+    /* 主文字色。 */
   }
+
   .feed-item .source {
+    /* 「在 某某玩法」那部分。 */
     color: var(--text-light);
+    /* 灰色，表示这是次要信息。 */
   }
+
   .feed-item .right {
+    /* 右边那一整块：金额徽章 + 时间。 */
     display: flex;
     align-items: center;
+    /* 金额和时间竖直居中对齐（它们字号不同，不写会底部对齐显得歪）。 */
     gap: 10px;
   }
+
   .feed-item .amount {
+    /* 金额那个小胶囊。 */
     padding: 2px 10px;
     border-radius: 20px;
+    /* 【为什么是 20px 不是 50%】因为这是个宽大于高的长条，
+       50% 会算出椭圆；写一个足够大的固定值（大于高度的一半）就是「两端半圆的胶囊」。
+       常见写法还有 999px、99em，意思都是「圆到不能再圆」。 */
     font-size: 13px;
     font-weight: 600;
     white-space: nowrap;
+    /* 【white-space:nowrap】不换行。
+       【为什么】金额是「+12.3400 Gascoin」，窄屏上如果允许换行会断成两行很难看。
+       nowrap 之后宁可让外层容器换行，也要保证这一段完整。 */
   }
+
   .feed-item .amount.gain {
+    /* 【.amount.gain】连写两个类：既是 .amount 又是 .gain（赚钱）。
+       JS 里根据金额正负决定加 gain 还是 loss。 */
     background: rgba(76,175,80,.15);
+    /* 【rgba(红,绿,蓝,透明度)】r/g/b 是 0~255，alpha 是 0~1。
+       这里绿色 + 只有 15% 不透明度 → 一层淡淡的绿底。
+       为什么不用 #4caf50 直接当底色？太浓了，压过文字。
+       【注意】这里用的是「绿=涨」，因为这是外国站（Roblox 生态）。
+       本站的价格涨跌要按国内习惯红涨绿跌，别把这里的配色照搬过去。 */
     color: #2e7d32;
+    /* 深绿的字，跟淡绿底配起来对比够，看得清。 */
   }
+
   .feed-item .amount.loss {
+    /* 亏钱：红色系。 */
     background: rgba(231,76,60,.15);
     color: #c0392b;
+    /* 深红字 + 淡红底，同上逻辑。 */
   }
+
   .feed-item .time {
+    /* 「3 分钟前」那种相对时间。 */
     font-size: 12px;
     color: var(--text-light);
     white-space: nowrap;
+    /* 同样防止「3 分 / 钟前」被拆成两行。 */
   }
+
   .feed-status {
+    /* 列表的占位状态：加载中 / 暂无动态 / 加载失败。
+       这三种情况共用一套样式，改一处三处都变。 */
     text-align: center;
     padding: 40px 20px;
     color: var(--text-light);
     font-size: 15px;
   }
+
   .feed-status .icon {
+    /* 那个 emoji 图标（沙漏 / 空信箱 / 警告）。 */
     font-size: 32px;
     display: block;
+    /* 【为什么】<span> 是行内元素，默认跟后面的文字挤在同一行、还只能设部分尺寸。
+       改成 block 之后独占一行、可以设宽高和外边距，emoji 才能单独占上面一行并居中。 */
     margin-bottom: 10px;
+    /* 跟下面的文字拉开距离。 */
   }
+
   .feed-foot {
+    /* 列表底下那行「共 N 条 · 每 5 秒自动刷新」。 */
     margin-top: 14px;
     font-size: 13px;
     color: var(--text-light);
     text-align: right;
+    /* 靠右对齐。 */
   }
 
   /* ===== 重点关注：两个人的记录左右并排 ===== */
+  /* 上面那行也是注释（斜杠星号包起来的），只是用等号做个视觉分隔，方便在长文件里找段。 */
   .watch-wrap { margin-top: 18px; }
+  /* 【单行简写】只有一条声明时，可以直接写在花括号里一行，
+      省行数。可读性上「一条就一行、多条就换行」是比较通行的判断标准。 */
+
   .watch-title {
+    /* 「重点关注」这个小标题。 */
     font-size: 16px;
     color: var(--text);
     margin-bottom: 10px;
     position: relative;
+    /* 【position:relative】相对定位。
+       【为什么必须写】下面 ::before 里的竖线要用 position:absolute
+       相对于「最近的已定位祖先」摆放；如果这里不写 relative，
+       那条线就会一路往上找到页面的根，位置全错。
+       另外：相对定位本身不动位置，它只是给子元素提供一个「坐标原点」。 */
     padding-left: 12px;
+    /* 左边空出 12px，给那条竖线让位，文字不会压在线上。 */
   }
+
   .watch-title::before {
+    /* 【::before】伪元素：用 CSS 凭空造一个「不存在于 HTML 里」的元素，
+       插在这个元素内容的最前面。
+       【铁律】必须写 content 属性，哪怕内容是空的；不写 content 这个伪元素根本不会生成。
+       做装饰性小图标、竖线、引号，用它比在 HTML 里多塞一个 <i> 干净。 */
     content: "";
+    /* 空字符串：只要它存在，不要任何文字内容。 */
     position: absolute;
+    /* 【position:absolute】绝对定位：脱离正常排版流，
+       坐标相对于上面那个 position:relative 的 .watch-title，用 left/top 摆位置。 */
     left: 0; top: 5px;
+    /* 【left:0】贴着标题左边；【top:5px】从顶部往下 5px（微调，跟文字视觉对齐）。 */
     width: 3px; height: 16px;
+    /* 竖线：宽 3px、高 16px。 */
     background: var(--primary-deep);
+    /* 竖线颜色。 */
     border-radius: 2px;
+    /* 稍微磨圆两头，不然像素级直角看着生硬。 */
   }
+
   .watch-grid {
+    /* 两块并排的容器。 */
     display: grid;
+    /* 【grid 网格布局】比 flex 更适合「等分格子」。
+       这里只是二选一，两种都能做，但 grid 写起来更直接。 */
     grid-template-columns: 1fr 1fr;
+    /* 【fr】fraction 份数。1fr 1fr = 两列等宽。
+       想「左边窄右边宽」就写 1fr 2fr。比用百分比好：不用管 gap 占了多少。 */
     gap: 14px;
+    /* 两列之间的间距。grid 的 gap 不会让总宽超出，浏览器会自动扣掉。 */
   }
+
   @media (max-width: 700px) {
+    /* 【@media】媒体查询：只有在满足条件时才应用里面的样式。
+       【max-width:700px】视口宽度 ≤ 700px（基本就是手机/小平板）。
+       这段是响应式设计的核心工具 —— 一套代码适配大小屏。 */
     .watch-grid { grid-template-columns: 1fr; }
+    /* 窄屏两列变一列，上下堆叠。手机上并排两块会窄到看不清内容。 */
   }
+
   .watch-box {
+    /* 每个人的那个小卡片。 */
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--field);
     padding: 12px;
   }
+
   .watch-head {
+    /* 卡片顶部：名字 + 计数。 */
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
     margin-bottom: 10px;
   }
+
   .watch-name {
+    /* 用户名，比如 chengfayunsuan。 */
     font-weight: 700;
     font-size: 14px;
     color: var(--text);
     word-break: break-all;
+    /* 【word-break:break-all】允许在「任意字符之间」断行，不只在空格处断。
+       【为什么需要】用户名是一长串没有空格的英文，
+       默认规则认为「一个单词不能拆」，于是它宁可溢出容器也不换行，把布局撑破。
+       设成 break-all 就能在任意位置断开。缺点是会把单词拆得难看，
+       所以只用在「必须不溢出」的用户名、链接、长 ID 上。 */
   }
+
   .watch-count {
+    /* 右上角那个小数字气泡，显示抓到几条。 */
     flex: none;
+    /* 【flex 简写三个值：grow shrink basis】
+       这里写 none 等于 `0 0 auto`：不放大、不缩小、按内容尺寸。
+       【为什么】不加的话，名字太长时这个气泡会被挤瘦变形。 */
     min-width: 22px;
     padding: 1px 8px;
     border-radius: 999px;
+    /* 【999px】一个足够大的值 = 永远两端半圆。
+       做胶囊形按钮/标签用这个比算一半高度稳，改字号也不会变形。 */
     background: var(--primary-soft);
     color: var(--primary-deep);
     font-size: 12px;
     font-weight: 600;
     text-align: center;
   }
+
   .watch-list {
+    /* 卡片里那个可滚动的小列表。 */
     display: flex;
     flex-direction: column;
     gap: 6px;
     max-height: 300px;
+    /* 最多 300px 高，超了自己滚。比上面主列表矮一半。 */
     overflow-y: auto;
     padding: 2px;
   }
+
   /* 跟上面实时列表同一套样式，只是小一号 */
+  /* ↑ JS 里 createItem() 生成的还是 .feed-item 元素，
+     这里靠「后代选择器 + 更低优先级覆盖」把它缩小，避免写第二套 HTML 结构。 */
   .watch-box .feed-item {
+    /* 【为什么能生效】.watch-box .feed-item 这个选择器比单独的 .feed-item 更「具体」，
+       在优先级相同规则下更具体的赢；所以这里的 padding 会盖掉外面那条。 */
     padding: 9px 12px;
     font-size: 13px;
   }
+
   .watch-box .feed-item:hover { transform: none; }
+  /* 【transform:none】取消位移。
+       小卡片里的条目本来就窄，再往右挪 2px 会更挤，而且容易触发滚动条抖动。 */
   .watch-empty {
+    /* 「还没抓到 TA 的动态」。 */
     padding: 18px 10px;
     text-align: center;
     font-size: 13px;
@@ -209,27 +466,64 @@
 </style>
 </head>
 <body>
+<!-- 【<body>】从这里开始才是用户真正看见的内容。 -->
 
   
       <div id="navbar"></div>
+      <!-- 【导航栏占位】一个空盒子，id="navbar"。
+           真正的导航是 js/nav.js 在页面加载后用 JS 塞进去的。
+           好处：几十个页面只维护一份导航代码，改一次全站生效。
+           代价：JS 没跑起来时，导航就是空的。 -->
 
   <header>
+    <!-- 【<header>】语义标签，表示「页头/介绍区」。
+         它跟 <div> 长得一样、效果也一样，唯一的区别是「告诉人和搜索引擎这里是什么」。
+         这类标签还有 <nav> 导航、<main> 主要内容、<article> 文章、<footer> 页脚。
+         用它们的目的是：屏幕阅读器能跳读、搜索引擎能理解结构。 -->
     <img class="avatar" src="/avatar.jpg" alt="头像" onerror="this.style.display='none'">
+    <!-- 【<img>】图片。它不需要闭合标签（HTML 里叫「自闭合」元素）。
+         【src】source 图片地址，/avatar.jpg 是根目录下的头像。
+         【alt】替代文字：图片加载失败时显示它，盲人朗读软件读它，SEO 也看它。
+         【onerror】图片加载失败时执行的 JS。
+           这里 this.style.display='none' = 把自己藏起来。
+           【this】指「触发这个事件的那个元素」，也就是这张图片本身。
+           【为什么要藏】不藏的话，头像挂了会在页面上显示一个破图标，很丑；
+           藏起来至少页面是干净的。这是最常用的「图片兜底」写法。 -->
     <h1 class="name">近期动态</h1>
+    <!-- 【<h1>】一级标题。整页一般只用一次，代表「这一页的主题」。
+         层级 h1 > h2 > h3 要按顺序用，别跳级（h1 直接到 h4），
+         不然结构乱了，无障碍工具会读得莫名其妙。 -->
     <p class="tagline">来自 MoonBazaar 的实时动态</p>
+    <!-- 【<p>】段落 paragraph。 -->
   </header>
 
   <section>
+    <!-- 【<section>】语义标签，表示「一个独立的内容区块」，通常带自己的小标题。 -->
     <div class="card">
+      <!-- 【.card】公共样式里定义的「卡片」外观：圆角、半透明底、细边框、阴影。
+           全站几乎所有内容都装在这种卡片里，视觉才统一。 -->
       <div class="feed-header">
         <div class="feed-live">
           <span class="live-dot"></span>
+          <!-- 【<span>】行内容器，本身不带任何样式和换行。
+               用来「圈住一小段内容」方便单独上样式。这里是那个红点，
+               它的宽高和圆角全靠 .live-dot 这个类。 -->
           <span>实时更新中</span>
         </div>
         <button class="btn-refresh" id="refreshBtn">刷新</button>
+        <!-- 【<button>】按钮。比用 <a> 或 <div> 假装按钮好得多：
+             天生能 Tab 聚焦、能按回车/空格触发、有 disabled 属性、读屏软件会念「按钮」。
+             【type 属性没写】默认是 submit，只有在 <form> 里面才会有提交行为，
+             这里不在表单里，所以没影响。但正规写法建议写上 type="button" 避免踩坑。 -->
       </div>
 
       <div class="feed-list" id="feedList">
+        <!-- 【id="feedList"】id 是「身份证号」，全页唯一，JS 靠它找元素：
+             document.getElementById('feedList')。
+             【id 和 class 的区别】
+               id    → 一个页面只能有一个，像身份证号；
+               class → 可以重复用很多个，像「程序员」这个身份标签。
+             下面这段是「初始占位内容」，JS 拿到数据后会把整个盒子内容替换掉。 -->
         <div class="feed-status">
           <span class="icon">⏳</span>
           加载中…
@@ -238,17 +532,26 @@
 
       <p class="feed-foot">
         共 <b id="feedCount">0</b> 条 · 每 5 秒自动刷新
+        <!-- 【<b>】加粗。语义上 b 只是「视觉加粗」，<strong> 才是「内容很重要」。
+             这里数字加粗只是好看，用 b 合适。 -->
       </p>
 
       <div class="watch-wrap">
         <h3 class="watch-title">重点关注</h3>
+        <!-- 【<h3>】三级标题。虽然页面上只有一个 h1，按理这里该用 h2，
+             但视觉大小是用 font-size 单独控制的，标签层级只影响结构语义，
+             不影响显示大小 —— 这一点新手最容易误会。 -->
         <div class="watch-grid">
           <div class="watch-box" id="watch0">
+            <!-- id 里带数字是因为 JS 里用 'watch' + i 拼出来批量取：
+                 i=0 拿到 watch0，i=1 拿到 watch1。跟下面 WATCH 数组的顺序一一对应。 -->
             <div class="watch-head">
               <span class="watch-name">chengfayunsuan</span>
               <span class="watch-count">0</span>
             </div>
             <div class="watch-list"><div class="watch-empty">加载中…</div></div>
+            <!-- 一行写完嵌套：外层是可滚动列表，里面先放占位文字。
+                 JS 渲染时会把 watch-list 里的内容整个换掉。 -->
           </div>
           <div class="watch-box" id="watch1">
             <div class="watch-head">
@@ -263,113 +566,390 @@
   </section>
 
   <footer>
+    <!-- 【<footer>】页脚。 -->
     <p>© 2026 CHENGFA</p>
+    <!-- 【&copy; 的实体写法】这里直接打的是版权符号本身。
+         在 HTML 里有些字符必须「转义」才能安全使用，比如小于号要写成 &lt;，
+         大于号写成 &gt;，& 写成 &amp;，不然浏览器会以为是标签的开头。 -->
   </footer>
   
   <script src="/js/config.js"></script>
+  <!-- 【<script src="...">】引入外部 JS 文件。
+       【顺序很重要】下面的脚本用到了这里定义的全局变量，先引谁后引谁不能乱。
+       ① config.js → 全站配置（Supabase 地址、密钥等），挂在 window 上
+       ② bg.js     → 背景视频/图片（IndexedDB 里取，零流量）
+       ③ supabase-js.js → Supabase 官方 SDK
+       ④ sb.js     → 基于 SDK 封装的业务数据层（SBAPI）
+       ⑤ nav.js    → 导航栏、登录弹窗、信箱
+       【为什么都放在 body 末尾】浏览器解析到 script 时会停下来先执行它。
+       放在末尾，前面的 HTML 已经解析完了，脚本里 getElementById 才找得到元素。
+       放 head 里执行的话，元素还不存在，全都会拿到 null。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
 /* ============ 动态列表 ============ */
+
+/* ---------- 第一步：把要用的元素和常量先准备好 ---------- */
 const feedList = document.getElementById('feedList');
+/* 【const】声明一个「不能重新赋值」的变量。
+   【const vs let vs var】
+     const → 不能再整体换掉（feedList = xxx 会报错），但对象内部还能改
+     let   → 可以重新赋值，块级作用域
+     var   → 老写法，有各种坑（变量提升、不认块级作用域），新代码别用
+   规则：默认用 const，确定要改才用 let。这样读代码的人一眼知道「这东西不会变」。
+   【document.getElementById('feedList')】按 id 找元素。
+   返回值是那个 DOM 元素（一个对象，代表页面上的盒子）；找不到就返回 null。 */
+
 const feedCount = document.getElementById('feedCount');
+/* 底部那个「共 N 条」里的数字元素。 */
+
 const refreshBtn = document.getElementById('refreshBtn');
+/* 刷新按钮。 */
 
 const TARGET = 'https://moonbazaar.xyz/home/get_live_feed.php?limit=30&offset=0';
-const POLL_INTERVAL = 5000;
+/* 【常量全大写】行业惯例：全大写的名字表示「这是配置，运行中不会变」。
+   这不是语法要求，纯属给人看的约定。
+   【这个地址】别人站点的接口。? 后面是参数：
+     limit=30  → 一次给 30 条
+     offset=0  → 从第 0 条开始（分页用，offset=30 就是第二页）
+   【&amp; 的问题】这里直接写 &，因为它在脚本块的字符串中，
+   不参与 HTML 解析，不会有转义问题。 */
 
+const POLL_INTERVAL = 5000;
+/* 轮询间隔：5000 毫秒 = 5 秒。
+   【轮询 polling】就是「每隔一段时间问服务器一次有没有新数据」。
+   笨但可靠。对比 WebSocket（服务器主动推）省事得多，代价是空转请求多。 */
+
+/* ---------- 第二步：几个状态开关 ---------- */
 let currentFingerprint = null;
+/* 记录「上一次看到的最新一条」的指纹，用来判断有没有新数据。
+   初始是 null（空），还没加载过。 */
+
 let pollTimer = null;
+/* 存定时器的编号。
+   【为什么要存】setInterval 返回一个数字编号，要停它必须用这个编号去 clearInterval。
+   不存下来就再也停不掉了 —— 这叫「定时器泄漏」，页面越用越卡。 */
+
 let isRefreshing = false;
+/* 正在请求中吗？用来防止重复请求。
+   【竞态问题】用户狂点刷新按钮，如果没有这个开关，
+   会同时发出 5 个请求，回来的顺序可能乱掉，页面显示的数据就串了。
+   这叫「竞态条件 race condition」，是很常见的 bug 源。 */
+
 let feedLoaded = false;
+/* 是否已经成功加载过一次。
+   区分「第一次加载」和「后续轮询」：
+   第一次要整体铺满，后续只在顶部插新的。 */
 
 /* 后端已废（前端直连 Supabase，没有自建 Node 了），只能靠公共 CORS 代理直抓源站。
    三个代理并发打，谁先回来用谁 —— 单个代理经常挂，靠冗余顶住。 */
 const PROXIES = [
+  /* 【数组】用方括号装一串值。
+     这里装的是三个「函数」，因为要用不同方式拼代理地址。
+     【为什么装函数不装字符串】第三个代理需要把原地址 encodeURIComponent 编码，
+     前两个不用，逻辑不一样，所以用函数包一层，调用时统一都是 p(url)。 */
   url => `https://cors.eu.org/${url}`,
+  /* 【url => ...】箭头函数：一种简写函数。
+     等价于 function(url) { return ...; }
+     只有一个参数时可以省括号，函数体只有一句 return 时可以省花括号和 return。
+     【`  反引号】模板字符串：里面的 ${表达式} 会被替换成值，可以直接换行。 */
   url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  /* 【encodeURIComponent】把特殊字符编码成 %XX 形式。
+     网址里的 ? & = 有特殊含义，原样塞进参数里会把参数结构搞乱，
+     必须编码（比如 : 变 %3A，/ 变 %2F）。这是「把网址当参数传」的必备操作。 */
   url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+  /* 【最后一项目后没逗号】也可以，JS 允许。但后面加逗号更安全，
+     以后在末尾追加新项时不会忘记补逗号。 */
 ];
 
+/* 【CORS 是什么】跨域资源共享。
+   A 网站用 JS 去请求 B 网站的接口，浏览器出于安全默认会拦下来（禁止读响应），
+   这就叫「跨域限制」。公共 CORS 代理的原理：让浏览器去请求代理，
+   代理在服务器那边自己去抓 B 站数据，再带上「允许跨域」的响应头返回给你。
+   因为服务器之间没有同源策略限制，所以能绕过。 */
+
 async function fetchViaProxy() {
+  /* 【async function】声明一个异步函数。
+     它有两个作用：① 内部可以用 await；② 调用它返回一个 Promise 而不是直接的值。
+     【Promise 承诺】代表「一个还没完成、但将来会有结果的操作」。
+     可以理解成餐厅给的取餐号：现在没饭，但凭号以后一定能取到。 */
   const results = await Promise.allSettled(
+    /* 【await】等后面那个异步操作出结果，再往下走。
+       注意它「暂停的是这个函数」，不是整个页面 —— 页面照常能点能滚，这叫非阻塞。
+       【Promise.allSettled】等一批 Promise 全部结束（成功或失败都算结束），
+       返回一个数组，每项长这样：{ status: 'fulfilled', value: 结果 }
+       或者 { status: 'rejected', reason: 错误 }。
+       对比 Promise.all：all 只要有一个失败就整体失败，allSettled 不会，
+       它保证给你第一手完整战况 —— 这里需要「哪个成功了用哪个」，所以选 allSettled。 */
     PROXIES.map(p => fetch(p(TARGET)).then(r => {
+      /* 【.map】把数组每一项经过处理变成新的一项。
+         这里把「每个代理函数」变成「对它发起请求的 Promise」。
+         【fetch】浏览器自带的网络请求函数，返回 Promise，拿到的是「响应对象」。
+         【.then】Promise 完成时执行的回调。 */
       if (!r.ok) throw new Error('HTTP ' + r.status);
+      /* 【r.ok】是 fetch 响应对象的一个布尔属性：HTTP 状态码 200~299 时为 true。
+         【必须自己判断】fetch 有个著名的大坑：
+         哪怕服务器返回 404 或 500，fetch 也不会报错，它认为「请求成功送达了」。
+         所以必须手动检查 r.ok，不然你会把错误页面当成正常数据去解析。
+         【throw new Error(...)】主动抛一个错误，让这个 Promise 变成 rejected（失败），
+         这样 allSettled 那一边就能识别出「这个代理挂了」。
+         【r.status】状态码，比如 404、500、403。 */
       return r;
+      /* 成功就把响应原样往下传，交给后面的 .json()。 */
     }))
   );
+
   const ok = results.find(r => r.status === 'fulfilled');
+  /* 【.find】找出数组里第一个满足条件的元素，找不到返回 undefined。
+     【===】三个等号是「严格相等」：值相等 **并且** 类型也相等。
+     1 == '1' 是 true（两个等号会偷偷转类型），1 === '1' 是 false。
+     规则：永远用三个等号，两个等号是 bug 制造机。 */
+
   if (!ok) throw new Error('所有代理均失败');
+  /* 一个成功的都没有 → 抛错，交给调用方的 try/catch 去处理。 */
+
   return await ok.value.json();
+  /* 【ok.value】就是那个响应对象（上面 return r 传下来的）。
+     【.json()】把响应体按 JSON 解析成 JS 对象，它本身也是异步的，所以还要 await。
+     【JSON】一种文本格式，长得像 JS 对象：{"name":"张三","age":18}。
+     服务器和浏览器之间传数据基本都用它。 */
 }
 
 async function fetchFeed() {
+  /* 这层是多余的包装：只是给 fetchViaProxy 换了个业务上的名字。
+     好处是以后要换数据源，只改这里，别处的调用不用动。
+     【这种写法叫「薄封装」】多一层函数只为将来好改，不算坏习惯。 */
   return await fetchViaProxy();
 }
 
 /* 防 XSS */
 function escapeHTML(str) {
+  /* 【function 名字(参数)】传统函数声明写法。
+     跟箭头函数的区别：它有自己独立的 this，而且会「提升」（在定义之前就能调用）。
+     这里选传统写法是因为要在下面多处调用，功能简单，哪种都行。
+
+     【XSS 是什么】Cross-Site Scripting 跨站脚本攻击。
+     如果用户 A 的昵称是「<img src=x onerror=alert(1)>」（一个会执行代码的假图片标签），
+     网站直接把这个字符串插进页面，浏览器会把它当成真的 HTML 解析并执行 ——
+     攻击者就能偷 cookie、冒充你操作。这就是 XSS。
+     防御办法：把所有从外部来的内容都转义，让 < 变成 &lt;，浏览器就只当文字显示。 */
   const div = document.createElement('div');
+  /* 【document.createElement('div')】凭空造一个 div 元素，此时它还没被插进页面，
+     只在内存里存在。这种元素叫「游离节点」。 */
   div.textContent = String(str);
+  /* 【.textContent】设置元素的「纯文本内容」。
+     【关键点】textContent 是安全的：哪怕你塞进去一段「脚本标签 + alert(1)」的字符串，
+     它也只会当普通文字存着，绝不会被解析成标签。
+     【String(str)】强制转成字符串。防止传进来 null 或数字时出错。 */
   return div.innerHTML;
+  /* 【.innerHTML】读出元素的 HTML 内容。
+     因为上一步是用 textContent 塞进去的，浏览器在内部已经把 < 存成了 &lt;，
+     所以这里读出来的 innerHTML 就是「转义好的安全字符串」。
+     【这个技巧的妙处】用浏览器自己的解析器做转义，不用自己手写一堆 replace，
+     既不会漏字符，也不会有错误。 */
 }
 
 /* ============ 重点关注：只留这两个人的记录 ============ */
 const WATCH = ['chengfayunsuan', 'hym666'];
+/* 要盯着的人。想加人就在这里加一项 —— 但注意 HTML 里也得手动加一个对应的
+   watch-box 盒子（id 是 watch 加下标），否则 renderWatch 找不到容器会直接跳过。 */
+
 const WATCH_KEEP = 60;
+/* 每个人最多保留多少条。不设上限的话，页面开一整天，
+   数组会越攒越长，内存一直涨，最后卡死。这叫「内存泄漏」。 */
+
 const watchStore = {};   // { 名字: [tx, ...] } 新 → 旧
+/* 【{} 空对象】用花括号创建对象，里面是「键: 值」的集合。
+   这里当「字典/映射表」用：以用户名为键，存那个人的动态数组。
+   注意用 const 声明对象，仍然可以往里面加键、改值 —— 
+   const 管的是「不能整体换成另一个对象」，不是「内容不能动」。 */
+
 const watchSeen  = {};   // { 名字: Set(指纹) }
+/* 【Set】集合：一组不重复的值。
+   用来记录「这条我已经见过了」，避免同一笔动态被重复插两遍。
+   为什么用 Set 不用数组？因为 Set 的 .has() 判断「有没有」是瞬间完成的，
+   数组的 .includes() 要一项项比，数据多了会明显变慢。 */
 
 function wfp(tx) {
+  /* 【wfp】= watch fingerprint 关注列表用的指纹。
+     参数 tx 是一条动态（transaction 的缩写，一笔交易）。 */
   return `${tx.username}|${tx.source}|${tx.robux_val}|${tx.created_at || tx.time_ago}`;
+  /* 【${}】模板字符串里嵌表达式。
+     【用竖线分隔】拼成一个字符串当唯一标识。为什么不用哈希？
+     因为这几个字段本身就是唯一组合，拼起来直接比较就够了，不用算哈希。
+     【created_at || tx.time_ago】优先用精确时间戳；
+     有些条目没有 created_at，就退回用「3 分钟前」这种文字。
+     【|| 的规则】左边是「假值」才用右边。假值包括：
+       false、0、''（空字符串）、null、undefined、NaN
+       注意 0 和 '' 也算假值，这是 JS 的一个经典陷阱 —— 
+       如果 created_at 万一真的等于 0（1970 年），会被当成没值。 */
 }
 
 function mergeWatch(list) {
+  /* 把新抓到的数据「合并」进关注列表。
+     为什么叫 merge 不叫 set：因为它是累加的，不清空旧数据。 */
   if (!Array.isArray(list)) return;
+  /* 【Array.isArray】判断是不是数组。
+     【为什么必须先判断】如果接口返回的是错误信息（一个对象或字符串）而不是数组，
+     直接 .forEach 会报「list.forEach is not a function」然后整个函数崩掉。
+     先用门槛挡住，后面就能放心操作。这叫「防御性编程」。 */
+
   list.forEach(tx => {
+    /* 【.forEach(回调)】遍历数组每一项，对每一项执行一次函数。
+      【跟 map 的区别】map 会把返回值收集成新数组，forEach 不收集（返回值被丢掉），
+      只为了「做副作用」（比如往别的地方塞数据）。这里就是纯副作用。 */
+
     const n = tx.username;
+    /* 拿到用户名，存成短名字 n，下面用得多，省点打字。 */
+
     if (WATCH.indexOf(n) === -1) return;
+    /* 【.indexOf(值)】找这个值在数组里的位置（下标），找不到返回 -1。
+       【=== -1 就是「不在数组里」】这是 ES5 时代的写法。
+       现代写法是 if (!WATCH.includes(n)) return; 更好读，作用完全一样。
+       【return 在这里的作用】在 forEach 的回调里 return，
+       相当于 continue —— 跳过这一项，继续下一项，不会中断整个循环。 */
+
     watchStore[n] = watchStore[n] || [];
+    /* 【a = a || b】经典惯用法：「如果 a 已经有值就用它，否则用 b」。
+       第一次遇到这个人时 watchStore[n] 是 undefined（假值），就初始化成空数组。 */
+
     watchSeen[n]  = watchSeen[n] || new Set();
+    /* 【new Set()】创建一个空集合。
+       【new】关键字，表示「按这个构造函数造一个新对象」。
+       数组可以直接 [] 造，Set 必须 new Set()。 */
+
     if (watchSeen[n].has(wfp(tx))) return;
+    /* 【.has(值)】集合里有没有这个值。
+       如果有 → 说明这条已经处理过了，直接跳过，避免重复。 */
+
     watchSeen[n].add(wfp(tx));
+    /* 【.add(值)】往集合里加一项。重复加不会报错，也不会有两份（集合特性）。 */
+
     watchStore[n].push(tx);
+    /* 【.push】把一项加到数组末尾。 */
+
     watchStore[n].sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+    /* 【.sort(比较函数)】排序，原地改数组本身（不是返回新数组）。
+       【比较函数】必须传，不传的话 sort 会把元素转成字符串按字典序排，
+       那 10 会排在 2 前面（因为 '10' < '2' 按字符比较），数字排序就全乱了。
+       【比较函数的规则】返回负数 → a 排前面；返回正数 → b 排前面；返回 0 → 顺序不变。
+         这里写的是 b.localeCompare(a)（注意 b 在前），结果是**降序**（新的在上面）。
+       【localeCompare】按「语言习惯」比较两个字符串。
+       对 '2026-10-26 10:00:00' 这种格式的日期字符串，
+       它按字符顺序比，效果等价于按时间先后比 —— 前提是日期格式统一且高位在前。
+       【String(... || '')】防止某一项没有 created_at 时传 null 进去报错，
+       兜底成空字符串（空字符串排最前/最后，不会崩）。 */
+
     if (watchStore[n].length > WATCH_KEEP) watchStore[n].length = WATCH_KEEP;
+    /* 【这句很妙】直接把数组的 length 设小，JS 会自动把多出来的尾巴**截掉**。
+       比用 slice(0, 60) 再赋值回去省一次数组复制。
+       注意：这跟「重新赋值」是两回事，是修改数组本身。 */
   });
+
   renderWatch();
+  /* 数据变完了，立刻重画那两块卡片。 */
 }
 
 function renderWatch() {
+  /* 纯渲染函数：把 watchStore 里的数据画到页面上。 */
   WATCH.forEach((n, i) => {
+    /* 【forEach((值, 下标) => {})】第二个参数是「第几项」，从 0 开始。
+       这里 n 是名字，i 是下标，用来拼 id：'watch' + i → watch0、watch1。 */
+
     const box = document.getElementById('watch' + i);
+    /* 【字符串拼接】'watch' + 0 = 'watch0'。
+       【数字 + 字符串】+ 号遇到字符串就是「连接」，不会做加法。
+       注意 1 + 2 + 'watch' 会得到 '3watch'，而 'watch' + 1 + 2 得到 'watch12' ——
+       从左到右计算，这就是所谓「隐式类型转换」，是容易出错的地方。 */
+
     if (!box) return;
+    /* 页面里没这个盒子（比如你往 WATCH 加了人但忘了加 HTML）→ 跳过，别让整个函数崩。 */
+
     const items = watchStore[n] || [];
+    /* 这个人还没数据时用空数组顶上，下面 items.length 就是 0，安全。 */
+
     box.querySelector('.watch-count').textContent = items.length;
+    /* 【.querySelector(选择器)】在 box 这个元素**内部**找第一个匹配的元素，
+       选择器语法跟 CSS 一样（'.watch-count' 就是类选择器）。
+       对比 getElementById：querySelector 支持任意 CSS 选择器，但只能限定在某个后代里找；
+       getElementById 只能按 id 找、范围是整页，但速度更快。
+       【.textContent = ...】把内容换成这个值。
+       传数字也没关系，会自动转成字符串。 */
+
     const listEl = box.querySelector('.watch-list');
     if (!items.length) {
+      /* 【!items.length】length 为 0 时是假值，取反就是 true。
+         这种「用 length 判断空数组」比 items.length === 0 更简短。 */
       listEl.innerHTML = '<div class="watch-empty">还没抓到 TA 的动态</div>';
+      /* 【TA】网络用语，指代第三人，避免暴露性别。
+         【注意】这里是在 JS 字符串里，所以可以直接写 HTML 标签。
+         但如果内容来自用户输入（比如用户名），就绝对不能直接拼 innerHTML —— 那会有 XSS 风险。 */
       return;
+      /* 空状态画完就结束这个人的渲染。 */
     }
+
     listEl.innerHTML = '';
+    /* 先清空。为什么清空再逐个 appendChild，而不是一次性拼字符串？
+       因为 createItem 返回的是真实 DOM 元素（要复用来绑定事件等），
+       而且逐个 appendChild 比「拼一大串 HTML 再一次性解析」在处理很多项时更可控。 */
+
     items.forEach(tx => listEl.appendChild(createItem(tx, false)));
+    /* 【.appendChild(元素)】把元素加为最后一个孩子。
+       【createItem(tx, false)】第二个参数 false 表示「不是新条目」→ 不播入场动画。
+       关注列表本来就是历史数据，全都在播动画会很吵。 */
   });
 }
 
 /* 指纹：用于判断"新数据" */
 function fingerprint(tx) {
+  /* 注意这跟上面的 wfp 很像但**不一样**，是两个用途：
+     wfp       → 关注列表查重，用原始字符串
+     fingerprint → 主列表判断「有没有新数据」，用 toFixed 归一化后的数字
+     为什么不合成一个？因为主列表要处理「12.34 和 12.3400 算同一条」的情况，
+     关注列表不需要。这是历史演进留下的两套逻辑。 */
   return `${tx.username}|${tx.source}|${parseFloat(tx.robux_val).toFixed(4)}|${tx.time_ago}`;
+  /* 【parseFloat】把字符串转成带小数的数字。
+     接口给的可能就是字符串 "12.34"，不转的话没法做数值比较。
+     【.toFixed(4)】保留 4 位小数，返回字符串 "12.3400"。
+     【为什么要 toFixed】因为不同次请求返回的小数位数可能不一样，
+     "12.34" 和 "12.3400" 直接比字符串是不相等的，但其实数值相同；
+     统一成 4 位再比，就能正确识别为「同一条」。
+     【注意】toFixed 返回的是字符串不是数字，做后续计算前要再 parseFloat。 */
 }
 
 function createItem(tx, isNew) {
+  /* 造一条动态的 DOM 元素。两个参数：数据、是不是新条目。
+     【为什么要 isNew 参数】因为两处调用需求不同：
+     主列表插入新数据时要播动画，关注列表渲染历史数据时不要。 */
   const val = parseFloat(tx.robux_val);
+  /* 转成数字，下面要判断正负和取绝对值。 */
+
   const isGain = val > 0;
+  /* 大于 0 就是赚钱。
+     【命名习惯】is 开头的变量通常是布尔值（true/false），
+     这样读到 isGain 就知道它是「是不是赚了」，不用猜。 */
+
   const abs = Math.abs(val).toFixed(4);
+  /* 【Math.abs】取绝对值：-12.34 变成 12.34。
+     【为什么要绝对值】因为下面要自己拼 +/- 号。
+     如果直接用 -12.34 再拼，会变成 "--12.34" 两个负号。
+     先取绝对值，颜色和符号分别用 isGain 控制，逻辑最干净。 */
 
   const div = document.createElement('div');
+  /* 造一个空 div 当容器。 */
+
   div.className = 'feed-item' + (isNew ? ' new' : '');
+  /* 【.className = 字符串】整个替换 class 属性。
+     这里用三元运算符拼：是新的就多加一个 ' new'。
+     【三元运算符 条件 ? 值1 : 值2】
+       条件为真取冒号前的，为假取冒号后的。相当于 if/else 的简写，适合这种二选一。
+     【注意 ' new' 前面有空格】因为要跟 'feed-item' 分开，
+     没空格会粘成 'feed-itemnew'，那就变成一个不存在的类，样式全丢。
+     【对比 classList.add('new')】那样更安全、可读性更好，
+     但这里需要一次性设置，用 className 更短。 */
+
   div.innerHTML = `
     <div>
       <span class="user">${escapeHTML(tx.username)}</span>
@@ -382,65 +962,174 @@ function createItem(tx, isNew) {
       <span class="time">${escapeHTML(tx.time_ago)}</span>
     </div>
   `;
+  /* 【反引号包起来的是字符串，不是代码】
+     这一段里如果写「双斜杠注释」或「斜杠星号注释」，会被当成文字原样显示在页面上 ——
+     这是本项目之前实实在在踩过的坑。要注释只能像现在这样，写在反引号外面。
+     【每一处 ${} 里为什么都包 escapeHTML】
+     因为 username、source、time_ago 全都来自外部接口，属于「用户可控数据」，
+     任何人都可能把昵称改成恶意脚本。全部转义，一处不漏，才能防住 XSS。
+     这是本文件里最重要的安全点。
+     【${isGain ? 'gain' : 'loss'}】根据正负给不同 class，
+     配合 CSS 里的 .amount.gain / .amount.loss 显示绿/红。 */
   return div;
 }
 
 async function loadFeed(isManual = false) {
+  /* 【默认参数 isManual = false】调用时可以不传，不传就按 false 处理。
+     注意默认参数只在「传了 undefined」或「完全没传」时生效，
+     传 null 是**不**会走默认值的，这是个小陷阱。 */
   if (isRefreshing) return;
+  /* 正在刷新中 → 直接退出，不重复发请求。这就是上面说的「防竞态」。 */
+
   isRefreshing = true;
   refreshBtn.disabled = true;
+  /* 【.disabled = true】给按钮加禁用状态。视觉上变灰（靠 CSS 的 :disabled），
+     行为上点不动、也不能用 Tab 聚焦。这是给用户「正在干活」的反馈。 */
   refreshBtn.textContent = '刷新中…';
+  /* 文字也换掉，双重反馈。 */
 
   try {
+    /* 【try { } catch { } finally { }】错误处理三件套：
+       try     → 里面放可能出错的代码
+       catch   → 出错了走这里，不会让整个页面崩掉
+       finally → 不管成功还是失败，最后一定会执行
+       【为什么必须有】网络请求随时会失败（断网、代理挂了、接口改了）。
+       没有 try/catch，一个请求失败就会抛出未捕获错误，后面的代码全都不执行。 */
     const data = await fetchFeed();
+    /* 拿到数据。这行可能抛错（所有代理都挂了），所以放在 try 里。 */
+
     if (Array.isArray(data)) mergeWatch(data);
+    /* 是数组才送去合并。不是数组就说明接口返回了奇怪的东西，直接忽略，别崩。 */
 
     if (!Array.isArray(data) || data.length === 0) {
+      /* 【||】或：只要左边或右边有一个为真，整个就是真。
+         这里两种情况都当「没数据」处理：
+           不是数组 → 数据格式不对
+           是空数组 → 真没动态
+         【注意 data.length === 0】这里用了三个等号，因为 0 是假值，
+         如果写 !data.length 也能行，但和前面 !Array.isArray 混着写容易看晕。
+         这里选择显式写 === 0，更直白。 */
       if (!feedLoaded || isManual) {
+        /* 【|| 在这里的作用】满足任一条件就更新界面：
+           !feedLoaded → 第一次加载，必须给个结果
+           isManual    → 用户手动点的刷新，必须给反馈
+           如果两个都不满足（自动轮询 + 已经加载过），那就**不**改界面 ——
+           因为自动轮询偶发失败时，把已经显示好好的列表清空换成「暂无动态」，
+           用户会以为数据丢了。这个细节很容易被忽略。 */
         feedList.innerHTML = `<div class="feed-status"><span class="icon">📭</span>暂无动态</div>`;
         feedCount.textContent = '0';
       }
       feedLoaded = true;
+      /* 标记「已经加载过了」。虽然这次是空的，但确实拿到响应了。 */
       return;
+      /* 没数据就不用往下渲染了，直接结束。 */
     }
 
     // 首次加载 / 手动刷新：全部重画
+    /* 【双斜杠】JS 的单行注释。从这里到行尾都是注释。
+       注意：只有写在「代码区」才是注释，写在反引号字符串里会原样显示。 */
     if (!feedLoaded || isManual) {
+      /* 第一次进来，或者用户手动点了刷新 → 全量重绘。 */
       feedList.innerHTML = '';
+      /* 清空旧内容（包括那个「加载中」的占位）。 */
+
       data.forEach(tx => feedList.appendChild(createItem(tx, false)));
+      /* 一条条加进去。全量重绘时不播动画，否则 30 条同时动画会像抽风。 */
+
       currentFingerprint = fingerprint(data[0]);
+      /* 【data[0]】数组第一项 = 最新的一条（接口按时间倒序给的）。
+         记下它的指纹，下次轮询时用它来比对「有没有出现更新的」。 */
+
       feedCount.textContent = data.length;
+      /* 【.length】数组长度。直接当「共几条」显示。 */
+
       feedLoaded = true;
       return;
     }
 
     // 增量更新：找新的插到最上面
+    /* 【增量更新 incremental update】只处理变化的部分，不全量重画。
+       好处：① 省性能 ② 不会把用户正在看的位置重置
+       ③ 不会让已有条目闪一下。这是「感觉流畅」的关键。 */
     if (fingerprint(data[0]) === currentFingerprint) {
+      /* 最新一条的指纹没变 → 没有任何新数据。
+         【===】严格相等，两边都是字符串，直接比内容。 */
       feedCount.textContent = feedList.querySelectorAll('.feed-item').length;
+      /* 【querySelectorAll】找出所有匹配的元素，返回一个 NodeList（类数组）。
+         这里重新数一遍页面上实际有几条，而不是用 data.length ——
+         因为页面上的条数是累积的（轮询会不断加新的），可能比 data.length 多。 */
       return;
+      /* 没新东西就不用动界面了。 */
     }
+
     const newItems = [];
+    /* 用来暂存「这次新出现的条目」。 */
+
     for (const tx of data) {
+      /* 【for...of】遍历数组/可迭代对象。每次循环把当前项赋给 tx。
+         【跟 forEach 的区别】for...of 可以用 break 提前跳出，forEach 不行。
+         这里需要「一遇到旧数据就停」，所以必须用 for...of。
+         【const tx】每次循环都新建一个只属于这一轮的常量，互不干扰。 */
       if (fingerprint(tx) === currentFingerprint) break;
+      /* 【break】立即跳出整个循环。
+         逻辑：接口是按时间倒序给的，从新到旧扫，
+         一旦遇到「上次见过的那条」，说明后面的全都是旧的，stop。
+         这个做法叫「哨兵/边界值」，比用 Set 记录所有历史指纹省内存得多。 */
       newItems.push(tx);
+      /* 没见过 → 收进新数据列表。 */
     }
+
     if (newItems.length > 0) {
       currentFingerprint = fingerprint(data[0]);
+      /* 更新「最后一次见到的」指纹。 */
+
       for (let i = newItems.length - 1; i >= 0; i--) {
+        /* 【倒序遍历】从最后一项往前走到第 0 项。
+           【为什么倒着来】newItems 里是「新→旧」排列的，
+           而 prepend 是往最前面插。如果正序插：
+             插第 1 条（最新）→ 它到最上；再插第 2 条 → 第 2 条跑到第 1 条上面。
+             结果顺序反了。
+           倒序插：先插最旧的，最后插最新的 → 最新的正好在最上面。顺序正确。
+           这是个很典型的「插入顺序陷阱」，值得记住。
+           【i--】每次减 1；(表达式) 里的 let i 声明只在这个循环里有效。 */
         feedList.prepend(createItem(newItems[i], true));
+        /* 【.prepend(元素)】把元素插到「最前面」，成为第一个孩子。
+           对比 appendChild 是插到最后。 */
       }
+
       while (feedList.querySelectorAll('.feed-item').length > 150) {
+        /* 【while】条件为真就一直循环。
+           【为什么用 while 不用 if】可能要删掉好几条才能降到 150 以下。 */
         feedList.removeChild(feedList.lastChild);
+        /* 【.lastChild】最后一个孩子节点。
+           【.removeChild(节点)】从父元素里把它删掉。
+           【为什么要有这层限制】页面开着不关，每 5 秒可能加几条，
+           几小时后 DOM 里能有几千个元素，滚动会卡到动不了。
+           这就是「长列表必须设上限」的原因。 */
       }
       feedCount.textContent = feedList.querySelectorAll('.feed-item').length;
+      /* 重新数一遍更新数字。 */
     }
   } catch (err) {
+    /* 【catch (err)】接住 try 里抛出的错误，err 是错误对象（有 message、stack 等）。
+       注意：变量名写 e / err / error 都行，只是习惯。 */
     console.error('加载失败:', err);
+    /* 【console.error】在浏览器开发者工具（按 F12）的 Console 面板打印红色错误。
+       排错的第一步永远是看这里。用户看不见，但你能看见。
+       对比 console.log 是普通白字。 */
     if (!feedLoaded || isManual) {
+      /* 跟上面同一个道理：自动轮询失败时不要破坏已经显示的列表。 */
       feedList.innerHTML = `<div class="feed-status"><span class="icon">⚠️</span>加载失败，请点「刷新」重试</div>`;
+      /* 明确告诉用户「怎么办」而不是只报「出错了」。这叫「可操作的错误提示」，
+         是体验设计里很重要的一条。 */
     }
   } finally {
+    /* 【finally】不管成功、失败、还是提前 return，都一定执行。
+       最适合放「收尾清理」：把加载状态复位。
+       【为什么不能写在 try 末尾】因为中途 return 或抛错就跳过了；
+       catch 里也要写一遍，重复。finally 一次搞定。 */
     isRefreshing = false;
+    /* 解除锁，允许下次请求。 */
     refreshBtn.disabled = false;
     refreshBtn.textContent = '刷新';
   }
@@ -448,29 +1137,69 @@ async function loadFeed(isManual = false) {
 
 /* 手动刷新：清状态重来 */
 refreshBtn.addEventListener('click', () => {
+  /* 【.addEventListener(事件名, 回调)】给元素绑事件监听。
+     用户点这个按钮时，浏览器就调用这个函数。
+     【为什么不用 onclick 属性】addEventListener 可以绑多个监听器，
+     而且不会覆盖掉别处绑的；onclick 写两次后一个会把前一个覆盖掉。
+     现代代码统一用 addEventListener。 */
   if (pollTimer) clearInterval(pollTimer);
+  /* 【clearInterval(编号)】停掉定时器。
+     【为什么要先停】不停的话，手动刷新的同时自动轮询还在跑，
+     两个请求同时发出去，状态会互相干扰。
+     先停 → 刷完再重新开一个干净的。 */
   currentFingerprint = null;
   feedLoaded = false;
+  /* 把两个状态都重置成「没加载过」，
+     这样接下来的 loadFeed 会走「全量重绘」分支，而不是增量。
+     用户点刷新，期望的是「完整重来一遍」。 */
   feedList.innerHTML = `<div class="feed-status"><span class="icon">⏳</span>刷新中…</div>`;
+  /* 立刻给视觉反馈，不要等请求回来才动 —— 网络慢的时候，
+     用户点了没反应就会狂点，然后更慢，恶性循环。 */
   loadFeed(true).then(() => {
+    /* 【.then】等 loadFeed 这个异步函数执行完再执行。
+       因为 loadFeed 是 async 函数，返回的是 Promise。
+       【为什么要在它完成之后再开定时器】避免「上一次还没回来就又发一次」，
+       保证任意时刻只有一个轮询在跑。 */
     pollTimer = setInterval(() => loadFeed(false), POLL_INTERVAL);
+    /* 【setInterval(回调, 毫秒)】每隔指定毫秒执行一次回调，直到被 clearInterval 停掉。
+       注意它返回一个编号（正整数），要存起来才能停。
+       【对比 setTimeout】setTimeout 只执行一次。 */
   });
 });
 
 /* 首次加载 + 开启轮询 */
 renderWatch();                       // 先把两个框摆出来（空态）
+/* 页面一打开先调一次：把两个 watch-box 里的「加载中…」换成「还没抓到 TA 的动态」。
+   因为后面 mergeWatch 才会真正填数据，这里只是先把空状态摆好，避免一直显示「加载中」。 */
+
 loadFeed(true).then(() => {
+  /* 首次加载。传 true 表示「按手动刷新处理」→ 走全量重绘 + 必须更新界面。 */
   pollTimer = setInterval(() => loadFeed(false), POLL_INTERVAL);
+  /* 首屏加载完才开始轮询。
+     【如果一开始就 setInterval】会在首屏还没回来时就发出第二个请求，重复劳动。 */
 });
 
 /* 页面隐藏时暂停轮询 */
 document.addEventListener('visibilitychange', () => {
+  /* 【visibilitychange】页面「可见性」变化时触发。切到别的标签页、
+     最小化浏览器、锁屏，都会触发。
+     【为什么要监听】用户把标签页切走了，还在每 5 秒发一次请求，纯浪费：
+     浪费他的流量、浪费对方服务器资源、还耗电。
+     这叫「后台节流」，是口碑细节。 */
   if (document.hidden) {
+    /* 【document.hidden】布尔值，页面当前不可见时为 true。 */
     if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    /* 停掉定时器，并把变量清成 null。
+       【为什么清成 null】光 clearInterval 的话，变量里还留着旧编号，
+       下面的 `if (!pollTimer)` 就判断不出「现在是停着的」，回来时不会重启。 */
   } else {
+    /* 页面又切回来了。 */
     if (!pollTimer) {
+      /* 确实是停着的状态（上面清成了 null → !null 是 true），才重启，避免开两个。 */
       pollTimer = setInterval(() => loadFeed(false), POLL_INTERVAL);
       loadFeed(false);
+      /* 立刻拉一次，不等 5 秒。
+         用户切回来是想看最新情况，让他盯着旧数据等 5 秒体验很差。 */
     }
   }
 });
