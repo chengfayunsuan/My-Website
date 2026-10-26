@@ -1,43 +1,86 @@
 <!DOCTYPE html>
 <!-- ============================================================
      文件：pages/videos.html（视频列表页）
-     作用：分页展示所有已发布视频，显示封面、标题、播放量。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：分页展示所有已发布视频（每页 20 条），B 站式封面网格：
+           封面右下角标时长、左上角标「B 站」来源，标题最多两行。
+           也支持「最新 / 热门」两种排序。
+     数据来源：window.SBAPI（Supabase 直连），没有自建后端。
+     说明：这一整段尖括号叹号包起来的是注释，不会显示在页面上。
      ============================================================ -->
 <html lang="zh-CN">
+<!-- 【lang="zh-CN"】声明语言是简体中文。
+     影响：朗读软件选哪种口音、浏览器要不要提示翻译、中文怎么断行。 -->
+
 <head>
+<!-- 【head】给浏览器看的信息区，页面上不显示。 -->
+
 <meta charset="UTF-8">
+<!-- 【charset】字符编码，UTF-8 才能正常显示中文和 emoji。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【viewport】手机上的虚拟窗口宽度。
+     width=device-width = 等于手机实际宽度；initial-scale=1.0 = 初始不缩放。
+     不写这两句，手机上会显示成桌面版的缩微版，字小到看不清。 -->
+
 <title>视频 · 乘法</title>
+<!-- 浏览器标签页上那行字。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 标签页左边的小图标。路径开头的 / 表示从网站根目录开始找。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 引入全站公共样式。
+     【?v=26】缓存版本号：改完 CSS 把它加 1，浏览器才会重新下载。
+     否则用户可能一直看你几个月前缓存的旧样式。 -->
+
 <style>
+  /* 本页专属样式。导航、卡片这类公共部分都在 /style.css 里。 */
+
   .vid-head {
+    /* 顶部那一行：左边标题，右边「排序 + 传视频」。 */
     display: flex;
     align-items: center;
     justify-content: space-between;
+    /* 两端对齐：第一个靠最左、最后一个靠最右。 */
     gap: 12px;
     flex-wrap: wrap;
+    /* 窄屏挤不下时换行，而不是压在一起或溢出屏幕。 */
     margin-bottom: 16px;
   }
+
   .vid-tabs { display: flex; gap: 8px; }
+  /* 「最新 / 热门」两个标签横排。 */
+
   .vid-tab {
+    /* 单个排序标签。 */
     padding: 6px 16px;
     border: 1px solid var(--border);
     border-radius: 999px;
+    /* 【999px】一个足够大的值 → 两端都是半圆的胶囊形。
+       为什么不用 50%：50% 是按宽高的各一半算，长条会变成椭圆。
+       要胶囊就得写一个远大于高度的值。 */
     background: var(--card);
     color: var(--text-light);
     font-family: inherit;
+    /* 【inherit】继承父元素字体。
+       【必须写】button / input / textarea / select 这些「表单控件」
+       浏览器默认用系统字体，不会自动跟网页字体一致，不写就格格不入。 */
     font-size: 14px;
     cursor: pointer;
+    /* 鼠标变小手，暗示可以点。 */
   }
+
   .vid-tab.on {
+    /* 【.on】表示「当前选中」。这是个「状态类」，JS 会动态加/删。 */
     background: var(--grad-primary);
     border-color: var(--primary);
     color: #fff;
     font-weight: 600;
+    /* 字重 600 = 半粗。数字比 bold 更精确，还能取 450、650 这种中间值（可变字体）。 */
   }
+
   .vid-write {
+    /* 「传视频」按钮。注意它是 <a> 标签，所以要多写两件事。 */
     padding: 8px 20px;
     border: none;
     border-radius: 8px;
@@ -47,16 +90,27 @@
     font-size: 14px;
     cursor: pointer;
     text-decoration: none;
+    /* 【必须写】a 标签默认有下划线，去掉才像按钮。 */
     display: inline-block;
+    /* 【必须写】a 默认是行内元素，行内元素设上下的 padding 会「溢出」：
+       背景色画出来了，但不会把周围元素推开，容易跟别的元素叠在一起。
+       改成 inline-block 才有完整的盒子模型，同时还能跟旁边的元素并排
+       （用 block 就会独占一整行了）。 */
   }
+
   .vid-write:hover { background: var(--primary-deep); }
+  /* 悬停换成深一档的主色。 */
+
   .vid-empty {
+    /* 空状态 / 加载中 / 加载失败，三种情况共用一套样式。 */
     padding: 40px 20px;
     text-align: center;
     color: var(--text-light);
     font-size: 15px;
   }
+
   .vid-more {
+    /* 「加载更多」按钮，横跨整行。 */
     margin-top: 14px;
     width: 100%;
     padding: 10px;
@@ -68,90 +122,328 @@
     font-size: 14px;
     cursor: pointer;
   }
+
   .vid-more:hover { border-color: var(--primary); color: var(--primary); }
+  /* 故意做得低调（次要操作不该抢主操作的注意力）。 */
 
   /* B 站式封面网格 */
   #list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px 16px; }
+  /* 【#list】井号开头是 id 选择器，匹配 id="list" 的元素。
+     【display:grid】网格布局 —— 做「一排排整齐的方块」比 flex 省事。
+     【grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))】
+       这是响应式网格最经典的一行，拆开看：
+         repeat(...)           → 重复生成若干列，重复多少次由浏览器自己算
+         auto-fill             → 「能塞几列就塞几列」，根据容器宽度自动决定
+         minmax(200px, 1fr)    → 每列最窄 200px，最宽按 1 份平分剩余空间
+       合起来的效果：宽屏自动变成 5 列、4 列，窄屏变成 2 列、1 列，
+       全程不用写任何 @media 断点。这就是它的价值。
+     【gap: 20px 16px】两个值时是「行间距 20px、列间距 16px」
+       （顺序跟 padding 一样：先上下、后左右）。
+     【为什么行距比列距大】因为每个视频卡片标题在下方，
+       行与行之间要留出标题的高度，不然看着挤。 */
+
   .vb { display: block; text-decoration: none; color: var(--text); }
+  /* 整个视频卡片是一个 <a> 链接。
+     【display:block】因为 a 默认行内，要让它当块级容器用。
+     【color】设成正文色，否则 a 默认的蓝色会传染给里面所有文字。
+     【text-decoration:none】去掉下划线。 */
+
   .vb-cover { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 10px;
     overflow: hidden; background: var(--field); }
+  /* 【position:relative】给里面那些绝对定位的小标签（时长、B 站标）当坐标原点。
+     【aspect-ratio: 16 / 9】宽高比锁死为 16:9。
+       好处：宽度随容器变，高度自动按比例算 —— 不用 JS 计算，也不用 padding 撑高的老花招。
+       【overflow:hidden】配合圆角用：让里面的图片也被圆角裁掉，
+       不然图片的直角会从圆角里戳出来。 */
+
   .vb-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* 【object-fit:cover】图片填满整个框、超出部分裁掉、不拉伸变形。
+     用户上传的封面长宽比五花八门，必须用 cover，否则会变成扁脸/瘦脸。
+     其他值：contain 完整显示留白边、fill 强行拉伸（默认值，会变形）。
+     【display:block】去掉图片底部那几像素「基线空隙」
+     （图片是行内元素，默认按文字基线摆，下面会多出一点空白）。 */
+
   .vb-ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
     font-size: 26px; color: #fff; background: var(--primary); }
+  /* 【ph = placeholder 占位】
+     没有封面图时显示的大 ▶ 号。
+     【为什么要占位】如果什么都不显示，卡片高度会塌掉，
+     整个网格变得参差不齐。有了占位，所有卡片高度一致。
+     【display:flex + align-items:center + justify-content:center】
+     这是「水平垂直都居中」最标准的三行组合（flex 版）。
+     另有一种老写法是绝对定位 + translate，现在没必要了。 */
+
   .vb-dur { position: absolute; right: 6px; bottom: 6px; padding: 1px 5px; border-radius: 4px;
     background: rgba(0, 0, 0, .74); color: #fff; font-size: 12px; line-height: 16px; }
+  /* 封面右下角的时长（比如 12:34）。
+     【position:absolute】绝对定位：相对于最近的那个 position:relative 祖先（也就是 .vb-cover）摆位置。
+     【right:6px; bottom:6px】贴着右下角，留 6px 边距。
+     【rgba(0,0,0,.74)】半透明黑底。
+       【为什么必须加底】白色小字直接压在封面图上，遇到亮色图片就完全看不清了。
+       加一层半透明黑底，任何图片上都能读清楚 —— 这是字幕/标签的标准做法。 */
+
   .vb-tag { position: absolute; left: 6px; top: 6px; padding: 1px 6px; border-radius: 4px;
     background: rgba(251, 114, 153, .92); color: #fff; font-size: 11px; line-height: 16px; }
+  /* 左上角的「B 站」来源标。B 站粉底色，92% 不透明度。 */
+
   .vb-title { margin-top: 8px; font-size: 14px; line-height: 1.45; font-weight: 600;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  /* 【这个「多行省略号」三件套必须背下来】
+     display: -webkit-box        → 变成一个支持多行截断的特殊盒子
+     -webkit-box-orient: vertical → 让内容竖着排（默认是横的）
+     -webkit-line-clamp: 2       → 最多显示 2 行，超出部分显示「…」
+     再加 overflow: hidden 兜底。
+     【-webkit- 前缀是什么】这是 Chrome / Safari 早期自己搞的私有属性，
+     后来因为太好用被广泛采用，其他浏览器也跟进兼容了。
+     现在做「标题固定两行」基本都这么写，虽然它严格来说不是正式标准。
+     单行省略号则用标准三件套：overflow + text-overflow + white-space。
+     【为什么标题要限两行】不限的话，长标题会把卡片撑高，
+     同一行的其他卡片就短一截，网格看起来参差不齐。 */
+
   .vb:hover .vb-title { color: var(--primary-deep); }
+  /* 【.vb:hover .vb-title】鼠标悬停在整张卡片上时，标题变主色。
+     注意是悬停在外层 .vb 上（不只是标题上）—— 
+     因为用户感知的「可点区域」是整张卡片，反馈也应该是整张卡片。 */
+
   .vb-meta { margin-top: 5px; font-size: 12px; color: var(--text-light); display: flex;
     flex-wrap: wrap; gap: 8px; }
+  /* 标题下面那排小字：作者、播放量、点赞、时间。
+     【flex-wrap:wrap】窄屏上挤不下就换行，不会溢出。 */
+
   #list .vid-empty { grid-column: 1 / -1; }
+  /* 【grid-column: 1 / -1】让这个元素横跨从第 1 条网格线到最后一条网格线，
+     也就是「占满整整一行」。
+     【为什么需要】「加载中…」这条提示也是 #list 的网格子元素，
+     不横跨的话它只会占第一格（200px 宽），挤在角落里很难看。
+     【1 / -1 的意思】1 是第一条竖线，-1 是「倒数第一条」（从右数）。
+     用 -1 而不是具体数字，是因为列数是自动算的，你不知道到底有几列。 */
 </style>
 </head>
 <body>
+<!-- 从这里开始才是页面上看得见的内容。 -->
+
   <div id="navbar"></div>
+  <!-- 导航栏占位。真正的导航由 js/nav.js 加载后塞进来，
+       几十个页面只维护一份导航代码，改一次全站生效。 -->
 
   <section style="margin-top:36px;">
+    <!-- 【section】语义标签，表示独立内容区块。
+         外观跟 div 一样，区别只是「告诉人和搜索引擎这里是什么」。
+         【style="margin-top:36px;"】行内样式，一次性微调用，
+         优先级极高，以后想用 CSS 覆盖得加 !important，所以别滥用。 -->
     <div class="card">
+      <!-- .card 是公共样式里的卡片外观：圆角、半透明底、细边框、阴影。 -->
+
       <div class="vid-head">
         <h2 class="section-title" style="margin:0;">视频</h2>
+        <!-- 【style="margin:0;"】清掉标题自带的上边距。
+             h1~h6 浏览器默认有上下 margin，塞进 flex 行里会把整行撑高、对齐歪掉。
+             这种「清 margin」是排版时最常见的调整。 -->
+
         <div style="display:flex; gap:10px; align-items:center;">
+          <!-- 行内容器，把「排序 + 按钮」包成一组。 -->
           <div class="vid-tabs">
             <button class="vid-tab on" data-sort="new">最新</button>
+            <!-- 【data-sort="new"】自定义数据属性（data- 开头是规范）。
+                 JS 里用 btn.dataset.sort 读到 "new"。
+                 【为什么不用 id】id 全页唯一，标签有多个；
+                 用 data- 把「这个按钮代表什么」直接写在标签上最直观。
+                 【class 里的 on】表示默认选中「最新」。 -->
             <button class="vid-tab" data-sort="hot">热门</button>
           </div>
           <a class="vid-write" href="/pages/video-write.html">传视频</a>
+          <!-- 【a 标签】跳页面的用 a，执行动作的用 button。
+               好处：支持右键新标签打开、支持复制链接、悬停能看到目标地址。 -->
         </div>
       </div>
 
       <div class="v-grid" id="list">
+        <!-- 【这里同时有 v-grid 和 #list 两个选择器命中】
+             在 style.css 里 .v-grid 定义了网格布局，
+             本页的 #list 又用 grid-template-columns 覆盖了一次。
+             【谁生效】id 选择器的「权重」比类选择器高得多，
+             所以 #list 那一条会赢。这也是为什么本页要重复写 display:grid —— 
+             目的是把 .v-grid 的列数改成 auto-fill 的自适应列。 -->
         <p class="vid-empty">加载中…</p>
+        <!-- 占位。JS 拿到数据后会整个替换掉。 -->
       </div>
 
       <button class="vid-more" id="moreBtn" style="display:none;">加载更多</button>
+      <!-- 【style="display:none;"】初始隐藏。
+           【为什么】数据还没回来，不知道有没有第二页；
+           而且如果总共只有 3 支视频，这个按钮就是多余的。
+           等数据回来后由 JS 决定显示还是隐藏。 -->
     </div>
   </section>
 
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+  <!-- 依次引入 5 个脚本，顺序绝不能乱，每个都依赖前一个：
+         config.js        → 全站配置，挂到 window 上
+         bg.js            → 背景图/视频（IndexedDB 取，零流量）
+         supabase-js.js   → Supabase 官方 SDK
+         sb.js            → 业务层，提供 window.SBAPI
+         nav.js           → 导航栏 + 登录弹窗 + 信箱
+       【为什么都放 body 末尾】浏览器解析到 script 会停下先执行它。
+       放在末尾时上面的 HTML 已解析完，脚本里 getElementById 才找得到元素。
+       放 head 里执行的话元素还不存在，拿到的全是 null。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
+/* ============ 视频列表 ============ */
+
+/* ---------- 1. 拿元素、定状态 ---------- */
 const listEl = document.getElementById('list');
+/* 【const】声明不可重新赋值的变量。
+   规则：默认 const，确定要改才 let。读代码的人一眼知道它不会变。
+   【getElementById】按 id 找元素，找不到返回 null。 */
 const moreBtn = document.getElementById('moreBtn');
 
 let sort = 'new';
+/* 当前排序：'new' 最新 / 'hot' 热门。点标签时改它。
+   【用字符串不用布尔值】以后要加第三种排序（比如「最多收藏」），
+   加个字符串值就行，结构不用改。 */
 let offset = 0;
+/* 【offset 偏移量】分页用：已经看过多少条，下次从第几条开始取。
+   第一次 0，取 20 条后变 20，再点「加载更多」就从第 20 条往下取。
+   【offset/limit 的缺点】翻页期间如果有人插入新数据，
+   会出现「某条被跳过」或「某条重复出现」。
+   数据变化不频繁的场景用这个完全够，大厂那种高并发场景会用游标（cursor）分页。 */
 const STEP = 20;
+/* 每页条数。全大写是行业惯例，表示「这是配置，运行中不变」，纯约定不是语法。 */
 
+/* ---------- 2. 转义函数（防 XSS） ---------- */
 function escapeHTML(s) {
+  /* 【XSS 跨站脚本攻击】
+     如果有人把视频标题写成一段「图片标签 + onerror 里塞脚本」的代码，
+     网站直接当 HTML 插进页面，浏览器会真的解析并执行 ——
+     攻击者就能偷登录凭证、冒充你操作。
+     唯一的根治办法：所有用户输入在显示前转义，
+     把尖括号引号换成「实体」（< 变成 &lt;），浏览器就只当普通文字。
+     【必须转 5 个字符】< > & " ' —— 漏一个都可能被绕过。 */
   return String(s == null ? '' : s)
+  /* 【s == null】宽松比较同时挡住 null 和 undefined（undefined == null 为 true）。
+     【String(...)】强制转字符串，因为下面 .replace 是字符串方法，
+     传数字或布尔值会直接报错。 */
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    /* 【/&/g】正则：斜杠包起来是正则，g 表示「全局」——替换所有出现的地方。
+       不加 g 只替换第一个，剩下的漏掉，转义就白做了。
+       【&amp; 必须第一个转】因为 & 是实体编号的开头。
+       如果先转 < 变 &lt;，那个 & 再被转一次就成了 &amp;lt;，
+       页面上会原样显示 "&lt;" 这几个字符。顺序错了整套就废了。 */
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  /* 引号也要转：内容要往 HTML 属性里塞的时候（比如 src="..."），
+     属性里的引号不转就能提前闭合属性、注入新属性。
+     【&#39; 是什么】HTML 实体的数字写法：# + 字符的 Unicode 码点。
+     单引号码点是 39。 */
 }
 
+/* ---------- 3. 媒体地址处理 ---------- */
 const MEDIA = window.MEDIA_BASE || '';
+/* 【window.MEDIA_BASE】config.js 里挂到全局的「媒体文件基地址」。
+   可能长这样：https://pub-xxx.r2.dev 或者 https://cdn.你的域名.com
+   【|| ''】没配置时兜底成空字符串（= 用相对路径），
+     这样本地开发时没有 CDN 也能跑，不会直接崩。
+   【为什么用 window. 前缀】明确表示「这是全局变量」，
+   而且变量不存在时只返回 undefined 而不会抛错，比直接写 MEDIA_BASE 更安全。 */
+
 function mediaUrl(p) {
+  /* 【p】path，数据库里存的视频/封面路径。
+     这个函数负责把它变成一个浏览器真的能加载的完整地址。 */
   if (!p) return '';
+  /* 空值时返回空字符串。调用方会判断「是空就不显示这个元素」。 */
+
   if (/^(https?:|data:|\/\/)/.test(p)) return p;
+  /* 三种「已经是完整地址」的情况，原样返回：
+       ① http:// 或 https:// 开头 → 完整网络地址
+       ② data: 开头 → 内嵌的 base64 数据
+       ③ // 开头 → 协议相对地址（自动跟随当前页面的 http/https）
+     【/^(https?:|data:|\/\/)/】拆开看：
+       /            → 正则的开始和结束分隔符
+       ^            → 必须从字符串开头匹配（不是开头就不算）
+       (A|B|C)      → 分组 + 或，三个里任一都行
+       https?:      → http 后面那个 s 可以出现 0 次或 1 次（? 表示可选）
+       :            → 冒号，字面量
+       \/\/         → 两道斜杠。斜杠在正则里必须写成 \/ 转义，
+                      因为普通斜杠是正则的分隔符，不转义会被当成正则结束。
+     【.test(p)】用这个正则去测字符串，返回 true/false。 */
+
   return MEDIA.replace(/\/+$/, '') + '/' + String(p).replace(/^\/+/, '');
-}
-function fmtDur(sec) {
-  const s = Math.floor(Number(sec) || 0);
-  if (!s) return '';
-  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = s % 60;
-  const p = n => (n < 10 ? '0' + n : '' + n);
-  return (h ? h + ':' + p(m) : m) + ':' + p(ss);
+  /* 【这一行是「安全地拼路径」的经典写法】
+     【MEDIA.replace(/\/+$/, '')】
+       去掉 MEDIA 末尾所有的斜杠。
+       【\/+$】末尾（$）的一个或多个（+）斜杠。
+       不加这一步：MEDIA 是 "https://cdn.com/" 而 p 是 "/video.mp4"，
+       拼出来就成了 "https://cdn.com//video.mp4" 双斜杠。
+       多数服务器能容忍，但有些严格的服务会 404。
+     【String(p).replace(/^\/+/, '')】
+       去掉 p 开头所有的斜杠。
+       【^\/+】开头（^）的一个或多个斜杠。
+     【合起来的效果】不管两边带不带斜杠，拼出来永远只有一个斜杠。
+       这种「先各自清洗再拼接」比用 if/else 判断四种组合要干净得多。
+       这个技巧在拼 URL、拼文件路径时非常常用。 */
 }
 
+function fmtDur(sec) {
+  /* 【fmtDur】= format duration，把「秒数」格式化成「分:秒」或「时:分:秒」。
+     比如 3725 秒 → "1:02:05"，125 秒 → "2:05"。 */
+  const s = Math.floor(Number(sec) || 0);
+  /* 【Number(sec)】转数字。可能传来的是字符串 "125"。
+     【|| 0】转出来是 NaN（不是数字）时兜底成 0。
+       因为 NaN 是假值，|| 会切到右边。
+     【Math.floor】向下取整，去掉小数部分（3.9 → 3）。
+       【为什么不四舍五入】时长显示 3.9 秒就要说 3 秒，向上取整会显得比实际长。 */
+  if (!s) return '';
+  /* 0 秒（或者没时长）就返回空字符串 —— 调用方会判断「是空就不显示时长标签」。
+     【为什么返回空字符串而不是 '0:00'】没时长的视频显示 "0:00" 是误导，
+     什么都不显示更诚实。 */
+
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = s % 60;
+  /* 【%】取余（取模）运算符，算「除完剩多少」。
+     【拆解】假设 s = 3725 秒：
+       h  = 3725 / 3600 = 1.034… → floor → 1 小时
+       s % 3600 = 3725 - 3600 = 125（去掉整小时后的余数）
+       125 / 60 = 2.08… → floor → 2 分钟
+       ss = 125 % 60 = 5 秒
+       结果 1:02:05 ✓
+     【为什么要先取余再除以 60】
+       如果直接 s / 60 = 62.08 → floor → 62 分钟，
+       那 "62 分钟" 就不是你想显示的格式了。
+       取余的作用是「只保留不满一小时的那部分」。 */
+
+  const p = n => (n < 10 ? '0' + n : '' + n);
+  /* 【p】= pad 补零。小于 10 就在前面加个 0（5 → "05"）。
+     【'' + n】数字转字符串的小技巧（也可以用 String(n) 或 n.toString()）。
+     【为什么三元两边一个用 '0' + n 一个用 '' + n】
+       第一个的结果本来就是字符串了；第二个要强制转成字符串，
+       否则返回的是数字，后面用 + 拼接时可能会变成加法运算 —— 
+       不过这里外层是字符串拼接，其实不加也行。加上更保险。 */
+
+  return (h ? h + ':' + p(m) : m) + ':' + p(ss);
+  /* 【h ? A : B】有小时才显示小时部分：
+       有小时 → "1:02" + ":05" → "1:02:05"
+       没小时 → 直接用分钟数（不补零，因为 "2:05" 比 "02:05" 自然）+ ":05" → "2:05"
+     【为什么分钟在有小时时要补零、没小时时不补】
+       这是视频网站通用的显示习惯，用户看着最舒服。细节但很见功力。 */
+}
+
+/* ---------- 4. 把一条视频数据变成一段 HTML ---------- */
 function cardHTML(v) {
   const cover = mediaUrl(v.poster);
+  /* 【poster】封面图路径。经过 mediaUrl 处理变成可用地址。 */
   const bili = /^bili:/i.test(v.video_path || '');
+  /* 判断这个视频是不是「从 B 站导入的」。
+     【约定】video_path 存 "bili:BV1xx411c7mD" 这种格式表示 B 站视频，
+     存普通路径就表示本站自己的文件。
+     【/^bili:/i】开头的 bili: 字样，i 标志表示「忽略大小写」，
+       所以 "BILI:" 也能匹配上。
+     【v.video_path || ''】字段可能是 null，
+       直接 /regex/.test(null) 会得到 false（不会报错，但意图不清晰），
+       兜底成空字符串更明确。 */
+
   return `
     <a class="vb" href="/pages/video.html?id=${v.id}">
       <div class="vb-cover">
@@ -171,50 +463,207 @@ function cardHTML(v) {
         <span>${escapeHTML(SBAPI.fmtTime(v.created_at))}</span>
       </div>
     </a>`;
+  /* 【这一段嵌套三元很难读，值得拆解】
+     外层：有封面图吗？
+       有 → 用 <img> 显示
+       没有 → 内层再判断：是 B 站视频吗？
+                是   → 输出一个带 data-bv 的占位块（下面 fillLazyPosters 会去抓封面）
+                不是 → 输出普通的 ▶ 占位块
+
+     【img 上三个属性都是性能/隐私优化】
+       loading="lazy"  → 懒加载：图片进入可视区域前不下载。
+         一页 20 个封面就是 20 个请求，不懒加载会拖慢首屏。
+       alt=""          → 空替代文字。因为标题已经说明了内容，
+         读屏软件遇到空 alt 会直接跳过这张图，不打断阅读。
+       referrerpolicy="no-referrer" → 请求图片时不发送「来源页地址」。
+         ① 保护隐私（不告诉对方你从哪个页面点过来的）
+         ② 绕开防盗链（很多图床会检查来源，不带就允许加载）
+
+     【data-bv 那串写得特别绕，拆开看】
+       String(v.video_path || '')   → 保证是字符串
+       .replace(/^bili:/i, '')      → 去掉开头的 "bili:"，只留下 BV 号
+       escapeHTML(...)              → 因为要放进 HTML 属性里，必须转义
+     这一整串塞在模板字符串的 ${} 里，所以不能换行，
+     导致可读性差 —— 如果复杂到看不清，应该先在上方存成变量再插进来。
+
+     【重要提醒】反引号内全是「字符串内容」，不是代码。
+     在这里面写双斜杠或斜杠星号注释，会被原样显示到页面上。
+     本项目之前真的踩过这个坑。 */
 }
 
 // 老数据 poster 存成 null（当年第三方代理抓不到），这里按 BV 号现取封面补上
+/* 【这是个「数据修复」而不是「正常功能」】
+   早年 B 站视频的封面抓不到，数据库里 poster 是空的。
+   现在有了 fetchBili 接口，可以在用户浏览时顺手把封面补上，
+   让老数据看起来不那么残破。 */
 async function fillLazyPosters() {
   const els = [...document.querySelectorAll('.vb-lazy[data-bv]')];
+  /* 【document.querySelectorAll】找出所有匹配的元素，返回 NodeList。
+     【...】展开运算符：把 NodeList 摊开成真正的数组。
+       【为什么要转数组】NodeList 只有 forEach，没有 map / filter / some 这些方法。
+       转成真数组之后所有数组方法都能用。
+       还有一个实际好处：转数组的那一刻是「快照」——
+       后面 DOM 被修改了也不会影响手上这份列表，遍历时才不会出错。
+     【.vb-lazy[data-bv]】组合选择器：
+       类名是 vb-lazy 并且 有 data-bv 属性 的元素。 */
+
   await Promise.all(els.map(async el => {
+    /* 【Promise.all(数组)】等一批异步操作全部完成再往下走。
+       【为什么不用一个一个 await】那样要串行等，20 个封面就要等 20 次往返；
+       并发的话总时间约等于最慢的那一个。这是最基础的性能优化。
+       【.map(async el => ...)】每个元素都启动一个异步任务，返回一组 Promise。 */
     const info = await SBAPI.fetchBili(el.getAttribute('data-bv'));
+    /* 【.getAttribute('data-bv')】读属性值。
+       【为什么不用 el.dataset.bv】两种都行，dataset 更短；
+       getAttribute 是更底层的写法，对自定义属性名没有任何限制。 */
     if (!info || !info.pic) return;
+    /* 没拿到数据、或者数据里没有封面图地址 → 这一条放弃，保留原来的 ▶ 占位。
+       【这叫「优雅降级」】修不好就保持原样，绝不能让页面崩掉。 */
+
     const img = document.createElement('img');
+    /* 【createElement】凭空造一个元素，此时它还没被插进页面（只在内存里）。
+       这种元素叫「游离节点」。 */
     img.src = info.pic;
     img.alt = '';
     img.loading = 'lazy';
+    /* 【.loading = 'lazy'】用 JS 设属性时直接赋值就行，
+       不需要 setAttribute（普通的字符串属性都可以这么设）。 */
     img.setAttribute('referrerpolicy', 'no-referrer');
+    /* 【为什么这个要用 setAttribute】
+       因为 JS 里 img.referrerPolicy 这个属性名是驼峰写法，
+       而 HTML 属性是小写连字符写法，两种都能用但容易搞混。
+       遇到不确定的，setAttribute('属性名', 值) 永远是对的。
+       【判断标准】简单的常用属性（src / alt / title）直接赋值；
+       生僻的、带连字符的（如 aria-* / data-* / referrerpolicy）用 setAttribute 更稳。 */
     el.replaceWith(img);
+    /* 【.replaceWith(新元素)】用新元素「换掉」当前元素（原地替换，位置不变）。
+       【和 remove() + appendChild() 的区别】那样要先删后加，
+       位置会跑到最后面；replaceWith 一步到位且保持原位置。
+       这是现代浏览器提供的便捷方法，非常好用。 */
   }));
+  /* 【await 放在这里的作用】整个函数会等所有封面都补完才结束。
+     调用方 load() 里没 await 它 —— 也就是说这是「后台跑着，不挡主流程」，
+     用户不用等封面补完就能看到列表。这个设计很对。 */
 }
 
+/* ---------- 5. 加载数据 ---------- */
 async function load(append) {
+  /* 【append】true = 追加到后面（加载更多），false = 从头重画（切排序/首次进入）。 */
   if (!append) { offset = 0; listEl.innerHTML = '<p class="vid-empty">加载中…</p>'; }
+  /* 【一行两个语句用分号隔开】只在很短的时候这么写。
+     【切排序为什么 offset 归零】排序变了，之前「翻到第 20 条」的位置就没意义了，
+     必须从第一页重新开始。 */
+
   try {
+    /* 【try / catch】网络请求随时会失败（断网、超时、接口改了）。
+       没有它，一旦出错后面的代码全都不执行，页面就永远卡在「加载中…」。 */
     const d = await SBAPI.getVideos({ limit: STEP, offset, sort });
+    /* 【await】等这个异步操作出结果。它只暂停这个函数，不阻塞页面，
+       页面照常能点能滚，这叫「非阻塞」。
+       【传对象当参数】比按位置传参（getVideos(20, 0, 'new')）好：
+       调用处一眼能看出每个值是什么意思，顺序写错也不容易出 bug。
+       【{ offset }】对象简写语法，等价于 { offset: offset }。 */
+
     if (!d.ok) throw new Error();
+    /* 【throw new Error()】主动抛错，让流程直接跳到 catch。
+       【为什么要抛】接口返回了但 ok 是 false（权限不够、服务器出错），
+       这也算失败，应该走同一套错误处理，不能继续往下渲染。 */
+
     const rows = d.list.map(cardHTML).join('');
+    /* 【.map(cardHTML)】把每条视频数据变成一段 HTML。
+       直接把函数名传给 map，map 会把每个元素当参数传进去，
+       而 cardHTML(v) 正好需要一个参数，刚好对得上。
+       不放心就写 v => cardHTML(v)，更直白。
+       【.join('')】用空字符串把数组拼成一个长字符串。
+       【必须写 join】不写的话数组转字符串默认用逗号连接，
+       页面上每个视频之间就会多出一堆逗号。这是新手最容易踩的坑之一。 */
+
     listEl.innerHTML = (append ? listEl.innerHTML.replace(/<p class="vid-empty">.*?<\/p>/s, '') : '') + rows;
+    /* 【「追加」的核心逻辑，拆开看】
+       ① append 为 true：先把现有的「加载中」提示删掉，再在后面接新内容
+          append 为 false：从空字符串开始（= 整体替换）
+       ② 最后把 rows 接上
+
+       【.replace(/<p class="vid-empty">.*?<\/p>/s, '')】
+         【/.../s】s 是正则的 dotAll 标志：
+           默认点号 . 不匹配换行，加了 s 才能匹配包括换行在内的所有字符。
+         【.*?】非贪婪匹配：尽可能少地吃字符。
+           用 .*（贪婪）会一路吃到最后一个 </p>，把中间所有视频都吞掉删了 ——
+           那就全毁了。加个问号变成非贪婪，吃到最近的 </p> 就停，非常关键。 */
+
     if (!d.list.length && !append) listEl.innerHTML = '<p class="vid-empty">还没有人传视频，来当第一个吧~</p>';
+    /* 空状态提示。三个条件缺一不可：
+       ① 返回列表为空（length 为 0 是假值，取反即「长度为零」）
+       ② 不是在追加（追加时没数据表示「没有更多了」，不该说「没人传视频」）
+       ③ 满足前两条才显示 */
+
     offset += d.list.length;
+    /* 【+=】累加。
+       【为什么用 d.list.length 而不是 STEP】最后一页可能只有 5 条，
+       用 STEP 会白白跳过 15 条数据。必须用实际返回的条数。 */
+
     moreBtn.style.display = d.list.length < STEP ? 'none' : 'block';
+    /* 【三元运算符 条件 ? 值1 : 值2】
+       返回条数少于每页数（已经到底了）→ 'none' 藏起来
+       等于 20（可能还有更多）→ 'block' 显示
+       【.style.display】直接改行内样式。
+       【为什么用 < STEP 而不是 === 0】可能刚好剩 15 条，返回 15 条，
+       这时候其实已经到头了，也该藏起来。 */
+
     fillLazyPosters();
+    /* 【注意这里没有 await】故意不等它 —— 
+       补封面是个「后台优化」，不该让用户等。
+       列表先显示出来，封面到了再一个个换上，体验最好。
+       【代价】如果 fillLazyPosters 内部抛错，会变成「未处理的 Promise 拒绝」，
+       控制台报警告。更严谨的写法是 .catch(() => {}) 兜一下。 */
   } catch {
+    /* 【catch 后没写 (err)】现代 JS 允许省略参数（如果不打算用这个错误对象）。
+       这里只想「出错了给个提示」，不关心具体错误，所以省掉。 */
     listEl.innerHTML = '<p class="vid-empty">加载失败，刷新试试</p>';
+    /* 【好提示的标准】不只说「出错了」，还告诉用户「能怎么办」。
+       这里给了「刷新试试」。只说「加载失败」用户会懵，
+       说「请联系管理员」又太远 —— 给一个用户自己能做的动作最实用。 */
   }
 }
 
+/* ---------- 6. 排序标签点击 ---------- */
 document.querySelectorAll('.vid-tab').forEach(b => {
+  /* 【NodeList.forEach】querySelectorAll 返回的 NodeList 有 forEach 方法，
+     可以像数组一样遍历。
+     【b => {}】箭头函数，等价于 function(b) {}，只是更短。
+       它没有自己的 this —— 这里用不到 this，所以无所谓。 */
   b.addEventListener('click', () => {
+    /* 【addEventListener】绑点击监听。
+       比用 onclick 属性好：可以绑多个监听器互不覆盖。 */
     document.querySelectorAll('.vid-tab').forEach(x => x.classList.remove('on'));
+    /* 先把所有标签的选中状态清掉。
+       【.classList.remove('on')】去掉 on 这个类。
+       内层变量取名叫 x 而不叫 b，是为了不和外层的 b 重名 ——
+       虽然允许覆盖，但重名会让代码难读。 */
     b.classList.add('on');
+    /* 再给点中的加上。顺序不能反，反了会把自己也删掉。 */
     sort = b.dataset.sort;
+    /* 【dataset.sort】读 data-sort 的值，得到 'new' 或 'hot'。
+       【命名转换】data-sort → dataset.sort；
+       data-user-id → dataset.userId（连字符转驼峰）。这个细节容易忘。 */
     load(false);
+    /* false = 从第一页重新加载。 */
   });
 });
+
 moreBtn.addEventListener('click', () => load(true));
+/* 【为什么用箭头函数包一层，不直接写 load】
+   直接写 addEventListener('click', load) 的话，
+   浏览器会把「事件对象」当成第一个参数传进去（append = 事件对象 = 真值），
+   结果永远在追加，切排序也会变成追加。这是个非常隐蔽的 bug。
+   包一层箭头函数，调用 load(true) 时参数就完全由你控制了。 */
 
 load(false);
+/* 【启动：首次加载】
+   放在所有函数定义之后。
+   【为什么】JS 从上往下执行，函数声明会「提升」（可以先调用后定义），
+   但 const / let 声明的变量不提升，提前用会拿到 undefined。
+   统一把「启动代码」放最后是最稳的习惯。 */
 </script>
 </body>
 </html>

@@ -1,43 +1,93 @@
 <!DOCTYPE html>
 <!-- ============================================================
      文件：pages/articles.html（文章列表页）
-     作用：分页展示所有已发布文章，支持按分类/时间浏览。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：分页展示所有已发布文章（每页 20 条），可以切「最新 / 热门」两种排序；
+           页面最上方还嵌了一块「最新视频」，让人一进来就能看到视频。
+     数据来源：window.SBAPI（Supabase 直连），没有自建后端。
+     说明：这一整段尖括号叹号包起来的是注释，不会显示在页面上。
      ============================================================ -->
 <html lang="zh-CN">
+<!-- 【lang="zh-CN"】声明语言是简体中文。
+     影响：朗读软件选哪种口音、浏览器要不要提示翻译、中文怎么断行。 -->
+
 <head>
+<!-- 【head】给浏览器看的信息，页面上不显示。 -->
+
 <meta charset="UTF-8">
+<!-- 【charset】字符编码。UTF-8 才能正常显示中文和 emoji。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【viewport】手机上的「虚拟窗口」。
+     width=device-width = 宽度等于手机实际宽度；initial-scale=1.0 = 初始不缩放。
+     不写这两句，手机上网页会显示成桌面版的缩微版，字小到看不清。 -->
+
 <title>文章 · 乘法</title>
+<!-- 浏览器标签页上那行字。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 标签页左边的小图标。
+     路径开头的单个 / 表示「从网站根目录开始」，不是当前文件夹。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 引入全站公共样式。
+     【?v=26】缓存版本号：改完 CSS 把它加 1，浏览器才会重新下载新样式。
+     否则用户可能一直在看你几个月前缓存的旧版本。 -->
+
 <style>
+  /* 本页专属样式。导航、卡片这些公共的都在 /style.css 里。 */
+
   .art-head {
+    /* 页面顶部那一行：左边标题，右边「排序切换 + 写文章 + 传视频」。 */
     display: flex;
     align-items: center;
     justify-content: space-between;
+    /* 两端对齐：第一个靠最左，最后一个靠最右，中间空隙均分。 */
     gap: 12px;
     flex-wrap: wrap;
+    /* 窄屏上挤不下时允许换行，而不是压在一起或溢出屏幕。 */
     margin-bottom: 16px;
   }
+
   .art-tabs { display: flex; gap: 8px; }
+  /* 两个排序标签「最新 / 热门」横排，间距 8px。
+     【tabs 标签页】这个叫法是通用叫法，指「点击切换内容的一组按钮」。 */
+
   .art-tab {
+    /* 单个排序标签。 */
     padding: 6px 16px;
     border: 1px solid var(--border);
     border-radius: 999px;
+    /* 【999px】一个足够大的值，结果就是「两端都是半圆」的胶囊形状。
+       为什么不用 50%：50% 是按宽高各算一半，长条会变成椭圆；
+       写个大数才能保证圆弧半径等于高度的一半。 */
     background: var(--card);
     color: var(--text-light);
     font-family: inherit;
+    /* 【inherit 继承父元素字体】
+       【必须写】button、input、textarea、select 这些「表单控件」
+       浏览器默认用系统字体，不会自动跟网页字体一致。不写就会显得格格不入。 */
     font-size: 14px;
     cursor: pointer;
+    /* 鼠标移上去变小手，暗示「可以点」。 */
   }
+
   .art-tab.on {
+    /* 【.on】表示「当前选中的那一个」。
+       这是很常见的「状态类」命名法：on / active / selected / current 都是同类意思。
+       JS 切换标签时，就是先把所有 .on 去掉，再给点中的那个加上。 */
     background: var(--grad-primary);
+    /* 渐变主色背景。 */
     border-color: var(--primary);
     color: #fff;
     font-weight: 600;
+    /* 加粗一点，让「选中」和「未选中」的差别更明显。
+       【font-weight】字重：400 正常、500 中等、600 半粗、700 加粗。
+       用数字比写 bold 更精确。 */
   }
+
   .art-write {
+    /* 「写文章」「传视频」这两个按钮。
+       注意它们在 HTML 里是 <a> 标签（链接），不是 <button>，所以要额外处理几件事。 */
     padding: 8px 20px;
     border: none;
     border-radius: 8px;
@@ -47,44 +97,86 @@
     font-size: 14px;
     cursor: pointer;
     text-decoration: none;
+    /* 【必须写】<a> 标签默认带下划线，这里要去掉，才像按钮。 */
     display: inline-block;
+    /* 【必须写】<a> 默认是行内元素，行内元素设宽高和内边距的上下部分会「溢出」：
+       背景色会画出来，但不会把周围元素推开，上下两个按钮就会叠在一起。
+       改成 inline-block 才有完整的盒子模型。
+       【为什么不用 block】block 会独占一整行，两个按钮就没法并排了。
+       inline-block = 可以设宽高、又可以并排。 */
   }
+
   .art-write:hover { background: var(--primary-deep); }
+  /* 【:hover】鼠标悬停时。换成深一档的主色，给「可点」的反馈。 */
 
   .art-list { display: flex; flex-direction: column; gap: 10px; }
+  /* 文章列表容器：竖直排列，每行之间 10px 间距。
+     【flex-direction:column】flex 默认是横排，改成 column 才是从上往下一行一个。
+     不写的话所有文章会横着挤成一排。 */
+
   .art-row {
+    /* 单篇文章的一行。整个是一整块可点的链接。 */
     display: block;
+    /* 因为它是 <a> 标签，默认是行内的，要改成 block 才能：
+       ① 占满整行宽度 ② 正常使用上下 padding 和圆角。 */
     padding: 14px 16px;
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--field);
     text-decoration: none;
+    /* 去掉链接下划线。 */
     transition: transform .15s, border-color .15s;
+    /* 【transition 多个属性】用逗号分隔，各写各自的时长。
+       这里是：位移 0.15 秒、边框颜色 0.15 秒，同时进行。
+       配合下面的 :hover 用，鼠标移上去时是「滑过去」而不是「跳过去」。 */
   }
+
   .art-row:hover { transform: translateX(3px); border-color: var(--primary); }
+  /* 【transform: translateX(3px)】往右平移 3px（负数是往左）。
+     【为什么用 transform 而不是 margin-left】
+     transform 由显卡（GPU）处理，不触发周围元素重新排版；
+     改 margin 会让浏览器重算整个布局，性能差很多。做动画优先用它。 */
+
   .art-row h3 {
+    /* 【.art-row h3】中间有空格 = 后代选择器：找 .art-row 里面的 h3。
+       如果写成 .art-row.h3（无空格）意思完全不同：既是 art-row 又是 h3 类的元素。
+       这个区别是新手最容易搞混的地方之一。 */
     font-size: 17px;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 6px;
     overflow: hidden;
+    /* 三件套第 1 件：超出裁掉。 */
     text-overflow: ellipsis;
+    /* 三件套第 2 件：被裁的地方显示「…」。 */
     white-space: nowrap;
+    /* 三件套第 3 件：不许换行。
+       【必须三件一起用】只写 text-overflow 没效果；写了 overflow:hidden
+       但不写 nowrap，文字会先折成两行，永远不会触发省略号。
+       这套「单行省略号三件套」几乎每个项目都会用到，值得背下来。 */
   }
+
   .art-meta {
+    /* 标题下面那排小字：作者、时间、字数、赞、收藏、浏览。 */
     display: flex;
     flex-wrap: wrap;
+    /* 窄屏上小字太多挤不下时自动换行。 */
     gap: 12px;
     font-size: 12px;
     color: var(--text-light);
   }
+
   .art-empty {
+    /* 空状态 / 加载中 / 加载失败的提示文字。
+       三种情况共用一套样式，改一处三处一致。 */
     padding: 40px 20px;
     text-align: center;
     color: var(--text-light);
     font-size: 15px;
   }
+
   .art-more {
+    /* 「加载更多」按钮，横跨整行宽度。 */
     margin-top: 14px;
     width: 100%;
     padding: 10px;
@@ -96,33 +188,67 @@
     font-size: 14px;
     cursor: pointer;
   }
+
   .art-more:hover { border-color: var(--primary); color: var(--primary); }
+  /* 悬停时边框和文字都变主色。这个按钮故意做得「低调」：
+     它是个次要操作（用户主要是在看文章），不该跟主操作（写文章）抢注意力。
+     这叫「视觉层级」—— 一个区域里最突出的只应该有一个。 */
 </style>
 </head>
 <body>
+<!-- 从这里开始才是页面上看得见的内容。 -->
+
   <div id="navbar"></div>
+  <!-- 导航栏占位。真正的导航由 js/nav.js 加载后塞进来，
+       这样几十个页面只维护一份导航代码，改一次全站生效。 -->
 
   <section style="margin-top:36px;">
+    <!-- 【section】语义标签，表示「一个独立内容区块」。
+         它跟 div 外观完全一样，区别只是「告诉人和搜索引擎这里是什么」。
+         同类标签还有 header 页头、nav 导航、main 主内容、article 文章、footer 页脚。
+         【style="margin-top:36px;"】行内样式，直接写在标签上。
+         优先级极高，以后想用 CSS 覆盖它得加 !important，所以只适合一次性微调。 -->
     <div class="card">
+      <!-- .card 是公共样式里的卡片外观：圆角、半透明底、细边框、阴影。 -->
+
       <div class="art-head">
         <h2 class="section-title" style="margin:0;">文章</h2>
+        <!-- 【style="margin:0;"】把标题自带的上边距清掉。
+             h1~h6 浏览器默认有上下 margin，放进 flex 行里会让整行高度被撑开、对齐歪掉。
+             这种「清 margin」是排版时最常见的调整。 -->
+
         <div style="display:flex; gap:10px; align-items:center;">
+          <!-- 一个行内容器，把「排序切换 + 两个按钮」包成一组，方便整体靠右。 -->
           <div class="art-tabs">
             <button class="art-tab on" data-sort="new">最新</button>
+            <!-- 【data-sort="new"】自定义数据属性（data- 开头是 HTML 规范）。
+                 JS 里用 btn.dataset.sort 就能读到 "new"。
+                 【为什么不用 id】id 全页只能有一个，标签有好几个；
+                 用 data- 属性把「这个按钮代表什么」直接写在标签上，最直观。
+                 【class 里的 on】表示「默认选中最新」。 -->
             <button class="art-tab" data-sort="hot">热门</button>
           </div>
           <a class="art-write" href="/pages/write.html">写文章</a>
+          <!-- 【a 标签】链接。点它跳到写文章页。
+               【为什么用 a 不用 button】因为它本质是「跳转到另一个页面」，
+               a 天生能做这件事；而且 a 支持右键「在新标签页打开」、
+               支持复制链接、鼠标悬停时地址栏会显示目标地址 —— 这些好处 button 都没有。
+               【判断标准】跳页面用 a，执行动作（提交/删除/弹窗）用 button。 -->
           <a class="art-write" href="/pages/video-write.html">传视频</a>
         </div>
       </div>
 
       <!-- 视频（放在文章之上） -->
+      <!-- 这行也是 HTML 注释，写在这里给看代码的人解释下面那块是什么。 -->
       <div class="art-head" style="margin-bottom:14px;">
         <h2 class="section-title" style="margin:0;">视频</h2>
         <a class="art-write" href="/pages/videos.html">全部视频</a>
       </div>
       <div class="v-grid" id="vidList" style="margin-bottom:24px;">
+        <!-- 【.v-grid】视频卡片的网格布局，样式在公共 CSS 里。
+             【id="vidList"】JS 靠它拿到这个容器，往里塞视频卡片。 -->
         <p class="v-empty">加载中…</p>
+        <!-- 占位。JS 拿到数据后会整个替换掉。 -->
       </div>
 
       <div class="art-list" id="list">
@@ -130,31 +256,94 @@
       </div>
 
       <button class="art-more" id="moreBtn" style="display:none;">加载更多</button>
+      <!-- 【style="display:none;"】初始先藏起来。
+           【为什么】第一页数据还没加载完，不知道该不该显示；
+           而且如果只有 3 篇文章，「加载更多」按钮就是多余的。
+           等数据回来后再由 JS 决定显示还是隐藏。
+           【display:none 和 visibility:hidden 的区别】
+             display:none      → 不显示且不占位置（后面的元素会补上来）
+             visibility:hidden → 不显示但仍占位置（留一块空白）
+           这里要的是前者。 -->
     </div>
   </section>
 
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+  <!-- 依次引入 5 个脚本。
+       【顺序绝对不能乱】每个都依赖前一个：
+         config.js        → 全站配置，挂到 window 上
+         bg.js            → 背景图/视频（IndexedDB 取，零流量）
+         supabase-js.js   → Supabase 官方 SDK
+         sb.js            → 业务层，提供 window.SBAPI
+         nav.js           → 导航栏 + 登录弹窗 + 信箱
+       【为什么都放 body 末尾】浏览器解析到 script 会停下先执行它，
+       放在末尾时上面的 HTML 已解析完，脚本里的 getElementById 才找得到元素。
+       放 head 里执行的话元素还不存在，拿到的全是 null。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
+/* ============ 文章列表 ============ */
+
+/* ---------- 1. 拿元素、定状态 ---------- */
 const listEl = document.getElementById('list');
+/* 【const】声明不可重新赋值的变量。
+   规则：默认用 const，确定要改才用 let。读代码的人一眼知道它不会变。
+   【getElementById】按 id 找元素，找不到返回 null。 */
 const moreBtn = document.getElementById('moreBtn');
 
 let sort = 'new';
+/* 【let】可以重新赋值。
+   当前排序方式：'new' 最新 / 'hot' 热门。点标签时会改它。
+   【用字符串不用布尔值】以后要加「最多收藏」这种第三种排序，
+   加一个字符串值就行，不用改结构。这叫「可扩展」。 */
 let offset = 0;
+/* 【offset 偏移量】分页用的：已经看过多少条了，下次从第几条开始取。
+   第一次 0，取 20 条后 offset 变 20，再点「加载更多」就从第 20 条开始取。
+   【分页的两种方式对比】
+     offset/limit（这里用的）→ 简单，但数据在翻页期间有增删时会「漏条」或「重复」
+     cursor（游标）           → 用「上一页最后一条的时间/id」当起点，不会有这问题
+   数据量小、变化不频繁的场景用 offset 完全够。 */
 const STEP = 20;
+/* 每页多少条。
 
+   【为什么叫 STEP 不叫 PAGE_SIZE】都行，STEP 更短。
+   常量全大写是行业惯例，表示「这是配置，运行中不变」，纯约定不是语法要求。 */
+
+/* ---------- 2. 转义函数（防 XSS） ---------- */
 function escapeHTML(s) {
+  /* 【XSS 跨站脚本攻击】
+     如果有人在文章标题里写一段「图片标签 + onerror 里塞脚本」的代码，
+     网站直接当 HTML 插进页面，浏览器会真的解析并执行 ——
+     攻击者就能偷你的登录凭证、冒充你操作。
+     唯一的根治办法：所有用户输入在显示前都转义，
+     把尖括号引号换成「实体」（< 变成 &lt;），浏览器就只当普通文字。
+     【必须转 5 个字符】< > & " ' —— 少一个都可能被绕过。 */
   return String(s == null ? '' : s)
+  /* 【s == null】宽松比较同时挡住 null 和 undefined（undefined == null 为 true）。
+     【String(...)】强制转字符串，因为下面 .replace 是字符串方法，
+     传数字或布尔值会报错。 */
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    /* 【/&/g】正则：斜杠包起来是正则，g 表示「全局」——替换所有出现的地方。
+       不加 g 只替换第一个，剩下的就漏了，转义就白做了。
+       【&amp; 必须第一个转】因为 & 是实体编号的开头。
+       如果先转 < 变 &lt;，那个 & 再被转一次就变成 &amp;lt;，
+       页面上会显示成 "&lt;" 这几个字符本身。顺序错了整套就废了。 */
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  /* 双引号、单引号也要转：内容要往 HTML 属性里塞的时候（比如 data-name="..."），
+     属性里的引号不转就能提前闭合属性、注入新属性。
+     【&#39; 是什么】HTML 实体的数字写法：# + 字符的 Unicode 码点。
+     单引号码点是 39，所以写 &#39;。
+     【这一串为什么写在一行】为了紧凑。但超过 80~100 个字符就该换行了，
+     不然要横向滚动才能看完，很难读。 */
 }
 
+/* ---------- 3. 把一条文章数据变成一段 HTML ---------- */
 function rowHTML(a) {
+  /* 【命名习惯】函数名带 HTML 的，表示「返回一段 HTML 字符串」。
+     参数 a 是一篇文章的数据对象。 */
   return `
     <a class="art-row" href="/pages/article.html?id=${a.id}">
       <h3>${escapeHTML(a.title)}</h3>
@@ -167,45 +356,198 @@ function rowHTML(a) {
         <span>👁 ${a.views || 0}</span>
       </div>
     </a>`;
+  /* 【反引号】模板字符串：可以换行、可以嵌 ${表达式}。
+     比用 'a' + b + 'c' 拼字符串好读太多，而且这里的多行结构能保持缩进。
+     【重要提醒】从反引号开始到结束，这中间全是「字符串内容」，不是代码。
+     在这里面写双斜杠注释或斜杠星号注释，会被当成文字原样显示在页面上 ——
+     本项目之前实实在在踩过这个坑。要注释只能写在反引号外面。
+
+     【${a.id} 为什么没套 escapeHTML】
+       因为 id 是数据库生成的自增数字，不可能是用户输入的恶意字符串。
+       而且它出现在 href 属性里，如果真被注入了，转义也救不了（要用别的手段）。
+       判断标准：这个值是不是「用户可控」？是就必须转义。
+     【${a.chars || 0} 为什么也没转义】
+       它是个数字，数字里不可能有尖括号引号，转了反而多此一举。
+       【|| 0】的作用是字段为 null/undefined 时显示 0，而不是显示 "undefined"。
+       这是「给字段设默认值」最常用的写法。
+
+     【href="/pages/article.html?id=123"】点这一整块跳到详情页，
+       并把 id 通过问号参数传过去。详情页用 URLSearchParams 读出来。 */
 }
 
+/* ---------- 4. 加载数据 ---------- */
 async function load(append) {
+  /* 【async function】异步函数：内部可以用 await，调用它返回一个 Promise。
+     【append】布尔值：true = 追加到现有列表后面（加载更多），false = 从头重画（切排序/首次进入）。 */
+
   if (!append) { offset = 0; listEl.innerHTML = '<div class="art-empty">加载中…</div>'; }
+  /* 【一行写两个语句用分号隔开】可以，但只在很短的时候这么写。
+     【切排序为什么要 offset = 0】因为排序变了，之前翻到第 20 条的位置就没意义了，
+     必须从第一页重新开始。
+     【innerHTML 赋值】把字符串当 HTML 解析并替换掉元素原有内容。
+       这里内容是固定的、自己写的，所以安全。
+       如果是用户输入，必须用 textContent 或先转义。 */
+
   try {
+    /* 【try / catch】错误处理。网络请求随时会失败（断网、接口改了、超时），
+       没有 try/catch 一旦出错，后面的代码全都不执行，页面就卡在「加载中」了。 */
     const d = await SBAPI.getArticles({ limit: STEP, offset, sort });
+    /* 【await】等这个异步操作出结果再往下走。
+       注意它只暂停这个函数，不阻塞页面 —— 页面照常能点能滚，叫「非阻塞」。
+       【传一个对象当参数】{ limit: 20, offset: 0, sort: 'new' } 这种「命名参数」比
+       按位置传参（getArticles(20, 0, 'new')）好：
+       调用处能看出每个数字是什么意思，而且顺序写错也不容易出 bug。
+       【offset】这里用了对象的简写语法：{ offset } 等价于 { offset: offset }。 */
+
     if (!d.ok) throw new Error();
+    /* 【throw new Error()】主动抛错，让流程跳到下面的 catch。
+       【为什么这么写】接口返回了，但 ok 是 false（比如权限不够、服务器出错），
+       这种情况也算失败，应该走同一套错误处理，而不是继续往下渲染。
+       括号里没写错误信息，因为下面 catch 里显示的是统一文案。 */
+
     const rows = d.list.map(rowHTML).join('');
+    /* 【.map(rowHTML)】把每条文章数据变成一段 HTML 字符串。
+       直接把函数名传给 map：map 会把每个元素当参数传进去，
+       而 rowHTML(a) 正好需要一个参数，所以刚好对得上。
+       不放心的话可以写 x => rowHTML(x)，更直白。
+       【.join('')】把数组拼成一个长字符串，用空字符串连接。
+       【必须写 join】不写的话数组转字符串默认用逗号连接，
+       页面上每条文章之间就会多出一堆逗号。这是新手最容易踩的坑之一。 */
+
     listEl.innerHTML = (append ? listEl.innerHTML.replace(/<div class="art-empty">.*?<\/div>/s, '') : '') + rows;
+    /* 【这一行是「追加」的关键，拆开看】
+       ① append 为 true 时：先把现有的「加载中」提示删掉，再把新内容接在后面
+          append 为 false 时：直接用空字符串开头（等于全量替换）
+       ② 最后把 rows 接上去
+
+       【.replace(/<div class="art-empty">.*?<\/div>/s, '')】
+         【/.../s】s 是正则的「dotAll」标志：
+           默认情况下正则里的点号 . 不匹配换行符，
+           加了 s 之后 . 才能匹配包括换行在内的所有字符。
+           这里的 art-empty 内容里没有换行，其实加不加 s 都行 ——
+           但加上更保险，以后格式变了也不会失效。
+         【.*?】非贪婪匹配：尽可能少地匹配字符。
+           如果用 .*（贪婪），它会一路匹配到最后一个 </div>，
+           把中间所有文章都吞掉删掉 —— 那就全毁了。
+           加个问号变成非贪婪，匹配到最近的 </div> 就停。这个 ? 非常关键。 */
+
     if (!d.list.length && !append) listEl.innerHTML = '<div class="art-empty">还没有人写文章，来当第一个吧~</div>';
+    /* 空状态提示。
+       【为什么三个条件】① 返回的列表是空的 ② 不是在追加（追加时没数据就是「没有更多了」）
+       ③ 只有满足前两条才显示 —— 否则每次「加载更多」到底都显示「没人写文章」就很怪。
+       【.length 为 0 是假值】所以 !d.list.length 就是「长度为 0」。 */
+
     offset += d.list.length;
+    /* 【+=】累加。为什么用 d.list.length 而不是 STEP？
+       因为最后一页可能只有 5 条，用 STEP 的话会跳过 15 条数据。
+       用实际返回条数才准确。 */
+
     moreBtn.style.display = d.list.length < STEP ? 'none' : 'block';
+    /* 【三元运算符 条件 ? 值1 : 值2】
+       返回条数少于每页数量（说明已经是最后一页了）→ 藏起来
+       等于 20（可能还有更多）→ 显示出来
+       【.style.display】直接改行内样式。'none' 不显示不占位，'block' 显示。
+       【为什么用 < STEP 而不是 === 0】
+       因为可能刚好剩 15 条，返回 15 条，这时其实已经到底了，也该藏起来。 */
   } catch {
+    /* 【catch 后面没写 (err)】现代 JS 允许省略参数（如果你不打算用这个错误对象）。
+       这里只是想「出错了就显示提示」，不关心具体是什么错，所以省掉。 */
     listEl.innerHTML = '<div class="art-empty">加载失败，刷新试试</div>';
+    /* 【好提示的标准】不只说「出错了」，还告诉用户「可以怎么办」。
+       这里给了「刷新试试」这个下一步动作。
+       只说「加载失败」用户会懵；说「请联系管理员」又太远。
+       「告诉我一个我自己能做的动作」是最实用的错误文案。 */
   }
 }
 
+/* ---------- 5. 排序标签的点击 ---------- */
 document.querySelectorAll('.art-tab').forEach(b => {
+  /* 【document.querySelectorAll('.art-tab')】找出所有匹配的元素，返回 NodeList（类数组）。
+     【.forEach】NodeList 也有 forEach 方法，可以像数组一样遍历。
+     【b => {}】箭头函数，等价于 function(b) {}，只是更短。
+       它没有自己的 this，这一点跟普通函数不同，但这里用不到 this，无所谓。 */
   b.addEventListener('click', () => {
+    /* 【addEventListener('click', 回调)】用户点这个元素时执行回调。
+       【为什么不用 onclick 属性】addEventListener 可以绑多个监听器互不覆盖；
+       onclick 赋两次值，前一个会被静静地丢掉。 */
     document.querySelectorAll('.art-tab').forEach(x => x.classList.remove('on'));
+    /* 先全部取消选中。
+       【.classList.remove('on')】去掉 on 这个类。
+       注意这里用了 x 这个变量名，避免和外层的 b 重名 —— 虽然内层可以覆盖外层，
+       但重名会让代码难读，改个名更清楚。 */
     b.classList.add('on');
+    /* 再给点中的这个加上选中样式。
+       【顺序不能反】如果先加后删，删的时候会把自己也删掉。 */
     sort = b.dataset.sort;
+    /* 【dataset.sort】读 data-sort 属性的值，得到 'new' 或 'hot'。
+       【命名转换规则】data- 后面有连字符会转成驼峰：
+         data-sort     → dataset.sort
+         data-user-id  → dataset.userId   ← 这里变成驼峰了
+       这个细节很容易忘。 */
     load(false);
+    /* 【false】表示「不是追加」= 从第一页重新加载。 */
   });
 });
+
 moreBtn.addEventListener('click', () => load(true));
+/* 【true】表示「追加」= 接着往下加载。
+   【为什么用箭头函数包一层】因为不能直接写 addEventListener('click', load) ——
+   那样浏览器会把「事件对象」当成 append 参数传进去，事件对象是真值，
+   等于永远传了 true，就永远在追加，切排序也变成追加了。这是个很隐蔽的 bug。 */
 
 load(false);
+/* 【启动：首次加载】
+   这一行放在所有函数定义之后。
+   【为什么】JS 从上往下执行，函数声明会「提升」（可以先调用后定义），
+   但 const / let 声明的变量不会提升，提前用会拿到 undefined。
+   统一把「启动代码」放在最后是最稳的习惯。
+   【其实这里也可以不传参数】不传时 append 是 undefined（假值），
+   走的是 else 分支，效果跟传 false 一样。
+   但显式写 false 更能表达意图，读代码的人不用去猜「不传会怎样」。 */
 </script>
 
 <script>
 /* 文章页顶部视频区：拉最新的几支 */
 (function () {
+  /* 【IIFE 立即执行函数表达式】
+     结构是 (函数)() —— 括号把函数包起来变成「表达式」，然后立刻用 () 调用。
+     【为什么要这么写】为了「造一个独立的作用域」。
+     这里面声明的 box、esc 等变量，外面完全看不到，不会污染全局。
+     注意这个文件里前面已经有一个 const listEl 了，
+     如果这里再声明 listEl 就会报「重复声明」——
+     用 IIFE 包起来就完全不会冲突。
+     【现代替代写法】用 { } 块级作用域配合 let/const 也行，
+     但 IIFE 更保险（老浏览器也支持），而且意图更明确。 */
+
   const box = document.getElementById('vidList');
   if (!box) return;
+  /* 容器不存在就直接退出，避免下面报 null 错。
+     【return 在 IIFE 里】就是提前结束这个函数，效果等同「不执行了」。 */
+
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+  /* 【为什么这里又写一个 esc，不复用上面的 escapeHTML】
+     因为 escapeHTML 是上一个 <script> 块里声明的。
+     两个 script 块共享同一个全局作用域，理论上能直接用 ——
+     但那样就形成了「隐式依赖」：以后调整 script 顺序或把其中一块抽走，就会突然报错。
+     这里自己写一份，虽然重复，但这一块代码是「自给自足的」，
+     复制到别的页面也能独立工作。这种取舍在工程上叫「宁可重复也不要隐式耦合」。
+     【写成一行】因为这个函数很短；但严格来说超过 100 个字符就该换行。 */
+
   SBAPI.getVideos({ limit: 6, offset: 0 })
+  /* 取最新 6 支视频。
+     【这里没写 await】因为它不是 async 函数，用的是下面 .then() 的方式。
+     两种写法效果一样，.then 是 Promise 的老写法，async/await 是新写法。
+     老代码里两种混着出现很常见。 */
     .then(d => {
+      /* 【.then(回调)】Promise 成功时执行，d 是结果。 */
       if (!d || !d.ok || !d.list.length) { box.innerHTML = '<p class="v-empty">还没有人传视频</p>'; return; }
+      /* 三种情况一起挡掉：
+           !d              → 什么都没返回
+           !d.ok           → 接口说「这次失败了」
+           !d.list.length  → 成功了但列表是空的
+         【|| 的短路特性】从左到右判断，一旦某个为真就立刻停，后面的不再执行。
+         所以 d 是 null 时，不会去访问 d.ok 而报错 —— 这个顺序很关键，
+         必须把「可能为空的检查」写在最前面。 */
       box.innerHTML = d.list.map(v => `
         <a class="v-card" href="/pages/video.html?id=${v.id}">
           <span class="v-thumb">▶</span>
@@ -214,8 +556,17 @@ load(false);
             <span class="m">作者：${esc(v.author||'匿名')} · ▶${v.views||0} · ♥${v.likes||0}</span>
           </span>
         </a>`).join('');
+      /* 这段逻辑跟上面的 rowHTML 一模一样，只是标签不同。
+         【▶ ♥ 这些符号】直接用 Unicode 字符当图标，
+         不用图片也不用图标字体 —— 省请求、任意缩放不糊、还能跟着文字颜色变。
+         代价是不同系统上「长什么样」略有差异。 */
     })
     .catch(() => { box.innerHTML = '<p class="v-empty">视频加载失败</p>'; });
+    /* 【.catch(回调)】Promise 失败时执行。
+       【为什么必须写】不写的话，一旦请求出错，会变成一个「未处理的 Promise 拒绝」，
+       控制台一片红，而且用户那边就是永远显示「加载中…」，不知道发生了什么。
+       【catch 要放在 then 后面】Promise 的链式调用顺序就是执行顺序，
+       反过来写捕获不到前面的错误。 */
 })();
 </script>
 </body>
