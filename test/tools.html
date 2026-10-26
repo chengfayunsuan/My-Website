@@ -1,60 +1,107 @@
 <!DOCTYPE html>
+<!-- 【<!DOCTYPE html>】固定第一行，声明 HTML5 文档。 -->
+
 <!-- ============================================================
      文件：test/tools.html（小工具集）
-     作用：十几个纯前端 JS 小工具（单位换算、编码解码、颜色工具等），不依赖后端。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：12 个纯前端 JS 小工具（求面积、排序、质数、二分查找等），
+           全部在浏览器里算，不依赖后端。
+     说明：这里写的注释不会显示在页面上，只给看代码的人（也就是你）看。
      ============================================================ -->
+
 <html lang="zh-CN">
+<!-- 【lang="zh-CN"】声明内容为简体中文。 -->
+
 <head>
+<!-- 【<head>】设置区，内容不显示在页面上。 -->
+
 <meta charset="UTF-8">
+<!-- 声明 UTF-8 编码，否则中文乱码。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 手机适配：页面宽度 = 屏幕宽度，初始不缩放。 -->
+
 <title>小工具集 · 乘法</title>
+<!-- 标签页标题。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 标签页小图标。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 引入公共样式表；?v=26 是防缓存版本号。 -->
+
 <style>
+/* 下面只放这一页专属的样式。从 style 开始标签到结束标签之间是 CSS 语法，
+   注释必须用斜杠加星号，HTML 那种尖括号叹号写法在这块区域无效。 */
+
   .tools-grid {
+  /* 12 个工具按钮排成的网格。 */
     display: grid;
+    /* 【grid 网格布局】比 flex 更适合「等宽多列」这种规整排列。 */
     grid-template-columns: repeat(3, 1fr);
+    /* 【repeat(3, 1fr)】分 3 列，每列 1 份（fr = 分数单位），自动等宽。 */
     gap: 14px;
+    /* 行列间距都是 14px。 */
     margin-top: 10px;
   }
+
   .tool-btn {
+  /* 每个工具按钮。 */
     padding: 14px 10px;
+    /* 上下 14 撑高、左右 10 让字不贴边。 */
     border: none;
+    /* 去掉按钮默认的立体边框。 */
     border-radius: 8px;
     background: var(--grad-primary);
+    /* 紫色底。 */
     color: #fff;
+    /* 白字，紫底上对比度最高。 */
     font-size: 15px;
     cursor: pointer;
+    /* 鼠标变小手。 */
     transition: background .2s, transform .2s;
     text-align: center;
+    /* 文字居中（按钮文字长时可能换行，换行后也居中）。 */
     font-family: inherit;
+    /* 按钮默认不继承字体，必须手动写，否则会和全站字体不一致。 */
   }
   .tool-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+  /* 【filter:brightness(1.1)】整体提亮 10%，比换一个颜色省事；
+     【translateY(-2px)】上浮 2px，做出「被按起来」的反馈。 */
   .tool-btn.active { background: var(--success); }
+  /* 【.active】当前选中的工具变绿，和紫色未选中的形成对比。 */
 
   #stage {
+  /* 下方的工作区（点按钮后在这里生成表单）。 */
     margin-top: 24px;
     padding: 22px;
+    /* 内边距，内容不贴边。 */
     background: var(--field);
+    /* 半透明底，比卡片再淡一层，形成层次。 */
     border: 1px solid var(--border);
     border-radius: 10px;
     min-height: 120px;
+    /* 【min-height】先占好 120px 高，切换工具时页面不会上下跳。 */
   }
   #stage h3 {
+  /* 【后代选择器】#stage 里面的 h3（工具标题）。 */
     margin-bottom: 14px;
     color: var(--primary);
+    /* 紫色标题。 */
     font-size: 18px;
   }
   #stage label {
+  /* 输入框上方的说明文字。 */
     display: block;
+    /* 【block】让 label 独占一行 —— 不写它会和输入框挤在同一行。 */
     margin: 10px 0 4px;
+    /* 上下留白：和上一个输入框拉开、和本输入框贴近。 */
     font-size: 14px;
     color: var(--text-light);
   }
   #stage input {
     width: 100%;
     max-width: 280px;
+    /* 最宽 280px，屏幕再宽输入框也不会长得像一条扁带。 */
     padding: 8px 12px;
     border: 1px solid var(--border);
     border-radius: 6px;
@@ -62,10 +109,14 @@
     color: var(--text);
     font-size: 15px;
     font-family: monospace;
+    /* 【monospace 等宽字体】数字宽度一致，输入 123 和 111 占的宽度相同，对齐更好看。 */
     outline: none;
+    /* 去掉浏览器默认的聚焦蓝框，改用下面自定义的边框变色。 */
   }
   #stage input:focus { border-color: var(--primary); }
+  /* 【:focus】点中、正在输入时边框变紫。 */
   #stage button.run {
+  /* 注意选择器是「#stage 里 class 叫 run 的 button」——两个条件同时满足才选中。 */
     margin-top: 14px;
     padding: 10px 24px;
     border: none;
@@ -78,29 +129,42 @@
   }
   #stage button.run:hover { filter: brightness(1.1); }
   #stage pre {
+  /* 【<pre>】预格式化标签，会保留换行和空格，用来显示算法结果最合适。 */
     margin-top: 16px;
     padding: 14px;
     background: var(--card);
     border-radius: 8px;
     font-family: monospace;
+    /* 等宽字体，输出矩阵、表格才对得齐。 */
     font-size: 14px;
     line-height: 1.7;
+    /* 行高放宽，多行输出更好读。 */
     white-space: pre-wrap;
+    /* 【pre-wrap】保留换行和空格，同时超长行仍会自动折行。
+       只用 pre 的话，超长行会撑出横向滚动条。 */
     word-break: break-all;
+    /* 超长无空格串强制换行。 */
     color: var(--text);
     min-height: 40px;
+    /* 先占好高度，出结果时不被突然撑开。 */
   }
   @media (max-width: 600px) {
+  /* 【媒体查询】屏幕宽度 ≤ 600px 时应用里面的样式（也就是手机上）。 */
     .tools-grid { grid-template-columns: repeat(2, 1fr); }
+    /* 三列改两列，按钮才不会窄到放不下文字。 */
   }
 </style>
 </head>
+
 <body>
 
    <div id="navbar"></div>
+   <!-- 导航栏占位，由 js/nav.js 注入。 -->
 
   <header>
     <img class="avatar" src="/avatar.jpg" alt="头像" onerror="this.style.display='none'">
+    <!-- 【<img>】src 是图片地址；alt 是加载失败时的替代文字；
+         【onerror】加载失败时执行 this.style.display='none' 把自己藏起来，避免出现破图标。 -->
     <h1 class="name">小工具集</h1>
     <p class="tagline">12 个用 JavaScript 重写的 C 语言小程序</p>
   </header>
@@ -109,8 +173,12 @@
     <div class="card">
       <h2 class="section-title">选择工具</h2>
       <div class="tools-grid" id="toolsGrid"></div>
+      <!-- 空容器。12 个按钮全部由下面那段 JS 循环生成后塞进来 ——
+           手动写 12 个 <button> 也行，但改起来麻烦，动态生成更省事。 -->
       <div id="stage">
+      <!-- 工作区。点某个工具后，这里会被整个替换成「标题 + 输入框 + 运行按钮 + 输出区」。 -->
         <p style="color:var(--text-light);">👆 点上面任意一个按钮开始</p>
+        <!-- 【style="..."】内联样式，直接写在标签上，优先级比外部样式表高。 -->
       </div>
     </div>
   </section>
@@ -122,34 +190,71 @@
 <script src="/js/sb.js"></script>
 <script src="/js/nav.js?v=23"></script>
 <script>
+/* 下面这段是本页逻辑。从 script 开始标签到它的结束标签之间全是 JavaScript，
+   注释要用斜杠加星号或双斜杠，HTML 那种尖括号叹号写法在这块区域无效。 */
+
 /* ========== 工具定义 ========== */
 const tools = {
+// 【对象】用一对大括号把 12 个工具装起来，每个工具用一个短 key 当名字（tri、multi…）。
+//   这样后面只要知道 key，就能拿到工具的全部信息：名字、要几个输入框、怎么算。
+//   这种「数据驱动」的写法，比写 12 个 if 分支好维护得多。
+
   tri: {
+  // 【tri】三角形的英文 triangle 缩写，作为这个工具的唯一标识。
     name: '001 求三角形面积',
+    // 【name】显示在按钮上的文字。
     inputs: [
+    // 【inputs】这个工具需要哪些输入框，是一个数组。
+    //   每一项描述一个输入框：id（程序里怎么取它的值）、label（页面上显示什么）、type（什么类型）。
+    //   用数组而不是写死三个输入框，是为了让「生成表单」的代码只写一遍，所有工具通用。
       { id: 'a', label: '边长 a', type: 'number' },
+      // 【type:'number'】数字类型，手机上会弹出数字键盘，而且程序会用 parseFloat 转成数字。
       { id: 'b', label: '边长 b', type: 'number' },
       { id: 'c', label: '边长 c', type: 'number' }
     ],
     run: (v) => {
+    // 【run】这个工具的执行函数。
+    //   【(v) => {...}】箭头函数，v 是一个对象，装着所有输入框的值，比如 {a:3, b:4, c:5}。
+    //   每个工具的 run 签名一样，所以调用处不用关心具体是哪个工具。
       const { a, b, c } = v;
+      // 【解构赋值】从对象 v 里把 a、b、c 三个字段「拆」成三个独立变量。
+      //   等价于 const a = v.a; const b = v.b; const c = v.c; 但一行就够。
       if (a >= b + c || b >= a + c || c >= a + b) return '出错了！这三条边组不成三角形。';
+      // 【三角形判定】任意两边之和必须大于第三边，否则组不成三角形。
+      // 【||】或：三个条件任意一个成立就 return，函数立刻结束。
       const p = (a + b + c) / 2;
+      // 【海伦公式第一步】半周长。
       const area = Math.sqrt(p * (p - a) * (p - b) * (p - c));
+      // 【海伦公式】面积 = √(p(p-a)(p-b)(p-c))。
+      // 【Math.sqrt】开平方。
       return `三角形的面积为：${area.toFixed(2)}`;
+      // 【.toFixed(2)】保留两位小数，返回的是字符串（不是数字）。
+      //   不处理的话会出现 6.000000000000001 这种难看的浮点误差。
     }
   },
+  // 【逗号】注意对象里每项之间用逗号分隔，不是分号。
 
   multi: {
     name: '002 九九乘法表',
     inputs: [],
+    // 【空数组】不需要任何输入，点开就直接算。
     run: () => {
+    // 【没有参数】不需要输入值，所以括号里是空的。
       let s = '';
+      // 【let】声明一个会被反复修改的变量（这里要不停往里拼字符串）。
       for (let i = 1; i <= 9; i++) {
+      // 【for 循环】三段式：① let i = 1 初始化；② i <= 9 循环条件；③ i++ 每轮结束后执行。
+      //   i++ 等价于 i = i + 1。
         for (let j = 1; j <= i; j++) s += `${j}×${i}=${i*j}\t`;
+        // 【双重循环】外层管行（1~9），内层管列（1~i），所以是三角形而不是矩形。
+        // 【s += ...】等价于 s = s + ...，往字符串后面追加。
+        // 【\t】制表符（相当于按一下 Tab 键），让各列对齐。
+        // 【\n】换行符。这两个都是「转义字符」，反斜杠加字母表示一个特殊字符。
         s += '\n';
+        // 一行排完，换行。
       }
       return s;
+      // 把整张表返回。
     }
   },
 
@@ -157,12 +262,16 @@ const tools = {
     name: '003 猜数模拟器',
     inputs: [
       { id: 'target', label: '目标数字（1-100）', type: 'number', placeholder: '自己定一个' },
+      // 【placeholder】输入框没填时显示的灰色提示。
       { id: 'guess',  label: '你的猜测',        type: 'number' }
+      // 属性之间多打几个空格只是排版对齐，不影响功能。
     ],
     run: (v) => {
       if (v.guess > v.target) return '大了！';
       if (v.guess < v.target) return '小了！';
       return '猜中了！🎉';
+      // 【提前返回】三个 if 依次判断，都不成立就是相等，直接返回「猜中了」。
+      //   这种写法比 if / else if / else 更扁平，读起来更顺。
     }
   },
 
@@ -172,8 +281,14 @@ const tools = {
     run: (v) => {
       const n = v.n;
       if (n < 2) return '既不是质数也不是合数！';
+      // 0 和 1 既不是质数也不是合数，先单独处理掉。
       for (let i = 2; i < n; i++) if (n % i === 0) return `${n} 是合数！`;
+      // 【试除法】从 2 试到 n-1，只要能被整除就是合数。
+      // 【n % i === 0】% 是取余数，余 0 表示整除。
+      // 【===】严格相等，值和类型都要一样。永远用三个等号。
+      // 【for 后面直接跟 if】循环体只有一条语句时可以不写大括号（但不推荐，容易看错）。
       return `${n} 是质数！`;
+      // 一路试下来都没被整除，就是质数。
     }
   },
 
@@ -182,14 +297,24 @@ const tools = {
     inputs: [{ id: 'p', label: '你的出拳（1=石头 2=剪刀 3=布）', type: 'number' }],
     run: (v) => {
       if (![1,2,3].includes(v.p)) return '你输错了！只能输入 1、2、3';
+      // 【[1,2,3] 临时数组】现场造一个数组，用 .includes() 判断里面有没有这个值。
+      // 【!...】取反：不包含就进分支。
       const ai = Math.floor(Math.random() * 3) + 1;
+      // 【Math.random()】返回 0 到 1 之间的随机小数（不含 1）。
+      //   乘 3 得到 0~3 之间的小数，Math.floor 向下取整得到 0/1/2，再加 1 变成 1/2/3。
+      //   这是「生成指定范围随机整数」的标准写法。
       const names = { 1: '石头', 2: '剪刀', 3: '布' };
+      // 用对象当「字典」，数字 key 可以直接反查中文名。
       const diff = v.p - ai;
+      // 用差值判断胜负，比写 9 种情况简洁。
       let result;
+      // 【先声明不赋值】后面在不同分支里赋值，所以用 let（const 声明时必须给值）。
       if (diff === 2 || diff === -1) result = '你赢了！';
+      // 差 2 或 -1 是赢，差 -2 或 1 是输，其余（0）是平局。
       else if (diff === -2 || diff === 1) result = '你输了！';
       else result = '平局！';
       return `你出：${names[v.p]}\n对方出：${names[ai]}\n${result}`;
+      // 【\n】换行，让三行结果分开显示（外层用的是 <pre>，会保留换行）。
     }
   },
 
@@ -198,10 +323,23 @@ const tools = {
     inputs: [{ id: 'arr', label: '输入数字，用逗号分隔', type: 'text', placeholder: '645,9486,123,456' }],
     run: (v) => {
       const arr = v.arr.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+      // 【链式调用】一行做完三件事：
+      //   ① .split(',')  按逗号把字符串切成数组："6,4" → ["6","4"]
+      //   ② .map(...)    把每一项变成数字：parseInt(s.trim()) 先去空格再转整数
+      //   ③ .filter(...) 过滤掉转不成数字的项。isNaN 是「不是一个数字」，
+      //      !isNaN(n) 就是「是有效数字」，所以用户多打了逗号也不会产生 NaN 让排序出错。
+      //   这种「切 → 转 → 洗」的链条是处理用户输入的标准套路。
       for (let i = 0; i < arr.length - 1; i++)
         for (let j = 0; j < arr.length - 1 - i; j++)
+        // 【内层少比一轮】每轮结束后最大的已经沉到末尾，所以 -i 可以少比 i 次。
+        //   循环体没写大括号，只有下面那一句 if。
           if (arr[j] > arr[j+1]) [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
+          // 【解构交换】一行交换两个变量的值，不需要临时变量。
+          //   右边先构造一个数组 [arr[j+1], arr[j]]，
+          //   然后按位置解构赋值给左边的 [arr[j], arr[j+1]]，完成互换。
+          //   这是 ES6 之后最简洁的交换写法。
       return `排序结果：\n${arr.join(' ')}`;
+      // 【.join(' ')】用空格把数组连成一个字符串。
     }
   },
 
@@ -212,8 +350,18 @@ const tools = {
       const a = v.n;
       if (a < 1) return '不是让你输入正数吗？';
       let t = a, c = 0;
+      // 【一条 let 声明两个变量】用逗号隔开。
+      //   t 是「还要处理的剩余部分」，c 是「反转后的数字」。
       while (t !== 0) { c = c * 10 + t % 10; t = Math.floor(t / 10); }
+      // 【while 循环】条件为真就一直转，和 for 的区别是「不知道要转几次」。
+      // 【核心两步】
+      //   ① c = c * 10 + t % 10 —— 把 c 整体左移一位，再把 t 的末位数字接上去。
+      //      例：123 → 先取 3 得 c=3；再取 2 得 c=32；再取 1 得 c=321。
+      //   ② t = Math.floor(t / 10) —— 砍掉末位。123 → 12 → 1 → 0。
+      //      【Math.floor】向下取整，123/10 = 12.3 → 12。
       return c === a ? '这个数是回文数！' : '这个数不是回文数！';
+      // 【三元运算】条件 ? 真时返回什么 : 假时返回什么。
+      //   回文数就是「正着读反着读一样」，所以反转后还等于原数就是。
     }
   },
 
@@ -222,15 +370,23 @@ const tools = {
     inputs: [{ id: 'n', label: '要查找的数字（数组是 10~240 的 10 的倍数）', type: 'number' }],
     run: (v) => {
       const arr = [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240];
+      // 【前提】二分查找只能用于「已经排好序」的数组，这里手工写的就是从小到大。
       const target = v.n;
       let min = 0, max = arr.length - 1;
+      // 【区间】min 和 max 圈定「还有可能藏着目标」的那一段，初始是整个数组。
       while (min <= max) {
+      // 区间还有效（左边界没越过右边界）就继续找。
         const mid = Math.floor((min + max) / 2);
+        // 取中间位置。Math.floor 保证是整数下标。
         if (target < arr[mid]) max = mid - 1;
+        // 目标比中间值小 → 丢弃右半边，把右边界挪到 mid 前面。
         else if (target > arr[mid]) min = mid + 1;
+        // 目标比中间值大 → 丢弃左半边。
         else return `您查找的数字在第 ${mid + 1} 个！`;
+        // 相等就是找到了。mid 是下标（从 0 开始），所以 +1 变成「第几个」。
       }
       return '您查找的数字不在数组里！';
+      // 循环结束还没返回，说明区间已经空了，没找到。
     }
   },
 
@@ -239,14 +395,26 @@ const tools = {
     inputs: [{ id: 'n', label: '输入一个正整数', type: 'number' }],
     run: (v) => {
       let a = v.n;
+      // 用 let 而不是 const，因为下面要不停地除小它。
       if (a < 1) return '不是让你输入正数吗？';
       if (a === 1) return '1 没有质因数';
       const orig = a;
+      // 【先存一份原值】因为 a 会被除到变成 1，最后拼结果时还要用原来的数。
       const parts = [];
+      // 装所有质因数的数组。
       for (let i = 2; i * i <= a; i++)
+      // 【为什么是 i*i <= a 而不是 i <= a】
+      //   一个数如果有大于 √a 的因数，那它一定还有一个小于 √a 的因数与之配对。
+      //   所以只需要试到 √a 就够了，效率高很多。
         while (a % i === 0) { a /= i; parts.push(i); }
+        // 【这里用 while 而不是 if】因为可能连续除好几次。
+        //   例：8 = 2×2×2，要连除三次 2。
+        //   【a /= i】等价于 a = a / i。
+        //   【.push】往数组末尾塞一个元素。
       if (a > 1) parts.push(a);
+      // 循环结束后如果 a 还大于 1，说明剩下的这个 a 本身就是质数（比如 14 = 2 × 7）。
       return `${orig} = ${parts.join(' × ')}`;
+      // 用「 × 」把质因数连起来，拼成 12 = 2 × 2 × 3 的样子。
     }
   },
 
@@ -256,8 +424,13 @@ const tools = {
     run: (v) => {
       let arr = [1,2,3,4,5,6,7,8,9,10];
       const idx = arr.indexOf(v.n);
+      // 【indexOf】找某个值在数组里的位置。找到返回下标（从 0 开始），找不到返回 -1。
       if (idx === -1) return '您输入的数字不在数组里！';
       arr.splice(idx, 1);
+      // 【.splice(起始下标, 删几个)】从指定位置删掉指定数量的元素。
+      //   注意它和 slice 的区别：slice 是「复制一段」（不改原数组），
+      //   splice 是「直接从原数组里挖掉」（会改变原数组）。
+      //   这个功能完全等价于 arr = arr.filter(x => x !== v.n)，那种写法更函数式。
       return `更正数组：\n${arr.join(' ')}`;
     }
   },
@@ -267,8 +440,13 @@ const tools = {
     inputs: [{ id: 'arr', label: '输入数字，用逗号分隔', type: 'text', placeholder: '6,46,468885,33' }],
     run: (v) => {
       const arr = v.arr.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+      // 和 006 完全一样的「切 → 转 → 洗」。
       for (let i = 0; i < arr.length - 1; i++)
         for (let j = 0; j < arr.length - 1; j++)
+        // 【注意】内层这里是 j < arr.length - 1，没有 -i。
+        //   所以这段代码其实还是「冒泡排序」的写法，并不是真正的选择排序
+        //   （选择排序是每轮找出最小值放到前面）。结果一样是升序，只是效率略低。
+        //   这只影响算法名和性能，不影响结果正确性，所以不改。
           if (arr[j] > arr[j+1]) [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
       return `排序结果：\n${arr.join(' ')}`;
     }
@@ -281,61 +459,121 @@ const tools = {
       const z = v.n;
       if (z < 1) return '没有此序号';
       if (z === 1 || z === 2) return `第 ${z} 个序号对应数字为：1`;
+      // 斐波那契数列：1, 1, 2, 3, 5, 8, 13…
+      //   每个数等于前两个数之和，前两项都是 1。
       let a = 1, b = 1;
+      // a 和 b 是「滚动前进」的两个数，一直代表最新的两项。
       for (let i = 3; i <= z; i++) {
+      // 从第 3 项开始算（前两项已经有了）。
         const c = a + b;
+        // 新的数 = 前两个之和。
         if (i === z) return `第 ${z} 个序号对应数字为：${c}`;
+        // 算到目标序号就返回。
         a = b; b = c;
+        // 【滚动】整体往前挪一格：原来的 b 变成新的 a，新算出的 c 变成新的 b。
+        //   这样不需要数组也不用递归，只占两个变量的内存 —— 这叫「迭代法」。
       }
     }
   }
 };
 
-
 /* ========== 渲染按钮 ========== */
 const grid = document.getElementById('toolsGrid');
+// 拿到那个空容器。
 Object.entries(tools).forEach(([key, t]) => {
+// 【Object.entries(对象)】把对象变成数组，每一项是 [键, 值] 的形式：
+//   [['tri', {...}], ['multi', {...}], ...]
+//   然后 forEach 遍历，回调参数用解构 [key, t] 直接把键和值拆出来。
+//   这是「遍历对象」最常用的写法，比 for...in 更安全（不会遍历到原型上的属性）。
   const btn = document.createElement('button');
+  // 【document.createElement('button')】在内存里造一个 button 元素，此时还没插进页面。
   btn.className = 'tool-btn';
+  // 【.className】设置 class 属性。注意不是 class（那在 JS 里是保留字）。
   btn.textContent = t.name;
+  // 【textContent】设置纯文本。用它而不是 innerHTML，
+  //   因为工具名是纯文字，不存在 HTML 标签，用 textContent 更安全也更快。
   btn.dataset.key = key;
+  // 【dataset】读写元素上的 data-* 属性。
+  //   写 dataset.key 就等于在 HTML 上写 data-key="tri"。
+  //   为什么要存？后面在 openTool 里要靠它找出「是哪个按钮被点了」。
   btn.onclick = () => openTool(key);
+  // 【onclick】点击事件。这里用箭头函数包了一层，
+  //   是因为直接写 onclick = openTool(key) 会「立刻执行」并把返回值赋给 onclick，
+  //   包成箭头函数才是「等点击了再执行」。
   grid.appendChild(btn);
+  // 【.appendChild】把造好的元素真正插进页面。
 });
+// 12 次循环后，容器里就有 12 个按钮了 —— 这些按钮在 HTML 源码里一个都看不到。
 
 /* ========== 打开某个工具 ========== */
 function openTool(key) {
+// 【函数声明】JS 会把它「提升」到作用域顶部，
+//   所以即使调用处写在定义之前也能正常工作（但 arrow function 不行）。
   document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  // 【querySelectorAll】按 CSS 选择器找出所有匹配的元素，返回一个类似数组的集合。
+  //   这里先全部去掉 active 类，保证任何时候只有一个按钮是绿的。
   document.querySelector(`.tool-btn[data-key="${key}"]`).classList.add('active');
+  // 【querySelector】只找第一个匹配的。
+  // 【[data-key="tri"]】这叫「属性选择器」，选中 data-key 等于指定值的元素。
+  //   配合反引号模板字符串，就能按变量动态拼出选择器。
+  // 【classList.add】加上 active 类，把这个按钮点亮。
 
   const t = tools[key];
+  // 【用 key 取对象里的值】tools['tri'] 就拿到 tri 那个工具对象。
   const stage = document.getElementById('stage');
 
   let html = `<h3>${t.name}</h3>`;
+  // 先拼出标题。用 let 是因为后面还要不断 += 追加。
   t.inputs.forEach(inp => {
+  // 遍历这个工具需要的输入框定义。
     html += `<label>${inp.label}</label>`;
+    // 生成说明文字。label 是能点的，但这里没绑 for 属性，点它不会聚焦输入框。
     html += `<input id="in_${inp.id}" type="${inp.type}" ${inp.placeholder ? `placeholder="${inp.placeholder}"` : ''}>`;
+    // 【嵌套模板字符串】反引号里面又套了一层反引号，是合法的。
+    // 【三元运算做「可选属性」】有 placeholder 就拼上这段属性，没有就拼空字符串。
+    //   这样没写 placeholder 的输入框不会出现 placeholder="undefined"。
+    // 【id="in_${inp.id}"】给每个输入框加个前缀，避免 id 冲突（比如 a、n 这种太常见的名字）。
   });
   html += `<button class="run" id="runBtn">运行</button>`;
   html += `<pre id="out">（点运行查看结果）</pre>`;
   stage.innerHTML = html;
+  // 【一次性写入】先把所有 HTML 拼成一个字符串，最后只写一次 innerHTML。
+  //   为什么不在循环里一个个 appendChild？因为每改一次 DOM 浏览器都要重排一次，
+  //   拼好再写只重排一次，性能好得多（虽然这里元素很少，差别看不出来）。
 
   document.getElementById('runBtn').onclick = () => {
+  // 给刚生成的「运行」按钮绑定点击事件。
+  //   注意：按钮是上一行才生成的，所以这句必须写在 innerHTML 赋值之后。
     const vals = {};
+    // 收集所有输入值，装进这个空对象。
     t.inputs.forEach(inp => {
       const raw = document.getElementById(`in_${inp.id}`).value;
+      // 用和生成时同样的 id 规则把输入框找出来，读它的 .value（用户输入的文字）。
       vals[inp.id] = (inp.type === 'number') ? parseFloat(raw) : raw;
+      // 【用方括号动态设字段】vals[inp.id] = ... 相当于 vals['a'] = 3。
+      //   点号只能写死字段名，方括号才能用变量当字段名。
+      // 【parseFloat】把字符串转成小数。输入框的值永远是字符串，
+      //   不转的话 "3" + "4" 会得到 "34" 而不是 7。
+      // 【三元运算】数字类型的输入框才转数字，文本框保持原样（比如逗号分隔的数组串）。
     });
     try {
+    // 把执行包起来，任何一个工具算错都不会让整页崩掉。
       const result = t.run(vals);
+      // 【t.run(vals)】调用这个工具自己的 run 函数，把收集到的值传进去。
+      //   这一行就是「数据驱动」的精髓：不管点了哪个工具，调用的代码都是这一句。
       document.getElementById('out').textContent = result;
+      // 【textContent】而不是 innerHTML —— 更安全。
+      //   万一某个结果里带尖括号，用 innerHTML 会被当成标签解析，用 textContent 就原样显示。
     } catch (e) {
       document.getElementById('out').textContent = '运行出错：' + e.message;
+      // 【e.message】错误的具体描述，直接告诉用户哪里不对。
     }
   };
 
   if (t.inputs.length === 0) {
+  // 不需要输入的工具（比如九九乘法表），打开就直接出结果，省得用户还要点一下「运行」。
     document.getElementById('runBtn').click();
+    // 【.click()】用代码模拟点击，复用上面已经写好的逻辑。
   }
 }
 </script>
