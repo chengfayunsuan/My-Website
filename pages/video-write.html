@@ -1,68 +1,225 @@
 <!DOCTYPE html>
 <!-- ============================================================
      文件：pages/video-write.html（投稿视频页）
-     作用：上传视频与封面（大文件走分片上传）、填写标题简介、提交发布。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：三种投稿方式都在这里 ——
+           ① 填 B 站 BV 号（推荐，不占本站流量、不限大小）
+           ② 上传自己的视频文件（最大 2GB，走分片上传，有进度条）
+           ③ 编辑已有视频（地址带 ?id=3 时自动进编辑模式）
+     说明：这一整段尖括号叹号包起来的是注释，不会显示在页面上。
      ============================================================ -->
 <html lang="zh-CN">
+<!-- 【lang="zh-CN"】声明语言是简体中文。
+     影响：朗读软件选哪种口音、浏览器要不要提示翻译、中文怎么断行。 -->
+
 <head>
+<!-- 【head】给浏览器看的信息区，页面上不显示。 -->
+
 <meta charset="UTF-8">
+<!-- 【charset】字符编码，UTF-8 才能正常显示中文和 emoji。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【viewport】手机上的虚拟窗口宽度。
+     width=device-width = 等于手机实际宽度；initial-scale=1.0 = 初始不缩放。
+     不写这两句，手机上会显示成桌面版缩微版，字小到看不清。 -->
+
 <title>投稿视频 · 乘法</title>
+<!-- 浏览器标签页上那行字。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 标签页左边的小图标。路径开头的 / 表示从网站根目录开始找。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 引入全站公共样式。
+     【?v=26】缓存版本号：改完 CSS 把它加 1，浏览器才会重新下载。
+     否则用户可能一直在看你几个月前缓存的旧样式。 -->
+
 <style>
+  /* 本页专属样式。ed- 前缀表示 editor（编辑器）相关。
+     【为什么加前缀】CSS 类名是全局的，起个通用名（比如 .title）很容易跟别的页面撞车。
+     用模块前缀是避免冲突最土但最有效的办法。
+     注意：公共的 .card / .section-title 没有前缀，因为那是全站共用的。 */
+
   .ed-card { padding: 24px; }
+  /* 编辑器卡片的内边距，比普通卡片大一点，写东西的空间要宽敞。 */
+
   .ed-title {
+    /* 标题输入框。注意它用的是 <input> 但套了这组样式。 */
     width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+    /* 【一行写多个声明】短声明挤一行更紧凑。但超过 100 个字符就该换行，
+       否则要横向滚动才能看完，反而更难读。这里已经接近临界了。 */
     font-family: inherit; font-size: 20px; font-weight: 600; background: var(--field); color: var(--text); outline: none; box-sizing: border-box;
+    /* 【font-family:inherit】继承父元素字体。
+       【必须写】input / textarea / button / select 这些「表单控件」
+       浏览器默认用系统字体，不会自动跟网页字体一致，不写就格格不入。
+       【font-size:20px】标题用大字，视觉上就有「这是一篇内容的标题」的感觉。
+       【outline:none】关掉浏览器默认那圈焦点虚线框。
+       【box-sizing:border-box】让「宽度」包含 padding 和 border。
+         不写的话 width:100% 再加上左右各 12px 内边距和 1px 边框，
+         实际宽度会超出父容器 26px，把整个版面撑破。
+         这个属性通常在全站 CSS 开头统一设一次，这里单独写是保险。 */
   }
+
   .ed-title:focus { border-color: var(--primary); }
+  /* 【:focus】获得焦点时（被点中、或 Tab 跳过来）。
+     上面关掉了 outline，这里必须补一个可见的焦点提示 ——
+     否则键盘用户完全不知道光标在哪个框里，这是无障碍上的错误。 */
+
   .ed-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 14px 0 6px; }
+  /* 【margin: 上 左右 下】三个值时：上 14px、左右 0、下 6px。
+     四个值的顺序才是「上 右 下 左」。 */
+
   .ed-btn {
+    /* 各种次要按钮。 */
     min-width: 30px; height: 32px; padding: 0 14px; border: 1px solid var(--border); border-radius: 6px;
     background: var(--card); color: var(--text); font-family: inherit; font-size: 14px; cursor: pointer;
+    /* 【height 固定 + padding 上下为 0】按钮高度靠 height 精确控制，
+       这样一排按钮高度绝对一致，不会因为字体渲染差异差个 1px 而参差。 */
   }
+
   .ed-btn:hover { background: var(--primary-soft); border-color: var(--primary); color: var(--primary-deep); }
+  /* 悬停时三个属性一起变：底色变淡主色、边框变主色、文字变深主色。
+     比只改一个属性更能明确表达「可以点」。 */
+
   .ed-desc {
+    /* 简介输入框（textarea）。 */
     width: 100%; min-height: 120px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
     font-family: inherit; font-size: 15px; background: var(--field); color: var(--text); outline: none; box-sizing: border-box; resize: vertical; margin-top: 14px;
+    /* 【min-height】最小高度，大约 5 行。
+       用 min 不用 height：用户打多了它会自己长高，用 height 就锁死了。
+       【resize:vertical】允许拖动右下角上下调高度。
+       限制成只能竖向：允许横向拖的话，用户能把它拖出容器撑破布局。
+       其他值：none 不能拖、horizontal 只能拉宽、both 都能拖。 */
   }
+
   .ed-desc:focus { border-color: var(--primary); }
+  /* 同上面：补偿被去掉的 outline。 */
+
   .bar { height: 8px; border-radius: 6px; background: var(--field); border: 1px solid var(--border); overflow: hidden; margin-top: 10px; }
+  /* 上传进度条的外壳（一条灰色的槽）。
+     【overflow:hidden】必须写 —— 里面那条彩色填充是靠 width 百分比变宽的，
+     圆角只在父元素上，不裁的话彩色条会从圆角里戳出来，变成直角。 */
+
   .bar > i { display: block; height: 100%; width: 0; background: var(--grad-primary); transition: width .2s; }
+  /* 【.bar > i】大于号是「子代选择器」：
+       只选 .bar 的**直接**子元素 i，不管孙子和更深层。
+       对比后代选择器（空格）会选所有层级的后代。
+       这里用 > 是为了防止以后 i 里面再嵌一个 i 被误伤。
+     【为什么用 <i> 标签】i 本来是「斜体」的语义标签，
+       但这里完全不需要语义，只是需要一个「空的小盒子」来画填充条。
+       很多人用 <span> 或 <div>，用 <i> 纯粹是历史习惯（少打几个字）。
+       严格来说用 div 更清楚，性能上没有区别。
+     【width:0】初始宽度 0 —— 从无到有地长出来才像进度条。
+       【display:block】i 是行内元素，行内元素设 width/height 无效，
+         必须改成 block（或 inline-block）才能控制尺寸。
+     【transition: width .2s】宽度变化时平滑过渡 0.2 秒。
+       不写的话，JS 每 100ms 更新一次宽度会出现「一格一格跳」的感觉。 */
+
   .bar-txt { font-size: 13px; color: var(--text-light); margin-top: 6px; }
+  /* 进度条下面的文字（百分比 + 已传/总共）。 */
+
   .ed-foot { margin-top: 12px; font-size: 13px; color: var(--text-light); }
+  /* 底部小字（素材空间/存储提示）。 */
+
   .ed-actions { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+  /* 「发布按钮 + 结果提示」排一行。
+     【align-items:center】让按钮和旁边的小字竖直居中对齐。 */
+
   .ed-submit { padding: 9px 26px; border: none; border-radius: 8px; background: var(--grad-primary); color: #fff; font-family: inherit; font-size: 15px; cursor: pointer; }
+  /* 主操作按钮：发布 / 保存修改。
+     【为什么它比 .ed-btn 显眼】因为这是整个页面唯一的「正事」。
+     视觉层级的原则：一个区域里最突出的元素只应该有一个。 */
+
   .ed-submit:hover { background: var(--primary-deep); }
+
   .ed-submit:disabled { opacity: .6; cursor: not-allowed; }
+  /* 禁用状态：半透明（看起来「灰掉了」）+ 鼠标变禁止符号。
+     【not-allowed】就是那个 🚫 圆圈斜杠。
+     【为什么禁用时还要单独写 :disabled】
+       因为上面 .ed-submit:hover 会改背景色，禁用时鼠标压上去照样会变色，
+       用户会以为还能点。加上这条虽然改的是 opacity 和 cursor，
+       但浏览器会按「都生效」处理，视觉上是「灰且禁止」。
+       如果想让禁用时 hover 完全没反应，得写 .ed-submit:disabled:hover { background: 原色 } 之类的。 */
+
   .ed-msg { font-size: 14px; }
+  /* 提交结果的提示文字。 */
+
   .ed-msg.ok { color: #2e7d32; } .ed-msg.err { color: #c0392b; }
+  /* 【两条规则写在一行】用分号隔开，纯粹为了省行数。
+     【.ed-msg.ok】连写两个类（中间没空格）= 元素同时有这两个类。
+       这跟 .ed-msg .ok（有空格，后代选择器）是完全不同的意思。
+       这个区别是新手最容易搞混的地方，务必分清：
+         连写（无空格）→ 同一个元素上同时具备
+         空格         → 前者里面的后者（不同元素）
+     【颜色】绿 2e7d32 表示成功，红 c0392b 表示失败。
+       注意：这里用的是「绿=好，红=坏」的语义色，跟股市的「红涨绿跌」是两回事，
+       不要混为一谈。 */
 </style>
 </head>
 <body>
+<!-- 从这里开始才是用户看得见的内容。 -->
+
   <div id="navbar"></div>
+  <!-- 导航栏占位。真正的导航由 js/nav.js 加载后塞进来，
+       几十个页面只维护一份导航代码，改一次全站生效。 -->
 
   <section style="margin-top:36px;">
+    <!-- 【section】语义标签，表示独立内容区块。外观跟 div 一样，
+         区别只是「告诉人和搜索引擎这里是什么」。
+         【style="margin-top:36px;"】行内样式，一次性微调用。 -->
     <div class="card ed-card">
       <h2 class="section-title" id="pageTitle">投稿视频</h2>
+      <!-- 【id="pageTitle"】JS 会把它改成「编辑视频」——
+           同一个页面身兼「投稿」和「编辑」两种模式，靠这个标题区分。
+           【这种设计叫「一页两用」】好处是不用维护两份几乎一样的代码；
+           坏处是逻辑会分散在 initEdit() 这类判断里，读代码时要多留神。 -->
 
       <input class="ed-title" id="title" maxlength="100" placeholder="标题（最多 100 字）" autocomplete="off" data-lpignore="true">
+      <!-- 【input】单行输入框。它不需要闭合标签（HTML 里叫「自闭合元素」）。
+           【maxlength="100"】最多 100 个字符，超了打不进去。
+             注意这跟 textarea 的 maxlength 是同一个机制，都只防君子不防小人
+             （用户改网页代码就能绕过），所以后端还得再校验一次。
+           【placeholder】空着时显示的灰色提示文字。只是提示不是值，一打字就消失。
+           【autocomplete="off"】让浏览器不要自动填充历史记录。
+             标题是内容不是个人信息，弹出「上次填过的」会很烦。
+           【data-lpignore="true"】让 LastPass 这类密码管理器别管这个框。
+             密码管理器看到 input 就以为要填账号，会在旁边弹个小图标，很碍事。
+             这是「对抗浏览器插件"的土办法，各家的属性名还不一样（下面还有 data-1p-ignore 是给 1Password 的）。 -->
 
       <div style="margin-top:14px">
+        <!-- 一个纯用来控制间距的包装 div。
+             【为什么不用 margin-top 直接写在 input 上】
+             因为 input 已经通过 .ed-title 类有了自己的 margin/padding 体系，
+             再加容易乱。包一层 div 是最省心的做法，代价是多一层 DOM。 -->
         <input class="ed-title" id="bvid" maxlength="60" style="margin-top:0"
                placeholder="B 站 BV 号（推荐）：例 BV1xx411c7mD"
                autocomplete="one-time-code" data-lpignore="true" autocapitalize="off" spellcheck="false">
+        <!-- 【style="margin-top:0"】因为复用了 .ed-title 类，那个类可能带上来边距，
+             这里要覆盖成 0（间距已经由外层 div 控制了）。
+             【autocomplete="one-time-code"】这个值有点巧：
+               它本来是给「短信验证码」用的，作用是让浏览器**不要**自动填地址/账号。
+               因为设成 "off" 很多浏览器根本不理你，但 "one-time-code" 会被尊重。
+               这是个实用的小技巧。
+             【autocapitalize="off"】iOS 上不要自动把首字母变大写。
+               BV 号大小写敏感，"bv1xx" 和 "BV1xx" 不一样，自动大写会搞坏它。
+             【spellcheck="false"】不要做拼写检查。
+               否则 BV 号下面会被画满红色波浪线，看着像写错了。 -->
         <div id="biliHint" style="font-size:13px;color:var(--text-light);margin-top:6px;line-height:1.6">
           填了 BV 号就不用上传视频，播放直接走 B 站。<b>视频必须是「公开」</b>，仅自己可见的视频访客打不开。
         </div>
+        <!-- 【b 标签】加粗，纯视觉用途。
+             （语义上的「强调」应该用 strong，但这里只是想让它显眼，用 b 合适。）
+             这段文字会被 JS 整段替换，用来显示「已识别 BV 号」「正在取封面」等状态。 -->
       </div>
 
       <div style="margin-top:12px">
         <input class="ed-title" id="posterUrl" maxlength="600" style="margin-top:0"
                placeholder="封面图地址（选填，自动抓不到时粘一个）"
                autocomplete="off" data-lpignore="true" data-1p-ignore spellcheck="false">
+        <!-- 【data-1p-ignore】1Password 的忽略属性。
+             注意它没有 ="true"，是个「布尔属性」：
+             只要出现就生效。（HTML 里 disabled、hidden、checked 都是这种。）
+             【为什么同一个功能要写两个】各家插件各搞各的，没有统一标准，
+             只能都写上。这种「兼容性土办法」在前端很常见。 -->
         <div style="font-size:12px;color:var(--text-light);margin-top:6px;line-height:1.6">
           拿法：打开 B 站视频页 → 封面图上右键 → 复制图片地址 → 粘到这里。留空就用自动抓的。
         </div>
@@ -70,18 +227,47 @@
 
       <div class="ed-bar">
         <button class="ed-btn" id="pickVideo" type="button">🎬 或者上传视频文件</button>
+        <!-- 【type="button"】明确声明这是普通按钮。
+             不写的话默认是 "submit"，一旦这段被包进 form 元素里，
+             点它就会触发表单提交、页面自动刷新，所有填好的内容全丢。
+             这是个非常常见的踩坑点，养成习惯：不提交表单的按钮都写 type="button"。 -->
         <span id="fileInfo" style="font-size:13px;color:var(--text-light)">支持 mp4 / webm / ogv / mov / mkv，最大 2GB</span>
+        <!-- 选完文件后会显示「文件名 · 大小」。
+             【span】行内容器，本身没样式，用来圈住一小段内容方便单独控制。 -->
       </div>
       <div class="bar" id="prog" style="display:none;"><i id="barFill"></i></div>
+      <!-- 【style="display:none;"】进度条初始隐藏，上传开始才显示。
+           【display:none 和 visibility:hidden 的区别】
+             display:none      → 不显示且不占位置（后面的元素会补上来）
+             visibility:hidden → 不显示但仍占一块空白
+           这里要的是前者，不然没上传时也留着一块空白很奇怪。 -->
       <div class="bar-txt" id="barTxt" style="display:none;"></div>
       <input type="file" id="fileVideo" accept="video/*,.mkv" hidden>
+      <!-- 【type="file"】文件选择框，浏览器天生的。
+           【accept】限定可选的文件类型：
+             video/*   → 所有视频类型（mp4、webm 等）
+             .mkv      → 额外允许 .mkv 扩展名
+             因为 mkv 在很多系统上不被识别为 video，得单独列出来。
+           【accept 只是过滤，不是限制】用户可以选「所有文件」绕过它，
+             所以真正的类型校验还得在 JS 里再做一次（下面 handleVideo 就做了）。
+           【hidden】布尔属性，直接隐藏。
+             一个 file 输入框长得又丑又土，实际做法都是藏起来，
+             用一个好看的按钮去点它（下面 pickVideo 的 click 就是干这个的）。 -->
 
       <textarea class="ed-desc" id="desc" maxlength="2000" placeholder="简介（选填，最多 2000 字）" autocomplete="off"></textarea>
+      <!-- 【textarea】多行文本框。
+           注意它的值不像 input 那样用 value 属性，而是写在开始和结束标签之间。 -->
 
       <div class="ed-foot" id="quota">素材空间 —</div>
+      <!-- 底部的存储提示，JS 会填入具体文案。 -->
 
       <div class="ed-actions">
         <button class="ed-submit" id="publish" disabled>发布</button>
+        <!-- 【disabled】布尔属性：初始就是禁用状态。
+             【为什么初始禁用】因为还没填标题、也没选视频，这时候点「发布」只会报错。
+             与其让用户点了再被骂，不如一开始就让他点不动（并且样式是灰的），
+             这样他一眼就知道「还有东西没填」。
+             这叫「前置约束」—— 把错误挡在发生之前，而不是发生之后才提示。 -->
         <span class="ed-msg" id="msg"></span>
       </div>
     </div>
@@ -90,14 +276,35 @@
   <footer><p>© 2026 CHENGFA</p></footer>
 
   <script src="/js/config.js"></script>
+  <!-- 依次引入 6 个脚本，顺序绝不能乱，每个都依赖前一个：
+         config.js        → 全站配置（Supabase 地址、密钥、MEDIA_BASE），挂到 window 上
+         bg.js            → 背景图/视频（IndexedDB 取，零流量）
+         supabase-js.js   → Supabase 官方 SDK
+         sb.js            → 业务层，提供 window.SBAPI
+         upload.js        → 上传层，提供 window.MEDIA（分片上传 + 进度回调）
+         nav.js           → 导航栏 + 登录弹窗 + 信箱
+       【为什么 upload.js 排在这个位置】因为它依赖 sb.js 里的登录凭证，
+       得排在 sb.js 后面；nav.js 不依赖上传，放最后。
+       【为什么都放 body 末尾】浏览器解析到 script 会停下先执行它。
+       放在末尾时上面的 HTML 已解析完，脚本里 getElementById 才找得到元素。
+       放 head 里执行的话元素还不存在，拿到的全是 null。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/upload.js"></script>
   <script src="/js/nav.js?v=23"></script>
 <script>
+/* ============ 1. 常量 ============ */
 const VID_MAX = 2 * 1024 * 1024 * 1024;
+/* 2GB 上限。为什么要写成乘法的样子，而不是直接写 2147483648？
+   【可读性】1024*1024*1024 一眼看出是「1024 的三次方 = G」。
+     直接写 2147483648 谁也不知道这是多大的数，改的时候也没法算。
+   【计算规则】1 KB = 1024 B、1 MB = 1024 KB、1 GB = 1024 MB。
+     所以 2GB = 2 × 1024 × 1024 × 1024 = 2147483648 字节。
+   【注意】硬盘厂商用的是 1000 进制（1GB = 10 亿字节），
+     所以「标称 2GB 的文件」实际可能显示 1.86GB —— 这就是「硬盘缩水」的原因。 */
 
+/* ============ 2. 把页面上要用到的元素一次性全拿到 ============ */
 const fileVideo = document.getElementById('fileVideo');
 const progEl = document.getElementById('prog');
 const barFill = document.getElementById('barFill');
@@ -111,167 +318,516 @@ const biliHint = document.getElementById('biliHint');
 const posterEl = document.getElementById('posterUrl');
 const msgEl = document.getElementById('msg');
 const quotaEl = document.getElementById('quota');
+/* 【为什么开头就把所有元素拿好】
+   而不是用的时候再 getElementById？
+   ① 性能：查 DOM 是相对慢的操作，查一次存下来比反复查省
+   ② 安全：元素如果不存在，在开头就会暴露（虽然这里没检查），
+      不会等到某个函数深处才莫名其妙报 null
+   ③ 可读性：看这 13 行就知道这个页面用了哪些元素，一目了然
+   【命名习惯】结尾带 El 的表示「这是个 DOM 元素」，
+     跟普通的数据变量区分开。团队协作时这种约定很有用。 */
 
+/* ============ 3. 状态变量 ============ */
 let videoName = '', duration = 0, uploaded = false, videoUrl = '';
+/* 【一行声明四个变量】用逗号分隔。
+   【每个的含义】
+     videoName → 上传的视频文件名
+     duration  → 时长（秒）
+     uploaded  → 视频文件是否已经上传成功（布尔）
+     videoUrl  → 上传成功后的可访问地址
+   【为什么 videoName 和 duration 声明了但基本没用】
+   这是历史遗留：早期版本会显示文件名和读取时长，后来改成「只认 BV 号」就不再用了。
+   不影响功能，属于「代码里的死变量」。看到这种可以安心删掉。 */
 let loggedIn = false;
+/* 是否已登录。初始 false，下面那个 IIFE 会去查一次会话然后改它。 */
 
 const BILI_TIP = '填了 BV 号就不用上传视频，播放直接走 B 站。<b>视频必须是「公开」</b>，仅自己可见的视频访客打不开。';
+/* 把 HTML 里那段提示文字存成常量。
+   【为什么】因为它要反复用到（清空输入时要恢复成这句话），
+   存一份常量比在三个地方各写一遍长字符串靠谱 —— 改文案只改一处。
+   【注意里面有 <b> 标签】所以后面只能用 innerHTML 塞回去，不能用 textContent
+   （textContent 会把 <b> 当普通文字显示出来）。 */
 let biliInfo = null;      // { pic, duration, title } —— 抓到就存下来，发布时写进库
+/* 从 B 站抓到的信息：封面地址、时长、标题。
+   发布时要用它来填数据库字段，所以必须在内存里存着。 */
 let biliTimer = null;
+/* 防抖定时器的编号。
+   【防抖 debounce 是什么】用户每敲一个字就发一次请求太浪费，
+   改成「停止输入 600ms 后才真正发」。
+   如果用户在这 600ms 内又敲了字，就把上一个定时器取消、重新计时。
+   这样只在用户「真的停下来了」才发一次请求。
+   【为什么必须存编号】要取消定时器必须用 clearTimeout(编号)，
+   不存下来就永远取消不掉，用户快速输入时会发出一堆请求。 */
+
+/* ============ 4. 工具函数 ============ */
 
 // B 站接口没有 CORS 头，浏览器直连会被拦，走公共代理；三个轮流试，抓不到也不影响发布
 // 统一走 SBAPI.fetchBili（JSONP 直连 B 站，失败再走 /bili 边缘函数）
 async function fetchBiliInfo(bv) {
+  /* 取 B 站视频信息。
+     【注释里说的是三层降级策略】
+       ① JSONP 直连 —— JSONP 是老技术，靠 <script> 标签不受跨域限制来取数据
+       ② 公共 CORS 代理 —— 让代理服务器代你去抓
+       ③ 边缘函数 /bili —— 自己部署的 Cloudflare Worker，反代 B 站接口
+     一层层往下退，全都失败就返回 null（不抛错）。
+     【为什么抓不到也不影响发布】因为封面和时长只是「锦上添花」，
+     播放本身是靠 B 站自己的 iframe 嵌入，跟这些数据无关。
+     这种「非关键功能失败不阻断主流程」的设计原则叫「优雅降级」。 */
   try { return await SBAPI.fetchBili(bv); } catch (e) { return null; }
+  /* 【try/catch 包一行】因为任何一个网络错误都不该冒泡到调用方。
+     【catch (e) 里 e 没用上】可以省略参数写成 catch {，
+     这里保留 e 可能是早期调试留下的。不影响运行。
+     【return null 而不是抛出】让调用方用 if (info) 判断就行，
+     不用再套一层 try/catch —— 这叫「把异常转成返回值」。 */
 }
 function httpsUrl(u) { return String(u || '').replace(/^http:/, 'https:'); }
+/* 【为什么要这个函数】B 站返回的封面地址是 http:// 开头的。
+   本站是 https 的，在 https 页面里加载 http 图片会被浏览器当成「混合内容」拦住。
+   把 http: 换成 https: 就能正常显示。
+   【String(u || '')】兜底成空字符串，防止传 null 时 .replace 报错。
+   【/^http:/】只替换开头的 http:，
+     不会误伤路径中间碰巧出现的 "http:" 字样。
+   【注意这个替换是「只换第一个」】没加 g 标志。
+     正好，因为上面 ^ 已经限定了开头，只有一个能匹配上。 */
 function biliOf(v) {
+  /* 从一串可能很乱的输入里，提取出标准的 BV 号。 */
   if (!v) return '';
   const m = String(v).trim().match(/(BV[0-9A-Za-z]{10})/);
+  /* 【.match(正则)】在字符串里搜索匹配的部分。
+     找到返回一个数组（第 0 项是整段匹配，第 1 项起是括号捕获的内容）；
+     找不到返回 null。
+     【/(BV[0-9A-Za-z]{10})/】拆开看：
+       (          → 左括号开始「捕获组」，匹配到的这段会单独放进数组
+       BV         → 字面量 BV 两个字母
+       [0-9A-Za-z] → 字符类：任意一个数字或大小写字母
+       {10}       → 前面那个字符类重复 10 次
+       )          → 捕获组结束
+     合起来 = BV + 10 位字母数字 = 12 位的标准 BV 号。
+     【为什么没有 ^ 和 $】故意的 —— 这样既能匹配纯 BV 号 "BV1xx411c7mD"，
+     也能从完整链接 "https://www.bilibili.com/video/BV1xx411c7mD?share=1" 里提取出来。
+     用户在地址栏复制的是一整条链接，这个设计让他不用手动删。
+     【为什么用 {10} 而不是写成 [0-9A-Za-z]{10} 之外的形式】
+     BV 号的格式就是固定 12 位，用长度限定能有效避免误匹配（比如 "BVideo" 这种）。 */
   return m ? m[1] : '';
+  /* 【m[1]】取第一个捕获组的内容（不含前后多余的字符）。
+     【m ? ... : ''】匹配失败时 m 是 null（假值），返回空字符串。 */
 }
 function requireLogin() {
+  /* 检查是否登录，没登录就把登录框怼到用户脸上。
+     返回 true = 已登录可以继续；false = 已经拦下来了。 */
   if (loggedIn) return true;
   const m = document.getElementById('loginModal');
   if (m) m.classList.add('show'); else alert('请先登录');
+  /* 【if...else 写一行】只在很短的时候这么写。
+     【为什么要 else】因为登录弹窗不一定存在（nav.js 没加载成功时），
+     有弹窗就弹，没有就只能用最原始的 alert 兜底。 */
   return false;
 }
 (async () => { const s = await SBAPI.getSession(); loggedIn = !!s; })();
+/* 【IIFE + async】立即执行的异步函数。
+   【为什么需要包起来】顶层不能直接用 await（老版浏览器会语法错误），
+   包进 async 函数里就能用了。
+   【const s = await SBAPI.getSession()】去查浏览器本地有没有登录凭证。
+   【!!s】两个感叹号 = 强制转布尔值。
+     !!对象 → true，!!null → false，!!undefined → false，!!'' → false。
+     为什么要转？因为 s 是个对象或 null，
+     loggedIn 应该是干净的 true/false，不能存一个对象进去（后面 if (loggedIn) 虽然也能用，
+     但语义上不清晰，而且调试时打印出来一堆对象信息很乱）。 */
 function setMsg(text, cls) { msgEl.textContent = text; msgEl.className = 'ed-msg' + (cls ? ' ' + cls : ''); }
+/* 设置提交结果提示。
+   【textContent 而不是 innerHTML】安全 —— 哪怕 text 里有 HTML 标签也只会当文字显示。
+   【className 整体替换】注意这是「整体赋值」，不是追加。
+     所以每次都要把基础类 'ed-msg' 重新拼上，
+     否则设成 'ok' 之后就会变成只有 ok 类，基础样式全丢了。
+     【(cls ? ' ' + cls : '')】有第二个参数才加空格和类名。
+       那个空格绝对不能少，否则会拼成 'ed-msgok'，变成一个不存在的类名。 */
 
+/* ============ 5. BV 号输入框：识别 + 防抖抓信息 ============ */
 bvidEl.addEventListener('input', () => {
+  /* 【'input' 事件】输入框内容一变就触发（每敲一个字都触发）。
+     【和 'change' 的区别】change 只在「失去焦点且内容变了」时触发一次，
+     所以实时响应必须用 input。 */
   const raw = bvidEl.value.trim();
+  /* 【.value】读用户输入的内容。
+     【.trim()】去掉首尾空格 —— 用户从别处复制粘贴很容易带上空格，
+     不 trim 的话 " BV1xx" 就识别不出来。这是「处理用户输入」的第一件必做的事。 */
+
   if (!raw) {
+    /* 用户把内容清空了 → 恢复到初始状态。 */
     biliHint.innerHTML = BILI_TIP; biliHint.style.color = '';
+    /* 【innerHTML】因为 BILI_TIP 里有 <b> 标签，必须用 innerHTML 才会生效。
+       （内容是固定的常量，不是用户输入，所以这里没有 XSS 风险。）
+       【style.color = ''】设成空字符串 = 清除行内颜色，恢复成 CSS 里定义的颜色。
+       注意：不能用 null 或 undefined，那样会变成字符串 "null"/"undefined" 这种无效值。 */
     publishBtn.disabled = !uploaded;
+    /* 【!uploaded】如果视频文件已经上传好了，按钮保持可用；否则禁用。
+       【这个逻辑贯穿全页】发布的前提是「有 BV 号」或「有已上传的文件」，
+       两者满足其一就行。 */
     biliInfo = null;
+    /* 清掉之前抓到的信息，避免「清空输入后还拿旧封面发出去」。 */
     return;
   }
+
   const bv = biliOf(raw);
   if (bv) {
     biliHint.innerHTML = '✓ 已识别 ' + bv + '，正在取封面…';
+    /* 【字符串拼接】'✓ 已识别 ' + bv + '，正在取封面…'
+       注意这里用的是普通字符串，因为 bv 是程序提取出来的纯字母数字，不含标签。 */
     biliHint.style.color = 'var(--primary-deep)';
+    /* 【style.color 能直接用 var(...) 吗】可以 —— 
+       行内样式同样支持 CSS 变量，前提是那个变量在某个祖先元素上定义过。
+       （如果没定义，这个值会失效，颜色保持原样。） */
     publishBtn.disabled = false;
+    /* 只要有合法 BV 号，就能发布了 —— 封面和时长抓不到也不影响播放。 */
+
     clearTimeout(biliTimer);
+    /* 【清掉上一个定时器】这就是防抖的核心：
+       用户每敲一个字都会走到这里，每次都把上一次的倒计时取消，
+       于是只有「最后一次输入之后 600ms 内没再输入」才会真正发请求。 */
     biliTimer = setTimeout(async () => {
       const info = await fetchBiliInfo(bv);
+      /* 真正去抓信息。可能返回 null（全部渠道都失败）。 */
       if (biliOf(bvidEl.value) !== bv) return;   // 期间又改了
+      /* 【这一行是「竞态防护」，非常重要】
+         【场景】用户输入 BV1 → 600ms 后发请求 A；
+         又改成 BV2 → 再发请求 B。
+         如果 A 比 B 晚回来，就会用「BV1 的信息」去覆盖「BV2 的输入框」——
+         用户看到的是一个完全不相干的封面，还以为自己搞错了。
+         【解法】请求回来后，再检查一次「当前输入框里的 BV 号还是我刚才请求的那个吗」，
+         不是就丢弃这个结果。
+         这种「结果回来时状态已经变了」的问题叫「竞态条件 race condition」，
+         是所有异步编程里最需要警惕的东西。 */
       if (info) {
         biliInfo = info;
+        /* 存起来，发布时要用（封面地址、时长、标题）。 */
         if (!titleEl.value.trim() && info.title) titleEl.value = info.title;
+        /* 【只填空白项】如果用户已经自己写了标题，就不要用 B 站的标题覆盖他。
+           判断方式：titleEl.value.trim() 是空字符串（假值）→ 才填。
+           这个细节很关键：自动填充应该是「帮忙」，不是「捣乱」。 */
         if (info.pic && !posterEl.value.trim()) posterEl.value = info.pic;
+        /* 封面同理：用户填了就不覆盖。 */
         biliHint.innerHTML = '✓ ' + bv + ' · 封面和时长已抓到，直接发布就行';
       } else {
         biliInfo = null;
         biliHint.innerHTML = '✓ ' + bv + '（封面没抓到，不影响播放）';
+        /* 【乐观提示】即使没抓到信息也要告诉用户「BV 号是对的，可以发」。
+           如果这里显示成错误信息，用户会以为发不了，直接放弃。 */
       }
     }, 600);
+    /* 【600 毫秒】为什么是这个值？
+       太短（比如 100ms）起不到防抖效果，用户打字慢的时候照样发好几次；
+       太长（比如 2000ms）用户会觉得「怎么半天没反应」。
+       300~800ms 是常见的经验区间。这个数字没有标准答案，靠体感调。 */
   } else {
     biliHint.textContent = '没认出来。BV 号是 BV + 10 位字母数字，总共 12 位；也可以直接粘整条视频链接';
+    /* 【textContent 而不是 innerHTML】这句没有 HTML 标签，用 textContent 更安全。
+       （虽然内容是固定文案，但养成习惯：能用 textContent 就不用 innerHTML。） */
     biliHint.style.color = '#e03e6a';
+    /* 红色，表示「这里有问题」。 */
     publishBtn.disabled = !uploaded;
+    /* 没有合法 BV 号 → 回到「必须已上传文件才能发」的状态。 */
   }
 });
 
+/* ============ 6. 选择视频文件 ============ */
 document.getElementById('pickVideo').addEventListener('click', () => fileVideo.click());
+/* 【这一行是「美化文件选择框」的标准套路】
+   真正的 <input type="file"> 长得丑、各浏览器还不一样，没法用 CSS 改成想要的样子。
+   做法：① 把它 hidden 藏起来 ② 用一个好看的按钮 ③ 点按钮时用 JS 触发它的 click()
+   这样用户看到的永远是那个好看的按钮，实际交互还是原生文件选择器。
+   【.click() 是什么】用代码模拟一次点击，效果跟用户真的点了完全一样。 */
+
 fileVideo.addEventListener('change', e => { if (e.target.files[0]) handleVideo(e.target.files[0]); e.target.value = ''; });
+/* 【'change' 事件】用户选完文件（或取消）时触发。
+   【e.target.files】选中的文件列表（FileList）。它是个「类数组」，
+     用 files[0] 取第一个。
+   【为什么要判断 files[0] 存在】用户点了「取消」时，files 是空的，
+     不判断就会传 undefined 进去然后报错。
+   【e.target.value = ''】这一句很容易被忽略，但非常关键：
+     把 file 输入框的值清空，这样**连续选择同一个文件也会触发 change**。
+     不清空的话，用户第二次选同一个文件，浏览器认为「值没变」，不触发事件，
+     用户会以为按钮坏了。这是个非常经典的坑。 */
 
 async function handleVideo(file) {
+  /* 【file】是一个 File 对象，有几个重要属性：
+       name → 文件名
+       size → 字节数
+       type → MIME 类型（比如 "video/mp4"） */
   if (!requireLogin()) return;
+  /* 没登录就别开始上传 —— 传完才发现没权限，白等半天还浪费流量。 */
+
   if (!/^video\//.test(file.type) && !/\.(mp4|webm|ogv|mov|mkv)$/i.test(file.name)) {
+    /* 双重校验：MIME 类型 或 扩展名，满足其一就算视频。
+       【/^video\//】以 "video/" 开头（比如 video/mp4、video/webm）。
+         斜杠在正则里要写成 \/ 转义，因为普通斜杠是正则的结束符。
+       【/\.(mp4|webm|ogv|mov|mkv)$/i】
+         \.          → 一个真正的点（不转义的话 . 表示「任意字符」）
+         (a|b|c)     → 括号分组 + 或
+         $           → 必须在字符串末尾
+         i 标志      → 忽略大小写，所以 .MP4 也算
+       【为什么要两者之一】有些系统上传 mkv 时 type 是空的或 "application/octet-stream"，
+         光看 type 会误判为「不是视频」；光看扩展名又容易被改名文件骗过。
+         两个条件用 || 连起来（有一个成立就放行）兼容性最好。 */
     return alert('只支持视频文件');
+    /* 【return alert(...)】alert 返回 undefined，
+       这里的作用是「弹完窗立刻退出函数」，把两行压成一行。 */
   }
   if (file.size > VID_MAX) return alert('这个视频 ' + (file.size / 1024 / 1024 / 1024).toFixed(2) + 'GB，超过 2GB 上限');
+  /* 【文件大小校验，必须在客户端先拦一次】
+     让用户传一个 5GB 的文件，等传到 90% 才失败，那是灾难性的体验。
+     【换算是这样的】file.size / 1024 → KB，再 /1024 → MB，再 /1024 → GB。
+     【.toFixed(2)】保留 2 位小数，返回字符串。
+       不处理的话可能显示成 "2.384185791015625GB"，一长串数字看着像 bug。 */
   videoName = file.name; videoUrl = ''; uploaded = false;
+  /* 【一行三个赋值】用分号隔开。
+     【为什么 videoUrl 要清空】因为现在选的是新文件，上一次上传的地址必须作废，
+     否则可能拿旧地址去发布。 */
   publishBtn.disabled = !biliOf(bvidEl.value);
+  /* 重新计算发布按钮状态：填了 BV 号才可用（文件还在传）。 */
   fileInfo.textContent = file.name + ' · ' + (file.size / 1048576).toFixed(1) + 'MB';
+  /* 【1048576】= 1024 × 1024，就是一 MB 的字节数。
+     为什么这里直接写数字而不是 1024*1024？因为上面那个换算表达式已经很长了，
+     写死一个数更短。但可读性上 1024*1024 更好 —— 这是一种取舍。 */
   progEl.style.display = ''; barTxt.style.display = ''; barFill.style.width = '0%';
+  /* 【style.display = ''】设成空字符串 = 「清除这个行内样式」，
+     元素回到 CSS 里定义的显示方式（div 默认就是显示）。
+     这比写 'block' 好：如果 CSS 里以后改成 flex，写死 'block' 就错了，
+     清空行内样式则永远跟着 CSS 走。 */
   barTxt.textContent = '上传中… 0%';
   setMsg('');
+  /* 清掉上一次的错误提示。 */
   try {
     if (!window.MEDIA) throw new Error('upload.js 没加载');
+    /* 【防御性检查】如果 upload.js 因为网络问题没加载成功，window.MEDIA 就是 undefined，
+       直接 MEDIA.upload 会报一个很难懂的错（"Cannot read property upload of undefined"）。
+       这里主动抛一个说人话的错误，用户/开发者一看就知道原因。
+       【这个技巧值得学】把技术错误翻译成人能看懂的话。 */
     const r = await MEDIA.upload(file, 'video', pct => {
+      /* 【upload 的三个参数】
+         ① file → 要上传的文件
+         ② 'video' → 这是哪一类文件（视频），后端据此决定存哪个目录/用什么限制
+         ③ 回调函数 → 上传过程中会反复调用它，参数是进度百分比 0~100
+       【这个回调叫「进度回调」，是异步操作里很常见的模式】
+       因为上传可能要几分钟，不可能等完了才给用户反馈，
+       所以让上传过程「主动汇报」进度。 */
       barFill.style.width = pct + '%';
+      /* 把进度条的宽度设成百分比。
+         因为 CSS 里写了 transition: width .2s，所以是平滑地长过去。 */
       barTxt.textContent = pct + '%  ·  ' + (file.size * pct / 104857600).toFixed(1) + ' / ' + (file.size / 1048576).toFixed(1) + 'MB';
+      /* 【这一串换算容易看晕，拆开看】
+         file.size * pct / 104857600
+           file.size × 百分比 = 已上传的字节数
+           再除以 104857600（= 1024×1024×100 = 100MB？不对）
+           【更正算一下】1048576 × 100 = 104857600。
+           所以 file.size * pct / 104857600 = (file.size / 1048576) * (pct / 100)
+           也就是「总 MB 数 × 已传比例」= 已传的 MB 数。对得上 ✓
+         file.size / 1048576 = 总 MB 数
+         结果形如：47%  ·  38.5 / 82.3MB
+       【为什么不写得更清楚】因为这一行本来可以拆成三行变量，
+       但作者为了紧凑写成了一行。牺牲了一点可读性。 */
     });
     videoUrl = r.url; uploaded = true;
+    /* 【r.url】上传成功返回的可访问地址。
+       【uploaded = true】这一步很关键 —— 它让发布按钮变成可用。 */
     barFill.style.width = '100%'; barTxt.textContent = '上传完成';
     publishBtn.disabled = false;
     setMsg('视频已上传，填好标题就能发布', 'ok');
+    /* 【'ok'】第二个参数是样式类，会变成绿色。 */
   } catch (e) {
+    /* 【catch (e)】拿住错误对象，下面要用 e.message。 */
     progEl.style.display = 'none'; barTxt.style.display = 'none';
+    /* 上传失败就把进度条藏起来 —— 留着一个卡在 37% 的进度条会让用户困惑。 */
     setMsg(e.message || '上传失败', 'err');
+    /* 【e.message || '上传失败'】优先显示具体错误原因（比如「网络中断」），
+       没有就显示通用文案。
+       【为什么不用 alert】上传失败是「可以重试」的常规错误，
+       弹窗打断性太强。用页面上的文字提示更温和，用户还能直接再点一次上传。 */
   }
 }
 
+/* ============ 7. 存储配额提示 ============ */
 async function loadQuota() {
   quotaEl.textContent = '推荐 B 站嵌入（不限大小、不占本站流量）';
 }
+/* 【要说明一下这个函数现在名不副实】
+   名字叫 loadQuota（加载配额），实际上只是写了一句固定文案，既没请求也没计算。
+   【小提示】看代码时遇到这种「名字和实际行为不符」的函数要留意，
+   往往是需求改过、名字没跟着改留下的。不影响运行，但会误导后来的人。
+   【这个函数甚至可以不写成 async】因为它内部没有任何 await。
+   加上 async 只是让调用方可以 await 它（虽然没必要），属于无害的冗余。 */
 
+/* ============ 8. 发布 / 保存 ============ */
 publishBtn.addEventListener('click', async () => {
   if (!requireLogin()) return;
   const bv = biliOf(bvidEl.value);
   if (!bv && !uploaded && !editId) return setMsg('填 B 站 BV 号，或者选个视频等它上传完', 'err');
+  /* 三种情况都要有内容来源：① 有 BV 号 ② 有已上传的文件 ③ 是编辑模式。
+     【editId 是下面才声明的】这里引用它在它声明之前 —— 看上去像 bug，其实不是：
+       因为这段代码是一个「回调函数体」，只有用户点击时才会执行，
+       那时整个脚本早就跑完、editId 也已经赋值了。
+       这叫「暂时性死区（TDZ）」的边界情况：
+       在声明之前**读取**会报错，但**把读取写在函数里、延后执行**就没问题。
+       能跑，但很脆弱 —— 如果哪天有人在声明之前就触发点击，就会崩。 */
   const title = titleEl.value.trim();
   if (!title) return alert('先写个标题');
+  /* 标题是必填项。用 alert 而不是 setMsg，因为这是「用户操作错误」，
+     需要强提示让他注意到；而发布失败那种「系统错误」用页面文字更合适。 */
   publishBtn.disabled = true; setMsg(editId ? '保存中…' : '发布中…', '');
+  /* 【禁用按钮，防重复提交】
+     不禁用的话用户可能连点三下，发出三条一模一样的视频。
+     这是「表单提交」最基本的防护，几乎每个提交按钮都该有。
+     【三元运算】编辑模式说「保存中」，新建模式说「发布中」—— 措辞要对上用户的预期。 */
   try {
     const path = bv ? 'bili:' + bv : videoUrl;
+    /* 【存进数据库的播放地址有两种形式】
+       填了 BV 号 → 存成 "bili:BV1xx411c7mD"（约定：bili: 前缀表示这是 B 站视频）
+       上传了文件 → 存成真实的可访问地址
+       读取时用 /^bili:/ 判断是哪种，再决定用 iframe 还是 <video> 播放。
+       【这种「用前缀标记类型」的做法很常见】好处是一个字段能存两种东西，
+       坏处是「类型信息藏在字符串里」，不够显式。更好的做法是加一个 type 字段。 */
     const poster = (posterEl.value.trim() || (bv && biliInfo ? httpsUrl(biliInfo.pic) : '')) || null;
+    /* 【这一行有三层兜底，拆开看】
+       ① posterEl.value.trim() → 用户手填的封面地址（优先级最高，尊重用户选择）
+       ② 或者：有 BV 号 且 抓到了信息 → 用 B 站的封面（转成 https）
+       ③ 最后再 || null → 两个都空就给 null（数据库里存空值，而不是空字符串）
+       【为什么要转成 null 而不是 ''】
+         空字符串在数据库里是一个「有值但是空」的状态，
+         查询时 is null 查不到它，is not null 又会把它算进来，很麻烦。
+         语义上「没有封面」就该是 null。这是一条值得记住的数据规范。 */
 
     // 编辑模式：只改标题 / 简介 / 封面，不动播放地址和时长
     if (editId) {
+      /* 【编辑模式的限制】故意不允许改播放地址。
+         因为改播放地址意味着要重新上传、重新转码、旧文件还得删 ——
+         逻辑复杂度高很多，收益却很小（想换视频就删了重发）。
+         【这种「主动砍需求」的判断】是工程师很重要的能力：
+         不是所有能做的都该做。 */
       const u = await SBAPI.updateVideo(editId, title, descEl.value.trim(), poster);
       if (!u.ok) { publishBtn.disabled = false; return setMsg(u.error || '保存失败', 'err'); }
+      /* 【失败时必须恢复按钮】否则按钮永远灰着，用户只能刷新页面重来。
+         这是「异常处理里也要清理状态」的典型例子。 */
       setMsg('已保存，跳转中…', 'ok');
       setTimeout(() => { location.href = '/pages/video.html?id=' + editId; }, 500);
+      /* 【setTimeout(回调, 500)】500ms 后跳转。
+         【为什么先等一下】因为要留一点时间让用户看到「已保存」这三个字。
+         立刻跳走的话，用户根本不知道保存成功没有。
+         500ms 是「刚好看得清又不会觉得卡」的经验值。
+         【location.href = 地址】跳转到新页面（当前标签页）。 */
       return;
     }
 
     const dur = bv && biliInfo ? Math.round(Number(biliInfo.duration) || 0) : 0;
+    /* 【时长的计算】
+       B 站的在 info.duration 里，但可能是字符串，所以要 Number() 转；
+       转换失败得到 NaN，用 || 0 兜底；
+       最后 Math.round 四舍五入到整数秒（数据库存浮点数没意义）。
+       【没有 BV 号就是 0】表示「时长未知」，由播放器自己读出来。
+       用 0 而不是 null，是因为后续如果做「按时长筛选」，0 不会让排序崩掉。 */
     const d = await SBAPI.createVideo(title, descEl.value.trim(), path, poster, dur);
+    /* 【五个参数】标题、简介、播放地址、封面、时长。
+       参数一多就该改成传对象（{ title, desc, path, poster, dur }）——
+       现在这样如果顺序写错一个，就是很难查的 bug。 */
     if (!d.ok) { publishBtn.disabled = false; return setMsg(d.error || '发布失败', 'err'); }
+    /* 【d.error || '发布失败'】优先用后端给的具体原因（比如「标题太短」），
+       没有就用通用文案。这类「具体优于笼统」的错误提示，能大幅减少用户的困惑。 */
     setMsg('已发布，跳转中…', 'ok');
     setTimeout(() => { location.href = '/pages/video.html?id=' + d.id; }, 600);
+    /* 【d.id】新建成功后返回的 id，跳到详情页直接看自己刚发的东西。 */
   } catch {
+    /* 【catch 后没写 (err)】这里不关心具体是什么错，统一提示检查网络。 */
     publishBtn.disabled = false; setMsg('发布失败，检查网络', 'err');
   }
 });
 
 // 编辑已有视频：/pages/video-write.html?id=3
 const editId = new URLSearchParams(location.search).get('id');
+/* 【location.search】当前地址里问号开始的那一段（包含问号），例如 "?id=3"。
+   【URLSearchParams】浏览器自带的解析器，专门处理这种参数串。
+     比自己用 split('&') 拆可靠得多，它会自动处理 URL 编码（%E5%BC%A0 这类）。
+   【.get('id')】读取 id 参数的值。
+   【返回值】参数不存在时返回 null（不是空字符串）—— 这个区别很重要，
+     因为 null 是假值，下面 if (!editId) 就能正确判断「不是编辑模式」。
+   【为什么这句写在这么后面】因为它是「页面启动流程」的一部分，
+     放在末尾更符合「先定义、后执行」的习惯。
+     但正因为放在这里，上面 publishBtn 的回调里引用它才成了「暂时性死区」的情况。 */
+
 async function initEdit() {
+  /* 如果地址带了 ?id=xxx，就把页面切成「编辑模式」并预填内容。 */
   if (!editId) return;
+  /* 没有 id → 这是新建模式，什么都不用做。 */
+
   document.getElementById('pageTitle').textContent = '编辑视频';
   publishBtn.textContent = '保存修改';
+  /* 改标题和按钮文字，让用户知道现在是编辑不是新建。
+     【这种「同一页面两种模式」的设计】靠文字的变化来区分是最轻量的做法。 */
+
   const d = await SBAPI.getVideo(editId);
   if (!d.ok) { setMsg(d.error || '读不到这条视频', 'err'); return; }
+  /* 读不到（被删了、id 不对）就提示并退出。 */
   if (!d.canEdit) { setMsg('这不是你发的视频', 'err'); publishBtn.disabled = true; return; }
+  /* 【canEdit】后端（Supabase 的 RLS 策略或 RPC 函数）算好的「我有权限改这条吗」。
+     【为什么必须由后端算】前端的判断用户随时能改代码绕过，
+     真正的权限必须在数据库层面拦。这里只是「界面上友好地提示」，不是安全措施。
+     【禁用按钮 + 提示】比只提示不禁用更好：用户不会点了才发现没权限。 */
+
   titleEl.value = d.title || '';
+  /* 【.value = ...】给输入框设初始值。
+     【|| ''】字段可能是 null，直接赋 null 会显示成字符串 "null" 或者报错，
+     兜底成空字符串才对。 */
   descEl.value = d.description || '';
   posterEl.value = d.poster || '';
   const bv = biliOf(d.video_path);
   if (bv) {
     bvidEl.value = bv;
     biliHint.innerHTML = '✓ 已识别 ' + bv + '（编辑模式不改播放地址）';
+    /* 明确告诉用户「播放地址不能改」，避免他改了半天发现没生效。 */
     biliHint.style.color = 'var(--primary-deep)';
   } else if (d.video_path) {
     videoUrl = d.video_path;
     uploaded = true;
+    /* 【为什么要设 uploaded = true】
+       因为后面的发布逻辑会检查「有没有可用的视频来源」，
+       编辑模式下视频已经存在，不设 true 的话会被判成「没内容」而发不出去。 */
     fileInfo.textContent = '已有视频文件，编辑时不重传';
+    /* 告诉用户不用重新上传 —— 不然他可能以为必须重新传一遍。 */
   }
   publishBtn.disabled = false;
+  /* 一切就绪，可以保存了。 */
 }
 
 loadQuota();
 initEdit();
+/* 【启动两件事】
+   ① loadQuota() → 写底部的存储提示（其实只是固定文案）
+   ② initEdit() → 如果是编辑模式就预填内容
+   【注意两个都没加 await】它们都是异步函数但这里不等结果，
+   意思是「让它们在后台跑，页面先显示出来」。
+   这样用户能立刻看到表单，而不是对着空白等一秒。
+   【代价】如果它们内部抛错，会变成「未处理的 Promise 拒绝」，控制台报警告。
+   更严谨的写法是 .catch(() => {}) 兜一下。 */
+
 // 上限文案跟着当前存储后端走：R2 2GB，Supabase Storage 兜底 50MB
 (function () {
+  /* 【IIFE 立即执行函数】结构是 (函数)() —— 括号包起来变成表达式，然后立刻调用。
+     【为什么要包】为了造一个独立作用域，里面声明的 big 变量外面看不到，不污染全局。 */
   if (!window.MEDIA) return;
+  /* upload.js 没加载成功就直接退出 —— 连限制都读不到，别乱写文案。 */
+
   const big = MEDIA.limitOf('video') >= 1073741824;
+  /* 【limitOf('video')】向上传层问「视频这一类的上限是多少字节」。
+     为什么上限会变？因为项目配了两套存储：
+       R2（Cloudflare 对象存储）→ 支持 2GB
+       Supabase Storage 兜底    → 只有 50MB
+     当前用哪套决定了用户能传多大，文案必须跟着变，否则就是骗人。
+     【1073741824】= 1024×1024×1024 = 1GB。
+     大于等于 1GB 就认为「是大上限那套」。 */
   fileInfo.textContent = big
     ? '支持 mp4 / webm / ogv / mov / mkv，最大 2GB'
     : '支持 mp4 / webm / ogv / mov / mkv，当前最大 50MB；长视频请用 B 站 BV 号';
+  /* 【三元运算符】条件 ? 值1 : 值2，相当于 if/else 的简写。
+     【注意第二句文案】它不只说了限制，还给了替代方案「长视频请用 BV 号」。
+     这是个很好的产品思维：用户撞到限制时，如果能立刻知道「那我该怎么办」，
+     挫败感会大幅下降。只说「最大 50MB」，用户只会觉得「这网站真烂」。 */
 })();
 </script>
 </body>
