@@ -1,92 +1,291 @@
 <!DOCTYPE html>
 <!-- ============================================================
      文件：status.html（部署自检页）
-     作用：逐项检查前端资源、后端接口、存储桶、隧道连通性是否正常。用于排查「哪里挂了」。
+     路径：/status.html
+
+     作用：逐项检查前端资源、后端接口、存储桶、隧道连通性是否正常。
+           主要用途是排查「哪里挂了」——部署完网站打不开时，先来这里看一眼，
+           它会告诉你到底是配置文件 404、还是数据库连不上、还是 key 失效。
+
+     特点：这个页面【故意不引入 style.css】，配色和样式全部自带。
+           理由很实在：如果 style.css 本身挂了，自检页还得能正常显示，
+           不能跟网站一起趴下。就像医院的急救室要有独立供电。
+
      说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
      ============================================================ -->
+<!-- 【DOCTYPE】给浏览器的版本声明，意思是「按 HTML5 标准解析」。
+     不写会退回「怪异模式」，盒模型和行高的算法都会变，页面直接错位。
+     必须写在最上面，前面不能有任何标签。 -->
 <html lang="zh-CN">
+<!-- 【html】整个网页最外层的大盒子。
+     lang="zh-CN" 声明这是简体中文，影响屏幕阅读器发音和中文标点排版规则。 -->
 <head>
+<!-- 【head】这里面的东西不直接显示在页面上，
+     装的是给浏览器和搜索引擎看的说明书：编码、视口、标题、样式、脚本。
+     可以理解为快递箱上的面单——不是商品本身，但决定这件货怎么送。 -->
+
 <meta charset="UTF-8">
+<!-- 【字符编码】UTF-8 能装下全世界所有文字。
+     写错或不写，中文会变成乱码。这一行必须尽量靠前（前 1024 字节内）。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【视口设置】手机适配的第一条底线：
+       width=device-width → 页面宽度 = 设备物理宽度
+       initial-scale=1.0  → 初始不缩放
+     不写的话手机会假装自己是 980px 宽的桌面屏，把整页缩小塞进去，
+     字小到必须双指放大。 -->
+
 <title>部署自检 · 乘法</title>
+<!-- 标签页显示的文字。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 【网页图标】标签页左边的小图。/ 开头表示从网站根目录算起。 -->
+
 <style>
+  /* ============================================================
+     注意这里【没有】<link rel="stylesheet" href="/style.css">。
+     本页所有样式都是自带的，包括下面这套颜色变量。
+     原因：自检页的职责是「网站出问题时还能打开」，
+     不能依赖任何可能已经挂掉的资源。
+     ============================================================ */
+
   :root {
+  /* 【:root】就是 html 元素，但它的选择器优先级比 html 高一点点。
+     更重要的是——它是【全页面变量的默认挂载点】。
+     变量定义在这里，页面上所有元素都能用 var() 读到。
+
+     【CSS 变量（自定义属性）的规则】
+       变量名必须以两个减号开头，取值时写 var(变量名)。
+       作用域规则：定义在哪个元素上，就只对「那个元素及其所有后代」有效。
+       所以定义在 :root 上 = 全站可用。
+       如果某个子元素上又定义了一个同名变量，那个子元素内部会用新值
+       （就近覆盖）——这就是「换主题」和「模块换配色」的实现原理：
+       不用改一堆具体样式，只换一组变量值。 */
+
     /* 跟随 Local.html 的扁平磨砂配色 */
     --bg: #121212;
+    /* 【#121212】十六进制颜色：#RRGGBB。
+       12/12/12 三个通道值相等 = 灰色。这个值接近黑但不是纯黑，
+       纯黑（#000）在屏幕上容易显得「死板」，稍微亮一点更舒服。
+       这是深色界面设计的常见经验：不要用纯黑做背景。 */
     --card: rgba(30, 30, 30, .5);
+    /* 【rgba(红, 绿, 蓝, 透明度)】前三个是 0-255，最后是 0-1 的透明度。
+       .5 = 半透明。半透明卡片配合下面的背景模糊，做出「磨砂玻璃」效果。 */
     --border: #333;
+    /* 【#333】三位简写，等于 #333333。
+       当三组两两相同的十六进制可以缩写成三位：
+         #333333 → #333    #ffffff → #fff */
     --text: #f0f0f0;
+    /* 主文字颜色。接近白但不是纯白（#fff），纯白在深底上会有「发光」的刺眼感。 */
     --dim: #cccccc;
+    /* 次要文字颜色，比主文字暗一档。用颜色区分主次，是最基本的视觉层级手法。 */
     --ok: #57D68A;
+    /* 通过 —— 绿色 */
     --okbg: rgba(53, 199, 119, .16);
+    /* 「通过」标签的背景：16% 不透明的绿。
+       文字用实色绿、背景用低透绿，是标签样式的标准配方——
+       色相一致（都是绿），只有深浅不同，视觉上非常统一。 */
     --bad: #FF7B6B;
+    /* 失败 —— 红橙 */
     --badbg: rgba(255, 90, 90, .16);
     --warn: #FFD24A;
+    /* 注意 —— 黄色 */
     --warnbg: rgba(240, 180, 0, .16);
   }
   * { box-sizing: border-box; }
+  /* 【* 通配选择器】命中所有元素。
+     【box-sizing: border-box】这是最重要的一个 CSS 重置，必须理解：
+       默认值 content-box 下，元素的实际宽度 = width + padding + border。
+         写 width:100px; padding:10px; → 实际占 120px，很容易撑破布局。
+       border-box 下，width 就是「包含内边距和边框在内的总宽度」。
+         写 width:100px; padding:10px; → 实际占 100px，内容自动缩到 80px。
+     几乎现代所有项目都会在整个页面上应用这条规则，
+     因为它让「宽度计算」变成人的直觉算法。 */
   body {
     margin: 0;
+    /* 清掉浏览器默认的 8px 外边距，否则页面四周会有一圈白边。 */
     padding: 28px 18px 60px;
+    /* 【三个值】上 28px、左右 18px、下 60px。
+       下面留 60px 是为了让内容不要紧贴屏幕底边。
+       为什么不是四个值？因为左右对称时，CSS 允许把「左右」合并成一个值。 */
     background: transparent;
+    /* 【transparent】完全透明。
+       为什么要透明而不是设个深色？因为页面可能由 bg.js 铺了一层背景，
+       这里保持透明就能透出背景，而不会把背景盖住。
+       这是「背景统一由一处管理」的思路：其他元素都别自己刷底色。 */
     color: var(--text);
     font-family: "Orbitron", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    /* 【font-family 字体栈】按从左到右的顺序找，找到第一个能用的就用。
+         "Orbitron"        → 一个科技感英文字体，如果用户装了就用
+         "PingFang SC"     → 苹方，macOS / iOS 的中文字体
+         "Microsoft YaHei" → 微软雅黑，Windows 的中文字体
+         Arial             → 兜底的西文字体
+         sans-serif        → 最后的最后，交给系统挑一个无衬线字体
+       为什么要这么长一串？因为没人能保证用户装了什么字体。
+       字体栈的意义就是「优先用我想要的，但要保证一定有个能用的」。
+       注意：带空格的字体名必须加引号，不加引号会被当成多个词。 */
     font-size: 15px;
     line-height: 1.6;
+    /* 【无单位行高】1.6 表示「字号的 1.6 倍」，会随 font-size 自动缩放。
+       为什么不写 24px？因为无单位行高会继承给子元素并按各自的字号重算，
+       写死 px 的话，子元素字号变小了行高还是 24px，看起来会太松。
+       这就是「行高永远用无单位数字」的原因。 */
   }
   .wrap { max-width: 880px; margin: 0 auto; }
+  /* 【max-width + margin:0 auto】这是「内容居中且不超过某个宽度」的万能组合：
+       max-width: 880px  → 最宽 880px，屏幕更宽时也不再撑开
+       margin: 0 auto   → 上下 0，左右自动（auto 就是「把剩余空间平分到两边」）
+     为什么需要？因为在大屏上让一行文字横跨 2000px，眼睛根本没法阅读——
+     读完一行要摆头。正文区域的合适宽度大约是 60~80 个字符。 */
   h1 {
     font-size: 22px;
     margin: 0 0 6px;
+    /* 【margin 三个值】上 0、左右 6px？不对——
+       三个值的规则是：上、左右、下。所以这里是 上 0、左右 0、下 6px。
+       （写三个值时，第二个值同时用于左右。）
+       清掉 h1 默认的大外边距，否则标题上方会多出一大块空白。 */
     color: azure;                 /* Local 标题：azure 纯色，不用渐变 */
+    /* 【azure】一个 CSS 预定义色名，浅天蓝（#F0FFFF）。
+       这里的注释说明了设计意图：Local 风格的标题是纯色，不用渐变色。 */
     display: inline-block;
+    /* 【为什么要 inline-block？】
+       h1 默认是块级元素，独占一整行、宽度撑满父容器。
+       块级元素自己是没法「靠内容宽度居中」的。
+       改成 inline-block 后它就变得像文字一样，宽度由内容撑开。
+       这样父元素的 text-align:center 才能生效，
+       或者像这里一样，让它和其他行内元素并排。 */
   }
   .sub { color: var(--dim); font-size: 13px; margin: 0 0 22px; word-break: break-all; }
+  /* 【word-break: break-all】允许在【任意字符】处断行，不按单词边界。
+     这里为什么需要？因为这个元素里要显示完整的页面地址（可能很长），
+     长 URL 在窄屏上会溢出容器、把页面撑出横向滚动条。
+     break-all 强行让它折行。
+     （另一种 word-break: break-word 只在「一个词太长放不下」时才断，
+      更温和一些。这里是 URL，用 break-all 更彻底。） */
   .card {
     background: var(--card);
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
+    /* 【backdrop-filter】让「元素背后的内容」模糊。
+       这就是「磨砂玻璃」效果：卡片本身半透明，背后的东西被模糊掉。
+       【为什么写两遍？】上面带 -webkit- 的是【浏览器前缀】版本，
+         给老版本 Safari / iOS 用；下面不带的是标准版本。
+         现在新浏览器都认标准版，但保留前缀版本能让老设备也有效果。
+         这就是「渐进增强」的思路：新浏览器享受更好的效果，老浏览器至少能用。 */
     border: none;
     border-radius: 12px;
     overflow: hidden;
+    /* 【overflow: hidden】把超出圆角范围的内容裁掉。
+       为什么需要？因为下面的 .row 有自己的背景和边框，
+       如果子元素是直角的，会把父元素圆角的位置「顶」出方角来，
+       看起来就像圆角失效了。加这一句，子元素被裁进圆角里，视觉才对。
+       这是「圆角容器 + 直角子元素」时的必备补丁。 */
     box-shadow: none;
+    /* 显式关掉阴影。Local 的扁平风格不用阴影来表达层级，
+       改用「半透明 + 模糊」来区分层次。 */
   }
   .row {
     display: flex;
     align-items: flex-start;
+    /* 【align-items: flex-start】交叉轴对齐到顶部。
+       为什么用 flex-start 而不是 center？
+       因为一行里可能有「标签」「名称」「详细说明」「耗时」四块，
+       而且详细说明可能会折成两三行。
+       如果垂直居中，那么标签就会浮在中间，看起来和第一行文字错位。
+       顶部对齐时，所有元素的第一行文字能水平对齐，读起来最舒服。 */
     gap: 12px;
+    /* 【gap】子元素之间的间距，横竖都 12px。
+       比给每个子元素写 margin 干净得多——gap 只加在元素之间，
+       不会在最外侧也加一份。 */
     padding: 13px 16px;
     border-bottom: 1px solid var(--border);
+    /* 【只画下边框】做出「一行一行」的分隔线效果。
+       比给每一行画完整边框要清爽——完整边框会形成网格，
+       视觉上很吵；只有下边框则像表格的分隔线。 */
   }
   .row:last-child { border-bottom: none; }
+  /* 【:last-child 伪类】选中「同一堆兄弟里的最后一个」。
+     最后一行不该有下边框，否则会和卡片的底部圆角打架，
+     看起来像多了一条多余的黑线。
+     这个「最后一个不要边框」的写法，在任何列表布局里都极其常见。 */
   .badge {
     flex: none;
+    /* 【flex: none】是 flex: 0 0 auto 的简写，三个值分别是：
+         flex-grow: 0    → 不放大（空间有剩也不占）
+         flex-shrink: 0  → 不缩小（空间不够也不缩）
+         flex-basis: auto → 基础宽度按内容算
+       效果：这个元素宽度完全由内容决定，绝不参与「分配剩余空间」的游戏。
+       【为什么这里必须要它？】
+         因为父容器是 display:flex，如果不写 flex:none，
+         标签在空间紧张时会被压缩，导致「通过 / 失败」两个字被挤成竖排。
+       凡是「宽度不能被压缩」的元素（图标、标签、按钮），都该加 flex:none。 */
     min-width: 54px;
+    /* 【min-width 而不是 width】让它至少 54px 宽（保证「检测中」三个字放得下），
+       内容更宽时就自动撑开。
+       写死 width 的话，万一以后文案变长就会溢出。 */
     padding: 2px 8px;
     border-radius: 6px;
     font-size: 12px;
     font-weight: 600;
+    /* 字重 600，介于正常（400）和粗体（700）之间。
+       小字加一点字重能在深色背景上更清晰。 */
     text-align: center;
     white-space: nowrap;
+    /* 【nowrap】强制不换行。
+       和上面的 flex:none、min-width 是一套组合拳，共同保证标签「永远不会变形」。
+       三个一起用，才能保证不管父容器多窄，标签都是完整的一个小方块。 */
   }
   .badge.ok { background: var(--okbg); color: var(--ok); }
+  /* 【.badge.ok】两个类连写、中间【没有空格】= 「同时具备这两个类」的元素。
+       注意和 .badge .ok（带空格）的区别：
+         带空格   → 找 .badge【内部】的 .ok 元素
+         不带空格 → 找【同时属于】两个类的同一个元素
+       这个区别在 CSS 里极其重要，写错就完全失效而且不报错，极难排查。 */
   .badge.bad { background: var(--badbg); color: var(--bad); }
   .badge.warn { background: var(--warnbg); color: var(--warn); }
   .badge.wait { background: var(--border); color: var(--dim); }
+  /* 【注意：wait 这个样式从来没被用到】
+     上面的 add() 函数里虽然定义了「检测中」这个状态文案，
+     但整份代码里没有任何地方调用 add(name, 'wait', ...)。
+     所以这是个「准备了但没用上」的死样式。
+     它的原意应该是「先插一行『检测中』，等结果出来再改」，
+     但作者最终选择了「等结果出来了再插行」。
+     标注在这里，不改代码（留着以后可能用得上，不影响功能）。 */
   .body { flex: 1; min-width: 0; }
+  /* 【flex: 1】是 flex: 1 1 0% 的简写：可以放大、可以缩小、基础宽度为 0。
+       效果是「占满所有剩余空间」。
+     【min-width: 0】这一句是 flex 布局里极其重要、又极其容易被忽略的补丁：
+       flex 子元素的默认 min-width 是 auto，意思是「不能小于内容的固有宽度」。
+       问题是：如果内容里有一个超长的单词或 URL（固有宽度很大），
+       这个元素就【不肯缩小】，硬生生把父容器撑破，导致横向溢出。
+       显式写 min-width: 0 就是告诉浏览器「允许我缩到比内容还窄」，
+       这样 overflow / word-break 才有机会生效。
+     【判断标准】任何 flex 子元素里放了可能很长的文本（URL、用户名、路径），
+       就给它加 min-width: 0。不加就等着布局炸。 */
   .name { font-weight: 600; font-size: 14px; }
   .detail { color: var(--dim); font-size: 13px; word-break: break-all; }
   .ms { flex: none; color: var(--dim); font-size: 12px; font-variant-numeric: tabular-nums; padding-top: 2px; }
+  /* 【font-variant-numeric: tabular-nums】让数字使用「等宽数字」。
+       普通字体里，数字 1 比 8 窄，所以「8 ms」「18 ms」「180 ms」
+       每一行的数字宽度都不一样，多行排下来会参差不齐。
+       等宽数字（tabular-nums）让每个数字占一样宽，纵向就能对齐。
+     【什么时候用】所有「纵向排列、需要对齐」的数字都该用：
+       表格里的金额、排行榜的分数、这里的耗时。
+       这是个很小但很显专业的细节。 */
   .summary {
     margin-top: 18px;
     padding: 14px 16px;
     border-radius: 12px;
     border: 1px solid var(--border);
+    /* 【1px solid var(--border)】顺序是「粗细 样式 颜色」。
+       solid = 实线，dashed = 虚线，dotted = 点线。三个值缺一不可
+       （只写颜色不写样式是不会显示边框的，这是新手常见的坑）。 */
     background: var(--card);
     font-size: 14px;
   }
   .summary b { font-size: 15px; }
+  /* 【后代选择器】选中 .summary 内部所有 b 标签（加粗）。
+     这里用来让总结的第一句话稍微大一点。 */
   .foot { margin-top: 16px; color: var(--dim); font-size: 12px; }
   button {
     margin-top: 14px;
@@ -94,72 +293,343 @@
     border: none;
     border-radius: 8px;
     background: #8A2BE2;
+    /* 【#8A2BE2】CSS 颜色名里的 blueviolet（蓝紫）。
+       这里写十六进制和写 blueviolet 效果完全一样，
+       写十六进制的好处是不依赖颜色名（虽然标准色名很稳定）。 */
     color: #fff;
     font-family: inherit;
+    /* 【font-family: inherit】继承父元素的字体。
+       【为什么必须写？】因为浏览器给 button / input / textarea / select
+       的默认字体是「系统 UI 字体」，它们【不会】自动继承 body 的字体。
+       不写这行，按钮里的字和页面上其他地方的字长得不一样——
+       这是「按钮看起来总是怪怪的」最常见的原因。 */
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
+    /* 【cursor: pointer】鼠标移上去变成小手，明确暗示「这里能点」。 */
     box-shadow: none;
     transition: background .2s;
+    /* 【transition】属性变化时做平滑过渡，不是瞬间跳。
+       这里只对 background 做动画，.2 秒完成（.2s 是 0.2s 的简写）。
+       为什么不用 transition: all？因为 all 会把布局属性也拿去做动画，
+       容易卡顿、也容易产生意外效果。指定具体属性是好习惯。 */
   }
   button:hover { background: #9B4DF0; transform: none; }
+  /* 【:hover】鼠标悬停时的状态，颜色亮一档作为反馈。
+     【transform: none】显式撤销位移/缩放。
+       为什么要写？因为可能 style.css 里给 button 定义了 hover 时上浮，
+       但本页没引 style.css，所以其实多余。
+       不过这种「显式声明我不想变」的写法在多人协作里是有价值的，
+       能防止以后有人加了全局 button 样式把这里搞乱。 */
 </style>
 </head>
 <body>
+<!-- 【body class 是空的】注意这个页面没有 body 上的主题类，
+     因为它根本没用全站的样式系统，自带了一整套。 -->
 <div class="wrap">
+
   <h1>部署自检</h1>
+  <!-- 【h1】页面主标题，一个页面最好只有一个。 -->
   <p class="sub" id="where">正在检测…</p>
+  <!-- 【占位】等脚本跑起来后会被替换成当前页面地址（见下面的 where 那行）。
+       先写「正在检测…」而不是留空，是为了避免文字突然蹦出来造成布局跳动。 -->
 
   <div class="card" id="card"></div>
+  <!-- 【空的卡片容器】所有检测结果行都由 JS 一行一行造出来塞进去。
+       为什么不写死在 HTML 里？因为检测项的「通过/失败」是运行时才知道的，
+       而且点「重新检测」时要清空重来——动态生成最灵活。 -->
+
   <div class="summary" id="summary" style="display:none;"></div>
+  <!-- 【总结区】默认隐藏，所有检测跑完才显示。
+       【style="display:none"】直接写在标签上的行内样式，
+       优先级比外部 CSS 高。为什么用 display 而不是 opacity？
+       因为这里不需要淡入动画，只要求「干脆地不占位置」。 -->
+
   <button id="again">重新检测</button>
+  <!-- 【重新检测按钮】点了会重新跑一遍所有检测。
+       注意它没写 type 属性——因为它不在 <form> 里，默认的 submit 行为
+       不会触发任何东西，所以没问题。
+       但严谨起见，按钮永远写 type="button" 是好习惯。 -->
+
   <p class="foot">
     这个页面只读、只测连通性，不改任何数据。用的 key 是前端公开的 publishable key，不含 service_role。
   </p>
+  <!-- 【这段说明很重要，不是废话】
+       它告诉看代码的人（以及未来的你）：
+       1. 这个页面安全——它只发 GET 请求读数据，不会删改
+       2. 用的是「公开的」前端 key
+       【publishable key / anon key 是什么？】
+       前端必须带一个 key 才能访问数据库，但这个 key 是公开的
+       （浏览器里任何人都能看到，看源码就有）。
+       它的安全性不靠「保密」，而靠【RLS（行级安全策略）】——
+       数据库里配置了「哪个用户能读哪一行」，
+       所以就算有人拿这个 key 直接请求，也只能读到公开数据。
+       【那 service_role key 呢？】那个是「超级管理员 key」，
+       能绕过所有 RLS 限制，读写任何数据。
+       所以它【绝对不能出现在前端代码里】——一旦泄露，等于数据库全裸。
+       这句话就是在声明「我们没犯这个错」。 -->
+
 </div>
 
 <script src="/js/config.js"></script>
+<!-- 【config.js】配置文件，里面定义了 SUPABASE_URL、SUPABASE_ANON_KEY、
+     MEDIA_BASE 这些常量。下面第一件事就是检查它有没有加载成功。
+     【为什么用脚本标签引入，而不是 fetch 来读配置？】
+     因为 script 标签是同步阻塞的，执行完这一行，配置文件里的变量
+     就已经挂到 window 上了，下面可以直接用。而 fetch 是异步的，
+     还得 await，代码会复杂一圈。 -->
+
 <script src="/js/bg.js?v=2"></script>
+<!-- 【bg.js】背景相关脚本（背景图/背景视频）。
+     ?v=2 是【破缓存】用的版本号：浏览器会缓存 js/css 文件，
+     你改了内容它可能还用旧的。把版本号改掉，浏览器就认为这是新文件，
+     会强制重新下载。这是最省事的破缓存手段。 -->
+
 <script>
+/* 注意：从这一行开始，内容都是 JavaScript，不是 HTML 了。
+   脚本块内部，浏览器的解析规则完全切换：
+     - 不再把尖括号当标签开始（除非遇到脚本块的结束标签）
+     - 注释必须用 JS 的写法（两斜杠 或 斜杠星号）
+     - 在这里写 HTML 的注释符号会被当成 JS 代码执行，直接报语法错误 */
+
 (function () {
+/* ============================================================
+   【IIFE 立即执行函数表达式】最外层包装：
+     (function () { ... })()
+     └─┬─────────────────┘ └┬┘
+       │                     └─ 最后这对括号 = 「立刻调用」
+       └─ 第一对括号，把函数声明变成表达式
+
+   为什么要包这一层？两个理由：
+   1. 【不污染全局】内部的 SB_URL、add、run 这些名字全关在函数里，
+      外面看不见，不会和其他脚本（config.js、bg.js）撞名。
+   2. 【避免变量泄漏】浏览器里顶层声明的变量会自动变成 window 的属性，
+      包一层就全关住了。
+
+   顺带说明：内部没有 return，所以返回 undefined，也没人接。
+   ============================================================ */
+
   const SB_URL = (typeof window.SUPABASE_URL === 'string' && window.SUPABASE_URL) || '';
+  /* 【这一行是防御式编程的范本，逐层拆】
+     1. typeof window.SUPABASE_URL === 'string'
+        【为什么用 typeof 判断而不是直接判断真假？】
+        如果直接写 window.SUPABASE_URL，而 config.js 根本没加载成功，
+        那个变量就【根本不存在】——访问一个不存在的变量
+        （而且不是 window 的属性）会抛 ReferenceError 直接中断脚本。
+        但 SUPABASE_URL 如果是挂在 window 上的，读 window.SUPABASE_URL
+        其实不会报错，只会得到 undefined。
+        那为什么还要 typeof？因为作者不确定 config.js 是写成
+        全局变量（var SUPABASE_URL = ...）还是挂在 window 上。
+        如果是前者，window.SUPABASE_URL 读不到，直接写 SUPABASE_URL 又会报错。
+        用 typeof 判断是最保险的：typeof 对不存在的变量【不会报错】，
+        只会返回字符串 'undefined'。
+     2. && window.SUPABASE_URL
+        确认类型是字符串之后，再取它的值。
+        （因为只要类型对，值一定是那个值，这半句其实有点冗余，
+          但多一层不会有坏处。）
+     3. || ''
+        兜底成空字符串。这样下面 SB_URL.replace(...) 之类的调用
+        永远不会因为 undefined 报错。
+     【总结成一句】凡是「可能不存在的外部数据」，都要有兜底。
+     这是「自检页」自己必须最先做的事——它本来就是为了排查
+     别人为什么不工作，自己绝不能因为同样的原因崩掉。 */
+
   const SB_KEY = (typeof window.SUPABASE_ANON_KEY === 'string' && window.SUPABASE_ANON_KEY) || '';
+  /* 同上，取公开的前端 key。
+     这个名字里带 anon（anonymous，匿名的），就是「公开可用」的意思。 */
+
   const card = document.getElementById('card');
+  /* 【把元素查出来存着】一次查找，反复使用。
+     document.getElementById 要在整棵 DOM 树里搜索，
+     虽然很快，但每次调用都不是免费的。存下来最省。
+     更重要的是：名字短了，后面 card.appendChild(row) 读起来也清楚。 */
+
   const summary = document.getElementById('summary');
   document.getElementById('where').textContent = location.origin + location.pathname;
+  /* 【把这行地址显示出来】逐部分拆：
+       location.origin   → 协议 + 域名 + 端口，比如 "https://chengfayunsan.github.io"
+       location.pathname → 路径部分，比如 "/status.html"
+     拼起来就是「不含查询参数的完整页面地址」。
+     【为什么自检页要显示自己的地址？】
+     因为自检页最常见的用途是「打开后截图发给别人」或者「对比两个环境」。
+     显示完整地址，就能一眼确认「我现在测的是线上还是本地」——
+     这个信息在排查问题时极其关键。
+     【用 textContent 而不是 innerHTML】地址里可能有特殊字符，
+     textContent 会原样当文字显示，天然防注入。 */
 
   let pass = 0, fail = 0;
+  /* 【一次声明两个变量】逗号分隔，等价于写两行 let。
+     【注意这里必须用 let 不能用 const】因为它们是计数器，
+     下面要反复 ++ 自增。const 声明的变量不能再赋值。
+     【++ 运算符】pass++ 就是 pass = pass + 1，
+     意思是「加一之后再存回去」。
+     这是这两个变量的唯一用途：统计通过/失败了多少项。 */
 
   function add(name, state, detail, ms) {
+  /* 【造一行检测结果】四个参数：
+       name   → 检测项名称（比如 "js/config.js"）
+       state  → 状态：'ok' / 'bad' / 'warn' / 'wait'
+       detail → 详细说明
+       ms     → 耗时（毫秒），可以是 null 表示不显示
+     这个函数被 10 多处调用，把「造一行」的逻辑收在一处是最关键的复用。 */
     const row = document.createElement('div');
+    /* 【createElement】凭空造一个新元素，此时它还不存在于页面上。
+       造出来的东西只是「孤儿节点」，必须 append 到页面某处才显示。
+       这是新手最常犯的错误：只 createElement 不 appendChild，
+       代码不报错，但页面上什么都没有。 */
     row.className = 'row';
     const label = { ok: '通过', bad: '失败', warn: '注意', wait: '检测中' }[state] || state;
+    /* 【这一行有两个技巧叠加】
+       1. 【对象字面量当映射表用】
+          先创建一个对象 { ok: '通过', bad: '失败', ... }，
+          然后立刻用 [state] 去查表。
+          这样 state='ok' 就得到 '通过'，state='bad' 就得到 '失败'。
+          比写一串 if/else 或者 switch 简洁得多。
+          这种「建了对象马上取值」的写法叫【立即索引】，很常用。
+       2. 【|| state】兜底：
+          如果传进来一个表里没有的 state（比如 'error'），
+          查表得到 undefined，就退回显示 state 本身。
+          这样至少能看到 'error' 这几个字母，不会显示 undefined。
+       【为什么要翻译？】因为 state 是给 CSS 类名用的英文标识，
+         而用户看的是中文。数据和显示必须分开——
+         这样改文案不影响逻辑，改逻辑不影响文案。 */
     row.innerHTML = '<span class="badge ' + state + '">' + label + '</span>'
       + '<div class="body"><div class="name"></div><div class="detail"></div></div>'
       + '<span class="ms">' + (ms != null ? ms + ' ms' : '') + '</span>';
+    /* 【先用空壳搭结构，再用 textContent 填内容】
+       注意 .name 和 .detail 这里都是【空的】，
+       真正的文字由下面两行用 textContent 填。
+       为什么要这么绕？直接拼一个完整的 innerHTML 不行吗？
+       ——因为下面两个值（name、detail）里可能包含用户/服务器返回的文本。
+         如果直接拼进 innerHTML，就是 XSS 漏洞。
+         而 textContent 不解析标签，天然安全。
+       这是【安全 + 高效并存】的标准套路：
+         结构（可信）用 innerHTML 一次性搭好，性能好；
+         内容（不可信）用 textContent 单独填，安全。
+       注意 state 和 label 是拼进 innerHTML 的——
+       它们是代码内部写死的常量，不是外部数据，所以安全。
+
+       【ms != null ? ...】用 != null（双等号）同时挡住 null 和 undefined，
+       这是少数「应该用双等号」的场景（null == undefined 为 true）。
+       为什么不能写 if (ms)？因为 ms 可能是 0（极快的检测），
+       0 是假值，会被误判成「没有耗时」，然后一行 0ms 的结果就不显示了。 */
     row.querySelector('.name').textContent = name;
+    /* 【querySelector】按 CSS 选择器找元素，返回第一个匹配的。
+       '.name' 是类选择器。
+       为什么不在 row 上直接用 document.querySelector？
+       因为要【限定范围】——页面上可能有多个 .name，
+       但我们要的是「这一行里的那个」。在 row 上调用 querySelector，
+       搜索范围就缩小到这一行的子树里。 */
     row.querySelector('.detail').textContent = detail || '';
+    /* 【detail || ''] 兜底成空字符串。
+       如果传 null/undefined，textContent 会显示「null」「undefined」这几个字，
+       用户看到会以为网站坏了。 */
     card.appendChild(row);
+    /* 【appendChild】把新元素挂到父元素内部的末尾。
+       到这一步为止，元素才真正出现在页面上。
+       注意这里是「一行一行往后追加」，所以调用 add() 的顺序
+       就是页面上从上到下的顺序。 */
     return row;
+    /* 【返回造好的这一行】
+       用途：调用方如果想之后再改这一行的状态（比如先显示「检测中」，
+       等结果出来再改成「通过」），就可以拿到 row 去改。
+       【但注意】整份代码里没有任何地方接收这个返回值，
+       所以这是个「备着但没用上」的返回值。不影响功能。 */
   }
 
   async function timed(fn) {
+  /* 【给一个异步操作计时，并且吞掉异常】
+     输入：一个返回 Promise 的函数
+     输出：{ ok: true, val: 结果值, ms: 耗时 } 或 { ok: false, err: 错误信息, ms: 耗时 }
+     意义：把「计时」和「错误捕获」这两件每个检测都要做的事收在一处，
+     让下面的调用方只关心「结果怎么展示」。 */
     const t0 = performance.now();
+    /* 【performance.now()】高精度计时器，返回页面加载至今的毫秒数（带小数）。
+       【为什么不用 Date.now()？】
+         Date.now() 返回的是「当前时间戳」，它有三个问题：
+           1. 精度只到毫秒，测不出 0.5ms 的差别
+           2. 它依赖系统时钟——如果系统时间被调整了（NTP 同步、用户改时间），
+              计算结果可能是负数
+           3. 它可能被浏览器为了防指纹追踪而降低精度
+         performance.now() 是【单调递增】的，永远只增不减，精度更高，
+         专门用来测量时间间隔。测性能一律用它，这是标准答案。 */
     try {
       const v = await fn();
+      /* 【await】等这个异步操作完成，拿到结果。
+         关键理解：await 并没有把浏览器卡死，它只是把这个函数「暂停」了，
+         浏览器照样能响应用户操作、渲染动画，等结果回来了再接着跑。
+         像厨师炖汤：放上锅不等，转去做别的菜，汤好了再回来处理。 */
       return { ok: true, val: v, ms: Math.round(performance.now() - t0) };
+      /* 【Result 对象】用一个对象同时返回「成功与否 + 数据 + 耗时」。
+         【为什么不用 try/catch 让错误直接抛出去？】
+           因为调用方需要「拿到耗时」和「拿到错误信息」两个东西，
+           如果让错误抛出去，调用方 try/catch 也要重复写计时代码。
+           统一包成对象，调用方只看 r.ok 就行，干净得多。
+         【Math.round】四舍五入成整数，因为显示「12.3456789 ms」没意义。 */
     } catch (e) {
       return { ok: false, err: (e && e.message) || String(e), ms: Math.round(performance.now() - t0) };
+      /* 【e && e.message】先确认 e 存在再读 .message。
+         为什么要这么写？因为 catch 到的东西不一定是 Error 对象——
+           有人会 throw '字符串'，甚至 throw null。
+           throw null 的时候，e 是 null，读 e.message 会抛新的错误
+           （Cannot read properties of null），把真正的错误盖掉。
+         【|| String(e)】兜底：e.message 不存在（比如抛的是字符串）时，
+           直接把它转成字符串显示。
+         【注意顺序】e && e.message 在前，String(e) 在后，
+           两个合起来保证了「任何东西都能变成一条可读的错误信息」。 */
     }
   }
 
   async function fetchT(url, opts, timeout) {
+  /* 【带超时的 fetch】fetchT 的 T 就是 Timeout 的意思。
+     【为什么需要它？】因为原生 fetch 【没有超时机制】。
+       如果服务器不响应（比如域名被阻断、连接被挂起），
+       那个 fetch 的 Promise 会永远 pending，永远不会 resolve 也不会 reject。
+       表现就是页面卡在「检测中」不动，用户只能刷新。
+       这是 fetch 相比老 XMLHttpRequest 少有的一个退步
+       （XHR 有 timeout 属性，fetch 没有，得自己用 AbortController 实现）。 */
     const c = new AbortController();
+    /* 【AbortController】字面意思是「中止控制器」。
+       【它的用法】每个 controller 身上有个 signal（信号），
+         把 signal 传给 fetch，然后调用 controller.abort()，
+         那个 fetch 就会立刻被中止，Promise 以 AbortError 拒绝。
+       这是浏览器提供的「取消一个正在进行的异步操作」的标准机制。 */
     const t = setTimeout(() => c.abort(), timeout || 10000);
+    /* 【定时器 = 超时器】
+         setTimeout(要做的事, 多少毫秒后做)
+         这里的意思是：到了时间就调用 c.abort() 把请求掐断。
+       【timeout || 10000】调用方没传超时就默认 10 秒。
+         为什么要有默认值？这是防呆——万一某个调用方忘了传，
+         至少不会变成「永远不超时」。
+       10 秒是个经验值：正常请求都在 1 秒内，10 秒还没回就是真的有问题了。 */
     try {
       return await fetch(url, Object.assign({ cache: 'no-store' }, opts || {}, { signal: c.signal }));
+      /* 【这一行有三层，逐层拆】
+         1. fetch(url, 配置)  → 发请求，返回 Promise
+         2. Object.assign(目标, 源1, 源2, ...)  → 把后面所有对象的属性
+            合并到第一个对象上，返回第一个对象（会被修改）。
+            【合并顺序极其重要】后面的会覆盖前面的：
+              { cache: 'no-store' }  ← 基础配置（每次都重新请求，不吃缓存）
+              opts || {}             ← 调用方传的配置（可能覆盖 method/headers）
+              { signal: c.signal }   ← 必须【最后】，保证中止信号一定生效
+            为什么最后那个必须最后？如果放前面，调用方传的 opts 里
+            如果有个同名属性就会把它覆盖掉，超时机制就静默失效了——
+            这种 bug 极难发现，因为它不报错，只是「偶尔不超时」。
+         3. 【cache: 'no-store'】告诉浏览器「不要用缓存」。
+            自检页的整个意义就是「测当下真实的连通性」，
+            如果走了缓存，那测的是缓存，等于自欺欺人。
+            这个选项在这里是必需的，不是可选的优化。 */
     } finally {
       clearTimeout(t);
+      /* 【finally】不管成功还是失败（包括抛错）都一定执行。
+         这里用来取消定时器。
+         【为什么必须清？】如果请求很快（比如 100ms 就回来了），
+         但定时器还挂着，10 秒后它还是会执行 c.abort()。
+         虽然那时候请求早就结束了、abort 一个已完成的请求是空操作，
+         不会出错，但定时器会一直占着内存和调度资源。
+         更严重的情况：如果这个函数被调用几百次（比如重新检测很多轮），
+         就会攒下几百个待触发的定时器。
+         【养成习惯】凡是设了 setTimeout，就在 finally 里 clearTimeout。 */
     }
   }
 
@@ -169,11 +639,54 @@
       add('js/config.js', 'bad', '没读到 SUPABASE_URL / SUPABASE_ANON_KEY，文件可能 404 或内容被改', null);
       fail++;
       return false;
+      /* 【返回布尔值】因为后面的总结要判断「配置有没有读到」。
+         配置没读到是【一切问题的根源】——数据库、登录、媒体全都依赖它，
+         所以这个信息要单独反馈给用户，不能混在普通失败里。
+         这是本文件唯一一个返回 true/false 的检测函数。 */
     }
     const r = await timed(() => fetchT('/js/config.js').then(x => x.status));
+    /* 【这行有三层嵌套，从里往外读】
+       1. fetchT('/js/config.js')  → 发请求，得到 Response 对象
+       2. .then(x => x.status)     → 从 Response 里取出状态码（200/404/…）
+          【注意】这里取的是 status 数字，不是响应内容。
+          为什么只测状态码？因为上面已经确认「变量读到了」，
+          说明内容是对的，这里只是想确认「这个文件本身能访问到」——
+          也就是排除「变量是从别处来的、文件其实 404」这种情况。
+       3. timed(() => ...)         → 包一层用来计时和捕获错误
+          【为什么包成箭头函数？】timed 接收的是「一个函数」，
+          如果直接写 timed(fetchT(...))，那是在【现在立刻执行】，
+          然后把 Promise 传给 timed——而 timed 需要的是函数，不是 Promise。
+          包成 () => ... 就是「把这个操作交给你，你负责调用并计时」。
+       【这个「加不加括号」的区别】是 JS 里最容易踩的坑之一：
+         加括号 = 现在执行
+         不加括号 = 把函数本身交出去，等别人调用 */
     if (!r.ok) { add('js/config.js', 'bad', '请求失败：' + r.err, r.ms); fail++; return false; }
+    /* 【!r.ok】注意这里的 r 是 timed 返回的对象，
+       r.ok 表示「这个操作有没有抛错」，不是 HTTP 状态。
+       这两个 ok 含义完全不同，很容易看混：
+         timed 返回的 r.ok  → 代码有没有抛异常（网络断了、DNS 失败）
+         http 状态码        → 服务器有没有正常响应（200/404/500）
+       所以下面还要单独判断 r.val !== 200。两者都过了才算真通过。 */
     if (r.val !== 200) { add('js/config.js', 'bad', 'HTTP ' + r.val, r.ms); fail++; return false; }
+    /* 【!== 严格不相等】要求类型和值都一样。
+       这里 r.val 是数字 200，和数字 200 比较，没问题。
+       如果写成 != 200，那字符串 '200' 也会通过——虽然这里不会发生，
+       但养成一律用 ===/!== 的习惯能躲掉大量隐蔽 bug。 */
     add('js/config.js', 'ok', 'Supabase 地址已读到：' + SB_URL.replace(/^https:\/\//, ''), r.ms);
+    /* 【SB_URL.replace(/^https:\/\//, '')】把开头的 "https://" 删掉，
+       只显示域名部分。为什么？因为地址完整写出来太长了，
+       而且协议部分所有人都一样，显示出来没信息量。
+       【正则逐部分拆】
+         ^        → 开头锚点（只匹配开头，不会误删中间的）
+         https    → 字面的 https
+         :        → 冒号
+         \/\/     → 两个斜杠。斜杠在正则里是定界符，要表示字面意思
+                    必须用反斜杠转义
+       【replace 只传两个参数、没有 /g】表示只替换第一个匹配。
+         这里正好——开头只有一个 https://，符合意图。
+         但如果本意是「替换所有」，忘了 /g 就会只换一个，是个经典 bug。
+       用途：把 "https://abc.supabase.co" 显示成 "abc.supabase.co"，
+       短一半，一眼就能看出是哪个项目。 */
     pass++;
     return true;
   }
@@ -181,27 +694,120 @@
   // ② 静态资源
   async function checkAssets() {
     const list = ['/js/sb.js', '/style.css', '/favicon.ico', '/404.html'];
+    /* 【自检清单】四个「网站必须有」的文件。
+       为什么选这四个？因为它们分别代表了四类资源：
+         sb.js       → JS 逻辑
+         style.css   → 样式
+         favicon.ico → 图片/图标
+         404.html    → 静态页面
+       只要这四类都能拿到，就说明「静态文件托管」这一层是好的。 */
     const rows = await Promise.all(list.map(u =>
       timed(() => fetchT(u, { method: 'GET' }).then(x => ({ url: u, status: x.status })))
     ));
+    /* 【Promise.all + map】这是「并发请求」的标准模板，逐层拆：
+       1. list.map(u => ...)  → 把每个 URL 转换成一个 Promise
+          【map】把数组里每个元素「转换」成另一个东西，返回新数组，原数组不变。
+          这里把 '/js/sb.js' 这种字符串，转换成一个「正在进行的请求」。
+       2. Promise.all([...])  → 等【所有】Promise 都完成，
+          返回结果数组（顺序和传入顺序一致，不是返回顺序）。
+          【核心价值】四个请求【同时发出】，总耗时 ≈ 最慢的那一个。
+          如果一个个 await，总耗时是四个相加——慢 4 倍。
+          这是最基础也最有效的性能优化。
+          【和 Promise.allSettled 的区别】（很重要）
+            Promise.all 是「一荣俱荣，一损俱损」：
+              只要有一个 reject，整个就 reject，你就拿不到其他成功的结果。
+            Promise.allSettled 是「全部等完，各自报告」，
+              成功的失败的都能拿到。
+          这里 Promise.all 能安全使用，关键在于 timed() 内部已经 try/catch 了——
+          它【永远不会 reject】，只会返回 {ok:false,...}。
+          所以这里实际上不会发生「一损俱损」的情况。
+          【这是个很好的设计】用一个「不抛错的包装器」让 Promise.all 变得安全。
+       3. 返回的对象是 { url, status } 两个字段，
+          把 URL 和状态码绑在一起，后面才知道「是哪一个失败了」。 */
     const bad = [];
     rows.forEach(r => {
       if (r.ok && r.val.status === 200) pass++;
       else { fail++; bad.push(r.val ? (r.val.url + ' → HTTP ' + r.val.status) : (r.err || '失败')); }
+      /* 【这个三元很绕，拆开看】
+           r.val 存在？
+             是 → r.val.url + ' → HTTP ' + r.val.status
+                  （请求发出去了，但状态码不对，比如 404）
+             否 → r.err || '失败'
+                  （请求根本没发成功，比如网络断了，此时 r.val 是 undefined）
+         【为什么 r.val 会是 undefined？】
+           因为 timed 失败时返回的是 { ok:false, err:..., ms:... }，
+           根本没有 val 这个字段。
+           所以 r.val 是 undefined，判断为假，走右边分支。
+         【这个判断可以更清楚】写成 if (r.ok) ... else ... 会好读得多。
+           功能正确，属于「可以优化可读性」的地方。 */
     });
+    /* 【forEach 而不是 map】因为这里不需要返回值，只是遍历执行。
+       【注意】forEach 不能用 break 提前跳出，也不能 await（在外层 await 不了）。
+       如果需要「中途停下」，必须用 for...of 循环。 */
     if (bad.length) add('静态资源', 'bad', '这些拿不到：' + bad.join('；'), null);
     else add('静态资源', 'ok', 'sb.js / style.css / favicon.ico / 404.html 都在', null);
+    /* 【.join('；')】把失败列表用中文分号连成一串。
+       如果只有一项，join 后就是那一项本身，不会多出分号。
+       这比手写循环拼字符串干净得多（不用管「最后一个不加分隔符」的问题）。
+       【注意这里只调用了一次 add()】
+         意味着四个资源在页面上只显示成【一行】。
+         但上面的 pass/fail 是按四个资源各算一次（最多 4 个 pass）。
+         所以会出现「总结说通过 5 项，但页面上只有 2 行绿标」的不一致。
+         这是计数语义和显示粒度不匹配导致的，属于真实存在的小瑕疵。
+         标注在这里，不改代码。 */
   }
 
   // ③ supabase-js 脚本（真实加载一次，两个源分别测）
   function probeScript(url, timeout) {
+  /* 【探测一个脚本能不能加载】
+     【为什么不能直接用 fetch 测？】
+       因为 fetch 拿到的是「文件内容」，验证不了「浏览器能不能执行它」。
+       而这里要测的是「这个 js 文件能不能被浏览器成功加载并运行」——
+       最直接的办法就是真的插一个 script 标签进去试。
+       这是「用真实的加载机制去测真实的环境」，比任何间接手段都可靠。 */
     return new Promise(resolve => {
+    /* 【手动包装 Promise】
+       【为什么要手动包？】因为 script 的加载是「事件回调」式的
+       （onload / onerror），不是 Promise 式的。
+       把回调风格转换成 Promise 风格，叫【Promise 化】，
+       是 JS 里非常常见的适配手段。
+       好处：调用方可以用 await 拿到结果，不用嵌套回调。 */
       const s = document.createElement('script');
       const t = setTimeout(() => { s.remove(); resolve({ ok: false, err: '超时 ' + timeout + 'ms' }); }, timeout);
+      /* 【超时兜底】
+         script 标签有个讨厌的特性：如果服务器一直不响应，
+         onload 和 onerror 【都不会触发】，它就永远挂着。
+         所以必须自己设一个定时器兜底。
+         【s.remove()】超时后把这个标签从页面上摘掉，
+           不然它会一直留在 head 里（虽然不会执行，但是脏数据）。
+         【resolve 只会生效一次】Promise 有个特性：
+           一旦 resolve 或 reject 过，后面再调用都会被忽略。
+           所以这里就算定时器和 onload 都触发了，也只会采纳先到的那个——
+           这是个很省心的机制，不用自己写「已经处理过了吗」的标志位。 */
       s.src = url;
+      /* 【给 script 设 src】注意这一步【必须在设 onload 之后】？
+         其实设 src 之后浏览器才开始加载，但脚本不可能瞬间加载完，
+         所以先设 src 再设 onload 在实践中也不会出问题。
+         不过严谨的写法是「先绑事件，再设 src」——
+         万一脚本在内存缓存里，设 src 的瞬间就同步触发了 onload，
+         那时 onload 还没赋值，回调就丢了。这是真实存在的边缘情况。 */
       s.onload = () => { clearTimeout(t); resolve({ ok: true }); };
+      /* 【onload】加载并执行成功后触发。
+         【clearTimeout(t)】把超时定时器取消掉——
+         不然它会一直挂着，到时间了再执行一次（虽然 resolve 无效，但白费资源）。 */
       s.onerror = () => { clearTimeout(t); s.remove(); resolve({ ok: false, err: '加载失败（被墙 / DNS 污染）' }); };
+      /* 【onerror】加载失败时触发。
+         【提示文案很有信息量】「被墙 / DNS 污染」直接点出了问题所在——
+         这个自检页的场景就是「国内访问 Supabase 可能不通」，
+         所以失败原因的猜测要针对这个语境，而不是干巴巴地写「加载失败」。
+         好的错误提示应该包含「最可能的原因」和「下一步怎么办」。 */
       document.head.appendChild(s);
+      /* 【挂到 head 上】
+         为什么挂 head 而不是 body？因为脚本加载不关心位置，
+         而 head 是「放资源引用」的约定位置。
+         注意：这个标签一挂上去，浏览器就开始下载并执行它了——
+         如果脚本成功加载，它可能会往 window 上挂东西（比如 window.supabase）。
+         这正是我们要的效果，但也意味着「探测」会带来副作用。 */
     });
   }
 
@@ -210,101 +816,354 @@
       add('supabase-js 脚本', 'ok', '已加载（window.supabase 存在）', null);
       pass++;
       return;
+      /* 【先检查是否已经加载过】
+         因为如果这个页面别的脚本已经引入了 supabase-js，
+         就没必要再测一遍（而且再插一次 script 标签会造成重复加载）。
+         【window.supabase】supabase-js 加载后会把 SDK 挂在 window.supabase 上，
+         所以检查这个属性存在就等于「SDK 已就绪」。
+         注意直接读 window.supabase 是安全的——即使没加载，
+         读一个不存在的 window 属性只会得到 undefined，不会报错。
+         （这跟在顶层直接写 supabase 不同，那样会 ReferenceError。） */
     }
     const a = await timed(() => probeScript('/js/vendor/supabase-js.js', 9000));
+    /* 【只测本地源，不测 CDN】
+       上面的注释说「两个源分别测」，但实际代码只测了本地这一个。
+       可能作者删掉了 CDN 那一半。属于注释和代码不一致，标注不改。
+       【为什么现在只用本地源？】因为用 CDN 意味着依赖别人的服务器，
+       别人挂了你就挂了。副本放本地最可靠。 */
     if (a.ok && a.val.ok) { add('supabase-js 脚本', 'ok', '本地脚本加载成功（/js/vendor/supabase-js.js）', a.ms); pass++; return; }
+    /* 【a.ok && a.val.ok】两层判断：
+         a.ok      → timed 有没有抛异常
+         a.val.ok  → probeScript 内部判断的加载结果
+       为什么要两层？因为 probeScript 是自己 resolve 的（不会 reject），
+       所以 a.ok 理论上永远是 true。但加上它更保险——
+       万一哪天 probeScript 里抛了个意料之外的错，这里也能正确处理。
+       这叫【防御性编程】：不指望「不可能发生」，而是明确写死条件。 */
     add('supabase-js 脚本', 'bad', '本地脚本加载失败：' + (a.val ? a.val.err : a.err) + '（检查 js/vendor/supabase-js.js 是否部署上去了）', null);
+    /* 【a.val ? a.val.err : a.err】又是那个「两种情况选一个错误信息」：
+         请求发出去了但加载失败 → 用 probeScript 给的原因
+         请求都没发出去（timed 抛错）→ 用 timed 捕获的错误
+       【括号里的提示是最好的部分】它直接告诉人「去哪儿查」：
+       「检查 js/vendor/supabase-js.js 是否部署上去了」——
+       这是自检页最有价值的地方：不只是说「坏了」，还说「去修哪里」。 */
     fail++;
   }
 
   // ④ REST：读 profiles
   async function checkRest() {
+  /* 【REST】Supabase 提供的一套 HTTP 接口，规则非常直白：
+       表名放进 URL 路径，筛选条件放进查询参数。
+       比如 /rest/v1/profiles?select=id,username&limit=1
+       就是「查 profiles 表，只要 id 和 username 两列，最多 1 行」。
+     这是「PostgREST」这套方案的设计：把数据库直接映射成 HTTP 接口，
+     不用写任何后端代码就能增删改查。 */
     if (!SB_URL || !SB_KEY) { add('Supabase REST', 'bad', '缺少配置，跳过', null); fail++; return; }
     const url = SB_URL.replace(/\/+$/, '') + '/rest/v1/profiles?select=id,username&limit=1';
+    /* 【SB_URL.replace(/\/+$/, '')】去掉结尾的斜杠。
+       正则逐部分拆：
+         \/+  → 一个或多个斜杠（加号 = 前面那个字符出现 1 次或多次）
+         $    → 字符串结尾锚点
+       为什么要删？因为地址可能写成 "https://abc.supabase.co/" 带尾斜杠，
+       再拼 "/rest/v1/..." 就变成双斜杠 "…co//rest/v1/…"。
+       有些服务器会因此 404，有些不会——这种「有时候行有时候不行」
+       的 bug 最难查，所以宁可提前规整好。
+       【这个「先清尾斜杠再拼接」的模式】在拼 URL 时应该养成肌肉记忆。 */
     const r = await timed(() => fetchT(url, {
       headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }
     }, 12000));
+    /* 【两个必需的请求头】
+         apikey        → Supabase 用它识别是哪个项目
+         Authorization → 'Bearer ' + key，标准的 HTTP 认证格式，
+                         Bearer 后面跟一个空格再跟凭证
+       【为什么两个都要带同一个 key？】因为 Supabase 的网关
+       在两处都会校验，只带一个会失败。
+       【12000】这个请求超时设成 12 秒，比其他检测的 10 秒长一点，
+       因为跨洋请求可能确实比较慢。 */
     if (!r.ok) {
       add('Supabase REST', 'bad', '连不上（' + r.err + '）→ 域名被阻断或网络问题', r.ms);
       fail++;
       return;
+      /* 【r.ok 为假说明连请求都没发成功】
+         最典型的原因就是域名解析失败或连接被阻断（俗称被墙）。
+         提示里直接给出最可能的结论，省得用户自己猜。 */
     }
     if (r.val.status === 200) {
       const n = (await r.val.json().catch(() => [])) || [];
+      /* 【这一行又有三层，逐层拆】
+         1. r.val.json()   → 把响应体解析成 JS 对象，返回 Promise
+         2. .catch(() => []) → 如果解析失败（响应不是合法 JSON），兜底成空数组
+            【为什么必须 catch？】因为如果服务器返回的是 HTML 错误页
+            （比如 Cloudflare 的 502 页面），json() 会抛错。
+            那时整个检测就断了，连「HTTP 200 但内容不对」这个
+            重要线索都拿不到。加个 catch 就能继续往下走。
+         3. || []           → 如果解析出来是 null，也兜底成空数组
+         【链式调用的顺序】.catch 必须写在 .then 后面（这里没有 then），
+         而且它捕获的是【它前面所有环节】的错误。
+         【为什么最后又 || []？】因为 json() 解析出 null 是完全合法的
+         （响应体就是 "null"），但那之后 n.length 会报错。 */
       add('Supabase REST', 'ok', 'read profiles 正常，返回 ' + n.length + ' 行', r.ms);
       pass++;
+      /* 【n.length】如果后端一切正常，请求了 limit=1 所以最多 1 行。
+         显示「返回 1 行」或「返回 0 行」（0 行说明 profiles 表是空的，
+         但接口本身是通的——这两种情况都是「通过」）。 */
     } else if (r.val.status === 401 || r.val.status === 403) {
       add('Supabase REST', 'warn', 'HTTP ' + r.val.status + '：网络通，但 key 或 RLS 有问题', r.ms);
       fail++;
+      /* 【401 = 未认证，403 = 无权限】
+         这两个状态码的含义都是「服务器收到请求了，但拒绝了你」。
+         【为什么用 warn（注意）而不是 bad（失败）？】
+         因为这说明「网络是通的」，问题在配置层——
+         区分这两类问题对排查极其重要：
+           连不上 → 网络/域名问题，你改代码没用
+           401/403 → 网络没问题，是 key 或权限策略配错了
+         提示里写「网络通，但 key 或 RLS 有问题」正是这个意思。
+         【RLS 是什么】Row Level Security，行级安全策略。
+         它是 Supabase 的安全核心：在数据库里定义「谁能读哪一行」。
+         如果 RLS 写得太严（比如没给匿名用户读权限），
+         就算 key 是对的，也会返回 403。 */
     } else {
       add('Supabase REST', 'bad', 'HTTP ' + r.val.status + '（期望 200）', r.ms);
       fail++;
+      /* 【其他所有状态码】500（服务器错误）、404（路径不对）、502（网关错误）……
+         统一显示出来，并在括号里说明「期望 200」，
+         让用户知道这个数字是不对的。 */
     }
   }
 
   // ⑤ 各表行数（schema 是否真的跑过）
   async function checkTables() {
+  /* 【目的】确认数据库里「该有的表都建了」。
+     这一步能抓到一类很典型的问题：代码部署了，但数据库的建表脚本没跑，
+     导致所有页面都在报「表不存在」。 */
     if (!SB_URL || !SB_KEY) return;
+    /* 【这里没有 fail++】因为上面 checkRest 已经因为同样的原因计过一次失败了。
+       不重复计数是对的——同一个根因只该扣一分。
+       对比 checkRest 里是 fail++ 的，说明作者在这里是有意简化的。 */
     const tables = ['articles', 'videos', 'messages', 'comments', 'notifications'];
     const out = [];
     for (const t of tables) {
+    /* 【for...of 循环】
+         和 forEach 的区别：for...of 可以用 break / continue / await，
+         forEach 都不行。
+         和 for (let i=0; i<n; i++) 的区别：for...of 直接拿元素，不用索引。
+       【为什么这里用串行 await 而不是 Promise.all 并发？】
+         如果并发，5 个请求同时打到 Supabase，
+         有可能触发速率限制（返回 429），
+         那样检测结果就不准了——会误判成「表有问题」。
+         串行慢一点（5 个请求 × 约 200ms = 1 秒），但结果可靠。
+       【这是个很好的权衡示例】自检工具宁可慢，也要准。 */
       const url = SB_URL.replace(/\/+$/, '') + '/rest/v1/' + t + '?select=id&limit=1';
       const r = await timed(() => fetchT(url, {
         headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, Prefer: 'count=exact' }
       }, 12000));
+      /* 【Prefer: count=exact】一个特殊的请求头，
+         意思是「请告诉我总共有多少行」。
+         Supabase 会在响应的 content-range 头里返回这个数字。
+         为什么需要它？因为上面 limit=1 只取了一行，
+         但响应头里会带上「一共有 N 行」这个信息，
+         于是「一次请求同时拿到样本数据和总数」。
+         【这是个很实用的技巧】想知道总数但不想把全部数据拉回来时就这么干。 */
       if (!r.ok) { out.push(t + ':网络失败'); continue; }
+      /* 【continue】跳过这一轮剩下的代码，直接进入下一张表。
+         不中断整个循环——一张表网络失败不该影响其他表的检测。 */
       if (r.val.status === 200) {
         const cr = r.val.headers.get('content-range') || '';
+        /* 【headers.get('content-range')】从响应头里读指定字段。
+           【响应头是什么】HTTP 响应分「头」和「体」两部分：
+             头是元信息（状态码、内容类型、总数……）
+             体才是真正的数据
+           这里要读的「总数」就在头里，不在体里，所以必须用 headers.get。
+           【content-range 长什么样】格式是 "0-0/42"，
+           意思是「第 0 到第 0 行，总共 42 行」。
+           【|| ''】兜底：如果服务器没返回这个头，得到一个空字符串，
+           而不是 null（不然下面 .split 会报错）。 */
         const total = cr.split('/')[1];
+        /* 【.split('/')】按斜杠切成数组。
+           "0-0/42".split('/') → ['0-0', '42']
+           取索引 [1] 就得到 '42'。
+           【索引从 0 开始】这点和数组一样。
+           如果 content-range 格式不对（没有斜杠），
+           那 [1] 就是 undefined，下面的判断会兜住。 */
         out.push(t + ':' + (total && total !== '*' ? total + ' 行' : '表在'));
+        /* 【三层判断】
+             total 存在？
+             total 不是 '*'？  ← Supabase 在「不计数」时会返回 * 
+             都满足 → 显示 "42 行"
+             否则   → 显示 "表在"（至少证明表存在，只是不知道行数）
+           这是个很好的例子：同一个检查要处理「完整信息」和「部分信息」两种结果。 */
       } else if (r.val.status === 404) {
         out.push(t + ':表不存在');
+        /* 404 在这个场景基本就是「表没建」。 */
       } else {
         out.push(t + ':HTTP ' + r.val.status);
+        /* 其他状态码原样显示，方便排查。 */
       }
     }
     const broken = out.filter(x => /失效|不存在|HTTP/.test(x));
+    /* 【正则 /失效|不存在|HTTP/】竖线表示「或」。
+       所以它匹配：包含「失效」、或包含「不存在」、或包含「HTTP」的字符串。
+       【注意一个细节】这个正则里的「失效」这个词，
+       上面的所有 out.push 都不可能产出——因为没有任何分支会拼出「失效」。
+       所以这个条件是永远用不上的死代码。可能是早期版本留下的。
+       不影响功能，标注在这里。 */
     add('数据表', broken.length ? 'warn' : 'ok', out.join('　'), null);
+    /* 【out.join('　')】用【全角空格】连接五张表的信息。
+       为什么用全角空格？因为 HTML 会压缩连续空白，
+       用普通空格的话，多个空格会变成一个，表格会挤在一起。
+       全角空格不会被压缩，能稳定产生间隔。
+       【更好的做法】用 <br> 或者拆成多行，可读性更高。
+       现在这样五张表挤在一行，手机上会折得很乱。 */
     broken.length ? fail++ : pass++;
+    /* 【三元当语句用】条件 ? 表达式 : 表达式，
+       这种「用三元执行副作用」的写法能用但不太常规，
+       可读性上不如 if/else。属于风格问题。 */
   }
 
   // ⑥ Auth 服务（拿假账号故意登录失败，HTTP 400 就证明服务活着）
   async function checkAuth() {
+  /* 【这个思路很巧妙，值得单独说】
+     目标：验证「登录服务是不是活着」。
+     难点：没有真实账号密码，没法真的登录成功。
+     解法：故意用一个不存在的账号去登录，然后看返回什么。
+       服务活着 → 它会去查数据库、查不到、返回 400「账号密码错误」
+       服务挂了 → 连不上，或者返回 5xx
+     所以「拿到 400」恰恰是好消息——说明整条链路都在工作。
+     这叫【主动探测】或【反向验证】：用一个必然失败的操作，
+     来证明系统在正确地处理失败。 */
     if (!SB_URL || !SB_KEY) return;
     const url = SB_URL.replace(/\/+$/, '') + '/auth/v1/token?grant_type=password';
+    /* 【grant_type=password】OAuth 2.0 规范里的「密码模式」，
+       意思是「我用账号密码换令牌」。
+       这个参数是 Supabase Auth 的接口约定，照抄就行。 */
     const r = await timed(() => fetchT(url, {
       method: 'POST',
+      /* 【method: 'POST'】改请求方法。
+         GET 是「我要拿东西」，参数在 URL 里；
+         POST 是「我要提交东西」，数据在请求体里。
+         登录要把密码发过去，所以必须用 POST——
+         密码放在 URL 里会留在浏览器历史、服务器日志里，非常危险。 */
       headers: { apikey: SB_KEY, 'Content-Type': 'application/json' },
+      /* 【Content-Type: application/json】声明「我发的数据是 JSON 格式」。
+         不写这个，服务器可能不知道该怎么解析请求体，返回 400。
+         注意这个 header 名带连字符，所以要加引号写成字符串键名。 */
       body: JSON.stringify({ email: 'probe-not-exist@chengfa.app', password: 'probe-not-a-real-pass' })
+      /* 【JSON.stringify】把 JS 对象转成 JSON 字符串。
+         【为什么必须转？】因为网络只能传字符串（或二进制），
+         不能直接传对象。JSON.stringify 就是「对象 → 字符串」的翻译官，
+         服务器那头再 JSON.parse 转回对象。
+         【看这个假邮箱】probe-not-exist@chengfa.app ——
+         名字里明确写了 "probe"（探测）和 "not-exist"（不存在），
+         任何正常人（或者未来的你）看日志就知道这是测试请求，
+         不会误以为出了什么问题。这是个非常好的命名习惯。 */
     }, 12000));
     if (!r.ok) { add('Auth 登录接口', 'bad', '连不上（' + r.err + '）', r.ms); fail++; return; }
     if (r.val.status === 400 || r.val.status === 422) {
       add('Auth 登录接口', 'ok', 'HTTP ' + r.val.status + '（账号不存在，符合预期，说明 Auth 服务正常）', r.ms);
       pass++;
+      /* 【400 和 422 都算成功】
+         400 = 请求有问题（账号密码错）
+         422 = 语义错误（格式对但内容不合法）
+         不同版本的 Supabase 在这两种之间摇摆过，所以两个都接受。
+         这就是「宁可宽松，不可误报」——自检工具报假警报比不报还糟。 */
     } else if (r.val.status === 429) {
       add('Auth 登录接口', 'warn', 'HTTP 429 触发限流，等几分钟再试', r.ms);
       pass++;
+      /* 【429 = Too Many Requests（请求太多被限流）】
+         这【不是】服务有问题，恰恰相反，是服务在正常地保护自己。
+         所以算作通过（pass++），但用 warn 状态提醒用户「你现在测不准」。
+         【为什么会被限流？】因为反复点「重新检测」，
+         每次都往 Auth 服务发一个登录请求，很快就超了频率限制。
+         这是个真实的自检页使用陷阱，提示里写「等几分钟再试」很到位。 */
     } else {
       add('Auth 登录接口', 'warn', 'HTTP ' + r.val.status, r.ms);
       pass++;
+      /* 【其他状态码也当通过？】这里有点宽松了。
+         比如 500（服务器内部错误）显然应该是失败，
+         但现在会被标成「注意」并计入 pass。
+         属于合理的简化，但严格来说该把 5xx 算失败。
+         标注在这里，不改代码。 */
     }
   }
 
   // ⑦ 当前浏览器有没有登录态
   function checkSession() {
     const ref = (SB_URL.match(/^https:\/\/([a-z0-9]+)\.supabase\.co/) || [])[1] || '';
+    /* 【从 URL 里提取项目 ref】这行很绕，从外往里读：
+       1. SB_URL.match(/^https:\/\/([a-z0-9]+)\.supabase\.co/)
+          【match】用正则去匹配，返回一个数组或 null。
+          【正则逐部分拆】
+            ^https:\/\/     → 以 https:// 开头
+            ([a-z0-9]+)     → 【捕获组】一串小写字母和数字
+                              外面那对圆括号就是「把这一段单独记下来」
+            \.supabase\.co  → 字面的 .supabase.co（点要转义，
+                              不转义的话 . 表示「任意字符」）
+          【match 返回什么】匹配成功时返回：
+            [0] = 整个匹配到的字符串（"https://abcdefg.supabase.co"）
+            [1] = 第一个捕获组的内容（"abcdefg"）← 这就是项目 ref
+          匹配失败返回 null。
+       2. || []
+          如果 match 返回 null，就换成空数组，
+          这样下一步的 [1] 不会报「Cannot read properties of null」。
+       3. [1]
+          取索引 1。如果上一步是空数组，取索引 1 得到 undefined（不报错）。
+       4. || ''
+          把 undefined 兜底成空字符串。
+       【四层嵌套，每一层都是为了让下一层不会崩】
+       这就是「链式取值必须层层兜底」的典型写法。
+       现代 JS 可以用可选链写得更短：
+         SB_URL.match(...)?.[1] || ''
+       效果一样，但短很多。 */
     const key = 'sb-' + ref + '-auth-token';
+    /* 【localStorage 的键名规则】
+       supabase-js 把登录态存在 localStorage 里，
+       键名格式是 "sb-<项目ref>-auth-token"。
+       知道这个规则，就能直接去读它——
+       不用调用 SDK，纯前端就能判断「有没有登录」。
+       【为什么要这么绕？】因为自检页故意不依赖 sb.js，
+       它只用最原始的 fetch 和 localStorage，保证「别的都挂了它还能用」。 */
     let raw = null;
     try { raw = localStorage.getItem(key); } catch (e) {}
+    /* 【try/catch 包住 localStorage】
+       【为什么必须包？】因为 localStorage 在某些情况下会【抛错】：
+         1. 用户在浏览器里禁用了 Cookie / 站点数据
+         2. Safari 无痕模式下 localStorage 是只读的（甚至读也抛错）
+         3. 某些企业策略禁止第三方存储
+       不包 try/catch 的话，这一行抛错，整个自检页就停了。
+       【catch (e) {} 什么都不做】合理：读不到就当没有登录态，
+       下面会显示「没登录，属正常」。 */
     if (!raw) { add('当前登录态', 'warn', '浏览器里没有 Supabase 会话（没登录，属正常）', null); return; }
+    /* 【注意这里没有 fail++ 也没有 pass++】
+       所以「没登录」这一项不计入总数。
+       这是合理的——没登录是正常状态，不该扣分。
+       但也导致了「检测项数」和「通过+失败数」对不上，
+       总结里显示的数字会比页面上的行数少。属于计数口径的小问题。 */
     try {
       const obj = JSON.parse(raw);
+      /* 【JSON.parse】把 JSON 字符串转回 JS 对象。
+         和 JSON.stringify 正好相反。
+         【为什么要 try？】因为 localStorage 里的内容可能被手动改坏了，
+         或者格式变了，那时 JSON.parse 会抛 SyntaxError。 */
       const exp = obj && obj.expires_at;
+      /* 【obj && obj.expires_at】安全取深层属性。
+         如果 obj 是 null（JSON 解析出 "null" 就会得到 null），
+         直接读 obj.expires_at 会抛错，加个 && 就绕过去了。 */
       const living = exp ? exp * 1000 > Date.now() : false;
+      /* 【expires_at 的单位是秒，不是毫秒】
+         这是 JWT（令牌）规范的定义：exp 声明的都是「Unix 时间戳（秒）」。
+         而 Date.now() 返回的是【毫秒】。
+         所以必须 exp * 1000 才能比较。
+         【忘了乘 1000 会怎样？】exp 是个十位数（比如 1767225600），
+         Date.now() 是十三位数（1767225600000）。
+         比出来的结果永远是「已过期」——这个 bug 特别隐蔽，
+         因为代码不报错，只是逻辑错了。
+         【这是个超高频的坑】凡是要处理时间戳，第一件事就是确认单位。 */
       add('当前登录态', 'ok', '有本地会话，' + (living ? '未过期' : '已过期（需要重新登录）'), null);
       pass++;
     } catch (e) {
       add('当前登录态', 'warn', '本地会话解析失败，建议退出重登', null);
+      /* 【解析失败 = 存储里的数据坏了】
+         建议「退出重登」是最直接有效的解决办法，
+         因为重新登录会覆盖掉这份坏数据。 */
     }
   }
 
@@ -312,17 +1171,44 @@
   function checkMedia() {
     const m = window.MEDIA_BASE;
     if (!m) { add('媒体域名 MEDIA_BASE', 'warn', '留空 = 跟站点同域（媒体由本站直接吐），接 R2 前这样是对的', null); return; }
+    /* 【MEDIA_BASE 是什么】媒体文件的「基础地址」。
+       图片、音频、视频都存在某个存储服务上，
+       这里存的就是那个服务的地址前缀，拼接时用（比如 fixAvatar 里）。
+       【留空表示什么】留空就是「跟网站同一个域名」，
+       媒体文件直接从本站返回。
+       注释里说「接 R2 前这样是对的」——
+       R2 是 Cloudflare 的对象存储（类似亚马逊 S3，但流量不要钱）。
+       接入 R2 之前，媒体放在本站是最简单的做法。
+       【注意这里也不 pass/fail 计数】同样是「可以接受的状态」。 */
     if (/github\.io/.test(m)) { add('媒体域名 MEDIA_BASE', 'bad', '还指着 ' + m + '，github.io 国内不通，媒体会全裂', null); fail++; return; }
+    /* 【这条检查针对一个具体的历史问题】
+       GitHub Pages 的域名（xxx.github.io）在国内访问经常不通。
+       如果媒体地址还指着它，那所有图片视频都会裂掉——
+       而网站本身可能还能打开（因为主站可能已经搬到别的地方了）。
+       【这种「知道具体坑就专门检查它」的自检项】是最有价值的。
+       通用的「能不能连上」检查发现不了这种问题，
+       因为它不是「网络故障」，而是「配置指向了一个不该指的地方」。 */
     add('媒体域名 MEDIA_BASE', 'ok', m, null);
     pass++;
   }
 
   async function run() {
+  /* 【总调度】把八个检测按顺序跑一遍，最后给个总结。 */
     card.innerHTML = '';
+    /* 【清空】把上一次的检测结果全部清掉。
+       为什么要清？因为下面是一行一行 append 的，
+       不清的话第二次检测的结果会接在第一次后面，越堆越长。
+       【用 innerHTML = '' 清空】是清空子元素最简单的方法。
+       （严格来说它还会销毁内部的所有事件监听器，但这里正好需要。） */
     summary.style.display = 'none';
+    /* 总结也先藏起来，等全部跑完再显示。 */
     pass = 0; fail = 0;
+    /* 【计数器归零】不归零的话，第二次检测的数字会累加到第一次上。 */
 
     const cfgOk = await checkConfig();
+    /* 【先跑配置检查，并且等它完成】
+       因为配置是所有其他检测的前提（没有 URL 和 KEY 什么都测不了），
+       所以必须逐个 await，不能并发。 */
     await checkAssets();
     await checkSdk();
     await checkRest();
@@ -330,23 +1216,68 @@
     await checkAuth();
     checkSession();
     checkMedia();
+    /* 【为什么全是 await 串行？】
+       好处：
+         1. 结果按固定顺序显示（如果并发，谁先回来谁先显示，顺序会乱）
+         2. 不会同时打太多请求，避免触发限流
+         3. 每一项的耗时是独立的，不受其他请求影响（测速才准）
+       代价：总耗时是各项相加，可能要好几秒。
+       对这个页面来说，「顺序稳定 + 结果准确」比「快」重要得多，
+       所以串行是正确的选择。
+       【注意最后两个没有 await】因为 checkSession 和 checkMedia
+       都是同步函数（没有 async），不需要等。 */
 
     summary.style.display = 'block';
+    /* 全部跑完，最后把总结显示出来。 */
     if (!cfgOk) {
       summary.innerHTML = '<b style="color:var(--bad)">配置文件都没读到，先修这个。</b><br>'
         + '打开 <code>' + location.origin + '/js/config.js</code> 看是不是 404。';
+      /* 【配置文件失败要单独处理】
+         因为它是根因——所有后面的失败都是它的连锁反应。
+         如果只在总结里说「有 12 项失败」，用户会一头雾水。
+         直接告诉他「先修这个，打开这个地址看」，
+         才是真正有用的信息。
+       【<code> 标签】语义标签，表示「一段代码/文件名」，
+         浏览器默认用等宽字体显示。比直接写文字更专业，也更易读。
+       【style="color:var(--bad)"】行内样式，优先级比外部 CSS 高，
+         用来让这句话变红。
+       【location.origin 拼进去安全吗？】安全——它是浏览器提供的当前域名，
+         用户改不了（改了就是访问别的站点了），不含注入风险。 */
     } else if (fail === 0) {
       summary.innerHTML = '<b style="color:var(--ok)">全部通过（' + pass + ' 项）。</b><br>'
         + '站点、数据层、登录接口、媒体路径都正常。可以直接去注册账号了。';
+      /* 【成功时给下一步指引】
+         「可以直接去注册账号了」比单纯说「全部通过」有用得多——
+         用户跑完自检，往往就是要确认「现在能不能用」，
+         这句话直接回答了他真正的问题。 */
     } else {
       summary.innerHTML = '<b style="color:var(--bad)">' + fail + ' 项有问题，' + pass + ' 项通过。</b><br>'
         + '看上面标“失败”的行，那行的说明就是原因。';
+      /* 【失败时告诉用户怎么看】
+         「看上面标失败的行，那行的说明就是原因」——
+         这句话把用户从「总结」引导到「具体某一行」，
+         因为真正的诊断信息都在每一行的 detail 里。
+         自检页的价值就在这些 detail 上，总结只是个目录。 */
     }
   }
 
   document.getElementById('again').addEventListener('click', run);
+  /* 【挂「重新检测」】直接传函数名 run，不加括号。
+       加括号 → 立刻执行一次，然后把返回值（Promise）当监听器，是错的
+       不加   → 把函数本身交出去，点击时才调用，是对的 */
   run();
+  /* 【页面一加载就跑一次】
+       为什么不放在最开头？因为 run 里用到的 card、summary
+       都是上面才声明的（const 有暂时性死区，声明前访问会抛错）。
+       放在最后一行是最稳妥的：所有变量和函数都准备好了，再开跑。 */
 })();
+/* 【收尾】
+     }  → 关闭 function 的函数体
+     )  → 关闭开头那层包装的括号
+     () → 立刻调用
+   最后的分号结束语句。
+   因为是 IIFE，内部所有变量到此为止，外面再也访问不到。
+   在浏览器控制台里试 add 或 run，会得到 undefined——这是对的，不是 bug。 */
 </script>
 </body>
 </html>
