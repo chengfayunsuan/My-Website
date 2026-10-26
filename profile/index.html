@@ -1,64 +1,279 @@
 <!DOCTYPE html>
 <!-- ============================================================
      文件：profile/index.html（个人主页）
+     路径：/profile/     打开 /profile/?uid=1 就是看 1 号用户的主页
+
      作用：展示某个用户的信息和 TA 发布的内容：文章、视频、留言、收藏。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+           并且能区分「看自己」和「看别人」两种状态：
+             看自己 → 能编辑签名、换头像、改密码、删文章
+             看别人 → 全部只读，多出「关注」「拉黑」两个按钮
+
+     注释说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
      ============================================================ -->
+<!-- 【DOCTYPE】下面这行是给浏览器看的「版本声明」。
+     意思是：这份文件按 HTML5 标准来解析。
+     不写这行的话，浏览器会退回到「怪异模式」（Quirks Mode），
+     盒模型、行高等一堆计算规则都会变，页面直接错位。
+     所以每个 .html 文件第一行必须是它，而且必须最靠上，前面不能有任何东西。 -->
 <html lang="zh-CN">
+<!-- 【html 标签】整个网页的最外层大盒子，所有东西都装在里面。
+     lang="zh-CN" → 【语言标记】告诉浏览器「这页是简体中文」。
+     影响三件事：屏幕阅读器用哪套发音、浏览器要不要提示翻译、
+     以及中文标点的排版规则（比如标点在行首行尾该不该挤）。
+     它不影响页面长相，但影响无障碍和搜索，别省。 -->
 <head>
+<!-- 【head 头部】这个盒子里的东西都不直接显示在页面上。
+     它装的是「给浏览器和搜索引擎看的说明书」：
+     用哪个字符编码、页面多宽、标题叫什么、引入哪些样式和脚本。
+     可以理解成快递箱上的面单——不是商品本身，但决定这件货怎么送。 -->
+
 <meta charset="UTF-8">
+<!-- 【meta charset】字符编码声明。UTF-8 是国际通用编码，能装下全世界所有文字。
+     不写或者写错，中文就会变成「锟斤拷」「æˆ‘」这种乱码。
+     这一行必须在 head 的最前面（前 1024 个字节以内），
+     否则浏览器已经用错误的编码读了一遍，再声明就晚了。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【viewport 视口】手机浏览器的核心设置，逐项拆：
+       name="viewport"                 → 我在设置「视口」
+       width=device-width              → 页面宽度 = 设备物理宽度（不缩放）
+       initial-scale=1.0               → 初始缩放比例 1 倍
+     不写这行会怎样？手机浏览器会假装自己是 980px 宽的桌面屏，
+     把整个页面缩小后塞进手机屏幕，字小到看不见，用户得双指放大。
+     这是移动端适配的第一条底线。 -->
+
 <title>个人主页 · 乘法</title>
+<!-- 【title】浏览器标签页上显示的文字，也是收藏夹里存的名字。
+     注意：这个标题在脚本里会被动态改掉——
+     看自己时是「个人主页 · 乘法」，看别人时变成「某某 的主页 · 乘法」。
+     JS 里那句 document.title = ... 改的就是这里。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 【link rel="icon"】网页图标，就是标签页左边那个小图，学名 favicon。
+     不写的话浏览器会去根目录瞎猜一个 favicon.ico，猜不到就显示默认的空白页图标。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 【link rel="stylesheet"】引入外部样式表（CSS）文件。
+     这里的 / 开头表示「从网站根目录算起」，不是从当前文件夹算起。
+     【?v=26 版本号】这是给浏览器缓存下的套：
+       浏览器会缓存 css 文件，你改了内容它可能还用旧的。
+       把版本号从 26 改成 27，浏览器就认为是「另一个文件」，强制重新下载。
+       每次大改样式记得把这个数字 +1，这是最省事的破缓存手段。 -->
+
 <style>
+  /* ============================================================
+     这一段是本页「专属」的样式，只在这个页面生效。
+     公共的（导航栏、卡片、按钮）都在 style.css 里，这里只写本页独有的。
+     ============================================================ */
+
   /* 右栏下面：我点赞 / 收藏的文章 */
   .acts-block { margin-bottom: 14px; }
+  /* 【margin-bottom】下外边距，跟下方元素拉开 14 像素。
+     注意单位 px 不能省，写 14 是无效的。 */
+
   .acts-block:last-child { margin-bottom: 0; }
+  /* 【:last-child 伪类】选中「同一堆兄弟里的最后一个」。
+     这里的作用是：最后一个区块不要再有下边距，
+     否则卡片底部会多出一块没用的空白，看起来像没对齐。
+     这种「最后一个不要边距」的写法在任何列表布局里都极其常见。 */
+
   .acts-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  /* 【font-weight: 600】字重（粗细）。400 是正常，700 是粗体，600 介于中间。
+     【var(--text)】这是 【CSS 变量】：style.css 里定义了 --text 这个颜色，
+       这里用 var() 取出来用。好处是改一处全局变色，深色/浅色主题切换靠它。
+     变量名必须以两个减号开头，取值时写成 var(变量名)。 */
+
   .acts-list { display: flex; flex-direction: column; gap: 6px; }
+  /* 【display:flex】弹性布局，把子元素排成一行。
+     【flex-direction: column】但是我要竖着排，所以把主轴从「横」改成「竖」。
+     【gap: 6px】子元素之间的间距 6px。
+       这是 flex 才有的，比给每个子元素写 margin 然后处理「最后一个不要右边距」
+       干净得多——gap 只加在元素之间，不加在外侧。 */
+
   .acts-item {
     display: block;
+    /* 【display:block】让 <a> 标签变成块级元素。
+       <a> 天生是【行内元素】(inline)，行内元素设宽高、上下内边距都不太听话，
+       而且不会独占一行。改成 block 之后它就能占满整行、能设 padding。 */
+
     padding: 8px 10px;
+    /* 【padding】内边距，四个方向的写法是「上下 左右」。
+       8px 是上下，10px 是左右。文字和边框之间的空隙。 */
+
     border: 1px solid var(--border);
+    /* 【border】边框，三个值依次是 粗细 样式 颜色。
+       1px solid → 1 像素、实线。dotted 是点线，dashed 是虚线。 */
+
     border-radius: 8px;
+    /* 【border-radius】圆角半径。8px 就是四个角各切掉 8px 的圆弧。
+       写 50% 就是正圆（正方形的情况下）。 */
+
     background: var(--field);
+    /* 【background】背景。这里用变量 --field，是一个比卡片背景稍深的颜色，
+       用来区分「卡片」和「卡片里的条目」。 */
+
     text-decoration: none;
+    /* 【text-decoration:none】去掉下划线。
+       <a> 标签默认带下划线，页面里所有链接想好看都得先关掉它。 */
+
     color: var(--text);
+    /* 文字颜色也要手动设——因为 <a> 有自己的默认蓝色，不会自动继承父元素的颜色。 */
+
     font-size: 14px;
     transition: border-color .15s;
+    /* 【transition 过渡动画】当某个属性变化时，不要「瞬间跳」，而是在一段时间内平滑过渡。
+       border-color .15s → 边框颜色变化时用 0.15 秒渐变过去。
+       .15s 是 0.15s 的简写，秒前面的 0 可以省略。
+       注意：这里只对 border-color 做动画，其他属性（比如颜色、位置）变化还是瞬间的。
+       想全都加就写 transition: all .15s，但性能上不推荐 all。 */
   }
+
   .acts-item:hover { border-color: var(--primary); }
+  /* 【:hover 伪类】鼠标悬停时的状态。这里让边框变成主题色，作为「可点击」的反馈。
+     在没有 :hover 的触屏设备上，这条规则不会触发——所以不能只靠 hover 传达重要信息。 */
+
   .acts-item .t { font-weight: 600; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* 【.acts-item .t】中间有空格，表示「.acts-item 里面的 .t」（后代选择器）。
+     这一行是经典的【单行文字省略号三件套】，缺一不可：
+       1. overflow: hidden        → 超出的部分藏起来
+       2. text-overflow: ellipsis → 藏起来的地方显示「…」
+       3. white-space: nowrap     → 强制不换行（否则文字会自动折到第二行，永远不溢出）
+     少任何一条，省略号都不会出现。这个组合建议直接背下来。 */
+
   .acts-item .m { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+  /* 【--text-light】比正文浅一点的颜色，用来放次要信息（作者、播放量这类）。
+     这是视觉层级的基本手法：主要信息深色，次要信息浅色。 */
+
   .acts-empty { font-size: 13px; color: var(--text-light); padding: 4px 0; }
+  /* 空状态（「还没有」）的样式。空状态也是要设计的，
+     什么都不显示会让用户以为是加载失败或者页面坏了。 */
 </style>
 </head>
+<!-- 【/head】头部结束，下面是 body。 -->
+
 <body>
+<!-- 【body】页面主体。head 里是说明书，body 里才是用户真正看到的东西。
+     浏览器渲染时，body 里的元素按顺序从上往下堆。 -->
 
   <div id="navbar"></div>
+  <!-- 【占位容器】这是个空盒子，里面什么都没有，但 id="navbar" 是给 JS 用的。
+       导航栏不是写死在这个文件里的，而是由脚本 nav.js 生成后塞进来。
+       好处：几十个页面共用同一份导航栏代码，改一处全站生效，
+             不用每个 html 文件都维护一遍导航栏（那样改个链接要改几十次）。
+       代价：页面刚打开的一瞬间这里是空的，等脚本跑完导航栏才出现。 -->
 
   <section style="margin-top:40px; margin-bottom:40px;">
+  <!-- 【section 语义标签】表示页面里的一个「区块」。
+       它和 <div> 长得一模一样、默认行为也一样，区别纯粹是给人和机器看的语义：
+       div 是「一个盒子」，section 是「一个有意义的内容区」。
+       对屏幕阅读器来说，section 可以被快速跳转定位。
+       【style 行内样式】直接写在标签上的样式，优先级比外部 css 文件高。
+       这里给整个区块上下各留 40px 空白，把内容从导航栏下面托起来。
+       小提示：行内样式虽然方便，但多了以后极难维护，能用 class 就用 class。 -->
+
     <div class="profile-wrap">
+    <!-- 【profile-wrap 布局容器】这是一个「两栏布局」的外壳，
+         样式在 style.css 里（大概是 flex 或 grid，左边主内容、右边侧栏）。
+         类名 wrap 一般是约定俗成的意思：「用于约束最大宽度并居中的外层」。 -->
 
       <!-- 左栏 -->
       <div class="profile-left">
+      <!-- 左栏装：头像名片、个性签名、我的文章、我的留言。
+           内容多、宽度大，是视觉主体。 -->
 
         <!-- 头部：头像 + 用户名（横排，靠左） -->
         <div class="card profile-head">
+        <!-- 【card】公共的卡片样式：白底、圆角、阴影、内边距。
+             全站凡是「一块一块的内容」都用 card，保证视觉统一。
+             一个元素可以有多个 class（空格分隔），这里同时挂了 card 和 profile-head。 -->
+
           <div class="profile-avatar-box">
+          <!-- 包一层的最主要目的：给下面的「更换头像」label 做定位参照物。
+               绝对定位的元素会往上找最近的「定位祖先」，
+               如果父元素没有 position（默认 static），它就会一路找到页面根上，
+               位置完全失控。所以需要定位的东西，一定要有父元素给它当锚点。 -->
+
             <img class="profile-avatar" id="profileAvatarImg" src="/avatar-default.jpg" alt="头像">
+            <!-- 【img】图片标签。三个重点：
+                   src  → 图片地址。这里先放一张默认头像兜底，
+                          等 JS 拿到真实数据再换成用户自己的头像。
+                   alt  → 【替代文本】图片加载失败时显示的文字，
+                          也是屏幕阅读器读给视障用户听的内容。
+                          头像的 alt 写「头像」就够了，因为旁边就是用户名，
+                          写「张三的头像」有点啰嗦，但也完全可以。
+                   id   → JS 靠它找到这个元素，这里脚本里叫 el.avatarImg。 -->
+
             <label class="avatar-upload" id="avatarUploadLabel" for="avatarInput" style="display:none;">
+            <!-- 【label】这个标签的作用是「扩大点击区域」。
+                 关键在 for="avatarInput"：它等于「我代表 id 为 avatarInput 的那个表单控件」。
+                 所以用户点这个 label 上的任何地方，浏览器就会去触发那个 input，
+                 相当于点了 input 本身。这是美化文件上传按钮的标准套路：
+                   真正的 input 藏起来（或者透明覆盖），
+                   把 label 做成好看的按钮样式，用户以为点的是 label，
+                   实际触发的是 input。点的是假按钮，干活的是真控件。
+                 【style="display:none"】默认藏起来。
+                 因为只有「看自己的主页」时才能换头像，看别人主页要隐藏。
+                 谁来显示它？脚本里 enterEdit() 会把它改成 flex（进入编辑模式才出现）。 -->
+
               <span>更换头像</span>
+              <!-- 【span 行内标签】一个没有任何默认样式的「纯容器」。
+                   和 div 的区别：div 是块级（独占一行），span 是行内（跟着文字走）。
+                   这里其实用纯文字也行，包一层是为了方便单独设样式。 -->
+
               <input type="file" id="avatarInput" accept="image/*" hidden>
+              <!-- 【input type="file"】文件选择框，点了会弹出系统的「选择文件」对话框。
+                     accept="image/*" → 【accept 属性】限定只能选图片。
+                       image/* 里的星号是通配符，表示「任何图片类型」。
+                       写成 image/png 就只能选 png。
+                       注意：这只是给用户方便的「提示」，不是安全防线——
+                       用户在对话框里切到「所有文件」照样能选中别的东西，
+                       所以脚本里必须再校验一次真正的文件类型。
+                     hidden → 【布尔属性】HTML 里的布尔属性只要出现就等于 true，
+                       写成 hidden="hidden"、hidden="true"、hidden 效果完全一样，
+                       甚至写 hidden="false" 也还是隐藏（因为出现了就算 true）。
+                       这是新手最容易踩的坑之一。
+                     那为什么用户点了看不见的 input 也会触发？
+                       因为触发它的是上面那个 label 的 for 属性，不是用户直接点它。 -->
             </label>
           </div>
+
           <div class="profile-info">
+          <!-- 右边这块装：用户名、身份铭牌、关注/拉黑按钮。纵向排列。 -->
+
             <h1 class="profile-name" id="profileName">加载中…</h1>
+            <!-- 【h1】一级标题。一个页面最好只有一个 h1，这是 SEO 和结构的规范。
+                 这里先写「加载中…」作为占位文字，
+                 等 JS 拿到用户名后会被替换掉（el.name.textContent = data.username）。
+                 【…】这个符号是中文省略号，只占一个字符宽度，比写三个点好看。 -->
+
             <span class="role-tag" id="roleTag">用户</span>
+            <!-- 【铭牌】显示身份的小标签，可能是「站长」「管理员」，
+                 也可能换成用户自己写的个性签名。
+                 这块的显示逻辑是本页最绕的地方之一，稍后 render() 里会拆开讲。
+                 注意它没有固定的文字——里面的「用户」只是初始占位，
+                 实际显示什么完全由 JS 决定，甚至可能整个被隐藏。 -->
+
             <div class="profile-actions" id="profileActions" style="display:none;">
+            <!-- 【关注/拉黑按钮组】默认隐藏（display:none）。
+                 什么时候显示？paintRelations() 里判断：
+                   关系数据没拿到、或者是自己的主页、或者没登录 → 都不显示。
+                 因为「关注自己」「拉黑自己」这种操作没有意义，
+                 而没登录的人点关注也没法处理，不如直接不给他看。 -->
+
               <button type="button" class="act-btn" id="followBtn">关注</button>
+              <!-- 【button type="button"】按钮。
+                   type 一定要写清楚，这是个真实的坑：
+                     <button> 在 <form> 里的默认 type 是 "submit"，
+                     意思是「点击就提交表单并刷新页面」。
+                     如果你的按钮在表单里又忘了写 type，
+                     用户点一下整个页面就刷新了，你写的 JS 可能根本没机会执行。
+                   写 type="button" 就是纯按钮，不提交任何东西。稳妥起见永远写上。 -->
+
               <button type="button" class="act-btn danger" id="blockBtn">拉黑</button>
+              <!-- 【danger 类名】约定俗成表示「危险操作用红色」。
+                   拉黑、删除、退出这类按钮通常用红色系，
+                   利用颜色提前给用户一个「这个操作有后果」的心理提示。
+                   它是一个纯样式类，不带任何逻辑。 -->
             </div>
           </div>
         </div>
@@ -66,37 +281,92 @@
         <!-- 签名 -->
         <div class="card profile-bio-card">
           <h2 class="section-title">个性签名</h2>
+          <!-- 【h2】二级标题。层级关系：h1（页面主标题）> h2（区块标题）> h3……
+               不要为了字大字小去乱用标题标签，字号应该用 font-size 控制。
+               标题标签的价值在于「结构」，屏幕阅读器靠它生成目录、快速跳转。 -->
+
           <p class="profile-bio" id="bioText">这个人很懒，什么都没写。</p>
+          <!-- 【p】段落标签，默认上下有间距。
+               这句「这个人很懒，什么都没写」是经典的【空状态文案】。
+               空状态要考虑三种情况，本页其实都覆盖了：
+                 1. 数据真的有但内容为空（没写签名）
+                 2. 数据还在加载（显示「加载中…」）
+                 3. 数据加载失败（显示「加载失败」）
+               三种状态给用户的感受完全不同，不能混用一个「无」。 -->
+
           <textarea class="profile-bio-input" id="bioInput" maxlength="200" placeholder="写点什么…" style="display:none;"></textarea>
+          <!-- 【textarea 多行文本框】和 input 的区别：input 是单行，textarea 能换行。
+                 它是「双标签」，必须写 </textarea> 收尾，不能像 input 那样自闭合。
+                【maxlength="200"】最多只能输入 200 个字符，到了上限浏览器直接不让输入了。
+                   注意这是「前端限制」，改一下 HTML 就能绕过，
+                   所以后端必须再校验一次长度——前端校验是体验，后端校验才是安全。
+                【placeholder 占位提示】输入框为空时显示的灰色提示文字，
+                   一输入就消失，它不会成为内容，也不会被提交。
+                【display:none】默认隐藏，进入编辑模式时才显示（见 enterEdit）。
+                   这里的套路是「两个元素切换显示」：
+                   平时显示 <p> 文本，编辑时显示 <textarea> 输入框，二者位置重叠。
+                   为什么不直接让 <p> 变成可编辑？
+                   因为那样会引入 contenteditable 的一堆麻烦（光标、粘贴格式、换行处理），
+                   对本场景来说是杀鸡用牛刀。 -->
+
         </div>
 
         <!-- 我的文章（在留言之上） -->
         <div class="card profile-feed">
           <h2 class="section-title" id="artTitle">我的文章</h2>
+          <!-- 【标题也会变】看自己时是「我的文章」，看别人时被 JS 改成「TA 的文章」。
+               所以这里加了 id，好在脚本里定位（el.artTitle）。 -->
+
           <div id="myArticles">加载中…</div>
+          <!-- 【内容容器】这里只是个空壳，里面的文章列表由 JS 拼 HTML 字符串塞进来
+               （innerHTML 赋值）。这是「客户端渲染」最常见的形式：
+               HTML 只提供骨架，数据到了之后再填肉。
+               好处是数据变了页面就能跟着变，不用刷新；
+               代价是首屏会先看到「加载中…」闪一下。 -->
         </div>
 
         <!-- 我的留言 -->
         <div class="card profile-feed">
           <h2 class="section-title" id="msgTitle">我的留言</h2>
           <div id="myMessages">加载中…</div>
+          <!-- 和文章一样的套路：空壳 + JS 填充。 -->
         </div>
 
       </div>
 
       <!-- 右栏 -->
       <div class="profile-right">
+      <!-- 右栏装：数字统计（关注/粉丝/拉黑）、UID、注册时间、以及一堆小列表。
+           宽度较窄，是辅助信息区。 -->
+
         <div class="card profile-side">
 
           <div class="side-section">
+          <!-- 三个数字块。注意它们都带了 data-type 属性，这是重点。 -->
+
             <div class="profile-stat" data-type="following">
+            <!-- 【data-type 自定义属性】HTML 允许你随便造 data-* 开头的属性，
+                 浏览器不管它，纯粹留给你自己用。
+                 这里是给点击事件读的：点哪个块，就读它的 data-type，
+                 然后拿这个字符串去取 rel[type]。
+                 好处：三个块共用同一个点击处理函数，不用写三遍。
+                 这种「用一个属性标明身份，然后统一处理」的思路，
+                 和后面文章列表的 data-art 是同一套模式。 -->
+
               <span class="stat-label">关注</span>
+              <!-- 【stat-label】文字说明。「关注」这个词有歧义：
+                   在个人主页上，「关注 N」通常指「我关注了 N 个人」，
+                   而「粉丝 N」才是「N 个人关注我」。
+                   这一点必须在文案上区分清楚，否则用户永远搞不懂。 -->
               <span class="stat-num" id="followingCount">0</span>
+              <!-- 数字先写 0 兜底，JS 拿到数据后替换（paintRelations 里）。 -->
             </div>
+
             <div class="profile-stat" data-type="followers">
               <span class="stat-label">粉丝</span>
               <span class="stat-num" id="followersCount">0</span>
             </div>
+
             <div class="profile-stat" data-type="blocked">
               <span class="stat-label">拉黑</span>
               <span class="stat-num" id="blockedCount">0</span>
@@ -105,30 +375,54 @@
 
           <div class="side-section">
             <p class="profile-meta">UID: <span id="uid">—</span></p>
+            <!-- 【—】破折号当占位符用。数据没到的时候显示它，
+                 比显示「null」「undefined」体面得多。
+                 你肯定见过页面上直接蹦出个 undefined 的网站——那就是占位没做好。
+                 【嵌套】<span> 是在 <p> 里面的行内元素，
+                 为什么要把数字单独包一层？因为要给这个数字单独设样式（比如等宽字体），
+                 或者单独改它的内容，不影响「UID: 」这几个字。 -->
+
             <p class="profile-meta">注册于 <span id="createdAt">—</span></p>
+            <!-- 注册时间也是先占位，JS 填充。 -->
           </div>
 
         </div>
 
         <!-- 右栏下面的小栏目：点赞 / 收藏的文章 + 视频 -->
         <div class="card profile-acts" id="actsCard" style="display:none;">
+        <!-- 整张卡片默认隐藏，等 loadUserActs 确认有 uid 才显示。
+             如果 uid 拿不到（比如用户不存在），这里就一直不出现，
+             避免显示一堆空栏目让页面显得很破。 -->
+
           <h2 class="section-title" id="actsTitle">我的互动</h2>
+          <!-- 注意：这个标题其实从来没被 JS 改过，
+               所以看别人主页时它仍然显示「我的互动」——
+               这是个小瑕疵，文案上应该是「TA 的互动」。
+               下面五个小标题倒是都做了区分（见 loadUserActs / loadUserVideos）。 -->
+
           <div class="acts-block">
             <div class="acts-label" id="likedLabel">我赞过的文章</div>
             <div class="acts-list" id="likedList"><p class="empty-hint">加载中…</p></div>
+            <!-- 【初值直接放「加载中」】这是有意为之：
+                 如果 JS 因为报错没跑起来，用户至少看到「加载中」而不是一片空白，
+                 排查时也能立刻知道「是数据没到」而不是「布局塌了」。 -->
           </div>
+
           <div class="acts-block">
             <div class="acts-label" id="favedLabel">我收藏的文章</div>
             <div class="acts-list" id="favedList"><p class="empty-hint">加载中…</p></div>
           </div>
+
           <div class="acts-block">
             <div class="acts-label" id="myVideosLabel">我传的视频</div>
             <div class="acts-list" id="myVideosList"><p class="empty-hint">加载中…</p></div>
           </div>
+
           <div class="acts-block">
             <div class="acts-label" id="likedVideosLabel">我赞过的视频</div>
             <div class="acts-list" id="likedVideosList"><p class="empty-hint">加载中…</p></div>
           </div>
+
           <div class="acts-block">
             <div class="acts-label" id="favedVideosLabel">我收藏的视频</div>
             <div class="acts-list" id="favedVideosList"><p class="empty-hint">加载中…</p></div>
@@ -140,59 +434,343 @@
   </section>
 
   <button class="edit-fab" id="editFab" aria-label="编辑">
+  <!-- 【FAB】Floating Action Button，浮动操作按钮。
+       就是手机 App 右下角那个悬浮的圆形按钮，固定跟着屏幕走，不随页面滚动。
+       样式（position:fixed + 右下角定位 + 圆形）都在 style.css 里。
+       【aria-label="编辑"】这个按钮里只有一张图标，没有任何文字。
+         屏幕阅读器读到一个空按钮会不知所措，aria-label 就是给它补一个「读出来的名字」。
+         凡是「只有图标没有文字」的按钮，都必须加 aria-label，这是无障碍的硬性要求。 -->
+
     <svg viewBox="0 0 24 24" id="editIcon">
+    <!-- 【SVG 矢量图】用代码画的图形，不是图片文件。
+         好处：放大多少倍都不糊（因为是数学描述不是像素点），而且能用 CSS 改颜色。
+         viewBox="0 0 24 24" → 定义「坐标系」：左上角是 (0,0)，画布 24×24。
+           有了它，图形就能自适应任意尺寸缩放，这是 SVG 最关键的一个属性。
+         【注意这里没有写 width/height】尺寸完全由 CSS 控制。
+         【id="editIcon"】注意这个 id 挂在 svg 上，但脚本改的是它的 innerHTML——
+           也就是换掉里面的路径，从「铅笔」变成「叉」，实现图标切换。 -->
+
       <path d="M12 20h9"/>
+      <!-- 【path 路径】SVG 里最强大的元素，用一串指令描述形状。
+           d 属性就是一串命令，逐字拆开：
+             M12 20  → Move to：把笔移动到坐标 (12,20)，从这里开始画（M 是抬笔移动，不画线）
+             h9      → horizontal：水平画一条线，相对当前位置向右 9 个单位
+                       （小写 h 是相对坐标，大写 H 是绝对坐标）
+           合起来就是：从 (12,20) 向右画一条 9 长的横线，到 (21,20)。
+           为什么单独画这条线？这是铅笔图标的「笔身底边」。 -->
+
       <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+      <!-- 【铅笔的形状】这串路径命令逐段拆：
+             M16.5 3.5        → 抬笔移动到 (16.5, 3.5)
+             a2.121 2.121 0 1 1 3 3
+               → 【a 弧线命令】画一段椭圆弧，参数依次是：
+                 半径x、半径y、旋转角、大弧标志、扫掠方向、终点相对位移。
+                 这一小段画的是铅笔顶端那个小圆弧（橡皮头的位置）。
+             L7 19            → Line to：从当前位置画直线到 (7,19)
+             l-4 1            → 相对坐标画直线，向左 4、向下 1（这是笔尖）
+             1-4              → 再相对画直线，向右 1、向上 4（笔尖收口）
+             12.5-12.5        → 再画一段回到起点方向
+             z                → 【闭合路径】把终点连回起点，形成一个封闭图形
+           不用完全看懂——SVG 路径几乎没人手写，都是从图标库复制来的。
+           你只要知道：d 是一串「抬笔/画线/画弧/闭合」的指令就够了。 -->
     </svg>
   </button>
 
   <div class="edit-actions" id="editActions" style="display:none;">
+  <!-- 编辑模式下才出现的一排按钮（保存 / 取消 / 修改密码）。
+       默认 display:none，进编辑模式时改成 flex。
+       注意它和上面那个圆形按钮是两个独立元素：
+       圆形按钮永远在，只是图标会从「铅笔」变成「叉」；这排按钮才是编辑时才出现的。 -->
+
     <button class="edit-save" id="saveBtn">保存</button>
     <button class="edit-cancel" id="cancelBtn">取消</button>
     <button class="edit-pwd" id="pwdBtn">修改密码</button>
+    <!-- 注意这三个 button 都没写 type。
+         因为它们在 <form> 外面，默认的 submit 行为不会触发任何东西，所以问题不大。
+         但养成「按钮永远写 type」的习惯更安全。 -->
   </div>
 
   <div class="generic-modal" id="genericModal">
+  <!-- 【modal 模态框 / 弹窗】点「关注 N」那个数字时弹出来的用户列表就用它。
+       「模态」的意思是：它一出现，页面其他部分就被一层半透明遮罩盖住，
+       用户没法点后面东西，注意力被迫锁在这个框里。
+       实现套路：外层 div 就是那层全屏遮罩（样式里 position:fixed + inset:0），
+                 内层 .generic-box 才是白底的框本身，居中显示。
+       为什么不直接用 alert()？因为 alert 只能显示一行字，没法放列表和链接。
+       这里做的是「通用弹窗」：标题、内容都由 JS 动态填，
+       所以同一个框能干很多事，不用为每种内容单独写一个弹窗。 -->
+
     <div class="generic-box">
+    <!-- 【内部白框】点遮罩会关闭弹窗，但点这个框不该关闭。
+         怎么区分？靠 JS 判断 e.target 是外层还是内层（后面的代码有讲）。 -->
+
       <button class="generic-close" id="genericClose">×</button>
+      <!-- 【×】这是乘号字符（&times; 的实体写法），最常见的关闭图标。
+           用纯文字而不用 SVG，是因为简单、能直接改颜色和字号。
+           【无障碍提醒】这个按钮只有「×」符号，屏幕阅读器可能读成「乘号」，
+           听话的用户根本不知道这是关闭按钮。更严谨的做法是加 aria-label="关闭"。 -->
+
       <h2 class="generic-title" id="genericTitle">标题</h2>
+      <!-- 「标题」只是占位，JS 会改成「关注（3）」这样的内容。 -->
+
       <div class="generic-body" id="genericBody"></div>
+      <!-- 【空的 div】内容全靠 JS 填 innerHTML。
+           里面的东西可能是「加载中…」、可能是空状态提示、也可能是一整个用户列表。 -->
     </div>
   </div>
 
   <script src="/js/config.js"></script>
+  <!-- 【script src】引入外部 JS 文件。
+       注意 script 标签放在 body 最底部，这是有讲究的：
+       浏览器解析 HTML 是从上往下的，遇到 script（没有 async/defer 的话）
+       会立刻停下来去下载并执行它，等执行完才继续解析后面的 HTML。
+       如果放在 head 里，用户会盯着白屏等脚本下载完——
+       这叫【阻塞渲染】。放在底部就避开了这个问题：
+       HTML 已经渲染完了，脚本最后才跑，页面立刻能看见。
+       代价是脚本跑到的时候，上面的元素早就存在了，这正好是我们要的。 -->
+
 <script src="/js/bg.js?v=2"></script>
+<!-- 【bg.js】背景相关的脚本（可能是背景图/背景视频）。
+     ?v=2 和 css 的 ?v=26 是同一个道理：破浏览器缓存。
+     注意这行缩进有点乱（前面没对齐），只是格式瑕疵，不影响功能。 -->
+
 <script src="/js/vendor/supabase-js.js"></script>
+<!-- 【vendor 目录】vendor 是「第三方供应商代码」的约定叫法。
+     这个文件不是自己写的，是 Supabase 官方提供的 SDK（软件开发工具包）副本。
+     为什么要存在本地而不是用 CDN 链接？
+       1. 不依赖别人的服务器，别人挂了你不受影响
+       2. 加载更快（同域，省一次 DNS 查询和 TLS 握手）
+       3. 版本锁死，不会某天官方更新把 API 改了导致你网站直接崩 -->
+
   <script src="/js/sb.js"></script>
+  <!-- 【sb.js】自己封装的数据库接口层，sb 就是 supabase 的缩写。
+       里面把一堆操作包成了 SBAPI.getMe()、SBAPI.follow() 这样的函数。
+       为什么要包一层？见下面代码里的解释——这是本页最重要的架构点。 -->
+
   <script src="/js/nav.js?v=23"></script>
+  <!-- 【nav.js】生成顶部导航栏，把它塞进上面那个 id="navbar" 的空 div 里。 -->
+
   <script>
+  /* 注意：从这一行开始，下面的内容都是 JavaScript，不是 HTML 了。
+     脚本块内部，浏览器的解析规则完全切换：
+       - 不再把尖括号当成标签开始（除非遇到脚本块的结束标签）
+       - 注释必须用 JS 的写法（两斜杠 或 斜杠星号）
+       - 在这里写 HTML 的注释符号会被当成 JS 代码执行，直接报语法错误 */
+
   (function () {
+  /* ============================================================
+     【IIFE 立即执行函数表达式】整个文件最外层的一层包装，逐部分拆：
+       (function () { ... })()
+       └─┬─────────────────┘ └┬┘
+         │                     └─ 最后这一对括号，作用是「立刻调用」
+         └─ 第一对括号，把函数声明变成一个「表达式」
+
+     为什么非要包这一层？两个理由：
+
+     1. 【避免污染全局】函数内部用 let/const 声明的变量，
+        外面完全看不见。如果直接写在最外层，el、render、init 这些名字
+        就都跑到 window 上了，容易和别的脚本撞名。
+        这就好比上班时把工具都放在自己的抽屉里，
+        而不是摊在公共桌面上——不会有人拿错。
+
+     2. 【避免变量泄漏到 window】这是个真实的坑：
+        在浏览器里，顶层用 var 声明的变量会变成 window 的属性；
+        更坑的是，给未声明的变量赋值也会自动变成全局变量。
+        包一层函数，这些全都关在里面了。
+
+     顺带说一下那个「空操作」：
+       函数体最后什么都没 return，所以这个 IIFE 的返回值是 undefined，也没人接。
+       写完不写分号都行，但风格上建议写（前面加不加分号取决于上一行）。
+     ============================================================ */
+
     function fixAvatar(a) {
+    /* 【函数作用：把头像值变成能直接用的图片地址】
+       数据库里存的头像可能是三种完全不同的东西：
+         1. 空 → 没有头像，用默认图
+         2. 以 "data:" 开头 → base64 内嵌图片（用户上传后直接编码成字符串存的）
+         3. 以 "http://" 或 "https://" 开头 → 完整的外链地址
+         4. 其他 → 一个相对路径或文件名，需要拼上媒体服务器前缀 */
       if (!a) return '/avatar-default.jpg';
+      /* 【!a 判断空值】这个写法比 a === '' || a === null || a === undefined 短得多。
+         【falsy 假值】JS 里这几个值在条件判断中会自动当假：
+           false、0、''、null、undefined、NaN
+         所以 !a 为真，说明 a 是空字符串 / null / undefined。
+         注意 0 也会被当成空——头像不会是 0，这里安全。
+         但如果这个函数是用来处理「数量」的，!a 就会把 0 误判成「没值」，
+         那是非常经典的生产事故。 */
+
       if (a.startsWith('data:') || /^https?:\/\//.test(a)) return a;
+      /* 【startsWith】判断字符串开头是不是某段文本，返回 true/false。
+           用 data: 开头的本来就是完整可用的图片数据，直接用。
+         【正则 /^https?:\/\//】逐部分拆：
+             /  ...  /     → 两个斜杠包起来的是【正则表达式】字面量
+             ^             → 表示「字符串开头」（锚点）
+             https?        → http 后面跟一个可选的 s（问号表示「前面那个字符出现 0 或 1 次」）
+             :             → 冒号本身
+             \/\/          → 两个斜杠。斜杠在正则里是定界符，要表示字面意思必须用反斜杠转义
+           所以它的意思是：以 http:// 或 https:// 开头。
+         【.test(a)】正则的方法，检测 a 里有没有匹配到，返回 true/false。
+           这里其实是「有没有完整 URL 前缀」。 */
+
       return (window.MEDIA_BASE || '').replace(/\/+$/, '') + '/' + a.replace(/^\/+/, '');
+      /* 【这一行是本函数的核心，从里往外读】
+         1. window.MEDIA_BASE
+            【全局变量】媒体文件服务器的基础地址，在 config.js 里定义。
+            为什么头像/图片要单独放一个服务器？因为媒体文件体积大、流量贵，
+            放在专门的存储上（对象存储 + CDN）比塞在网站服务器里划算得多。
+         2. ( ... || '' )
+            取不到（undefined）就用空字符串兜底。不兜底会得到 "undefined/xxx.jpg"。
+         3. .replace(/\/+$/, '')
+            【正则替换】把结尾的一个或多个斜杠删掉。
+              \/+  → 一个或多个斜杠（加号表示「前面那个字符出现 1 次或多次」）
+              $    → 字符串结尾的锚点
+            为什么要删？因为基础地址可能写成 "https://cdn.com/" 也可能写成 "https://cdn.com"，
+            如果它已经带了斜杠，下面又加一个，就变成 "https://cdn.com//abc.jpg"（双斜杠）。
+            有些服务器会因此 404，有些不会——这种「有时候行有时候不行」的 bug 最难查。
+         4. + '/' +
+            中间补上唯一一个斜杠，保证拼接结果格式正确。
+         5. a.replace(/^\/+/, '')
+            把 a 开头的斜杠也删掉。同理，避免 "https://cdn.com//abc.jpg"。
+            注意这里是 ^（开头），第 3 步是 $（结尾），两个方向各自处理。
+         结论：无论输入是 "/a.jpg"、"a.jpg"、还是基础地址带不带尾斜杠，
+              最终都能拼出一个干净的单斜杠地址。
+              这就是「幂等」的写法——同一件事做多少遍结果都一样。 */
     }
 
     // 从网址里读 uid：/profile/?uid=1（数字 UID，站长是 1）
     // 也兼容早期分享出去的 uuid 链接；都没有就是看自己
     const rawUid = (new URLSearchParams(location.search).get('uid') || '').trim();
+    /* 【逐段拆这行】
+       1. location.search
+          【location】浏览器提供的「当前网址」对象。
+          【search】是问号及其后面的部分，例如 "?uid=1&from=share"。
+          注意它包含问号本身。
+       2. new URLSearchParams(...)
+          【URLSearchParams】专门解析这种查询字符串的内置工具。
+          传进去 "?uid=1&from=share"，它就能按 & 和 = 拆成键值对。
+          为什么不用 split('&') 手动拆？因为 URL 里的特殊字符都会被编码
+          （空格变成 %20，中文变成一串百分号），手动拆极容易出错，
+          而 URLSearchParams 会自动解码。
+       3. .get('uid')
+          取 uid 这个参数的值。没有这个参数返回 null。
+       4. || ''
+          如果是 null 就换成空字符串，好让后面的 .trim() 不出错
+          （null 身上没有 trim 方法，直接调会报「Cannot read properties of null」）。
+       5. .trim()
+          去掉首尾空白。为什么需要？因为用户可能从聊天软件复制链接，
+          尾巴上粘了个空格或是换行，不 trim 就会拼出 "1 " 这种脏值。
+       最终：网址没带 uid → rawUid 是空字符串 ''，falsy。
+             带了 → rawUid 是字符串（注意是字符串，不是数字）。 */
+
     const wantedNo = /^\d+$/.test(rawUid) ? Number(rawUid) : null;
+    /* 【判断网址里给的是「数字 UID」还是「uuid」】
+       /^\d+$/  → 整串都是数字。
+         ^    开头锚点
+         \d   一个数字字符（0-9）
+         +    出现一次或多次
+         $    结尾锚点
+       合起来：从开头到结尾全是数字，中间不能夹字母。
+       为什么要加 ^ 和 $？不加的话 /d+/ 匹配 "abc123def" 也会为 true——
+       因为在中间找到数字就够了，那是「包含」，不是「全是」。
+
+       【三元运算符】条件 ? 成立时的值 : 不成立时的值
+       这是 if/else 的表达式版本。区别是三元能直接产出一个值赋给变量，
+       而 if 是语句，不能这么写。
+
+       【Number(rawUid)】把字符串转成数字。
+       为什么转？因为后面要跟数据库里的 uid_no（数字）做 === 比较，
+       === 是严格相等，不转换类型的话 "1" === 1 是 false，比较永远失败。
+       这也是新手最常见的 bug 之一。 */
+
     const wantedUuid = rawUid && !wantedNo ? rawUid : null;
+    /* 【逻辑与 &&】左边为真才看右边，左边为假直接短路返回左边的值。
+       【逻辑非 !】取反。
+       整行意思：网址有值，但不是纯数字 → 那它就是 uuid。
+       因为 uuid 长这样：8f14e45f-ea1c-4e04-a1b2-3c9a7d6e5f40，
+       里面既有数字也有字母还有减号，过不了 /^\d+$/ 的检查。
+       用 && 和 || 组合出「有值且不匹配数字」这个条件，
+       比写 if/else 再赋值要简洁得多。 */
 
     let editing = false;
+    /* 【let】声明一个可以被重新赋值的变量（ES6 引入）。
+       和 const 的区别：const 声明后不能再指向别的值，let 可以。
+       和 var 的区别（重要，别用 var）：
+         var 是「函数作用域」，let 是「块作用域」（{} 里面）
+         var 有「变量提升」（声明前的代码也能访问到，值是 undefined）
+         var 允许重复声明，let 不允许（重复声明直接报错，帮你抓错）
+       【这个变量的作用】标记「当前是否在编辑模式」。
+       注意它只是一个「状态标志」，真正控制页面长相的是后面那些 style.display。
+       这种「用一个变量记住状态，各处根据状态决定行为」的模式，
+       叫做【状态驱动】，比到处散落判断好维护得多。 */
+
     let originalBio = '';
+    /* 记住「打开编辑模式时的原始签名」。
+       用途一：点取消时恢复到这个值（见 exitEdit）。
+       用途二：判断有没有改动（虽然当前代码没用到这个用途）。 */
+
     let originalAvatar = '';
+    /* 同上，记住原始头像地址，取消时恢复。 */
+
     let currentUsername = '';
+    /* 当前主页这个人的用户名。当前代码里赋值了但没实际读取——
+       属于「声明了但没用到」的变量。留着也无害。 */
+
     let myUid = null;
+    /* 「我自己」的 uuid。没登录时是 null。
+       用途：判断某个操作该不该显示（没登录就不显示关注按钮）。 */
+
     let isSelf = false;
+    /* 【关键状态】当前看的这个主页是不是我自己的。
+       这一个布尔值决定了整个页面的形态：
+         true  → 能编辑、能删文章、显示「我的文章」「我的留言」
+         false → 全部只读、显示「TA 的文章」「TA 的留言」、多出关注/拉黑
+       页面里几乎所有 if (isSelf) 都是在查这个值。 */
+
     let viewUid = null;      // 当前看的这个主页是谁的
+    /* 用 uuid 记下「正在看谁」。
+       为什么不用函数参数传？因为删除文章、刷新关注状态这些操作
+       发生在事件回调里，那时候拿不到 render() 的参数，
+       只能靠这个「共享的变量」来记住当前上下文。 */
+
     let rel = null;          // /relations 的结果
+    /* 【rel = relations】关注关系数据，从服务器拉回来的一坨 JSON。
+       大概长这样：{ following: [uuid...], followers: [uuid...], blocked: [uuid...],
+                     meFollowing: true, meBlocked: false }
+       注意它初始是 null（不是空对象），因为「还没加载」和「加载了但是空的」
+       是两种不同状态。代码里到处写 rel ? rel.following.length : 0
+       就是在区分这两种情况。 */
+
     let usersCache = null;   // /users 的名单，点开列表时用
+    /* 【缓存】全站用户名单。
+       为什么要缓存？因为用户可能反复点开「关注」「粉丝」「拉黑」三个列表，
+       每次都重新请求一遍全部用户，既慢又费流量。
+       第一次拿到就存起来，后面直接用。
+       代价：如果期间有新人注册，这个缓存就是旧的（stale）。
+       本页可以接受这个代价，因为新人注册不频繁。
+       这是典型的「空间换时间」+「用一致性换性能」的权衡。 */
 
     const el = {
+    /* 【元素索引表】把页面上所有要用到的元素，一次性集中查出来存好。
+       为什么这么做？三个理由：
+         1. document.getElementById() 是「在整棵树里搜索」，虽然很快但不是免费的。
+            一个页面可能触发几十上百次，缓存下来能省不少。
+         2. 避免打错字。如果不集中存，代码里散落着
+            document.getElementById('profileName')，某次手滑写成 'profileNam'，
+            得到 null，然后 null.textContent 报错——而且报错位置离打错的地方很远。
+            集中成对象以后，名字打错会变成 el.profileNam（undefined），
+            一眼就能看出这个 key 不存在。
+         3. 【命名一致性】把一长串 id 映射成短名字（profileAvatarImg → avatarImg），
+            后面代码读起来就短多了。
+       注意这是 const 声明的「对象常量」：
+       const 保证的是「el 这个变量永远指向同一个对象」，
+       内部属性是可以随便改的（el.name = xxx 完全合法）。
+       这点很多人搞混，以为 const 的对象不能改——能改，只是不能整个换掉。 */
       avatarImg: document.getElementById('profileAvatarImg'),
       avatarInput: document.getElementById('avatarInput'),
       avatarLabel: document.getElementById('avatarUploadLabel'),
+      /* 【注意这里】HTML 里的 id 是 avatarUploadLabel，
+         但对象里的 key 叫 avatarLabel（短一点）。
+         这就是这层映射的价值：把冗长的 HTML id 转成简短的代码用名。 */
       name: document.getElementById('profileName'),
       roleTag: document.getElementById('roleTag'),
       bioText: document.getElementById('bioText'),
@@ -217,97 +795,359 @@
       genericTitle: document.getElementById('genericTitle'),
       genericBody: document.getElementById('genericBody')
     };
+    /* 【对象语法提醒】
+         { 键: 值, 键: 值 }  → 键值对之间用逗号分隔
+         最后一个属性后面可以有逗号（这叫 trailing comma，完全合法，
+         而且加了反而更好——以后加新属性时不用改上一行）。
+       如果某个 id 在页面上不存在，对应的值就是 null，不会抛错。
+       所以「不报错」不等于「拿到了」——真要严谨应该在这里加个检查。 */
 
     const pencilSVG = '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>';
+    /* 【把图标存成字符串】
+       注意这两行的引号是单引号 '，里面又包含双引号 "——
+       JS 里单双引号完全等价，所以外面用单引号、里面用双引号最容易写，
+       不用做任何转义。
+       【为什么不直接写在 HTML 里然后显示/隐藏两个 svg？】
+       两种方案都行。这里选择「换 innerHTML」是因为只需要一个 svg 元素，
+       省一点 DOM 节点。代价是每次切换都要重新解析这段 HTML 字符串。 */
+
     const closeSVG  = '<path d="M18 6 6 18"/><path d="M6 6l12 12"/>';
+    /* 关闭用的叉号：两条交叉的线。
+       M18 6 6 18 → 从右上画到左下
+       M6 6l12 12 → 从左上往右下画
+       l（小写）表示相对坐标，L（大写）表示绝对坐标。 */
 
     /* ---------- 取数据 ---------- */
+    /* 下面这几个函数都是「取数据」层：
+       它们本身不碰页面，只负责把服务器给的数据整理成好用的形状。
+       这种分法叫【关注点分离】——
+         取数据的一层，画界面的一层。混在一起写，改个样子要动数据逻辑，
+         改个接口要动渲染代码，很快就成一锅粥。 */
 
     async function getMe() {
+    /* 【async 异步函数】前面加 async，函数内部就能用 await。
+       【await】意思是「等这个异步操作完成，拿到结果再往下走」。
+       关键理解：await 并没有把浏览器卡死，它只是把这个函数「暂停」了，
+       浏览器照样能响应用户点击、渲染动画，
+       等网络请求回来了再从这里接着往下跑。
+       这就像一个厨师炖汤：放上锅之后不等，转去做别的菜，
+       汤好了再回来处理。不是「站在锅前面盯着」。
+       还要知道：async 函数一定返回一个 Promise。
+       所以调用 getMe() 拿到的不是结果，而是「将来会有结果的凭证」，
+       必须 await 它才能拿到真正的值。 */
+
       const s = await SBAPI.getSession();
+      /* 【getSession】问一句「现在有没有人登录」。
+         返回登录会话对象，没人登录返回 null。
+         这里的 SBAPI 就是 /js/sb.js 里封装的那一层。
+         为什么要封装？因为直接调 Supabase SDK 会是这样：
+           supabase.auth.getSession()、supabase.from('messages').select()...
+         所有页面都这么写，一旦哪天要换数据库（比如从 Supabase 换到自己的后端），
+         全站几十个文件都要改。封装一层 SBAPI 之后，
+         只需要改 sb.js 一个文件，业务代码一个字都不用动。
+         这叫【抽象层】，或者说「中间人」。代价是多一层跳转，稍微绕一点。 */
+
       if (!s) return null;
+      /* 没登录就直接返回 null。
+         【提前返回 early return】这是个值得刻意养成的习惯：
+         把「特殊情况」在函数开头一口气处理掉，主流程就能保持「一路平铺」，
+         不用层层嵌套 if。新手最容易写出五层 if 嵌套，
+         而老手会把这些都改成提前 return，读起来清爽得多。 */
+
       const d = await SBAPI.me();
+      /* 【me】拿当前登录用户的详细信息（用户名、角色、UID 编号）。
+         返回的数据里带一个 ok 字段表示成功还是失败。 */
+
       return d.ok ? { uid: d.uid, uidNo: d.uidNo, username: d.username, role: d.role } : null;
+      /* 【这行做了两件事】
+         1. 判断成功与否：成功返回数据，失败返回 null。
+            为什么不直接 return d？因为 d 里可能还有一堆用不上的字段，
+            只挑需要的四个返回，调用方拿到的数据结构更干净。
+            【对象字面量简写】{ uid: d.uid } 其实可以简写成 { uid }（ES6 语法），
+            当变量名和属性名相同时就能省掉冒号后面的部分。
+         2. 【为什么一定要看 d.ok 而不能直接看 d？】
+            因为即使请求失败，服务器通常也会返回一个 JSON（比如 {ok:false, error:"..."}），
+            它依然是个「真值对象」。如果你写 if (!d) 判断，
+            请求失败时 d 是有值的，if 不会成立，你就把错误数据当成功用了。
+            这是前后端交互里最常见的坑之一，必须显式检查 ok。 */
     }
 
     async function getUserByUid(uid) {
       const d = await SBAPI.getUserByUid(uid);
       return d.ok ? d : null;
+      /* 这里返回整个 d（不是挑字段），因为渲染需要 bio、avatar、createdAt 等一堆字段，
+         干脆全给它。 */
     }
+
     // 网址里给的是数字 UID 就按 uid_no 查，给的是 uuid 就按 id 查
     async function getUserByWanted() {
       if (wantedNo) {
+      /* 【直接用 wantedNo 当条件】数字 0 是 falsy，但 UID 从 1 开始，
+         所以这里不会误判。如果 UID 可能为 0，就得写 wantedNo !== null。 */
         const d = await SBAPI.getUserByUidNo(wantedNo);
         return d.ok ? d : null;
       }
       if (wantedUuid) return await getUserByUid(wantedUuid);
+      /* 【这里 return await 有点冗余】直接写 return getUserByUid(wantedUuid)
+         效果几乎一样（因为函数本身就是 async，返回 Promise 会被自动摊平）。
+         唯一的区别是：加了 await，如果 getUserByUid 抛错，
+         错误会在这里被抛出（堆栈里会多一层）；不加则错误直接透传给调用方。
+         两种都能工作，属于风格问题。 */
       return null;
+      /* 【这行什么情况会执行？】
+         网址里既没数字 UID 也没 uuid。
+         但注意：这个函数只在 init() 的「情况三」（看别人主页）里被调用，
+         而那种情况下 rawUid 一定非空。
+         所以理论上走不到这里——属于「防御性兜底」，
+         万一以后代码改了，也不会返回 undefined 让调用方崩掉。 */
     }
 
     /* ---------- 入口：决定看谁的主页 ---------- */
+    /* init 是整个页面的启动函数，逻辑分三条岔路：
+         情况一：网址没 uid       → 看自己（必须登录）
+         情况二：网址的 uid 是我  → 看自己（可编辑）
+         情况三：网址的 uid 是别人 → 看别人（只读）
+       这种「先判断大前提，再分情况处理」的写法，
+       比一股脑塞进一个函数里强得多。 */
 
     async function init() {
       let me = await getMe();
+      /* 【这里用 let 不用 const】因为下面可能要改它吗？
+         实际上这个函数里没改过 me，用 const 更合适。用 let 略宽松。
+         【小知识】声明了但从不重新赋值的变量用 const，
+         是团队规范里最常见的一条——它能防止你手滑写错变量名造成意外覆盖。 */
+
       if (me) myUid = me.uid;
+      /* 【单行 if 不写花括号】这是合法的，但不推荐：
+         以后要在 if 里加第二行代码时，如果忘了补花括号，
+         第二行就跑到 if 外面去了，而且不报错——这种 bug 极难发现。
+         建议永远写花括号。
+         这行的作用：记下「我是谁」，后面判断权限全靠它。 */
 
       // 情况一：网址没写 uid → 看自己
       if (!rawUid) {
         if (!me) {
           alert('请先登录');
+          /* 【alert】浏览器原生的阻塞式弹窗。
+             它有三个特点：丑、不能定制、会卡住整个页面直到用户点确定。
+             生产环境一般都换成自己写的弹窗组件，
+             但在「必须让用户看到」的关键提示上用 alert 也很实用，
+             因为它不可能被样式问题搞消失。 */
+
           location.href = '/';
+          /* 【跳转页面】给 location.href 赋值就等于跳转。
+             这行执行后，浏览器开始加载新页面，但当前脚本还会继续往下跑一小会儿
+             （同步代码跑完才会真的切走）。
+             所以下面紧跟着写 return 是必要的，
+             不然接着执行 render(profile) 会在一个即将消失的页面上瞎操作。 */
+
           return;
         }
         isSelf = true;
+        /* 没写 uid 但已登录 → 这就是自己的主页。 */
+
         const profile = await getUserByUid(me.uid) || me;
+        /* 【这个写法很妙，值得单独讲】
+           await 的优先级高于 ||，所以实际是 (await getUserByUid(...)) || me。
+           意思：先去数据库取一份完整资料；
+           如果取不到（返回 null，比如网络抖动或用户记录异常），
+           就退回用登录时拿到的 me 对象。
+           这叫【兜底 fallback】，保证后面 render 一定有东西可渲染，
+           不会因为一个字段缺失就整页空白。
+           实战中这种写法能挡掉大量「偶发白屏」。 */
+
         // 把 uid 补进网址，方便复制给别人
         if (profile.uidNo || me.uidNo) history.replaceState(null, '', '/profile/?uid=' + (profile.uidNo || me.uidNo));
         else if (me.uid) history.replaceState(null, '', '/profile/?uid=' + me.uid);
+        /* 【history.replaceState】改地址栏的网址，但【不刷新页面】。
+           三个参数：
+             1. state  → 要跟这条历史记录绑定的数据，这里用不上，传 null
+             2. title  → 标题，现代浏览器都忽略它，传空字符串
+             3. url    → 新地址
+           为什么用 replaceState 而不是 pushState？
+             pushState 会新增一条历史记录，用户按「后退」会退回到没参数的地址，
+             然后又触发一次地址修正，可能来回打转。
+             replaceState 是「替换当前这条」，用户后退就直接离开这个页面，符合直觉。
+
+           为什么要改地址？两个好处：
+             1. 用户能直接复制地址栏的链接发给别人
+             2. 刷新页面后还能定位到同一个人（不会变成「看自己」）
+           为什么优先用 uidNo（数字）而不是 uuid？
+             数字短、好念、好记。uid=1 比 uid=8f14e45f-... 友好一万倍。 */
+
         render(profile);
         return;
       }
 
       // 情况二：网址写的就是自己 → 看自己（可编辑）
       if (me && ((wantedUuid && me.uid === wantedUuid) || (wantedNo && me.uidNo === wantedNo))) {
+      /* 【这行是本页最容易看错的判断之一，逐层拆】
+         外层 me && (...)  → 必须已登录，才有「自己」这个概念
+         里面是「或」的两个条件：
+           ① wantedUuid && me.uid === wantedUuid
+              网址给的是 uuid，且和我的一致
+           ② wantedNo && me.uidNo === wantedNo
+              网址给的是数字 UID，且和我的一致
+         为什么两边都要加 && wantedUuid / && wantedNo？
+           因为如果 wantedUuid 是 null，me.uid === null 在理论上可能成立
+           （虽然实际不会），加了 && 就彻底排除了这种可能。
+           这叫【防御性编程】：不指望「不可能发生」，而是明确写死「必须满足」。
+         【=== 严格相等】要求类型和值都一样。
+           用 == 会做类型转换，'1' == 1 是 true，'0' == false 也是 true，
+           这类隐式转换是无数 bug 的源头。现代 JS 规范里，=== 是唯一正确选择。
+         【注意这里的括号层级】外层 && 优先级低于 ||，
+           所以必须用括号把 || 的两边包起来，
+           否则会变成 (me && A) || B，意思完全错了。 */
+
         isSelf = true;
         render(await getUserByUid(me.uid) || me);
+        /* 同样的兜底套路：取到完整资料就用，取不到就用登录信息。
+           注意这里 me.uid 是 uuid，而情况一里也是 me.uid——
+           两次都是按 uuid 查，因为 uuid 才是主键。 */
         return;
       }
 
       // 情况三：看别人的主页（不需要登录）
       const other = await getUserByWanted();
+      /* 注意这里没有要求登录——看别人的主页是公开行为，不需要账号。
+         这是产品决策：公开页面（个人主页、文章、视频）不做登录墙，
+         既方便分享，也对搜索引擎友好。 */
+
       if (!other) {
+        /* 【用户不存在】比如别人分享了个 uid=9999 的链接，但没这个人。
+           这种「错误页」也要认真做，不能白屏。
+           下面这几行是逐块填内容，把整页变成一个大号的「查无此人」提示。 */
         el.name.textContent = '找不到这个用户';
         el.roleTag.style.display = 'none';
+        /* 身份铭牌没意义了，藏掉。 */
         el.uid.textContent = rawUid;
+        /* 把用户请求的那个 uid 显示出来，方便他核对是不是链接弄错了。 */
         el.createdAt.textContent = '—';
         el.bioText.textContent = 'UID ' + rawUid + ' 不存在，可能还没注册。';
+        /* 【字符串拼接】用加号把字符串和变量连起来。
+           注意 rawUid 是字符串，直接拼没问题；
+           如果它是数字，加号会变成「数学加法」而不是拼接——
+           这就是为什么 String() 或模板字符串（反引号）更保险。 */
         el.myMessages.innerHTML = '<p class="empty-hint">—</p>';
         el.myArticles.innerHTML = '<p class="empty-hint">—</p>';
+        /* 【innerHTML】把字符串当 HTML 解析后塞进元素里。
+           为什么这两处用 innerHTML 而不是 textContent？
+             因为它们要塞的是带标签的 HTML（<p class="empty-hint">），
+             textContent 会把整串原样当文字显示出来，页面上就会出现「<p class=...>」这种字符。
+           【安全提醒】innerHTML 是 XSS 攻击的头号入口。
+             如果这个字符串里拼进了用户输入的内容（比如用户名、留言），
+             而没做转义，用户就能注入一段脚本在你页面上跑。
+             本文件后面专门写了 escapeHTML 函数处理这个问题（下面会详细讲）。 */
         el.editFab.style.display = 'none';
+        /* 人都找不到，编辑按钮当然要藏掉。
+           【注意一个隐患】这里没有隐藏 avatarLabel（更换头像的 label）。
+           不过它本来就是隐藏的（HTML 里写了 display:none），所以实际没问题。
+           但这种「只藏一部分」的写法容易在以后改动时漏掉，值得留意。 */
         return;
       }
       isSelf = false;
+      /* 显式写 false（虽然初始值就是 false）。
+         好处：读代码的人看到这行，立刻知道「这条路径是看别人」，
+         不用回头去翻初始值。这种「意图明确」比省一行代码重要。 */
       render(other);
     }
 
     /* ---------- 渲染 ---------- */
+    /* render 是「把一份数据变成一屏界面」的函数。
+       注意它只有这一个入口，所有数据都从参数 data 进来，
+       内部不去请求任何东西（除了最后几行委托给 loadXxx）。
+       这种「纯渲染」的设计有个大好处：
+       想预览效果，随便造一个假 data 对象传进去就行，不用搭后端。 */
 
     function render(data) {
       currentUsername = data.username;
       el.name.textContent = data.username;
+      /* 【textContent vs innerHTML】这是必须分清的一对：
+           textContent → 把内容当【纯文本】，所有标签原样显示成文字，最安全
+           innerHTML   → 把内容当【HTML 代码解析】，标签会变成真元素，最危险
+         凡是展示「用户输入的内容」（用户名、留言、标题、签名），
+         一律用 textContent，天然防住 XSS。
+         凡是需要拼装复杂结构（一堆 div 套 span），才用 innerHTML，
+         而且里面的每个用户数据都必须先转义。
+         这个区分能挡掉网页安全漏洞里最常见的那一大类。 */
+
       document.title = isSelf ? '个人主页 · 乘法' : (data.username + ' 的主页 · 乘法');
+      /* 动态修改标签页标题，做出「千人千面」的效果。
+         看自己 → 「个人主页 · 乘法」
+         看别人 → 「张三 的主页 · 乘法」
+         这对分享很重要：链接发出去，聊天软件抓的就是这个标题。 */
+
       el.uid.textContent = data.uidNo || '—';
+      /* 【|| 兜底】uidNo 是 0 或空时显示破折号。
+         注意陷阱：如果 uidNo 真的可能是 0，|| 会把它变成 '—'。
+         这里 UID 从 1 开始，所以安全。
+         更严谨的写法是 data.uidNo ?? '—'（空值合并运算符），
+         它只在 null/undefined 时兜底，不会把 0 和 '' 吃掉。 */
       el.createdAt.textContent = data.createdAt || '—';
 
       const role = data.role || 'user';
+      /* 角色兜底成普通用户。这样下面判断时不用到处写 data.role === 'owner'，
+         万一 role 是 undefined，也自然走到「普通用户」分支。 */
       const bio = String(data.bio || '').trim();
+      /* 【这一行有三层防护，值得逐层看】
+         1. String(...)
+            如果 data.bio 是数字、null、或者别的类型，统一转成字符串。
+            为什么要先 String 再 trim？因为如果 bio 是数字（虽然不该发生），
+            数字没有 trim 方法，直接调会报错。
+         2. data.bio || ''
+            空值兜底成空字符串，让 String() 有东西可转。
+         3. .trim()
+            去掉首尾空白。
+            【为什么必须 trim？】用户可能只敲了几个空格就当签名提交了。
+            不 trim 的话，bio 里有一个空格，它是「真值」，
+            下面 if (bio) 就会成立，页面就会显示一块看不见内容的铭牌。
+            用户看到的效果是「铭牌突然出现但什么都没有」，非常迷惑。
+            trim 之后，纯空白变成空字符串（falsy），走「没写签名」分支，正确。 */
+
       el.roleTag.className = 'role-tag';
+      /* 【重置 class】把 class 恢复成初始状态。
+         这是「多次复用」的关键一步：
+         下面会根据不同情况加 role-bio / role-owner / role-admin，
+         如果不清空，第二次渲染时旧的 class 会累积在那，
+         上一个用户的「站长」样式会留在下一个用户身上。
+         【注意一个真实隐患】这一行只重置了 className，
+         但【没有重置 style.display】。
+         如果上一次渲染走的是「普通用户没写签名」分支，
+         把 display 设成了 'none'，那么这次就算有 bio，
+         元素也还是隐藏的——因为下面只改 textContent 和 class，没把 display 改回来。
+         当前页面里 render 基本只调一次（保存成功时才会再调一次 init），
+         所以实际很难触发。但这是设计上的漏洞，
+         严格来说这里应该加一句 el.roleTag.style.display = ''。 */
+
       el.roleTag.removeAttribute('title');
+      /* 【removeAttribute】删掉一个属性。为什么标题（title）也要清？
+         因为 title 是鼠标悬停时的提示文字。
+         如果不删，上一次渲染留下的旧签名会继续在悬停时冒出来，
+         用户会看到「悬停显示的是别人的签名」这种诡异现象。 */
+
       if (bio) {
         // 铭牌优先显示本人在 users.json 里写的签名，没写才退回身份标签
         el.roleTag.textContent = bio.length > 20 ? bio.slice(0, 20) + '…' : bio;
+        /* 【三元 + slice】超过 20 个字就截断加省略号。
+           【.slice(0, 20)】从索引 0 开始取到索引 20（不含 20），也就是前 20 个字符。
+             索引从 0 开始数，所以 slice(0, 20) 是第 1 个到第 20 个。
+           【为什么不直接用 CSS 的省略号三件套？】
+             因为这个元素是「行内标签」，宽度由内容撑开，
+             而铭牌这个位置需要「宽度可控、不撑破布局」。
+             用 JS 截断能保证长度绝对安全，不依赖父容器的宽度。
+             代价是它按字符数算，不看实际像素宽度——
+             如果全是「W」这种超宽字符，视觉上还是可能偏长。
+             两种方案各有取舍，这里选了更稳的那个。 */
         el.roleTag.classList.add('role-bio');
+        /* 【classList.add】给元素追加一个 class。
+           和 className = 'xxx' 的区别：add 是「追加」，不会覆盖已有的 class。
+           这就是为什么上面要先 className = 'role-tag' 重置——
+           用 add/remove 操作，就必须自己管好重置。 */
         el.roleTag.title = bio;
+        /* 完整签名挂在 title 上，鼠标悬停就能看到全文。
+           这是「截断 + 悬停看全文」的标准做法。
+           注意：手机上没有 hover，这个全文就看不到——
+              所以重要内容不能只靠 title 传达。 */
       } else if (role === 'owner') {
         el.roleTag.textContent = '站长';
         el.roleTag.classList.add('role-owner');
@@ -315,32 +1155,62 @@
         el.roleTag.textContent = '管理员';
         el.roleTag.classList.add('role-admin');
       } else if (role === 'owner') {
+      /* 【这里有个重复分支】和上面第一个 role === 'owner' 完全一样。
+         因为前面的 owner 分支已经拦住了所有 owner 情况，
+         这个 else if 永远不可能成立——【死代码】。
+         应该是复制粘贴时留下的。不影响功能，但可以删掉。
+         加注释时我发现了它，但按你的要求不动逻辑，只标注在这里。 */
         el.roleTag.textContent = '站长';
         el.roleTag.classList.add('role-owner');
       } else {
         // 普通用户又没写签名 → 铭牌整个不显示
         el.roleTag.style.display = 'none';
+        /* 【注意这里又是那个隐患】这里把 display 设成 none，
+           但函数开头没有重置它。
+           所以「先渲染一个有签名的用户，再渲染一个没签名的用户」时，
+           第二次会因为 display 是 'none'，导致铭牌不显示——
+           而这两个用户是在同一个页面里连续 render 才可能发生的。
+           当前流程里 render 每次页面加载只跑一次，
+           所以是潜在问题，不是现实问题。 */
       }
 
       const avatarSrc = fixAvatar(data.avatar);
+      /* 把数据库里的头像字段（可能是空、base64、绝对 URL、相对路径）
+         统一处理成「能直接塞进 img 的地址」。逻辑见上面的 fixAvatar。 */
       el.avatarImg.src = avatarSrc;
       originalAvatar = avatarSrc;
+      /* 记下当前值，编辑模式下点「取消」要恢复到这里。
+         注意记的是【处理后的地址】，不是原始字段——
+         因为恢复时直接赋值给 img.src，必须是能用的地址。 */
 
       if (data.bio && data.bio.trim()) {
         el.bioText.textContent = data.bio;
       } else {
         el.bioText.textContent = '这个人很懒，什么都没写。';
       }
+      /* 【这段和上面 bio 的判断重复了】
+         上面已经算好了 const bio = String(data.bio || '').trim()，
+         这里完全可以写 el.bioText.textContent = bio || '这个人很懒，什么都没写。';
+         现在这样写功能一样，只是多算了一次。
+         不过程序上没坏处，属于「可以更简洁」而不是「有 bug」。 */
       el.bioInput.value = data.bio || '';
+      /* 【.value】表单控件的值。textarea 用 .value 而不是 textContent，
+         因为 textarea 的内容就是它的 value。
+         注意：如果这里用 textContent 赋值，看起来也能显示，
+         但用户一编辑就会出问题，而且后续 .value 读不到。 */
       originalBio = data.bio || '';
+      /* 记下原始签名，取消时恢复。 */
 
       // 不是自己 → 只读：藏掉编辑按钮和"更换头像"
       if (isSelf) {
         el.msgTitle.textContent = '我的留言';
       } else {
         el.editFab.style.display = 'none';
+        /* 藏掉浮动编辑按钮。看别人主页当然不能改别人的资料。 */
         el.avatarLabel.style.display = 'none';
         el.msgTitle.textContent = 'TA 的留言';
+        /* 【TA】这是个很聪明的中文处理：不知道对方性别时用「TA」，
+           既不用纠结「他/她」，也比「该用户」自然得多。 */
       }
 
       el.artTitle.textContent = isSelf ? '我的文章' : 'TA 的文章';
@@ -350,95 +1220,397 @@
       loadRelations(data.uid);
       loadUserActs(data.uid);
       loadUserVideos(data.uid);
+      /* 【五个加载并行发起】注意这里全都没有 await。
+         意思是：发出去就不管了，谁先回来谁先画。
+         好处是快——五个请求同时在路上，总耗时约等于最慢的那一个。
+         如果一个个 await，总耗时是五个相加，慢好几倍。
+         【隐患】这五个请求互不依赖，所以并行没问题。
+         但要注意 loadArticles 里用到了 uid 参数，
+         而文章删除后的刷新用的是 viewUid（在 loadRelations 里才赋值）。
+         如果用户在 viewUid 赋值之前就点了删除（几乎不可能，因为按钮也是刚渲染出来的），
+         就会传 undefined 进去。属于理论上的竞态，实际难触发。
+         【另一个隐患】这五个函数里任何一个如果没写 try/catch 包住，
+         一旦抛错，整个 render 后面的代码就断了。
+         本文件里它们都各自写了 try/catch，所以安全。 */
     }
 
     /* ---------- 关注 / 拉黑 ---------- */
 
     async function loadRelations(uid) {
       viewUid = uid;
+      /* 【先把「当前看谁」记下来】而且是在发请求【之前】就记。
+         为什么顺序重要？因为如果放在请求回来之后再记，
+         万一请求很慢，这期间用户点了别的东西，viewUid 还是旧值。
+         先记下来，后面的操作立刻就有正确的上下文了。 */
       rel = null;
+      /* 【重置成 null】这是个容易被忽略但很关键的一步。
+         为什么要重置？因为如果这个函数被调用第二次（比如关注后刷新），
+         不清空的话，新数据回来之前页面显示的仍是旧数据。
+         更糟的是：如果第二次请求失败了，rel 里留着的旧值会让人误以为成功了。
+         先清空，配合下面的 catch 分支，就能正确处理「加载失败」的情况。 */
       try {
         const d = await SBAPI.getRelations(uid);
         if (d && d.ok) rel = d;
+        /* 【d && d.ok】先确认 d 存在，再确认 d.ok 为真。
+           为什么不直接写 if (d.ok)？因为如果 d 是 null/undefined，
+           d.ok 会直接抛「Cannot read properties of null」。
+           加了 d && 之后，d 是假值时直接短路，不会去碰 .ok。
+           这个模式在处理外部数据时应该成为肌肉记忆。 */
       } catch { /* 拿不到就显示 0 */ }
+      /* 【catch 后面什么都不写】这是 ES2019 的「可选 catch 绑定」语法，
+         允许省略错误参数。以前必须写 catch (e) {}，那个 e 没用还得声明。
+         【catch 里什么都不做是否合理？】这里合理，因为下面 paintRelations
+         会把 null 当成「全 0」来渲染。网络失败时显示 0 而不是报错弹窗，
+         对用户体验更好——关注数加载不出来，不该打断用户看主页。
+         但要清楚：这种「静默失败」会让问题难以被发现。
+         如果这是核心数据，至少应该 console.warn 一下方便排查。 */
       paintRelations();
+      /* 不管成功失败都画一次。失败时 rel 是 null，画出来全是 0。 */
     }
 
     function paintRelations() {
       const f  = rel ? (rel.following || []).length : 0;
+      /* 【这行有两层兜底】
+           rel ? ... : 0
+             没数据就 0
+           (rel.following || []).length
+             rel 有数据但 following 字段不存在（后端没返回）时，
+             先兜底成空数组，再取 .length。
+             如果直接写 rel.following.length，following 是 undefined 就报错了。
+           两层看起来啰嗦，但这正是「服务端数据不可全信」的务实写法：
+           你永远不知道某天后端改字段名之后会返回什么。 */
       const fo = rel ? (rel.followers || []).length : 0;
       const b  = rel ? (rel.blocked   || []).length : 0;
+      /* 变量名 f / fo / b 是 following / followers / blocked 的缩写。
+         【可读性提醒】这种缩写在这个短函数里还行（下面三行就用完了），
+         但如果函数很长，fo 和 f 一眼看不出区别，
+         那时候就该老老实实写全。变量名的作用是给人看的，不是给机器。 */
+
       document.getElementById('followingCount').textContent = f;
       document.getElementById('followersCount').textContent = fo;
       document.getElementById('blockedCount').textContent   = b;
+      /* 【注意这里又用了一次 getElementById，没走 el 索引表】
+         上面明明建了 el 对象，为什么这三处不用？
+         因为 el 对象里压根没存这三个元素——建表时忘了加。
+         这不算错（每次现查也能用），但和「集中管理」的初衷不一致，
+         属于可以优化的地方。 */
+      /* 【textContent = 数字】赋的是数字不是字符串，会自动转成字符串。
+         这点 JS 比很多语言宽松。 */
 
       // 看自己的主页不显示关注 / 拉黑；没登录也没法点
       if (!rel || isSelf || !myUid) {
+      /* 三个条件任一成立就隐藏按钮组：
+           !rel      → 关系数据没加载成功，连「对方是否已关注」都不知道，没法显示正确状态
+           isSelf    → 自己的主页，自己关注自己没意义
+           !myUid    → 没登录，点了也没身份可以记录
+         这三个判断把「按钮该不该出现」的所有情况都覆盖了。 */
         el.profileActions.style.display = 'none';
         return;
+        /* 【提前返回】后面的代码不用跑了。
+           这也是前面说的「早返回」习惯——把不满足的情况先排除掉，
+           后面的代码就不需要再包一层 if。 */
       }
       el.profileActions.style.display = 'flex';
+      /* 【display:flex】为什么不是 block？
+         因为这两个按钮要「横排并在一起」，flex 能让它们自动并排且带间距
+         （间距由 CSS 里的 gap 控制）。
+         用 block 的话每个按钮独占一行，变成两个竖着的大按钮。 */
       el.followBtn.textContent = rel.meFollowing ? '已关注' : '关注';
+      /* 【按钮文字反映状态】这是交互设计的基本原则：
+         按钮上写的应该是「当前状态」或者「点了会发生什么」，二选一并保持一致。
+         这里选的是「当前状态」：已关注 / 关注。
+         另一种做法是「动作」：取消关注 / 关注。
+         两种都行，但绝不能混用——最容易出错的场景是
+         「按钮写的是取消关注，但状态字段判断错了，点下去反而关注上了」。
+         用户一旦被骗过一次，就再也不信任这个按钮了。 */
       el.followBtn.className = 'act-btn' + (rel.meFollowing ? ' on' : '');
+      /* 【className 重新赋值】注意这是「覆盖」，不是追加。
+         所以每一部分都必须完整写出来：基础类 act-btn + 状态类 on。
+         如果写成 el.followBtn.className = ' on'，
+         基础的按钮样式就全丢了，按钮会变成一个丑陋的裸文字。
+         这也是为什么下面的 blockBtn 要写 'act-btn danger'——
+         danger 这个基础类不能丢。 */
       el.blockBtn.textContent = rel.meBlocked ? '取消拉黑' : '拉黑';
+      /* 注意这个按钮用的是「动作」语义（取消拉黑），
+         而上面关注按钮用的是「状态」语义（已关注）。
+         两个按钮语义不统一，是个小小的不一致——
+         用户看到「已关注」和「取消拉黑」并排，可能会稍微困惑一下。 */
       el.blockBtn.className = 'act-btn danger' + (rel.meBlocked ? ' on' : '');
     }
 
     async function toggleRelation(kind) {
+    /* 【kind 参数】传 'follow' 或 'block'，用一个函数处理两种操作。
+       为什么能合并？因为关注和拉黑的逻辑完全一样：
+         都是「调接口 → 成功就刷新关系数据」。
+       如果以后关注要做额外的事（比如发通知），就得拆开——
+       到时候再拆，别为了「将来可能要」提前把代码搞复杂。 */
+
       if (!myUid) return alert('请先登录');
+      /* 【return alert(...) 这个写法】利用 alert 返回 undefined（falsy），
+         return 出去等价于「到此结束」。
+         好处是省了一行 return。坏处是可读性差一点——
+         一眼看上去像是「返回 alert 的结果」。
+         更清楚的写法是 { alert('请先登录'); return; }。 */
       if (!viewUid) return;
+      /* 不知道看的是谁，没法关注。理论上不会发生（按钮显示前 viewUid 一定已赋值），
+         但多这一行能防住未来改动引入的意外。 */
+
       const btn = (kind === 'follow') ? el.followBtn : el.blockBtn;
+      /* 【三元选按钮】根据 kind 挑出要操作的那个按钮，
+         这样下面的禁用/启用代码只写一份。 */
+
       btn.disabled = true;
+      /* 【disabled 禁用】两件事同时发生：
+           1. 按钮变灰，用户看得出「正在处理」
+           2. 按钮不再响应点击
+         这一行是【防重复提交】的关键。
+         不加的话：用户点一下、觉得没反应、再点一下——
+         两个请求同时在飞，可能变成「关注了两次」或者「关注又取消了」。
+         这类 bug 在弱网环境下非常容易出现，
+         而开发者本机网速快，永远测不出来。
+         【更严谨的做法】还要设一个超时，
+         万一网络请求永远不回来（连接卡死），按钮就永久禁用了，
+         用户只能刷新页面。本页没做这个兜底。 */
+
       try {
         const d = (kind === 'follow') ? await SBAPI.follow(viewUid) : await SBAPI.block(viewUid);
         btn.disabled = false;
+        /* 【为什么在 alert 之前就恢复禁用状态？】
+           因为要先把界面恢复正常，再弹提示。
+           如果 alert 在前面，用户点确定后按钮才恢复，
+           这中间的时间差会让按钮看起来「卡住了」。
+           另一个原因：alert 是阻塞的，弹着的时候页面其他部分也是停的。 */
         if (!d.ok) return alert(d.error || '操作失败');
+        /* 失败就把服务器给的错误信息显示出来；
+           服务器没给就显示通用文案。
+           【为什么 d.error || '操作失败' 而不是直接显示 d.error？】
+           因为如果 d.error 是 undefined，alert 会显示「undefined」，
+           用户看到这个会以为是网站坏了。永远给个兜底文案。 */
         await loadRelations(viewUid);
+        /* 【重新拉一次关系数据】不是手动改本地状态，而是重新问服务器。
+           为什么？因为服务器可能做了额外的事：
+             比如 A 关注 B 之后，B 的粉丝数变了，
+             或者触发了「互相关注」之类的逻辑。
+           重新拉一次，「所见即服务器所说」，永远不会出现两边不一致。
+           代价是多一次网络请求，但换来的是准确性，值。
+           【更优的做法】服务器在响应里直接返回最新状态，省这一次请求。
+           如果这个按钮点得很频繁，就该那么优化。 */
       } catch {
         btn.disabled = false;
+        /* 【这里必须再恢复一次】因为上面那行 btn.disabled = false
+           在 try 里，如果请求抛错，那行根本执行不到，
+           按钮就会永久禁用——用户再也没法点关注了，只能刷新页面。
+           这是个真实的坑：凡是「禁用 → 操作 → 启用」的模式，
+           catch 里必须重复写一次恢复。
+           更好的写法是用 finally，那样无论成功失败都会执行：
+             finally { btn.disabled = false; } */
         alert('网络错误，请重试');
       }
     }
 
     el.followBtn.addEventListener('click', () => toggleRelation('follow'));
+    /* 【addEventListener】给元素挂一个「事件监听器」，三个部分：
+         1. 'click'      → 事件类型（点击）
+         2. 函数          → 事件发生时执行什么
+         3. （省略）      → 第三个参数是 options，比如 { once: true } 表示只触发一次
+       这里用【箭头函数】包一层，是为了传参数：
+         如果直接写 toggleRelation('follow')，那是在【现在立刻调用】它，
+         然后把返回值（Promise）当作监听器——完全错了。
+         包一层箭头函数，意思是「点击的时候再调用它」，这才是对的。
+       【箭头函数】x => y 是 function(x) { return y } 的简写。
+         它和普通函数还有一个重要区别：箭头函数没有自己的 this，
+         会用外层作用域的 this。在需要 this 的场景（比如对象方法里）不能乱用，
+         但在这种纯回调里用箭头函数最省事。 */
+
     el.blockBtn.addEventListener('click', () => toggleRelation('block'));
 
     /* ---------- 关注 / 粉丝 / 拉黑 三个数字点开看人 ---------- */
 
     const STAT_TITLE = { following: '关注', followers: '粉丝', blocked: '拉黑' };
+    /* 【映射表 / 字典】把「字段名」翻译成「给人看的文字」。
+       为什么不直接在代码里写 if (type === 'following') '关注'？
+       因为下面要在好几个地方用这个翻译（标题、空状态），
+       集中成一张表，改文案只改一处。
+       这种「配置和逻辑分离」的思路在写界面时非常有用，
+       以后要加第四种关系（比如「互关」），只改这张表就行，逻辑不用动。 */
+
     const STAT_EMPTY = {
       following: '还没有关注任何人',
       followers: '还没有粉丝',
       blocked: '还没有拉黑任何人'
     };
+    /* 【多行对象】属性多的时候换行写，末尾那个逗号是允许的（trailing comma）。
+       空状态文案要具体：
+         写「还没有关注任何人」比写「暂无数据」好一万倍——
+         后者是给程序员看的，前者是给人看的。
+         文案里带上动作（「关注」），用户立刻知道怎么让这里不再空。 */
 
     async function fetchUsers() {
       if (usersCache) return usersCache;
+      /* 【缓存命中】如果之前取过了，直接返回，不发请求。
+         【注意这里的返回】async 函数返回的即使是普通值，
+         外层的 await 也能正常拿到——async 会自动把它包成 Promise。
+         所以调用方写 const all = await fetchUsers() 完全没问题。 */
       try {
         const d = await SBAPI.getAllUsers();
         usersCache = d.ok ? d.list : [];
       } catch { usersCache = []; }
+      /* 【catch 里也写缓存】把空数组缓存起来。
+         为什么？否则每次网络失败，下次点开列表又重试一遍，
+         又慢慢等又失败，体验很差。缓存空数组相当于「放弃治疗」，
+         至少不会反复卡。
+         【代价】如果只是临时断网，恢复网络后这个列表还是空的，
+         必须刷新页面才能恢复。这是「用正确性换体验」的取舍，
+         在这个非核心功能上可以接受。 */
       return usersCache;
     }
 
     async function showStatList(type) {
       const uids = (rel && rel[type]) || [];
+      /* 【rel[type] 动态取属性】type 是 'following' / 'followers' / 'blocked'，
+         所以 rel[type] 等价于 rel.following 或 rel.followers。
+         【方括号访问】和点号访问的区别：
+           rel.following  → 属性名写死在代码里
+           rel[type]      → 属性名是个变量，运行时才确定
+         当属性名来自用户操作或者循环变量时，只能用方括号。
+         (rel && rel[type]) || []
+           两层兜底：rel 可能为 null（关系没加载成功），
+           rel[type] 可能不存在（后端没返回这个字段）。
+           最终保证 uids 一定是个数组，后面才能安全用 .length 和 .map。 */
+
       el.genericTitle.textContent = STAT_TITLE[type] + '（' + uids.length + '）';
+      /* 标题带数量，做成「关注（3）」的形式。
+         用户点开之前就知道里面有几个，不用点进去数。 */
       el.genericBody.innerHTML = '<p class="empty-hint">加载中…</p>';
+      /* 【先显示加载中，再弹窗】顺序很重要：
+         如果先弹窗再填「加载中」，用户会看到一瞬间的空白框闪一下。
+         先把内容准备好，再让框出现，视觉上更干净。 */
       el.genericModal.classList.add('show');
+      /* 【.show 类】控制弹窗显示/隐藏。
+         为什么用切换 class 而不是直接改 style.display？
+         因为弹窗通常带淡入淡出动画，而 display 从 none 到 block 是「瞬间」的，
+         动画根本没机会播放。
+         常见做法是：display 一直保持可见，用 opacity + visibility（或 transform）
+         配合 transition 来做动画，.show 类就是「动画到可见状态」。
+         这是 CSS 动画的一个经典限制，记住它。 */
 
       if (!uids.length) {
         el.genericBody.innerHTML = '<p class="empty-hint">' + STAT_EMPTY[type] + '</p>';
         return;
+        /* 【提前返回】列表是空的，就不用去拉全站用户名单了。
+           这个优化很重要：空列表时省掉一次「请求所有用户」的大开销。
+           写代码时凡是「后面要花大代价做某事」，都先看看能不能提前判断掉。 */
       }
 
       const all = await fetchUsers();
       const map = new Map(all.map(u => [u.id, u]));
+      /* 【这行是本函数最精妙的地方，必须逐层拆】
+         从里往外读：
+           1. all.map(u => [u.id, u])
+              【Array.map】把数组里的每个元素「转换」成另一个东西，
+              返回一个【新数组】，原数组不变。
+              这里把每个用户对象 u 转换成一个二元组 [u.id, u]。
+              结果大概是：[[ 'uuid1', {用户1} ], [ 'uuid2', {用户2} ], ...]
+           2. new Map(...)
+              【Map 映射表】一种「键 → 值」的数据结构，
+              构造时可以直接吃一个「二元组数组」。
+           3. 最终得到的 map 是：
+              Map { 'uuid1' => {用户1}, 'uuid2' => {用户2}, ... }
+
+         【为什么要先转成 Map？】为了查得快。
+           rel.following 里存的是【uuid 数组】（只有 id，没有名字）。
+           要给每个 uuid 显示名字，就得拿 id 去用户名单里找。
+           如果用普通数组查：uids.map(uid => all.find(u => u.id === uid))
+             数组的 find 是「从头一个个比对」，1000 个用户 × 50 个关注 = 5 万次比较。
+             Map 的 get 是哈希查找，几乎瞬间完成。
+           数据量小时差别看不出来，但这是必须养成的习惯——
+           因为这个函数每次点开列表都会跑。
+         【Map 和普通对象的区别】
+           对象的键只能是字符串（或 Symbol）；
+           Map 的键可以是任意类型（对象、数字都行）。
+           而且 Map 有 .size、有顺序保证，遍历起来更方便。 */
+
       el.genericBody.innerHTML = uids.map(uid => {
+      /* 【这是拼 HTML 的核心】下面用【模板字符串】拼出每个用户的 HTML。
+         拼完的数组再 .join('') 连成一整串（后面有）。
+         注意这整个回调里的注释都不能写进模板字符串里，
+         因为反引号里的内容会被原样当成 HTML 输出——写进去就变成页面上的文字了。 */
+
         const u = map.get(uid);
+        /* 拿 uuid 去映射表里查用户对象。查不到返回 undefined。
+           【什么时候会查不到？】
+             关注列表里有个 uuid，但那个用户已经被删除了。
+             这时候 u 是 undefined，后面的代码必须能扛住。 */
+
         const name = u ? u.username : ('UID ' + uid);
+        /* 【三元兜底】找到了就显示用户名，
+           找不到就退化成显示 uuid 本身。
+           这样即使数据不一致，用户看到的也是「一串编号」而不是「undefined」。
+           这类兜底在实战中非常重要：显示 undefined 会让用户觉得网站坏了，
+           显示一串编号至少看起来像个正经 ID。 */
+
         const shownUid = u ? (u.uid_no || uid) : uid;
+        /* 优先显示数字 UID（好记好念），没有就退回 uuid。
+           注意 u.uid_no || uid 这里也有那个陷阱：
+           uid_no 如果是 0 会被 || 吃掉。UID 从 1 开始，安全。 */
+
         const meMark = (uid === myUid) ? ' <span class="user-row-you">（我）</span>' : '';
+        /* 【在列表里标出「我自己」】
+           为什么需要？因为用户在「粉丝」列表里找自己是很常见的需求——
+           「这人关注了我，我认识吗？哦是我自己」。
+           提前标出来省得找。
+           注意这里的字符串开头有个空格 ' <span...'，
+           是为了和用户名之间留出空隙。这种「靠空格排版」比较脆弱，
+           更规范的做法是给 span 加 margin-left。 */
+        /* ============================================================
+           下面的 return 用【反引号模板字符串】拼 HTML。ES6 语法，三个核心能力：
+             1. 能换行（普通引号写多行要用加号拼接或者反斜杠续行）
+             2. 能用美元符号加花括号插值（把变量和表达式塞进去）
+             3. 里面可以直接写单双引号，不用转义
+           这里的 HTML 缩进会原样保留，但浏览器渲染 HTML 时
+           会把连续空白压缩成一个空格，所以缩进不影响最终样子。
+
+           【极其重要的注意事项】反引号内部【不能写注释】。
+             因为里面的一切都会被当成 HTML 文本输出到页面上，
+             在反引号里写两斜杠或斜杠星号，用户就会在页面上
+             看到这些符号本身。所以凡是解释模板结构的注释，
+             都必须像现在这样写在反引号【外面】。
+           ============================================================ */
+
+        /* 关于 ${encodeURIComponent(shownUid)}：花括号里可以是任意 JS 表达式，
+           会先算完再转成字符串塞进去。
+           【encodeURIComponent】把值做 URL 编码。
+             为什么必须编码？因为 uuid 里可能有特殊字符，
+             更危险的是用户名之类的自由文本——如果有人叫「a 和 b 等于 c」，
+             直接拼进 URL 会把参数结构搞乱，变成两个参数。
+             这个函数把特殊符号全变成百分号编码，中文也变成一串百分号。
+             浏览器访问时服务器会自动解码还原，用户看到的是正常的。
+           【哪些地方必须编码？】凡是「拼进 URL 的值」都要编码，
+             不管是查询参数、还是路径片段。这是防注入的基本动作。
+
+           关于 ${fixAvatar(u && u.avatar_url)}：
+             【u && u.avatar_url】安全取深层属性。
+             如果 u 是 undefined（用户已删除），u.avatar_url 会直接抛错。
+             写成 u && u.avatar_url 之后，u 假值时整个表达式返回 u，
+             不会去访问 .avatar_url，问题就绕过去了。
+             通用形式是 a && a.b && a.b.c，拿不准哪层会空时非常好用。
+             （新语法里可以写 u?.avatar_url，更简洁，但老浏览器可能不支持。）
+
+           关于图片的 alt="" ——注意这里是【空字符串】，不是省略。
+             为什么空？因为这张头像旁边紧跟着用户名，信息已经完整。
+             屏幕阅读器如果读「图片 头像 张三」，就重复了，反而聒噪。
+             判断 alt 该写什么的通用标准：这张图被删掉，信息会不会丢？
+               会丢 → 写描述；不丢 → 写空。装饰性图片一律空 alt。
+
+           关于 ${escapeHTML(name)}${meMark}：
+             name 要转义（它来自用户输入，可能是别人注册的名字），
+             meMark 不用转义——因为那是我们自己写死的字符串，
+             不含任何外部输入。这个区别很重要：只有外部数据才需要转义。
+
+           关于 ${escapeHTML(String(shownUid))}：
+             先 String 转字符串再转义，是为了让意图明确——
+             shownUid 可能是数字，数字走一遍 String 再说更保险。
+           ============================================================ */
         return `
           <a class="user-row" href="/profile/?uid=${encodeURIComponent(shownUid)}">
             <img class="user-row-avatar" src="${fixAvatar(u && u.avatar_url)}" alt="">
@@ -448,18 +1620,66 @@
             </span>
           </a>`;
       }).join('');
+      /* 【.join('')】把数组里的字符串拼成一整串。
+         参数 '' 表示「用空字符串连接」，也就是直接挨着。
+         如果传 '-'，就会在每个用户之间插一个减号。
+         【为什么必须 join？】因为 innerHTML 需要的是「一个字符串」，
+         而 map 返回的是「一个字符串数组」。
+         如果不 join 直接赋值，数组会被自动转成字符串，
+         元素之间自动加上逗号——页面上就会莫名出现一堆逗号。
+         这是新手非常常见的翻车点。 */
     }
 
     async function loadMessages(username) {
+    /* 【注意这个函数用 username 做参数，不是 uid】
+       因为后端 /messages 接口返回的数据里只有 author（作者名字），没有 authorUid。
+       所以只能靠「名字相同」来筛选。
+       【这是个设计缺陷】两个用户如果重名，留言就会混在一起。
+       正确的做法是后端在留言数据里带上 authorUid，按 id 筛。
+       当前代码是按名字筛（下面那行 filter），所以确实有这个隐患。
+       我没改逻辑，只在这里标注出来。 */
       try {
         const d = await SBAPI.getMessages();
+        /* 【拉全部留言】注意这里没有传分页参数，
+           等于把整个留言板都拉回来，然后在本地筛选。
+           留言多了会非常慢（这是真实的性能隐患）。
+           正确做法是让后端支持 ?author=xxx 的查询。
+           标注在这里，不改代码。 */
         const data = d.list || [];
+        /* 兜底成空数组，防止 d.list 是 undefined 时 .filter 报错。 */
         const mine = data.filter(m => m.author === username).reverse();
+        /* 【filter】筛出符合条件的元素，返回新数组，不改原数组。
+           【reverse】把数组顺序整个反转，【注意它会修改原数组本身】。
+             这里之所以安全，是因为 filter 已经生成了一个新数组 mine，
+             反转的是这个新数组，不影响 data。
+             如果写成 data.reverse().filter(...)，就会把原始数据也弄乱了。
+             这是 reverse / sort 这类「会修改自己」的方法必须警惕的地方。
+           为什么要 reverse？因为后端返回的通常是「时间正序」（老的在前），
+           而个人主页要显示「最新的在最上面」，所以反过来。
+           【更好的做法】让后端直接按时间倒序返回，前端就不用动了。 */
         if (!mine.length) {
           el.myMessages.innerHTML = '<p class="empty-hint">' +
             (isSelf ? '还没有发过留言' : 'TA 还没有发过留言') + '</p>';
+          /* 【字符串拼接跨行】用加号把两段接起来，
+             这样每行不会太长。
+             也可以改成模板字符串，会更清楚：
+               `<p class="empty-hint">${isSelf ? '还没有发过留言' : 'TA 还没有发过留言'}</p>`
+             效果一样。 */
           return;
         }
+        /* 【escapeHTML 在这里是必须的，不是可选的】
+           m.content 是用户输入的留言内容。
+           如果某个用户留言写的是「一段带尖括号的恶意代码」，
+           不转义的话这段代码会被当成真正的 HTML 解析，
+           里面的脚本就会在你的页面上、以你的身份执行——
+           这就是【XSS 跨站脚本攻击】。
+           转义之后，尖括号会变成 HTML 实体，
+           浏览器只会把它当文字显示，不会执行。
+           规则很简单：凡是用户输入的内容要拼进 innerHTML，一律先转义。
+
+           m.time（时间）理论上不是用户输入的，但「一律转义」比
+           「逐个判断哪些要转义」安全得多。防御要统一，不要留判断的口子。
+           （再次提醒：反引号内部不能写注释，所以这段解释放在外面。） */
         el.myMessages.innerHTML = mine.map(m => `
           <div class="my-msg-item">
             <div class="my-msg-text">${escapeHTML(m.content)}</div>
@@ -468,6 +1688,8 @@
         `).join('');
       } catch {
         el.myMessages.innerHTML = '<p class="empty-hint">加载失败</p>';
+        /* 【明确的失败提示】「加载失败」和「还没有」是两回事，
+           必须区分。混用会让用户以为自己的数据丢了。 */
       }
     }
 
@@ -475,15 +1697,67 @@
     async function loadArticles(uid) {
       const box = el.myArticles;
       if (!box) return;
+      /* 【防御性检查】如果页面上没有 id="myArticles" 这个元素，
+         下面所有 box.xxx 都会抛错。
+         这里提前判断，函数直接安全退出。
+         什么时候会没有？比如你把这段代码复制到别的页面复用，
+         而那个页面没这个容器。这种检查让函数更「抗复用」。 */
       if (!uid) { box.innerHTML = '<p class="empty-hint">—</p>'; return; }
+      /* 【没 uid 就没法查文章】显示一个破折号占位，直接退出。 */
       try {
         const d = await SBAPI.getArticles({ uid, limit: 50 });
+        /* 【对象简写】{ uid, limit: 50 } 里的 uid 是简写，
+           等价于 { uid: uid, limit: 50 }。
+           当变量名和属性名相同时就能这么省。
+           【limit: 50】只取前 50 篇。
+             为什么要有上限？因为一个高产作者可能有几千篇，
+             一次全拉回来页面直接卡死。
+             但这里的 50 是写死的，用户看不到「还有更多」——
+             这是当前实现的一个局限：超过 50 篇的文章在这个页面看不到。
+             正规做法是做分页或者「加载更多」。 */
         const list = (d && d.list) || [];
+        /* 同样的双重兜底：请求对象可能不存在，list 字段也可能不存在。 */
         if (!list.length) {
           box.innerHTML = '<p class="empty-hint">' +
             (isSelf ? '还没有写过文章，<a href="/pages/write.html">去写一篇</a>' : 'TA 还没有写过文章') + '</p>';
+          /* 【空状态里带行动入口】这是很好的设计：
+             不是干巴巴说「你没有文章」，而是直接给一个「去写一篇」的链接。
+             空状态是最好的引导时机——用户正因为「这里什么都没有」而需要下一步指引。
+             注意这个链接只在自己看自己时出现，看别人主页时不显示（别人不能替他写）。 */
           return;
         }
+        /* 下面的模板字符串里有四处值得单独说（都写在反引号外面）：
+
+           1. href="/pages/article.html?id=..." 跳转到文章详情页，用 id 定位。
+              注意 a.id 直接拼进去没有转义——因为 id 是数据库生成的主键，
+              一定是不含特殊字符的 uuid，所以安全。但这不是好习惯：
+              能转义就应该转义，因为你无法保证后端永远不换 id 的格式。
+              要严谨的话这里也该用 encodeURIComponent(a.id)。
+
+           2. SBAPI.fmtTime 是封装的「时间格式化」函数。
+              数据库里存的是 ISO 格式的时间串，直接显示给用户太难看，
+              要格式化成「2026-01-15 16:30」这样。
+              格式化放在前端做，是因为同一个时间在不同场景要不同格式，
+              后端返回原始值、前端按需展示更灵活。
+
+           3. a.chars、a.likes、a.favs、a.views 都是数字，直接插值不转义
+              （数字不可能带 HTML 标签）。兜底成 0 是因为老数据可能缺字段。
+              那几个符号 ♥ ★ 👁 分别代表点赞、收藏、浏览。
+              好处是省空间、横排好看；坏处是符号含义不是所有人都懂，
+              更规范的做法是加 title 属性说明。
+              另外 👁 这类 emoji 在苹果和安卓上长得不一样，
+              要求视觉绝对统一的话应该用 SVG 图标。
+
+           4. 【嵌套模板字符串】也就是 isSelf 那个三元：
+                条件 isSelf
+                成立 → 一整个嵌套的反引号模板字符串（那两个按钮）
+                不成立 → 空字符串
+              内层反引号是合法的（只要它在外层花括号里面），JS 能正确配对。
+              data-art 说明「这是编辑还是删除」，data-id 说明「操作哪篇文章」。
+              按钮本身【不挂监听器】，全靠父容器委托处理（下面马上讲）。
+              为什么不逐个挂？因为列表每次渲染都会重建按钮元素，
+              逐个挂既麻烦又会残留旧监听器。委托给父容器只需挂一次，永久有效。
+           ============================================================ */
         box.innerHTML = list.map(a => `
           <div class="my-art-item">
             <a class="my-art-title" href="/pages/article.html?id=${a.id}">${escapeHTML(a.title)}</a>
@@ -505,49 +1779,222 @@
     }
 
     el.myArticles.addEventListener('click', async e => {
+    /* 【事件委托 Event Delegation】本文件最重要的一个技术点，值得讲透。
+       问题：文章列表里的「编辑」「删除」按钮是动态生成的，
+             而且每次刷新列表都会全部重建（innerHTML 覆盖）。
+             如果给每个按钮单独挂监听器：
+               1. 每次渲染都要遍历一遍挂上去，麻烦
+               2. 旧按钮被覆盖后，它们的监听器还占着内存（内存泄漏）
+       解法：把监听器挂在【它们的父容器】上，靠事件冒泡来工作。
+       原理：【事件冒泡】——你点了一个按钮，这个点击事件会沿着
+             按钮 → 父元素 → 祖父元素 → ... → document 一层层往上传播。
+             所以在父容器上挂一个监听器，就能「接住」所有子元素的点击。
+             好比你在公司前台放一个人，所有来访者都要经过前台登记，
+             不用在每间办公室门口都安排一个人。
+       好处：
+         1. 只挂一次，永远有效（新生成的按钮自动被覆盖）
+         2. 内存友好（只有一个监听器）
+         3. 代码集中，好维护
+       这是所有「动态列表」的标准做法，必须掌握。 */
+
       const btn = e.target.closest('[data-art]');
+      /* 【这行是委托的关键，两个重点】
+         1. e.target
+            【事件目标】实际被点击的那个元素。
+            注意它可能是按钮本身，也可能是按钮里的文字节点，
+            甚至可能是按钮的某个子元素。所以不能直接假设 e.target 就是按钮。
+         2. .closest('[data-art]')
+            【closest】从当前元素开始，往上逐层找祖先元素，
+            返回第一个匹配选择器的元素；找不到返回 null。
+            '[data-art]' 是【属性选择器】——选中「带有 data-art 属性」的元素，
+            不关心它的值是什么。
+            为什么用 closest 而不是 e.target.dataset.art？
+            因为如果用户点的是按钮里的文字（比如 <button><span>删除</span></button>），
+            e.target 是那个 span，span 上没有 data-art 属性，就读不到了。
+            closest 会从 span 往上找到 button，稳妥。
+         【这行的完整含义】「不管点到按钮的哪个部位，都往上找到那个带 data-art 的按钮；
+          如果点到的是列表空白处（没有祖先带这个属性），返回 null」。
+         这个模式可以当模板背下来，写任何「动态列表 + 按钮」都用它。 */
+
       if (!btn) return;
+      /* 点到的地方不是按钮，什么也不做。
+         注意：这个判断必须有，否则下面 btn.dataset.art 会抛错
+         （Cannot read properties of null）。
+         这就是「事件委托」必须付出的一点代价：你得自己过滤掉无关的点击。
+         而逐个挂监听器就不需要这一步。两种方案各有取舍。 */
+
       const artId = parseInt(btn.dataset.id, 10);
+      /* 【dataset】读 data-* 自定义属性的标准方式。
+           元素上有 data-id="abc"，代码里就写 el.dataset.id
+           注意：HTML 里的连字符属性名，在 dataset 里会变成驼峰：
+             data-art-edit → dataset.artEdit
+           但 data-art 只有一个词，所以还是 dataset.art。
+         【parseInt(值, 10)】把字符串转成整数。
+           【第二个参数 10 是必须的】它表示「按十进制解析」。
+           为什么不写不行？因为老版本 JS 里，以 0 开头的字符串会被当成八进制
+           （parseInt('010') 返回 8 而不是 10），
+           以 0x 开头的会被当成十六进制。
+           这是历史遗留的坑，现在虽然默认按十进制了，
+           但显式写 10 是必须养成的习惯——很多代码检查工具会强制要求。
+           【注意这里其实有个小问题】文章的 id 看起来是 uuid（一串带字母的字符），
+           parseInt 一个 uuid 会得到 NaN（因为开头不是数字）。
+           如果 id 真是 uuid，这个 parseInt 就是错的，
+           变成 NaN 之后传给接口，删除和编辑都会失败。
+           这一点需要你实际跑一下确认——如果编辑/删除功能正常，
+           那说明 id 是数字；如果不能用，就是这里的问题。 */
+
       if (btn.dataset.art === 'edit') {
         location.href = '/pages/write.html?id=' + artId;
+        /* 编辑就是跳到写文章页，带上 id 参数。
+           写文章页读到 id 就知道「这是编辑模式」，会先把原文拉回来填进编辑器。
+           复用同一个页面来「新建」和「编辑」，是很常见的做法——
+           因为两者的界面几乎完全一样，没必要维护两份。 */
         return;
       }
       if (!confirm('确定删掉这篇文章吗？\n里面的图片视频也会一起删掉，删了找不回来。')) return;
+      /* 【confirm 确认框】比 alert 多一个「取消」按钮，返回 true/false。
+         【\n】换行符。在 confirm 的文本里有效，能让提示分行显示，
+           更容易读。
+         【提示文案的三个要素】这条写得很规范：
+           1. 说清后果：文章会删掉
+           2. 说清连带影响：里面的图片视频也会一起删（这个用户往往想不到）
+           3. 说清不可逆：删了找不回来
+         删除确认框最忌讳只写「确定删除吗？」——
+         用户根本不知道删了会损失什么，点快了就后悔。
+         【confirm 的局限】它只有两个按钮，也不能定制样式。
+         但它是唯一能在「页面已经切走」时仍然可靠的确认方式，所以依然常用。 */
+
       btn.disabled = true;
+      /* 防重复点击。删除操作尤其需要——用户点一次没反应，很容易连点。
+         连点两次的后果是发两个删除请求，第二个可能删到别的文章
+         （如果后端是按位置删的话），或者报一个莫名其妙的错。 */
       try {
         const d = await SBAPI.deleteArticle(artId);
         if (!d.ok) { btn.disabled = false; return alert(d.error || '删除失败'); }
+        /* 【一行里干三件事，稍微挤了】
+             1. 恢复按钮
+             2. 弹提示
+             3. return 退出
+           功能正确，但可读性一般。拆成多行会更好读，
+           不过这种「失败分支」写成一行也挺常见的，属于风格问题。 */
         loadArticles(viewUid);
+        /* 【删完重新加载列表】注意这里没有 await。
+           因为不需要等它完成，函数到这里就结束了。
+           加上 await 反而会让 catch 有可能捕获到 loadArticles 内部的错误
+           （虽然它自己已经 try/catch 了）。
+           【注意传的是 viewUid】不是 uid —— 这个函数没有 uid 参数。
+           viewUid 是 loadRelations 里赋的值，是「当前看谁」的 uuid。
+           如果这时候 viewUid 还是 null（关系数据还没回来），
+           那 loadArticles(null) 会走到 if (!uid) 分支，显示一个破折号。
+           不过实际上能点到删除按钮，说明列表早渲染好了，
+           而渲染列表时 viewUid 早在 render → loadRelations 里设过了，
+           所以这个风险在时间上被排除了（靠的是执行顺序，不是显式保证）。
+           【这种「靠时序凑巧成立」的代码很脆弱】稍微调整一下调用顺序就会出 bug。
+           严谨的做法是给 loadArticles 传明确的参数。 */
       } catch { btn.disabled = false; alert('网络错误，请重试'); }
+      /* 又是那个坑：catch 里必须恢复按钮，否则永久禁用。 */
     });
 
     /* ---------- 右栏：我点赞 / 收藏的文章 ---------- */
     async function loadUserActs(uid) {
       const card = document.getElementById('actsCard');
+      /* 【注意这里用的是 document.getElementById 而不是 el 对象】
+         因为 el 索引表里没有存这三个元素。
+         同一个文件里两种取元素方式混用，风格不统一——
+         属于可以整理的地方，但不影响功能。 */
       const likedBox = document.getElementById('likedList');
       const favedBox = document.getElementById('favedList');
       if (!card || !uid) { if (card) card.style.display = 'none'; return; }
+      /* 【这行写得很巧妙但有点绕，拆开看】
+           条件：card 不存在 或 uid 不存在
+           动作：如果 card 存在，就把它藏起来；然后退出
+         为什么要判断 card 存在再操作？因为 card 可能是 null，
+           null.style 会抛错。
+         为什么 uid 不存在也要藏卡片？因为不知道看谁，就没法加载任何数据，
+           与其显示五个「加载中」永远转圈，不如整个藏掉。
+         这种写法可以更清楚：
+           if (!card) return;
+           if (!uid) { card.style.display = 'none'; return; }
+         多一行但一眼看懂。功能完全一样。 */
+
       card.style.display = 'block';
+      /* 【显示卡片】走到这里说明 card 和 uid 都有，可以正常加载了。
+         注意 display:block 而不是 flex —— 因为 card 里是纵向排列的区块，
+         块级布局就够了。 */
       document.getElementById('likedLabel').textContent = isSelf ? '我赞过的文章' : 'TA 赞过的文章';
       document.getElementById('favedLabel').textContent = isSelf ? '我收藏的文章' : 'TA 收藏的文章';
+      /* 【小标题随视角变化】这是「看自己 / 看别人」两种模式在文案上的体现。
+         如果不改，看别人主页时也会显示「我赞过的文章」，
+         用户会困惑「我什么时候赞过这些」。
+         这类文案细节是产品成熟度的重要标志。 */
       likedBox.innerHTML = '<p class="empty-hint">加载中…</p>';
       favedBox.innerHTML = '<p class="empty-hint">加载中…</p>';
+      /* 重置成加载状态。
+         为什么必须重置？因为如果这个函数被调用第二次（比如切换用户），
+         不重置的话旧数据会一直显示到新数据回来，
+         用户会看到「闪一下别人的列表再变成新的」，很怪。 */
 
       try {
         const [la, fa] = await Promise.all([
           SBAPI.getLikedArticles(uid),
           SBAPI.getFavedArticles(uid)
         ]);
+        /* 【Promise.all + 数组解构】这是并发请求的标准写法，逐部分讲：
+           1. Promise.all([p1, p2])
+              【Promise】表示「一个将来才会有结果的操作」。
+              Promise.all 接收一个 Promise 数组，
+              等【全部】完成之后，返回一个结果数组（顺序和传入顺序一致）。
+              关键价值：两个请求【同时发出】，总耗时 ≈ 最慢的那个，
+              而不是两个相加。这是性能优化的基本手段。
+           2. 【数组解构】const [la, fa] = ...
+              把返回数组的第 0 个赋给 la，第 1 个赋给 fa。
+              不用写 results[0]、results[1]，更直观。
+           3. 【和 Promise.allSettled 的区别】（很重要）
+              Promise.all 是「一荣俱荣，一损俱损」：
+                只要有一个失败，整个就 reject，走到 catch，
+                你就【拿不到】另一个成功的结果了。
+              Promise.allSettled 是「全部等完，各自报告」：
+                返回 [{status:'fulfilled', value}, {status:'rejected', reason}...]，
+                成功的失败的你都能拿到。
+              这里用的是 all，所以如果「点赞列表」失败了，
+              「收藏列表」即使成功了也会一起变成「加载失败」。
+              对当前场景影响不大（两个都是次要数据），但要知道这个取舍。
+              如果希望「一个失败另一个照常显示」，就该换 allSettled。 */
         likedBox.innerHTML = actsRows((la && la.list) || []);
         favedBox.innerHTML = actsRows((fa && fa.list) || []);
+        /* 【(la && la.list) || []】又是那个双重兜底：
+             请求对象可能没有，list 字段也可能没有，
+             最终保证传给 actsRows 的一定是数组。
+           为什么兜底两次？因为 la 来自网络，你无法保证它一定长成你期望的样子。 */
       } catch {
         likedBox.innerHTML = '<p class="acts-empty">加载失败</p>';
         favedBox.innerHTML = '<p class="acts-empty">加载失败</p>';
+        /* 注意这里用的是 acts-empty 类（小号灰字），
+           而不是 empty-hint。因为这是右栏窄空间，
+           字号要更小一点才协调。 */
       }
     }
 
     function actsRows(list) {
+    /* 【把文章数组变成 HTML 字符串】这是个「纯函数」：
+         同样的输入一定得到同样的输出，不依赖任何外部状态，
+         也不修改传入的 list。
+       纯函数的好处是容易测试、容易复用、不会产生意外副作用。
+       写界面时尽量把「拼 HTML」的部分抽成这种纯函数。 */
       if (!list.length) return '<p class="acts-empty">还没有</p>';
+      /* 【空状态】「还没有」比「暂无数据」自然，
+         比空着不显示更明确。 */
+      /* 【仔细看下面那个计数逻辑，有问题】
+           里面写的是 a.likes || a.favs || 0
+           意思是：有 likes 就显示 likes，没有就显示 favs，都没有就 0。
+           但这个函数是「点赞列表」和「收藏列表」共用的同一个——
+           在「我赞过的文章」里显示 likes 是对的，
+           但在「我收藏的文章」里，它【仍然优先显示 likes】！
+           也就是说「我收藏的文章」列表里那个 ♥ 数字，
+           其实是这篇文章的点赞数，不是收藏数。用户会误解。
+           正确做法是把「要显示哪个数字」作为参数传进来。
+           这是真实存在的逻辑瑕疵，我在这里标注，不改代码。
+           （注释必须写在反引号外面，否则会变成页面上的文字。） */
       return list.map(a => `
         <a class="acts-item" href="/pages/article.html?id=${a.id}">
           <span class="t">${escapeHTML(a.title)}</span>
@@ -557,7 +2004,16 @@
 
     /* ---------- 右栏：我传 / 赞过 / 收藏的视频 ---------- */
     function videoRows(list) {
+    /* 和 actsRows 几乎一模一样，只是链接地址和图标不同。
+       为什么没有合并成一个函数？
+         因为文章和视频的数据字段、跳转地址、显示的数字都不一样，
+         强行合并要加一堆 if 判断，反而更难读。
+       【经验】两个函数长得像，不一定要合并。
+         等第三个类似的函数出现时，再考虑抽象。
+         过早抽象（DRY 过度）是比重复更麻烦的问题。 */
       if (!list.length) return '<p class="acts-empty">还没有</p>';
+      /* 同样有上面说的那个「♥ 到底是赞还是收藏」的问题。
+         ▶ 是播放图标（U+25B6），版权上没风险，可以直接用字符。 */
       return list.map(v => `
         <a class="acts-item" href="/pages/video.html?id=${v.id}">
           <span class="t">${escapeHTML(v.title)}</span>
@@ -570,6 +2026,18 @@
       const likedBox = document.getElementById('likedVideosList');
       const favedBox = document.getElementById('favedVideosList');
       if (!myBox || !uid) return;
+      /* 【注意这里只 return，没有藏卡片】
+         对比上面 loadUserActs 里会 card.style.display = 'none'。
+         为什么这里不藏？因为卡片是同一个（actsCard），
+         由 loadUserActs 负责显示/隐藏，这里不该重复管。
+         职责划分清楚了，但两个函数的写法不一致，读起来会疑惑一下。
+         【潜在问题】这两个函数是并行调用的（render 里同时发起），
+         谁先回来不一定。如果 loadUserActs 先回并且把卡片藏了，
+         而 loadUserVideos 后回又往里写内容，内容就写进了一个隐藏的卡片。
+         结果是「视频列表有数据但看不到」。
+         实际发生概率：只有 uid 为空时 loadUserActs 才藏卡片，
+         而那种情况下两个函数都会因为 !uid 提前退出，所以不会出问题。
+         属于设计上不严谨但实际不会触发的隐患。 */
       document.getElementById('myVideosLabel').textContent = isSelf ? '我传的视频' : 'TA 传的视频';
       document.getElementById('likedVideosLabel').textContent = isSelf ? '我赞过的视频' : 'TA 赞过的视频';
       document.getElementById('favedVideosLabel').textContent = isSelf ? '我收藏的视频' : 'TA 收藏的视频';
@@ -582,6 +2050,11 @@
           SBAPI.getLikedVideos(uid),
           SBAPI.getFavedVideos(uid)
         ]);
+        /* 【三个请求同时发】同样用 Promise.all + 解构。
+           注意第一个请求带了 limit: 50（同样是写死的上限）。
+           另外两个请求没传 limit，等于用后端的默认值——
+           这意味着「赞过的视频」可能比「传的视频」显示得更多或更少，
+           取决于后端默认值是多少。这种不一致最好统一。 */
         myBox.innerHTML = videoRows((mv && mv.list) || []);
         likedBox.innerHTML = videoRows((lv && lv.list) || []);
         favedBox.innerHTML = videoRows((fv && fv.list) || []);
@@ -589,29 +2062,101 @@
         myBox.innerHTML = '<p class="acts-empty">加载失败</p>';
         likedBox.innerHTML = '<p class="acts-empty">加载失败</p>';
         favedBox.innerHTML = '<p class="acts-empty">加载失败</p>';
+        /* 三个都写「加载失败」，因为用的是 Promise.all——
+           一个失败三个全废。如果换成 allSettled，
+           就可以只给失败的那个显示「加载失败」，其他正常显示。
+           这是 allSettled 存在的意义。 */
       }
     }
 
     /* 文本和属性里都能安全用的转义 */
     function escapeHTML(s) {
+    /* 【本文件的安全基石】这个函数防的是 XSS（跨站脚本攻击）。
+       原理：innerHTML 会把字符串当 HTML 代码解析。
+             如果有用户输入的内容是「一段带尖括号的代码」，
+             浏览器会老老实实执行它——这是网页最常见的安全漏洞。
+       解法：把 5 个有特殊含义的字符换成「HTML 实体」。
+             实体就是「用另一种写法表示同一个字符」，
+             浏览器渲染时会把 &lt; 显示成 <，但它不会被当成标签解析。
+       为什么注释里我不直接写那几个字符？
+         因为写在这段注释里会干扰阅读，而且有些工具会误判。
+         下面代码里能看到具体是哪五个字符。 */
+
       return String(s == null ? '' : s)
+      /* 【s == null】这个写法同时判断 null 和 undefined。
+         为什么用双等号？因为 == 会做类型转换，而 null == undefined 是 true，
+         所以这一个条件就能同时挡住两者。
+         这是 JS 里少数「建议用双等号」的场景之一，
+         而且必须明确写成 v == null（不能写 v == 'null'）。
+         另一种现代写法是 s ?? ''（空值合并），更清楚。
+         【为什么先 String()】如果 s 是数字，下面的 .replace 会报错
+         （数字没有 replace 方法）。先转成字符串就安全了。 */
+
         .replace(/&/g, '&amp;')
+        /* 【第一步必须是 & 而且必须第一个执行】这是本函数最关键的一点。
+           原因：后面几步生成的实体本身都包含 & 符号
+           （比如 < 会被换成 &lt;，里面就有个 &）。
+           如果先换了 < 再换 &，那刚生成的 &lt; 会被第二次替换成 &amp;lt;，
+           页面上就会真的显示「&lt;」这几个字符，而不是显示一个小于号。
+           所以顺序只能是：先处理 &，再处理其他的。
+           这个坑我在前面几个文件里也踩到过，值得记牢。 */
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
+        /* 尖括号是最危险的：它们是 HTML 标签的开始和结束。
+           不转义的话，用户输入「一段 script 标签」就能插入脚本。
+           这是 XSS 最主要的入口。 */
         .replace(/"/g, '&quot;')
+        /* 【为什么双引号也要转？】因为本函数的注释里说了「文本和属性里都能用」。
+           在 HTML 属性里，比如 <img src="VALUE">，
+           如果 VALUE 里有双引号，攻击者就能提前闭合属性，
+           然后塞进一个新的事件属性（比如 onerror=...），
+           这叫【属性型 XSS】。转义双引号就防住了。 */
         .replace(/'/g, '&#39;');
+        /* 单引号同理。为什么用 &#39; 而不是 &apos;？
+           因为 &apos; 是老版本 IE 不支持的实体，&#39; 是数字实体，
+           所有浏览器都认。虽然现在不用管 IE 了，但这个是历史惯例。 */
+      /* 【/g 标志】之前讲过的正则字面量，末尾那个 g 是【全局标志】。
+         不加 g 的话，replace 只会替换【第一个】匹配，
+         后面的全都不管——这是极其常见的 bug：
+         用户输入里有两个尖括号，只转义了第一个，攻击照样成立。
+         凡是做转义、替换所有出现的场景，/g 绝对不能忘。 */
     }
 
     function enterEdit() {
+    /* 【进入编辑模式】四步：切换两个元素的显示、显示按钮组、换图标。 */
       editing = true;
       el.bioText.style.display = 'none';
       el.bioInput.style.display = 'block';
+      /* 【显示/隐藏切换】同一块位置，两个元素轮流出现：
+           平时显示 <p>（只读文本），编辑时显示 <textarea>（输入框）。
+         这样用户视觉上感觉「签名变成了可编辑的」，
+         实际是两个元素在切换。这是最省事的做法。
+         【和 contenteditable 的对比】也可以直接让 <p> 可编辑，
+         但那会带来粘贴格式、光标位置、换行处理一堆麻烦。
+         对「只有 200 字的一段签名」来说，用 textarea 是正解。 */
       el.avatarLabel.style.display = 'flex';
+      /* 【只在编辑模式显示「更换头像」】
+         为什么是 flex 而不是 block？因为 label 里要「图标/文字」并排，
+         flex 能方便地让它们居中对齐。 */
       el.editActions.style.display = 'flex';
+      /* 显示保存/取消/修改密码这排按钮。 */
       el.editIcon.innerHTML = closeSVG;
+      /* 【换图标】把铅笔换成叉号。
+         视觉上传达「再点一次就退出编辑」。
+         这比在按钮上加文字「退出编辑」更省空间，也更符合浮动按钮的惯例。
+         【为什么是 innerHTML 而不是别的？】
+         因为 svg 里的 <path> 是子元素，换图标就是换子元素的内容。
+         innerHTML 会完整替换内部结构，顺带把旧元素彻底销毁，
+         不会留下任何残留。 */
     }
 
     function exitEdit() {
+    /* 【退出编辑模式】必须是【幂等】的——也就是「不管当前是什么状态，
+         调用它之后都变成非编辑状态」。
+       这不是多余的谨慎：exitEdit 会被多个地方调用
+         （点取消、点叉号、保存成功），
+       如果它假设「一定是从编辑模式进来的」，
+       某个调用路径下就会出问题。写成幂等的最安全。 */
       editing = false;
       el.bioText.style.display = 'block';
       el.bioInput.style.display = 'none';
@@ -619,48 +2164,184 @@
       el.editActions.style.display = 'none';
       el.editIcon.innerHTML = pencilSVG;
       el.bioInput.value = originalBio;
+      /* 【恢复原始值】这是取消的核心。
+         用户改了半天点取消，必须把内容恢复成打开时的样子。
+         如果不恢复，虽然界面回到了只读状态，
+         但下次再进编辑，输入框里还留着上次没保存的内容——
+         用户会以为修改奇迹般地保存了。 */
       el.avatarImg.src = originalAvatar;
+      /* 【恢复头像预览】用户选了一张新图片，图片立刻显示在预览里
+         （FileReader 读成 base64 直接赋值给 img.src）。
+         如果点取消，必须把预览换回原图，
+         否则会出现「已取消但头像看起来改了」的错乱状态。
+         注意：因为改动只在浏览器内存里，从没上传到服务器，
+         所以刷新页面也会恢复——但视觉上的即时反馈必须对。 */
     }
 
     el.editFab.addEventListener('click', () => {
       editing ? exitEdit() : enterEdit();
+      /* 【三元当 if 用】条件 ? 做A : 做B。
+         这里如果 editing 为真就退出，否则进入。
+         功能上等于：
+           if (editing) { exitEdit(); } else { enterEdit(); }
+         三元的优势是短；劣势是不能在里面写多行逻辑。
+         这种「只有两个动作」的开关场景，三元是很合适的。 */
     });
     el.cancelBtn.addEventListener('click', exitEdit);
+    /* 【直接传函数名】注意这里没有包箭头函数，因为不需要传参数。
+       直接把函数引用交给 addEventListener，点击时它会调用这个函数。
+       【为什么不能写 exitEdit()？】那样会在【现在】就调用一次，
+       然后把它的返回值（undefined）当成监听器注册，
+       结果就是「代码一跑到这行就执行了一次退出编辑」，而点击反而没反应。
+       这是新手最常犯的错误之一。判断标准很简单：
+         加括号 = 现在调用
+         不加括号 = 把函数本身交出去，等别人调用 */
 
     el.avatarInput.addEventListener('change', e => {
+    /* 【为什么要监听 change 而不是 input？】
+       input 事件在用户「每次输入/改变」时都触发（很频繁）；
+       change 事件在「值确定下来」时才触发。
+       对文件选择框来说，选完文件（关掉对话框）才算确定，
+       所以用 change 最合适。
+       如果用 input，某些浏览器可能在打开对话框的过程中就触发，拿到空文件。 */
+
       const file = e.target.files[0];
+      /* 【e.target.files】文件选择框里的文件列表（FileList 对象）。
+        为什么是「列表」？因为 input 可以加 multiple 属性让用户一次选多个文件。
+        这里没加 multiple，所以只有一个，取 [0]。
+       没选文件时这个列表是空的，files[0] 是 undefined。 */
       if (!file) return;
+      /* 用户点了取消，没选文件。什么也不做，
+         否则下面 file.type 会抛「Cannot read properties of undefined」。 */
+
       if (!file.type.startsWith('image/')) return alert('请选图片文件');
+      /* 【file.type】浏览器根据文件扩展名（有时是内容）猜出来的 MIME 类型，
+         比如 "image/png"、"video/mp4"。
+         【这个检查能挡住多少？】
+           它挡不住恶意用户——改个扩展名就能绕过，
+           所以服务器端必须重新校验（检查真实文件头）。
+           它主要的作用是「拦住普通用户的手滑」：用户想选头像却选了个 pdf，
+           立刻告诉他，省得传上去再失败。
+         【一个边缘情况】如果浏览器识别不出类型，file.type 会是空字符串 ''，
+           那 startsWith('image/') 是 false，会被拦下并提示「请选图片文件」。
+           这对用户来说有点冤（明明是图片），
+           但比放过去一个真的坏文件要好。 */
       if (file.size > 1024 * 1024) return alert('图片不能超过 1MB');
+      /* 【file.size】文件大小，单位是【字节】。
+         1024 * 1024 = 1,048,576 字节 = 1 MB。
+         【为什么写 1024*1024 而不是 1048576？】
+           因为前者一眼就能看出是「1MB」，
+           而且想改成 2MB 只改一个数字（1024 * 2 * 1024）比算字节数方便。
+         这种「让代码自己算」的写法比硬编码结果更好维护。
+         【1MB 合理吗？】对头像来说偏宽松了。
+           头像是要存在数据库里的（base64 编码后体积还要再大 33%），
+           1MB 的图片转成 base64 是 1.33MB 的字符串，
+           每次加载头像都要传这么多，很浪费。
+           正常头像 100KB 以内完全够用。 */
+
       const reader = new FileReader();
+      /* 【FileReader】浏览器提供的「读取本地文件」工具。
+        关键点：浏览器的安全模型下，JS 【不能】直接访问用户的文件系统路径。
+        你拿不到「C:\照片\头像.jpg」这个路径，也读不到文件内容，
+        只能通过 FileReader 让浏览器替你把文件内容读出来。
+        这是安全设计，不是限制。 */
       reader.onload = ev => { el.avatarImg.src = ev.target.result; };
+      /* 【onload 回调】文件读取完成后自动调用。
+         【ev.target.result】读出来的内容。
+         因为下面用的是 readAsDataURL，所以 result 是一串
+         "data:image/jpeg;base64,/9j/4AAQ..." 这样的【Data URL】。
+         这一整串就是图片本身（用文本编码表示），
+         可以直接赋给 img.src 显示，不需要任何服务器。
+         【好处】立刻能看到预览，用户体验好，而且不用先上传。
+         【代价】这串文本比原图大 33%（base64 编码的固有开销），
+           而且它是同步解析的，图片越大越卡。
+           所以大文件不适合用这个方案——这也是上面限制 1MB 的原因之一。 */
       reader.readAsDataURL(file);
+      /* 【readAsDataURL】真正开始读。
+         注意它是【异步】的：这一行执行完立刻返回，
+         文件还在后台读，读完了才调用上面的 onload。
+         所以千万不要在这行后面就去用 result——那时候还没有呢。
+         这行的顺序也必须想清楚：必须先设 onload，再调用读取方法。
+         如果反过来，可能文件读得很快，读完了你才开始设 onload，那回调就永远不触发了。 */
     });
 
     el.saveBtn.addEventListener('click', async () => {
       const bio = el.bioInput.value;
+      /* 从输入框读当前编辑的内容。 */
       const avatar = el.avatarImg.src;
+      /* 【这一行有个值得注意的地方】
+         img.src 读出来的是【绝对地址】，不是写进去的那个值。
+         比如 HTML 里写 src="/avatar-default.jpg"，
+         读出来是 "https://你的域名/avatar-default.jpg"。
+         所以保存的是完整 URL。虽然 fixAvatar 能处理这种情况
+         （它看到 http 开头就直接用），
+         但数据库里存的地址就变成了绝对地址——
+         以后要是换域名，这些写死的老域名头像就全挂了。
+         更安全的做法是保存相对路径。
+         不过如果用户是上传新图（base64），src 就是 data: 串，没这个问题。
+         当前代码能工作，但有这个长期隐患。 */
       try {
         const d = await SBAPI.updateProfile({ bio, avatar_url: avatar });
+        /* 【对象简写】{ bio, avatar_url: avatar }
+           bio 是简写（变量名等于属性名），
+           avatar_url 是完整写法（因为属性名带下划线，变量名没有）。 */
         if (!d.ok) return alert('保存失败：' + (d.error || '未知错误'));
+        /* 用冒号拼接错误前缀和后缀，比直接显示 error 更友好。 */
         originalBio = bio;
         originalAvatar = avatar;
+        /* 【更新「原始值」】保存成功后，当前值就成了新的「原始值」，
+           这样下次进编辑再点取消，恢复的是这次保存的内容，而不是更早的。
+           如果忘了这两行，用户会遭遇：
+             改一次 → 保存 → 再改 → 取消 → 内容退回到第一次修改之前。
+           这种 bug 非常让人抓狂，因为它看起来像「保存没生效」。 */
         // 铭牌跟着一起变，不用刷新页面
         const t = String(bio || '').trim();
         el.roleTag.className = 'role-tag';
         if (t) {
           el.roleTag.style.display = '';
+          /* 【style.display = ''】把行内样式清空，元素恢复成 CSS 决定的默认显示方式。
+             为什么要清空？因为如果之前因为「没写签名」被设成了 'none'，
+             现在有签名了必须显式恢复显示，否则签名写好了铭牌还是看不见。
+             【为什么是 '' 而不是 'block'？】因为空字符串表示「没有行内样式」，
+             元素会回到样式表里的设定。如果强制写 'inline-block'，
+             万一以后 CSS 改了显示方式，这里就写死了不跟着变。
+             这就是为什么上面 render 里那个「忘记重置 display」是隐患——
+             这里倒是记得重置了。 */
           el.roleTag.textContent = t.length > 20 ? t.slice(0, 20) + '…' : t;
           el.roleTag.classList.add('role-bio');
           el.roleTag.title = t;
+          /* 这一整段和 render 里的逻辑完全重复了。
+             【重复的代价】以后要改「截断长度从 20 改成 30」，
+             必须记得两个地方都改。忘了其中一个，就会出现
+             「刚保存时截断 30 字，刷新后变回 20 字」的诡异现象。
+             更好的做法是把这段抽成一个函数（比如 setRoleTag(t)），
+             两边都调它。这是「重构」最典型的机会。 */
         } else {
           el.roleTag.style.display = 'none';
           el.roleTag.removeAttribute('title');
+          /* 清空了签名，铭牌整个隐藏，标题提示也要删掉。 */
         }
         el.bioText.textContent = t || '这个人很懒，什么都没写。';
+        /* 【同步更新只读文本】因为退出编辑模式后显示的是那个 <p>，
+           它的内容是上次 render 时填的旧值。
+           如果不同步更新，用户会看到「保存成功了，但显示的签名还是旧的」——
+           直到刷新页面才对。这种「保存了但看起来没生效」的体验极其糟糕。 */
         alert('保存成功');
         exitEdit();
+        /* 【先退出编辑再重新 init】顺序很重要：
+           如果先 init 再 exitEdit，init 里 render 会重新填 bioText，
+           然后 exitEdit 又把 bioInput.value 恢复成 originalBio——
+           而这时候 originalBio 已经是新值了，所以也没问题。
+           但为了逻辑清晰，先收起编辑界面再刷新数据更符合直觉。 */
         init();
+        /* 【重新走一遍完整初始化】为什么不只是刷一部分？
+           因为改了签名会影响铭牌、改了头像会影响头像显示，
+           这些都是 render 里的逻辑。
+           直接再跑一次 init，能保证所有地方都同步到最新状态。
+           【代价】init 会重新请求一堆接口（关系、文章、留言、视频……），
+           消耗比较大。更精细的做法是只更新变化的部分。
+           但对「保存个人资料」这种低频操作来说，重新 init 完全能接受，
+           而且最不容易漏掉什么。这是典型的「用性能换正确性」。 */
       } catch {
         alert('网络错误，保存失败');
       }
@@ -668,31 +2349,118 @@
 
     el.pwdBtn.addEventListener('click', async () => {
       const newPassword = prompt('请输入新密码（至少 6 位）');
+      /* 【prompt】浏览器原生输入框，返回用户输入的字符串；
+         点取消返回 null。
+         【用它做密码输入的问题】输入的字符是【明文显示】的，
+         旁边的人能看到。这是个真实的安全隐患。
+         正规做法是用自己做的弹窗 + input type="password"。
+         这里用 prompt 是图省事，属于可以改进的地方。 */
       if (!newPassword) return;
+      /* 【取消或输空】注意这个判断同时挡住了 null 和 ''。
+         如果用户敲了一个空格，它是 " " —— 真值，会通过这个判断，
+         然后下面的 length 检查会因为长度 1 < 6 而拦住。侥幸挡住了。 */
       if (newPassword.length < 6) return alert('新密码至少 6 位');
+      /* 【.length】字符串长度。
+         【只检查长度是不够的】真正的密码强度校验还应该看：
+           有没有数字、有没有大小写混合、是不是常见弱密码（123456）、
+           是不是和用户名相同……
+         但即使只做长度检查，也比不检查好。
+         另外【必须强调】：密码强度校验一定要在【服务端】也做一遍，
+         因为前端的一切都能被绕过。 */
       try {
         const d = await SBAPI.changePassword(newPassword);
+        /* 【明文传输密码？】这里是传给自己封装的接口，
+           实际用的是 HTTPS，传输过程中是加密的，所以安全。
+           但如果哪天有人把这个网站改成 http，密码就会明文飞过网络。
+           这就是为什么现在全站强制 HTTPS。 */
         if (!d.ok) return alert('修改失败：' + (d.error || '未知错误'));
         alert('密码已修改');
+        /* 【改完密码后应该做什么？】规范的做法是：
+           让旧密码登录的所有会话失效，强制重新登录。
+           否则如果密码是因为「觉得被盗了」才改的，
+           攻击者的登录状态还在，改了也白改。
+           这里没做这一步——属于安全上的欠缺。 */
       } catch {
         alert('网络错误，修改失败');
       }
     });
 
     document.querySelectorAll('.profile-stat').forEach(stat => {
+    /* 【querySelectorAll】按 CSS 选择器找元素，返回所有匹配的【NodeList】。
+       '.profile-stat' 是类选择器，找到页面上所有带这个类的元素——也就是三个数字块。
+       【NodeList 不是数组】这点很重要：
+         它有 forEach（所以这里能直接用），
+         但没有 map / filter / reduce，也不能用 Array 的其他方法。
+         需要真数组时得写成 [...document.querySelectorAll(...)] 或者 Array.from(...)。
+       【和 getElementsByClassName 的区别】querySelectorAll 返回的是「静态快照」，
+         之后新加的元素不会出现在这个列表里；
+         getElementsByClassName 是「实时集合」，DOM 变了它也跟着变。
+         大多数情况静态的更不容易出意外。 */
       stat.addEventListener('click', () => showStatList(stat.dataset.type));
+      /* 【闭包 closure】这里的 stat 是 forEach 回调的参数。
+         每次循环都会创建一个新的作用域，各自捕获自己那一轮的 stat。
+         所以三个监听器分别记住了各自对应的元素，不会互相干扰。
+         【如果是 var 会怎样？】var 是函数级作用域，三轮循环共用一个变量，
+         等用户点击的时候，循环早跑完了，stat 是最后一个元素——
+         点哪个块都只会打开「拉黑」列表。这是经典的【var 闭包陷阱】，
+         let/const 出现之后才彻底解决。这也解释了为什么 forEach 的回调
+         用 let/const 声明参数（它本来就是参数，天然每轮独立）。
+         【注意 stat.dataset.type】读的是 HTML 里的 data-type 属性，
+         值就是 'following' / 'followers' / 'blocked'。 */
     });
 
     el.genericClose.addEventListener('click', () => el.genericModal.classList.remove('show'));
+    /* 点 × 关闭弹窗。移除 .show 类就等于让淡出动画反向播放到隐藏。 */
     el.genericModal.addEventListener('click', e => {
       if (e.target === el.genericModal) el.genericModal.classList.remove('show');
+      /* 【点遮罩关闭弹窗，但点框内不关闭】
+         这行的核心是【e.target === el.genericModal】。
+         e.target 是「实际被点击的元素」。
+         如果用户点的是遮罩区域，e.target 就是外层的 genericModal 本身，相等 → 关闭。
+         如果用户点的是白色框里面的任意位置（标题、内容、列表），
+         e.target 就是那个具体的子元素（或者 .generic-box），
+         不等于 genericModal → 不关闭。
+         【为什么需要这个判断？】如果只写「点哪都关闭」，
+         用户在框里选文字、点空白处想复制内容，弹窗突然就没了，非常烦。
+         【这个模式是弹窗的标准做法】任何自己实现的弹窗都该这么写。
+         注意必须用 === 精确比较，不能用 closest 之类的模糊判断。 */
     });
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') el.genericModal.classList.remove('show');
+      /* 【Esc 关闭弹窗】这是键盘用户的必备交互。
+         鼠标用户点个 × 就行，但键盘用户（或者习惯用键盘的人）
+         期待按 Esc 能关掉浮层——这是几乎所有系统和软件的通用约定。
+         【e.key】按下的键名。
+           这里要注意：Esc 键的 key 值是 'Escape'，不是 'Esc'，也不是 'ESC'。
+           这些东西的大小写和拼写必须精确，写错了就永远不触发，而且不报错。
+           常见值：'Enter'、'Tab'、' '（空格就是一个空格字符）、
+                  'ArrowUp'、'Backspace'、'Delete'。
+         【注意这个监听挂在 document 上】
+         因为用户按 Esc 的时候，焦点可能在页面上任何地方，
+         挂在 document 上才能保证一定接收到。 */
+      /* 【小瑕疵】这里没有判断弹窗是否打开。
+         用户按 Esc 时，即使弹窗没开，也会执行「移除 .show」——
+         对一个本来就没有 .show 的元素移除它，是无害的空操作。
+         所以功能上没问题，只是多做了一次无用功。 */
     });
 
     init();
+    /* 【启动】页面加载到最后，执行 init，正式开始干活。
+       为什么不放在文件开头？
+       因为 init 里会调用 render，render 会用到 el 对象，
+       而 el 对象在文件中间才初始化。
+       如果 init() 写太早，执行到的时候 el 还是 undefined，
+       整个页面直接报错。这就是【执行顺序】的重要性——
+       声明和使用之间必须有正确的先后关系。
+       放到最后一行是最稳妥的：所有变量都准备好了，再开跑。 */
   })();
+  /* 【这里收尾两次】
+       }  → 关闭 function 的函数体
+       )  → 关闭开头那个包装函数声明的括号
+       () → 立刻调用
+       最后的 ; → 语句结束
+     注意它是 IIFE，所以内部所有变量的作用域到此为止，外面再也访问不到了。
+     用浏览器控制台试 el 或 render，会得到 undefined——这是对的，不是 bug。 */
   </script>
 
 </body>
