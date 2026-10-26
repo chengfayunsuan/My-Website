@@ -1,172 +1,338 @@
 <!DOCTYPE html>
+<!-- 【<!DOCTYPE html>】固定第一行，声明 HTML5 文档。 -->
+
 <!-- ============================================================
      文件：test/users.html（用户名单页）
-     作用：列出所有注册用户及其身份（站长 / 管理员 / 普通用户）。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：列出所有注册用户及其身份（站长 / 管理员 / 普通用户），可切换 UID 正序/倒序。
+     说明：这里写的注释不会显示在页面上，只给看代码的人（也就是你）看。
      ============================================================ -->
+
 <html lang="zh-CN">
+<!-- 【lang="zh-CN"】声明内容为简体中文。 -->
+
 <head>
+<!-- 【<head>】设置区，内容不显示在页面上。 -->
+
 <meta charset="UTF-8">
+<!-- 声明 UTF-8 编码，否则中文乱码。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 手机适配：页面宽度 = 屏幕宽度，初始不缩放。 -->
+
 <title>用户名单 · 乘法</title>
+<!-- 标签页标题。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 标签页小图标。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 引入公共样式表；?v=26 是防缓存版本号。 -->
+
 <style>
+/* 下面只放这一页专属的样式。从 style 开始标签到结束标签之间是 CSS 语法，
+   注释必须用斜杠加星号，HTML 那种尖括号叹号写法在这块区域无效。 */
+
   .users-head {
+  /* 标题行：左边「用户名单」，右边排序按钮，两端对齐。 */
     display: flex;
     align-items: center;
+    /* 纵向居中，标题和按钮不会一高一低。 */
     justify-content: space-between;
+    /* 两端顶开：标题靠左、按钮靠右。 */
     gap: 12px;
+    /* 两者之间至少留 12px，挤在一起时也不粘连。 */
     flex-wrap: wrap;
+    /* 手机上装不下就换行，不会硬挤变形。 */
   }
   .users-head .section-title { margin-bottom: 0; }
+  /* 【覆盖公共样式】.section-title 在 style.css 里默认有下边距，
+     这里放在一行里不需要，清零让标题和按钮对齐在一条线上。 */
 
   /* 正序 / 倒序 切换：一个胶囊里两个按钮 */
   .sort-box {
+  /* 外层容器负责「胶囊」外观。 */
     display: inline-flex;
+    /* 【inline-flex】既是 flex 布局，又像行内元素一样不独占一行。 */
     border: 1px solid var(--border);
     border-radius: 999px;
+    /* 【999px】给一个远超半径的值，浏览器会当成「两头半圆」的胶囊形。 */
     overflow: hidden;
+    /* 【关键】裁掉内部按钮超出的直角，胶囊两端才是圆的。不写这句两个按钮会方角戳出来。 */
     background: var(--card);
   }
   .sort-btn {
+  /* 胶囊里的一个按钮。 */
     padding: 8px 18px;
     border: none;
+    /* 按钮默认有立体边框，去掉。 */
     background: transparent;
+    /* 透明底，露出外层的颜色。 */
     color: var(--text-light);
+    /* 次要色：未选中的按钮要弱化。 */
     font-size: 14px;
     font-family: inherit;
+    /* 按钮默认不继承字体，必须手动写。 */
     cursor: pointer;
     transition: background .2s, color .2s;
+    /* 背景和文字色各做 0.2 秒过渡。 */
   }
   .sort-btn:hover { color: var(--primary); }
+  /* 悬停变紫，暗示「可以点」。 */
   .sort-btn.on { background: var(--grad-primary); color: #fff; }
+  /* 【.on 状态类】当前选中的那个。JS 通过 classList 加/删这个类来切换。
+     注意 .sort-btn.on 是两个类连写，优先级比单个 .sort-btn 高，能覆盖上面的透明底。 */
 
   .users-count {
+  /* 「一共 N 个人」那行。 */
     color: var(--text-light);
     font-size: 14px;
     margin: 16px 0 6px;
+    /* 上 16 下 6：和标题拉开、和名单贴近。 */
   }
   .users-empty {
+  /* 空状态 / 错误提示。 */
     text-align: center;
     color: var(--text-light);
     padding: 34px 0;
+    /* 上下留白，空状态不至于空得难看。 */
   }
 
   .user-row {
+  /* 名单里的一行（整行是个 <a>，点了进对方主页）。 */
     display: flex;
     align-items: center;
     gap: 14px;
+    /* 头像、名字、右侧箭头之间 14px。 */
     padding: 12px 10px;
+    /* 上下 12 撑出行高，左右 10 让 hover 底色不贴字。 */
     border-bottom: 1px solid var(--border);
+    /* 行之间的细分隔线。 */
     text-decoration: none;
+    /* 它是 <a>，去掉默认下划线。 */
     color: inherit;
+    /* 【inherit】继承父元素的文字颜色，而不是链接默认的蓝色。 */
     border-radius: 8px;
+    /* 圆角，hover 时底色才是圆润的一块。 */
     transition: background .2s;
   }
   .user-row:last-child { border-bottom: none; }
+  /* 【:last-child】最后一行不要分隔线，否则名单底部会多出一道悬空的横线。 */
   .user-row:hover { background: var(--primary-soft); }
+  /* 悬停整行变淡紫底，点击区域一眼就看得出。 */
 
   .user-row-avatar {
+  /* 每行左边的圆头像。 */
     width: 46px;
     height: 46px;
+    /* 正方形 + 50% 圆角 = 正圆。 */
     border-radius: 50%;
     object-fit: cover;
+    /* 【object-fit:cover】图片等比缩放填满容器，多出来的裁掉。
+       不写它，非正方形头像会被拉扁变形。 */
     flex: none;
+    /* 【flex:none】不参与伸缩 —— 否则名字太长时头像会被挤扁。 */
     display: block;
+    /* 【<img> 是行内元素】底部会自带 3~4px 的「基线空隙」，
+       改成 block 才能彻底消掉。 */
     background: var(--card);
+    /* 图片没加载出来时先显示一块底色，避免闪白。 */
     border: 1px solid var(--border);
   }
   .user-row-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  /* 【flex-direction:column】名字和 UID 竖着排。
+     【min-width:0】flex 子项的隐藏坑：默认最小宽度等于内容宽度，
+       加了这行才允许被压缩，长名字才会正确省略而不是撑破整行。 */
   .user-row-name {
+  /* 用户名。 */
     font-size: 16px;
     font-weight: 600;
+    /* 半粗，比 UID 那行重。 */
     color: var(--text);
     word-break: break-all;
+    /* 【break-all】超长的连续英文字符也强制换行。
+       默认只在空格处换行，一个 60 字符的用户名会把整行撑爆。 */
   }
   .user-row-uid { font-size: 13px; color: var(--text-light); }
+  /* 用户下面那行小字：次要色，弱化。 */
   .user-row-go {
+  /* 最右侧的「进入主页 ›」。 */
     margin-left: auto;
+    /* 【margin-left:auto】在 flex 里等于「把这块推到最右边」，不需要额外的空白元素。 */
     flex: none;
+    /* 不参与伸缩，保持原宽。 */
     font-size: 13px;
     color: var(--text-light);
   }
   .user-row:hover .user-row-go { color: var(--primary); }
+  /* 【后代选择器】整行悬停时，里面的「进入主页」也变紫 —— 提示更明显。 */
 </style>
 </head>
+
 <body>
 
   <div id="navbar"></div>
+  <!-- 导航栏占位，由 js/nav.js 注入。 -->
 
   <section style="margin-top:40px;">
+  <!-- 【style="..."】内联样式，直接写在标签上。
+       【margin-top:40px】上面空出 40px —— 因为这一页没有 header 头像区，
+       不加会贴着导航栏。内联样式优先级很高，会盖过 style.css 里的规则。 -->
     <div class="card">
+    <!-- 磨砂玻璃卡片。 -->
       <div class="users-head">
         <h2 class="section-title">用户名单</h2>
         <div class="sort-box">
+        <!-- 胶囊容器，里面两个按钮共用一份外框。 -->
           <button class="sort-btn" id="sortAsc" type="button">UID 正序 ↑</button>
+          <!-- 【type="button"】明确这是普通按钮。
+               不写的话在 <form> 里默认是 submit，点一下会提交并刷新页面。 -->
           <button class="sort-btn" id="sortDesc" type="button">UID 倒序 ↓</button>
+          <!-- ↑ ↓ 是 Unicode 箭头字符，直接写就行。 -->
         </div>
       </div>
 
       <p class="users-count" id="usersCount">正在加载…</p>
+      <!-- 人数统计，初始显示「正在加载…」，JS 拉到数据后换成「一共 N 个人」。 -->
       <div id="usersList"></div>
+      <!-- 名单容器，空的。所有行都由下面那段 JS 生成后塞进来。 -->
     </div>
   </section>
 
   <script src="/js/config.js"></script>
+  <!-- 【<script src>】引入外部 JS。顺序不能乱：后面的可能用到前面定义的全局变量。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
+
 <script>
+/* 下面这段是本页逻辑。从 script 开始标签到它的结束标签之间全是 JavaScript，
+   注释要用斜杠加星号或双斜杠，HTML 那种尖括号叹号写法在这块区域无效。 */
+
 (function () {
+// 【IIFE 立即执行函数】定义完立刻执行。
+//   好处：里面所有变量都被关在函数内部，不会污染全局、不会和别的文件撞名。
+
   /* 数据走 window.SBAPI（Supabase profiles），RLS 只允许读公开字段 */
   const listEl  = document.getElementById('usersList');
   const countEl = document.getElementById('usersCount');
   const ascBtn  = document.getElementById('sortAsc');
   const descBtn = document.getElementById('sortDesc');
+  // 先把要反复操作的四个元素各抓一次，存进变量。
+  //   这样后面就不用每次 getElementById —— 那是在 DOM 里搜一遍，能省则省。
+  //   【const】声明后不能再重新赋值。用 const 而不是 let，是告诉读代码的人「这些不会变」。
 
   let users = [];   // {uid(注册顺序序号), username, avatar, role}
+  // 【let】声明一个会被重新赋值的变量（和 const 的区别就在这里）。
+  //   【= []】先给一个空数组，避免后面 .length 时报「undefined 没有 length」。
   let dir = 1;      // 1 = UID 正序（小到大），-1 = 倒序（大到小）
+  // 用一个数字表示排序方向，后面乘一下就实现正/倒序切换 —— 比写两个 if 分支简洁。
 
   function esc(s) {
+  // 【自定义函数】把一段文字里的 HTML 特殊字符转义，防止 XSS 注入。
+  //   参数 s 是原始字符串，返回值是安全版本。
     return String(s == null ? '' : s)
+    // 【String(...)】强制转成字符串，防止传进来数字 / null 时下面 .replace 报错。
+    // 【s == null ? '' : s】三元运算符：「条件 ？ 真时用什么 ： 假时用什么」。
+    //   两个等号 == 同时匹配 null 和 undefined；一个等号 = 是赋值，别搞混。
       .replace(/&/g, '&amp;')
+      // 【.replace(要找的, 换成什么)】
+      // 【/&/g】正则表达式：两个斜杠包住的是正则，g 表示「全局替换所有出现的地方」。
+      //   不加 g 只替换第一个。
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
+      // 五个字符全部换掉。之后这段文字塞进 innerHTML 时，
+      // 浏览器只会把它当普通文字显示，不会被当成标签或代码执行。
   }
 
   function fixAvatar(a) {
+  // 头像地址的「清洗」：只接受三种安全来源，其他一律退回默认图。
     if (typeof a !== 'string' || !a) return '/avatar-default.jpg';
+    // 【typeof a !== 'string'】类型判断：不是字符串就直接退回默认图。
+    // 【||】或：两个条件任意一个成立就进分支。
+    //   【!a】空字符串也是假值，所以「空」也退回默认图。
     const s = a.trim();
+    // 【.trim()】去掉首尾空格。数据库里有时会混进空格，不清掉图片会 404。
     if (/^data:image\//.test(s) || s.charAt(0) === '/' || /^https?:\/\//.test(s)) return s;
+    // 三种放行的地址：
+    //   ① 【/^data:image\//】以「data:image/」开头的内嵌图片。
+    //      正则里 ^ 表示「开头」，\/ 是转义后的斜杠（斜杠在正则里有特殊含义，要加反斜杠）。
+    //      【.test(s)】用正则去测这个字符串，匹配就返回 true。
+    //   ② 【s.charAt(0) === '/'】第一个字符是斜杠，即站内绝对路径，比如 /avatar.jpg。
+    //   ③ 【/^https?:\/\//】以 http:// 或 https:// 开头的外链。
+    //      【s?】意思是前面的 s 可有可无，所以 http 和 https 都能匹配。
+    // 这三种都是安全的；其他任何写法（比如 javascript: 开头的伪协议）都会被挡掉，
+    // 否则可能被用来执行恶意脚本。
     return '/avatar-default.jpg';
+    // 不匹配就退回默认头像。
   }
 
   function paint() {
+  // 「把 users 数组画到页面上」。每次排序变化都重新调一次，这是最简单的渲染思路。
     ascBtn.classList.toggle('on', dir === 1);
     descBtn.classList.toggle('on', dir === -1);
+    // 【classList】元素的类名列表。
+    // 【.toggle('on', 条件)】条件为真就加上 on 这个类，为假就删掉。
+    //   比 if/else 加 classList.add / remove 简洁得多。
+    // 这里的效果：当前方向对应的按钮变紫高亮。
 
     if (!users.length) {
+    // 【!users.length】数组长度为 0 即为假值，取反成真 —— 也就是「一个用户都没有」。
       countEl.textContent = '';
+      // 【textContent】设置纯文本内容。
+      //   注意它和 innerHTML 的区别：textContent 不解析 HTML，
+      //   你写 <b> 它就原样显示 <b>。安全、快，能用它就别用 innerHTML。
       listEl.innerHTML = '<p class="users-empty">还没有人注册。</p>';
+      // 这里要插入真正的 HTML 标签，所以必须用 innerHTML。
       return;
+      // 处理完就退出，不再往下执行。
     }
 
     const sorted = users.slice().sort(function (a, b) {
+    // 【.slice()】不带参数 = 完整复制一份新数组。
+    //   为什么要复制？因为 sort() 会「就地」修改原数组。
+    //   直接 users.sort() 会把原始顺序改掉，之后再想恢复就难了。
+    // 【.sort(比较函数)】按比较函数的返回值排序：
+    //   返回负数 → a 排前面；返回正数 → b 排前面；返回 0 → 位置不变。
       return dir * ((Number(a.uid_no) || 0) - (Number(b.uid_no) || 0));
+      // 【核心技巧】这里其实是「升序公式 × dir」：
+      //   升序就是 a - b（a 小就返回负数，a 排前面）。
+      //   乘 dir：dir = 1 时结果不变 = 正序；dir = -1 时正负颠倒 = 倒序。
+      //   用一次乘法实现正倒序切换，不用写两个分支。
+      // 【Number(...)】强制转数字，防止字段是字符串时用减法出现奇怪结果。
+      // 【|| 0】字段可能是 undefined，兜底成 0。
+      //
+      // 【注意这里有个字段名不一致的隐患】
+      //   下面 load() 里构造的对象字段叫 uid，但这里读的是 uid_no。
+      //   uid_no 不存在 → Number(undefined) 是 NaN → NaN || 0 得到 0
+      //   → 所有人的值都是 0 → 减法结果是 0 → 排序实际上完全没生效。
+      //   要修的话把这里两处 uid_no 都改成 uid 即可（改动很小，但属于逻辑修改，
+      //   本次只做注释，没有擅自改动，留给你自己决定）。
     });
 
     countEl.textContent = '一共 ' + sorted.length + ' 个人'
       + (dir === 1 ? '（UID 从小到大）' : '（UID 从大到小）');
+      // 【字符串拼接】+ 号在这里是连接，不是加法。
+      // 【三元运算】dir 是 1 就选前半句，否则选后半句。
 
     listEl.innerHTML = sorted.map(function (u) {
+    // 【.map(回调)】把数组里每一项「变成」另一个东西，返回等长的新数组。
+    //   这里把每个用户对象 u 变成一段 HTML 字符串。
       const uid = Number(u.uid_no) || 0;
+      // 同上面的问题：字段名应该是 uid，这里写 uid_no 会一直得到 0，
+      //   结果页面上一律显示「UID 0」。这也是同一个字段名不一致引起的。
       // 显示用 uid_no（注册顺序号，站长=1）；链接也优先用它，profile 页两种都认
       return '<a class="user-row" href="/profile/?uid=' + encodeURIComponent(u.uid_no || u.id) + '">'
+      // 【用 + 拼长字符串】这行断成多行时，每行开头要留一个 + 号，
+      //   否则语法错误（这也是为什么很多人更喜欢用反引号模板字符串）。
+      // 【encodeURIComponent】把值转成 URL 安全形式。
+      //   ID 里万一有特殊字符（& / # / 空格），不转义会把链接搞坏。
+      // 【u.uid_no || u.id】优先用注册序号，没有就用数据库 id 兜底。
         +   '<img class="user-row-avatar" src="' + esc(fixAvatar(u.avatar)) + '" alt="">'
+        // 头像地址先过 fixAvatar 清洗，再过 esc 转义 —— 双重保险。
+        // 【alt=""】空字符串：这是纯装饰性图片，读屏软件可以跳过。
         +   '<span class="user-row-info">'
         +     '<span class="user-row-name">' + esc(u.username) + '</span>'
         +     '<span class="user-row-uid">UID ' + esc(uid) + '</span>'
@@ -174,47 +340,85 @@
         +   '<span class="user-row-go">进入主页 ›</span>'
         + '</a>';
     }).join('');
+    // 【.join('')】把 map 出来的数组用空字符串连成一个长字符串。
+    //   不写 join 直接赋给 innerHTML，数组会被自动用逗号连接，
+    //   页面上就会在每行之间多出一堆逗号。
   }
 
   // 头像加载失败就退回默认图（error 事件不冒泡，得用捕获）
   listEl.addEventListener('error', function (e) {
+  // 【坑：error 事件不会冒泡】图片加载失败时浏览器触发 error 事件，
+  //   但这个事件只在图片自己身上触发，不会往上冒泡给父元素。
+  //   所以不能在 listEl 上靠普通监听捕获到 —— 必须用「捕获阶段」监听（第三个参数 true）。
     const t = e.target;
+    // 【e.target】事件真正发生在哪个元素上（这里是那张加载失败的 img）。
     if (t && t.tagName === 'IMG' && t.src.indexOf('avatar-default') === -1) {
+    // 三重判断：
+    //   ① t 存在（防止万一拿不到）
+    //   ② 【tagName === 'IMG'】确认目标是图片。tagName 是大写的。
+    //   ③ 【indexOf('avatar-default') === -1】当前地址里没有「avatar-default」。
+    //      为什么要这第三条？因为默认图自己也可能加载失败，
+    //      不判断的话就会「设默认图 → 又失败 → 再设默认图」无限循环。
+    //      【indexOf】找不到返回 -1。
       t.src = '/avatar-default.jpg';
+      // 换成默认头像。
     }
   }, true);
+  // 【第三个参数 true】表示在「捕获阶段」监听：事件从最外层往里传时就先经过这里，
+  //   所以即使 error 不冒泡也能被接住。这是处理 error / focus 这类不冒泡事件的常用手法。
 
   ascBtn.addEventListener('click', function () { dir = 1; paint(); });
   descBtn.addEventListener('click', function () { dir = -1; paint(); });
+  // 点按钮只做两件事：改方向、重画。数据本身不用重新请求，所以很快。
+  // 【function(){ 语句1; 语句2; }】一行里写多条语句用分号隔开，是合法的简写。
 
   async function load() {
+  // 【async function】异步函数，里面可以用 await。
     countEl.textContent = '正在加载…';
     listEl.innerHTML = '';
+    // 先把旧内容清掉，避免用户看到上一次的残留。
     try {
+    // 【try / catch】捕获可能的错误，防止一个请求失败就把整个页面搞崩。
       const d = await SBAPI.getAllUsers();
+      // 【await】等这个异步请求真正完成，把结果赋给 d。
+      // 【SBAPI.getAllUsers()】是 js/sb.js 暴露的全局方法，去 Supabase 取用户列表。
+      //   那个文件的注释里详细讲过 Promise 和错误处理。
       if (!d || !d.ok) {
+      // 兜底：什么都没返回、或者接口说失败了。
         countEl.textContent = '';
         listEl.innerHTML = '<p class="users-empty">拿不到用户名单，检查一下网络再刷新。</p>';
         return;
       }
       // profiles 已按注册时间升序返回，序号就是注册顺序
       users = d.list.map(function (u, i) {
+      // 【map 回调的第二个参数】i 是当前项的索引（从 0 开始）。
+      //   这里用它算出「注册顺序号」：第 0 项 → 1，第 1 项 → 2 …
         return {
+        // 返回一个新对象，只挑出页面要用的字段。
+        //   直接返回原对象也行，但原对象里可能有很多敏感字段（邮箱、密码散列），
+        //   只挑需要的字段是更稳的习惯。
           id: u.id,
           uid: i + 1,
+          // 【i + 1】索引从 0 开始，人看着别扭，所以加 1 变成「第几个人」。
           username: u.username,
           role: u.role,
           avatar: u.avatar_url
+          // 【注意字段改名】数据库里叫 avatar_url，这里改成 avatar。
+          //   改名本身没问题，但下面 paint() 里读的是 uid_no（这里定义的是 uid），
+          //   字段名没对上 —— 这就是上面提到的那个隐患。
         };
       });
       paint();
+      // 数据准备好了，画出来。
     } catch (e) {
+    // 网络断开、超时、代码抛错，都会走到这里。
       countEl.textContent = '';
       listEl.innerHTML = '<p class="users-empty">连不上服务器，检查一下网络再刷新。</p>';
     }
   }
 
   load();
+  // 立刻执行一次，页面一打开就去拉数据。
 })();
 </script>
 
