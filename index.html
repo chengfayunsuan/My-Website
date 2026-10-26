@@ -1,32 +1,95 @@
 <!DOCTYPE html>
+<!-- 【<!DOCTYPE html>】固定第一行，声明这是 HTML5 文档。不写浏览器会进入「怪异模式」，布局尺寸会和现代浏览器不一致。 -->
+
 <!-- ============================================================
      文件：index.html（首页）
-     作用：访客打开网站看到的第一个页面。包含：六个功能入口按钮（文章/视频/留言板/动态/工具/个人主页）、个人简介、更新日志、登录状态展示。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：访客打开网站看到的第一个页面。包含六个功能入口按钮
+           （文章 / 视频 / 留言板 / 动态 / 工具 / 个人主页）、
+           个人简介、更新日志、登录状态展示。
+     说明：这里写的注释不会显示在页面上，只给看代码的人（也就是你）看。
      ============================================================ -->
+
 <html lang="zh-CN">
+<!-- 【<html>】最外层大盒子，页面的一切都装在它里面。
+     【lang="zh-CN"】告知浏览器「内容是简体中文」—— 影响字体选择、朗读发音、翻译提示。 -->
+
 <head>
+<!-- 【<head>】设置区。这里的东西不会显示在页面上，都是给浏览器看的：编码、标题、引用的文件。 -->
+
 <meta charset="UTF-8">
+<!-- 【<meta charset>】声明文件编码 UTF-8。漏掉这句中文会变成乱码方块。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【viewport】手机适配必写。
+     【width=device-width】页面宽度 = 手机真实屏幕宽度；
+     【initial-scale=1.0】初始不缩放。不写这行，手机上整页会被缩小，字小到看不清。 -->
+
 <title>乘法 · 个人主页</title>
+<!-- 【<title>】浏览器标签页上的字，也决定收藏夹里存的名字。 -->
+
 <meta name="description" content="乘法的个人主页，记录编程学习与项目">
+<!-- 【description】页面简介。搜索引擎在结果列表里展示的那两行灰字就是它。
+     写得好坏直接影响别人搜到你时愿不愿意点进来。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 【<link rel="icon">】标签页左边的小图标。
+     【href="/favicon.ico"】开头的斜杠 = 从网站根目录算起，不管当前页面在哪一层都能找到。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 【<link rel="stylesheet">】引入全站公共样式表。
+     【?v=26】防缓存版本号：浏览器会缓存 CSS 加快加载，但改了样式后可能还读旧文件。
+     把这个数字改大（26 → 27），浏览器就当它是新文件，会重新下载。 -->
 </head>
+
 <body>
+<!-- 【<body>】页面上所有「看得见」的东西都装在这里。 -->
+
   <div id="navbar"></div>
+  <!-- 【占位空盒子】导航栏不写在这里，而是由 js/nav.js 在运行时塞进来。
+       【id="navbar"】id 是元素的唯一标识，一个页面里不能重复。
+       JS 用 document.getElementById('navbar') 就能精确找到它。
+       为什么不在每个页面重复写一遍导航？因为改一次要改十几个文件，动态注入只改一处。 -->
+
   <header>
+  <!-- 【<header>】语义化标签，表示「页头」。它和 <div> 效果一样，但名字告诉了人和搜索引擎这块是什么。 -->
+
     <img class="avatar" src="avatar.jpg" alt="头像"
          onerror="this.style.display='none'">
+    <!-- 【<img>】图片标签，没有结束标签。三个属性缺一不可：
+         【src="avatar.jpg"】图片地址，相对路径 = 和本文件放在同一个文件夹；
+         【alt="头像"】图片加载不出来时显示的替代文字，也是盲人读屏软件念的内容；
+         【onerror="..."】图片加载失败时执行的一小段 JS。
+         这里的意思是 this.style.display='none' —— this 指这张图自己，把它隐藏掉。
+         为什么要这样？因为头像文件丢了的话，浏览器会显示一个破图标，很难看。 -->
+
     <h1 class="name">乘法</h1>
+    <!-- 【<h1>】一级标题，一个页面只应该有一个，搜索引擎靠它判断这页的主题。
+         【class="name"】给它挂一个类名，方便 CSS 里用 .name 精准设置样式。 -->
+
     <p class="tagline">这是想要进行乘法运算的测试网页</p>
+    <!-- 【<p>】段落标签。这里是副标题 / 一句话签名。 -->
   </header>
 
   <section id="test">
+  <!-- 【<section>】语义化标签，表示「一个内容区块」。
+       【id="test"】给这个区块起个唯一名字，CSS 里可以用 #test 选中，
+       页面内的锚点链接也能写成 href="#test" 直接跳到这里。 -->
+
     <div class="card">
+    <!-- 【class="card"】套上 style.css 里定义的「磨砂玻璃卡片」样式：
+         半透明底 + 背后模糊 + 12px 圆角。 -->
+
       <h2 class="section-title">测试页</h2>
+      <!-- 【<h2>】二级标题，比 h1 小一号，用来做板块标题（h1 已经给站名用了）。
+           【section-title】这个类会让标题左边出现一根紫色竖条（用伪元素画的）。 -->
+
       <div class="test-grid">         
+      <!-- 【test-grid】三列网格布局的容器，里面的子元素会自动排成规整的方块。 -->
+
         <a class="test-item" href="/test/board">留言板</a>
+        <!-- 【<a>】链接标签，href 是「点它跳去哪」。
+             这里的 /test/board 会被服务器解析成 /test/board.html。
+             每个链接都套了 test-item 类，网格会自动给它们上不同的颜色。 -->
         <a class="test-item" href="/test/tools">小工具集</a>
         <a class="test-item" href="/test/weather">天气预报</a>
         <a class="test-item" href="/test/dynamic">近期动态</a>
@@ -34,19 +97,38 @@
         <a class="test-item" href="/test/users">用户名单</a>
         <!-- 第 7 个：原来独立跑的 Local.html，现在并进本站静态托管 -->
         <a class="test-item" href="http://localhost:8080/">个人主页</a>
+        <!-- 【指向本机的地址】localhost 意思是「你自己的这台电脑」，8080 是端口号。
+             这个链接只有在你本机跑着那个服务时才打得开，
+             别人点会显示打不开 —— 这是故意的，属于本地开发页。 -->
       </div>
 
       <a class="art-entry-btn" href="/pages/write.html">✍ 写文章</a>
+      <!-- 【入口按钮】点它去写文章页。
+           ✍ 是 Unicode 字符，直接写在 HTML 里就行，不需要图片。 -->
       <a class="art-entry-btn" href="/pages/video-write.html">🎬 传视频</a>
 
       <!-- 视频入口：小方框里放最新的几支（放在文章之上） -->
       <div class="art-box">
+      <!-- 【art-box】主页上的小方框容器，比大卡片更轻、更紧凑。 -->
+
         <div class="art-box-head">
+        <!-- 小方框的标题行：左边「视频」两字，右边「全部 ›」链接，两端对齐。 -->
+
           <span class="art-box-title">视频</span>
+          <!-- 【<span>】行内容器，本身没有任何样式，用来给一小段文字单独套样式。
+               和 <div> 的区别：div 独占一行（块级），span 不换行（行内）。 -->
+
           <a class="art-box-more" href="/pages/videos.html">全部 ›</a>
+          <!-- 【›】是「右单角引号」字符，画成一个箭头，比用图片省事。 -->
         </div>
+
         <div class="art-box-list v-grid" id="vidList">
+        <!-- 两个类叠加：art-box-list 负责竖排列表，v-grid 负责视频卡之间的间距。
+             【id="vidList"】留给下面那段 JS 用：JS 找到它，把视频卡片塞进去。 -->
+
           <p class="v-empty">加载中…</p>
+          <!-- 【占位提示】JS 还没跑完时先显示这句，用户不会看到一块空白发呆。
+               JS 拉完数据会用真实内容整个替换掉这里。 -->
         </div>
       </div>
 
@@ -69,28 +151,63 @@
       <p>你好，我是乘法。一名热爱编程与计算机技术的学习者，目前正在认真学习C语言和html，css，喜欢折腾各种小项目，乐于把想法一点点变成代码。希望在这里记录成长，也期待与你交流。</p>
 
       <div class="socials">
+      <!-- 【socials】一排圆形社交图标。flex 横排 + 水平居中，悬停时变紫并上浮。 -->
+
         <a href="https://github.com/chengfayunsuan" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+        <!-- 【target="_blank"】在新标签页打开，不把访客从你站点带走。
+             【rel="noopener"】安全补丁：新页面拿不到原页面的 window 对象，
+               防止对方页面用 window.opener 把你的页面偷偷跳转到钓鱼站。
+             【title】鼠标停住时浮出的小提示。
+             【aria-label】给盲人读屏软件念的名字（svg 本身没有文字，必须靠它）。 -->
+
           <svg viewBox="0 0 24 24" fill="currentColor">
+          <!-- 【<svg>】矢量图形标签，图标是「算出来的」而不是图片，放大多少倍都清晰。
+               【viewBox="0 0 24 24"】画布坐标系：左上角是 (0,0)，右下角是 (24,24)。
+                 所有路径坐标都按这个 24×24 的格子来画，缩放时整体等比放大。
+               【fill="currentColor"】填充色 = 继承父元素的文字颜色。
+                 所以 CSS 里改 .socials a 的 color，图标自动跟着变，不用单独写图标颜色。 -->
+
             <path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.11-.76.41-1.27.74-1.56-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.38-5.25 5.66.42.36.79 1.08.79 2.18v3.23c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/>
+            <!-- 【<path>】路径，用一串指令描述形状。d 属性的字母含义：
+                   M = 移动到某点（起点）
+                   A = 画圆弧，参数是「半径 半径 旋转 大弧标志 顺逆时针 终点」
+                   c = 相对坐标的三次贝塞尔曲线（画弯的）
+                   v = 竖直向下的相对线段     z = 闭合路径（回到起点）
+                 这一长串就是 GitHub 那只章鱼猫的轮廓，完全是算出来的。 -->
           </svg>
         </a>
+
         <a href="https://space.bilibili.com/1567979505" target="_blank" rel="noopener" title="B站" aria-label="B站">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- 【fill="none"】不填充内部，只画线框。
+               【stroke="currentColor"】线条颜色继承文字色。
+               【stroke-width="2"】线粗 2 个格子单位。
+               【stroke-linecap="round"】线头画成圆的；
+               【stroke-linejoin="round"】拐角画成圆的 —— 这两条让线条看起来柔和得多。 -->
             <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <!-- 【<rect>】矩形：左上角坐标 (2,7)，宽 20 高 14，rx="2" 是圆角半径。 -->
             <path d="m6 3 3 3M18 3l-3 3"/>
+            <!-- 两条斜线当 B 站的天线。M18 3 后又 l-3 3 是「相对上一点」画线段。 -->
           </svg>
         </a>
+
         <a href="https://mnb.ee?ar=chengfa" target="_blank" rel="noopener" title="MB" aria-label="MB">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
+            <!-- 【<circle>】圆：圆心 (12,12)，半径 10。 -->
             <path d="M8 15V9l4 4 4-4v6"/>
+            <!-- 一个 M 形折线，画在圆里面。 -->
           </svg>
         </a>
+
         <a href="https://link3.cc/chengfa" target="_blank" rel="noopener" title="稿纸" aria-label="稿纸">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <!-- 一张纸的轮廓，右上角故意缺一块，形成「翻折角」的效果。 -->
             <path d="M14 2v6h6"/>
+            <!-- 那个翻折角本身。 -->
             <path d="M8 13h8M8 17h8M8 9h2"/>
+            <!-- 三根横线假装纸上的字。M 之后连续写同方向线段，最后回到新起点继续画。 -->
           </svg>
         </a>
       </div>
@@ -101,64 +218,158 @@
     <div class="card">
       <div class="log-head">
         <h2 class="section-title">更新日志</h2>
+
         <button class="log-add" id="logAdd" type="button" title="添加一条更新日志" style="display:none;">
+        <!-- 【<button>】按钮标签，比 <a> 更适合「执行一个动作」而不是「跳转」。
+             【type="button"】明确这是普通按钮。不写的话在某些情况下默认是 submit，
+               点一下会提交表单、刷新页面，很难查的坑。
+             【style="display:none;"】内联样式，写在标签上优先级最高。
+               这里先把「添加」按钮藏起来，等 JS 确认你是站长后再显示。 -->
+
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          <!-- 一个加号：竖线 M12 5v14 + 横线 M5 12h14。
+               【width/height="16"】svg 标签上也可以直接写宽高，
+               这里写在标签上是为了让图标和文字「添加」排在一起不撑高按钮。 -->
           添加
         </button>
       </div>
 
       <div class="log-editor" id="logEditor" style="display:none;">
+      <!-- 编辑区，默认隐藏，点「添加」才展开。 -->
+
         <textarea class="log-input" id="logInput" rows="2" maxlength="200" placeholder="写一条更新日志…（最多 200 字，Ctrl+Enter 快速发布）"></textarea>
+        <!-- 【<textarea>】多行文本框（input 只能单行）。
+             【rows="2"】默认高度显示 2 行，实际可以拖高。
+             【maxlength="200"】最多 200 字，超了浏览器直接不让输入 —— 前端第一道防线。
+             【placeholder】没输入时显示的灰色提示。
+             注意 textarea 必须写结束标签，不能像 input 那样自闭合。 -->
         <div class="log-editor-actions">
           <button class="log-submit" id="logSubmit" type="button">发布</button>
           <button class="log-cancel" id="logCancel" type="button">取消</button>
           <span class="log-editor-msg" id="logEditorMsg"></span>
+          <!-- 空 span 用来存放「发布成功 / 失败」的提示文字，由 JS 往里塞内容并换颜色。 -->
         </div>
       </div>
 
       <ul class="log-list" id="logList"></ul>
+      <!-- 【<ul>】无序列表，里面的每一项要用 <li>。
+           这里标签中间是空的，日志条目全部由 js/main.js 动态生成。 -->
       <button class="log-more" id="logMore">加载更多</button>
     </div>
   </section>
 
   <footer>
+  <!-- 【<footer>】页脚语义化标签。 -->
     <p>chengfayunsuan@qq.com</p>
     <p>© 2026 CHENGFA</p>
+    <!-- 【©】版权符号，直接写字符就行，不需要特殊写法。 -->
   </footer>
 
   <script src="/js/config.js"></script>
+  <!-- 【<script src>】引入外部 JS 文件。
+       顺序非常关键：后面的文件可能用到前面定义的东西，所以不能乱调。
+       这里必须先 config（配置）、再 bg（背景）、再 sb（数据层）、最后 nav（导航）。 -->
 <script src="/js/bg.js?v=2"></script>
 <script src="/js/vendor/supabase-js.js"></script>
+<!-- 第三方库 Supabase 的浏览器版（放在 vendor 目录 = 「第三方依赖」的意思）。 -->
   <script src="/js/sb.js"></script>
   <script src="/js/nav.js?v=23"></script>
   <script src="main.js"></script>
+  <!-- 注意这个没写开头的斜杠：main.js 表示「和本文件同一个文件夹的 main.js」。
+       不带斜杠是相对路径，带斜杠是从网站根目录算。 -->
+
 <script>
 /* 主页那个文章小方框：拉最新的 5 篇 */
+/* 下面是这一段内嵌 JS。从 script 的开始标签到它的结束标签之间全是 JavaScript 语法，
+   这里的注释必须用斜杠加星号，HTML 那种尖括号叹号写法在这块区域里是无效的。 */
+
 (function () {
+// 【IIFE 立即执行函数】(function(){ ... })();
+//   把函数用括号包起来，后面紧跟一对括号：定义完立刻执行一次。
+//   为什么这么写？因为里面的变量（box、esc）就被关在这个函数内部，
+//   不会和别的文件里同名的变量打架。这叫「作用域隔离」。
+
   const box = document.getElementById('artList');
+  // 【const】声明一个常量（不会被重新赋值）。
+  //   注意是「不能重新赋值」，不是「内容不能改」—— 对象和数组内部照样能改。
+  // 【document.getElementById('artList')】在页面里找 id 为 artList 的元素。
+  //   找不到会返回 null。
+
   if (!box) return;
+  // 【if】条件判断。【!box】取反：如果 box 是 null（假值）就为真。
+  // 【return】直接结束这个函数，后面的代码不再执行。
+  //   为什么要这行？万一有人删了那个 div，下面的 box.innerHTML 会报错崩掉整段脚本。
+  //   这是最便宜的防御性写法。
+
   const esc = s => String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  // 【箭头函数】s => 表达式 等价于 function(s){ return 表达式; }
+  // 【String(...)】转成字符串，防止传进来数字之类时后面 .replace 报错。
+  // 【s == null ? '' : s】三元运算符：「条件 ？ 真时用什么 ： 假时用什么」。
+  //   注意这里是两个等号 ==，它能同时匹配 null 和 undefined。
+  // 【.replace(/&/g, '&amp;')】把 & 换成它的实体编码。
+  //   /&/g 是正则表达式：斜杠包起来是正则，g 表示「全局替换所有出现的地方」。
+  //   【为什么要转义】如果用户在标题里贴一段 script 代码，
+  //   直接插进页面就会被浏览器当成真代码执行 —— 这叫 XSS 攻击。
+  //   把这 5 个字符换掉，它就只能老老实实显示成文字。
+  //   （额外注意：这段 JS 里也绝对不能出现 script 的结束标签原文，
+  //     浏览器一看到它就会以为脚本到此结束，后面的代码全变成页面文字。）
+
+  // 【下面这段的写法】先把数组里的每篇文章「变成」一段 HTML 字符串（map），
+  //   再用空字符串把它们接起来（join），最后一次性塞进容器（innerHTML）。
+  //   注意：模板字符串（反引号）里面是字符串内容，不是代码，
+  //   所以在反引号里写 // 或注释符号，都会原样显示到页面上 —— 新手最常踩的坑。
+  //   本段所有注释都写在反引号外面。
 
   SBAPI.getArticles({ limit: 5, offset: 0 })
+  // 【SBAPI】是 js/sb.js 挂到全局对象上的一组方法。
+  // 【getArticles({...})】传一个对象当参数：要 5 条，从第 0 条开始。
+  //   它返回一个 Promise（承诺）：现在还没拿到数据，但保证以后给结果。
+
     .then(d => {
+    // 【.then(回调)】承诺兑现时执行。d 就是服务器返回的数据。
+
       if (!d || !d.ok || !d.list.length) {
+      // 三种失败情况一次挡掉：
+      //   !d           → 什么都没返回
+      //   !d.ok        → 接口说「这次失败了」
+      //   !d.list.length → 返回成功但列表是空的（length 为 0 即「假值」）
         box.innerHTML = '<p class="art-box-none">还没有人写文章，来当第一个吧~</p>';
+        // 【innerHTML】把字符串当成 HTML 塞进这个元素里，原来的内容全部替换掉。
         return;
+        // 处理完就退出，不再往下走。
       }
+
       box.innerHTML = d.list.map(a => `
         <a class="art-box-row" href="/pages/article.html?id=${a.id}">
           <span class="t" style="font-weight:700">${esc(a.title)}</span>
           <span class="m">作者：${esc(a.author || '匿名')} · ♥${a.likes || 0} · 👁${a.views || 0}</span>
         </a>`).join('');
+        // 【.map(回调)】把数组里每一项变成一个东西，返回新数组。
+        //   这里把每篇文章对象 a 变成上面那段 HTML 字符串。
+        // 【反引号】模板字符串：能换行、能嵌 ${表达式}，比用加号拼字符串好读多了。
+        // 【${a.id}】把变量的值直接填进字符串。
+        // 【${esc(a.title)}】标题必须先 esc 转义，防止别人的标题里藏坏代码。
+        // 【a.author || '匿名'】|| 是「或」：左边有值就用左边，是空/undefined 就用右边。
+        //   这是给字段设默认值最常用的写法。
+        // 【a.likes || 0】同理 —— 一个赞都没有时显示 0，而不是 undefined。
+        // 【.join('')】把 map 出来的数组用空字符串连成一个长字符串。
+        //   不加 join 直接赋给 innerHTML 会自动用逗号连接，页面上就多出一堆逗号。
     })
+
     .catch(() => { box.innerHTML = '<p class="art-box-none">文章加载失败</p>'; });
+    // 【.catch(回调)】出任何错（断网、接口 500、代码异常）都会走到这里。
+    //   有了它，用户看到的是「加载失败」而不是一个永远转圈的空框。
 
   /* 主页视频小方框：拉最新的 5 支（放在文章之上） */
   (function () {
+  // 又一个 IIFE，套在上一个里面 —— 这叫「嵌套作用域」，
+  // 里面的 vbox 变量连外层都拿不到，彻底隔离。
+
     const vbox = document.getElementById('vidList');
     if (!vbox) return;
+
     SBAPI.getVideos({ limit: 5, offset: 0 })
       .then(d => {
         if (!d || !d.ok || !d.list.length) {

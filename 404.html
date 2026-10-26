@@ -1,73 +1,195 @@
 <!DOCTYPE html>
+<!-- 【<!DOCTYPE html>】第一行必须写，告诉浏览器「这是 HTML5 文档」。
+     不写的话浏览器会进入「怪异模式」，各种尺寸计算都会和老式浏览器一样，布局会莫名其妙地错位。
+     它不是标签，没有结束标签，就孤零零一行。 -->
+
 <!-- ============================================================
      文件：404.html（404 页面）
-     作用：访问了不存在的地址时，Cloudflare Pages 自动返回这个页面。作用：告诉访客「地址错了」，并给一条回首页的路。
-     说明：注释不会显示在页面上，只给看代码的人（也就是你）看的。
+     作用：访问了不存在的地址时，Cloudflare Pages 自动返回这个页面。
+           告诉访客「地址错了」，并给一条回首页的路。
+     说明：尖括号加叹号包起来的这段就是 HTML 注释，不会显示在页面上，只给看代码的人看。
+           注意：进入下面那个 style 标签之后就是 CSS 语法了，那里要用斜杠加星号包注释，
+           不能用这里的尖括号叹号写法，两种语法不能混。
      ============================================================ -->
+
 <html lang="zh-CN">
+<!-- 【<html>】整个网页的最外层「大盒子」，所有内容都必须装在它里面。
+     【lang="zh-CN"】声明页面语言是「中文-中国大陆」。
+     作用：① 浏览器会正确选择中文字体；② 屏幕阅读器用中文发音；
+           ③ 浏览器会主动问用户「要不要翻译成英文」而不是反过来。 -->
+
 <head>
+<!-- 【<head>】「设置区」，放的是给浏览器看的信息（编码、标题、引用的文件）。
+     这里的内容一个都不会直接显示在页面上。 -->
+
 <meta charset="UTF-8">
+<!-- 【<meta>】给浏览器看的「元信息」，它自己没有结束标签。
+     【charset="UTF-8"】声明文件编码是 UTF-8。
+     不写这句，中文很可能变成「锟斤拷」「口口口」这种乱码。 -->
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 【viewport 视口】这一行是手机适配的命门。
+     不写它，iPhone 会假装自己有 980px 宽，然后把整个页面缩小塞进屏幕 —— 字小到看不清。
+     【width=device-width】让页面宽度 = 手机屏幕的真实宽度。
+     【initial-scale=1.0】初始缩放比例 1 倍，不要自动缩放。 -->
+
 <title>404 · 页面走丢了</title>
+<!-- 【<title>】浏览器标签页上显示的文字，也是收藏夹里的名字、搜索结果里的标题。 -->
+
 <link rel="icon" href="/favicon.ico">
+<!-- 【<link>】用来「引入外部文件」，它也没有结束标签。
+     【rel="icon"】说明这个文件是「网站图标」（标签页左边那个小图）。
+     【href="/favicon.ico"】文件地址。开头的 / 表示「从网站根目录算起」，
+     不管当前页面在几层子目录里，/style.css 都指向同一个文件。 -->
+
 <link rel="stylesheet" href="/style.css?v=26">
+<!-- 【rel="stylesheet"】引入的是「样式表」—— 全站共用的大 CSS 文件。
+     【?v=26】版本号小技巧：浏览器会把 CSS 缓存起来加快下次打开速度，
+     但改了 CSS 之后它可能还在用旧的。改一下这个数字（26 → 27），
+     浏览器就认为是「另一个文件」，会重新下载。这叫「缓存击穿」。 -->
+
 <style>
+/* 【style 标签】在 HTML 里直接写 CSS。这里放的都是「只有这个页面才用」的样式，
+   所以不写进公共的 style.css，省得别的页面也被影响。
+   【重要】从 style 开始标签到它的结束标签之间全是 CSS 语法，
+   注释必须用斜杠加星号包起来，HTML 那种尖括号叹号的写法在这里会把样式撑坏。 */
+
+
   body {
+  /* 【选择器 body】就是页面上那个最外层可见的「身体」，所有内容都在它里面。 */
     margin: 0;
+    /* 【margin:0】外边距清零。浏览器默认给 body 留了 8px 白边，清掉才是满屏。 */
     min-height: 100vh;
+    /* 【min-height】最小高度。【100vh】= 视口高度的 100%（vh = viewport height）。
+       这样即使内容很少，body 也占满一屏，下面那个「垂直居中」才有意义。 */
     display: flex;
+    /* 【display:flex】开启弹性布局 —— 这是 CSS 里最常用的排版方式。 */
     flex-direction: column;
+    /* 【column】主轴改成竖向：里面的元素从上往下排（默认是横着排）。 */
     align-items: center;
+    /* 【align-items:center】交叉轴居中。现在是竖排，交叉轴就是横向 ——
+       也就是让卡片「水平居中」。 */
     justify-content: center;
+    /* 【justify-content:center】主轴居中。现在是竖排，主轴是纵向 ——
+       也就是让卡片「垂直居中」。 */
     text-align: center;
+    /* 【text-align:center】文字水平居中（这是管文字的，和上面管盒子的不一样）。 */
     padding: 20px;
+    /* 【padding:20px】内边距。手机上卡片和屏幕边缘留 20px，不会贴边。 */
   }
+
   .lx-card {
+  /* 【.lx-card】开头的点表示这是「类选择器」，选中 class="lx-card" 的元素。
+     一个元素可以有很多类，一个类也能被很多元素用。 */
     max-width: 460px;
+    /* 【max-width】最宽 460px。屏幕比 460 宽时它就不长了，卡片不会拉成一条。 */
     width: 100%;
+    /* 【width:100%】占满父元素宽度（但不能超过上面的 max-width）。 */
     padding: 48px 32px 40px;
+    /* 【三个值】上 48px、左右 32px、下 40px（顺序是「上 左右 下」，顺时针）。 */
     text-align: center;
+    /* 卡片里的文字也居中。 */
   }
+
   h1 {
+  /* 【h1】一级标题标签，HTML 里字号最大的标题。 */
     font-family: var(--font-num);
+    /* 【var(--font-num)】取一个 CSS 变量的值 —— 这个变量定义在 style.css 的 :root 里，
+       存的是「数字专用等宽字体」。在括号里写变量名，变量名必须以 -- 开头。 */
     font-size: 110px;
+    /* 110px 的超大字，让「404」成为页面唯一的主角。 */
     font-weight: 800;
+    /* 【font-weight】字重（粗细），400 正常、700 加粗、800~900 特粗。 */
     letter-spacing: 6px;
+    /* 【letter-spacing】字间距 6px，三个数字之间拉开，更有设计感。 */
     margin: 0 0 8px;
+    /* 【三个值】上 0、左右 0、下 8px。清零是必须的 ——
+       浏览器默认给 h1 上下留了很大的边距，不清掉会顶得很怪。 */
     line-height: 1;
+    /* 【line-height:1】行高 = 字号本身。数字大时不留空隙，位置才好精确控制。 */
     color: azure;
+    /* 【azure】CSS 内置颜色名，等于 #F0FFFF 淡蓝白，和全站标题同一个色。 */
   }
+
   p {
+  /* 【p】段落标签，这里放那句「这个页面去乘法运算了」。 */
     color: var(--text-light);
+    /* 次要文字色（浅灰），比标题暗一档。 */
     margin: 6px 0 30px;
+    /* 上 6px、下 30px —— 下面留得多，是为了和按钮拉开距离。 */
     font-size: 15px;
+    /* 15px 正文字号。 */
   }
+
   a.lx-btn {
+  /* 【a.lx-btn】标签名和类名连写（中间没有空格）= 选「既是 <a> 又有 lx-btn 这个类」的元素。
+     连写优先级比单个选择器高，能压过 style.css 里 <a> 的默认样式。 */
     display: inline-block;
+    /* 【inline-block】像文字一样横排，但又可以设宽高和内边距 ——
+       按钮必须用它，用 inline 设不了宽高。 */
     padding: 12px 30px;
+    /* 上下 12、左右 30，撑出一个够大的可点区域。 */
     background: var(--primary);
+    /* 主色紫。 */
     color: #fff;
+    /* 【#fff】十六进制颜色，# 后面 3 位或 6 位。fff 就是纯白。 */
     text-decoration: none;
+    /* 【text-decoration:none】去掉链接默认的下划线。 */
     border-radius: 8px;
+    /* 【border-radius】圆角半径 8px。 */
     font-size: 15px;
     font-weight: 600;
+    /* 半粗，按钮文字比正文重一点。 */
     box-shadow: none;
+    /* 不要投影（Local 风格不用阴影做层次）。 */
     transition: background .2s;
+    /* 【transition】过渡：背景色变化用 0.2 秒慢慢变，鼠标悬停时不会「啪」地跳。 */
   }
+
   a.lx-btn:hover {
+  /* 【:hover】鼠标悬停在这个元素上时。
+     注意这是「又一个规则块」，不是给上面那个加条件 —— CSS 是「后写的覆盖先写的」。 */
     background: var(--primary-deep);
+    /* 换成深一档的紫，给出「能点」的反馈。 */
     transform: none;
+    /* 【transform:none】明确取消位移/缩放。公共样式里可能给按钮加了悬停上浮，这里压掉。 */
     filter: none;
+    /* 【filter:none】取消亮度滤镜。 */
   }
 </style>
 </head>
+
 <body>
+<!-- 【<body>】页面上「看得见」的所有内容都装在这里。
+     一个页面只能有一个 <head> 和一个 <body>。 -->
+
   <div class="lx-card glass">
+  <!-- 【<div>】最常用的「容器」标签，本身没有任何样子，纯粹用来装东西、方便排版。
+       【class="lx-card glass"】空格分隔 = 同时套用两个类：
+         lx-card → 上面 <style> 里定义的卡片尺寸
+         glass  → style.css 里定义的「磨砂玻璃」效果
+       一个元素可以同时穿好几件衣服，样式会叠加。 -->
+
     <h1>404</h1>
+    <!-- 大标题，就三个字符。 -->
+
     <p>这个页面去乘法运算了，没算出来。</p>
+    <!-- 用站名「乘法」开了个玩笑，比干巴巴的「Not Found」友好。 -->
+
     <a class="lx-btn" href="/">回到首页</a>
+    <!-- 【<a>】链接标签。
+         【href="/"】点它跳到网站根目录，也就是首页。
+         开头的 / 很重要：表示从域名根算起，不管当前地址是什么都能回首页。 -->
   </div>
+
 <script src="/js/config.js"></script>
+<!-- 【<script>】引入 JS 文件，必须用 src 属性指定地址。
+     用 <script src="..."></script> 的写法时，标签中间必须是空的 ——
+     内容和 src 同时存在时，内容会被忽略。 -->
 <script src="/js/bg.js?v=2"></script>
+<!-- 【为什么放在 </body> 前面】HTML 从上往下一行行解析，
+     放最后可以保证「页面内容已经存在」再执行 JS，否则 JS 找不到元素会报错。
+     【?v=2】同样是防缓存的版本号，改了 js 就把数字改大。 -->
 </body>
 </html>
+<!-- 【</html>】文档结束。浏览器看到它就知道「后面没有内容了」。 -->
