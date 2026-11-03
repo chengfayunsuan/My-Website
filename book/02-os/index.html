@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 02 · 操作系统：把一台机器分成很多间房</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../index.html">总目录</a>
+    <a href="index.html">PART 02</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../index.html">总目录</a><span class="sep">/</span><span class="here">PART 02</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">PART 02</span>
+    操作系统：把一台机器分成很多间房
+  </h1>
+  <p class="part-sub">一台电脑只有一颗 CPU、一块内存、一块硬盘，却要同时伺候几十个程序。操作系统就是那个分房间、发钥匙、管秩序的物业。</p>
+
+  <p class="lead">这一部回答一个很朴素的问题：你双击一个图标，为什么它就能跑起来，而且不会把别的程序搞崩？答案藏在「隔离」两个字里——隔离 CPU 时间、隔离内存、隔离文件、隔离权限。</p>
+
+  <div class="note">
+    <b>本部分布：</b>8 个中章 · 34 个小节 · 其中 13 节标 ★ 为速通必读 ·
+    已完稿 0/34
+  </div>
+
+  <h2>2.1　操作系统是什么</h2>
+  <p class="grpnote">内核、系统调用、开机全过程、固件与安全启动</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>2.1.1</code></td>
+        <td>内核与用户态：为什么程序不能直接碰硬件</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.1.2</code></td>
+        <td>系统调用：程序请求内核办事的唯一那道门</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.1.3</code></td>
+        <td>开机全过程：通电 → UEFI → 引导 → 内核 → 桌面</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.1.4</code></td>
+        <td>固件与安全启动：Secure Boot、TPM 与"换主板要重新激活"</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.2　进程与线程</h2>
+  <p class="grpnote">一个正在跑的程序，以及它内部的分身</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>2.2.1</code></td>
+        <td>进程：一个正在跑的程序，以及它独占的那份资源</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.2.2</code></td>
+        <td>线程与并发：为什么程序能一边下载一边响应点击</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.2.3</code></td>
+        <td>调度：CPU 凭什么决定先跑谁</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.2.4</code></td>
+        <td>锁、死锁与竞态：两个线程抢一个变量</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.2.5</code></td>
+        <td>进程间通信与管道：程序之间怎么传话</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.3　内存</h2>
+  <p class="grpnote">虚拟内存、分页、堆与栈</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>2.3.1</code></td>
+        <td>虚拟内存：每个程序都以为自己独占整台机器</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.3.2</code></td>
+        <td>分页、页表与缺页中断</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.3.3</code></td>
+        <td>堆与栈：你的变量到底住在哪</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.3.4</code></td>
+        <td>内存不够时会发生什么：交换、OOM 与崩溃</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.4　文件系统</h2>
+  <p class="grpnote">文件是什么、路径、权限、硬盘、掉电安全、备份</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>2.4.1</code></td>
+        <td>文件是什么：inode、目录与数据块</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.4.2</code></td>
+        <td>路径、盘符与挂载点：C 盘到底是什么</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.4.3</code></td>
+        <td>权限：rwx、ACL 与"拒绝访问"</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.4.4</code></td>
+        <td>硬盘、SSD、分区表与格式化</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.4.5</code></td>
+        <td>掉电安全、日志与快照：为什么数据库怕断电</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.4.6</code></td>
+        <td>备份与容灾：RAID、3-2-1 与 RPO/RTO</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.5　Windows 的特有结构</h2>
+  <p class="grpnote">注册表、绿色软件、服务、驱动、账户</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>2.5.1</code></td>
+        <td>注册表到底是什么：一个装系统设置的巨型数据库</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.5.2</code></td>
+        <td>绿色软件为什么能免安装：配置、DLL 与三种存法</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.5.3</code></td>
+        <td>服务、计划任务与开机自启：谁在后台悄悄运行</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.5.4</code></td>
+        <td>驱动：跑在内核里的外挂程序</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.5.5</code></td>
+        <td>用户账户、UAC 与 SID：管理员权限到底意味着什么</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.6　命令行</h2>
+  <p class="grpnote">cmd、PowerShell、bash、环境变量与脚本</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>2.6.1</code></td>
+        <td>命令行是什么：给程序发一行字，而不是点图标</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.6.2</code></td>
+        <td>cmd：从 DOS 继承下来的老家伙</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.6.3</code></td>
+        <td>PowerShell：传对象而不是传文本</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.6.4</code></td>
+        <td>bash 与 Unix 哲学：一切皆文件</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.6.5</code></td>
+        <td>环境变量、PATH 与"命令找不到"</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.6.6</code></td>
+        <td>脚本：把重复劳动写成一个文件</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.7　时间</h2>
+  <p class="grpnote">系统时钟、时区、时间戳与 NTP</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>2.7.1</code></td>
+        <td>系统时钟、时区、Unix 时间戳，以及全世界的电脑怎么对表</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.8　电脑卡了到底卡在哪</h2>
+  <p class="grpnote">任务管理器、发热降频、蓝屏与排障</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>2.8.1</code></td>
+        <td>任务管理器里那几个数字是什么意思</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.8.2</code></td>
+        <td>卡顿、发热与降频：性能是怎么被自己吃掉的</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>2.8.3</code></td>
+        <td>蓝屏、日志与排障：先看证据再看结论</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="../01-machine/index.html">← PART 01 电、逻辑与数：机器是怎么学会算数的</a>
+    <a class="next" href="../03-files/index.html">PART 03 文件与格式：为什么它们长那副样子 →</a>
+  </div>
+
+</div>
+</body>
+</html>

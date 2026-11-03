@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 05 · 邮件与账号：互联网最早的那套东西</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../index.html">总目录</a>
+    <a href="index.html">PART 05</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../index.html">总目录</a><span class="sep">/</span><span class="here">PART 05</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">PART 05</span>
+    邮件与账号：互联网最早的那套东西
+  </h1>
+  <p class="part-sub">邮件比网页老二十年，却几乎没变过。正因为它简单，才最适合用来第一次看清「协议」到底是什么。</p>
+
+  <p class="lead">这一部有两个目标。第一，让你能亲手用一行行文本发出一封邮件，从此「协议」不再是抽象名词。第二，把「登录」这件事讲到底——因为邮箱、银行、网站全都靠它，讲一次，后面全省。</p>
+
+  <div class="note">
+    <b>本部分布：</b>6 个中章 · 19 个小节 · 其中 7 节标 ★ 为速通必读 ·
+    已完稿 0/19
+  </div>
+
+  <h2>5.1　邮件地址</h2>
+  <p class="grpnote">@ 的来历、地址结构与 MX 记录</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>5.1.1</code></td>
+        <td>@ 的来历、地址的三段结构，以及域名那半边怎么靠 MX 记录找路</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5.2　发信与收信</h2>
+  <p class="grpnote">SMTP、服务器转交、POP3 与 IMAP、邮件头</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>5.2.1</code></td>
+        <td>SMTP：一封邮件从你的客户端到服务器</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.2.2</code></td>
+        <td>邮件服务器之间怎么转交：为什么会有延迟和退信</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.2.3</code></td>
+        <td>POP3 与 IMAP：为什么手机删了电脑还在</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.2.4</code></td>
+        <td>邮件头：一封邮件走过的每一站</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5.3　邮件的内容</h2>
+  <p class="grpnote">MIME、Base64、HTML 邮件</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>5.3.1</code></td>
+        <td>MIME 与 Base64：邮件为什么能带图片和附件</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.3.2</code></td>
+        <td>HTML 邮件与它的坑：为什么邮件里的排版总是不听话</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5.4　反垃圾与防伪造</h2>
+  <p class="grpnote">SPF、DKIM、DMARC、过滤</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>5.4.1</code></td>
+        <td>SPF：谁的 IP 有权替我发信</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.4.2</code></td>
+        <td>DKIM：给邮件盖一个防伪章</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.4.3</code></td>
+        <td>DMARC：告诉全世界怎么处理假邮件</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.4.4</code></td>
+        <td>垃圾邮件过滤与误判：为什么你的正常邮件进了垃圾箱</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5.5　建一个邮箱系统</h2>
+  <p class="grpnote">自建的坑、企业邮箱与归档</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>5.5.1</code></td>
+        <td>自建邮件服务器的坑：25 端口、IP 信誉、反向解析</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.5.2</code></td>
+        <td>企业邮箱、邮件网关与归档</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5.6　账号与身份</h2>
+  <p class="grpnote">密码存储、Session 与 JWT、OAuth、二次验证、实名</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>5.6.1</code></td>
+        <td>密码是怎么存的：哈希、盐与"为什么不能存明文"</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.6.2</code></td>
+        <td>Session、Token 与 JWT：登录状态存在哪</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.6.3</code></td>
+        <td>OAuth：用微信或 Google 登录时发生了什么</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.6.4</code></td>
+        <td>两步验证与找回密码：安全与便利的拉扯</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.6.5</code></td>
+        <td>手机号为什么能证明是你：SIM 卡、实名制与验证码</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>5.6.6</code></td>
+        <td>实名认证、人脸识别与设备指纹</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="../04-network/index.html">← PART 04 网络：两台机器怎么变成一台大机器</a>
+    <a class="next" href="../06-web/index.html">PART 06 网站与 Node.js：从一段代码到别人能访问 →</a>
+  </div>
+
+</div>
+</body>
+</html>

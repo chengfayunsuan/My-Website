@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 04 · 网络：两台机器怎么变成一台大机器</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../index.html">总目录</a>
+    <a href="index.html">PART 04</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../index.html">总目录</a><span class="sep">/</span><span class="here">PART 04</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">PART 04</span>
+    网络：两台机器怎么变成一台大机器
+  </h1>
+  <p class="part-sub">从网线里的电压，到海底光缆、BGP 和域名，再到 HTTPS 与抓包。这是全书最长的一部。</p>
+
+  <p class="lead">网络这一层最容易学成「背协议名」。这一部尽量不背：每一个协议都先问你一个具体的问题——两台电脑怎么知道对方在不在、数据丢了怎么办、名字怎么变成地址——然后再看它给出的答案。</p>
+
+  <div class="note">
+    <b>本部分布：</b>9 个中章 · 41 个小节 · 其中 19 节标 ★ 为速通必读 ·
+    已完稿 0/41
+  </div>
+
+  <h2>4.1　物理与链路</h2>
+  <p class="grpnote">线、光、空气，以及网卡和交换机</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>4.1.1</code></td>
+        <td>网线、光纤与无线电：数据在物理世界里怎么跑</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.1.2</code></td>
+        <td>网卡、MAC 与交换机：局域网是怎么连起来的</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.1.3</code></td>
+        <td>无线：Wi-Fi 与蜂窝网（2G 到 5G）怎么传数据</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4.2　物理互联网</h2>
+  <p class="grpnote">海底光缆、IXP、BGP</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>4.2.1</code></td>
+        <td>海底光缆：互联网真正的骨头</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.2.2</code></td>
+        <td>IXP 与对等互联：运营商之间怎么结算</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.2.3</code></td>
+        <td>BGP 与自治系统：互联网的"国际关系"</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4.3　IP 层</h2>
+  <p class="grpnote">地址、子网、NAT、路由、端口</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>4.3.1</code></td>
+        <td>IP 地址与子网掩码：192.168.1.1 这串数字什么意思</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.3.2</code></td>
+        <td>公网、私网与 NAT：为什么你家所有设备共用一个 IP</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.3.3</code></td>
+        <td>路由：数据包怎么找到路</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.3.4</code></td>
+        <td>IPv6：地址不够用之后的方案</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.3.5</code></td>
+        <td>端口：一台机器上的门牌号</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4.4　域名与 DNS</h2>
+  <p class="grpnote">域名怎么注册、解析、备案，以及被污染</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>4.4.1</code></td>
+        <td>域名结构：从根到顶级到二级</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.4.2</code></td>
+        <td>注册局与注册商：你的钱付给了谁</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.4.3</code></td>
+        <td>注册、续费、转入与赎回期：域名为什么会丢</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.4.4</code></td>
+        <td>whois、隐私保护与域名抢注</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.4.5</code></td>
+        <td>解析记录全表：A、AAAA、CNAME、MX、TXT、NS、CAA</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.4.6</code></td>
+        <td>递归查询、根服务器与 DNS 污染</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.4.7</code></td>
+        <td>备案：中国特有的一层，以及它卡在哪</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4.5　TCP 与 UDP</h2>
+  <p class="grpnote">可靠传输、握手挥手、拥塞控制、端口映射</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>4.5.1</code></td>
+        <td>TCP：可靠传输到底是怎么做到的</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.5.2</code></td>
+        <td>三次握手、四次挥手与那个状态机</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.5.3</code></td>
+        <td>拥塞控制：为什么网速会自己慢下来</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.5.4</code></td>
+        <td>UDP 与实时传输：宁可丢也不要等</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.5.5</code></td>
+        <td>防火墙、端口转发与内网穿透</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4.6　HTTP</h2>
+  <p class="grpnote">请求响应、头、Cookie、缓存、HTTP/2/3、WebSocket</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>4.6.1</code></td>
+        <td>请求与响应：一次网页访问的完整对话</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.6.2</code></td>
+        <td>方法、状态码与头部：404 和 500 差在哪</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.6.3</code></td>
+        <td>Cookie 与 Session：网站怎么记住你</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.6.4</code></td>
+        <td>缓存、CDN 与 Anycast</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.6.5</code></td>
+        <td>HTTP/2、HTTP/3 与 QUIC</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.6.6</code></td>
+        <td>WebSocket 与长连接：服务器主动找你</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4.7　TLS</h2>
+  <p class="grpnote">两种加密、证书、握手、HTTPS 保护了什么</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>4.7.1</code></td>
+        <td>对称与非对称加密：两把钥匙的故事</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.7.2</code></td>
+        <td>证书与 CA：为什么你相信那个小锁</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.7.3</code></td>
+        <td>握手全过程：那几百毫秒里发生了什么</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.7.4</code></td>
+        <td>HTTPS 到底保护了什么，没保护什么</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4.8　其他协议家族</h2>
+  <p class="grpnote">SSH、MQTT、P2P</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>4.8.1</code></td>
+        <td>SSH 与 SFTP：怎么安全地操作远程机器、怎么传文件</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.8.2</code></td>
+        <td>MQTT 与物联网：几百万个设备怎么上报</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.8.3</code></td>
+        <td>P2P 与 BitTorrent：没有中心服务器怎么分发</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4.9　代理、VPN 与排查</h2>
+  <p class="grpnote">正反向代理、隧道、抓包、分层诊断</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>4.9.1</code></td>
+        <td>正向代理与反向代理：站在哪一边</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.9.2</code></td>
+        <td>VPN、隧道与 WireGuard</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.9.3</code></td>
+        <td>ping、traceroute、netstat：三个命令能查出什么</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.9.4</code></td>
+        <td>Wireshark 抓包：亲眼看见三次握手、DNS 查询和数据包</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>4.9.5</code></td>
+        <td>"网不好"到底是哪一层坏了：分层排查法</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="../03-files/index.html">← PART 03 文件与格式：为什么它们长那副样子</a>
+    <a class="next" href="../05-mail/index.html">PART 05 邮件与账号：互联网最早的那套东西 →</a>
+  </div>
+
+</div>
+</body>
+</html>

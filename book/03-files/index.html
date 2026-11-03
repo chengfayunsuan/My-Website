@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 03 · 文件与格式：为什么它们长那副样子</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../index.html">总目录</a>
+    <a href="index.html">PART 03</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../index.html">总目录</a><span class="sep">/</span><span class="here">PART 03</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">PART 03</span>
+    文件与格式：为什么它们长那副样子
+  </h1>
+  <p class="part-sub">所有文件在硬盘上都只是一串字节。后缀、魔数、编码、封装，全都是「怎么解释这串字节」的约定。</p>
+
+  <p class="lead">这一部会拆掉一个很常见的误解：文件有「类型」。文件没有类型，只有字节。类型是我们事后贴上去的标签，而这个标签有时候贴在文件名上，有时候贴在文件头里，有时候贴在 HTTP 头里——三种地方，三种规矩。</p>
+
+  <div class="note">
+    <b>本部分布：</b>7 个中章 · 28 个小节 · 其中 10 节标 ★ 为速通必读 ·
+    已完稿 0/28
+  </div>
+
+  <h2>3.1　一切都是字节</h2>
+  <p class="grpnote">文件在硬盘上的真实形态，以及文本与非文本的分界</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>3.1.1</code></td>
+        <td>文件在硬盘上到底长什么样：文本文件与二进制文件的分界</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3.2　后缀名</h2>
+  <p class="grpnote">后缀是给谁看的、魔数、MIME、怎么自己发明一个</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>3.2.1</code></td>
+        <td>后缀是给谁看的：Windows 认后缀，Linux 认内容</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.2.2</code></td>
+        <td>常见后缀全表：每个后缀是什么结构、由谁打开</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.2.3</code></td>
+        <td>魔数：文件开头那几个字节才是真身份</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.2.4</code></td>
+        <td>MIME type：网络上认文件靠的是另一套标签</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.2.5</code></td>
+        <td>怎么自己发明一个后缀：从魔数到注册关联</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.2.6</code></td>
+        <td>改后缀会发生什么：为什么有的能改有的直接打不开</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3.3　文本与编码</h2>
+  <p class="grpnote">BOM、换行符、输入法、乱码</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>3.3.1</code></td>
+        <td>BOM、CRLF 与"打开是乱码"的三种成因</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.3.2</code></td>
+        <td>中文输入法是怎么工作的：拼音怎么变成汉字</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.3.3</code></td>
+        <td>排序、大小写与正则：字符集之外还有一堆坑</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3.4　图片</h2>
+  <p class="grpnote">位图与矢量、格式、压缩、分辨率与色彩</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>3.4.1</code></td>
+        <td>位图与矢量：像素与公式的两条路</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.4.2</code></td>
+        <td>BMP、PNG、JPEG、GIF、WebP 各自在干什么</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.4.3</code></td>
+        <td>压缩：无损与有损到底差在哪</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.4.4</code></td>
+        <td>分辨率、DPI、色深与色域</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3.5　音频与视频</h2>
+  <p class="grpnote">采样、编码、封装、转码</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>3.5.1</code></td>
+        <td>采样率、位深与声道：声音怎么变成数字</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.5.2</code></td>
+        <td>WAV、MP3、AAC、FLAC：四种声音文件的分工</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.5.3</code></td>
+        <td>视频 = 一串图片 + 声音：H.264、H.265、AV1</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.5.4</code></td>
+        <td>封装格式：MP4、MKV、AVI 的区别在哪一层</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.5.5</code></td>
+        <td>码率、帧率与转码：为什么压完就糊了</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3.6　文档与数据</h2>
+  <p class="grpnote">PDF、Office、字体、序列化格式</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>3.6.1</code></td>
+        <td>PDF：为什么它到哪里都长一样</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.6.2</code></td>
+        <td>DOCX、XLSX、PPTX：其实是一包 XML</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.6.3</code></td>
+        <td>Markdown、HTML 与纯文本：写作的三种载体</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.6.4</code></td>
+        <td>字体文件：字形是怎么被画出来的</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.6.5</code></td>
+        <td>JSON、XML、YAML、CSV、Protobuf：数据怎么排队</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3.7　可执行与压缩</h2>
+  <p class="grpnote">程序文件结构、压缩算法、校验和</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>3.7.1</code></td>
+        <td>EXE、DLL、ELF：程序文件里装了什么</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.7.2</code></td>
+        <td>ZIP、RAR、7z、gz：压缩的原理</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.7.3</code></td>
+        <td>校验和与哈希：怎么知道文件没坏、没被改</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>3.7.4</code></td>
+        <td>文件之间怎么互相引用</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="../02-os/index.html">← PART 02 操作系统：把一台机器分成很多间房</a>
+    <a class="next" href="../04-network/index.html">PART 04 网络：两台机器怎么变成一台大机器 →</a>
+  </div>
+
+</div>
+</body>
+</html>

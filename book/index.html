@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>计算机是怎么长出来的 · 从一枚晶体管到一家公司</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="cover">
+  <a class="back-site" href="../">← 乘法主页</a>
+  <div class="kicker">COMPUTER · FROM SAND TO COMPANY</div>
+  <h1>计算机是怎么长出来的</h1>
+  <p class="sub">
+    从一枚晶体管里的两种电压，一路讲到浏览器、QQ、OBS、游戏、Agent，
+    再讲到注册一家公司、租一台服务器、开一个银行账户、把网站挂到全世界面前。
+    每一节都从最底层开始交代，只用到前面已经讲过的东西。
+  </p>
+  <div class="meta">
+    十四部 · 104 个中章 · 386 个小节 · 讲透为止，不凑字数 · 自底向上，不跳级
+  </div>
+  <p class="cover-link"><a href="intro.html">先读序：这本书想干什么 →</a></p>
+</div>
+
+<div class="wrap">
+
+  <p class="lead">
+    这本书只有一条规则：<strong>任何一节里出现的名词，都必须在它之前被解释过</strong>。
+    所以顺序不能打乱——你不能先看 API 再回头补 HTTP，也不能先看 Node.js 再回头补端口。
+    下面这条线就是从电开始，一格一格往上垒。
+  </p>
+
+  <div class="note">
+    <b>当前进度：</b>已完稿 5 节 / 共 386 节（第 0 部 0.1.1、0.1.2；第 1 部 1.1.1、1.1.2、1.1.3）。
+    每写完一节，状态标记和统计会自动更新。带 <span class="tag todo">未开始</span> 的还没动笔。
+  </div>
+
+  <div class="key">
+    <b>两种读法。</b>
+    全部 386 节，长的两万字，短的八千字。不必等它写完。
+    标了 ★ 的 <strong>142 节</strong>是「速通线」——只读这些，也能从电一路贯通到公司，不会断链。
+    其余的节是深水区，按兴趣挑着看。
+  </div>
+
+  <h2>第一层：机器本身</h2>
+  <p class="grpnote">电、逻辑、操作系统、文件。这一层不看，后面全是背名词。</p>
+
+  <div class="toc">
+    <a class="card" href="00-hardware/index.html">
+      <span class="num">PART 00　共 14 节</span>
+      <span class="ttl">先拆开一台电脑<span class="tag wip">进行中</span></span>
+      <span class="desc">0.1 机箱里有什么　·　0.2 接口与外设　·　0.3 装机与兼容　·　0.4 两种芯片架构</span>
+      <span class="meta">4 个中章　·　4 节速通必读　·　已完稿 2/14</span>
+    </a>
+    <a class="card" href="01-machine/index.html">
+      <span class="num">PART 01　共 30 节</span>
+      <span class="ttl">电、逻辑与数：机器是怎么学会算数的<span class="tag wip">进行中</span></span>
+      <span class="desc">1.1 信息的单位：从电压到比特　·　1.2 逻辑门：让电流学会判断　·　1.3 CPU：一台只认识几十条命令的机器　·　1.4 从语言到机器码：人怎么跟机器说话　·　1.5 数据怎么组织　·　1.6 把程序做出来的一套工具　·　1.7 代码怎么协作</span>
+      <span class="meta">7 个中章　·　12 节速通必读　·　已完稿 3/30</span>
+    </a>
+    <a class="card" href="02-os/index.html">
+      <span class="num">PART 02　共 34 节</span>
+      <span class="ttl">操作系统：把一台机器分成很多间房<span class="tag todo">未开始</span></span>
+      <span class="desc">2.1 操作系统是什么　·　2.2 进程与线程　·　2.3 内存　·　2.4 文件系统　·　2.5 Windows 的特有结构　·　2.6 命令行　·　2.7 时间　·　2.8 电脑卡了到底卡在哪</span>
+      <span class="meta">8 个中章　·　13 节速通必读　·　已完稿 0/34</span>
+    </a>
+    <a class="card" href="03-files/index.html">
+      <span class="num">PART 03　共 28 节</span>
+      <span class="ttl">文件与格式：为什么它们长那副样子<span class="tag todo">未开始</span></span>
+      <span class="desc">3.1 一切都是字节　·　3.2 后缀名　·　3.3 文本与编码　·　3.4 图片　·　3.5 音频与视频　·　3.6 文档与数据　·　3.7 可执行与压缩</span>
+      <span class="meta">7 个中章　·　10 节速通必读　·　已完稿 0/28</span>
+    </a>
+  </div>
+
+  <h2>第二层：把机器连起来</h2>
+  <p class="grpnote">网络、邮件。从这里开始，你的电脑不再是一个孤岛。</p>
+
+  <div class="toc">
+    <a class="card" href="04-network/index.html">
+      <span class="num">PART 04　共 41 节</span>
+      <span class="ttl">网络：两台机器怎么变成一台大机器<span class="tag todo">未开始</span></span>
+      <span class="desc">4.1 物理与链路　·　4.2 物理互联网　·　4.3 IP 层　·　4.4 域名与 DNS　·　4.5 TCP 与 UDP　·　4.6 HTTP　·　4.7 TLS　·　4.8 其他协议家族　·　4.9 代理、VPN 与排查</span>
+      <span class="meta">9 个中章　·　19 节速通必读　·　已完稿 0/41</span>
+    </a>
+    <a class="card" href="05-mail/index.html">
+      <span class="num">PART 05　共 19 节</span>
+      <span class="ttl">邮件与账号：互联网最早的那套东西<span class="tag todo">未开始</span></span>
+      <span class="desc">5.1 邮件地址　·　5.2 发信与收信　·　5.3 邮件的内容　·　5.4 反垃圾与防伪造　·　5.5 建一个邮箱系统　·　5.6 账号与身份</span>
+      <span class="meta">6 个中章　·　7 节速通必读　·　已完稿 0/19</span>
+    </a>
+  </div>
+
+  <h2>第三层：互联网与现实世界</h2>
+  <p class="grpnote">网站、银行、公司。这一层是「技术」和「社会」的接缝。</p>
+
+  <div class="toc">
+    <a class="card" href="06-web/index.html">
+      <span class="num">PART 06　共 47 节</span>
+      <span class="ttl">网站与 Node.js：从一段代码到别人能访问<span class="tag todo">未开始</span></span>
+      <span class="desc">6.1 一次访问经过了谁　·　6.2 HTML：页面的骨架　·　6.3 CSS：页面的样子　·　6.4 JavaScript：页面的行为　·　6.5 一个网站的文件夹怎么摆　·　6.6 后端与 Node.js　·　6.7 数据库　·　6.8 API　·　6.9 部署　·　6.10 一台机器不够用　·　6.11 搜索引擎与内容分发　·　6.12 Web 安全</span>
+      <span class="meta">12 个中章　·　22 节速通必读　·　已完稿 0/47</span>
+    </a>
+    <a class="card" href="07-money/index.html">
+      <span class="num">PART 07　共 40 节</span>
+      <span class="ttl">钱与银行：一笔转账背后的九层系统<span class="tag todo">未开始</span></span>
+      <span class="desc">7.1 全球货币体系　·　7.2 两级体系　·　7.3 账户　·　7.4 卡　·　7.5 一笔刷卡的钱怎么走　·　7.6 转账与清算　·　7.7 扫码支付　·　7.8 银行的技术　·　7.9 跨境与数字货币</span>
+      <span class="meta">9 个中章　·　13 节速通必读　·　已完稿 0/40</span>
+    </a>
+    <a class="card" href="08-business/index.html">
+      <span class="num">PART 08　共 25 节</span>
+      <span class="ttl">生意：从一张营业执照到一笔到账<span class="tag todo">未开始</span></span>
+      <span class="desc">8.1 主体与资质　·　8.2 注册流程　·　8.3 税务与发票　·　8.4 成本与服务器　·　8.5 收款与结算　·　8.6 合同与知识产权　·　8.7 合规　·　8.8 一个人怎么把公司转起来</span>
+      <span class="meta">8 个中章　·　7 节速通必读　·　已完稿 0/25</span>
+    </a>
+  </div>
+
+  <h2>第四层：软件与智能</h2>
+  <p class="grpnote">桌面、手机、Agent、安全。你天天点开的那些东西。</p>
+
+  <div class="toc">
+    <a class="card" href="09-desktop/index.html">
+      <span class="num">PART 09　共 39 节</span>
+      <span class="ttl">桌面与移动软件：它们各自在系统里占了哪块地<span class="tag todo">未开始</span></span>
+      <span class="desc">9.1 一个 App 是怎么被造出来的　·　9.2 软件怎么装进电脑　·　9.3 浏览器　·　9.4 QQ 与即时通讯　·　9.5 OBS 与录屏　·　9.6 游戏与显卡　·　9.7 FL Studio 与音频　·　9.8 壁纸与桌面美化　·　9.9 卸载器与遗留　·　9.10 手机应用　·　9.11 显示器与色彩</span>
+      <span class="meta">11 个中章　·　8 节速通必读　·　已完稿 0/39</span>
+    </a>
+    <a class="card" href="10-agent/index.html">
+      <span class="num">PART 10　共 24 节</span>
+      <span class="ttl">Agent 与本地部署：会自己动手的程序<span class="tag todo">未开始</span></span>
+      <span class="desc">10.1 Agent 的工作循环　·　10.2 工具、沙箱与权限　·　10.3 模型权重的物理形态　·　10.4 本地推理　·　10.5 训练与微调　·　10.6 多模态　·　10.7 把它用起来</span>
+      <span class="meta">7 个中章　·　7 节速通必读　·　已完稿 0/24</span>
+    </a>
+    <a class="card" href="11-security/index.html">
+      <span class="num">PART 11　共 24 节</span>
+      <span class="ttl">安全与暗网：谁在偷看，怎么藏起来<span class="tag todo">未开始</span></span>
+      <span class="desc">11.1 加密的三块砖　·　11.2 攻击面　·　11.3 Tor 与匿名　·　11.4 审查与反审查　·　11.5 企业安全　·　11.6 个人安全实践　·　11.7 隐私与数据</span>
+      <span class="meta">7 个中章　·　6 节速通必读　·　已完稿 0/24</span>
+    </a>
+  </div>
+
+  <h2>第五层：怎么真的学会</h2>
+  <p class="grpnote">实验与地图。光看不会，得动手。</p>
+
+  <div class="toc">
+    <a class="card" href="12-lab/index.html">
+      <span class="num">PART 12　共 15 节</span>
+      <span class="ttl">实验手册：动手把每一层跑一遍<span class="tag todo">未开始</span></span>
+      <span class="desc">12.1 先准备一台可以随便折腾的机器　·　12.2 底层实验　·　12.3 网络实验　·　12.4 服务端实验　·　12.5 数据实验</span>
+      <span class="meta">5 个中章　·　10 节速通必读　·　已完稿 0/15</span>
+    </a>
+    <a class="card" href="13-map/index.html">
+      <span class="num">PART 13　共 6 节</span>
+      <span class="ttl">地图与书单：接下来往哪走<span class="tag todo">未开始</span></span>
+      <span class="desc">13.1 六阶段路线　·　13.2 验收标准　·　13.3 按缺口选书与选课　·　13.4 一百道自查题</span>
+      <span class="meta">4 个中章　·　4 节速通必读　·　已完稿 0/6</span>
+    </a>
+  </div>
+
+  <h2>怎么读这本书</h2>
+
+  <dl class="kv">
+    <dt>顺序读</dt>
+    <dd>按编号 0.1.1 → 0.1.2 → … 一路读。这是唯一不需要先补知识的方式。</dd>
+
+    <dt>速通读</dt>
+    <dd>只读标 ★ 的节，约 142 节。跳过的节在正文里都会有「本节不讲，见 x.x.x」的指路。</dd>
+
+    <dt>每节的结构</dt>
+    <dd>先讲「它要解决什么问题」，再讲「它怎么解决」，然后「细节拆到最底层」，最后「常见误解 + 自测题」。</dd>
+
+    <dt>字数</dt>
+    <dd>不按配额写。讲得完的八千字就收尾，讲不完的两万字也不够——字数服从「讲清楚」，不服从指标。</dd>
+
+    <dt>自包含</dt>
+    <dd>每节开头会用一两百字把必需的前置重新交代一遍，所以单独抽一节给别人看，也不会断头。</dd>
+
+    <dt>标注</dt>
+    <dd>★ 速通必读　·　<b>待写</b> 尚未动笔　·　<b>已完稿</b> 可直接点开读。</dd>
+  </dl>
+
+  <div class="pager">
+    <span></span>
+    <a class="next" href="00-hardware/index.html">PART 00 · 先拆开一台电脑 →</a>
+  </div>
+
+</div>
+</body>
+</html>

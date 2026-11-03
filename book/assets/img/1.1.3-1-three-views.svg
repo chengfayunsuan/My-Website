@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" font-family="'PingFang SC','Microsoft YaHei',monospace">
+  <rect width="640" height="380" fill="#0e0e16"/>
+
+  <text x="20" y="26" fill="#9a9ab4" font-size="12.5">同一串比特，贴上三张标签，就是三个不同的数</text>
+  <text x="20" y="46" fill="#6b6b85" font-size="11">比特本身没有正负、没有小数、没有含义 —— 含义全部来自「你怎么读它」</text>
+
+  <!-- 位串 -->
+  <text x="20" y="92" fill="#6b6b85" font-size="10.5">1010 1100</text>
+  <g font-size="14" text-anchor="middle">
+    <rect x="96" y="72" width="34" height="34" rx="4" fill="#221636" stroke="#9b4df0" stroke-opacity="0.7"/><text x="113" y="95" fill="#d8c8ff">1</text>
+    <rect x="134" y="72" width="34" height="34" rx="4" fill="#221636" stroke="#9b4df0" stroke-opacity="0.7"/><text x="151" y="95" fill="#d8c8ff">0</text>
+    <rect x="172" y="72" width="34" height="34" rx="4" fill="#221636" stroke="#9b4df0" stroke-opacity="0.7"/><text x="189" y="95" fill="#d8c8ff">1</text>
+    <rect x="210" y="72" width="34" height="34" rx="4" fill="#221636" stroke="#9b4df0" stroke-opacity="0.7"/><text x="227" y="95" fill="#d8c8ff">0</text>
+    <rect x="256" y="72" width="34" height="34" rx="4" fill="#182231" stroke="#67b5ef" stroke-opacity="0.7"/><text x="273" y="95" fill="#a8d8f7">1</text>
+    <rect x="294" y="72" width="34" height="34" rx="4" fill="#182231" stroke="#67b5ef" stroke-opacity="0.7"/><text x="311" y="95" fill="#a8d8f7">1</text>
+    <rect x="332" y="72" width="34" height="34" rx="4" fill="#182231" stroke="#67b5ef" stroke-opacity="0.7"/><text x="349" y="95" fill="#a8d8f7">0</text>
+    <rect x="370" y="72" width="34" height="34" rx="4" fill="#182231" stroke="#67b5ef" stroke-opacity="0.7"/><text x="387" y="95" fill="#a8d8f7">0</text>
+  </g>
+  <text x="430" y="95" fill="#6b6b85" font-size="10.5">= 0xAC</text>
+
+  <!-- 三条分支 -->
+  <line x1="113" y1="112" x2="113" y2="140" stroke="#3a3a5c" stroke-width="1.5"/>
+  <line x1="311" y1="112" x2="311" y2="140" stroke="#3a3a5c" stroke-width="1.5"/>
+  <line x1="500" y1="112" x2="500" y2="140" stroke="#3a3a5c" stroke-width="1.5"/>
+
+  <!-- 卡 1：无符号 -->
+  <rect x="20" y="146" width="186" height="150" rx="10" fill="#171725" stroke="#67b5ef" stroke-opacity="0.45"/>
+  <text x="36" y="172" fill="#67b5ef" font-size="11.5" font-weight="700">无符号读法</text>
+  <text x="36" y="216" fill="#ffffff" font-size="32" font-weight="700">172</text>
+  <text x="36" y="244" fill="#9a9ab4" font-size="10.5">128 + 32 + 8 + 4</text>
+  <text x="36" y="268" fill="#6b6b85" font-size="10.5">范围 0 ~ 255</text>
+  <text x="36" y="286" fill="#6b6b85" font-size="10.5">用于：长度、像素、端口</text>
+
+  <!-- 卡 2：补码 -->
+  <rect x="226" y="146" width="186" height="150" rx="10" fill="#171725" stroke="#9b4df0" stroke-opacity="0.55"/>
+  <text x="242" y="172" fill="#c9b0ff" font-size="11.5" font-weight="700">补码读法</text>
+  <text x="242" y="216" fill="#ffffff" font-size="32" font-weight="700">−84</text>
+  <text x="242" y="244" fill="#9a9ab4" font-size="10.5">172 − 256</text>
+  <text x="242" y="268" fill="#6b6b85" font-size="10.5">范围 −128 ~ 127</text>
+  <text x="242" y="286" fill="#6b6b85" font-size="10.5">用于：温度、坐标、余额</text>
+
+  <!-- 卡 3：位标志 -->
+  <rect x="432" y="146" width="188" height="150" rx="10" fill="#171725" stroke="#4ec9a3" stroke-opacity="0.45"/>
+  <text x="448" y="172" fill="#4ec9a3" font-size="11.5" font-weight="700">位标志读法</text>
+  <text x="448" y="200" fill="#d8d8e4" font-size="13">8 个独立的开关</text>
+  <text x="448" y="222" fill="#9a9ab4" font-size="10.5">开：1010 1100 → 第 7、5、3、2 位</text>
+  <text x="448" y="244" fill="#6b6b85" font-size="10.5">用于：权限、状态、特性开关</text>
+  <text x="448" y="268" fill="#6b6b85" font-size="10.5">同一个字节 = 8 个「是/否」</text>
+  <text x="448" y="286" fill="#6b6b85" font-size="10.5">这是「位图」的基础</text>
+
+  <!-- 浮点提示 -->
+  <rect x="20" y="314" width="600" height="46" rx="8" fill="#131320" stroke="#2a2a44"/>
+  <text x="34" y="334" fill="#e8b84b" font-size="11">浮点读法需要至少 32 位（1 位符号 + 8 位指数 + 23 位尾数），8 位装不下一个浮点数。</text>
+  <text x="34" y="352" fill="#6b6b85" font-size="10.5">所以「一个字节」能表示的东西，只有前三种；要表示小数，至少得凑够 4 个字节。</text>
+</svg>

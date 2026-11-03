@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="a4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L8,4 L0,7 Z" fill="#6b6b85"/>
+    </marker>
+  </defs>
+
+  <rect width="760" height="470" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">谁跟谁说话：快的直连 CPU，慢的汇总到芯片组再转交</text>
+
+  <!-- CPU -->
+  <rect x="270" y="80" width="180" height="100" rx="8" fill="#20203a" stroke="#9b4df0" stroke-width="1.5"/>
+  <text x="360" y="120" fill="#fff" font-size="15" text-anchor="middle">CPU</text>
+  <text x="360" y="142" fill="#9b4df0" font-size="11" text-anchor="middle" font-family="monospace">真正在算的那个</text>
+
+  <!-- 内存 -->
+  <rect x="520" y="70" width="180" height="90" rx="8" fill="#16202b" stroke="#67b5ef" stroke-width="1.5"/>
+  <text x="610" y="106" fill="#a8d4f5" font-size="14" text-anchor="middle">内存</text>
+  <text x="610" y="128" fill="#67b5ef" font-size="11" text-anchor="middle" font-family="monospace">双通道，离 CPU 最近</text>
+
+  <line x1="452" y1="118" x2="516" y2="115" stroke="#67b5ef" stroke-width="1.6" marker-end="url(#a4)"/>
+  <text x="484" y="106" fill="#6b6b85" font-size="10.5" text-anchor="middle" font-family="monospace">内存通道</text>
+
+  <!-- PCIe 设备 -->
+  <rect x="520" y="250" width="180" height="90" rx="8" fill="#241f14" stroke="#e8b84b" stroke-width="1.5"/>
+  <text x="610" y="286" fill="#f0cd7a" font-size="14" text-anchor="middle">显卡 / NVMe 固态</text>
+  <text x="610" y="308" fill="#e8b84b" font-size="11" text-anchor="middle" font-family="monospace">PCIe 直连</text>
+
+  <line x1="440" y1="182" x2="556" y2="248" stroke="#e8b84b" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#a4)"/>
+  <text x="566" y="216" fill="#6b6b85" font-size="10.5" font-family="monospace">PCIe ×16</text>
+
+  <!-- PCH -->
+  <rect x="270" y="280" width="180" height="90" rx="8" fill="#1a1a26" stroke="#6b6b85" stroke-width="1.5"/>
+  <text x="360" y="316" fill="#c9c9dd" font-size="14" text-anchor="middle">芯片组</text>
+  <text x="360" y="338" fill="#6b6b85" font-size="11" text-anchor="middle" font-family="monospace">PCH，慢速设备的集线器</text>
+
+  <line x1="360" y1="182" x2="360" y2="276" stroke="#6b6b85" stroke-width="1.6" marker-end="url(#a4)"/>
+  <text x="368" y="234" fill="#6b6b85" font-size="10.5" font-family="monospace">DMI</text>
+
+  <!-- 外设 -->
+  <rect x="60" y="280" width="150" height="90" rx="8" fill="#152420" stroke="#4ec9a3" stroke-width="1.5"/>
+  <text x="135" y="312" fill="#7fe0c2" font-size="13" text-anchor="middle">USB / SATA</text>
+  <text x="135" y="334" fill="#4ec9a3" font-size="11" text-anchor="middle" font-family="monospace">网卡·声卡·硬盘</text>
+
+  <line x1="268" y1="325" x2="214" y2="325" stroke="#4ec9a3" stroke-width="1.6" marker-end="url(#a4)"/>
+  <text x="241" y="368" fill="#6b6b85" font-size="10.5" text-anchor="middle" font-family="monospace">南向</text>
+
+  <!-- 说明 -->
+  <rect x="60" y="404" width="640" height="46" rx="8" fill="#12121c" stroke="#2a2a44"/>
+  <text x="76" y="424" fill="#9a9ab4" font-size="12">这条线叫「数据通路」：数据在哪两个部件之间跑，就跑在对应的那组线路上。</text>
+  <text x="76" y="442" fill="#9a9ab4" font-size="12">为什么显卡插槽总是离 CPU 最近？因为它要的带宽最大，走线越短越稳。</text>
+
+  <text x="24" y="24" fill="none">.</text>
+</svg>

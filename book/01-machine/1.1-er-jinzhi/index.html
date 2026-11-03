@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.1 信息的单位：从电压到比特</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部 电、逻辑与指令</a><span class="sep">/</span>
+    <span class="here">1.1 信息的单位</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">CHAPTER 1.1</span>
+    信息的单位：从电压到比特
+  </h1>
+  <p class="part-sub">这一章只回答一个问题：现实世界里连续变化的东西，怎么变成一串可以被机器处理的离散符号</p>
+
+  <p class="lead">
+    这是全书的起点，也是最容易被跳过的一步。多数教程从「计算机使用二进制」开始讲，
+    却没说清<strong>为什么非二进制不可</strong>、<strong>二进制凭什么能表示文字和图片</strong>。
+    这一章的四个小节，就是把这两个问题拆到底。
+  </p>
+
+  <p>
+    四节的顺序是有依赖的：先有「一位能存两种状态」（1.1.1），才有「八位凑成一个字节、字节能做位运算」（1.1.2）；
+    有了字节，才能谈「这八个位怎么解释成一个数字」（1.1.3）；解释成数字之后，
+    才轮到「怎么解释成文字」（1.1.4）。跳着看会断。
+  </p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th>它解决什么</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>1.1.1</code></td>
+        <td><a href="1.1.1-only-0-and-1.html" style="color:#cfc6ff">为什么机器只认两个数：0 和 1 的物理来源</a></td>
+        <td>电压怎么变成 0/1；为什么不是十进制；编码的本质是什么</td>
+        <td><span class="tag done">已完稿</span></td>
+      </tr>
+      <tr>
+        <td><code>1.1.2</code></td>
+        <td><a href="1.1.2-bit-byte-word.html" style="color:#cfc6ff">比特、字节、字：容量单位是怎么定的</a></td>
+        <td>为什么 8 位一个字节；KB 到底是 1000 还是 1024；位运算能干什么</td>
+        <td><span class="tag done">已完稿</span></td>
+      </tr>
+      <tr>
+        <td><code>1.1.3</code></td>
+        <td><a href="1.1.3-numbers.html" style="color:#cfc6ff">数字的三种面孔：无符号、补码、浮点</a></td>
+        <td>−1 为什么是 11111111；0.1+0.2 为什么不等于 0.3</td>
+        <td><span class="tag done">已完稿</span></td>
+      </tr>
+      <tr>
+        <td><code>1.1.4</code></td>
+        <td>文字的编码：从 ASCII 到 UTF-8</td>
+        <td>中文为什么 3 个字节；乱码到底是谁的错</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="../index.html">← 第 1 部目录</a>
+    <a class="next" href="1.1.1-only-0-and-1.html">1.1.1 为什么只有 0 和 1 →</a>
+  </div>
+
+</div>
+</body>
+</html>

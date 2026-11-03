@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 07 · 钱与银行：一笔转账背后的九层系统</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../index.html">总目录</a>
+    <a href="index.html">PART 07</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../index.html">总目录</a><span class="sep">/</span><span class="here">PART 07</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">PART 07</span>
+    钱与银行：一笔转账背后的九层系统
+  </h1>
+  <p class="part-sub">从全球货币体系一路讲到 ISO 8583 报文。现实层面和技术层面各占一半，因为它们本来就是一件事的两面。</p>
+
+  <p class="lead">这一部不讲「钱是什么」这种常识。它讲的是：你点一下「付款」，中间经过了几家公司、几台机器、几套账本、几个监管机构，以及每一步为什么会出错、出错了谁来赔。</p>
+
+  <div class="note">
+    <b>本部分布：</b>9 个中章 · 40 个小节 · 其中 13 节标 ★ 为速通必读 ·
+    已完稿 0/40
+  </div>
+
+  <h2>7.1　全球货币体系</h2>
+  <p class="grpnote">金本位、布雷顿森林、美元环流、SWIFT</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>7.1.1</code></td>
+        <td>金本位、布雷顿森林与 1971 年那扇关上的窗</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.1.2</code></td>
+        <td>牙买加体系与浮动汇率：现在的规则是谁定的</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.1.3</code></td>
+        <td>石油美元与美元环流：一张纸凭什么换全世界的货</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.1.4</code></td>
+        <td>SWIFT、CHIPS 与 Fedwire：报文和清算根本不是一回事</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.1.5</code></td>
+        <td>外汇储备、汇率形成与 SDR</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7.2　两级体系</h2>
+  <p class="grpnote">央行、商业银行、准备金、货币乘数、利率</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>7.2.1</code></td>
+        <td>央行、商业银行与政策性银行：谁管谁</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.2.2</code></td>
+        <td>准备金、货币乘数与利率：银行是怎么"造"钱、又为什么给你利息</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7.3　账户</h2>
+  <p class="grpnote">账户的本质、I/II/III 类户、KYC、征信</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>7.3.1</code></td>
+        <td>账户的本质：其实就是一张表里的一行</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.3.2</code></td>
+        <td>I、II、III 类户：为什么你的二类卡有限额</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.3.3</code></td>
+        <td>开户为什么这么麻烦：KYC、反洗钱与断卡行动</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.3.4</code></td>
+        <td>征信：那份关于你的数字档案里写了什么</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7.4　卡</h2>
+  <p class="grpnote">卡号、磁条芯片、CVV、借记信用、卡组织</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>7.4.1</code></td>
+        <td>卡号里的秘密：BIN 段与 Luhn 校验</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.4.2</code></td>
+        <td>磁条、芯片与 EMV：为什么插卡比刷卡安全</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.4.3</code></td>
+        <td>CVV、有效期与"被盗刷"是怎么发生的</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.4.4</code></td>
+        <td>借记卡与信用卡：钱到底从哪来</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.4.5</code></td>
+        <td>银联、Visa、Mastercard：卡组织在中间干什么</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7.5　一笔刷卡的钱怎么走</h2>
+  <p class="grpnote">POS、收单、授权、清算、手续费、拒付</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>7.5.1</code></td>
+        <td>POS → 收单机构 → 卡组织 → 发卡行</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.5.2</code></td>
+        <td>授权与清算：为什么先冻结、后到账</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.5.3</code></td>
+        <td>手续费与分润：你刷的那 100 块被谁拿走了</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.5.4</code></td>
+        <td>拒付与争议处理：钱被退回去了怎么办</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7.6　转账与清算</h2>
+  <p class="grpnote">行内、跨行、网联、批处理、为什么等到账</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>7.6.1</code></td>
+        <td>行内转账：说白了就是改两张表</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.6.2</code></td>
+        <td>跨行转账：大小额、超级网银与两条通道</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.6.3</code></td>
+        <td>网联与"断直连"：为什么支付要经过一个中枢</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.6.4</code></td>
+        <td>清算所为什么要半夜批处理</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.6.5</code></td>
+        <td>为什么到账要等、周末为什么不到</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7.7　扫码支付</h2>
+  <p class="grpnote">二维码、一笔支付的完整路径、牌照</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>7.7.1</code></td>
+        <td>二维码里装了什么：付款码与收款码是两条完全不同的路</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.7.2</code></td>
+        <td>从扫码到"叮"：一笔微信支付的完整路径</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.7.3</code></td>
+        <td>备付金、二清与支付牌照</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7.8　银行的技术</h2>
+  <p class="grpnote">核心系统、复式记账、事务、幂等、对账、报文、风控</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>7.8.1</code></td>
+        <td>核心银行系统：一台几十年没换过的机器</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.8.2</code></td>
+        <td>复式记账：为什么每一笔都要记两次</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.8.3</code></td>
+        <td>数据库事务：转账绝不能只成功一半</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.8.4</code></td>
+        <td>幂等、重试与"重复扣款"</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.8.5</code></td>
+        <td>对账：每天半夜把两边的账对一遍</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.8.6</code></td>
+        <td>报文标准：ISO 8583 与 ISO 20022 长什么样</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.8.7</code></td>
+        <td>风控规则引擎与实时拦截</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.8.8</code></td>
+        <td>高可用：银行系统为什么一秒都不能停</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7.9　跨境与数字货币</h2>
+  <p class="grpnote">代理行、CIPS、数字人民币、稳定币</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>7.9.1</code></td>
+        <td>代理行与对应账户：跨境汇款为什么又慢又贵</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.9.2</code></td>
+        <td>CIPS 与人民币国际化</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.9.3</code></td>
+        <td>数字人民币与 CBDC</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>7.9.4</code></td>
+        <td>稳定币、比特币与分布式账本：它们在体系里站哪一格</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="../06-web/index.html">← PART 06 网站与 Node.js：从一段代码到别人能访问</a>
+    <a class="next" href="../08-business/index.html">PART 08 生意：从一张营业执照到一笔到账 →</a>
+  </div>
+
+</div>
+</body>
+</html>

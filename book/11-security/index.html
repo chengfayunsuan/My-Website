@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 11 · 安全与暗网：谁在偷看，怎么藏起来</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../index.html">总目录</a>
+    <a href="index.html">PART 11</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../index.html">总目录</a><span class="sep">/</span><span class="here">PART 11</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">PART 11</span>
+    安全与暗网：谁在偷看，怎么藏起来
+  </h1>
+  <p class="part-sub">加密、攻击面、Tor、审查与反审查。这一部讲的是「当网络不再可信时会发生什么」。</p>
+
+  <p class="lead">安全这一行有个残酷的事实：防守方要堵住所有洞，攻击方只要找到一个。所以这一部不教你「怎么变安全」，而是教你「攻击者会从哪几个方向来」——知道方向，才知道该堵哪儿。</p>
+
+  <div class="note">
+    <b>本部分布：</b>7 个中章 · 24 个小节 · 其中 6 节标 ★ 为速通必读 ·
+    已完稿 0/24
+  </div>
+
+  <h2>11.1　加密的三块砖</h2>
+  <p class="grpnote">对称、非对称、哈希与签名</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>11.1.1</code></td>
+        <td>对称加密与分组模式：一把钥匙开一把锁</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.1.2</code></td>
+        <td>非对称加密与密钥交换：两把钥匙怎么配合</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.1.3</code></td>
+        <td>哈希、HMAC 与数字签名：证明"这是你发的"</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>11.2　攻击面</h2>
+  <p class="grpnote">弱口令、漏洞、劫持、恶意软件、社工</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>11.2.1</code></td>
+        <td>弱口令、撞库与钓鱼：90% 的入侵从这里开始</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.2.2</code></td>
+        <td>漏洞、补丁与 0day</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.2.3</code></td>
+        <td>中间人、DNS 劫持与流量劫持</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.2.4</code></td>
+        <td>恶意软件、勒索与挖矿</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.2.5</code></td>
+        <td>社会工程：人永远是最软的一环</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>11.3　Tor 与匿名</h2>
+  <p class="grpnote">三层洋葱、隐藏服务、暗网的位置、指纹</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>11.3.1</code></td>
+        <td>三层洋葱：入口、中间、出口</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.3.2</code></td>
+        <td>隐藏服务与 .onion：服务器怎么藏起来</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.3.3</code></td>
+        <td>暗网在协议栈的哪一格</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.3.4</code></td>
+        <td>匿名不等于隐身：指纹与关联攻击</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>11.4　审查与反审查</h2>
+  <p class="grpnote">封锁层次、混淆、攻防史</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>11.4.1</code></td>
+        <td>封锁的四个层次：DNS、IP、SNI、流量特征</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.4.2</code></td>
+        <td>混淆、域前置与桥接</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.4.3</code></td>
+        <td>这场攻防的技术史</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>11.5　企业安全</h2>
+  <p class="grpnote">零信任、WAF、应急响应、等保</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>11.5.1</code></td>
+        <td>零信任与最小权限</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.5.2</code></td>
+        <td>WAF、IDS、日志审计与应急响应</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.5.3</code></td>
+        <td>等保与合规要求</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>11.6　个人安全实践</h2>
+  <p class="grpnote">密码管理器、硬盘加密、隐私设置、泄露之后</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>11.6.1</code></td>
+        <td>密码管理器与两步验证</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.6.2</code></td>
+        <td>加密硬盘与加密备份</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.6.3</code></td>
+        <td>手机与电脑的隐私设置</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.6.4</code></td>
+        <td>被泄露了怎么办：止损清单</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>11.7　隐私与数据</h2>
+  <p class="grpnote">追踪、画像、法律给的权利</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>11.7.1</code></td>
+        <td>追踪：Cookie、指纹、SDK 与用户画像</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>11.7.2</code></td>
+        <td>个人信息保护法给了你什么权利</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="../10-agent/index.html">← PART 10 Agent 与本地部署：会自己动手的程序</a>
+    <a class="next" href="../12-lab/index.html">PART 12 实验手册：动手把每一层跑一遍 →</a>
+  </div>
+
+</div>
+</body>
+</html>

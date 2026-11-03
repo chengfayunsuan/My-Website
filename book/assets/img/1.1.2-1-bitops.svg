@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" font-family="'PingFang SC','Microsoft YaHei',monospace">
+  <rect width="640" height="400" fill="#0e0e16"/>
+
+  <text x="20" y="26" fill="#9a9ab4" font-size="12.5">五种位运算：同一对输入，五个不同的结果</text>
+  <text x="20" y="46" fill="#6b6b85" font-size="11">每一位独立运算，互不影响 —— 这是它比算术运算"快"的根本原因</text>
+
+  <!-- 列头 -->
+  <text x="128" y="76" fill="#6b6b85" font-size="10.5">b7</text>
+  <text x="154" y="76" fill="#6b6b85" font-size="10.5">b6</text>
+  <text x="180" y="76" fill="#6b6b85" font-size="10.5">b5</text>
+  <text x="206" y="76" fill="#6b6b85" font-size="10.5">b4</text>
+  <text x="232" y="76" fill="#6b6b85" font-size="10.5">b3</text>
+  <text x="258" y="76" fill="#6b6b85" font-size="10.5">b2</text>
+  <text x="284" y="76" fill="#6b6b85" font-size="10.5">b1</text>
+  <text x="310" y="76" fill="#6b6b85" font-size="10.5">b0</text>
+
+  <!-- A -->
+  <text x="20" y="106" fill="#67b5ef" font-size="12.5" font-weight="700">A</text>
+  <text x="20" y="122" fill="#6b6b85" font-size="9.5">1010 1100</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="122" y="88" width="22" height="26" rx="3" fill="#182231" stroke="#67b5ef" stroke-opacity="0.55"/><text x="133" y="106" fill="#a8d8f7">1</text>
+    <rect x="148" y="88" width="22" height="26" rx="3" fill="#182231" stroke="#67b5ef" stroke-opacity="0.55"/><text x="159" y="106" fill="#a8d8f7">0</text>
+    <rect x="174" y="88" width="22" height="26" rx="3" fill="#182231" stroke="#67b5ef" stroke-opacity="0.55"/><text x="185" y="106" fill="#a8d8f7">1</text>
+    <rect x="200" y="88" width="22" height="26" rx="3" fill="#182231" stroke="#67b5ef" stroke-opacity="0.55"/><text x="211" y="106" fill="#a8d8f7">0</text>
+    <rect x="226" y="88" width="22" height="26" rx="3" fill="#182231" stroke="#67b5ef" stroke-opacity="0.55"/><text x="237" y="106" fill="#a8d8f7">1</text>
+    <rect x="252" y="88" width="22" height="26" rx="3" fill="#182231" stroke="#67b5ef" stroke-opacity="0.55"/><text x="263" y="106" fill="#a8d8f7">1</text>
+    <rect x="278" y="88" width="22" height="26" rx="3" fill="#182231" stroke="#67b5ef" stroke-opacity="0.55"/><text x="289" y="106" fill="#a8d8f7">0</text>
+    <rect x="304" y="88" width="22" height="26" rx="3" fill="#182231" stroke="#67b5ef" stroke-opacity="0.55"/><text x="315" y="106" fill="#a8d8f7">0</text>
+  </g>
+
+  <!-- B -->
+  <text x="20" y="152" fill="#4ec9a3" font-size="12.5" font-weight="700">B</text>
+  <text x="20" y="168" fill="#6b6b85" font-size="9.5">0000 1111</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="122" y="134" width="22" height="26" rx="3" fill="#1b2b22" stroke="#4ec9a3" stroke-opacity="0.55"/><text x="133" y="152" fill="#7fe0c2">0</text>
+    <rect x="148" y="134" width="22" height="26" rx="3" fill="#1b2b22" stroke="#4ec9a3" stroke-opacity="0.55"/><text x="159" y="152" fill="#7fe0c2">0</text>
+    <rect x="174" y="134" width="22" height="26" rx="3" fill="#1b2b22" stroke="#4ec9a3" stroke-opacity="0.55"/><text x="185" y="152" fill="#7fe0c2">0</text>
+    <rect x="200" y="134" width="22" height="26" rx="3" fill="#1b2b22" stroke="#4ec9a3" stroke-opacity="0.55"/><text x="211" y="152" fill="#7fe0c2">0</text>
+    <rect x="226" y="134" width="22" height="26" rx="3" fill="#1b2b22" stroke="#4ec9a3" stroke-opacity="0.55"/><text x="237" y="152" fill="#7fe0c2">1</text>
+    <rect x="252" y="134" width="22" height="26" rx="3" fill="#1b2b22" stroke="#4ec9a3" stroke-opacity="0.55"/><text x="263" y="152" fill="#7fe0c2">1</text>
+    <rect x="278" y="134" width="22" height="26" rx="3" fill="#1b2b22" stroke="#4ec9a3" stroke-opacity="0.55"/><text x="289" y="152" fill="#7fe0c2">1</text>
+    <rect x="304" y="134" width="22" height="26" rx="3" fill="#1b2b22" stroke="#4ec9a3" stroke-opacity="0.55"/><text x="315" y="152" fill="#7fe0c2">1</text>
+  </g>
+
+  <line x1="20" y1="180" x2="616" y2="180" stroke="#2a2a44"/>
+
+  <!-- A & B -->
+  <text x="20" y="208" fill="#c9b0ff" font-size="12" font-weight="700">A &amp; B</text>
+  <text x="20" y="224" fill="#6b6b85" font-size="9.5">0000 1100</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="122" y="190" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="133" y="208" fill="#d8c8ff">0</text>
+    <rect x="148" y="190" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="159" y="208" fill="#d8c8ff">0</text>
+    <rect x="174" y="190" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="185" y="208" fill="#d8c8ff">0</text>
+    <rect x="200" y="190" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="211" y="208" fill="#d8c8ff">0</text>
+    <rect x="226" y="190" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="237" y="208" fill="#ffffff" font-weight="700">1</text>
+    <rect x="252" y="190" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="263" y="208" fill="#ffffff" font-weight="700">1</text>
+    <rect x="278" y="190" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="289" y="208" fill="#d8c8ff">0</text>
+    <rect x="304" y="190" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="315" y="208" fill="#d8c8ff">0</text>
+  </g>
+  <text x="348" y="200" fill="#9a9ab4" font-size="11">两个都是 1 才保留</text>
+  <text x="348" y="218" fill="#6b6b85" font-size="10.5">用途：取某几位（掩码）</text>
+
+  <!-- A | B -->
+  <text x="20" y="256" fill="#c9b0ff" font-size="12" font-weight="700">A | B</text>
+  <text x="20" y="272" fill="#6b6b85" font-size="9.5">1010 1111</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="122" y="238" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="133" y="256" fill="#ffffff" font-weight="700">1</text>
+    <rect x="148" y="238" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="159" y="256" fill="#d8c8ff">0</text>
+    <rect x="174" y="238" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="185" y="256" fill="#ffffff" font-weight="700">1</text>
+    <rect x="200" y="238" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="211" y="256" fill="#d8c8ff">0</text>
+    <rect x="226" y="238" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="237" y="256" fill="#ffffff" font-weight="700">1</text>
+    <rect x="252" y="238" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="263" y="256" fill="#ffffff" font-weight="700">1</text>
+    <rect x="278" y="238" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="289" y="256" fill="#ffffff" font-weight="700">1</text>
+    <rect x="304" y="238" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="315" y="256" fill="#ffffff" font-weight="700">1</text>
+  </g>
+  <text x="348" y="248" fill="#9a9ab4" font-size="11">有一个 1 就是 1</text>
+  <text x="348" y="266" fill="#6b6b85" font-size="10.5">用途：点亮某几位（置位）</text>
+
+  <!-- A ^ B -->
+  <text x="20" y="304" fill="#c9b0ff" font-size="12" font-weight="700">A ^ B</text>
+  <text x="20" y="320" fill="#6b6b85" font-size="9.5">1010 0011</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="122" y="286" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="133" y="304" fill="#ffffff" font-weight="700">1</text>
+    <rect x="148" y="286" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="159" y="304" fill="#d8c8ff">0</text>
+    <rect x="174" y="286" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="185" y="304" fill="#ffffff" font-weight="700">1</text>
+    <rect x="200" y="286" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="211" y="304" fill="#d8c8ff">0</text>
+    <rect x="226" y="286" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="237" y="304" fill="#d8c8ff">0</text>
+    <rect x="252" y="286" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="263" y="304" fill="#d8c8ff">0</text>
+    <rect x="278" y="286" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="289" y="304" fill="#ffffff" font-weight="700">1</text>
+    <rect x="304" y="286" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="315" y="304" fill="#ffffff" font-weight="700">1</text>
+  </g>
+  <text x="348" y="296" fill="#9a9ab4" font-size="11">不一样才是 1</text>
+  <text x="348" y="314" fill="#6b6b85" font-size="10.5">用途：翻转某几位（异或两次复原）</text>
+
+  <!-- ~A -->
+  <text x="20" y="352" fill="#c9b0ff" font-size="12" font-weight="700">~A</text>
+  <text x="20" y="368" fill="#6b6b85" font-size="9.5">0101 0011</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="122" y="334" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="133" y="352" fill="#d8c8ff">0</text>
+    <rect x="148" y="334" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="159" y="352" fill="#ffffff" font-weight="700">1</text>
+    <rect x="174" y="334" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="185" y="352" fill="#d8c8ff">0</text>
+    <rect x="200" y="334" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="211" y="352" fill="#ffffff" font-weight="700">1</text>
+    <rect x="226" y="334" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="237" y="352" fill="#d8c8ff">0</text>
+    <rect x="252" y="334" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0" stroke-opacity="0.5"/><text x="263" y="352" fill="#d8c8ff">0</text>
+    <rect x="278" y="334" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="289" y="352" fill="#ffffff" font-weight="700">1</text>
+    <rect x="304" y="334" width="22" height="26" rx="3" fill="#221636" stroke="#9b4df0"/><text x="315" y="352" fill="#ffffff" font-weight="700">1</text>
+  </g>
+  <text x="348" y="344" fill="#9a9ab4" font-size="11">全部反过来</text>
+  <text x="348" y="362" fill="#6b6b85" font-size="10.5">用途：配合与运算做「清位」</text>
+
+  <text x="20" y="392" fill="#6b6b85" font-size="10.5">记住一句话就够了：想变 0 用与，想变 1 用或，想翻转用异或。</text>
+</svg>

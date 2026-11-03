@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 09 · 桌面与移动软件：它们各自在系统里占了哪块地</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../index.html">总目录</a>
+    <a href="index.html">PART 09</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../index.html">总目录</a><span class="sep">/</span><span class="here">PART 09</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">PART 09</span>
+    桌面与移动软件：它们各自在系统里占了哪块地
+  </h1>
+  <p class="part-sub">先讲一个 App 的通用骨架，再逐个拆开你天天点开的那些软件。</p>
+
+  <p class="lead">前八部讲的是「系统怎么运转」，这一部讲的是「软件怎么长在系统上」。同一种功能，为什么有的软件 20MB 有的 2GB？为什么有的能绿色运行有的必须装？答案都在这一部。</p>
+
+  <div class="note">
+    <b>本部分布：</b>11 个中章 · 39 个小节 · 其中 8 节标 ★ 为速通必读 ·
+    已完稿 0/39
+  </div>
+
+  <h2>9.1　一个 App 是怎么被造出来的</h2>
+  <p class="grpnote">架构分层、本地与云端、通信、推送、跨平台</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.1.1</code></td>
+        <td>C/S 与 B/S：装在你机器上，还是跑在别人机器上</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.1.2</code></td>
+        <td>界面层、逻辑层、数据层：一个 App 的三层怎么切</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.1.3</code></td>
+        <td>本地存什么、云端存什么：离线与同步冲突</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.1.4</code></td>
+        <td>怎么和后端说话：REST、WebSocket 与长连接</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.1.5</code></td>
+        <td>推送通道：APNs、FCM 与国内厂商通道</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.1.6</code></td>
+        <td>跨平台：Electron、Tauri、Flutter、RN 各自偷什么懒</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.2　软件怎么装进电脑</h2>
+  <p class="grpnote">安装包、安装改了什么、签名、商店、供应链</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.2.1</code></td>
+        <td>安装包：MSI、EXE、dmg、deb 与 AppImage</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.2.2</code></td>
+        <td>安装的时候它到底改了什么</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.2.3</code></td>
+        <td>代码签名、公证与"未知开发者"</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.2.4</code></td>
+        <td>应用商店的审核与抽成</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.2.5</code></td>
+        <td>供应链投毒：xz 后门那类事是怎么发生的</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.3　浏览器</h2>
+  <p class="grpnote">内核、多进程、沙箱、扩展</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.3.1</code></td>
+        <td>内核、渲染引擎与 JS 引擎</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.3.2</code></td>
+        <td>多进程架构与沙箱：一个标签页崩了为什么别的没事</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.3.3</code></td>
+        <td>扩展、书签与密码管理器</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.3.4</code></td>
+        <td>为什么浏览器越来越像操作系统</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.4　QQ 与即时通讯</h2>
+  <p class="grpnote">一条消息的旅程、长连接、群聊、加密</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.4.1</code></td>
+        <td>一条消息从按下回车到对方看见</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.4.2</code></td>
+        <td>长连接、心跳与离线消息</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.4.3</code></td>
+        <td>群聊、漫游与本地数据库</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.4.4</code></td>
+        <td>端到端加密与"只是加密传输"的区别</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.5　OBS 与录屏</h2>
+  <p class="grpnote">采集、编码、推流、开销</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.5.1</code></td>
+        <td>采集：窗口、屏幕与摄像头</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.5.2</code></td>
+        <td>编码、推流与录制：RTMP、HLS 与性能开销</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.6　游戏与显卡</h2>
+  <p class="grpnote">一帧怎么算出来、GPU 分工、引擎、卡顿</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.6.1</code></td>
+        <td>一帧画面是怎么被算出来的</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.6.2</code></td>
+        <td>GPU 与 CPU 的分工：为什么显卡不能当 CPU 用</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.6.3</code></td>
+        <td>引擎、着色器与光线追踪</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.6.4</code></td>
+        <td>帧率、延迟与"卡"的三种含义</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.7　FL Studio 与音频</h2>
+  <p class="grpnote">声卡驱动、采样合成、效果链、延迟</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.7.1</code></td>
+        <td>声卡、驱动与 ASIO：为什么专业音频要独占设备</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.7.2</code></td>
+        <td>采样、合成与 MIDI</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.7.3</code></td>
+        <td>效果器与混音链</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.7.4</code></td>
+        <td>延迟、爆音与缓冲区</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.8　壁纸与桌面美化</h2>
+  <p class="grpnote">动态壁纸、窗口管理器、合成器</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.8.1</code></td>
+        <td>动态壁纸怎么在桌面上画画，以及窗口管理器与桌面合成</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.9　卸载器与遗留</h2>
+  <p class="grpnote">卸载删了什么、残留、重装系统</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.9.1</code></td>
+        <td>卸载到底删了什么，没删什么</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.9.2</code></td>
+        <td>残留三件套：注册表、AppData 与计划任务</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.9.3</code></td>
+        <td>为什么"重装系统"能解决 90% 的问题</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.10　手机应用</h2>
+  <p class="grpnote">Android 与 iOS、安装包、权限、后台</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.10.1</code></td>
+        <td>Android 与 iOS 的架构差异</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.10.2</code></td>
+        <td>APK、IPA 与签名</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.10.3</code></td>
+        <td>权限模型：它为什么要你的通讯录</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.10.4</code></td>
+        <td>后台、保活与耗电</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.11　显示器与色彩</h2>
+  <p class="grpnote">分辨率刷新率、色域色准、HDR</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>9.11.1</code></td>
+        <td>分辨率、刷新率与响应时间</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>9.11.2</code></td>
+        <td>色域、色准、校色与 HDR：为什么你调的颜色别人看着不一样</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="../08-business/index.html">← PART 08 生意：从一张营业执照到一笔到账</a>
+    <a class="next" href="../10-agent/index.html">PART 10 Agent 与本地部署：会自己动手的程序 →</a>
+  </div>
+
+</div>
+</body>
+</html>

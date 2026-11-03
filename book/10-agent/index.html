@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 10 · Agent 与本地部署：会自己动手的程序</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../index.html">总目录</a>
+    <a href="index.html">PART 10</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../index.html">总目录</a><span class="sep">/</span><span class="here">PART 10</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">PART 10</span>
+    Agent 与本地部署：会自己动手的程序
+  </h1>
+  <p class="part-sub">模型不是魔法，它是一堆存成文件的数字。这一部讲它怎么被存、怎么被算、怎么被跑在你自己的显卡上。</p>
+
+  <p class="lead">「AI 会自己操作电脑」听起来很玄，拆开看只有三件事：一个会预测下一个词的模型、一套能被调用的工具、一个不断循环的判断。这一部把这三件事分别落到文件、内存和进程上。</p>
+
+  <div class="note">
+    <b>本部分布：</b>7 个中章 · 24 个小节 · 其中 7 节标 ★ 为速通必读 ·
+    已完稿 0/24
+  </div>
+
+  <h2>10.1　Agent 的工作循环</h2>
+  <p class="grpnote">模型本质、上下文、工具调用、循环与修正</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>10.1.1</code></td>
+        <td>大模型到底是什么：一个预测下一个词的程序</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.1.2</code></td>
+        <td>上下文窗口与提示词：它为什么会"忘事"</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.1.3</code></td>
+        <td>工具调用：怎么让它从"会说"变成"会做"</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.1.4</code></td>
+        <td>循环、规划与自我修正</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>10.2　工具、沙箱与权限</h2>
+  <p class="grpnote">沙箱、三类工具边界、MCP</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>10.2.1</code></td>
+        <td>沙箱与三类工具的边界：文件、命令、网络</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.2.2</code></td>
+        <td>MCP 与插件体系：怎么给它外挂新能力</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>10.3　模型权重的物理形态</h2>
+  <p class="grpnote">参数、精度、量化、显存</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>10.3.1</code></td>
+        <td>参数、张量与权重文件：一堆数字怎么存</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.3.2</code></td>
+        <td>精度：FP32、FP16、BF16、INT8</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.3.3</code></td>
+        <td>量化：为什么压到 4bit 还能用</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.3.4</code></td>
+        <td>显存是怎么被吃掉的</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>10.4　本地推理</h2>
+  <p class="grpnote">引擎、硬件、速度指标、完整流程</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>10.4.1</code></td>
+        <td>推理引擎：llama.cpp、vLLM、Ollama 各管什么</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.4.2</code></td>
+        <td>CPU、GPU 与统一内存</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.4.3</code></td>
+        <td>速度指标：token/s 与首字延迟</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.4.4</code></td>
+        <td>本地部署的完整流程：从下载到能对话</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>10.5　训练与微调</h2>
+  <p class="grpnote">预训练、对齐、LoRA、数据集、评估</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>10.5.1</code></td>
+        <td>预训练、微调与对齐：三个阶段分别在干吗</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.5.2</code></td>
+        <td>LoRA 与低秩分解：为什么小显卡也能微调</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.5.3</code></td>
+        <td>数据集从哪来、怎么清洗</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.5.4</code></td>
+        <td>评估：怎么知道它真的变好了</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>10.6　多模态</h2>
+  <p class="grpnote">图像 token、语音、视频生成</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>10.6.1</code></td>
+        <td>图像怎么变成 token</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.6.2</code></td>
+        <td>语音识别与合成</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.6.3</code></td>
+        <td>视频生成：为什么它比图片难那么多</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>10.7　把它用起来</h2>
+  <p class="grpnote">RAG、成本与隐私、自动化工作流</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>10.7.1</code></td>
+        <td>本地知识库与 RAG：让它读你自己的资料</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.7.2</code></td>
+        <td>成本与隐私的权衡：本地还是云</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>10.7.3</code></td>
+        <td>一个能用的自动化工作流</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="../09-desktop/index.html">← PART 09 桌面与移动软件：它们各自在系统里占了哪块地</a>
+    <a class="next" href="../11-security/index.html">PART 11 安全与暗网：谁在偷看，怎么藏起来 →</a>
+  </div>
+
+</div>
+</body>
+</html>

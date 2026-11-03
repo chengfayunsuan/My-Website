@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PART 06 · 网站与 Node.js：从一段代码到别人能访问</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../index.html">总目录</a>
+    <a href="index.html">PART 06</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../index.html">总目录</a><span class="sep">/</span><span class="here">PART 06</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">PART 06</span>
+    网站与 Node.js：从一段代码到别人能访问
+  </h1>
+  <p class="part-sub">HTML 是骨架，CSS 是皮肤，JS 是肌肉，Node.js 是后台。这一部结束时，你能独立把一个网站挂到公网上。</p>
+
+  <p class="lead">网站是整本书里唯一一个「你自己就能完整做出来」的系统。它小到一个静态页面，大到淘宝，但骨架是同一套。这一部按「一个请求从哪来、到哪里去」的顺序铺开：先在浏览器里认识三件套（HTML、CSS、JS），再看它们怎么在文件夹里摆放，然后是服务器、数据库、接口和部署。铺完你就能对着任何一个网站说出它大概由什么组成。</p>
+
+  <div class="note">
+    <b>本部分布：</b>12 个中章 · 47 个小节 · 其中 22 节标 ★ 为速通必读 ·
+    已完稿 0/47
+  </div>
+
+  <h2>6.1　一次访问经过了谁</h2>
+  <p class="grpnote">从输入网址到看见画面，六种角色各干一段</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.1.1</code></td>
+        <td>从输入网址到看见画面：前端、后端、数据库、服务器、域名、证书</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.2　HTML：页面的骨架</h2>
+  <p class="grpnote">标签、常用元素、表单、渲染流程</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.2.1</code></td>
+        <td>HTML 是什么：把内容一层层贴上标签</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.2.2</code></td>
+        <td>常用标签全表与语义化：div 不是万能的</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.2.3</code></td>
+        <td>表单：浏览器怎么把你的输入打包成一次请求</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.2.4</code></td>
+        <td>浏览器怎么把 HTML 变成画面：解析、DOM 树与重排重绘</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.3　CSS：页面的样子</h2>
+  <p class="grpnote">选择器、盒模型、布局、层叠、响应式</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.3.1</code></td>
+        <td>选择器与层叠：样式为什么没生效</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.3.2</code></td>
+        <td>盒模型、外边距塌陷与 box-sizing</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.3.3</code></td>
+        <td>布局三兄弟：float、flex、grid</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.3.4</code></td>
+        <td>定位、层叠上下文与 z-index：谁盖住谁</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.3.5</code></td>
+        <td>响应式、媒体查询与移动端适配</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.4　JavaScript：页面的行为</h2>
+  <p class="grpnote">语法、事件、DOM、异步、模块与框架</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.4.1</code></td>
+        <td>JS 是什么：浏览器里唯一能改页面的语言</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.4.2</code></td>
+        <td>变量、函数、对象与事件：它和别的语言差在哪</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.4.3</code></td>
+        <td>DOM：找到元素、改它、听它</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.4.4</code></td>
+        <td>异步、Promise 与 fetch：等数据的时候页面为什么没卡</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.4.5</code></td>
+        <td>模块化、打包与前端框架：为什么现在写个页面要装一堆包</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.5　一个网站的文件夹怎么摆</h2>
+  <p class="grpnote">三个文件就能跑；分目录；相对路径；src 与 dist</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.5.1</code></td>
+        <td>最小网站：三个文件就能跑起来</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.5.2</code></td>
+        <td>为什么要分 css、js、img、assets 几个文件夹</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.5.3</code></td>
+        <td>相对路径与绝对路径：../ 往哪走，图片为什么裂了</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.5.4</code></td>
+        <td>从 src 到 dist：源码、产物与构建为什么分开</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.5.5</code></td>
+        <td>三种真实摆法：静态站、SPA、全栈项目</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.6　后端与 Node.js</h2>
+  <p class="grpnote">Node 是什么、事件循环、路由与请求的一生</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.6.1</code></td>
+        <td>Node.js 是什么：把 JS 引擎搬出浏览器</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.6.2</code></td>
+        <td>事件循环与非阻塞 I/O：单线程怎么扛住一万个连接</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.6.3</code></td>
+        <td>路由、中间件，与一个请求在服务端的一生</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.7　数据库</h2>
+  <p class="grpnote">表、SQL、索引、事务、缓存、备份</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.7.1</code></td>
+        <td>为什么需要数据库：文件已经不够用了</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.7.2</code></td>
+        <td>表、行、列与 SQL：用一句话描述你要什么</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.7.3</code></td>
+        <td>索引与 B+ 树：为什么查询能快到毫秒级</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.7.4</code></td>
+        <td>事务与 ACID：转账不能只成功一半</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.7.5</code></td>
+        <td>缓存、Redis 与 NoSQL：什么时候不该用表</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.7.6</code></td>
+        <td>备份、主从与"数据丢了怎么办"</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.8　API</h2>
+  <p class="grpnote">接口、REST、认证、Webhook、SDK</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.8.1</code></td>
+        <td>API 是什么：程序之间的一张菜单</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.8.2</code></td>
+        <td>REST 风格与 JSON：最常见的那套约定</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.8.3</code></td>
+        <td>认证、限流与幂等：别人乱调你怎么办</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.8.4</code></td>
+        <td>Webhook：让别人反过来通知你</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.8.5</code></td>
+        <td>SDK、OpenAPI 与一次真实的第三方调用</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.9　部署</h2>
+  <p class="grpnote">服务器、域名、证书、Nginx、Docker、Cloudflare</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.9.1</code></td>
+        <td>在一台服务器上把它跑起来</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.9.2</code></td>
+        <td>域名、解析与备案怎么落到自己头上</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.9.3</code></td>
+        <td>HTTPS 证书怎么来：免费的那条路</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.9.4</code></td>
+        <td>Nginx 与反向代理：为什么要在前面挡一层</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.9.5</code></td>
+        <td>虚拟化、Docker、云服务器与 Cloudflare 各在哪一层</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.10　一台机器不够用</h2>
+  <p class="grpnote">负载均衡、会话共享、微服务、CAP</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.10.1</code></td>
+        <td>负载均衡与多实例：两台服务器怎么分工</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.10.2</code></td>
+        <td>会话共享、缓存与消息队列</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.10.3</code></td>
+        <td>微服务、单体、CAP 与限流熔断</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.11　搜索引擎与内容分发</h2>
+  <p class="grpnote">爬虫、倒排索引、SEO</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.11.1</code></td>
+        <td>爬虫与倒排索引：搜索引擎怎么看见并记住你的站</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.11.2</code></td>
+        <td>排名、SEO 与"为什么搜不到我"</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.12　Web 安全</h2>
+  <p class="grpnote">XSS、注入、跨站与越权</p>
+
+  <table>
+    <thead><tr><th>编号</th><th>标题</th><th class="c">速通</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>6.12.1</code></td>
+        <td>XSS：别人把你的页面当成了自己的地盘</td>
+        <td class="c"><span class="star">★</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.12.2</code></td>
+        <td>SQL 注入：一个引号能拖走整个数据库</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>6.12.3</code></td>
+        <td>CSRF、同源、CORS、越权与文件上传</td>
+        <td class="c"><span class="dim">·</span></td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="../05-mail/index.html">← PART 05 邮件与账号：互联网最早的那套东西</a>
+    <a class="next" href="../07-money/index.html">PART 07 钱与银行：一笔转账背后的九层系统 →</a>
+  </div>
+
+</div>
+</body>
+</html>

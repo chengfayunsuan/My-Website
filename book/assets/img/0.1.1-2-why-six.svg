@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L8,4 L0,7 Z" fill="#6b6b85"/>
+    </marker>
+  </defs>
+
+  <rect width="760" height="470" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">先想「要它干什么」，再想「需要什么零件」——功能是稳定的，零件是会换的</text>
+
+  <text x="170" y="66" fill="#6b6b85" font-size="12" text-anchor="middle" font-family="monospace">需求（要它干什么）</text>
+  <text x="580" y="66" fill="#6b6b85" font-size="12" text-anchor="middle" font-family="monospace">零件（于是必须有）</text>
+
+  <!-- 行 1 -->
+  <rect x="60" y="82" width="220" height="44" rx="8" fill="#1a1a26" stroke="#3a3a5c"/>
+  <text x="170" y="110" fill="#d8d8e4" font-size="13.5" text-anchor="middle">得通电才能动</text>
+  <line x1="292" y1="104" x2="418" y2="104" stroke="#6b6b85" stroke-width="1.3" marker-end="url(#arr2)"/>
+  <rect x="428" y="82" width="240" height="44" rx="8" fill="#241618" stroke="#f0606a"/>
+  <text x="548" y="110" fill="#f7a3a8" font-size="13.5" text-anchor="middle">电源　把 220V 变成 12V</text>
+
+  <!-- 行 2 -->
+  <rect x="60" y="140" width="220" height="44" rx="8" fill="#1a1a26" stroke="#3a3a5c"/>
+  <text x="170" y="168" fill="#d8d8e4" font-size="13.5" text-anchor="middle">得有人执行命令</text>
+  <line x1="292" y1="162" x2="418" y2="162" stroke="#6b6b85" stroke-width="1.3" marker-end="url(#arr2)"/>
+  <rect x="428" y="140" width="240" height="44" rx="8" fill="#20203a" stroke="#9b4df0"/>
+  <text x="548" y="168" fill="#cfc6ff" font-size="13.5" text-anchor="middle">CPU　只会加、比、搬</text>
+
+  <!-- 行 3 -->
+  <rect x="60" y="198" width="220" height="44" rx="8" fill="#1a1a26" stroke="#3a3a5c"/>
+  <text x="170" y="226" fill="#d8d8e4" font-size="13.5" text-anchor="middle">算到一半得有地方放</text>
+  <line x1="292" y1="220" x2="418" y2="220" stroke="#6b6b85" stroke-width="1.3" marker-end="url(#arr2)"/>
+  <rect x="428" y="198" width="240" height="44" rx="8" fill="#16202b" stroke="#67b5ef"/>
+  <text x="548" y="226" fill="#a8d4f5" font-size="13.5" text-anchor="middle">内存　快，但一断电就没</text>
+
+  <!-- 行 4 -->
+  <rect x="60" y="256" width="220" height="44" rx="8" fill="#1a1a26" stroke="#3a3a5c"/>
+  <text x="170" y="284" fill="#d8d8e4" font-size="13.5" text-anchor="middle">关机了东西还得在</text>
+  <line x1="292" y1="278" x2="418" y2="278" stroke="#6b6b85" stroke-width="1.3" marker-end="url(#arr2)"/>
+  <rect x="428" y="256" width="240" height="44" rx="8" fill="#152420" stroke="#4ec9a3"/>
+  <text x="548" y="284" fill="#7fe0c2" font-size="13.5" text-anchor="middle">硬盘　慢，但断电还在</text>
+
+  <!-- 行 5 -->
+  <rect x="60" y="314" width="220" height="44" rx="8" fill="#1a1a26" stroke="#3a3a5c"/>
+  <text x="170" y="342" fill="#d8d8e4" font-size="13.5" text-anchor="middle">得看见画面</text>
+  <line x1="292" y1="336" x2="418" y2="336" stroke="#6b6b85" stroke-width="1.3" marker-end="url(#arr2)"/>
+  <rect x="428" y="314" width="240" height="44" rx="8" fill="#241f14" stroke="#e8b84b"/>
+  <text x="548" y="342" fill="#f0cd7a" font-size="13.5" text-anchor="middle">显卡　一台专职画图的小电脑</text>
+
+  <!-- 行 6 -->
+  <rect x="60" y="372" width="220" height="44" rx="8" fill="#1a1a26" stroke="#3a3a5c"/>
+  <text x="170" y="400" fill="#d8d8e4" font-size="13.5" text-anchor="middle">它们之间得互相说话</text>
+  <line x1="292" y1="394" x2="418" y2="394" stroke="#6b6b85" stroke-width="1.3" marker-end="url(#arr2)"/>
+  <rect x="428" y="372" width="240" height="44" rx="8" fill="#171725" stroke="#6b6b85"/>
+  <text x="548" y="400" fill="#c9c9dd" font-size="13.5" text-anchor="middle">主板　把所有线汇总到一处</text>
+
+  <text x="24" y="452" fill="#4f4f6e" font-size="11" font-family="monospace">　注意左边一列没有一个字提到「晶体管」「缓存」「PCIe」——那些是实现细节，不是需求。</text>
+</svg>

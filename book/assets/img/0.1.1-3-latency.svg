@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <linearGradient id="gL1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7a3ec0"/><stop offset="1" stop-color="#9b4df0"/>
+    </linearGradient>
+    <linearGradient id="gRam" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b7ba8"/><stop offset="1" stop-color="#67b5ef"/>
+    </linearGradient>
+    <linearGradient id="gSsd" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2c7f68"/><stop offset="1" stop-color="#4ec9a3"/>
+    </linearGradient>
+    <linearGradient id="gHdd" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a8842d"/><stop offset="1" stop-color="#e8b84b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="760" height="430" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">取一次数据要等多久（对数刻度，每往右一格是 10 倍）</text>
+
+  <!-- 行 1 寄存器 -->
+  <text x="166" y="104" fill="#cfc6ff" font-size="13" text-anchor="end">CPU 寄存器</text>
+  <rect x="180" y="90" width="26" height="22" rx="3" fill="url(#gL1)"/>
+  <text x="218" y="106" fill="#9a9ab4" font-size="12" font-family="monospace">0.3 ns</text>
+
+  <!-- 行 2 L1 -->
+  <text x="166" y="146" fill="#cfc6ff" font-size="13" text-anchor="end">L1 缓存</text>
+  <rect x="180" y="132" width="44" height="22" rx="3" fill="url(#gL1)"/>
+  <text x="236" y="148" fill="#9a9ab4" font-size="12" font-family="monospace">1 ns</text>
+
+  <!-- 行 3 L2 -->
+  <text x="166" y="188" fill="#cfc6ff" font-size="13" text-anchor="end">L2 缓存</text>
+  <rect x="180" y="174" width="74" height="22" rx="3" fill="url(#gL1)"/>
+  <text x="266" y="190" fill="#9a9ab4" font-size="12" font-family="monospace">4 ns</text>
+
+  <!-- 行 4 L3 -->
+  <text x="166" y="230" fill="#cfc6ff" font-size="13" text-anchor="end">L3 缓存</text>
+  <rect x="180" y="216" width="103" height="22" rx="3" fill="url(#gL1)"/>
+  <text x="295" y="232" fill="#9a9ab4" font-size="12" font-family="monospace">15 ns</text>
+
+  <!-- 行 5 内存 -->
+  <text x="166" y="272" fill="#a8d4f5" font-size="13" text-anchor="end">内存</text>
+  <rect x="180" y="258" width="140" height="22" rx="3" fill="url(#gRam)"/>
+  <text x="332" y="274" fill="#9a9ab4" font-size="12" font-family="monospace">80 ns</text>
+
+  <!-- 行 6 SSD -->
+  <text x="166" y="314" fill="#7fe0c2" font-size="13" text-anchor="end">SSD 随机读</text>
+  <rect x="180" y="300" width="299" height="22" rx="3" fill="url(#gSsd)"/>
+  <text x="491" y="316" fill="#9a9ab4" font-size="12" font-family="monospace">100,000 ns（0.1 ms）</text>
+
+  <!-- 行 7 HDD -->
+  <text x="166" y="356" fill="#f0cd7a" font-size="13" text-anchor="end">机械硬盘寻道</text>
+  <rect x="180" y="342" width="400" height="22" rx="3" fill="url(#gHdd)"/>
+  <text x="592" y="358" fill="#9a9ab4" font-size="12" font-family="monospace">10,000,000 ns（10 ms）</text>
+
+  <!-- 数量级差注解 -->
+  <line x1="180" y1="382" x2="580" y2="382" stroke="#2a2a44" stroke-dasharray="3 4"/>
+  <text x="180" y="400" fill="#6b6b85" font-size="11.5">内存比寄存器慢约 270 倍　·　SSD 比内存慢约 1250 倍　·　机械硬盘比 SSD 慢约 100 倍</text>
+
+  <text x="24" y="422" fill="#4f4f6e" font-size="11" font-family="monospace">　如果取一次寄存器花 1 秒，取一次内存要 4 分钟，取一次 SSD 要 4 天，取一次机械硬盘要 1 年。</text>
+</svg>

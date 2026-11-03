@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="470" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">同一条插槽，跑几代、给几条通道，带宽能差上百倍</text>
+
+  <!-- 刻度：0→63 映射 190→660，7.46 px/GB/s -->
+  <g stroke="#22222f" stroke-width="1">
+    <line x1="190" y1="66" x2="190" y2="392"/>
+    <line x1="302" y1="66" x2="302" y2="392"/>
+    <line x1="414" y1="66" x2="414" y2="392"/>
+    <line x1="526" y1="66" x2="526" y2="392"/>
+    <line x1="638" y1="66" x2="638" y2="392"/>
+  </g>
+  <g fill="#4f4f6e" font-size="10" font-family="monospace" text-anchor="middle">
+    <text x="190" y="60">0</text>
+    <text x="302" y="60">15</text>
+    <text x="414" y="60">30</text>
+    <text x="526" y="60">45</text>
+    <text x="638" y="60">60</text>
+  </g>
+  <text x="648" y="60" fill="#4f4f6e" font-size="10">GB/s</text>
+
+  <!-- 行 -->
+  <g font-family="monospace" font-size="11">
+    <text x="180" y="94" fill="#8a8aa4" text-anchor="end">PCIe 3.0 ×1</text>
+    <rect x="190" y="80" width="24" height="22" rx="2" fill="#3a4a5c"/>
+    <text x="224" y="95" fill="#8a8aa4">0.98</text>
+
+    <text x="180" y="138" fill="#8a8aa4" text-anchor="end">PCIe 3.0 ×4</text>
+    <rect x="190" y="124" width="29" height="22" rx="2" fill="#3a4a5c"/>
+    <text x="229" y="139" fill="#8a8aa4">3.94</text>
+
+    <text x="180" y="182" fill="#8a8aa4" text-anchor="end">PCIe 4.0 ×4</text>
+    <rect x="190" y="168" width="59" height="22" rx="2" fill="#67b5ef"/>
+    <text x="259" y="183" fill="#9fd0f5">7.88</text>
+
+    <text x="180" y="226" fill="#8a8aa4" text-anchor="end">PCIe 5.0 ×4</text>
+    <rect x="190" y="212" width="117" height="22" rx="2" fill="#9b4df0"/>
+    <text x="317" y="227" fill="#c9a8ff">15.75</text>
+
+    <text x="180" y="270" fill="#8a8aa4" text-anchor="end">PCIe 3.0 ×16</text>
+    <rect x="190" y="256" width="117" height="22" rx="2" fill="#3a4a5c"/>
+    <text x="317" y="271" fill="#8a8aa4">15.75</text>
+
+    <text x="180" y="314" fill="#8a8aa4" text-anchor="end">PCIe 4.0 ×16</text>
+    <rect x="190" y="300" width="235" height="22" rx="2" fill="#67b5ef"/>
+    <text x="435" y="315" fill="#9fd0f5">31.5</text>
+
+    <text x="180" y="358" fill="#c8c8d8" text-anchor="end" font-weight="bold">PCIe 5.0 ×16</text>
+    <rect x="190" y="344" width="470" height="22" rx="2" fill="#9b4df0"/>
+    <text x="672" y="359" fill="#e0c8ff" font-weight="bold">63.0</text>
+  </g>
+
+  <!-- SATA 对照 -->
+  <line x1="194" y1="382" x2="194" y2="398" stroke="#4ec9a3" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="204" y="412" fill="#4ec9a3" font-size="10" font-family="monospace">SATA 固态满速 0.55 GB/s，就在这条竖线上</text>
+
+  <text x="24" y="436" fill="#8a8aa4" font-size="10.5">注意这几组相同的数字：4.0×4 = 7.88，3.0×16 = 15.75 = 5.0×4，4.0×16 = 31.5 = 5.0×8。</text>
+  <text x="24" y="456" fill="#8a8aa4" font-size="10.5">通道数和代数可以互换——这就是为什么 PCIe 4.0×8 的显卡插在 3.0×16 槽上，带宽一点没少。</text>
+</svg>
