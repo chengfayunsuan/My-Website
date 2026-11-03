@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="440" fill="#0e0e16"/>
+  <text x="24" y="28" fill="#9a9ab4" font-size="12.5" font-family="monospace">一个比特住在一个晶体管和一个电容里，而电容会漏</text>
+
+  <!-- ============ 左：单元电路 ============ -->
+  <rect x="22" y="46" width="352" height="368" rx="10" fill="#12121c" stroke="#2a2a44"/>
+  <text x="42" y="74" fill="#d8d8e4" font-size="13">1T1C：最小的存储单元</text>
+
+  <!-- 位线 -->
+  <line x1="200" y1="96" x2="200" y2="158" stroke="#67b5ef" stroke-width="2"/>
+  <text x="208" y="106" fill="#67b5ef" font-size="11">位线 bit line</text>
+  <text x="208" y="122" fill="#6b6b85" font-size="10">读写都走这根</text>
+
+  <!-- 晶体管 -->
+  <rect x="178" y="158" width="44" height="46" rx="6" fill="#171725" stroke="#9b4df0" stroke-width="1.6"/>
+  <text x="200" y="186" fill="#cfc6ff" font-size="11" text-anchor="middle" font-family="monospace">1T</text>
+
+  <!-- 字线 -->
+  <line x1="60" y1="181" x2="178" y2="181" stroke="#e8b84b" stroke-width="2"/>
+  <text x="60" y="173" fill="#e8b84b" font-size="11">字线 word line</text>
+  <text x="60" y="205" fill="#6b6b85" font-size="10">一根控制一整行</text>
+
+  <!-- 电容 -->
+  <line x1="200" y1="204" x2="200" y2="252" stroke="#d8d8e4" stroke-width="1.6"/>
+  <line x1="160" y1="252" x2="240" y2="252" stroke="#4ec9a3" stroke-width="2.4"/>
+  <line x1="160" y1="266" x2="240" y2="266" stroke="#4ec9a3" stroke-width="2.4"/>
+  <text x="250" y="252" fill="#4ec9a3" font-size="11">上极板</text>
+  <text x="250" y="268" fill="#4ec9a3" font-size="11">下极板</text>
+  <text x="250" y="288" fill="#6b6b85" font-size="10">约 25 飞法</text>
+
+  <!-- 接地 -->
+  <line x1="200" y1="266" x2="200" y2="300" stroke="#d8d8e4" stroke-width="1.6"/>
+  <line x1="184" y1="300" x2="216" y2="300" stroke="#9a9ab4" stroke-width="2"/>
+  <line x1="189" y1="307" x2="211" y2="307" stroke="#9a9ab4" stroke-width="2"/>
+  <line x1="194" y1="314" x2="206" y2="314" stroke="#9a9ab4" stroke-width="2"/>
+  <text x="222" y="312" fill="#9a9ab4" font-size="10">接地</text>
+
+  <!-- 电荷标记 -->
+  <text x="176" y="246" fill="#e8b84b" font-size="11" font-family="monospace">+</text>
+  <text x="212" y="262" fill="#e8b84b" font-size="11" font-family="monospace">−</text>
+
+  <text x="42" y="352" fill="#9a9ab4" font-size="11">写 1：字线加电压，晶体管导通，位线上的电荷灌进电容。</text>
+  <text x="42" y="372" fill="#9a9ab4" font-size="11">读：先把位线预充到一半电压，再看它被拉高还是拉低。</text>
+  <text x="42" y="392" fill="#f0606a" font-size="11">读出是破坏性的——读一次，电容里的电荷就没了。</text>
+
+  <!-- ============ 右：漏电与刷新 ============ -->
+  <rect x="388" y="46" width="350" height="368" rx="10" fill="#12121c" stroke="#2a2a44"/>
+  <text x="408" y="74" fill="#d8d8e4" font-size="13">电荷漏掉的样子</text>
+
+  <!-- 坐标 -->
+  <line x1="420" y1="300" x2="712" y2="300" stroke="#2a2a44"/>
+  <line x1="420" y1="300" x2="420" y2="104" stroke="#2a2a44"/>
+  <text x="412" y="98" fill="#6b6b85" font-size="10" text-anchor="end">电压</text>
+  <text x="712" y="318" fill="#6b6b85" font-size="10" text-anchor="end">时间 →</text>
+
+  <!-- 门限线 -->
+  <line x1="420" y1="210" x2="700" y2="210" stroke="#f0606a" stroke-width="1" stroke-dasharray="5 4"/>
+  <text x="424" y="202" fill="#f0606a" font-size="10">判决门限</text>
+
+  <!-- 锯齿：四次衰减 + 三次刷新 -->
+  <path d="M432 116 C 470 118, 500 176, 512 206" fill="none" stroke="#4ec9a3" stroke-width="1.8"/>
+  <line x1="512" y1="206" x2="512" y2="116" stroke="#9b4df0" stroke-width="1.6" stroke-dasharray="3 3"/>
+  <path d="M512 116 C 550 118, 580 176, 592 206" fill="none" stroke="#4ec9a3" stroke-width="1.8"/>
+  <line x1="592" y1="206" x2="592" y2="116" stroke="#9b4df0" stroke-width="1.6" stroke-dasharray="3 3"/>
+  <path d="M592 116 C 630 118, 660 176, 672 206" fill="none" stroke="#4ec9a3" stroke-width="1.8"/>
+  <line x1="672" y1="206" x2="672" y2="116" stroke="#9b4df0" stroke-width="1.6" stroke-dasharray="3 3"/>
+
+  <circle cx="512" cy="206" r="3" fill="#f0606a"/>
+  <circle cx="592" cy="206" r="3" fill="#f0606a"/>
+  <circle cx="672" cy="206" r="3" fill="#f0606a"/>
+
+  <text x="516" y="232" fill="#9b4df0" font-size="10">刷新</text>
+  <text x="596" y="232" fill="#9b4df0" font-size="10">刷新</text>
+  <text x="676" y="232" fill="#9b4df0" font-size="10">刷新</text>
+
+  <text x="408" y="262" fill="#6b6b85" font-size="10">漏到门限以下，1 就被读成 0 了</text>
+
+  <text x="408" y="352" fill="#9a9ab4" font-size="11">JEDEC 规定：每个存储单元至少每 64 毫秒刷新一次。</text>
+  <text x="408" y="372" fill="#9a9ab4" font-size="11">刷新不是「充电」，是读出来再写回去——所以它一直在耗电。</text>
+  <text x="408" y="392" fill="#e8b84b" font-size="11">断电即失：不是因为「没写进磁盘」，是物理上没地方存了。</text>
+</svg>

@@ -130,7 +130,7 @@ table {
   border-radius: 10px; overflow: hidden;
 }
 th, td { padding: 11px 13px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-th { background: var(--panel-2); color: #fff; font-weight: 600; }
+th { background: var(--panel-2); color: #fff; font-weight: 600; word-break: keep-all; }
 tr:last-child td { border-bottom: none; }
 
 /* ---------- 代码 ---------- */

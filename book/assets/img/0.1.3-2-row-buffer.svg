@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="450" fill="#0e0e16"/>
+  <text x="24" y="28" fill="#9a9ab4" font-size="12.5" font-family="monospace">地址不是「直接指到某个比特」，而是先开一行、再在这一行里挑一个</text>
+
+  <!-- ============ 左：阵列与行缓冲 ============ -->
+  <rect x="22" y="46" width="388" height="378" rx="10" fill="#12121c" stroke="#2a2a44"/>
+  <text x="42" y="74" fill="#d8d8e4" font-size="13">一个 bank 的内部</text>
+
+  <!-- 行号 -->
+  <g fill="#6b6b85" font-size="9" font-family="monospace" text-anchor="end">
+    <text x="56" y="112">行0</text><text x="56" y="134">行1</text><text x="56" y="156">行2</text>
+    <text x="56" y="178">行3</text><text x="56" y="200">行4</text><text x="56" y="222">行5</text>
+  </g>
+
+  <!-- 阵列 6 行 × 8 列 -->
+  <g stroke="#2a2a44">
+    <g fill="#1a1a2a">
+      <rect x="64" y="100" width="22" height="16" rx="2"/><rect x="90" y="100" width="22" height="16" rx="2"/><rect x="116" y="100" width="22" height="16" rx="2"/><rect x="142" y="100" width="22" height="16" rx="2"/><rect x="168" y="100" width="22" height="16" rx="2"/><rect x="194" y="100" width="22" height="16" rx="2"/><rect x="220" y="100" width="22" height="16" rx="2"/><rect x="246" y="100" width="22" height="16" rx="2"/>
+      <rect x="64" y="122" width="22" height="16" rx="2"/><rect x="90" y="122" width="22" height="16" rx="2"/><rect x="116" y="122" width="22" height="16" rx="2"/><rect x="142" y="122" width="22" height="16" rx="2"/><rect x="168" y="122" width="22" height="16" rx="2"/><rect x="194" y="122" width="22" height="16" rx="2"/><rect x="220" y="122" width="22" height="16" rx="2"/><rect x="246" y="122" width="22" height="16" rx="2"/>
+      <rect x="64" y="166" width="22" height="16" rx="2"/><rect x="90" y="166" width="22" height="16" rx="2"/><rect x="116" y="166" width="22" height="16" rx="2"/><rect x="142" y="166" width="22" height="16" rx="2"/><rect x="168" y="166" width="22" height="16" rx="2"/><rect x="194" y="166" width="22" height="16" rx="2"/><rect x="220" y="166" width="22" height="16" rx="2"/><rect x="246" y="166" width="22" height="16" rx="2"/>
+      <rect x="64" y="188" width="22" height="16" rx="2"/><rect x="90" y="188" width="22" height="16" rx="2"/><rect x="116" y="188" width="22" height="16" rx="2"/><rect x="142" y="188" width="22" height="16" rx="2"/><rect x="168" y="188" width="22" height="16" rx="2"/><rect x="194" y="188" width="22" height="16" rx="2"/><rect x="220" y="188" width="22" height="16" rx="2"/><rect x="246" y="188" width="22" height="16" rx="2"/>
+      <rect x="64" y="210" width="22" height="16" rx="2"/><rect x="90" y="210" width="22" height="16" rx="2"/><rect x="116" y="210" width="22" height="16" rx="2"/><rect x="142" y="210" width="22" height="16" rx="2"/><rect x="168" y="210" width="22" height="16" rx="2"/><rect x="194" y="210" width="22" height="16" rx="2"/><rect x="220" y="210" width="22" height="16" rx="2"/><rect x="246" y="210" width="22" height="16" rx="2"/>
+    </g>
+  </g>
+
+  <!-- 高亮行 2 -->
+  <g fill="#3a2b52" stroke="#9b4df0">
+    <rect x="64" y="144" width="22" height="16" rx="2"/><rect x="90" y="144" width="22" height="16" rx="2"/><rect x="116" y="144" width="22" height="16" rx="2"/><rect x="142" y="144" width="22" height="16" rx="2"/><rect x="168" y="144" width="22" height="16" rx="2"/><rect x="194" y="144" width="22" height="16" rx="2"/><rect x="220" y="144" width="22" height="16" rx="2"/><rect x="246" y="144" width="22" height="16" rx="2"/>
+  </g>
+
+  <!-- 行地址箭头 -->
+  <text x="38" y="94" fill="#e8b84b" font-size="10">行地址 →</text>
+
+  <!-- 搬到行缓冲的箭头 -->
+  <path d="M272 152 H 296" stroke="#9b4df0" stroke-width="1.6" marker-end="url(#a2)"/>
+
+  <!-- 行缓冲 -->
+  <text x="300" y="128" fill="#9b4df0" font-size="10">行缓冲</text>
+  <text x="300" y="142" fill="#6b6b85" font-size="9">整行一起搬</text>
+  <g fill="#241a36" stroke="#9b4df0">
+    <rect x="300" y="148" width="20" height="14" rx="2"/><rect x="322" y="148" width="20" height="14" rx="2"/><rect x="344" y="148" width="20" height="14" rx="2"/><rect x="300" y="164" width="20" height="14" rx="2"/><rect x="322" y="164" width="20" height="14" rx="2"/><rect x="344" y="164" width="20" height="14" rx="2"/>
+  </g>
+  <rect x="344" y="164" width="20" height="14" rx="2" fill="none" stroke="#e8b84b" stroke-width="1.6"/>
+  <text x="300" y="196" fill="#e8b84b" font-size="9">列地址挑中这一个</text>
+
+  <text x="42" y="276" fill="#9a9ab4" font-size="11">行命中：要的数据就在缓冲里，直接取。</text>
+  <text x="42" y="296" fill="#9a9ab4" font-size="11">行未命中：先把原来那行写回，再开新的一行。</text>
+  <text x="42" y="322" fill="#6b6b85" font-size="10">所以「顺序访问」比「乱跳」快——同一行只开一次。</text>
+  <text x="42" y="346" fill="#6b6b85" font-size="10">DDR4 有 4 个 bank 组 × 4 个 bank，为了在开行时别的还能干活。</text>
+
+  <rect x="42" y="362" width="348" height="48" rx="8" fill="#171725" stroke="#2a2a44"/>
+  <text x="56" y="382" fill="#9a9ab4" font-size="10.5">同一块内存：以前一次搬 1 个比特，现在一次预取 8 个。</text>
+  <text x="56" y="400" fill="#6b6b85" font-size="10">DDR5 更狠，一次 16 个——这个数叫「突发长度」。</text>
+
+  <!-- ============ 右：时序 ============ -->
+  <rect x="426" y="46" width="312" height="378" rx="10" fill="#12121c" stroke="#2a2a44"/>
+  <text x="446" y="74" fill="#d8d8e4" font-size="13">一次「行未命中」要等多久</text>
+
+  <!-- 时间轴 -->
+  <line x1="446" y1="300" x2="716" y2="300" stroke="#2a2a44"/>
+  <text x="716" y="318" fill="#6b6b85" font-size="10" text-anchor="end">时间 →</text>
+
+  <!-- ACT -->
+  <line x1="470" y1="300" x2="470" y2="150" stroke="#e8b84b" stroke-width="2"/>
+  <text x="470" y="142" fill="#e8b84b" font-size="10" text-anchor="middle">ACT</text>
+  <text x="470" y="128" fill="#6b6b85" font-size="9" text-anchor="middle">开行</text>
+
+  <!-- RD -->
+  <line x1="560" y1="300" x2="560" y2="176" stroke="#67b5ef" stroke-width="2"/>
+  <text x="560" y="168" fill="#67b5ef" font-size="10" text-anchor="middle">RD</text>
+  <text x="560" y="154" fill="#6b6b85" font-size="9" text-anchor="middle">读命令</text>
+
+  <!-- 数据 -->
+  <rect x="600" y="206" width="56" height="14" rx="2" fill="#1f3a4a" stroke="#67b5ef"/>
+  <text x="628" y="217" fill="#67b5ef" font-size="9" text-anchor="middle" font-family="monospace">数据</text>
+
+  <!-- tRCD -->
+  <line x1="470" y1="262" x2="560" y2="262" stroke="#9b4df0" stroke-width="1"/>
+  <line x1="470" y1="256" x2="470" y2="268" stroke="#9b4df0"/>
+  <line x1="560" y1="256" x2="560" y2="268" stroke="#9b4df0"/>
+  <text x="515" y="252" fill="#9b4df0" font-size="10" text-anchor="middle" font-family="monospace">tRCD ≈ 14ns</text>
+
+  <!-- tCL -->
+  <line x1="560" y1="240" x2="600" y2="240" stroke="#4ec9a3" stroke-width="1"/>
+  <line x1="600" y1="234" x2="600" y2="246" stroke="#4ec9a3"/>
+  <text x="580" y="234" fill="#4ec9a3" font-size="9" text-anchor="middle" font-family="monospace">tCL</text>
+
+  <!-- 预充电 -->
+  <line x1="446" y1="330" x2="470" y2="330" stroke="#f0606a" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="446" y="346" fill="#f0606a" font-size="10">tRP ≈ 14ns 预充电</text>
+
+  <text x="446" y="382" fill="#9a9ab4" font-size="11">14 + 14 + 14 ≈ 42ns，这就是「内存延迟」的来处。</text>
+  <text x="446" y="400" fill="#6b6b85" font-size="10">它由颗粒的物理特性决定，不是靠提高频率就能压下去的。</text>
+
+  <defs>
+    <marker id="a1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#e8b84b"/>
+    </marker>
+    <marker id="a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#9b4df0"/>
+    </marker>
+  </defs>
+</svg>
