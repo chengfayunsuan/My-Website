@@ -290,3 +290,49 @@ hr.sep { border: none; border-top: 1px dashed var(--line); margin: 42px 0; }
   border-radius: 10px; font-size: 14px; text-align: right;
   color: var(--txt-faint); background: transparent;
 }
+
+/* ---------- 宽表格：窄屏上自己横向滑动，不撑破整页 ---------- */
+.tw { margin: 22px 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tw > table { margin: 0; }
+.tw::-webkit-scrollbar { height: 6px; }
+.tw::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+
+/* ---------- 图：点开看原图 ---------- */
+a.fig-zoom { display: block; cursor: zoom-in; text-decoration: none; }
+a.fig-zoom img { transition: opacity .18s; }
+a.fig-zoom:hover img { opacity: .9; }
+
+/* ---------- 手机（≤640px） ---------- */
+@media (max-width: 640px) {
+  /* 表格挤一点，多数表就不用滑了；实在宽的表由 .tw 接住 */
+  table { font-size: 13px; }
+  th, td { padding: 8px 9px; }
+  .tw { margin: 18px 0; }
+
+  /* 图在窄屏上留白小一点，把宽度还给图本身 */
+  figure { margin: 22px 0; padding: 10px; }
+  figcaption { font-size: 12px; }
+
+  .minitoc { padding: 13px 15px 13px 10px; }
+  .minitoc ol { font-size: 14px; padding-left: 20px; }
+
+  /* 翻页两块并排太窄，竖着叠 */
+  .pager { flex-direction: column; gap: 10px; margin-top: 46px; }
+  .pager a, .pager a.next, .pager .todo-next { text-align: left; }
+  .pager a.next::after { content: ""; }
+
+  /* 手机上图太小，图下给一行提示，点一下去新标签里放大看。
+     不做成压在图上角标——那会盖住图里的内容。 */
+  a.fig-zoom::after {
+    content: "⤢ 点开看大图";
+    display: block; text-align: right;
+    margin-top: 7px; font-size: 11px;
+    color: var(--txt-faint); letter-spacing: .5px;
+  }
+
+  /* 正文左右留白收窄，390px 屏能多放三四个字 */
+  .wrap { padding: 6px 15px 90px; }
+  .cover { padding: 40px 16px 16px; }
+  .cover .sub { font-size: 15px; }
+  .note, .warn, .key, .why { padding: 11px 14px; font-size: 15px; }
+}

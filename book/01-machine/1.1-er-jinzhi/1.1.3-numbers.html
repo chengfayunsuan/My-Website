@@ -65,7 +65,7 @@
     先摆一张表。同样一串比特，用三种规则去读，得到三个完全不同的数：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>二进制</th><th>无符号读法</th><th>补码读法（有符号）</th><th>浮点读法（32 位段的一部分）</th></tr></thead>
     <tbody>
       <tr><td><code>0000 0001</code></td><td>1</td><td>+1</td><td>（不适用，浮点至少要 32 位）</td></tr>
@@ -73,7 +73,7 @@
       <tr><td><code>1000 0000</code></td><td>128</td><td><strong>−128</strong></td><td>—</td></tr>
       <tr><td><code>1111 1111</code></td><td>255</td><td><strong>−1</strong></td><td>—</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     注意第三、四行：<strong>同一串比特，无符号读是 128 和 255，有符号读却是 −128 和 −1</strong>。
@@ -81,7 +81,7 @@
   </p>
 
   <figure>
-    <img src="../../assets/img/1.1.3-1-three-views.svg" alt="同一个字节在无符号、补码、浮点三种规则下的不同解读">
+    <a class="fig-zoom" href="../../assets/img/1.1.3-1-three-views.svg" target="_blank" rel="noopener"><img src="../../assets/img/1.1.3-1-three-views.svg" alt="同一个字节在无符号、补码、浮点三种规则下的不同解读"></a>
     <figcaption><b>图 1.1.3-1</b>　八位比特本身没有正负、没有小数点。给它贴上哪张标签，它就是一个什么样的数——而这三张标签，是不同年代为了解决不同问题发明出来的。</figcaption>
   </figure>
 
@@ -113,7 +113,7 @@
     你写代码时，「用哪种数字」这件事，语言已经替你决定了大部分。而这些决定，会直接变成你遇到 bug 的类型。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>语言</th><th>有符号/无符号</th><th>溢出行为</th><th>整数精度</th></tr></thead>
     <tbody>
       <tr>
@@ -159,7 +159,7 @@
         <td>后来加了 BigInt</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="key">
     <b>从这张表能看出三种设计哲学：</b><br>
@@ -185,7 +185,7 @@
     位宽决定范围：n 位无符号整数的范围是 <strong>0 到 2ⁿ−1</strong>。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>位宽</th><th>范围</th><th>典型用途</th></tr></thead>
     <tbody>
       <tr><td>8 位</td><td>0 ~ 255</td><td>像素通道、字节、ASCII 扩展</td></tr>
@@ -193,7 +193,7 @@
       <tr><td>32 位</td><td>0 ~ 4,294,967,295</td><td>IPv4 地址、文件大小（4GB 上限）、时间戳</td></tr>
       <tr><td>64 位</td><td>0 ~ 1.8×10¹⁹</td><td>内存地址、大文件字节数、数据库主键</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>为什么「端口号是 16 位」这件事很重要</h3>
 
@@ -217,14 +217,14 @@
 
   <h3>无符号的好处与代价</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th></th><th>好处</th><th>代价</th></tr></thead>
     <tbody>
       <tr><td>范围</td><td>同样位数，比有符号多一倍的正数空间</td><td>不能表示负数</td></tr>
       <tr><td>运算</td><td>加减乘除都是最直接的电路，没有符号处理</td><td>减法「借位」时会出现「下溢」变成巨大正数</td></tr>
       <tr><td>比较</td><td>直接按位比大小</td><td>无符号和有符号比较时，规则完全不同（后面 -7 会讲这个坑）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     那个「下溢」值得现在就说一句：<code>0 - 1</code> 在无符号 8 位里等于 <strong>255</strong>。
@@ -308,7 +308,7 @@
     这是因为浮点的运算逻辑本来就复杂，把符号单独拎出来反而好处理。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>编码</th><th>零的个数</th><th>能直接比大小吗</th><th>现在用在哪</th></tr></thead>
     <tbody>
       <tr><td>原码</td><td>2</td><td>不能</td><td>浮点的符号位</td></tr>
@@ -316,7 +316,7 @@
       <tr><td>补码</td><td>1</td><td>能（同符号内）</td><td>所有整数运算</td></tr>
       <tr><td>余码</td><td>1</td><td>能（全部）</td><td>浮点指数、A/D 转换</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>▸ 深入：环形缓冲——无符号在工程里的经典用法</h3>
 
@@ -447,7 +447,7 @@ BCD：      0100 0010  = 0x42      ← 看着就像"42"</code></pre>
 
   <h3>它现在还在哪</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>地方</th><th>为什么还用</th></tr></thead>
     <tbody>
       <tr>
@@ -467,7 +467,7 @@ BCD：      0100 0010  = 0x42      ← 看着就像"42"</code></pre>
         <td>继承了历史系统，改造成本高于保留</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h4>代价：浪费与修正</h4>
 
@@ -511,7 +511,7 @@ BCD：      0100 0010  = 0x42      ← 看着就像"42"</code></pre>
   </p>
 
   <figure>
-    <img src="../../assets/img/1.1.3-2-mod-circle.svg" alt="模 256 的圆环：减 1 等于加 255">
+    <a class="fig-zoom" href="../../assets/img/1.1.3-2-mod-circle.svg" target="_blank" rel="noopener"><img src="../../assets/img/1.1.3-2-mod-circle.svg" alt="模 256 的圆环：减 1 等于加 255"></a>
     <figcaption><b>图 1.1.3-2</b>　8 位容器就是一个 256 格的圆环。走到 0 再往前一格，就绕回 255——所以在 8 位里，−1 的编码就是 255。</figcaption>
   </figure>
 
@@ -560,7 +560,7 @@ BCD：      0100 0010  = 0x42      ← 看着就像"42"</code></pre>
 
   <h3>验证：四种情况都对</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>运算</th><th>补码下的结果</th><th>正确吗</th></tr></thead>
     <tbody>
       <tr><td>5 + 3</td><td><code>00000101 + 00000011 = 00001000</code> = 8</td><td>✓</td></tr>
@@ -568,7 +568,7 @@ BCD：      0100 0010  = 0x42      ← 看着就像"42"</code></pre>
       <tr><td>−5 + 3</td><td><code>11111011 + 00000011 = 11111110</code> = −2</td><td>✓</td></tr>
       <tr><td>−5 + (−3)</td><td><code>11111011 + 11111101 = 1 11111000</code> = −8</td><td>✓</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     四种情况，一个加法器，没有分支判断。
@@ -631,13 +631,13 @@ BCD：      0100 0010  = 0x42      ← 看着就像"42"</code></pre>
     于是同一个加法器：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>控制信号</th><th>b 的输入</th><th>cin</th><th>结果</th></tr></thead>
     <tbody>
       <tr><td>加法模式</td><td>b 原样</td><td>0</td><td>a + b</td></tr>
       <tr><td>减法模式</td><td>b 取反</td><td>1</td><td>a + ~b + 1 = a − b</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     <strong>一个开关，省掉了一整套减法电路。</strong>在芯片上，这省的不只是面积，还有功耗和设计复杂度。
@@ -688,7 +688,7 @@ BCD：      0100 0010  = 0x42      ← 看着就像"42"</code></pre>
 
   <h4>这个视角能解释好几件事</h4>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>现象</th><th>用同余解释</th></tr></thead>
     <tbody>
       <tr>
@@ -708,7 +708,7 @@ BCD：      0100 0010  = 0x42      ← 看着就像"42"</code></pre>
         <td>因为同余类本身没有序关系，怎么排序是人为约定的</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     最后那一条值得琢磨：<strong>「256 个格子怎么排序」没有唯一答案</strong>。
@@ -729,7 +729,7 @@ BCD：      0100 0010  = 0x42      ← 看着就像"42"</code></pre>
     <strong>补码把多出来的那个给了负数。</strong>
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>编码</th><th>补码解读</th><th>备注</th></tr></thead>
     <tbody>
       <tr><td><code>0111 1111</code></td><td>+127</td><td>最大的正数</td></tr>
@@ -739,7 +739,7 @@ BCD：      0100 0010  = 0x42      ← 看着就像"42"</code></pre>
       <tr><td><code>1000 0001</code></td><td>−127</td><td></td></tr>
       <tr><td><code>1000 0000</code></td><td><strong>−128</strong></td><td>没有对应的 +128</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>−128 的三个奇怪性质</h3>
 
@@ -804,7 +804,7 @@ n 位无符号：      0  ~  +2ⁿ − 1</code></pre>
     因为同号相加的绝对值只会变大，变成反号说明「翻过了边界」。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>情况</th><th>会溢出吗</th></tr></thead>
     <tbody>
       <tr><td>正 + 正 → 负</td><td>会</td></tr>
@@ -812,7 +812,7 @@ n 位无符号：      0  ~  +2ⁿ − 1</code></pre>
       <tr><td>正 + 负</td><td>不会（结果一定在两者之间）</td></tr>
       <tr><td>正 − 负 → 负</td><td>会（等价于正 + 正）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     CPU 里其实有一个「溢出标志位」（OF，Overflow Flag），专门记录这件事。
@@ -906,7 +906,7 @@ for (i = 0; i &lt;= INT_MAX; i++) { ... }   // 编译器可以判断 i&lt;=INT_M
 
   <h3>怎么规避</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>做法</th><th>说明</th></tr></thead>
     <tbody>
       <tr><td>用无符号做循环变量</td><td>无符号溢出是定义良好的回绕，编译器不能乱来</td></tr>
@@ -914,7 +914,7 @@ for (i = 0; i &lt;= INT_MAX; i++) { ... }   // 编译器可以判断 i&lt;=INT_M
       <tr><td>开 <code>-fwrapv</code></td><td>让编译器把有符号溢出当回绕处理（GCC/Clang），代价是少一些优化</td></tr>
       <tr><td>用 <code>-fsanitize=undefined</code></td><td>运行时检测，一旦溢出就报错——调试阶段强烈建议开</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     有意思的是，Linux 内核长期使用 <code>-fno-strict-overflow</code>，
@@ -1110,13 +1110,13 @@ if (a &lt; b) { ... }   // 你以为是真，实际是假
     反过来，把 8 位扩展到 32 位时，前面补什么取决于<strong>源类型有没有符号</strong>：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>源类型</th><th>值</th><th>扩展到 int 后</th><th>规则</th></tr></thead>
     <tbody>
       <tr><td><code>unsigned char</code></td><td><code>0xFF</code></td><td>255</td><td>补 0（零扩展）</td></tr>
       <tr><td><code>signed char</code></td><td><code>0xFF</code></td><td><strong>−1</strong></td><td>补 1（符号扩展）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     同一串比特 <code>0xFF</code>，因为「源类型」不同，扩展出来的结果一个是 255、一个是 −1。
@@ -1161,7 +1161,7 @@ if (a &lt; b) { ... }   // 你以为是真，实际是假
 
   <h3>三种常见做法</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>做法</th><th>例子</th><th>优点</th><th>缺点</th></tr></thead>
     <tbody>
       <tr>
@@ -1183,7 +1183,7 @@ if (a &lt; b) { ... }   // 你以为是真，实际是假
         <td>慢（软件实现），占空间</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="warn">
     <b>一个真实的坑：</b>用整数存金额时，一定要在数据库里也用整数或 <code>DECIMAL</code>，
@@ -1202,7 +1202,7 @@ if (a &lt; b) { ... }   // 你以为是真，实际是假
     也就是说，实际值等于「存储值 ÷ 65536」。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>属性</th><th>Q16.16</th></tr></thead>
     <tbody>
       <tr><td>表示范围</td><td>约 ±32768</td></tr>
@@ -1211,7 +1211,7 @@ if (a &lt; b) { ... }   // 你以为是真，实际是假
       <tr><td>乘法</td><td>相乘后右移 16 位（因为结果是 32.32 格式）</td></tr>
       <tr><td>除法</td><td>左移 16 位后再除</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h4>为什么要用它</h4>
 
@@ -1234,7 +1234,7 @@ if (a &lt; b) { ... }   // 你以为是真，实际是假
     只要涉及小数，就一定会遇到舍入。但「舍入」不是一个动作，是一族动作——选错会让账目差钱。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>模式</th><th>规则</th><th>2.5 变成</th><th>−2.5 变成</th></tr></thead>
     <tbody>
       <tr><td>向上取整</td><td>往正无穷方向</td><td>3</td><td>−2</td></tr>
@@ -1243,7 +1243,7 @@ if (a &lt; b) { ... }   // 你以为是真，实际是假
       <tr><td>就近舍入（四舍五入）</td><td>.5 一律进位</td><td>3</td><td>−3</td></tr>
       <tr><td><strong>就近舍入（取偶）</strong></td><td>.5 时取偶数</td><td><strong>2</strong></td><td><strong>−2</strong></td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h4>最后一种是 IEEE 754 的默认</h4>
 
@@ -1307,18 +1307,18 @@ if (a &lt; b) { ... }   // 你以为是真，实际是假
   </p>
 
   <figure>
-    <img src="../../assets/img/1.1.3-3-ieee754.svg" alt="IEEE 754 单精度浮点的三段结构：符号位、指数位、尾数位">
+    <a class="fig-zoom" href="../../assets/img/1.1.3-3-ieee754.svg" target="_blank" rel="noopener"><img src="../../assets/img/1.1.3-3-ieee754.svg" alt="IEEE 754 单精度浮点的三段结构：符号位、指数位、尾数位"></a>
     <figcaption><b>图 1.1.3-3</b>　32 位浮点数被切成 1 + 8 + 23 三段。它不是「存了一个小数」，而是「存了一个公式的三个参数」。</figcaption>
   </figure>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>类型</th><th>总位数</th><th>符号</th><th>指数</th><th>尾数</th><th>有效十进制位</th></tr></thead>
     <tbody>
       <tr><td>单精度 float</td><td>32</td><td>1</td><td>8</td><td>23</td><td>约 7 位</td></tr>
       <tr><td>双精度 double</td><td>64</td><td>1</td><td>11</td><td>52</td><td>约 15~16 位</td></tr>
       <tr><td>半精度 half</td><td>16</td><td>1</td><td>5</td><td>10</td><td>约 3 位</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>三个设计细节，每个都有原因</h3>
 
@@ -1348,7 +1348,7 @@ if (a &lt; b) { ... }   // 你以为是真，实际是假
     指数全 0 和全 1 被留作特殊用途：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>指数</th><th>尾数</th><th>表示什么</th></tr></thead>
     <tbody>
       <tr><td>全 0</td><td>全 0</td><td>±0</td></tr>
@@ -1356,7 +1356,7 @@ if (a &lt; b) { ... }   // 你以为是真，实际是假
       <tr><td>全 1</td><td>全 0</td><td>±无穷大</td></tr>
       <tr><td>全 1</td><td>非 0</td><td>NaN（不是一个数）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>手算一次：0.15625 的浮点编码</h3>
 
@@ -1419,7 +1419,7 @@ a - b 应该是个很小的非零数，但因为无法表示，结果变成 0
     不是突然掉到 0，而是慢慢失去精度。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th></th><th>单精度</th><th>双精度</th></tr></thead>
     <tbody>
       <tr><td>最大有限值</td><td>约 3.4 × 10³⁸</td><td>约 1.8 × 10³⁰⁸</td></tr>
@@ -1427,7 +1427,7 @@ a - b 应该是个很小的非零数，但因为无法表示，结果变成 0
       <tr><td>最小非规格化正数</td><td>约 1.4 × 10⁻⁴⁵</td><td>约 4.9 × 10⁻³²⁴</td></tr>
       <tr><td>有效十进制位</td><td>约 7 位</td><td>约 15~16 位</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="note">
     <b>一个历史上的性能坑：</b>早期某些 x86 处理器（Pentium 4）处理非规格化数时会慢上百倍——
@@ -1443,14 +1443,14 @@ a - b 应该是个很小的非零数，但因为无法表示，结果变成 0
     指数几位、偏移多少、尾数怎么排、舍入用哪种规则，全是自己定。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>机器</th><th>浮点特点</th></tr></thead>
     <tbody>
       <tr><td>IBM System/360</td><td>十六进制指数（不是二进制），尾数 24 位，精度随数值大小漂移</td></tr>
       <tr><td>DEC VAX</td><td>自己的 F/D/G/H 四种格式，舍入规则与 IBM 不同</td></tr>
       <tr><td>早期的 Cray 超算</td><td>为了速度省略了一些规范化步骤，结果与别家不一致</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     后果是：<strong>同一段科学计算程序，换一台机器跑，末位结果就不一样</strong>。
@@ -1510,7 +1510,7 @@ a - b 应该是个很小的非零数，但因为无法表示，结果变成 0
 
   <h3>由此推出四条实用规则</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>规则</th><th>为什么</th><th>正确做法</th></tr></thead>
     <tbody>
       <tr>
@@ -1534,7 +1534,7 @@ a - b 应该是个很小的非零数，但因为无法表示，结果变成 0
         <td>大数据求和要排序或用 Kahan 求和</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>「大整数不连续」这件事值得单独说</h3>
 
@@ -1639,7 +1639,7 @@ for (const x of data) {
     这是所有「跨语言移植」项目都会撞上的一个坑：<strong>整数除法遇到负数时，取整方向不统一。</strong>
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>表达式</th><th>C / C++ / Java / Go / Rust</th><th>Python</th></tr></thead>
     <tbody>
       <tr><td><code>−7 / 2</code></td><td><strong>−3</strong>（向零取整）</td><td><strong>−4</strong>（向负无穷取整）</td></tr>
@@ -1647,7 +1647,7 @@ for (const x of data) {
       <tr><td><code>7 / −2</code></td><td>−3</td><td>−4</td></tr>
       <tr><td><code>7 % −2</code></td><td>1</td><td>−1</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     为什么不一样？因为「整数除法」在数学上有好几种定义方式，语言各自选了不同的：
@@ -1684,7 +1684,7 @@ for (const x of data) {
     学到这里，你手上已经有四种工具。实际开发时怎么选？按场景查表：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>场景</th><th>选什么</th><th>为什么</th></tr></thead>
     <tbody>
       <tr>
@@ -1728,7 +1728,7 @@ for (const x of data) {
         <td>几百位整数，任何定宽类型都不够</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="key">
     <b>选类型时问自己三个问题：</b><br>
@@ -1745,7 +1745,7 @@ for (const x of data) {
     写测试时不知道该测什么？先把这十二个值试一遍。它们覆盖了绝大多数边界 bug：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>值</th><th>为什么危险</th></tr></thead>
     <tbody>
       <tr><td><code>0</code></td><td>数组空、除零、逻辑里的「假」</td></tr>
@@ -1761,7 +1761,7 @@ for (const x of data) {
       <tr><td>数组最后一个元素</td><td>下标 <code>n − 1</code> 与 <code>n</code> 的边界</td></tr>
       <tr><td>刚好等于阈值</td><td><code>&lt;</code> 和 <code>&lt;=</code> 一字之差</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="key">
     <b>一份能救命的检查清单：</b>
@@ -1802,13 +1802,13 @@ int x = (int) big;      // C 里是 UB，实际结果因平台而异（常见是
 
   <h4>坑三：NaN 和 ∞ 转整数</h4>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>输入</th><th>C</th><th>Java</th><th>JavaScript</th></tr></thead>
     <tbody>
       <tr><td><code>NaN</code></td><td>未定义</td><td>0</td><td>NaN</td></tr>
       <tr><td><code>+∞</code></td><td>未定义</td><td>MAX_VALUE</td><td>Infinity（不是整数）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     所以在做「用户输入 → 数值 → 整数」这条链时，<strong>必须先检查 <code>isFinite</code> 和 <code>isNaN</code></strong>，
@@ -1845,7 +1845,7 @@ int x = (int) big;      // C 里是 UB，实际结果因平台而异（常见是
     后果有三个，你大概都遇到过：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>现象</th><th>原因</th></tr></thead>
     <tbody>
       <tr>
@@ -1861,7 +1861,7 @@ int x = (int) big;      // C 里是 UB，实际结果因平台而异（常见是
         <td>JS 的位运算会先把操作数转成 <strong>32 位有符号整数</strong>，超过 32 位的部分被截掉</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     第三条特别容易踩：<code>1 &lt;&lt; 31</code> 在 JS 里是 <code>−2147483648</code>（因为变成负数了），

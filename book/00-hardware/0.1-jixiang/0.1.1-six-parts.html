@@ -98,7 +98,7 @@
   </p>
 
   <figure>
-    <img src="../../assets/img/0.1.1-1-case-inside.svg" alt="机箱内部六大件位置示意">
+    <a class="fig-zoom" href="../../assets/img/0.1.1-1-case-inside.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.1.1-1-case-inside.svg" alt="机箱内部六大件位置示意"></a>
     <figcaption>
       <b>图 1</b>　机箱侧板打开（俯视示意）。六件东西各有固定位置：
       主板是那块最大的板，CPU 在它中间偏上、盖着散热器，内存条竖着插在 CPU 右边，
@@ -120,7 +120,7 @@
   </p>
 
   <figure>
-    <img src="../../assets/img/0.1.1-2-why-six.svg" alt="从需求倒推六大件">
+    <a class="fig-zoom" href="../../assets/img/0.1.1-2-why-six.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.1.1-2-why-six.svg" alt="从需求倒推六大件"></a>
     <figcaption>
       <b>图 2</b>　左边一列没有一个字提到「晶体管」「缓存」「PCIe」——那些都是实现细节。
       需求是稳定的，实现是会换的：1950 年的机器也满足这六条，只是零件换了一轮又一轮。
@@ -234,7 +234,7 @@
     六件东西并没有消失，只是被压缩了：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:120px">功能</th><th>在手机里变成了什么</th></tr></thead>
     <tbody>
       <tr><td>计算 + 显示</td><td>SoC（片上系统）：CPU、GPU、内存控制器、基带、图像处理器全做在一颗芯片里</td></tr>
@@ -244,7 +244,7 @@
       <tr><td>连接</td><td>不再是一块大板，而是一小块高密度 PCB，甚至用柔性排线连接各部件</td></tr>
       <tr><td>散热</td><td>没有风扇，靠石墨片、均热板把热摊到整个机身</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     这个对照解释了一个日常疑问：<strong>为什么手机内存不能像电脑一样升级？</strong>
@@ -280,7 +280,7 @@
     你俯视一块主板，能认出这些东西：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:170px">部件</th><th>作用</th><th style="width:150px">外形特征</th></tr></thead>
     <tbody>
       <tr><td>CPU 插槽</td><td>固定 CPU，把上千个触点接到主板上</td><td>方形金属框，带压杆</td></tr>
@@ -294,7 +294,7 @@
       <tr><td>CMOS 电池</td><td>关机后维持时间和 BIOS 设置</td><td>一颗银色纽扣电池</td></tr>
       <tr><td>芯片组</td><td>把慢速设备汇总后转交给 CPU</td><td>一块盖着散热片的方形芯片</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>芯片组：为什么需要这么个「中转站」</h3>
 
@@ -321,7 +321,7 @@
   </p>
 
   <figure>
-    <img src="../../assets/img/0.1.1-4-datapath.svg" alt="数据通路示意">
+    <a class="fig-zoom" href="../../assets/img/0.1.1-4-datapath.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.1.1-4-datapath.svg" alt="数据通路示意"></a>
     <figcaption>
       <b>图 3</b>　谁跟谁说话，决定了它们物理上离多远。
       内存和显卡直接连 CPU（因为要的带宽大、延迟低），USB 和 SATA 走芯片组中转（因为慢一点没关系）。
@@ -335,14 +335,14 @@
     主板有标准尺寸，最常见的是三种：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:120px">板型</th><th style="width:130px">尺寸</th><th>能插什么</th></tr></thead>
     <tbody>
       <tr><td>ATX</td><td>305 × 244 mm</td><td>4 条内存、最多 3 块长显卡、7 个扩展槽</td></tr>
       <tr><td>Micro-ATX</td><td>244 × 244 mm</td><td>4 条内存、2 块显卡、4 个扩展槽</td></tr>
       <tr><td>Mini-ITX</td><td>170 × 170 mm</td><td>2 条内存、1 块显卡、1 个扩展槽</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     尺寸决定了「能插几块卡」，但不决定性能。这是一个常见的误解：
@@ -442,7 +442,7 @@
     一颗现代 CPU 里，按面积排，大概是这几块：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:180px">部分</th><th>干什么</th><th style="width:110px">占面积</th></tr></thead>
     <tbody>
       <tr><td>核心（Core）</td><td>真正执行指令的地方，一颗 CPU 有 6~24 个</td><td>约 25%</td></tr>
@@ -453,7 +453,7 @@
       <tr><td>核显</td><td>不插独显时负责出画面（不是所有型号都有）</td><td>约 10%</td></tr>
       <tr><td>IO 与其他</td><td>DMI、电源管理、安全模块</td><td>约 4%</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="note">
     <b>这张表值得多看两眼。</b>你会发现真正「算」的核心只占四分之一，而缓存占了将近一半。
@@ -512,7 +512,7 @@
   </p>
 
   <figure>
-    <img src="../../assets/img/0.1.1-3-latency.svg" alt="各级存储的访问延迟对比">
+    <a class="fig-zoom" href="../../assets/img/0.1.1-3-latency.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.1.1-3-latency.svg" alt="各级存储的访问延迟对比"></a>
     <figcaption>
       <b>图 4</b>　取一次数据的代价，用对数刻度画。注意最下面那两行——
       SSD 和机械硬盘比内存慢了三个到五个数量级，这就是为什么「加内存」常常比「换 CPU」更能让电脑变快。
@@ -548,7 +548,7 @@
 
   <h3>买内存要看哪几个数</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:110px">参数</th><th>意思</th><th>实际影响</th></tr></thead>
     <tbody>
       <tr><td>容量</td><td>8 / 16 / 32 / 64 GB</td><td>决定能同时开多少程序。不够就会卡，且是那种「硬盘灯狂闪」的卡</td></tr>
@@ -557,7 +557,7 @@
       <tr><td>时序</td><td>CL16 / CL30</td><td>延迟。数字越小越好，但和频率要一起看</td></tr>
       <tr><td>通道</td><td>单通道 / 双通道</td><td><strong>影响最大的一项</strong>，插两根比插一根快近一倍</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     最后一项值得单独说。「双通道」的意思是：主板上有两组独立的内存通道，
@@ -708,7 +708,7 @@
 
   <h3>接口：同一块固态，插法不同，速度差十倍</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:130px">接口</th><th style="width:150px">通道</th><th>实际速度</th><th>外形</th></tr></thead>
     <tbody>
       <tr><td>SATA</td><td>走芯片组，SATA 协议</td><td>约 550 MB/s</td><td>2.5 寸方块，或 M.2 外形但走 SATA</td></tr>
@@ -716,7 +716,7 @@
       <tr><td>M.2 NVMe（PCIe 4.0）</td><td>直连 CPU</td><td>约 7000 MB/s</td><td>同上</td></tr>
       <tr><td>M.2 NVMe（PCIe 5.0）</td><td>直连 CPU</td><td>约 12000 MB/s</td><td>同上，通常需要散热片</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     注意 SATA 那行的天花板：600 MB/s 是 SATA 协议本身的上限，跟颗粒多快没关系。
@@ -760,7 +760,7 @@
 
   <h3>拆开看，它确实是一台电脑</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:170px">显卡上的部件</th><th>对应电脑里的什么</th></tr></thead>
     <tbody>
       <tr><td>GPU 芯片</td><td>CPU</td></tr>
@@ -771,7 +771,7 @@
       <tr><td>PCIe 金手指</td><td>主板总线</td></tr>
       <tr><td>HDMI / DP 接口</td><td>显示输出</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     所以「显卡坏了」不一定整机不亮——如果 CPU 有核显，拔掉独显照样能用。
@@ -796,7 +796,7 @@
     这是理解显卡的核心。两者的设计哲学完全相反：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:110px"></th><th>CPU</th><th>GPU</th></tr></thead>
     <tbody>
       <tr><td>核心数</td><td>6~24 个</td><td>几千到一万多个</td></tr>
@@ -804,7 +804,7 @@
       <tr><td>擅长</td><td>少量、复杂、有先后依赖的任务</td><td>海量、简单、互相独立的任务</td></tr>
       <tr><td>典型工作</td><td>判断「下一步该干什么」</td><td>算「这一百万个像素各是什么颜色」</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     打个比方：CPU 是一个全能的老工程师，什么都会，但只有一双手；
@@ -818,7 +818,7 @@
     两者都是「断电就没」的存储，但侧重完全不同：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:120px"></th><th>内存（DDR5）</th><th>显存（GDDR6X）</th></tr></thead>
     <tbody>
       <tr><td>带宽</td><td>约 80 GB/s（双通道）</td><td>约 1000 GB/s</td></tr>
@@ -826,7 +826,7 @@
       <tr><td>容量</td><td>大（16~128GB）</td><td>小（8~24GB）</td></tr>
       <tr><td>为什么这样设计</td><td>CPU 要频繁随机访问，延迟优先</td><td>GPU 要一次搬几亿个像素，带宽优先</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     所以「显存不够」的症状和「内存不够」完全不同：
@@ -929,7 +929,7 @@
     它衡量的是<strong>转换效率</strong>：输入 100 瓦，能输出多少瓦给电脑，剩下的变成热。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:120px">等级</th><th>20% 负载</th><th>50% 负载</th><th>100% 负载</th></tr></thead>
     <tbody>
       <tr><td>白牌</td><td>80%</td><td>80%</td><td>80%</td></tr>
@@ -938,7 +938,7 @@
       <tr><td>白金</td><td>90%</td><td>92%</td><td>89%</td></tr>
       <tr><td>钛金</td><td>92%</td><td>94%</td><td>90%</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     效率低不只是浪费电，还意味着<strong>更多热量留在电源里</strong>，风扇要转得更快，噪音更大。
@@ -1011,14 +1011,14 @@
 
   <h3>三种散热方式</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:110px">方式</th><th>原理</th><th>优点</th><th>缺点</th></tr></thead>
     <tbody>
       <tr><td>风冷</td><td>热管把热导到鳍片，风扇吹走</td><td>便宜、可靠、寿命长</td><td>体积大、有噪音上限</td></tr>
       <tr><td>一体式水冷</td><td>水泵把冷却液送到冷排，风扇吹冷排</td><td>散热强、机箱内空间好安排</td><td>贵、有水泵噪音、有漏液风险（很低）</td></tr>
       <tr><td>被动散热</td><td>只靠大块金属自然对流</td><td>完全无声</td><td>只能压低功耗芯片</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>硅脂到底在干什么</h3>
 
@@ -1073,7 +1073,7 @@
     机箱里还有一些东西，既不重要到值得单列，也不能完全忽略。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:150px">东西</th><th>作用</th><th>为什么没进六件</th></tr></thead>
     <tbody>
       <tr><td>机箱</td><td>固定所有部件、形成风道、屏蔽电磁干扰、接地</td><td>它是结构件，不参与计算也不参与存储</td></tr>
@@ -1082,7 +1082,7 @@
       <tr><td>CMOS 电池</td><td>关机后维持时钟和 BIOS 设置</td><td>一颗纽扣电池，但它坏了会让你「每次开机时间都不对」</td></tr>
       <tr><td>TPM 模块</td><td>存加密密钥，支持 BitLocker</td><td>通常是主板上的一个小芯片或 CPU 内置</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     这些东西里，最值得记住的是 <strong>CMOS 电池</strong>。
@@ -1201,7 +1201,7 @@
     先把对应关系给你，以后读到某一章觉得飘了，可以回来对一下。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:110px">这一节的件</th><th>后面在哪里被拆开讲</th><th>会回答什么问题</th></tr></thead>
     <tbody>
       <tr><td>主板</td><td>1.2 逻辑门 / 1.3 CPU / 4.3 端口</td><td>板子上那些线到底是什么信号</td></tr>
@@ -1211,7 +1211,7 @@
       <tr><td>显卡</td><td>9.6 游戏与显卡 / 10.4 本地推理</td><td>一帧画面怎么算出来、AI 为什么吃显存</td></tr>
       <tr><td>电源 / 散热</td><td>2.8 卡顿与降频</td><td>为什么电脑越用越慢</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     还有一条隐藏的线：<strong>这六件东西之间的「说话」，就是总线</strong>。

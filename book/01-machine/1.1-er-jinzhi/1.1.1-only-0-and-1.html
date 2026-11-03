@@ -138,14 +138,14 @@
     上一节说「键盘传的是编号」。具体到最常见的 USB 键盘，这个「包」是固定 8 个字节，格式如下：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>字节</th><th>内容</th><th>说明</th></tr></thead>
     <tbody>
       <tr><td>第 0 字节</td><td>修饰键位图</td><td>8 个位分别代表左 Ctrl、左 Shift、左 Alt、左 Win、右 Ctrl、右 Shift、右 Alt、右 Win</td></tr>
       <tr><td>第 1 字节</td><td>保留</td><td>老键盘上用于厂商自定义，通常为 0</td></tr>
       <tr><td>第 2~7 字节</td><td>六个按键的编号</td><td>同时按下的键，每个占一个字节；没按的填 0</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     举例：你按住左 Shift，再按 A，键盘发出的包是：
@@ -261,7 +261,7 @@
 
   <h4>它和「冯·诺依曼架构」的区别，别搞混</h4>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th></th><th>图灵机</th><th>冯·诺依曼架构</th></tr></thead>
     <tbody>
       <tr><td>是什么</td><td>一个<strong>数学定义</strong>，用来界定「可计算」的范围</td><td>一个<strong>工程方案</strong>，用来造真实的计算机</td></tr>
@@ -269,7 +269,7 @@
       <tr><td>组成</td><td>纸带 + 读写头 + 状态表</td><td>CPU + 内存 + 存储 + IO，程序和数据存在同一内存里</td></tr>
       <tr><td>关系</td><td colspan="2">冯·诺依曼架构是「实现图灵机的一种方式」，但不是唯一方式（量子计算、神经网络都不是它的直接实现）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     还有一个常被提起的「丘奇-图灵论题」：所有「直觉上可计算」的东西，都等价于图灵机可计算的东西。
@@ -285,7 +285,7 @@
   </p>
 
   <figure>
-    <img src="../../assets/img/1.1.1-1-voltage-threshold.svg" alt="模拟电压曲线被阈值切成 0 和 1">
+    <a class="fig-zoom" href="../../assets/img/1.1.1-1-voltage-threshold.svg" target="_blank" rel="noopener"><img src="../../assets/img/1.1.1-1-voltage-threshold.svg" alt="模拟电压曲线被阈值切成 0 和 1"></a>
     <figcaption><b>图 1.1.1-1</b>　真实导线上的电压是一条弯弯曲曲上升的曲线；机器并不记录这条曲线，它只问一句「现在过线了没有」，于是连续的曲线变成了一串方波。</figcaption>
   </figure>
 
@@ -317,7 +317,7 @@
     举个具体的例子。假设一条线满量程是 3.3V：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>切几档</th><th>每档间隔</th><th>能表示几进制</th><th>问题</th></tr></thead>
     <tbody>
       <tr><td>2 档（0/1）</td><td>1.65V</td><td>二进制</td><td>几乎没有，容错极宽</td></tr>
@@ -325,7 +325,7 @@
       <tr><td>10 档</td><td>0.33V</td><td>十进制</td><td>稍微一点干扰就串档</td></tr>
       <tr><td>256 档</td><td>0.013V</td><td>一个字节的量</td><td>在长导线上根本不可靠，只适合芯片内部</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     从这张表能读出整件事的答案：<strong>档位越少，每一档之间的「安全距离」越大，机器越不容易读错</strong>。
@@ -388,7 +388,7 @@
     对应的动态范围（最响与最轻的比值）大约是 <strong>96 分贝</strong>——经验公式是「每 1 位约 6 分贝」。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>位深</th><th>档位数</th><th>动态范围</th><th>用在哪</th></tr></thead>
     <tbody>
       <tr><td>8 位</td><td>256</td><td>约 48dB</td><td>老式游戏音效、早期采样器（底噪明显）</td></tr>
@@ -396,7 +396,7 @@
       <tr><td>24 位</td><td>1677 万</td><td>约 144dB</td><td>录音与混音阶段（留出余量，后期再降）</td></tr>
       <tr><td>32 位浮点</td><td>—</td><td>理论上极大</td><td>DAW 内部处理（不怕过载，可以超过 0dB）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     为什么录音用 24 位、发布用 16 位？因为录音时要留余量：歌手可能突然唱得很大声，24 位能扛住；
@@ -424,7 +424,7 @@
     两两成对使用。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>参数</th><th>全称</th><th>含义</th></tr></thead>
     <tbody>
       <tr><td><code>V<sub>OL</sub></code></td><td>Output Low</td><td>输出低电平时，最多不超过多少伏（比如 0.4V）</td></tr>
@@ -432,7 +432,7 @@
       <tr><td><code>V<sub>IL</sub></code></td><td>Input Low</td><td>输入低于这个值，才保证被认成 0（比如 0.8V）</td></tr>
       <tr><td><code>V<sub>IH</sub></code></td><td>Input High</td><td>输入高于这个值，才保证被认成 1（比如 2.0V）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     注意 <code>V<sub>OL</sub></code> 和 <code>V<sub>IL</sub></code> 之间有一段（0.4V ~ 0.8V），
@@ -473,7 +473,7 @@
     而这些电压不是一种，是很多种，因为芯片内部分成了多个<strong>电压域</strong>：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>电压域</th><th>典型值</th><th>为什么单独供电</th></tr></thead>
     <tbody>
       <tr><td>核心（Vcore）</td><td>0.8 ~ 1.35V，动态变化</td><td>算得越快越费电，所以要能随时调；核心走线短，可以用低压</td></tr>
@@ -482,7 +482,7 @@
       <tr><td>模拟 / PLL</td><td>独立低噪电源</td><td>时钟电路对电源噪声极敏感，混在一起会抖</td></tr>
       <tr><td>待机（RTC）</td><td>约 3V 纽扣电池</td><td>断电后还要维持时钟和 BIOS 设置</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h4>为什么要「动态」调</h4>
 
@@ -528,7 +528,7 @@
     假设有一条信号要经过 100 级电路，每一级都会引入一点误差（模拟电路里这是必然的）：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th></th><th>模拟电路</th><th>数字电路</th></tr></thead>
     <tbody>
       <tr><td>每级误差</td><td>±0.05V，无法消除</td><td>每级重新整形，误差归零</td></tr>
@@ -536,7 +536,7 @@
       <tr><td>100 级后</td><td>误差远超信号本身，完全失真</td><td>仍然干净——除非某一级判断错了</td></tr>
       <tr><td>失效方式</td><td>逐渐变糊，可以容忍</td><td>突然翻转，一个比特直接错</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="key">
     <b>这就解释了一个看似矛盾的现象：</b>数字电路对「小噪声」几乎免疫，但对「大到跨过阈值的噪声」零容忍。
@@ -573,7 +573,7 @@
     在数字计算机普及之前，人类造过大量<strong>模拟计算机</strong>：它们不用 0 和 1，而是用物理量本身来算。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>机器</th><th>用什么算</th><th>算什么</th></tr></thead>
     <tbody>
       <tr><td>计算尺</td><td>长度</td><td>乘除、开方、三角函数（精度约 3 位）</td></tr>
@@ -581,7 +581,7 @@
       <tr><td>潮汐预测机</td><td>滑轮与绳索的位移</td><td>预测潮汐，精度惊人</td></tr>
       <tr><td>电子模拟计算机</td><td>电压与电流</td><td>飞行模拟、控制系统仿真</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     它们有一个数字计算机至今比不上的优点：<strong>连续、实时、没有量化误差</strong>。
@@ -654,7 +654,7 @@
     原因不在数学，在工程与生态：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>问题</th><th>具体是什么</th></tr></thead>
     <tbody>
       <tr>
@@ -674,7 +674,7 @@
         <td>会修三进制机器的人极少，坏了就是一堆废铁</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="key">
     <b>这件事的意义远大于一段技术八卦：</b>它说明「技术选型」从来不是「选数学上最优的那个」，
@@ -702,7 +702,7 @@
   </p>
 
   <figure>
-    <img src="../../assets/img/1.1.1-2-encoding-mapping.svg" alt="现实世界的连续量与离散符号如何映射到比特串">
+    <a class="fig-zoom" href="../../assets/img/1.1.1-2-encoding-mapping.svg" target="_blank" rel="noopener"><img src="../../assets/img/1.1.1-2-encoding-mapping.svg" alt="现实世界的连续量与离散符号如何映射到比特串"></a>
     <figcaption><b>图 1.1.1-2</b>　编码的全部工作，就是在「现实里的东西」和「比特串」之间建立一张双向可查的表。表在编码端和解码端必须完全一致，否则就是乱码。</figcaption>
   </figure>
 
@@ -856,7 +856,7 @@
     以 <code>11111111</code> 这一串为例：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>读法</th><th>得到</th><th>用在哪</th></tr></thead>
     <tbody>
       <tr><td>无符号整数</td><td>255</td><td>像素亮度、数组长度、文件大小</td></tr>
@@ -865,7 +865,7 @@
       <tr><td>颜色分量</td><td>该通道最亮</td><td>RGB 里的 255,0,0 就是纯红</td></tr>
       <tr><td>八个开关</td><td>八个都打开</td><td>权限位、状态标志</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     最后一种读法特别值得现在就说一句，因为它会贯穿整本书：
@@ -896,13 +896,13 @@
     假设要存 <code>0x12345678</code>（四个字节：12、34、56、78）：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>方式</th><th>内存里的顺序</th><th>谁在用</th></tr></thead>
     <tbody>
       <tr><td>大端（Big-endian）</td><td><code>12 34 56 78</code></td><td>网络协议、Java、部分 CPU（PowerPC、SPARC）</td></tr>
       <tr><td>小端（Little-endian）</td><td><code>78 56 34 12</code></td><td>x86 / x64、ARM（默认可切换）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     名字来自《格列佛游记》里「鸡蛋该从大的一端敲还是小的一端敲」。两个阵营都有道理：
@@ -968,7 +968,7 @@ $ od -An -tx1 你好.txt
   </p>
 
   <figure>
-    <img src="../../assets/img/1.1.1-3-hexdump.svg" alt="「你好」六个字节的逐位拆解">
+    <a class="fig-zoom" href="../../assets/img/1.1.1-3-hexdump.svg" target="_blank" rel="noopener"><img src="../../assets/img/1.1.1-3-hexdump.svg" alt="「你好」六个字节的逐位拆解"></a>
     <figcaption><b>图 1.1.1-3</b>　「你」的三个字节 <code>E4 BD A0</code> 逐位展开成 24 个比特。注意每个字节的开头都有 <code>1110</code>、<code>10</code>、<code>10</code> 这样的前缀——那是 UTF-8 的「自描述」标记，告诉解码器这个字占几个字节。</figcaption>
   </figure>
 
@@ -997,11 +997,11 @@ $ od -An -tx1 你好.txt
   </p>
 
   <figure>
-    <img src="../../assets/img/1.1.1-4-magic-number.svg" alt="常见文件格式开头的魔数字节">
+    <a class="fig-zoom" href="../../assets/img/1.1.1-4-magic-number.svg" target="_blank" rel="noopener"><img src="../../assets/img/1.1.1-4-magic-number.svg" alt="常见文件格式开头的魔数字节"></a>
     <figcaption><b>图 1.1.1-4</b>　几乎所有格式都在开头几个字节里「自报家门」。所以把 <code>.jpg</code> 改名成 <code>.png</code> 并不能真的转换格式——程序仍然会按开头那串字节去认它。</figcaption>
   </figure>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>格式</th><th>开头字节</th><th>ASCII 里像什么</th></tr></thead>
     <tbody>
       <tr><td>PNG</td><td><code>89 50 4E 47 0D 0A 1A 0A</code></td><td>.PNG....</td></tr>
@@ -1011,7 +1011,7 @@ $ od -An -tx1 你好.txt
       <tr><td>ZIP / DOCX / XLSX</td><td><code>50 4B 03 04</code></td><td>PK..</td></tr>
       <tr><td>Windows EXE</td><td><code>4D 5A</code></td><td>MZ</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="note">
     <b>顺便说破一个常见困惑：</b>为什么 .docx、.xlsx 也能用解压软件打开？
@@ -1050,14 +1050,14 @@ $ od -An -tx1 你好.txt
     Windows 继承了 DOS，保留了 <code>CR LF</code>。Mac 早期用 <code>CR</code>，后来也改成了 <code>LF</code>。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>系统</th><th>换行</th><th>字节</th></tr></thead>
     <tbody>
       <tr><td>Windows</td><td>CR LF</td><td><code>0D 0A</code></td></tr>
       <tr><td>Linux / macOS（现代）</td><td>LF</td><td><code>0A</code></td></tr>
       <tr><td>老 Mac（OS 9 之前）</td><td>CR</td><td><code>0D</code></td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     后果是什么？一个一万行的代码文件，在 Windows 上比在 Linux 上大 1 万字节（约 10KB）。
@@ -1100,7 +1100,7 @@ $ od -An -tx1 你好.txt
     校验的思路分三个层次，一层比一层强：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>方法</th><th>怎么算</th><th>能查出什么</th><th>用在哪</th></tr></thead>
     <tbody>
       <tr>
@@ -1128,7 +1128,7 @@ $ od -An -tx1 你好.txt
         <td>下载校验、git、区块链、密码存储</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h4>CRC 为什么比「加起来」强</h4>
 
@@ -1240,14 +1240,14 @@ $ od -An -tx1 你好.txt
     最后补一个几乎人人都会遇到的换算，因为它和「比特」直接相关，而且商家很喜欢在这里做文章。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th></th><th>bit（比特）</th><th>Byte（字节）</th></tr></thead>
     <tbody>
       <tr><td>符号</td><td>小写 b</td><td>大写 B</td></tr>
       <tr><td>关系</td><td>1 B = 8 b</td><td>—</td></tr>
       <tr><td>用在哪</td><td>网络带宽（Mbps）</td><td>文件大小（MB）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     所以「100M 宽带」的真实下载速度是 <code>100 ÷ 8 = 12.5 MB/s</code>，不是 100MB/s。

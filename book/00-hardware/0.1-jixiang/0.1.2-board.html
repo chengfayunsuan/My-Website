@@ -107,7 +107,7 @@
   </p>
 
   <figure>
-    <img src="../../assets/img/0.1.2-1-board-overview.svg" alt="ATX 主板俯视布局">
+    <a class="fig-zoom" href="../../assets/img/0.1.2-1-board-overview.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.1.2-1-board-overview.svg" alt="ATX 主板俯视布局"></a>
     <figcaption><b>图 1</b>　一块标准 ATX 主板的俯视图。①~⑫ 是后面每一小节要拆开讲的位置。
       先只看一件事：所有高带宽的东西（CPU、内存、显卡、M.2）都挤在左上半区，
       低带宽的东西（SATA、USB、音频）全在右下角。</figcaption>
@@ -145,7 +145,7 @@
     现在工艺精细多了，但原理没变。一块主板从内到外是这几层东西：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:150px">层</th><th style="width:120px">材料</th><th>作用</th></tr></thead>
     <tbody>
       <tr><td>基材（芯板）</td><td>FR-4 玻纤布 + 环氧树脂</td><td>绝缘、承力。介电常数约 4.2，这个数字后面讲信号速度要用</td></tr>
@@ -154,7 +154,7 @@
       <tr><td>丝印层</td><td>白色油墨</td><td>那些「J1」「CPU_FAN」的小字，给人看的，不导电</td></tr>
       <tr><td>表面处理</td><td>沉金（ENIG）或喷锡</td><td>保护裸露的焊盘不被氧化，同时保证可焊性</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="note">
     <b>为什么是绿色？</b>
@@ -218,7 +218,7 @@
   </p>
 
   <figure>
-    <img src="../../assets/img/0.1.2-2-pcb-layers.svg" alt="六层板剖面与过孔、蛇形线">
+    <a class="fig-zoom" href="../../assets/img/0.1.2-2-pcb-layers.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.1.2-2-pcb-layers.svg" alt="六层板剖面与过孔、蛇形线"></a>
     <figcaption><b>图 2</b>　上半：一块六层板的层叠顺序。下半左：过孔怎么把两层连起来。
       下半右：为什么要故意把线绕成蛇形。</figcaption>
   </figure>
@@ -227,7 +227,7 @@
     从上往下六层，分别是：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:90px">层</th><th style="width:120px">角色</th><th>它在这一层干什么</th></tr></thead>
     <tbody>
       <tr><td>L1</td><td>顶层信号</td><td>元件都焊在这一面，走线也在这一面。你看到的那些细线就是它</td></tr>
@@ -237,7 +237,7 @@
       <tr><td>L5</td><td>地平面</td><td>再一整片铜，作用是「把 L4 夹在中间」</td></tr>
       <tr><td>L6</td><td>底层信号</td><td>插槽的针脚都焊在这一面，所以这层的走线要绕开所有焊盘</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>「地平面」到底是个什么东西</h3>
 
@@ -333,7 +333,7 @@
     它只是「原料」。芯片组里有一个时钟发生器，把 25 MHz 加工成各种频率分发出去：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:160px">用给谁</th><th style="width:130px">频率</th><th>说明</th></tr></thead>
     <tbody>
       <tr><td>CPU 基准（BCLK）</td><td>100 MHz</td><td>CPU 的实际频率 = 100 MHz × 倍频</td></tr>
@@ -342,7 +342,7 @@
       <tr><td>USB</td><td>24 MHz</td><td>再倍频出 480 Mbps（USB 2.0）或 5/10 Gbps</td></tr>
       <tr><td>音频 Codec</td><td>24.576 MHz</td><td>正好是 48 kHz × 512，为了音频采样整除</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="why">
     <b>这解释了一个老问题：为什么「超外频」容易把硬盘搞崩？</b>
@@ -486,7 +486,7 @@
     这叫共模抑制。所以差分信号抗干扰能力极强，可以用更小的电压摆幅、跑更高的速度。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:150px">接口</th><th style="width:110px">差分阻抗</th><th>为什么是这个值</th></tr></thead>
     <tbody>
       <tr><td>PCIe</td><td>85 Ω</td><td>高速串行，追求低损耗</td></tr>
@@ -495,7 +495,7 @@
       <tr><td>以太网</td><td>100 Ω</td><td>双绞线本身就是 100 欧，板端要匹配</td></tr>
       <tr><td>DDR 时钟</td><td>80 Ω 左右</td><td>与单端 40 欧配套（两条单端等于一对差分）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     差分对有一条铁律：<strong>两根线必须等长。</strong>
@@ -566,14 +566,14 @@
 
   <h3>先分清三种封装</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:110px">缩写</th><th style="width:150px">全称</th><th>针长在哪，谁更容易坏</th></tr></thead>
     <tbody>
       <tr><td>PGA</td><td>Pin Grid Array</td><td>针长在 CPU 上。AMD 的老 AM4、早期的 Intel 都是这种。装的时候容易把针压弯</td></tr>
       <tr><td>LGA</td><td>Land Grid Array</td><td>针长在插槽上，CPU 背面只有平的触点。Intel 从 2004 年起全用这个，AMD 的 AM5 也改了</td></tr>
       <tr><td>BGA</td><td>Ball Grid Array</td><td>直接焊死在主板上，没有插槽。笔记本、手机的 CPU 都是这种，焊上去就不能换</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     LGA 和 PGA 的取舍很直白：<strong>针在谁身上，谁就承担「被弄弯」的风险。</strong>
@@ -595,7 +595,7 @@
     没人会把 1700 个针的用途全部背下来，但大类是可以数清的：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:180px">用途</th><th style="width:110px">大约数量</th><th>说明</th></tr></thead>
     <tbody>
       <tr><td>核心供电（VCC）</td><td>500 根以上</td><td>给 CPU 核心供电。核心电压约 1.1V，电流能到 200A</td></tr>
@@ -606,7 +606,7 @@
       <tr><td>显示输出</td><td>几十根</td><td>核显直接输出到主板上的 HDMI/DP 口</td></tr>
       <tr><td>时钟、复位、管理</td><td>几十根</td><td>BCLK、电源管理、温度报告、调试口</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>为什么供电要五百根</h3>
 
@@ -669,14 +669,14 @@
     这样你拿一条 DDR5 去插 DDR4 的槽，物理上就插不进去。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:110px">类型</th><th style="width:110px">针数</th><th>缺口位置</th></tr></thead>
     <tbody>
       <tr><td>DDR3</td><td>240</td><td>偏左，距左端约 1/4 处</td></tr>
       <tr><td>DDR4</td><td>288</td><td>中间偏左，与 DDR3 差约 2 毫米</td></tr>
       <tr><td>DDR5</td><td>288</td><td>与 DDR4 针数相同但缺口位置不同，故意不兼容</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     注意最后一行：<strong>DDR4 和 DDR5 都是 288 针，缺口却不一样。</strong>
@@ -769,7 +769,7 @@
 
   <h3>插槽长度是有标准的</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:90px">规格</th><th style="width:110px">物理长度</th><th>常见用途</th></tr></thead>
     <tbody>
       <tr><td>×1</td><td>25 mm</td><td>网卡、声卡、USB 扩展卡</td></tr>
@@ -777,7 +777,7 @@
       <tr><td>×8</td><td>56 mm</td><td>RAID 卡、部分网卡</td></tr>
       <tr><td>×16</td><td>89 mm</td><td>显卡</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     重要的一点：<strong>物理长度不等于电气通道数。</strong>
@@ -796,7 +796,7 @@
   <h3>带宽：代数和通道数可以互换</h3>
 
   <figure>
-    <img src="../../assets/img/0.1.2-3-pcie-lanes.svg" alt="PCIe 各代各宽度的带宽对比">
+    <a class="fig-zoom" href="../../assets/img/0.1.2-3-pcie-lanes.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.1.2-3-pcie-lanes.svg" alt="PCIe 各代各宽度的带宽对比"></a>
     <figcaption><b>图 3</b>　同样一条插槽，跑第几代、给几条通道，带宽差上百倍。
       注意几组巧合：4.0×4 = 7.88，3.0×16 = 15.75 = 5.0×4，4.0×16 = 31.5 = 5.0×8。</figcaption>
   </figure>
@@ -865,14 +865,14 @@
     决定权在硬盘本身和主板的支持。判断依据是<strong>缺口（key）的位置</strong>：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:130px">Key</th><th style="width:150px">缺口位置</th><th>能跑什么</th></tr></thead>
     <tbody>
       <tr><td>B key</td><td>偏左</td><td>SATA 或 PCIe ×2</td></tr>
       <tr><td>M key</td><td>偏右</td><td>PCIe ×4（NVMe 固态基本都是这个）</td></tr>
       <tr><td>B+M key</td><td>两个缺口</td><td>兼容两种插槽，通常是 SATA 固态</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     所以「M.2 固态」这个说法本身是不精确的。准确说法是「M.2 接口的 NVMe 固态」或
@@ -899,7 +899,7 @@
     这是「协议层」的差别，值得说清：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:110px">对比项</th><th style="width:180px">AHCI（SATA 时代）</th><th>NVMe（PCIe 时代）</th></tr></thead>
     <tbody>
       <tr><td>队列深度</td><td>1 个队列，32 条命令</td><td>最多 64K 个队列，每队列 64K 条命令</td></tr>
@@ -907,7 +907,7 @@
       <tr><td>设计年代</td><td>2004 年，为机械硬盘设计</td><td>2011 年，为闪存设计</td></tr>
       <tr><td>带宽上限</td><td>约 600 MB/s（SATA 3.0 的极限）</td><td>取决于 PCIe 通道数，理论无上限</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     关键在「队列深度」。机械硬盘时代，一次只能处理一个请求（因为磁头只有一个），
@@ -967,7 +967,7 @@
 
   <h3>VRM 由四种元件组成</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:130px">元件</th><th style="width:120px">长相</th><th>作用</th></tr></thead>
     <tbody>
       <tr><td>PWM 控制器</td><td>一颗小芯片</td><td>大脑。它监测输出电压，决定每个开关什么时候开、什么时候关</td></tr>
@@ -975,7 +975,7 @@
       <tr><td>电感（Choke）</td><td>灰色方块，上面有字</td><td>储能 + 平滑。把方波「捋」成平稳的电流</td></tr>
       <tr><td>电容</td><td>小圆柱（固态电容）</td><td>缓冲。CPU 突然要大电流时，先由它顶上</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     原理叫「 buck 降压」，说白了就是：<strong>用开关把 12V 切成很多段，再用 LC 滤波取平均值。</strong>
@@ -1040,7 +1040,7 @@
   </p>
 
   <figure>
-    <img src="../../assets/img/0.1.2-4-topology.svg" alt="主板的连接拓扑：CPU 直连与 PCH 中转">
+    <a class="fig-zoom" href="../../assets/img/0.1.2-4-topology.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.1.2-4-topology.svg" alt="主板的连接拓扑：CPU 直连与 PCH 中转"></a>
     <figcaption><b>图 4</b>　主板不是一张平铺的网，而是两档结构。上半区的内存、显卡、第一个 M.2
       是 CPU 直连，各自独享通道；下半区的六个设备全挂在 PCH 后面，
       共享同一条通往 CPU 的上行链路。</figcaption>
@@ -1110,7 +1110,7 @@
 
   <h3>芯片组型号的数字在说什么</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:110px">Intel</th><th style="width:110px">AMD</th><th>定位与关键差异</th></tr></thead>
     <tbody>
       <tr><td>H610</td><td>A620</td><td>入门。不能超频 CPU，PCIe 和 USB 通道少，内存频率有上限</td></tr>
@@ -1118,7 +1118,7 @@
       <tr><td>Z790</td><td>X670</td><td>高端。能超 CPU、能拆 PCIe 通道（×16 拆成 ×8+×8）、USB 和 SATA 最多</td></tr>
       <tr><td>W790</td><td>TRX50</td><td>工作站。配至强或线程撕裂者，内存通道数翻倍</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     Intel 的数字第一位是「代数」：600 系配 12 代，700 系配 13/14 代。
@@ -1138,7 +1138,7 @@
     这是整个计算机领域最让人抓狂的命名。同一个 5 Gbps 的速度，前后有过三个名字：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:180px">你看到的名字</th><th style="width:110px">实际速度</th><th>备注</th></tr></thead>
     <tbody>
       <tr><td>USB 2.0</td><td>480 Mbps</td><td>2000 年的标准，现在还在用（键盘鼠标）</td></tr>
@@ -1147,7 +1147,7 @@
       <tr><td>USB 3.2 Gen2×2</td><td>20 Gbps</td><td>用两对 lane 并行，只有 Type-C 能做</td></tr>
       <tr><td>USB4</td><td>20 / 40 Gbps</td><td>基于雷电 3 协议，只有 Type-C</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     现在的规范要求厂商<strong>直接标速度</strong>（比如「USB 5Gbps」），不许再写 3.2 Gen1。
@@ -1173,7 +1173,7 @@
     这是新手装机最常见的「装完不亮」原因之一。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:110px">接口</th><th style="width:130px">带宽</th><th>能带动什么</th></tr></thead>
     <tbody>
       <tr><td>HDMI 2.0</td><td>18 Gbps</td><td>4K 60Hz，或 2K 144Hz</td></tr>
@@ -1181,7 +1181,7 @@
       <tr><td>DisplayPort 1.4</td><td>32.4 Gbps</td><td>4K 120Hz，支持菊花链多屏</td></tr>
       <tr><td>DisplayPort 2.1</td><td>80 Gbps</td><td>8K 60Hz 无损，多屏高刷</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>网口、音频与那些小接口</h3>
 
@@ -1203,7 +1203,7 @@
 
   <h3>板上那些不起眼但很重要的东西</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:150px">东西</th><th>作用，以及坏了会怎样</th></tr></thead>
     <tbody>
       <tr><td>BIOS 芯片</td><td>一颗 8 脚小芯片，存着 UEFI 固件（16~32 MB）。它决定主板能不能点亮</td></tr>
@@ -1213,7 +1213,7 @@
       <tr><td>Debug 灯 / 数码管</td><td>开机自检卡住时，灯亮在哪一项就说明卡在哪（CPU / DRAM / VGA / BOOT）</td></tr>
       <tr><td>清除 CMOS 跳线</td><td>两根针，短接一下就恢复出厂设置。超频失败点不亮时的救命稻草</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="note">
     <b>CMOS 电池这一条特别值得记。</b>
@@ -1231,7 +1231,7 @@
 
   <h3>第一步：先定板型，它决定机箱</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:130px">板型</th><th style="width:150px">尺寸（毫米）</th><th>适合谁</th></tr></thead>
     <tbody>
       <tr><td>E-ATX</td><td>305 × 330</td><td>工作站、多显卡。机箱要够大</td></tr>
@@ -1239,7 +1239,7 @@
       <tr><td>Micro-ATX</td><td>244 × 244</td><td>主流性价比。少两三条插槽，其他几乎一样</td></tr>
       <tr><td>Mini-ITX</td><td>170 × 170</td><td>小机箱。只有一条 PCIe 槽、两条内存槽，贵且难装</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     注意：<strong>小主板不一定便宜。</strong>
@@ -1262,7 +1262,7 @@
 
   <h3>第三步：看那些广告页不写的东西</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th style="width:180px">要看什么</th><th>为什么</th></tr></thead>
     <tbody>
       <tr><td>VRM 有没有散热片</td><td>没有的话，高功耗 CPU 满载会降频</td></tr>
@@ -1272,7 +1272,7 @@
       <tr><td>BIOS 更新方式</td><td>有没有「无 CPU 刷 BIOS」按钮，决定能不能上新 CPU</td></tr>
       <tr><td>后置 USB 的具体规格</td><td>「6 个 USB」可能是 4 个 2.0 + 2 个 5Gbps</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="warn">
     <b>三个新手最常踩的坑。</b>

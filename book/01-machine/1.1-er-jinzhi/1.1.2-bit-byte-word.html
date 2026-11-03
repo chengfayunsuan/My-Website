@@ -92,7 +92,7 @@
     在 1960 年代，每个计算机厂商都有自己的字长和字节长度，乱得像各国的插座：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>机器</th><th>一个「字符单元」多少位</th><th>原因</th></tr></thead>
     <tbody>
       <tr><td>UNIVAC（1951）</td><td>6 位</td><td>只够表示大写字母、数字和少量符号</td></tr>
@@ -101,7 +101,7 @@
       <tr><td>IBM 1401</td><td>6 位（BCD 字符）</td><td>商业数据处理，只需要数字和字母</td></tr>
       <tr><td>ASCII 标准（1963）</td><td>7 位</td><td>128 个字符，含大小写和标点</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     混乱的代价极高：数据不能互换，程序不能移植，打印机接不上别的电脑。
@@ -154,7 +154,7 @@
     于是各国开始各显神通——这一段历史解释了为什么今天的乱码问题这么难缠。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>编码</th><th>怎么用这 128 个位置</th><th>后果</th></tr></thead>
     <tbody>
       <tr>
@@ -178,7 +178,7 @@
         <td>中文文件在日文系统里打开就是一堆乱码</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     问题的根源是：<strong>每个国家都在自己那 256 个位置上做文章，但没有人和别人商量</strong>。
@@ -197,7 +197,7 @@
     1963 年定下的 ASCII，前 32 个位置（0~31）全部留给<strong>控制字符</strong>，不是给人看的字，而是给机器下的指令：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>编号</th><th>缩写</th><th>原意</th><th>今天还在用吗</th></tr></thead>
     <tbody>
       <tr><td>7</td><td>BEL</td><td>让电传打字机响铃</td><td>还在——<code>\a</code> 就是它，终端里会「叮」一声</td></tr>
@@ -208,7 +208,7 @@
       <tr><td>27</td><td>ESC</td><td>切换后续字符的含义</td><td>还在——终端颜色代码 <code>\033[31m</code> 就是它开头</td></tr>
       <tr><td>127</td><td>DEL</td><td>删掉纸带上打孔的那一位</td><td>还在——就是 Delete 键</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     六十多年前为机械打字机设计的控制码，今天还在你的键盘和终端里活着。
@@ -221,7 +221,7 @@
     这四个词在日常对话里经常被混着用，但它们指的是不同层次的东西。混了就会在关键时刻出错。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>词</th><th>是什么</th><th>大小</th><th>容易错在哪</th></tr></thead>
     <tbody>
       <tr>
@@ -249,7 +249,7 @@
         <td>和「操作系统位数」有关但不是一回事</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>最容易踩的坑：x86 的「字」是 16 位</h3>
 
@@ -287,14 +287,14 @@
     这不是操作系统的限制，是「用 32 个比特表示地址」这件事的数学天花板。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>字长</th><th>地址空间</th><th>实际能装多少内存</th></tr></thead>
     <tbody>
       <tr><td>16 位（8086）</td><td>2¹⁶ = 64KB（用段寄存器可到 1MB）</td><td>早期 PC 就是这个量级</td></tr>
       <tr><td>32 位</td><td>2³² = 4GB</td><td>约 3.2~3.5GB 可用（一部分被硬件映射占用）</td></tr>
       <tr><td>64 位</td><td>2⁶⁴ ≈ 16EB（理论）</td><td>目前实际用 48 位地址 = 256TB，远没用到上限</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="note">
     <b>为什么 32 位系统装了 4GB 内存只认 3.2GB？</b>
@@ -349,7 +349,7 @@
     C 标准只规定了「最小范围」，没规定具体多少位。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>类型</th><th>C 标准要求的最小范围</th><th>常见实际宽度</th></tr></thead>
     <tbody>
       <tr><td><code>short</code></td><td>至少 16 位</td><td>16 位</td></tr>
@@ -358,7 +358,7 @@
       <tr><td><code>long long</code></td><td>至少 64 位</td><td>64 位</td></tr>
       <tr><td>指针</td><td>取决于地址空间</td><td>32 位系统 4 字节，64 位系统 8 字节</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     注意 <code>long</code> 那一行：同样一段代码，在 Windows 上 <code>sizeof(long) == 4</code>，
@@ -394,7 +394,7 @@
 
   <h3>两套体系</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>体系</th><th>换算</th><th>谁在用</th></tr></thead>
     <tbody>
       <tr>
@@ -408,7 +408,7 @@
         <td>Windows 资源管理器、内存容量、大多数编程场景</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     1998 年，国际电工委员会（IEC）为了解决这个混乱，正式规定了 <code>KiB / MiB / GiB</code> 这套带「i」的写法，
@@ -455,7 +455,7 @@ Windows 按 1024 进制除：
     内存本来就是按 1024 算的，所以少掉的那部分是真的被别的东西占用了。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>被谁拿走</th><th>大概多少</th><th>为什么</th></tr></thead>
     <tbody>
       <tr>
@@ -474,7 +474,7 @@ Windows 按 1024 进制除：
         <td>开机自检、管理引擎等要常驻</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     想看清具体数字，运行 <code>msinfo32</code>，在「系统摘要」里能看到「已安装的物理内存」和「可用的物理内存」两个值，
@@ -500,7 +500,7 @@ Windows 按 1024 进制除：
   </p>
 
   <figure>
-    <img src="../../assets/img/1.1.2-1-bitops.svg" alt="五种位运算：与、或、异或、非、移位的效果对照">
+    <a class="fig-zoom" href="../../assets/img/1.1.2-1-bitops.svg" target="_blank" rel="noopener"><img src="../../assets/img/1.1.2-1-bitops.svg" alt="五种位运算：与、或、异或、非、移位的效果对照"></a>
     <figcaption><b>图 1.1.2-1</b>　五种位运算对同一串比特的作用。记不住的时候，只要问自己一句「我想让这一位变成什么」——想变 0 用与，想变 1 用或，想翻转用异或。</figcaption>
   </figure>
 
@@ -581,7 +581,7 @@ Windows 按 1024 进制除：
     位运算只有两个输入、一个输出，所以穷举所有情况只需要 4 行。这 4 行就是它们的全部定义：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>a</th><th>b</th><th>a &amp; b（与）</th><th>a | b（或）</th><th>a ^ b（异或）</th><th>~a（非）</th></tr></thead>
     <tbody>
       <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
@@ -589,7 +589,7 @@ Windows 按 1024 进制除：
       <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
       <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     看这张表能读出每个运算的「性格」：与很严格（必须两个都 1），或很宽松（有一个 1 就行），
@@ -664,7 +664,7 @@ x &amp; ~mask = 1010 0000   ← 低 4 位清零，高 4 位不动</code></pre>
 蓝色 =  c        &amp; 0xFF   = 0xD5 = 213</code></pre>
 
   <figure>
-    <img src="../../assets/img/1.1.2-2-mask-rgb.svg" alt="用掩码从一个 24 位颜色值里拆出红绿蓝三个分量">
+    <a class="fig-zoom" href="../../assets/img/1.1.2-2-mask-rgb.svg" target="_blank" rel="noopener"><img src="../../assets/img/1.1.2-2-mask-rgb.svg" alt="用掩码从一个 24 位颜色值里拆出红绿蓝三个分量"></a>
     <figcaption><b>图 1.1.2-2</b>　同一个 24 位数，用不同的移位量 + 同一个掩码 <code>0xFF</code>，就能分别取出三个通道。改颜色、做滤镜、算亮度，底层全是这套动作。</figcaption>
   </figure>
 
@@ -691,7 +691,7 @@ x &amp; ~mask = 1010 0000   ← 低 4 位清零，高 4 位不动</code></pre>
     Linux 的 <code>chmod 755</code>，拆开是 <code>111 101 101</code>：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>位</th><th>值</th><th>含义</th><th>三个一组</th></tr></thead>
     <tbody>
       <tr><td>第 0 位</td><td>1</td><td>执行</td><td rowspan="3">其他人的权限 = 5</td></tr>
@@ -700,7 +700,7 @@ x &amp; ~mask = 1010 0000   ← 低 4 位清零，高 4 位不动</code></pre>
       <tr><td>第 3~5 位</td><td>101</td><td>所属组的读/写/执行</td><td>= 5</td></tr>
       <tr><td>第 6~8 位</td><td>111</td><td>属主的读/写/执行</td><td>= 7</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     要判断「这个文件我能不能执行」，只需要一句 <code>mode &amp; 0o001</code>。
@@ -788,7 +788,7 @@ index    = hash &amp; mask = 0000 1010 = 10</code></pre>
     不同的键算出同一个下标，这叫冲突。两种主流处理：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>方式</th><th>做法</th><th>优缺点</th></tr></thead>
     <tbody>
       <tr>
@@ -802,7 +802,7 @@ index    = hash &amp; mask = 0000 1010 = 10</code></pre>
         <td>内存连续、缓存友好；但删除麻烦，且装太满会急剧变慢</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     「装太满会变慢」这件事有一个量化指标叫<strong>负载因子</strong>。
@@ -839,7 +839,7 @@ index    = hash &amp; mask = 0000 1010 = 10</code></pre>
 
   <h4>第三步：四个子网的边界</h4>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>子网</th><th>网络号</th><th>可用范围</th><th>广播地址</th></tr></thead>
     <tbody>
       <tr><td>第 1 个</td><td>192.168.1.0</td><td>.1 ~ .62</td><td>192.168.1.63</td></tr>
@@ -847,7 +847,7 @@ index    = hash &amp; mask = 0000 1010 = 10</code></pre>
       <tr><td>第 3 个</td><td>192.168.1.128</td><td>.129 ~ .190</td><td>192.168.1.191</td></tr>
       <tr><td>第 4 个</td><td>192.168.1.192</td><td>.193 ~ .254</td><td>192.168.1.255</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     注意每个子网的「广播地址」都是下一个子网「网络号」减一。这不是巧合：
@@ -902,7 +902,7 @@ index    = hash &amp; mask = 0000 1010 = 10</code></pre>
 
   <h3>右移有两种，别用错</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>类型</th><th>规则</th><th>负数怎么处理</th><th>用在哪</th></tr></thead>
     <tbody>
       <tr>
@@ -918,7 +918,7 @@ index    = hash &amp; mask = 0000 1010 = 10</code></pre>
         <td>有符号数的除法</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     举一个会被坑到的例子：<code>-8 &gt;&gt; 1</code> 在算术右移下是 <code>-4</code>（正确）；
@@ -960,7 +960,7 @@ index    = hash &amp; mask = 0000 1010 = 10</code></pre>
 
   <h3>编译器会做的那几件事</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>优化名</th><th>它干了什么</th><th>你写的代码</th><th>实际生成的</th></tr></thead>
     <tbody>
       <tr>
@@ -994,7 +994,7 @@ index    = hash &amp; mask = 0000 1010 = 10</code></pre>
         <td>用 SIMD 指令一次算 4~8 个</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>但有三种情况它不敢动</h3>
 
@@ -1155,7 +1155,7 @@ B = A ^ C ^ P   ← 剩下的全异或一遍就还原了</code></pre>
     剩下 2^k − 1 种要能指出具体哪一位错了，所以要 ≥ n + k。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>数据位 n</th><th>需要校验位 k</th><th>总位宽</th><th>开销</th></tr></thead>
     <tbody>
       <tr><td>4</td><td>3</td><td>7</td><td>75%</td></tr>
@@ -1163,7 +1163,7 @@ B = A ^ C ^ P   ← 剩下的全异或一遍就还原了</code></pre>
       <tr><td>64</td><td>7</td><td>71</td><td>11%</td></tr>
       <tr><td>128</td><td>8</td><td>136</td><td>6%</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     注意最后一列：<strong>数据越长，校验的相对开销越小</strong>（log 增长）。
@@ -1250,14 +1250,14 @@ h ^= h &gt;&gt;&gt; 16;</code></pre>
     这种用法叫「位图」（bitmap）或「位标志」（bit flags）。它的价值在于<strong>极度节省空间</strong>：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>存法</th><th>100 万个「是/否」占多少</th></tr></thead>
     <tbody>
       <tr><td>每个用一个布尔变量（按 1 字节算）</td><td>1,000,000 字节 ≈ 1MB</td></tr>
       <tr><td>用位图（每位一个）</td><td>125,000 字节 ≈ 122KB</td></tr>
       <tr><td>差距</td><td>8 倍</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     8 倍看起来不多，但当数据量到十亿级时，这个差别决定了「能不能全放进内存」。
@@ -1325,7 +1325,7 @@ h ^= h &gt;&gt;&gt; 16;</code></pre>
     你以为它占 1 + 4 + 1 = 6 字节。实际在 64 位系统上通常是 <strong>12 字节</strong>：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>偏移</th><th>内容</th><th>说明</th></tr></thead>
     <tbody>
       <tr><td>0</td><td>a</td><td>1 字节</td></tr>
@@ -1334,7 +1334,7 @@ h ^= h &gt;&gt;&gt; 16;</code></pre>
       <tr><td>8</td><td>c</td><td>1 字节</td></tr>
       <tr><td>9~11</td><td>（尾部填充）</td><td>为了让整个结构体是 4 的倍数（最大成员是 int）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     改一下顺序就能省 4 个字节：
@@ -1390,14 +1390,14 @@ h ^= h &gt;&gt;&gt; 16;</code></pre>
     因为「没存过」的元素不可能把那 k 个位置全占上（除非别的元素刚好占了）。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>目标误判率</th><th>每个元素需要多少位</th><th>一亿元素占多少内存</th></tr></thead>
     <tbody>
       <tr><td>10%</td><td>约 4.8 位</td><td>约 60MB</td></tr>
       <tr><td>1%</td><td>约 9.6 位</td><td>约 120MB</td></tr>
       <tr><td>0.1%</td><td>约 14.4 位</td><td>约 180MB</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     这就是为什么浏览器用它做恶意网址预筛、数据库用它减少磁盘查询、CDN 用它判断「这个文件是不是肯定不在缓存里」。
@@ -1455,7 +1455,7 @@ h ^= h &gt;&gt;&gt; 16;</code></pre>
 
   <h3>三个「壳」，三代人</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>名字</th><th>出生</th><th>它的世界是什么</th><th>典型文件</th></tr></thead>
     <tbody>
       <tr>
@@ -1477,7 +1477,7 @@ h ^= h &gt;&gt;&gt; 16;</code></pre>
         <td><code>.sh</code></td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <h3>最核心的差别：管道里流的是「文字」还是「对象」</h3>
 
@@ -1507,7 +1507,7 @@ Get-Process | Where-Object { $_.CPU -gt 100 }</code></pre>
     PowerShell 为了照顾习惯，给几乎每个 cmdlet 都起了 Linux 风格的别名：
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>你想干的事</th><th>cmd 写法</th><th>PowerShell 正式名</th><th>在 PowerShell 里可以直接写</th></tr></thead>
     <tbody>
       <tr><td>列目录</td><td><code>dir</code></td><td><code>Get-ChildItem</code></td><td><code>dir</code> / <code>ls</code> / <code>gci</code></td></tr>
@@ -1517,7 +1517,7 @@ Get-Process | Where-Object { $_.CPU -gt 100 }</code></pre>
       <tr><td>看进程</td><td><code>tasklist</code></td><td><code>Get-Process</code></td><td><code>ps</code> / <code>gps</code></td></tr>
       <tr><td>看网络连接</td><td><code>netstat -ano</code></td><td><code>Get-NetTCPConnection</code></td><td><code>netstat</code>（调的是老程序）</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="warn">
     <b>这里有个真实的坑：</b>PowerShell 里的 <code>ls</code> 不是 Linux 的 <code>ls</code>，是 <code>Get-ChildItem</code> 的别名；
@@ -1650,14 +1650,14 @@ Get-Process | Where-Object { $_.CPU -gt 100 }</code></pre>
 
   <h3>怎么改 PATH</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>方式</th><th>命令</th><th>作用范围</th></tr></thead>
     <tbody>
       <tr><td>临时（当前窗口）</td><td><code>set PATH=C:\new;%PATH%</code>（cmd）<br><code>$env:PATH = "C:\new;$env:PATH"</code>（PS）</td><td>关掉窗口就没了</td></tr>
       <tr><td>永久（当前用户）</td><td><code>setx PATH "%PATH%;C:\new"</code></td><td>写入注册表，新开的窗口生效</td></tr>
       <tr><td>图形界面</td><td>系统属性 → 环境变量</td><td>同上，但不容易把 PATH 写坏</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="warn">
     <b>用 <code>setx</code> 改 PATH 是有风险的：</b>它会把「当前窗口的 PATH」整个写回去。
@@ -1720,7 +1720,7 @@ Get-Process | Where-Object { $_.CPU -gt 100 }</code></pre>
 
   <h3>那为什么大家还在用 JSON</h3>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th></th><th>文本格式（JSON / XML / YAML）</th><th>二进制格式（protobuf / MessagePack）</th></tr></thead>
     <tbody>
       <tr><td>人能直接读吗</td><td>能，改起来方便</td><td>不能，要工具解</td></tr>
@@ -1730,7 +1730,7 @@ Get-Process | Where-Object { $_.CPU -gt 100 }</code></pre>
       <tr><td>调试</td><td>抓包一看就懂</td><td>得用专门的工具解</td></tr>
       <tr><td>适合</td><td>对外 API、配置文件、日志</td><td>内部服务通信、移动端、大数据量</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="key">
     <b>一句话的选择标准：</b>「<em>给人看的用文本，给机器看的用二进制</em>」。
@@ -1748,7 +1748,7 @@ Get-Process | Where-Object { $_.CPU -gt 100 }</code></pre>
     这不是脚本写错了，是 Windows 的<strong>执行策略</strong>（ExecutionPolicy）在拦你。
   </p>
 
-  <table>
+  <div class="tw"><table>
     <thead><tr><th>策略</th><th>行为</th><th>谁会用</th></tr></thead>
     <tbody>
       <tr><td>Restricted</td><td>禁止运行任何脚本</td><td>客户端 Windows 的默认值</td></tr>
@@ -1756,7 +1756,7 @@ Get-Process | Where-Object { $_.CPU -gt 100 }</code></pre>
       <tr><td>AllSigned</td><td>所有脚本都要有可信签名</td><td>企业环境</td></tr>
       <tr><td>Bypass</td><td>什么都不检查</td><td>临时跑一次，或自动化流水线</td></tr>
     </tbody>
-  </table>
+  </table></div>
 
   <p>
     它的设计意图是「防误点」：浏览器下载的脚本如果双击就跑，等于把执行权交给任何一个网页。
