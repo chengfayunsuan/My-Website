@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="b1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7 z" fill="#6b6b85"/>
+    </marker>
+  </defs>
+  <rect width="760" height="470" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">同一片硅，两种花法：一边养八个博士，一边养一万个小学生</text>
+
+  <!-- ============ 左：面积预算 ============ -->
+  <text x="24" y="56" fill="#d8d8e4" font-size="12.5">芯片面积花在哪</text>
+
+  <text x="24" y="84" fill="#67b5ef" font-size="10.5">CPU 的一个核</text>
+  <g font-size="9.5" text-anchor="middle">
+    <rect x="24" y="92" width="157" height="26" fill="#2b2036" stroke="#9b4df0"/>
+    <text x="102" y="109" fill="#cfc6ff">控制 + 预测 45%</text>
+    <rect x="181" y="92" width="140" height="26" fill="#1f3a4a" stroke="#67b5ef"/>
+    <text x="251" y="109" fill="#9fd4f5">缓存 40%</text>
+    <rect x="321" y="92" width="52" height="26" fill="#1f4a3c" stroke="#4ec9a3"/>
+    <text x="347" y="109" fill="#9fe0c9">15%</text>
+  </g>
+  <text x="24" y="132" fill="#6b6b85" font-size="9">面积几乎全用在「少等」：猜分支、乱序、提前搬数据</text>
+
+  <text x="24" y="164" fill="#67b5ef" font-size="10.5">GPU 的一个 SM</text>
+  <g font-size="9.5" text-anchor="middle">
+    <rect x="24" y="172" width="186" height="26" fill="#1f4a3c" stroke="#4ec9a3"/>
+    <text x="117" y="189" fill="#9fe0c9">128 个执行单元 60%</text>
+    <rect x="210" y="172" width="78" height="26" fill="#3a2b52" stroke="#9b4df0"/>
+    <text x="249" y="189" fill="#cfc6ff">寄存器 25%</text>
+    <rect x="288" y="172" width="62" height="26" fill="#2b2036" stroke="#6b6b85"/>
+    <text x="319" y="189" fill="#9a9ab4">调度 10%</text>
+    <rect x="350" y="172" width="23" height="26" fill="#1f3a4a" stroke="#67b5ef"/>
+  </g>
+  <text x="24" y="212" fill="#6b6b85" font-size="9">面积几乎全用在「多算」：一万多个单元，控制电路能省就省</text>
+
+  <rect x="24" y="226" width="349" height="42" rx="7" fill="#171725" stroke="#2a2a44"/>
+  <text x="38" y="244" fill="#e8b84b" font-size="9.5">结果：CPU 单线程快 3～5 倍，GPU 总吞吐高 50 倍</text>
+  <text x="38" y="259" fill="#6b6b85" font-size="9">两者不是同一条赛道上的快慢，是两种不同的取舍</text>
+
+  <!-- ============ 右上：两种掩延迟 ============ -->
+  <text x="393" y="56" fill="#d8d8e4" font-size="12.5">遇到「等」，两种办法</text>
+
+  <text x="393" y="84" fill="#67b5ef" font-size="10">CPU：让后面的活先插进来（乱序）</text>
+  <!-- 时间轴 -->
+  <rect x="393" y="92" width="345" height="12" rx="2" fill="#12121c" stroke="#2a2a44"/>
+  <rect x="393" y="92" width="55" height="12" fill="#1f4a3c" stroke="#4ec9a3"/>
+  <rect x="448" y="92" width="150" height="12" fill="#1a1a2a" stroke="#2a2a44"/>
+  <g fill="#3a2b52" stroke="#9b4df0" stroke-width="0.8">
+    <rect x="460" y="94" width="18" height="8"/><rect x="486" y="94" width="18" height="8"/>
+    <rect x="512" y="94" width="18" height="8"/><rect x="538" y="94" width="18" height="8"/>
+    <rect x="564" y="94" width="18" height="8"/>
+  </g>
+  <rect x="598" y="92" width="60" height="12" fill="#1f4a3c" stroke="#4ec9a3"/>
+  <rect x="658" y="92" width="80" height="12" fill="#1a1a2a" stroke="#2a2a44"/>
+  <text x="393" y="122" fill="#9a9ab4" font-size="8.5">灰色 = 等内存 400 周期　紫色小方块 = 从后面提前拉来的指令，把空档填掉</text>
+
+  <text x="393" y="150" fill="#67b5ef" font-size="10">GPU：这个 warp 卡住，就换下一个（多线程）</text>
+
+  <!-- 6 条 warp 泳道 -->
+  <g>
+    <rect x="393" y="160" width="345" height="9" fill="#12121c" stroke="#2a2a44"/>
+    <rect x="393" y="160" width="26" height="9" fill="#1f4a3c"/><rect x="419" y="160" width="70" height="9" fill="#1a1a2a"/>
+    <rect x="489" y="160" width="26" height="9" fill="#1f4a3c"/><rect x="515" y="160" width="70" height="9" fill="#1a1a2a"/>
+    <rect x="585" y="160" width="26" height="9" fill="#1f4a3c"/><rect x="611" y="160" width="70" height="9" fill="#1a1a2a"/>
+
+    <rect x="393" y="173" width="345" height="9" fill="#12121c" stroke="#2a2a44"/>
+    <rect x="411" y="173" width="26" height="9" fill="#1f4a3c"/><rect x="437" y="173" width="70" height="9" fill="#1a1a2a"/>
+    <rect x="507" y="173" width="26" height="9" fill="#1f4a3c"/><rect x="533" y="173" width="70" height="9" fill="#1a1a2a"/>
+    <rect x="603" y="173" width="26" height="9" fill="#1f4a3c"/><rect x="629" y="173" width="70" height="9" fill="#1a1a2a"/>
+
+    <rect x="393" y="186" width="345" height="9" fill="#12121c" stroke="#2a2a44"/>
+    <rect x="429" y="186" width="26" height="9" fill="#1f4a3c"/><rect x="455" y="186" width="70" height="9" fill="#1a1a2a"/>
+    <rect x="525" y="186" width="26" height="9" fill="#1f4a3c"/><rect x="551" y="186" width="70" height="9" fill="#1a1a2a"/>
+
+    <rect x="393" y="199" width="345" height="9" fill="#12121c" stroke="#2a2a44"/>
+    <rect x="447" y="199" width="26" height="9" fill="#1f4a3c"/><rect x="473" y="199" width="70" height="9" fill="#1a1a2a"/>
+    <rect x="543" y="199" width="26" height="9" fill="#1f4a3c"/><rect x="569" y="199" width="70" height="9" fill="#1a1a2a"/>
+
+    <rect x="393" y="212" width="345" height="9" fill="#12121c" stroke="#2a2a44"/>
+    <rect x="465" y="212" width="26" height="9" fill="#1f4a3c"/><rect x="491" y="212" width="70" height="9" fill="#1a1a2a"/>
+    <rect x="561" y="212" width="26" height="9" fill="#1f4a3c"/><rect x="587" y="212" width="70" height="9" fill="#1a1a2a"/>
+  </g>
+  <text x="393" y="238" fill="#9a9ab4" font-size="8.5">绿色 = 在算，灰色 = 在等。错开之后，同一时刻总有 lane 在算</text>
+
+  <text x="393" y="258" fill="#e8b84b" font-size="9">一句话：CPU 用硬件猜，GPU 用软件排</text>
+
+  <!-- ============ 下部：Little 定律 ============ -->
+  <line x1="24" y1="286" x2="736" y2="286" stroke="#2a2a44"/>
+
+  <text x="24" y="310" fill="#d8d8e4" font-size="12.5">为什么非要上万个线程：把延迟填满</text>
+
+  <g>
+    <rect x="24" y="322" width="222" height="76" rx="8" fill="#171725" stroke="#2a2a44"/>
+    <text x="135" y="350" fill="#9b4df0" font-size="20" text-anchor="middle" font-family="monospace">400 周期</text>
+    <text x="135" y="370" fill="#9a9ab4" font-size="9.5" text-anchor="middle">一次显存访问的延迟</text>
+    <text x="135" y="386" fill="#6b6b85" font-size="8.5" text-anchor="middle">约 160 纳秒（2.5 GHz）</text>
+
+    <rect x="262" y="322" width="222" height="76" rx="8" fill="#171725" stroke="#2a2a44"/>
+    <text x="373" y="350" fill="#4ec9a3" font-size="20" text-anchor="middle" font-family="monospace">160 KB</text>
+    <text x="373" y="370" fill="#9a9ab4" font-size="9.5" text-anchor="middle">要在路上的数据量</text>
+    <text x="373" y="386" fill="#6b6b85" font-size="8.5" text-anchor="middle">1008 GB/s × 160 ns</text>
+
+    <rect x="500" y="322" width="236" height="76" rx="8" fill="#171725" stroke="#2a2a44"/>
+    <text x="618" y="350" fill="#e8b84b" font-size="20" text-anchor="middle" font-family="monospace">≈ 5000</text>
+    <text x="618" y="370" fill="#9a9ab4" font-size="9.5" text-anchor="middle">同时挂着的未完成请求</text>
+    <text x="618" y="386" fill="#6b6b85" font-size="8.5" text-anchor="middle">按每个请求 32 字节算</text>
+  </g>
+
+  <text x="24" y="428" fill="#cfc6ff" font-size="10.5">Little 定律：在途数据量 = 带宽 × 延迟</text>
+  <text x="24" y="448" fill="#9a9ab4" font-size="9.5">它不只管内存，也管快递、收费站、食堂窗口——凡是「要等」又「要通量」的地方都成立。</text>
+</svg>

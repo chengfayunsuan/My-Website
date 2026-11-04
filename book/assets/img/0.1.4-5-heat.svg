@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 500" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="d1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7 z" fill="#f0606a"/>
+    </marker>
+    <marker id="d2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7 z" fill="#67b5ef"/>
+    </marker>
+  </defs>
+  <rect width="760" height="500" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">450 瓦怎么散掉：四道关，54 K 温差</text>
+
+  <!-- ================= 左：剖面 ================= -->
+  <text x="24" y="56" fill="#d8d8e4" font-size="12">从硅片到空气，要穿四层</text>
+
+  <!-- 空气 -->
+  <rect x="40" y="70" width="352" height="30" fill="#12121c"/>
+  <g stroke="#67b5ef" stroke-width="1.1" opacity="0.7">
+    <line x1="52" y1="85" x2="90" y2="85" marker-end="url(#d2)"/>
+    <line x1="150" y1="85" x2="188" y2="85" marker-end="url(#d2)"/>
+    <line x1="248" y1="85" x2="286" y2="85" marker-end="url(#d2)"/>
+    <line x1="336" y1="85" x2="374" y2="85" marker-end="url(#d2)"/>
+  </g>
+  <text x="40" y="66" fill="#6b6b85" font-size="8.5">空气 30°C，被风扇推着走</text>
+
+  <!-- 鳍片 -->
+  <g fill="#2a2a44" stroke="#4a4a68" stroke-width="0.8">
+    <rect x="44" y="100" width="7" height="80"/><rect x="72" y="100" width="7" height="80"/>
+    <rect x="100" y="100" width="7" height="80"/><rect x="128" y="100" width="7" height="80"/>
+    <rect x="156" y="100" width="7" height="80"/><rect x="184" y="100" width="7" height="80"/>
+    <rect x="212" y="100" width="7" height="80"/><rect x="240" y="100" width="7" height="80"/>
+    <rect x="268" y="100" width="7" height="80"/><rect x="296" y="100" width="7" height="80"/>
+    <rect x="324" y="100" width="7" height="80"/><rect x="352" y="100" width="7" height="80"/>
+    <rect x="380" y="100" width="7" height="80"/>
+  </g>
+  <text x="40" y="196" fill="#9a9ab4" font-size="8.5">鳍片 · 面积放大到几十倍，专治「热交不出去」</text>
+
+  <!-- 均热板 -->
+  <rect x="40" y="202" width="352" height="30" rx="4" fill="#2b2036" stroke="#9b4df0"/>
+  <text x="216" y="221" fill="#cfc6ff" font-size="9.5" text-anchor="middle">均热板 · 相变：这头蒸发，那头凝结</text>
+
+  <!-- 硅脂 -->
+  <rect x="150" y="232" width="132" height="10" fill="#3a3320" stroke="#e8b84b"/>
+  <text x="292" y="241" fill="#e8b84b" font-size="8.5">硅脂（几十微米）</text>
+
+  <!-- 硅片 -->
+  <rect x="150" y="242" width="132" height="34" rx="3" fill="#3a2b52" stroke="#9b4df0" stroke-width="1.6"/>
+  <text x="216" y="257" fill="#cfc6ff" font-size="9.5" text-anchor="middle">GPU 芯片 608 mm²</text>
+  <text x="216" y="269" fill="#e8b84b" font-size="8.5" text-anchor="middle">350 W · 57 W/cm²</text>
+
+  <!-- PCB -->
+  <rect x="40" y="276" width="352" height="14" rx="2" fill="#16232a" stroke="#3d6b5a"/>
+  <text x="40" y="308" fill="#6b6b85" font-size="8.5">PCB　·　热流 450 W 从这里往上走，一路被「摊开」</text>
+
+  <!-- 热流箭头 -->
+  <line x1="24" y1="272" x2="24" y2="96" stroke="#f0606a" stroke-width="1.6" marker-end="url(#d1)"/>
+
+
+  <!-- ================= 右：账单 ================= -->
+  <text x="424" y="56" fill="#d8d8e4" font-size="12">这 54 K 是谁贡献的</text>
+
+  <!-- 堆叠条 54K -->
+  <g>
+    <rect x="424" y="70" width="120" height="26" fill="#2a2a44" stroke="#4a4a68"/>
+    <rect x="544" y="70" width="34" height="26" fill="#3a3320" stroke="#e8b84b"/>
+    <rect x="578" y="70" width="58" height="26" fill="#2b2036" stroke="#9b4df0"/>
+    <rect x="636" y="70" width="48" height="26" fill="#3a2b52" stroke="#9b4df0"/>
+    <text x="484" y="87" fill="#d8d8e4" font-size="9" text-anchor="middle">25 K</text>
+    <text x="561" y="87" fill="#e8b84b" font-size="8" text-anchor="middle">7 K</text>
+    <text x="607" y="87" fill="#cfc6ff" font-size="8" text-anchor="middle">12 K</text>
+    <text x="660" y="87" fill="#cfc6ff" font-size="8" text-anchor="middle">10 K</text>
+  </g>
+  <text x="424" y="112" fill="#6b6b85" font-size="8.5">总温差 ΔT = 450 W × 0.12 K/W ≈ 54 K</text>
+
+  <!-- 图例 -->
+  <g font-size="9">
+    <rect x="424" y="128" width="10" height="10" fill="#2a2a44" stroke="#4a4a68"/>
+    <text x="442" y="137" fill="#9a9ab4">鳍片 → 空气　25 K（六成，全在这）</text>
+    <rect x="424" y="150" width="10" height="10" fill="#3a3320" stroke="#e8b84b"/>
+    <text x="442" y="159" fill="#9a9ab4">硅脂　7 K</text>
+    <rect x="424" y="172" width="10" height="10" fill="#2b2036" stroke="#9b4df0"/>
+    <text x="442" y="181" fill="#9a9ab4">均热板　12 K</text>
+    <rect x="424" y="194" width="10" height="10" fill="#3a2b52" stroke="#9b4df0"/>
+    <text x="442" y="203" fill="#9a9ab4">硅片内部　10 K</text>
+  </g>
+
+  <rect x="424" y="214" width="312" height="46" rx="7" fill="#171725" stroke="#2a2a44"/>
+  <text x="440" y="233" fill="#cfc6ff" font-size="9.5">空气 30°C + 54 K = 芯片 84°C</text>
+  <text x="440" y="250" fill="#6b6b85" font-size="8.5">再高就撞温度墙，风扇拉满、频率往下掉</text>
+
+  <text x="424" y="284" fill="#9a9ab4" font-size="9">想降温只有两条路：把 25 K 那一段啃下来</text>
+  <text x="424" y="300" fill="#9a9ab4" font-size="9">——更大的鳍片，或者更强的风。</text>
+
+  <!-- ================= 下：风扇噪音 ================= -->
+  <text x="24" y="340" fill="#d8d8e4" font-size="12">为什么厂商宁可把散热器做大，也不愿把风扇调快</text>
+
+  <g stroke="#2a2a44" stroke-width="1">
+    <line x1="60" y1="360" x2="60" y2="440"/>
+    <line x1="60" y1="440" x2="380" y2="440"/>
+  </g>
+  <g fill="#6b6b85" font-size="8">
+    <text x="52" y="456" text-anchor="end">30%</text>
+    <text x="150" y="456" text-anchor="middle">50%</text>
+    <text x="265" y="456" text-anchor="middle">75%</text>
+    <text x="380" y="456" text-anchor="middle">100%</text>
+    <text x="52" y="366" text-anchor="end">45 dB</text>
+    <text x="52" y="404" text-anchor="end">30 dB</text>
+    <text x="52" y="440" text-anchor="end">20 dB</text>
+  </g>
+  <polyline points="60,432 100,426 150,414 210,398 265,382 320,372 380,364"
+            fill="none" stroke="#f0606a" stroke-width="1.8"/>
+  <g fill="#f0606a">
+    <circle cx="60" cy="432" r="2.5"/><circle cx="150" cy="414" r="2.5"/>
+    <circle cx="265" cy="382" r="2.5"/><circle cx="380" cy="364" r="2.5"/>
+  </g>
+  <text x="66" y="368" fill="#f0606a" font-size="8.5">转速翻一倍</text>
+  <text x="66" y="380" fill="#f0606a" font-size="8.5">噪音约 +15 dB，主观三倍</text>
+
+  <text x="420" y="366" fill="#cfc6ff" font-size="10.5">风扇噪音不是线性涨的。</text>
+  <text x="420" y="386" fill="#9a9ab4" font-size="9.5">同样多的风，大风扇低转速比小风扇高转速安静得多——</text>
+  <text x="420" y="404" fill="#9a9ab4" font-size="9.5">这就是「大散热器」真正的卖点：不是更冷，是同样的温度下更安静。</text>
+  <text x="420" y="426" fill="#6b6b85" font-size="8.5">水冷做的事，本质是把「鳍片到空气」那 25 K 搬到机箱外，</text>
+  <text x="420" y="442" fill="#6b6b85" font-size="8.5">用大得多的换热面积去换——代价是泵、管路和漏水风险。</text>
+</svg>

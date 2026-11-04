@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="c1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7 z" fill="#67b5ef"/>
+    </marker>
+    <marker id="c2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7 z" fill="#9b4df0"/>
+    </marker>
+    <clipPath id="tri"><path d="M174,150 L40,330 L308,330 Z"/></clipPath>
+  </defs>
+  <rect width="760" height="520" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">三角形进，像素出：中间最贵的一步，恰好最适合并行</text>
+
+  <!-- ============ 流水线 ============ -->
+  <g>
+    <rect x="24" y="52" width="106" height="62" rx="6" fill="#171725" stroke="#2a2a44"/>
+    <text x="77" y="74" fill="#d8d8e4" font-size="10.5" text-anchor="middle">① 顶点着色</text>
+    <text x="77" y="90" fill="#9a9ab4" font-size="8" text-anchor="middle">每个顶点算位置</text>
+    <text x="77" y="103" fill="#6b6b85" font-size="8" text-anchor="middle">法线、纹理坐标</text>
+
+    <rect x="146" y="52" width="106" height="62" rx="6" fill="#171725" stroke="#2a2a44"/>
+    <text x="199" y="74" fill="#d8d8e4" font-size="10.5" text-anchor="middle">② 装配 / 裁剪</text>
+    <text x="199" y="90" fill="#9a9ab4" font-size="8" text-anchor="middle">三点拼回三角形</text>
+    <text x="199" y="103" fill="#6b6b85" font-size="8" text-anchor="middle">出屏的部分切掉</text>
+
+    <rect x="268" y="52" width="106" height="62" rx="6" fill="#171725" stroke="#2a2a44"/>
+    <text x="321" y="74" fill="#d8d8e4" font-size="10.5" text-anchor="middle">③ 光栅化</text>
+    <text x="321" y="90" fill="#9a9ab4" font-size="8" text-anchor="middle">三角形铺成格子</text>
+    <text x="321" y="103" fill="#6b6b85" font-size="8" text-anchor="middle">算出覆盖了哪些</text>
+
+    <rect x="390" y="52" width="106" height="62" rx="6" fill="#3a2b52" stroke="#9b4df0" stroke-width="1.6"/>
+    <text x="443" y="74" fill="#cfc6ff" font-size="10.5" text-anchor="middle">④ 片元着色</text>
+    <text x="443" y="90" fill="#9fd4f5" font-size="8" text-anchor="middle">贴图 / 光照 / 阴影</text>
+    <text x="443" y="103" fill="#e8b84b" font-size="8" text-anchor="middle">算力全在这</text>
+
+    <rect x="512" y="52" width="106" height="62" rx="6" fill="#171725" stroke="#2a2a44"/>
+    <text x="565" y="74" fill="#d8d8e4" font-size="10.5" text-anchor="middle">⑤ 深度 / 混合</text>
+    <text x="565" y="90" fill="#9a9ab4" font-size="8" text-anchor="middle">被挡住就丢掉</text>
+    <text x="565" y="103" fill="#6b6b85" font-size="8" text-anchor="middle">半透明要混色</text>
+
+    <rect x="634" y="52" width="100" height="62" rx="6" fill="#171725" stroke="#2a2a44"/>
+    <text x="684" y="74" fill="#d8d8e4" font-size="10.5" text-anchor="middle">⑥ 写帧缓冲</text>
+    <text x="684" y="90" fill="#9a9ab4" font-size="8" text-anchor="middle">写进显存</text>
+    <text x="684" y="103" fill="#6b6b85" font-size="8" text-anchor="middle">等显示器来读</text>
+  </g>
+  <g stroke="#67b5ef" stroke-width="1.3">
+    <line x1="130" y1="83" x2="142" y2="83" marker-end="url(#c1)"/>
+    <line x1="252" y1="83" x2="264" y2="83" marker-end="url(#c1)"/>
+    <line x1="374" y1="83" x2="386" y2="83" marker-end="url(#c1)"/>
+    <line x1="496" y1="83" x2="508" y2="83" marker-end="url(#c1)"/>
+    <line x1="618" y1="83" x2="630" y2="83" marker-end="url(#c1)"/>
+  </g>
+
+  <!-- ============ 左：三角形铺格子 ============ -->
+  <text x="24" y="148" fill="#d8d8e4" font-size="12">一个三角形覆盖了哪些像素</text>
+
+  <rect x="30" y="158" width="288" height="180" rx="4" fill="#12121c" stroke="#2a2a44"/>
+  <path d="M174,162 L44,326 L304,326 Z" fill="rgba(155,77,240,0.20)" stroke="#9b4df0" stroke-width="1.6"/>
+  <g stroke="#d8d8e4" stroke-opacity="0.10" stroke-width="1">
+    <line x1="48" y1="158" x2="48" y2="338"/>
+    <line x1="66" y1="158" x2="66" y2="338"/>
+    <line x1="84" y1="158" x2="84" y2="338"/>
+    <line x1="102" y1="158" x2="102" y2="338"/>
+    <line x1="120" y1="158" x2="120" y2="338"/>
+    <line x1="138" y1="158" x2="138" y2="338"/>
+    <line x1="156" y1="158" x2="156" y2="338"/>
+    <line x1="174" y1="158" x2="174" y2="338"/>
+    <line x1="192" y1="158" x2="192" y2="338"/>
+    <line x1="210" y1="158" x2="210" y2="338"/>
+    <line x1="228" y1="158" x2="228" y2="338"/>
+    <line x1="246" y1="158" x2="246" y2="338"/>
+    <line x1="264" y1="158" x2="264" y2="338"/>
+    <line x1="282" y1="158" x2="282" y2="338"/>
+    <line x1="300" y1="158" x2="300" y2="338"/>
+    <line x1="318" y1="158" x2="318" y2="338"/>
+    <line x1="30" y1="176" x2="318" y2="176"/>
+    <line x1="30" y1="194" x2="318" y2="194"/>
+    <line x1="30" y1="212" x2="318" y2="212"/>
+    <line x1="30" y1="230" x2="318" y2="230"/>
+    <line x1="30" y1="248" x2="318" y2="248"/>
+    <line x1="30" y1="266" x2="318" y2="266"/>
+    <line x1="30" y1="284" x2="318" y2="284"/>
+    <line x1="30" y1="302" x2="318" y2="302"/>
+    <line x1="30" y1="320" x2="318" y2="320"/>
+    <line x1="30" y1="338" x2="318" y2="338"/>
+  </g>
+  <!-- 高亮 tile 4x4 -->
+  <rect x="120" y="248" width="72" height="72" fill="none" stroke="#67b5ef" stroke-width="2"/>
+
+  <text x="30" y="354" fill="#6b6b85" font-size="8.5">格子 = 像素，只有三角形内部的格子才有活干　　</text>
+  <rect x="228" y="345" width="10" height="10" fill="none" stroke="#67b5ef" stroke-width="1.6"/>
+  <text x="244" y="354" fill="#67b5ef" font-size="8.5">蓝框 = 一个 tile（4×4 像素）</text>
+
+  <!-- ============ 右：放大 tile ============ -->
+  <text x="392" y="148" fill="#d8d8e4" font-size="12">放大来看：16 个像素，16 个线程</text>
+  <g>
+    <rect x="392" y="158" width="160" height="160" rx="4" fill="#12121c" stroke="#2a2a44"/>
+    <g fill="#1f3a4a" stroke="#67b5ef" stroke-width="0.8">
+      <rect x="396" y="162" width="36" height="36"/><rect x="436" y="162" width="36" height="36"/>
+      <rect x="476" y="162" width="36" height="36"/><rect x="516" y="162" width="36" height="36"/>
+      <rect x="396" y="202" width="36" height="36"/><rect x="436" y="202" width="36" height="36"/>
+      <rect x="476" y="202" width="36" height="36"/><rect x="516" y="202" width="36" height="36"/>
+      <rect x="396" y="242" width="36" height="36"/><rect x="436" y="242" width="36" height="36"/>
+      <rect x="476" y="242" width="36" height="36"/><rect x="516" y="242" width="36" height="36"/>
+      <rect x="396" y="282" width="36" height="36"/><rect x="436" y="282" width="36" height="36"/>
+      <rect x="476" y="282" width="36" height="36"/><rect x="516" y="282" width="36" height="36"/>
+    </g>
+    <g fill="#9fd4f5" font-size="7.5" text-anchor="middle">
+      <text x="414" y="184">t0</text><text x="454" y="184">t1</text><text x="494" y="184">t2</text><text x="534" y="184">t3</text>
+      <text x="414" y="224">t4</text><text x="454" y="224">t5</text><text x="494" y="224">t6</text><text x="534" y="224">t7</text>
+      <text x="414" y="264">t8</text><text x="454" y="264">t9</text><text x="494" y="264">t10</text><text x="534" y="264">t11</text>
+      <text x="414" y="304">t12</text><text x="454" y="304">t13</text><text x="494" y="304">t14</text><text x="534" y="304">t15</text>
+    </g>
+  </g>
+  <text x="570" y="176" fill="#9a9ab4" font-size="9">同一个程序，</text>
+  <text x="570" y="192" fill="#9a9ab4" font-size="9">跑 16 遍。</text>
+  <text x="570" y="212" fill="#6b6b85" font-size="8.5">区别只有</text>
+  <text x="570" y="226" fill="#6b6b85" font-size="8.5">拿到的坐标</text>
+  <text x="570" y="240" fill="#6b6b85" font-size="8.5">和纹理。</text>
+  <text x="570" y="268" fill="#e8b84b" font-size="8.5">这就是</text>
+  <text x="570" y="282" fill="#e8b84b" font-size="8.5">SIMT 喜欢</text>
+  <text x="570" y="296" fill="#e8b84b" font-size="8.5">的形状。</text>
+
+  <!-- ============ 底：三张数字卡 ============ -->
+  <g>
+    <rect x="24" y="376" width="222" height="70" rx="8" fill="#171725" stroke="#2a2a44"/>
+    <text x="135" y="404" fill="#67b5ef" font-size="19" text-anchor="middle" font-family="monospace">8.29 M</text>
+    <text x="135" y="422" fill="#9a9ab4" font-size="9.5" text-anchor="middle">4K 一帧的像素数</text>
+    <text x="135" y="437" fill="#6b6b85" font-size="8.5" text-anchor="middle">3840 × 2160</text>
+
+    <rect x="262" y="376" width="222" height="70" rx="8" fill="#171725" stroke="#2a2a44"/>
+    <text x="373" y="404" fill="#4ec9a3" font-size="19" text-anchor="middle" font-family="monospace">5 亿/秒</text>
+    <text x="373" y="422" fill="#9a9ab4" font-size="9.5" text-anchor="middle">4K 60 帧要处理的像素</text>
+    <text x="373" y="437" fill="#6b6b85" font-size="8.5" text-anchor="middle">还没算过度绘制</text>
+
+    <rect x="500" y="376" width="236" height="70" rx="8" fill="#171725" stroke="#2a2a44"/>
+    <text x="618" y="404" fill="#e8b84b" font-size="19" text-anchor="middle" font-family="monospace">4400 亿/秒</text>
+    <text x="618" y="422" fill="#9a9ab4" font-size="9.5" text-anchor="middle">176 个 ROP 能写的像素</text>
+    <text x="618" y="437" fill="#6b6b85" font-size="8.5" text-anchor="middle">写像素便宜得像白送</text>
+  </g>
+
+  <text x="24" y="480" fill="#cfc6ff" font-size="10.5">所以要花钱的地方不是「画三角形」，是「算颜色」——一个像素几百条指令，五亿像素一起上。</text>
+  <text x="24" y="500" fill="#9a9ab4" font-size="9">过度绘制：远处的山被近处的树盖住，那一遍就白算了。early-Z 就是让这种白干尽早出局。</text>
+</svg>
