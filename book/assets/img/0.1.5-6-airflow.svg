@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="f6a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7 z" fill="#67b5ef"/>
+    </marker>
+    <marker id="f6b" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7 z" fill="#f0606a"/>
+    </marker>
+  </defs>
+  <rect width="760" height="520" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">风扇曲线与系统阻抗：真实风量在交点上</text>
+
+  <!-- ================= 左上：P-Q ================= -->
+  <g stroke="#2a2a44">
+    <line x1="50" y1="330" x2="410" y2="330"/>
+    <line x1="50" y1="60" x2="50" y2="330"/>
+  </g>
+  <text x="34" y="195" fill="#9a9ab4" font-size="9" transform="rotate(-90 34 195)" text-anchor="middle">压差（相对值）</text>
+  <text x="230" y="368" fill="#9a9ab4" font-size="9" text-anchor="middle">风量（相对值）</text>
+  <g fill="#6b6b85" font-size="8.5" text-anchor="middle">
+    <text x="50" y="346">0</text>
+    <text x="230" y="346">50</text>
+    <text x="410" y="346">100</text>
+  </g>
+
+  <!-- 风扇曲线 -->
+  <polyline points="50,80 122,90 194,120 266,170 338,240 410,330" fill="none" stroke="#67b5ef" stroke-width="2.2"/>
+  <text x="330" y="196" fill="#9fd4f5" font-size="9.5" transform="rotate(-52 330 196)">风扇的 P-Q 曲线</text>
+
+  <!-- 高阻 -->
+  <polyline points="50,330 122,295 176,223 210,136" fill="none" stroke="#f0606a" stroke-width="1.8" stroke-dasharray="5 3"/>
+  <circle cx="210" cy="136" r="4.5" fill="#f0606a"/>
+  <text x="118" y="152" fill="#f0606a" font-size="9">高阻抗系统</text>
+  <text x="118" y="166" fill="#6b6b85" font-size="8.5">密鳍片 / 厚冷排</text>
+  <text x="222" y="132" fill="#f0606a" font-size="9">B</text>
+
+  <!-- 低阻 -->
+  <polyline points="50,330 158,303 230,255 283,194" fill="none" stroke="#4ec9a3" stroke-width="1.8" stroke-dasharray="5 3"/>
+  <circle cx="283" cy="194" r="4.5" fill="#4ec9a3"/>
+  <text x="296" y="232" fill="#4ec9a3" font-size="9">低阻抗系统</text>
+  <text x="296" y="246" fill="#6b6b85" font-size="8.5">大面积进风</text>
+  <text x="291" y="188" fill="#4ec9a3" font-size="9">A</text>
+
+  <text x="50" y="398" fill="#e8b84b" font-size="10">包装上印的 Qmax，是「完全没阻力」时的风量——真机里永远达不到</text>
+  <text x="50" y="416" fill="#9a9ab4" font-size="9.5">实际工作点是风扇曲线与阻抗曲线的交点：A 点风量大但顶不住压，B 点顶得住却没风</text>
+  <text x="50" y="434" fill="#6b6b85" font-size="9">阻抗随风量平方增长（ΔP = R · Q²），所以曲线是往上翘的抛物线</text>
+
+  <!-- ================= 右上：串联并联 ================= -->
+  <line x1="430" y1="60" x2="430" y2="450" stroke="#2a2a44"/>
+
+  <text x="456" y="76" fill="#d8d8e4" font-size="11">两个风扇怎么接</text>
+
+  <!-- 串联 -->
+  <circle cx="482" cy="112" r="15" fill="none" stroke="#67b5ef" stroke-width="1.4"/>
+  <path d="M482,100 L482,124 M472,106 L482,112 M492,106 L482,112" stroke="#67b5ef" stroke-width="1"/>
+  <circle cx="516" cy="112" r="15" fill="none" stroke="#67b5ef" stroke-width="1.4"/>
+  <path d="M516,100 L516,124 M506,106 L516,112 M526,106 L516,112" stroke="#67b5ef" stroke-width="1"/>
+  <text x="546" y="108" fill="#9fd4f5" font-size="9.5">串联（前后）</text>
+  <text x="546" y="124" fill="#9a9ab4" font-size="9">风量不变，压差 ×2</text>
+  <text x="546" y="138" fill="#6b6b85" font-size="8.5">适合高阻抗：冷排、密鳍片</text>
+
+  <!-- 并联 -->
+  <circle cx="482" cy="172" r="15" fill="none" stroke="#4ec9a3" stroke-width="1.4"/>
+  <path d="M482,160 L482,184 M472,166 L482,172 M492,166 L482,172" stroke="#4ec9a3" stroke-width="1"/>
+  <circle cx="482" cy="206" r="15" fill="none" stroke="#4ec9a3" stroke-width="1.4"/>
+  <path d="M482,194 L482,218 M472,200 L482,206 M492,200 L482,206" stroke="#4ec9a3" stroke-width="1"/>
+  <text x="546" y="180" fill="#9fe0c9" font-size="9.5">并联（并排）</text>
+  <text x="546" y="196" fill="#9a9ab4" font-size="9">压差不变，风量 ×2</text>
+  <text x="546" y="210" fill="#6b6b85" font-size="8.5">适合低阻抗：机箱面板、网孔</text>
+
+  <text x="456" y="246" fill="#e8b84b" font-size="9">装反了：扇子选错，风从鳍片边上溜走，噪音倒上来了</text>
+
+  <!-- ================= 右下：正压负压 ================= -->
+  <text x="456" y="286" fill="#d8d8e4" font-size="11">正压与负压，决定灰从哪进来</text>
+
+  <rect x="478" y="300" width="100" height="56" rx="3" fill="#171725" stroke="#4ec9a3"/>
+  <line x1="448" y1="314" x2="474" y2="314" stroke="#4ec9a3" stroke-width="1.4" marker-end="url(#f6a)"/>
+  <line x1="448" y1="328" x2="474" y2="328" stroke="#4ec9a3" stroke-width="1.4" marker-end="url(#f6a)"/>
+  <line x1="448" y1="342" x2="474" y2="342" stroke="#4ec9a3" stroke-width="1.4" marker-end="url(#f6a)"/>
+  <line x1="582" y1="328" x2="608" y2="328" stroke="#6b6b85" stroke-width="1.4" marker-end="url(#f6a)"/>
+  <circle cx="458" cy="314" r="2" fill="#4ec9a3"/>
+  <circle cx="458" cy="328" r="2" fill="#4ec9a3"/>
+  <circle cx="458" cy="342" r="2" fill="#4ec9a3"/>
+  <text x="618" y="316" fill="#9fe0c9" font-size="9.5">正压：进 3 出 1</text>
+  <text x="618" y="332" fill="#9a9ab4" font-size="9">灰只从滤网进</text>
+  <text x="618" y="346" fill="#6b6b85" font-size="8.5">机箱内部长期干净</text>
+
+  <rect x="478" y="378" width="100" height="56" rx="3" fill="#171725" stroke="#f0606a"/>
+  <line x1="448" y1="406" x2="474" y2="406" stroke="#6b6b85" stroke-width="1.4" marker-end="url(#f6a)"/>
+  <line x1="582" y1="392" x2="608" y2="392" stroke="#f0606a" stroke-width="1.4" marker-end="url(#f6b)"/>
+  <line x1="582" y1="406" x2="608" y2="406" stroke="#f0606a" stroke-width="1.4" marker-end="url(#f6b)"/>
+  <line x1="582" y1="420" x2="608" y2="420" stroke="#f0606a" stroke-width="1.4" marker-end="url(#f6b)"/>
+  <circle cx="492" cy="384" r="2" fill="#f0606a"/>
+  <circle cx="528" cy="384" r="2" fill="#f0606a"/>
+  <circle cx="564" cy="384" r="2" fill="#f0606a"/>
+  <circle cx="492" cy="428" r="2" fill="#f0606a"/>
+  <circle cx="528" cy="428" r="2" fill="#f0606a"/>
+  <circle cx="564" cy="428" r="2" fill="#f0606a"/>
+  <text x="618" y="394" fill="#f0606a" font-size="9.5">负压：进 1 出 3</text>
+  <text x="618" y="410" fill="#9a9ab4" font-size="9">灰从各处缝隙钻进来</text>
+  <text x="618" y="424" fill="#6b6b85" font-size="8.5">散热略好，两月后积灰</text>
+
+  <text x="456" y="470" fill="#9a9ab4" font-size="9">「加风扇反而更热」常因为：气流短路、热风被吸回、负压吸灰</text>
+</svg>

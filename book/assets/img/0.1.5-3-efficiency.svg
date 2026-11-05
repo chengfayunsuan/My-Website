@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 480" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="480" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">效率是一条拱形曲线，最高点不在满载</text>
+
+  <!-- ============ 左：曲线 ============ -->
+  <g stroke="#2a2a44">
+    <line x1="70" y1="300" x2="480" y2="300"/>
+    <line x1="70" y1="60" x2="70" y2="300"/>
+  </g>
+  <g stroke="#232338" stroke-dasharray="3 4">
+    <line x1="70" y1="220" x2="480" y2="220"/>
+    <line x1="70" y1="140" x2="480" y2="140"/>
+    <line x1="70" y1="60" x2="480" y2="60"/>
+  </g>
+  <g fill="#6b6b85" font-size="9" text-anchor="end">
+    <text x="62" y="304">80%</text>
+    <text x="62" y="224">86%</text>
+    <text x="62" y="144">92%</text>
+    <text x="62" y="64">98%</text>
+  </g>
+  <text x="18" y="180" fill="#9a9ab4" font-size="9" transform="rotate(-90 18 180)" text-anchor="middle">转换效率</text>
+
+  <g fill="#6b6b85" font-size="9" text-anchor="middle">
+    <text x="70" y="318">10</text>
+    <text x="159" y="318">30</text>
+    <text x="248" y="318">50</text>
+    <text x="337" y="318">70</text>
+    <text x="426" y="318">90</text>
+    <text x="480" y="318">100</text>
+  </g>
+  <text x="275" y="338" fill="#9a9ab4" font-size="9" text-anchor="middle">负载率（%）</text>
+
+  <!-- 白牌 -->
+  <polyline points="114,273 181,251 248,233 359,246 470,273" fill="none" stroke="#b0b0c4" stroke-width="1.8"/>
+  <text x="486" y="276" fill="#9a9ab4" font-size="9">白牌</text>
+
+  <!-- 金牌 -->
+  <polyline points="70,207 114,167 181,150 248,140 359,153 470,180" fill="none" stroke="#67b5ef" stroke-width="2"/>
+  <text x="486" y="183" fill="#9fd4f5" font-size="9">金牌</text>
+
+  <!-- 钛金 -->
+  <polyline points="70,167 114,113 181,97 248,87 359,104 470,153" fill="none" stroke="#4ec9a3" stroke-width="2"/>
+  <text x="486" y="156" fill="#9fe0c9" font-size="9">钛金</text>
+
+  <line x1="248" y1="87" x2="248" y2="300" stroke="#e8b84b" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="254" y="72" fill="#e8b84b" font-size="9">三条线都在这里最高</text>
+
+  <!-- ============ 右：损耗条 ============ -->
+  <line x1="540" y1="60" x2="540" y2="300" stroke="#2a2a44"/>
+
+  <text x="562" y="72" fill="#d8d8e4" font-size="11">850 W 电源，输出 425 W 时</text>
+  <text x="562" y="90" fill="#6b6b85" font-size="9">丢掉多少瓦，全部变成热</text>
+
+  <text x="562" y="122" fill="#9a9ab4" font-size="9.5">白牌 85%</text>
+  <rect x="562" y="128" width="150" height="16" rx="2" fill="#3a1e26" stroke="#f0606a"/>
+  <text x="576" y="140" fill="#f0606a" font-size="9.5">75 W</text>
+
+  <text x="562" y="166" fill="#9fd4f5" font-size="9.5">金牌 92%</text>
+  <rect x="562" y="172" width="74" height="16" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="576" y="184" fill="#9fd4f5" font-size="9.5">37 W</text>
+
+  <text x="562" y="210" fill="#9fe0c9" font-size="9.5">钛金 96%</text>
+  <rect x="562" y="216" width="36" height="16" rx="2" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="606" y="228" fill="#9fe0c9" font-size="9.5">18 W</text>
+
+  <line x1="562" y1="252" x2="736" y2="252" stroke="#2a2a44"/>
+  <text x="562" y="270" fill="#9a9ab4" font-size="9">同一台机器，白牌比钛金每小时</text>
+  <text x="562" y="286" fill="#f0606a" font-size="9">多丢 57 W 热，也多耗 57 W 电</text>
+
+  <!-- ============ 底：注释 ============ -->
+  <line x1="24" y1="356" x2="736" y2="356" stroke="#2a2a44"/>
+
+  <text x="24" y="380" fill="#cfc6ff" font-size="11">为什么是拱形</text>
+  <text x="24" y="402" fill="#9a9ab4" font-size="9.5">轻载：控制器自己、风扇、待机电路这些「固定开销」占比大，效率上不去</text>
+  <text x="24" y="420" fill="#9a9ab4" font-size="9.5">满载：导通损耗按电流平方涨（I²R），管子发热更多，效率又掉下来</text>
+  <text x="24" y="442" fill="#e8b84b" font-size="9.5">所以让峰值功耗落在额定的六成左右，既省电又安静——这才是「留余量」的真正用处</text>
+  <text x="24" y="466" fill="#6b6b85" font-size="9">注：曲线按 230 V 电网的认证值绘制，实际产品会因用料、温度、老化略有差异</text>
+</svg>

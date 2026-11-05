@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 486" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="p1a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,1.2 L8,4.5 L0,7.8 z" fill="#67b5ef"/>
+    </marker>
+  </defs>
+  <rect width="760" height="486" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">一个电子的四段旅程</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">电压降 180 倍，电流涨 95 倍——同一份功率，形状一直在变</text>
+
+  <!-- ========== 四个方框 ========== -->
+  <g>
+    <rect x="52" y="64" width="146" height="122" rx="7" fill="#171725" stroke="#2a2a44"/>
+    <circle cx="70" cy="84" r="9" fill="#232338" stroke="#6b6b85"/>
+    <text x="70" y="88" fill="#9a9ab4" font-size="10" text-anchor="middle">1</text>
+    <text x="86" y="88" fill="#d8d8e4" font-size="12">墙插</text>
+    <text x="64" y="116" fill="#e8b84b" font-size="15">220 V 交流</text>
+    <line x1="64" y1="126" x2="186" y2="126" stroke="#2a2a44"/>
+    <text x="64" y="143" fill="#9a9ab4" font-size="9">50 Hz 正弦波</text>
+    <text x="64" y="157" fill="#9a9ab4" font-size="9">插座上限约 10 A</text>
+    <text x="64" y="171" fill="#6b6b85" font-size="9">方向每秒翻 100 次</text>
+  </g>
+
+  <g>
+    <rect x="222" y="64" width="146" height="122" rx="7" fill="#171725" stroke="#2a2a44"/>
+    <circle cx="240" cy="84" r="9" fill="#232338" stroke="#6b6b85"/>
+    <text x="240" y="88" fill="#9a9ab4" font-size="10" text-anchor="middle">2</text>
+    <text x="256" y="88" fill="#d8d8e4" font-size="12">PFC 校正</text>
+    <text x="234" y="116" fill="#e8b84b" font-size="15">400 V 直流</text>
+    <line x1="234" y1="126" x2="356" y2="126" stroke="#2a2a44"/>
+    <text x="234" y="143" fill="#9a9ab4" font-size="9">把电流掰成和电压同形</text>
+    <text x="234" y="157" fill="#9a9ab4" font-size="9">功率因数 0.6 → 0.99</text>
+    <text x="234" y="171" fill="#6b6b85" font-size="9">顺便把电压抬高一倍</text>
+  </g>
+
+  <g>
+    <rect x="392" y="64" width="146" height="122" rx="7" fill="#171725" stroke="#2a2a44"/>
+    <circle cx="410" cy="84" r="9" fill="#232338" stroke="#6b6b85"/>
+    <text x="410" y="88" fill="#9a9ab4" font-size="10" text-anchor="middle">3</text>
+    <text x="426" y="88" fill="#d8d8e4" font-size="12">开关变换</text>
+    <text x="404" y="116" fill="#e8b84b" font-size="15">12 V 直流</text>
+    <line x1="404" y1="126" x2="526" y2="126" stroke="#2a2a44"/>
+    <text x="404" y="143" fill="#9a9ab4" font-size="9">MOS 每秒切十几万次</text>
+    <text x="404" y="157" fill="#9a9ab4" font-size="9">靠占空比决定输出多少</text>
+    <text x="404" y="171" fill="#6b6b85" font-size="9">效率 92%，37 瓦变热</text>
+  </g>
+
+  <g>
+    <rect x="562" y="64" width="146" height="122" rx="7" fill="#171725" stroke="#2a2a44"/>
+    <circle cx="580" cy="84" r="9" fill="#232338" stroke="#6b6b85"/>
+    <text x="580" y="88" fill="#9a9ab4" font-size="10" text-anchor="middle">4</text>
+    <text x="596" y="88" fill="#d8d8e4" font-size="12">主板 VRM</text>
+    <text x="574" y="116" fill="#e8b84b" font-size="15">1.2 V 直流</text>
+    <line x1="574" y1="126" x2="696" y2="126" stroke="#2a2a44"/>
+    <text x="574" y="143" fill="#9a9ab4" font-size="9">八相并联，错开 45°</text>
+    <text x="574" y="157" fill="#9a9ab4" font-size="9">一颗 CPU 要吃 200 A</text>
+    <text x="574" y="171" fill="#6b6b85" font-size="9">效率 90%，24 瓦变热</text>
+  </g>
+
+  <!-- 箭头 -->
+  <line x1="198" y1="125" x2="216" y2="125" stroke="#67b5ef" stroke-width="1.6" marker-end="url(#p1a)"/>
+  <line x1="368" y1="125" x2="386" y2="125" stroke="#67b5ef" stroke-width="1.6" marker-end="url(#p1a)"/>
+  <line x1="538" y1="125" x2="556" y2="125" stroke="#67b5ef" stroke-width="1.6" marker-end="url(#p1a)"/>
+
+  <!-- ========== 电流对照 ========== -->
+  <line x1="24" y1="204" x2="736" y2="204" stroke="#2a2a44"/>
+
+  <text x="52" y="224" fill="#cfc6ff" font-size="11">同样的瓦数，电流差在哪</text>
+
+  <text x="125" y="252" fill="#9fd4f5" font-size="15" text-anchor="middle">2.1 A</text>
+  <text x="125" y="268" fill="#6b6b85" font-size="9" text-anchor="middle">462 W ÷ 220 V</text>
+
+  <text x="295" y="252" fill="#9fd4f5" font-size="15" text-anchor="middle">1.16 A</text>
+  <text x="295" y="268" fill="#6b6b85" font-size="9" text-anchor="middle">462 W ÷ 400 V</text>
+
+  <text x="465" y="252" fill="#9fd4f5" font-size="15" text-anchor="middle">35 A</text>
+  <text x="465" y="268" fill="#6b6b85" font-size="9" text-anchor="middle">425 W ÷ 12 V</text>
+
+  <text x="635" y="252" fill="#f0606a" font-size="15" text-anchor="middle">200 A</text>
+  <text x="635" y="268" fill="#6b6b85" font-size="9" text-anchor="middle">240 W ÷ 1.2 V</text>
+
+  <!-- 对数轴 -->
+  <text x="52" y="296" fill="#9a9ab4" font-size="9">对数刻度：每格十倍</text>
+  <line x1="70" y1="330" x2="700" y2="330" stroke="#4a4a68"/>
+  <g stroke="#4a4a68">
+    <line x1="70" y1="326" x2="70" y2="334"/>
+    <line x1="324" y1="326" x2="324" y2="334"/>
+    <line x1="579" y1="326" x2="579" y2="334"/>
+    <line x1="700" y1="326" x2="700" y2="334"/>
+  </g>
+  <text x="70" y="348" fill="#6b6b85" font-size="9" text-anchor="middle">1 A</text>
+  <text x="324" y="348" fill="#6b6b85" font-size="9" text-anchor="middle">10 A</text>
+  <text x="579" y="348" fill="#6b6b85" font-size="9" text-anchor="middle">100 A</text>
+  <text x="716" y="348" fill="#6b6b85" font-size="9" text-anchor="middle">300 A</text>
+
+  <!-- 数据点 -->
+  <g>
+    <circle cx="86" cy="330" r="3.5" fill="#67b5ef"/>
+    <text x="86" y="318" fill="#9fd4f5" font-size="9" text-anchor="middle">1.16</text>
+  </g>
+  <g>
+    <circle cx="152" cy="330" r="3.5" fill="#67b5ef"/>
+    <text x="152" y="352" fill="#9fd4f5" font-size="9" text-anchor="middle">2.1</text>
+  </g>
+  <g>
+    <circle cx="463" cy="330" r="4" fill="#9b4df0"/>
+    <text x="463" y="320" fill="#cfc6ff" font-size="9" text-anchor="middle">35</text>
+  </g>
+  <g>
+    <circle cx="655" cy="330" r="5" fill="#f0606a"/>
+    <text x="655" y="318" fill="#f0606a" font-size="9.5" text-anchor="middle">200</text>
+  </g>
+
+  <text x="655" y="372" fill="#f0606a" font-size="9" text-anchor="middle">↑ 越靠近芯片，线要越粗、越短</text>
+
+  <!-- ========== 损耗条 ========== -->
+  <line x1="24" y1="392" x2="736" y2="392" stroke="#2a2a44"/>
+  <text x="24" y="414" fill="#d8d8e4" font-size="11.5">462 W 从墙上进来，只有 425 W 干到活，37 W 变成热</text>
+
+  <rect x="70" y="426" width="580" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <rect x="650" y="426" width="50" height="24" rx="3" fill="#3a1e26" stroke="#f0606a"/>
+  <text x="360" y="442" fill="#9fd4f5" font-size="10" text-anchor="middle">425 W → 12 V 母线，分给 CPU 和显卡</text>
+  <text x="675" y="442" fill="#f0606a" font-size="9" text-anchor="middle">37 W</text>
+  <text x="675" y="468" fill="#6b6b85" font-size="8.5" text-anchor="middle">发热</text>
+</svg>
