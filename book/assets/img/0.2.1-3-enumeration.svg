@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="e1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,1.2 L8,4.5 L0,7.8 z" fill="#67b5ef"/>
+    </marker>
+    <marker id="e2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,1.2 L8,4.5 L0,7.8 z" fill="#9b4df0"/>
+    </marker>
+  </defs>
+  <rect width="760" height="430" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">插上之后的一秒：八步认亲</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">前三步在电气层，后五步在协议层——主机从「有东西」问到「你是谁」</text>
+
+  <!-- 第一行 -->
+  <rect x="28" y="72" width="160" height="88" rx="6" fill="#171725" stroke="#67b5ef"/>
+  <text x="44" y="94" fill="#67b5ef" font-size="10">① 复位</text>
+  <text x="44" y="116" fill="#d8d8e4" font-size="9">主机把 D+ 与 D−</text>
+  <text x="44" y="131" fill="#d8d8e4" font-size="9">同时拉低 10 毫秒</text>
+  <text x="44" y="150" fill="#6b6b85" font-size="8.5">设备回到初始状态</text>
+
+  <rect x="208" y="72" width="160" height="88" rx="6" fill="#171725" stroke="#67b5ef"/>
+  <text x="224" y="94" fill="#67b5ef" font-size="10">② 用地址 0 说话</text>
+  <text x="224" y="116" fill="#d8d8e4" font-size="9">刚复位的设备</text>
+  <text x="224" y="131" fill="#d8d8e4" font-size="9">暂时都叫地址 0</text>
+  <text x="224" y="150" fill="#6b6b85" font-size="8.5">此时总线上只有它</text>
+
+  <rect x="388" y="72" width="160" height="88" rx="6" fill="#171725" stroke="#67b5ef"/>
+  <text x="404" y="94" fill="#67b5ef" font-size="10">③ 读前 8 个字节</text>
+  <text x="404" y="116" fill="#d8d8e4" font-size="9">问端点 0 一次</text>
+  <text x="404" y="131" fill="#d8d8e4" font-size="9">最多能收多少</text>
+  <text x="404" y="150" fill="#6b6b85" font-size="8.5">决定后面怎么问</text>
+
+  <rect x="568" y="72" width="160" height="88" rx="6" fill="#171725" stroke="#9b4df0"/>
+  <text x="584" y="94" fill="#cfc6ff" font-size="10">④ 分配新地址</text>
+  <text x="584" y="116" fill="#d8d8e4" font-size="9">主机从 1 到 127</text>
+  <text x="584" y="131" fill="#d8d8e4" font-size="9">挑一个给它</text>
+  <text x="584" y="150" fill="#6b6b85" font-size="8.5">从此只用这个号</text>
+
+  <line x1="192" y1="116" x2="204" y2="116" stroke="#67b5ef" stroke-width="1.6" marker-end="url(#e1)"/>
+  <line x1="372" y1="116" x2="384" y2="116" stroke="#67b5ef" stroke-width="1.6" marker-end="url(#e1)"/>
+  <line x1="552" y1="116" x2="564" y2="116" stroke="#9b4df0" stroke-width="1.6" marker-end="url(#e2)"/>
+
+  <!-- 折返 -->
+  <line x1="648" y1="160" x2="648" y2="196" stroke="#9b4df0" stroke-width="1.6" marker-end="url(#e2)"/>
+
+  <!-- 第二行（从右往左） -->
+  <rect x="568" y="200" width="160" height="88" rx="6" fill="#171725" stroke="#9b4df0"/>
+  <text x="584" y="222" fill="#cfc6ff" font-size="10">⑤ 读设备描述符</text>
+  <text x="584" y="244" fill="#d8d8e4" font-size="9">18 字节：厂商号、</text>
+  <text x="584" y="259" fill="#d8d8e4" font-size="9">产品号、版本</text>
+  <text x="584" y="278" fill="#6b6b85" font-size="8.5">VID / PID 就在这里</text>
+
+  <rect x="388" y="200" width="160" height="88" rx="6" fill="#171725" stroke="#9b4df0"/>
+  <text x="404" y="222" fill="#cfc6ff" font-size="10">⑥ 读配置描述符</text>
+  <text x="404" y="244" fill="#d8d8e4" font-size="9">几个接口、几个端点、</text>
+  <text x="404" y="259" fill="#d8d8e4" font-size="9">各是什么类型</text>
+  <text x="404" y="278" fill="#6b6b85" font-size="8.5">干货全在这一步</text>
+
+  <rect x="208" y="200" width="160" height="88" rx="6" fill="#171725" stroke="#9b4df0"/>
+  <text x="224" y="222" fill="#cfc6ff" font-size="10">⑦ 选一个配置</text>
+  <text x="224" y="244" fill="#d8d8e4" font-size="9">大多数设备</text>
+  <text x="224" y="259" fill="#d8d8e4" font-size="9">只有一个可选</text>
+  <text x="224" y="278" fill="#6b6b85" font-size="8.5">选完就开始供电</text>
+
+  <rect x="28" y="200" width="160" height="88" rx="6" fill="#171725" stroke="#4ec9a3"/>
+  <text x="44" y="222" fill="#4ec9a3" font-size="10">⑧ 匹配驱动</text>
+  <text x="44" y="244" fill="#d8d8e4" font-size="9">系统拿 VID/PID</text>
+  <text x="44" y="259" fill="#d8d8e4" font-size="9">去查表，绑定驱动</text>
+  <text x="44" y="278" fill="#6b6b85" font-size="8.5">设备正式可用</text>
+
+  <line x1="564" y1="244" x2="552" y2="244" stroke="#9b4df0" stroke-width="1.6" marker-end="url(#e2)"/>
+  <line x1="384" y1="244" x2="372" y2="244" stroke="#9b4df0" stroke-width="1.6" marker-end="url(#e2)"/>
+  <line x1="204" y1="244" x2="192" y2="244" stroke="#4ec9a3" stroke-width="1.6" marker-end="url(#e2)"/>
+
+  <!-- 底部 -->
+  <line x1="24" y1="312" x2="736" y2="312" stroke="#2a2a44"/>
+
+  <text x="28" y="336" fill="#e8b84b" font-size="9.5">全程通常不超过 1 秒。慢的时候（第一次装驱动）可能几秒。</text>
+  <text x="28" y="360" fill="#9a9ab4" font-size="9">描述符是分层的：设备 → 配置 → 接口 → 端点。一个键盘可以同时有三个接口，共用一个地址。</text>
+  <text x="28" y="382" fill="#f0606a" font-size="9">「设备描述符请求失败」= 第 ③ 或第 ⑤ 步没答好。先换线、换口，再怀疑设备。</text>
+  <text x="28" y="406" fill="#6b6b85" font-size="8.5">高速设备插上时先假装自己是全速设备（上拉也接 D+），复位后再握手升级——为了兼容老主机。</text>
+</svg>

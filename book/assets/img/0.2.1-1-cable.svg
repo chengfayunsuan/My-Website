@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="470" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">一根线的断面：四根芯，两层皮</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">剪开一根 USB 2.0 线，里面就这些东西</text>
+
+  <!-- 剖面 -->
+  <circle cx="168" cy="238" r="122" fill="#1a1a26" stroke="#3a3a52" stroke-width="2"/>
+  <circle cx="168" cy="238" r="112" fill="none" stroke="#6b6b85" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <circle cx="168" cy="238" r="100" fill="#12121c" stroke="#2a2a44"/>
+
+  <!-- 屏蔽层标注 -->
+  <line x1="168" y1="126" x2="168" y2="100" stroke="#6b6b85" stroke-width="1"/>
+  <text x="168" y="76" fill="#9a9ab4" font-size="9" text-anchor="middle">屏蔽层（铝箔 + 编织网）</text>
+  <text x="168" y="91" fill="#6b6b85" font-size="8.5" text-anchor="middle">接插头金属壳，把整根线裹成法拉第笼</text>
+
+  <!-- 外皮标注 -->
+  <line x1="250" y1="336" x2="270" y2="356" stroke="#6b6b85" stroke-width="1"/>
+  <text x="274" y="360" fill="#6b6b85" font-size="8.5">外皮 PVC</text>
+
+  <!-- 四根芯 -->
+  <circle cx="132" cy="196" r="21" fill="#3a1e26" stroke="#f0606a" stroke-width="1.6"/>
+  <text x="132" y="201" fill="#f0606a" font-size="9" text-anchor="middle">VBUS</text>
+
+  <circle cx="204" cy="196" r="21" fill="#2a2a30" stroke="#c8c8d4" stroke-width="1.6"/>
+  <text x="204" y="201" fill="#c8c8d4" font-size="9" text-anchor="middle">GND</text>
+
+  <circle cx="132" cy="280" r="14" fill="#183028" stroke="#4ec9a3" stroke-width="1.6"/>
+  <text x="132" y="284" fill="#4ec9a3" font-size="8.5" text-anchor="middle">D+</text>
+
+  <circle cx="204" cy="280" r="14" fill="#2e2a3a" stroke="#cfc6ff" stroke-width="1.6"/>
+  <text x="204" y="284" fill="#cfc6ff" font-size="8.5" text-anchor="middle">D−</text>
+
+  <!-- 绞合示意 -->
+  <path d="M146,286 q10,-14 20,0 q10,14 20,0" fill="none" stroke="#e8b84b" stroke-width="1.2"/>
+  <text x="176" y="312" fill="#e8b84b" font-size="8.5" text-anchor="middle">绞成一对</text>
+
+  <!-- 右侧说明 -->
+  <line x1="312" y1="60" x2="312" y2="430" stroke="#2a2a44"/>
+
+  <g>
+    <rect x="332" y="72" width="12" height="12" rx="2" fill="#3a1e26" stroke="#f0606a"/>
+    <text x="354" y="82" fill="#f0606a" font-size="10.5">VBUS　红</text>
+    <text x="354" y="98" fill="#9a9ab4" font-size="9">送电，默认 5 伏。线做得粗，因为要扛电流。</text>
+    <text x="354" y="113" fill="#6b6b85" font-size="8.5">28 AWG 约 0.21 欧/米，3 安就是 1.26 伏压降</text>
+  </g>
+
+  <g>
+    <rect x="332" y="130" width="12" height="12" rx="2" fill="#2a2a30" stroke="#c8c8d4"/>
+    <text x="354" y="140" fill="#c8c8d4" font-size="10.5">GND　黑</text>
+    <text x="354" y="156" fill="#9a9ab4" font-size="9">回路，所有电压的参考零点。和 VBUS 同粗。</text>
+  </g>
+
+  <g>
+    <rect x="332" y="182" width="12" height="12" rx="2" fill="#183028" stroke="#4ec9a3"/>
+    <text x="354" y="192" fill="#4ec9a3" font-size="10.5">D+ / D−　绿与白</text>
+    <text x="354" y="208" fill="#9a9ab4" font-size="9">不是「一发一收」，是一对差分线，传同一个信号的正反两面。</text>
+    <text x="354" y="223" fill="#6b6b85" font-size="8.5">必须等长、绞紧，差分阻抗 90 欧——歪一样就掉速</text>
+  </g>
+
+  <g>
+    <rect x="332" y="242" width="12" height="12" rx="2" fill="#232338" stroke="#6b6b85"/>
+    <text x="354" y="252" fill="#9a9ab4" font-size="10.5">屏蔽层</text>
+    <text x="354" y="268" fill="#9a9ab4" font-size="9">挡外面的干扰，也挡里面的信号辐射出去。</text>
+    <text x="354" y="283" fill="#6b6b85" font-size="8.5">省掉它的线，插在充电器旁边就开始掉盘</text>
+  </g>
+
+  <!-- 底部两个对比 -->
+  <line x1="24" y1="330" x2="736" y2="330" stroke="#2a2a44"/>
+
+  <text x="332" y="352" fill="#e8b84b" font-size="10">同样断掉一根，结果完全不同</text>
+
+  <text x="332" y="376" fill="#f0606a" font-size="9.5">断 VBUS 或 GND → 完全不亮，插上没反应</text>
+  <text x="332" y="394" fill="#4ec9a3" font-size="9.5">断 D+ 或 D− → 能充电，但不认设备</text>
+  <text x="332" y="412" fill="#6b6b85" font-size="9">「能充电说明线没坏」是错的——只说明那两根电源线没断</text>
+
+  <!-- 左侧底部注释 -->
+  <text x="24" y="352" fill="#9a9ab4" font-size="9">四根芯粗细分两档：</text>
+  <text x="24" y="370" fill="#6b6b85" font-size="8.5">电源看电阻（越粗越好）</text>
+  <text x="24" y="386" fill="#6b6b85" font-size="8.5">数据看阻抗（粗细无关，</text>
+  <text x="24" y="402" fill="#6b6b85" font-size="8.5">间距与材料才关键）</text>
+</svg>

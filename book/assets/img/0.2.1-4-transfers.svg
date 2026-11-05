@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="470" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">四种传输，四种取舍</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">没有一种能同时做到「快、准、准时」——USB 让你按用途挑两个</text>
+
+  <!-- 控制 -->
+  <rect x="24" y="70" width="170" height="286" rx="7" fill="#171725" stroke="#67b5ef"/>
+  <rect x="24" y="70" width="170" height="46" rx="7" fill="#1b2740"/>
+  <text x="40" y="90" fill="#9fd4f5" font-size="11">控制</text>
+  <text x="40" y="106" fill="#6b6b85" font-size="8.5">Control</text>
+
+  <text x="40" y="136" fill="#4ec9a3" font-size="8.5">保证</text>
+  <text x="40" y="151" fill="#d8d8e4" font-size="9">一定送达</text>
+  <text x="40" y="165" fill="#d8d8e4" font-size="9">有应答、有重传</text>
+
+  <text x="40" y="191" fill="#f0606a" font-size="8.5">不保证</text>
+  <text x="40" y="206" fill="#d8d8e4" font-size="9">速度和带宽</text>
+  <text x="40" y="220" fill="#d8d8e4" font-size="9">慢一点没关系</text>
+
+  <text x="40" y="246" fill="#9a9ab4" font-size="8.5">用在</text>
+  <text x="40" y="261" fill="#d8d8e4" font-size="9">枚举、设置命令</text>
+  <text x="40" y="275" fill="#d8d8e4" font-size="9">固件升级</text>
+
+  <line x1="40" y1="278" x2="178" y2="278" stroke="#2a2a44"/>
+  <text x="40" y="298" fill="#6b6b85" font-size="8.5">端点 0 永远是它</text>
+  <text x="40" y="314" fill="#6b6b85" font-size="8.5">所有设备的标配</text>
+  <text x="40" y="338" fill="#67b5ef" font-size="9">慢，但绝不会错</text>
+
+  <!-- 中断 -->
+  <rect x="204" y="70" width="170" height="286" rx="7" fill="#171725" stroke="#4ec9a3"/>
+  <rect x="204" y="70" width="170" height="46" rx="7" fill="#20303a"/>
+  <text x="220" y="90" fill="#9fe0c9" font-size="11">中断</text>
+  <text x="220" y="106" fill="#6b6b85" font-size="8.5">Interrupt</text>
+
+  <text x="220" y="136" fill="#4ec9a3" font-size="8.5">保证</text>
+  <text x="220" y="151" fill="#d8d8e4" font-size="9">延迟有上限</text>
+  <text x="220" y="165" fill="#d8d8e4" font-size="9">主机定期来问</text>
+
+  <text x="220" y="191" fill="#f0606a" font-size="8.5">不保证</text>
+  <text x="220" y="206" fill="#d8d8e4" font-size="9">带宽很小</text>
+  <text x="220" y="220" fill="#d8d8e4" font-size="9">一次几十字节</text>
+
+  <text x="220" y="246" fill="#9a9ab4" font-size="8.5">用在</text>
+  <text x="220" y="261" fill="#d8d8e4" font-size="9">键盘、鼠标</text>
+  <text x="220" y="275" fill="#d8d8e4" font-size="9">游戏手柄</text>
+
+  <line x1="220" y1="288" x2="358" y2="288" stroke="#2a2a44"/>
+  <text x="220" y="306" fill="#6b6b85" font-size="8.5">鼠标 1000 Hz 即每毫秒问一次</text>
+  <text x="220" y="322" fill="#6b6b85" font-size="8.5">中断 = 轮询，不是设备打断</text>
+  <text x="220" y="346" fill="#4ec9a3" font-size="9">小，但一定按时</text>
+
+  <!-- 批量 -->
+  <rect x="384" y="70" width="170" height="286" rx="7" fill="#171725" stroke="#e8b84b"/>
+  <rect x="384" y="70" width="170" height="46" rx="7" fill="#332a18"/>
+  <text x="400" y="90" fill="#e8b84b" font-size="11">批量</text>
+  <text x="400" y="106" fill="#6b6b85" font-size="8.5">Bulk</text>
+
+  <text x="400" y="136" fill="#4ec9a3" font-size="8.5">保证</text>
+  <text x="400" y="151" fill="#d8d8e4" font-size="9">每个字节都对</text>
+  <text x="400" y="165" fill="#d8d8e4" font-size="9">CRC 校验 + 重传</text>
+
+  <text x="400" y="191" fill="#f0606a" font-size="8.5">不保证</text>
+  <text x="400" y="206" fill="#d8d8e4" font-size="9">什么时候送到</text>
+  <text x="400" y="220" fill="#d8d8e4" font-size="9">总线空就快，忙就慢</text>
+
+  <text x="400" y="246" fill="#9a9ab4" font-size="8.5">用在</text>
+  <text x="400" y="261" fill="#d8d8e4" font-size="9">U 盘、移动硬盘</text>
+  <text x="400" y="275" fill="#d8d8e4" font-size="9">打印机</text>
+
+  <line x1="400" y1="288" x2="538" y2="288" stroke="#2a2a44"/>
+  <text x="400" y="306" fill="#6b6b85" font-size="8.5">插摄像头时复制文件会变慢</text>
+  <text x="400" y="322" fill="#6b6b85" font-size="8.5">它们在抢同一条总线</text>
+  <text x="400" y="346" fill="#e8b84b" font-size="9">快，但说不准何时到</text>
+
+  <!-- 等时 -->
+  <rect x="564" y="70" width="172" height="286" rx="7" fill="#171725" stroke="#9b4df0"/>
+  <rect x="564" y="70" width="172" height="46" rx="7" fill="#2e2a3a"/>
+  <text x="580" y="90" fill="#cfc6ff" font-size="11">等时</text>
+  <text x="580" y="106" fill="#6b6b85" font-size="8.5">Isochronous</text>
+
+  <text x="580" y="136" fill="#4ec9a3" font-size="8.5">保证</text>
+  <text x="580" y="151" fill="#d8d8e4" font-size="9">按时送到</text>
+  <text x="580" y="165" fill="#d8d8e4" font-size="9">带宽预先留好</text>
+
+  <text x="580" y="191" fill="#f0606a" font-size="8.5">不保证</text>
+  <text x="580" y="206" fill="#d8d8e4" font-size="9">送达本身</text>
+  <text x="580" y="220" fill="#d8d8e4" font-size="9">错了不重传，直接丢</text>
+
+  <text x="580" y="246" fill="#9a9ab4" font-size="8.5">用在</text>
+  <text x="580" y="261" fill="#d8d8e4" font-size="9">USB 声卡、摄像头</text>
+  <text x="580" y="275" fill="#d8d8e4" font-size="9">USB 音箱</text>
+
+  <line x1="580" y1="288" x2="720" y2="288" stroke="#2a2a44"/>
+  <text x="580" y="306" fill="#6b6b85" font-size="8.5">丢一个样本 = 轻微一下</text>
+  <text x="580" y="322" fill="#6b6b85" font-size="8.5">晚 10 毫秒 = 声音断续</text>
+  <text x="580" y="346" fill="#9b4df0" font-size="9">准时，但不保证没错</text>
+
+  <!-- 底部 -->
+  <line x1="24" y1="382" x2="736" y2="382" stroke="#2a2a44"/>
+  <text x="24" y="406" fill="#e8b84b" font-size="9.5">选哪种，取决于「错了会怎样」：文件错一个字节就废了，声音错一个样本听不出来。</text>
+  <text x="24" y="430" fill="#9a9ab4" font-size="9">等时传输会先向主机申请带宽，主机答应了才留给它——所以插上摄像头，U 盘的批量传输就会被挤慢。</text>
+  <text x="24" y="452" fill="#6b6b85" font-size="8.5">一个设备的不同接口可以用不同的传输类型：摄像头 = 视频用等时 + 麦克风用等时 + 控制端点用来调参数。</text>
+</svg>
