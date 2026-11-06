@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="460" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">下单前的十项检查</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">前八项是「装不装得上」，后两项是「点不点得亮」</text>
+
+  <rect x="40" y="72" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="54" y="96" fill="#6b6b85" font-size="9" font-family="monospace">1</text>
+  <text x="74" y="96" fill="#d8d8e4" font-size="10">CPU 插槽</text>
+  <text x="74" y="115" fill="#9a9ab4" font-size="8.5">看插槽型号与代数</text>
+  <rect x="336" y="84" width="34" height="16" rx="8" fill="none" stroke="#4ec9a3"/>
+  <text x="353" y="95" fill="#4ec9a3" font-size="8" text-anchor="middle">低</text>
+  <rect x="404" y="72" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="418" y="96" fill="#6b6b85" font-size="9" font-family="monospace">2</text>
+  <text x="438" y="96" fill="#d8d8e4" font-size="10">内存代际</text>
+  <text x="438" y="115" fill="#9a9ab4" font-size="8.5">DDR4 / DDR5 缺口不同，不能混</text>
+  <rect x="700" y="84" width="34" height="16" rx="8" fill="none" stroke="#4ec9a3"/>
+  <text x="717" y="95" fill="#4ec9a3" font-size="8" text-anchor="middle">低</text>
+  <rect x="40" y="142" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="54" y="166" fill="#6b6b85" font-size="9" font-family="monospace">3</text>
+  <text x="74" y="166" fill="#d8d8e4" font-size="10">主板板型</text>
+  <text x="74" y="185" fill="#9a9ab4" font-size="8.5">ATX / M-ATX / ITX 对上机箱</text>
+  <rect x="336" y="154" width="34" height="16" rx="8" fill="none" stroke="#4ec9a3"/>
+  <text x="353" y="165" fill="#4ec9a3" font-size="8" text-anchor="middle">低</text>
+  <rect x="404" y="142" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="418" y="166" fill="#6b6b85" font-size="9" font-family="monospace">4</text>
+  <text x="438" y="166" fill="#d8d8e4" font-size="10">显卡长度</text>
+  <text x="438" y="185" fill="#9a9ab4" font-size="8.5">限长 − 20 mm</text>
+  <rect x="700" y="154" width="34" height="16" rx="8" fill="none" stroke="#e8b84b"/>
+  <text x="717" y="165" fill="#e8b84b" font-size="8" text-anchor="middle">中</text>
+  <rect x="40" y="212" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="54" y="236" fill="#6b6b85" font-size="9" font-family="monospace">5</text>
+  <text x="74" y="236" fill="#d8d8e4" font-size="10">散热器高度</text>
+  <text x="74" y="255" fill="#9a9ab4" font-size="8.5">限高 − 5 mm</text>
+  <rect x="336" y="224" width="34" height="16" rx="8" fill="none" stroke="#e8b84b"/>
+  <text x="353" y="235" fill="#e8b84b" font-size="8" text-anchor="middle">中</text>
+  <rect x="404" y="212" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="418" y="236" fill="#6b6b85" font-size="9" font-family="monospace">6</text>
+  <text x="438" y="236" fill="#d8d8e4" font-size="10">电源功率与接口</text>
+  <text x="438" y="255" fill="#9a9ab4" font-size="8.5">算功率，看 12VHPWR</text>
+  <rect x="700" y="224" width="34" height="16" rx="8" fill="none" stroke="#e8b84b"/>
+  <text x="717" y="235" fill="#e8b84b" font-size="8" text-anchor="middle">中</text>
+  <rect x="40" y="282" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="54" y="306" fill="#6b6b85" font-size="9" font-family="monospace">7</text>
+  <text x="74" y="306" fill="#d8d8e4" font-size="10">M.2 数量与长度</text>
+  <text x="74" y="325" fill="#9a9ab4" font-size="8.5">2280 最常见</text>
+  <rect x="336" y="294" width="34" height="16" rx="8" fill="none" stroke="#4ec9a3"/>
+  <text x="353" y="305" fill="#4ec9a3" font-size="8" text-anchor="middle">低</text>
+  <rect x="404" y="282" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="418" y="306" fill="#6b6b85" font-size="9" font-family="monospace">8</text>
+  <text x="438" y="306" fill="#d8d8e4" font-size="10">冷排位置</text>
+  <text x="438" y="325" fill="#9a9ab4" font-size="8.5">顶部/前面能否装 360</text>
+  <rect x="700" y="294" width="34" height="16" rx="8" fill="none" stroke="#e8b84b"/>
+  <text x="717" y="305" fill="#e8b84b" font-size="8" text-anchor="middle">中</text>
+  <rect x="40" y="352" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="54" y="376" fill="#6b6b85" font-size="9" font-family="monospace">9</text>
+  <text x="74" y="376" fill="#d8d8e4" font-size="10">前置面板</text>
+  <text x="74" y="395" fill="#9a9ab4" font-size="8.5">机箱 USB-C 线，主板有针脚吗</text>
+  <rect x="336" y="364" width="34" height="16" rx="8" fill="none" stroke="#f0606a"/>
+  <text x="353" y="375" fill="#f0606a" font-size="8" text-anchor="middle">高</text>
+  <rect x="404" y="352" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="418" y="376" fill="#6b6b85" font-size="9" font-family="monospace">10</text>
+  <text x="438" y="376" fill="#d8d8e4" font-size="10">BIOS 版本</text>
+  <text x="438" y="395" fill="#9a9ab4" font-size="8.5">新 CPU 可能要刷 BIOS</text>
+  <rect x="700" y="364" width="34" height="16" rx="8" fill="none" stroke="#f0606a"/>
+  <text x="717" y="375" fill="#f0606a" font-size="8" text-anchor="middle">高</text>
+
+  <line x1="24" y1="432" x2="736" y2="432" stroke="#2a2a44"/>
+  <text x="24" y="452" fill="#e8b84b" font-size="9">最容易被忽略的是 9 和 10：一个让前置口变废，一个让整机点不亮。</text>
+</svg>

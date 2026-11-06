@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="450" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">瓶颈会换人：分辨率一变，该升级的东西就变了</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">横轴是显卡性能，纵轴是帧率。三条线最后都压在同一条天花板上——那条线是 CPU 画的</text>
+
+  <!-- 坐标 -->
+  <line x1="80" y1="370" x2="712" y2="370" stroke="#4a4a68"/>
+  <line x1="80" y1="70" x2="80" y2="370" stroke="#4a4a68"/>
+  <text x="400" y="400" fill="#9a9ab4" font-size="9" text-anchor="middle">显卡性能 →</text>
+  <text x="86" y="64" fill="#9a9ab4" font-size="9">帧率</text>
+
+  <!-- CPU 天花板 -->
+  <line x1="80" y1="120" x2="712" y2="120" stroke="#f0606a" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="700" y="112" fill="#f0606a" font-size="9" text-anchor="end">CPU 天花板</text>
+
+  <!-- 三条线 -->
+  <polyline points="80,362 130,330 180,298 230,266 280,234 330,202 380,170 430,138 480,120 712,120" fill="none" stroke="#67b5ef" stroke-width="2.2"/>
+  <text x="600" y="140" fill="#9fd4f5" font-size="9">1080p</text>
+
+  <polyline points="80,366 130,348 180,330 230,312 280,294 330,276 380,258 430,240 480,222 530,204 580,186 630,168 680,152 712,142" fill="none" stroke="#9b4df0" stroke-width="2.2"/>
+  <text x="640" y="186" fill="#cfc6ff" font-size="9">1440p</text>
+
+  <polyline points="80,368 130,358 180,348 230,338 280,328 330,318 380,308 430,298 480,288 530,278 580,268 630,258 680,248 712,240" fill="none" stroke="#4ec9a3" stroke-width="2.2"/>
+  <text x="660" y="262" fill="#9fe0c9" font-size="9">4K</text>
+
+  <!-- 区域标注 -->
+  <text x="120" y="94" fill="#f0606a" font-size="8.5">这一段：加显卡没用，CPU 先顶住了</text>
+  <text x="200" y="290" fill="#9a9ab4" font-size="8.5">这一段：加显卡立刻见效</text>
+  <line x1="300" y1="100" x2="300" y2="118" stroke="#f0606a" stroke-width="1"/>
+
+
+  <!-- 底部 -->
+  <line x1="24" y1="416" x2="736" y2="416" stroke="#2a2a44"/>
+  <text x="24" y="436" fill="#e8b84b" font-size="9">1080p 在很低的显卡性能下就撞到 CPU 天花板；4K 要很强的显卡才撞线。</text>
+</svg>

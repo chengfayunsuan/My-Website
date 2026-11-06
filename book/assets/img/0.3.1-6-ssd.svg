@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="440" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">快 25 倍，快 4 秒</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">左边是标称速度，右边是你按开机键之后等的时间</text>
+
+  <text x="24" y="86" fill="#9fd4f5" font-size="10">顺序读（MB/s，对数刻度）</text>
+  <text x="24" y="127" fill="#6b6b85" font-size="8.5">SATA</text>
+  <rect x="90" y="112" width="76" height="20" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="174" y="127" fill="#9fd4f5" font-size="8.5">550</text>
+  <text x="24" y="161" fill="#6b6b85" font-size="8.5">PCIe 3.0</text>
+  <rect x="90" y="146" width="387" height="20" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="485" y="161" fill="#9fd4f5" font-size="8.5">3500</text>
+  <text x="24" y="195" fill="#6b6b85" font-size="8.5">PCIe 4.0</text>
+  <rect x="90" y="180" width="504" height="20" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="602" y="195" fill="#9fd4f5" font-size="8.5">7000</text>
+  <text x="24" y="229" fill="#6b6b85" font-size="8.5">PCIe 5.0</text>
+  <rect x="90" y="214" width="620" height="20" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="718" y="229" fill="#9fd4f5" font-size="8.5">14000</text>
+
+  <line x1="24" y1="252" x2="736" y2="252" stroke="#2a2a44"/>
+  <text x="24" y="274" fill="#9fe0c9" font-size="10">开机到能用（秒）</text>
+
+  <text x="24" y="310" fill="#6b6b85" font-size="8.5">SATA</text>
+  <rect x="90" y="296" width="180" height="20" rx="2" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="280" y="311" fill="#9fe0c9" font-size="8.5">15</text>
+
+  <text x="24" y="344" fill="#6b6b85" font-size="8.5">PCIe 3.0</text>
+  <rect x="90" y="330" width="144" height="20" rx="2" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="244" y="345" fill="#9fe0c9" font-size="8.5">12</text>
+
+  <text x="24" y="378" fill="#6b6b85" font-size="8.5">PCIe 4.0</text>
+  <rect x="90" y="364" width="132" height="20" rx="2" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="232" y="379" fill="#9fe0c9" font-size="8.5">11</text>
+
+  <text x="24" y="412" fill="#6b6b85" font-size="8.5">PCIe 5.0</text>
+  <rect x="90" y="398" width="132" height="20" rx="2" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="232" y="413" fill="#9fe0c9" font-size="8.5">11</text>
+
+  <text x="440" y="290" fill="#e8b84b" font-size="9">标称速度涨了 25 倍，</text>
+  <text x="440" y="308" fill="#e8b84b" font-size="9">开机时间只少了 4 秒。</text>
+  <text x="440" y="332" fill="#9a9ab4" font-size="8.5">因为开机读的是几十万个散落的小文件</text>
+  <text x="440" y="348" fill="#9a9ab4" font-size="8.5">（4K 随机读），瓶颈在闪存的控制延迟，</text>
+  <text x="440" y="364" fill="#9a9ab4" font-size="8.5">不在接口带宽。</text>
+
+  <text x="440" y="392" fill="#6b6b85" font-size="8.5">顺序读什么时候有用？</text>
+  <text x="440" y="408" fill="#6b6b85" font-size="8.5">拷大文件、剪 4K 视频、搬素材——</text>
+  <text x="440" y="424" fill="#6b6b85" font-size="8.5">这些才是「接口越快越爽」的场合。</text>
+</svg>
