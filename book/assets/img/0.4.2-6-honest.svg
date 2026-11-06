@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="420" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">「M1 为什么快」拆成四份</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">估算值，量级正确。注意：没有一份叫「因为用了 ARM」</text>
+
+  <rect x="40" y="88" width="204" height="46" fill="#4ec9a3" fill-opacity="0.30" stroke="#4ec9a3"/>
+  <text x="142" y="108" fill="#4ec9a3" font-size="10" text-anchor="middle">制程</text>
+  <text x="142" y="124" fill="#4ec9a3" font-size="9" text-anchor="middle">30%</text>
+  <rect x="244" y="88" width="204" height="46" fill="#67b5ef" fill-opacity="0.30" stroke="#67b5ef"/>
+  <text x="346" y="108" fill="#67b5ef" font-size="10" text-anchor="middle">架构</text>
+  <text x="346" y="124" fill="#67b5ef" font-size="9" text-anchor="middle">30%</text>
+  <rect x="448" y="88" width="170" height="46" fill="#9b4df0" fill-opacity="0.30" stroke="#9b4df0"/>
+  <text x="533" y="108" fill="#9b4df0" font-size="10" text-anchor="middle">统一内存与 SoC</text>
+  <text x="533" y="124" fill="#9b4df0" font-size="9" text-anchor="middle">25%</text>
+  <rect x="618" y="88" width="102" height="46" fill="#e8b84b" fill-opacity="0.30" stroke="#e8b84b"/>
+  <text x="669" y="108" fill="#e8b84b" font-size="10" text-anchor="middle">软硬协同</text>
+  <text x="669" y="124" fill="#e8b84b" font-size="9" text-anchor="middle">15%</text>
+
+  <text x="40" y="154" fill="#6b6b85" font-size="8">同样是 10–15 W 的功耗窗口，同样的任务，四份因素叠加出来的差距</text>
+
+  <rect x="40" y="167" width="8" height="8" rx="1" fill="#4ec9a3" fill-opacity="0.35" stroke="#4ec9a3"/>
+  <text x="56" y="176" fill="#4ec9a3" font-size="9">制程 · 30%</text>
+  <text x="56" y="192" fill="#9a9ab4" font-size="8">7nm/5nm 领先一到两代</text>
+  <rect x="396" y="167" width="8" height="8" rx="1" fill="#67b5ef" fill-opacity="0.35" stroke="#67b5ef"/>
+  <text x="412" y="176" fill="#67b5ef" font-size="9">架构 · 30%</text>
+  <text x="412" y="192" fill="#9a9ab4" font-size="8">超大核、宽解码、大缓存</text>
+  <rect x="40" y="219" width="8" height="8" rx="1" fill="#9b4df0" fill-opacity="0.35" stroke="#9b4df0"/>
+  <text x="56" y="228" fill="#9b4df0" font-size="9">统一内存与 SoC · 25%</text>
+  <text x="56" y="244" fill="#9a9ab4" font-size="8">省掉复制与 PCIe</text>
+  <rect x="396" y="219" width="8" height="8" rx="1" fill="#e8b84b" fill-opacity="0.35" stroke="#e8b84b"/>
+  <text x="412" y="228" fill="#e8b84b" font-size="9">软硬协同 · 15%</text>
+  <text x="412" y="244" fill="#9a9ab4" font-size="8">调度、功耗管理、编译器</text>
+
+  <line x1="24" y1="300" x2="736" y2="300" stroke="#2a2a44"/>
+
+  <rect x="24" y="312" width="712" height="50" rx="5" fill="#171725" stroke="#2a2a44"/>
+  <text x="38" y="331" fill="#cfc6ff" font-size="8.5">那指令集占多少？如果把这颗芯片的指令集换成 x86，它大概会损失百分之十几——</text>
+  <text x="38" y="350" fill="#cfc6ff" font-size="8.5">来自译码器、uop cache 和那套「兼容性电路」。它不改变结论，但它确实存在。</text>
+
+  <text x="24" y="386" fill="#e8b84b" font-size="9">所以准确的说法不是「ARM 打败了 x86」，是「一家能同时决定内存、GPU、电和系统的公司，打败了不能的那一批」。</text>
+  <text x="24" y="406" fill="#6b6b85" font-size="8.5">制程红利会消失（对手也会用上台积电），架构优势会被追平，唯有「垂直整合」这件事，别人最难抄。</text>
+</svg>

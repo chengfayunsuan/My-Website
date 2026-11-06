@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="440" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">Rosetta 2：翻一次，之后直接用</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">不是逐条解释，是把整个程序提前翻成 ARM64，存起来</text>
+
+  <!-- x86 程序 -->
+  <rect x="30" y="86" width="120" height="60" rx="4" fill="#3a1e26" stroke="#f0606a"/>
+  <text x="90" y="110" fill="#f0a0aa" font-size="9" text-anchor="middle">x86 程序</text>
+  <text x="90" y="126" fill="#6b6b85" font-size="7.5" text-anchor="middle">.app 里的二进制</text>
+  <text x="90" y="140" fill="#6b6b85" font-size="7.5" text-anchor="middle">一段 x86 指令</text>
+
+  <path d="M154,116 L176,116" stroke="#9a9ab4" stroke-width="1.4" marker-end="url(#r1)"/>
+  <defs>
+    <marker id="r1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M1,0.5 L6,3.5 L1,6.5 z" fill="#9a9ab4"/>
+    </marker>
+  </defs>
+
+  <!-- 判断 -->
+  <path d="M238,90 L290,116 L238,142 L186,116 Z" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="238" y="112" fill="#cfc6ff" font-size="7.5" text-anchor="middle">译过</text>
+  <text x="238" y="124" fill="#cfc6ff" font-size="7.5" text-anchor="middle">没有？</text>
+
+  <!-- 否 → 翻译 -->
+  <path d="M290,116 L310,116" stroke="#9a9ab4" stroke-width="1.4" marker-end="url(#r1)"/>
+  <text x="300" y="108" fill="#6b6b85" font-size="7" text-anchor="middle">否</text>
+
+  <rect x="314" y="86" width="120" height="60" rx="4" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="374" y="110" fill="#cfc6ff" font-size="9" text-anchor="middle">翻译</text>
+  <text x="374" y="126" fill="#6b6b85" font-size="7.5" text-anchor="middle">按基本块切</text>
+  <text x="374" y="140" fill="#6b6b85" font-size="7.5" text-anchor="middle">插必要的内存屏障</text>
+
+  <path d="M438,116 L458,116" stroke="#9a9ab4" stroke-width="1.4" marker-end="url(#r1)"/>
+
+  <!-- 缓存 -->
+  <rect x="462" y="86" width="110" height="60" rx="4" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="517" y="110" fill="#9fe0c9" font-size="9" text-anchor="middle">翻译缓存</text>
+  <text x="517" y="126" fill="#6b6b85" font-size="7.5" text-anchor="middle">存 ARM64 代码</text>
+  <text x="517" y="140" fill="#6b6b85" font-size="7.5" text-anchor="middle">下次直接用</text>
+
+  <path d="M576,116 L598,116" stroke="#9a9ab4" stroke-width="1.4" marker-end="url(#r1)"/>
+
+  <!-- 执行 -->
+  <rect x="602" y="86" width="128" height="60" rx="4" fill="#183028" stroke="#4ec9a3"/>
+  <text x="666" y="110" fill="#9fe0c9" font-size="9" text-anchor="middle">在 M1 上执行</text>
+  <text x="666" y="126" fill="#6b6b85" font-size="7.5" text-anchor="middle">原生 ARM64 指令</text>
+  <text x="666" y="140" fill="#6b6b85" font-size="7.5" text-anchor="middle">约 70–80% 性能</text>
+
+  <!-- 是 → 直达（回环） -->
+  <path d="M238,142 L238,178 L517,178 L517,150" fill="none" stroke="#4ec9a3" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#r2)"/>
+  <defs>
+    <marker id="r2" markerWidth="7" markerHeight="7" refX="3.5" refY="6" orient="auto">
+      <path d="M0.5,1 L6.5,1 L3.5,6 z" fill="#4ec9a3"/>
+    </marker>
+  </defs>
+  <text x="252" y="172" fill="#4ec9a3" font-size="7.5">是（第二次运行起）：</text>
+  <text x="392" y="172" fill="#6b6b85" font-size="7.5">跳过翻译，直接命中缓存</text>
+
+  <!-- 下方：能做 / 不能 -->
+  <line x1="24" y1="204" x2="736" y2="204" stroke="#2a2a44"/>
+
+  <rect x="24" y="216" width="348" height="132" rx="5" fill="#12121c" stroke="#4ec9a3"/>
+  <text x="40" y="238" fill="#9fe0c9" font-size="9.5">它能翻译的</text>
+  <text x="40" y="260" fill="#9a9ab4" font-size="8">· 普通应用（Office、浏览器、设计软件）</text>
+  <text x="40" y="278" fill="#9a9ab4" font-size="8">· 游戏本体（如果游戏本身支持 macOS）</text>
+  <text x="40" y="296" fill="#9a9ab4" font-size="8">· 命令行工具、脚本解释器</text>
+  <text x="40" y="314" fill="#9a9ab4" font-size="8">· 大部分插件与扩展</text>
+  <text x="40" y="336" fill="#6b6b85" font-size="7.5">关键：它们是「用户态程序」，跑在沙盒里</text>
+
+  <rect x="388" y="216" width="348" height="132" rx="5" fill="#12121c" stroke="#f0606a"/>
+  <text x="404" y="238" fill="#f0606a" font-size="9.5">它救不了的</text>
+  <text x="404" y="260" fill="#9a9ab4" font-size="8">· 内核扩展与驱动（跑在特权层）</text>
+  <text x="404" y="278" fill="#9a9ab4" font-size="8">· 虚拟机里的 x86 系统（多一层翻译）</text>
+  <text x="404" y="296" fill="#9a9ab4" font-size="8">· 带反作弊的游戏（翻译=改代码）</text>
+  <text x="404" y="314" fill="#9a9ab4" font-size="8">· 专业硬件的配套软件</text>
+  <text x="404" y="336" fill="#6b6b85" font-size="7.5">共同点：要么在特权层，要么要检查代码完整性</text>
+
+  <line x1="24" y1="366" x2="736" y2="366" stroke="#2a2a44"/>
+
+  <text x="24" y="388" fill="#e8b84b" font-size="9">所以「M1 不能玩某某游戏」通常不是性能不够，是反作弊不让翻译层插手。</text>
+  <text x="24" y="408" fill="#9a9ab4" font-size="9">这一点决定了 Rosetta 2 是「过渡工具」而不是「永久方案」——原生版本才是终点。</text>
+  <text x="24" y="428" fill="#6b6b85" font-size="8.5">苹果的做法是给出明确时限：过渡期结束后收紧支持，逼开发者移植。</text>
+</svg>
