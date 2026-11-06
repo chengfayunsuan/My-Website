@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="h1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7 z" fill="#67b5ef"/>
+    </marker>
+  </defs>
+  <rect width="760" height="450" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">HDMI：一个像素拆成三份，各走一对线</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">视频是单向的，所以不需要「收发各一套」，只需要灌得快</text>
+
+  <!-- 像素 -->
+  <rect x="40" y="92" width="120" height="132" rx="5" fill="#171725" stroke="#4a4a68"/>
+  <text x="100" y="112" fill="#9a9ab4" font-size="9" text-anchor="middle">一个像素</text>
+  <text x="100" y="126" fill="#6b6b85" font-size="8" text-anchor="middle">24 位</text>
+
+  <rect x="50" y="136" width="100" height="26" fill="#3a1e26" stroke="#f0606a"/>
+  <text x="100" y="154" fill="#f0606a" font-size="9" text-anchor="middle">R　8 位</text>
+
+  <rect x="50" y="166" width="100" height="26" fill="#183028" stroke="#4ec9a3"/>
+  <text x="100" y="184" fill="#4ec9a3" font-size="9" text-anchor="middle">G　8 位</text>
+
+  <rect x="50" y="196" width="100" height="26" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="100" y="214" fill="#9fd4f5" font-size="9" text-anchor="middle">B　8 位</text>
+
+  <!-- 三对线 -->
+  <g stroke="#f0606a" stroke-width="1.6">
+    <line x1="164" y1="144" x2="524" y2="144"/><line x1="164" y1="152" x2="524" y2="152"/>
+  </g>
+  <text x="176" y="136" fill="#f0606a" font-size="8">TMDS 数据 2（红）· 针 1-3</text>
+
+  <g stroke="#4ec9a3" stroke-width="1.6">
+    <line x1="164" y1="174" x2="524" y2="174"/><line x1="164" y1="182" x2="524" y2="182"/>
+  </g>
+  <text x="176" y="166" fill="#4ec9a3" font-size="8">TMDS 数据 1（绿）· 针 4-6</text>
+
+  <g stroke="#67b5ef" stroke-width="1.6">
+    <line x1="164" y1="204" x2="524" y2="204"/><line x1="164" y1="212" x2="524" y2="212"/>
+  </g>
+  <text x="176" y="196" fill="#9fd4f5" font-size="8">TMDS 数据 0（蓝）· 针 7-9</text>
+
+  <!-- 时钟 -->
+  <g stroke="#e8b84b" stroke-width="1.6">
+    <line x1="164" y1="240" x2="524" y2="240"/><line x1="164" y1="248" x2="524" y2="248"/>
+  </g>
+  <text x="176" y="264" fill="#e8b84b" font-size="8">TMDS 时钟 · 针 10-12（数据率的 1/10）</text>
+
+  <!-- 屏幕 -->
+  <rect x="524" y="92" width="150" height="170" rx="5" fill="#171725" stroke="#67b5ef"/>
+  <rect x="540" y="108" width="118" height="98" rx="3" fill="#12121c" stroke="#4a4a68"/>
+  <text x="599" y="162" fill="#6b6b85" font-size="9" text-anchor="middle">屏幕</text>
+  <rect x="572" y="222" width="54" height="8" rx="2" fill="#2a2a44"/>
+  <text x="599" y="248" fill="#9a9ab4" font-size="8" text-anchor="middle">19 针就够</text>
+
+  <!-- 慢速线 -->
+  <line x1="24" y1="286" x2="736" y2="286" stroke="#2a2a44"/>
+  <text x="24" y="308" fill="#d8d8e4" font-size="10.5">剩下的几根慢线，干的却是关键活</text>
+
+  <rect x="40" y="320" width="212" height="52" rx="5" fill="#171725" stroke="#2e2a3a"/>
+  <text x="56" y="340" fill="#cfc6ff" font-size="9">CEC · 针 13</text>
+  <text x="56" y="356" fill="#9a9ab4" font-size="8.5">设备互相指挥：开机、切输入、调音量</text>
+
+  <rect x="264" y="320" width="212" height="52" rx="5" fill="#171725" stroke="#20303a"/>
+  <text x="280" y="340" fill="#9fe0c9" font-size="9">DDC · 针 15-16</text>
+  <text x="280" y="356" fill="#9a9ab4" font-size="8.5">一根 I²C：读显示器的 EDID（支持哪些分辨率）</text>
+
+  <rect x="488" y="320" width="186" height="52" rx="5" fill="#171725" stroke="#3a2430"/>
+  <text x="504" y="340" fill="#f0606a" font-size="9">+5V · 针 18</text>
+  <text x="504" y="356" fill="#9a9ab4" font-size="8.5">给 EDID 芯片供电，关机也能读</text>
+
+  <text x="24" y="398" fill="#e8b84b" font-size="9">DDC 断了的典型症状：分辨率不对、显示器被认成「通用即插即用监视器」</text>
+  <text x="24" y="420" fill="#6b6b85" font-size="9">省这两根线是线材偷工减料最常见的做法——因为不影响「有画面」，只影响「认不认得出」</text>
+  <text x="24" y="440" fill="#6b6b85" font-size="8.5">HDMI 的电气层几乎照搬 DVI，所以一个几块钱的无源转接头就能把 DVI 接到 HDMI 上</text>
+</svg>

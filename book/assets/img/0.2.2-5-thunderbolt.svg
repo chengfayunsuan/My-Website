@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="tb1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7 z" fill="#9b4df0"/>
+    </marker>
+  </defs>
+  <rect width="760" height="450" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">一根线里跑三种协议：隧道化</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">不是把信号混在一起，是把三种包各装进信封，到对面再拆开</text>
+
+  <!-- 左：三种源 -->
+  <text x="30" y="84" fill="#9a9ab4" font-size="9">三种数据</text>
+  <rect x="30" y="94" width="120" height="38" rx="4" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="90" y="112" fill="#9fd4f5" font-size="9" text-anchor="middle">PCIe 事务</text>
+  <text x="90" y="126" fill="#6b6b85" font-size="8" text-anchor="middle">外接硬盘、显卡</text>
+
+  <rect x="30" y="146" width="120" height="38" rx="4" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="90" y="164" fill="#cfc6ff" font-size="9" text-anchor="middle">DisplayPort 流</text>
+  <text x="90" y="178" fill="#6b6b85" font-size="8" text-anchor="middle">视频输出</text>
+
+  <rect x="30" y="198" width="120" height="38" rx="4" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="90" y="216" fill="#9fe0c9" font-size="9" text-anchor="middle">USB 事务</text>
+  <text x="90" y="230" fill="#6b6b85" font-size="8" text-anchor="middle">键鼠、U 盘</text>
+
+  <!-- 箭头 -->
+  <g stroke="#9b4df0" stroke-width="1.4" marker-end="url(#tb1)">
+    <line x1="154" y1="113" x2="176" y2="113"/>
+    <line x1="154" y1="165" x2="176" y2="165"/>
+    <line x1="154" y1="217" x2="176" y2="217"/>
+  </g>
+
+  <!-- 封装 -->
+  <rect x="182" y="86" width="110" height="158" rx="6" fill="#171725" stroke="#9b4df0"/>
+  <text x="237" y="102" fill="#cfc6ff" font-size="9" text-anchor="middle">封装</text>
+
+  <rect x="192" y="110" width="90" height="30" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="237" y="129" fill="#9fd4f5" font-size="8" text-anchor="middle">PCIe 包</text>
+  <rect x="192" y="148" width="90" height="30" rx="3" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="237" y="167" fill="#cfc6ff" font-size="8" text-anchor="middle">DP 包</text>
+  <rect x="192" y="186" width="90" height="30" rx="3" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="237" y="205" fill="#9fe0c9" font-size="8" text-anchor="middle">USB 包</text>
+  <text x="237" y="234" fill="#6b6b85" font-size="7.5" text-anchor="middle">信封上标着「这是谁」</text>
+
+  <!-- 线 -->
+  <line x1="296" y1="165" x2="464" y2="165" stroke="#e8b84b" stroke-width="3"/>
+  <rect x="352" y="148" width="56" height="34" rx="5" fill="#332a18" stroke="#e8b84b"/>
+  <text x="380" y="170" fill="#e8b84b" font-size="9" text-anchor="middle">40 G</text>
+  <text x="380" y="198" fill="#e8b84b" font-size="8.5" text-anchor="middle">总带宽动态分给三种流</text>
+  <line x1="380" y1="182" x2="380" y2="188" stroke="#e8b84b" stroke-width="0.8"/>
+
+  <!-- 拆封 -->
+  <rect x="470" y="86" width="110" height="158" rx="6" fill="#171725" stroke="#4ec9a3"/>
+  <text x="525" y="102" fill="#9fe0c9" font-size="9" text-anchor="middle">拆封</text>
+
+  <rect x="480" y="110" width="90" height="30" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="525" y="129" fill="#9fd4f5" font-size="8" text-anchor="middle">PCIe 包</text>
+  <rect x="480" y="148" width="90" height="30" rx="3" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="525" y="167" fill="#cfc6ff" font-size="8" text-anchor="middle">DP 包</text>
+  <rect x="480" y="186" width="90" height="30" rx="3" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="525" y="205" fill="#9fe0c9" font-size="8" text-anchor="middle">USB 包</text>
+  <text x="525" y="234" fill="#6b6b85" font-size="7.5" text-anchor="middle">按信封上的标签分回去</text>
+
+  <!-- 箭头 -->
+  <g stroke="#4ec9a3" stroke-width="1.4" marker-end="url(#tb1)">
+    <line x1="584" y1="125" x2="606" y2="125"/>
+    <line x1="584" y1="163" x2="606" y2="163"/>
+    <line x1="584" y1="201" x2="606" y2="201"/>
+  </g>
+
+  <!-- 设备 -->
+  <rect x="612" y="106" width="118" height="34" rx="4" fill="#171725" stroke="#4a4a68"/>
+  <text x="671" y="120" fill="#d8d8e4" font-size="9" text-anchor="middle">固态 / 显卡</text>
+  <text x="671" y="133" fill="#6b6b85" font-size="7" text-anchor="middle">以为自己插在 PCIe 槽</text>
+
+  <rect x="612" y="150" width="118" height="34" rx="4" fill="#171725" stroke="#4a4a68"/>
+  <text x="671" y="172" fill="#d8d8e4" font-size="9" text-anchor="middle">显示器</text>
+
+  <rect x="612" y="194" width="118" height="34" rx="4" fill="#171725" stroke="#4a4a68"/>
+  <text x="671" y="216" fill="#d8d8e4" font-size="9" text-anchor="middle">USB Hub</text>
+
+  <!-- 底部 -->
+  <line x1="24" y1="268" x2="736" y2="268" stroke="#2a2a44"/>
+
+  <text x="24" y="292" fill="#e8b84b" font-size="9.5">为什么外接显卡不用装特殊驱动：设备看到的就是标准 PCIe，它不知道中间隔了一条隧道</text>
+  <text x="24" y="314" fill="#9a9ab4" font-size="9">代价一：每层封装都要占带宽，标称 40 Gbps，真正能传数据的不到 32 Gbps</text>
+  <text x="24" y="336" fill="#9a9ab4" font-size="9">代价二：封装、排队、拆封都要时间，延迟从微秒级涨到十几微秒</text>
+  <text x="24" y="358" fill="#9a9ab4" font-size="9">代价三：40 Gbps 在铜线上衰减极快，被动线最多 0.8 米，再长要用带芯片的「有源线」</text>
+
+  <text x="24" y="392" fill="#cfc6ff" font-size="9">同一套思路还有个反面：雷电 3 和 USB4 接口长得一样，但雷电 3 必须支持 40 G 和 PCIe 隧道</text>
+  <text x="24" y="412" fill="#cfc6ff" font-size="9">USB4 只保底 20 G，40 G 是可选——所以「USB4 口」不一定能外接显卡，「雷电口」一定可以</text>
+  <text x="24" y="436" fill="#6b6b85" font-size="8.5">买线认认证标志：没有认证的「雷电」线会静默降级成 USB 模式，设备管理器里看不出异常</text>
+</svg>

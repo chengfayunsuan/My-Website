@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>0.2.2 PCIe、HDMI、雷电、网口：每个口各自负责什么</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 0 部</a>
+    <a href="../index.html">0.2 接口与外设</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 0 部</a><span class="sep">/</span>
+    <a href="../index.html">0.2 接口与外设</a><span class="sep">/</span>
+    <span class="here">0.2.2</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">0.2.2</span>
+    PCIe、HDMI、雷电、网口：每个口各自负责什么
+  </h1>
+  <p class="part-sub">
+    约 1.2 万字 · 6 张图 · 读完你能说清机箱后面每个口为什么长那样、
+    PCIe 的 ×16 到底是多少根线、以及一根雷电线怎么同时当三种线用
+  </p>
+
+  <div class="lead">
+    <b>上一节只讲了一根线。机箱后面还站着一排。</b>
+    它们形状不同、针数不同、有的能插拔有的不能，
+    看起来像一堆历史遗留的混乱。
+    <strong>但每一个口的外形，都是被它的用途逼出来的。</strong>
+    显卡要独占带宽，所以 PCIe 是点对点的星形；
+    视频只要单向灌数据，所以 HDMI 只需要三对线；
+    网络要跑一百米，所以网口必须带变压器。
+    <em>这一节把这一排口排在一起，看它们的形状是怎么被需求塑造的。</em>
+  </div>
+
+  <div class="minitoc">
+    <h4>本节的小部分</h4>
+    <ol>
+      <li><a href="#p1">0.2.2-1　机箱后面那一排：四种完全不同的思路</a></li>
+      <li><a href="#p2">0.2.2-2　PCIe：一条专属高速，不是一条公共马路</a></li>
+      <li><a href="#p3">0.2.2-3　一根 lane 是四根线：为什么必须成对</a></li>
+      <li><a href="#p4">0.2.2-4　PCIe 的四代：编码换了三次</a></li>
+      <li><a href="#p5">0.2.2-5　插槽里的针，真正干活的不到一半</a></li>
+      <li><a href="#p6">0.2.2-6　HDMI：三对线灌一路视频</a></li>
+      <li><a href="#p7">0.2.2-7　4K60 到底要多少带宽：算一遍就懂</a></li>
+      <li><a href="#p8">0.2.2-8　DisplayPort：为什么它更像网络</a></li>
+      <li><a href="#p9">0.2.2-9　网口：八根线，百兆只用四根</a></li>
+      <li><a href="#p10">0.2.2-10　网口里的变压器：为什么能热插拔、能扛雷</a></li>
+      <li><a href="#p11">0.2.2-11　雷电：一根线里塞三种协议</a></li>
+      <li><a href="#p12">0.2.2-12　小结与十道自测题</a></li>
+    </ol>
+  </div>
+
+  <h2 id="p1"><span class="h2num">0.2.2-1</span>机箱后面那一排：四种完全不同的思路</h2>
+
+  <p>
+    先站在机箱后面看一眼。从上往下大概是：HDMI、DisplayPort、USB、网口、
+    音频插孔、天线接口；再往下是显卡的 PCIe 挡板（也是 HDMI/DP）；
+    主板上还竖着一条长插槽和几条短插槽。
+  </p>
+
+  <p>
+    这些口按「怎么连」可以分成四类，每一类的物理形态完全不同：
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>类型</th><th>代表</th><th>拓扑</th><th>为什么这样</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>点对点总线</td><td>PCIe</td><td>每个设备一条专属通道</td><td>显卡要独占总线，不能被别人抢</td></tr>
+      <tr><td>主从总线</td><td>USB</td><td>一根线挂很多设备</td><td>外设慢、便宜、要能随便插</td></tr>
+      <tr><td>单向流</td><td>HDMI、DP</td><td>一个源对一个屏</td><td>视频只需要往一个方向灌</td></tr>
+      <tr><td>网络</td><td>以太网</td><td>很多点共享一个网段</td><td>要跑一百米，要能连交换机</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    这四类背后的取舍，可以归结成三个问题：
+  </p>
+
+  <p>
+    <strong>第一，谁来决定什么时候说话？</strong>
+    USB 是主机说了算（上一节讲过）；PCIe 是双方随时可以说（全双工、有流量控制）；
+    以太网是「谁有数据谁就说，撞了再退让」；HDMI 是源端一直说，屏只能听。
+  </p>
+
+  <p>
+    <strong>第二，线要跑多远？</strong>
+    机箱内 20 厘米，机箱外 2 米，网线 100 米。
+    距离决定了要不要变压器、要不要屏蔽、要不要把电压抬高。
+  </p>
+
+  <p>
+    <strong>第三，错了要不要重传？</strong>
+    PCIe 要（有 CRC 和重传），以太网要（TCP 层重传），HDMI 不要（视频丢一帧就丢一帧）。
+    <em>这一条直接决定了协议栈的复杂度。</em>
+  </p>
+
+  <h3>还有一个漏掉的：那个圆孔</h3>
+
+  <p>
+    机箱后面通常还有三个 3.5 毫米圆孔：绿色（耳机/音箱）、
+    粉色（麦克风）、蓝色（线路输入）。它们传的是<strong>模拟信号</strong>——
+    已经解调好的、直接推动喇叭的电压波形。
+  </p>
+
+  <p>
+    在数字接口遍地的今天，模拟口为什么还留着？三个原因：
+  </p>
+
+  <ul>
+    <li><strong>零延迟。</strong>数字音频要经过缓冲、解码、时钟同步，模拟直连没有这些环节。</li>
+    <li><strong>便宜。</strong>一个 3.5 毫米插座几毛钱，一对 USB 声卡芯片要几块。</li>
+    <li><strong>通用。</strong>任何有喇叭的东西都能接，不需要驱动、不需要协议。</li>
+  </ul>
+
+  <p>
+    代价是<strong>容易受干扰</strong>。模拟信号在机箱里跑，
+    旁边就是显卡和开关电源，底噪、电流声、爆音都可能混进来。
+    <em>这就是为什么「主板集成声卡有底噪」是个常见抱怨——
+    不是芯片差，是它住在了一个电磁环境很糟的地方。</em>
+  </p>
+
+  <p>
+    所以专业场合会用「外置声卡」：把模拟电路搬到机箱外面，
+    远离干扰源。<strong>这也是「数字传输 + 外部解码」这个思路的由来。</strong>
+  </p>
+
+  <h3>为什么不能做一个「万能口」把它们统一掉</h3>
+
+  <p>
+    这个问题很自然：USB 已经统一了外设，为什么不能再往前走一步，
+    把视频、网络、显卡全塞进一个口？
+  </p>
+
+  <p>
+    因为这三件事的<strong>电气要求互相矛盾</strong>，统一了就得处处将就。
+  </p>
+
+  <p>
+    <strong>功率。</strong>USB 设备可能只吃几毫瓦（一个鼠标），
+    显卡要吃 450 瓦。同一套供电线路要同时伺候这两者，
+    要么线粗得离谱，要么小设备被大电流的噪声淹没。
+  </p>
+
+  <p>
+    <strong>距离。</strong>PCIe 在机箱里跑 20 厘米，以太网要跑 100 米。
+    前者可以靠极高的频率换带宽，后者必须把频率压下来、
+    用复杂的编码对抗衰减。<em>这两个方向是相反的。</em>
+  </p>
+
+  <p>
+    <strong>可靠性。</strong>PCIe 错一个字节要重传，HDMI 丢一帧就丢一帧。
+    前者需要完整的确认与重传机制，后者需要绝对稳定的时序。
+    <em>把它们揉进同一个协议，两边都得背对方的包袱。</em>
+  </p>
+
+  <p>
+    USB4 看起来在统一，但它统一的是<strong>接口形状和上层隧道</strong>，
+    底下的 PCIe 还是 PCIe，DP 还是 DP。
+    <em>它做的是「一个信封装三种信」，不是「发明一种新语言」。</em>
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/0.2.2-1-four-kinds.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.2.2-1-four-kinds.svg" alt="机箱后面四类接口的拓扑对比：点对点、主从、单向流、网络"></a>
+    <figcaption><b>图 0.2.2-1</b>　四种拓扑，四种命运。PCIe 给每个设备修一条专用道，USB 让大家挤一条道，HDMI 是单行道，网口是一片互相连通的街区。</figcaption>
+  </figure>
+
+  <h2 id="p2"><span class="h2num">0.2.2-2</span>PCIe：一条专属高速，不是一条公共马路</h2>
+
+  <p>
+    PCIe 全称是 Peripheral Component Interconnect Express，
+    但它的设计思路和老 PCI 完全是两回事。
+  </p>
+
+  <p>
+    老 PCI 是一条<strong>共享总线</strong>：所有插槽挂在同一组线上，
+    同一时刻只能有一个设备说话。插的卡越多，每人分到的时间越少。
+    这在 1990 年代够用，因为显卡和网卡都不怎么吃带宽。
+  </p>
+
+  <p>
+    到 2000 年代初，显卡开始吃不消了。于是一个根本性的改动：
+    <strong>把共享总线换成点对点连接。</strong>
+  </p>
+
+  <p>
+    什么意思？主板芯片组和每一个 PCIe 设备之间，都有<strong>一组专属的线</strong>。
+    显卡的数据不走别人的路，网卡的数据也不跟显卡抢。
+    <em>这不是「一条更宽的路」，是「每家修一条私家高速」。</em>
+  </p>
+
+  <p>
+    这个改动带来的第一个后果是<strong>布线量爆炸</strong>。
+    一条 lane 是四根线（两对差分），×16 就是 64 根信号线。
+    一块主板要引出 20 多条 lane，就是上千根线。
+    <strong>这就是为什么主板PCB 从 4 层涨到了 8 层、10 层甚至更多。</strong>
+  </p>
+
+  <p>
+    第二个后果是<strong>需要交换机</strong>。点对点意味着没有「总线」了，
+    显卡、网卡、硬盘各自连到芯片组，芯片组负责把它们的数据转发到内存和 CPU。
+    这颗芯片就是 PCH（平台控制器中枢），俗称「南桥」。
+  </p>
+
+  <h3>谁在管这些「私家高速」</h3>
+
+  <p>
+    点对点听起来很美好，但总要有个东西把几十条通道连起来。
+    现代 PC 里有<strong>两个层级</strong>：
+  </p>
+
+  <p>
+    <strong>第一层：CPU 直连。</strong>CPU 自己有 16 到 20 条 lane，
+    直接连显卡和第一块固态硬盘。这一段不经过任何中转，
+    延迟最低、带宽最大。<em>所以显卡必须插在最上面那条长槽里——那条是直连 CPU 的。</em>
+  </p>
+
+  <p>
+    <strong>第二层：芯片组（PCH）扩展。</strong>CPU 再用 4 条 lane 连到 PCH，
+    PCH 再扇出十几二十条给网卡、声卡、USB、剩下的硬盘。
+    <em>注意：这十几条通道共享那 4 条上行链路。</em>
+  </p>
+
+  <p>
+    这就解释了一个常见现象：<strong>同时读两块插在 PCH 上的固态，
+    速度会比单独读一块慢。</strong>
+    因为它们的总出口只有 ×4，两个人挤一个门。
+    <em>而插在 CPU 直连槽上的那块，不受影响。</em>
+  </p>
+
+  <p>
+    也解释了为什么高端主板要堆 PCIe 通道数：
+    通道不够，就得让设备共享；共享就有争抢；争抢就有「插了这个就不能插那个」。
+    <strong>主板说明书上那些「×16 或 ×8+×8」的注释，说的就是这个。</strong>
+  </p>
+
+  <h3>北桥去哪了</h3>
+
+  <p>
+    如果你拆过二十年前的主板，会记得芯片组是<strong>两颗芯片</strong>：
+    北桥（靠近 CPU，管内存和显卡）和南桥（管硬盘、USB、网卡）。
+  </p>
+
+  <p>
+    北桥当年是主板上的发热大户，因为它要处理内存和显卡之间的高速数据。
+    后来厂商发现：<strong>内存控制器和显卡控制器，干脆搬进 CPU 里更快。</strong>
+    距离更近、延迟更低、还省了一颗芯片。
+  </p>
+
+  <p>
+    从 2009 年的 Nehalem 开始，北桥消失了。CPU 直接连内存、直接连显卡，
+    只剩下一颗「南桥」，改名叫 PCH。
+    <em>现在主板上那块盖着散热片的方形芯片，就是它。</em>
+  </p>
+
+  <p>
+    所以现在的「芯片组」只剩一颗，但它管的事反而更多了：
+    USB、SATA、网卡、声卡、额外的 PCIe、电源管理、BIOS 存储，全归它。
+    <em>它像一个总管，所有慢速设备都先汇到它这里，再由一条 ×4 的通道送进 CPU。</em>
+  </p>
+
+  <div class="key">
+    <b>一句话对比：</b>USB 像一条<strong>单车道乡村公路</strong>，所有车排队，交警（主机）指挥；
+    PCIe 像<strong>每家一条私家高速</strong>，各走各的，交汇处有立交（交换机）。
+    前者便宜灵活，后者贵但快。
+  </div>
+
+  <h2 id="p3"><span class="h2num">0.2.2-3</span>一根 lane 是四根线：为什么必须成对</h2>
+
+  <p>
+    PCIe 的带宽单位是「lane」（通道）。一根 lane 听起来像一根线，
+    实际是<strong>四根</strong>：
+  </p>
+
+  <ul>
+    <li>一对发送（TX+ / TX−）</li>
+    <li>一对接收（RX+ / RX−）</li>
+  </ul>
+
+  <p>
+    为什么是两对？因为 PCIe 是<strong>全双工</strong>——发送和接收可以同时进行，
+    各走各的线。这和 USB 2.0 的「一对线轮流用」完全不同。
+  </p>
+
+  <p>
+    为什么每一对又是两根？因为<strong>差分</strong>。
+    上一节讲过：两根线传同一个信号的正反两面，接收端做减法，共模干扰自动抵消。
+    PCIe 的信号速率动辄 8 G、16 G、32 G 次每秒，
+    单端传输在这个频率下根本活不下来。
+  </p>
+
+  <p>
+    所以「×16 的显卡插槽」这条广告词，翻译过来是：
+    <strong>64 根信号线，16 条独立通道，每条都能同时收发。</strong>
+    这也是为什么显卡金手指那么长、那么密。
+  </p>
+
+  <p>
+    顺便解释一个常见困惑：<em>为什么显卡插在 ×4 的插槽里也能亮，但性能掉一半？</em>
+    因为通道数少了，每条 lane 的速率没变，总带宽就只剩四分之一。
+    显卡还能工作，只是喂不饱。
+  </p>
+
+  <h3>通道还能拆开卖</h3>
+
+  <p>
+    ×16 的插槽不必真的跑 16 条通道。主板和 CPU 支持一种叫
+    <strong>拆分</strong>（bifurcation）的功能：
+    把一条 ×16 切成 ×8+×8，或者 ×4×4×4×4。
+  </p>
+
+  <p>
+    这在服务器上很常见：一个 ×16 槽插四块 ×4 的网卡或加速卡，
+    比插一块显卡有用得多。消费级主板上则是
+    「插第二块显卡时，两条槽各跑 ×8」。
+    <em>BIOS 里那个「PCIe Bifurcation」选项，就是干这个的。</em>
+  </p>
+
+  <p>
+    不同用途需要的通道数差别很大，可以看这张表：
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>设备</th><th class="c">典型通道</th><th>为什么</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>显卡</td><td class="c">×16</td><td>每帧要搬几百 MB 的纹理和顶点</td></tr>
+      <tr><td>固态硬盘</td><td class="c">×4</td><td>已经能跑 7 GB/s，再多也用不上</td></tr>
+      <tr><td>万兆网卡</td><td class="c">×4</td><td>10 Gbps 只要 ×1 就够，留余量</td></tr>
+      <tr><td>声卡</td><td class="c">×1</td><td>音频数据量极小</td></tr>
+      <tr><td>USB 扩展卡</td><td class="c">×2 – ×4</td><td>几个 USB 口共享上行带宽</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    有意思的是<strong>通道数和实际占用往往不匹配</strong>。
+    一块显卡占着 ×16，实际跑游戏时可能只用了三成带宽；
+    而一块 ×1 的声卡，反而因为延迟敏感而更在意「直连还是过 PCH」。
+    <em>通道数是上限，不是消耗。</em>
+  </p>
+
+  <h2 id="p4"><span class="h2num">0.2.2-4</span>PCIe 的四代：编码换了三次</h2>
+
+  <p>
+    PCIe 每一代的速率翻倍，但「翻倍」这件事不是简单地把频率乘二。
+    每两代就要换一次编码方式，因为铜线快撑不住了。
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>版本</th><th class="c">单 lane 速率</th><th class="c">编码</th><th class="c">单 lane 有效</th><th class="c">×16 有效</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>PCIe 1.0</td><td class="c">2.5 GT/s</td><td class="c">8b/10b</td><td class="c">250 MB/s</td><td class="c">4 GB/s</td></tr>
+      <tr><td>PCIe 2.0</td><td class="c">5 GT/s</td><td class="c">8b/10b</td><td class="c">500 MB/s</td><td class="c">8 GB/s</td></tr>
+      <tr><td>PCIe 3.0</td><td class="c">8 GT/s</td><td class="c">128b/130b</td><td class="c">985 MB/s</td><td class="c">15.75 GB/s</td></tr>
+      <tr><td>PCIe 4.0</td><td class="c">16 GT/s</td><td class="c">128b/130b</td><td class="c">1.97 GB/s</td><td class="c">31.5 GB/s</td></tr>
+      <tr><td>PCIe 5.0</td><td class="c">32 GT/s</td><td class="c">128b/130b</td><td class="c">3.94 GB/s</td><td class="c">63 GB/s</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    注意「GT/s」这个单位：它是<strong>每秒传输次数</strong>，不是每秒比特数。
+    8b/10b 编码时，一次传输只带 8 位有效数据；128b/130b 时，一次带 128 位。
+  </p>
+
+  <p>
+    所以 1.0 的 2.5 GT/s × 8 ÷ 10 = 2 Gbps = 250 MB/s。
+    3.0 的 8 GT/s × 128 ÷ 130 = 7.88 Gbps = 985 MB/s。
+    <em>频率只涨了 3.2 倍，有效带宽涨了 3.9 倍——因为编码效率提高了。</em>
+  </p>
+
+  <p>
+    为什么 3.0 要换编码？8b/10b 的 20% 开销在低频时无所谓，
+    到 8 GT/s 时那就是白扔 1.6 Gbps。128b/130b 只加 2 位做同步头，开销降到 1.5%。
+    <strong>同样的铜线，多榨出 18% 的带宽。</strong>
+  </p>
+
+  <h3>6.0 换了另一条路：用四个电平代替两个</h3>
+
+  <p>
+    前面五代都在「提频率」这条路上走。到 5.0 的 32 GT/s，
+    铜线已经快到极限了——再往上提，信号还没到对面就衰减没了。
+  </p>
+
+  <p>
+    PCIe 6.0 换了个办法：<strong>PAM4</strong>。
+    原来的信号只有高低两个电平（一个周期传 1 位），
+    现在用四个电平（一个周期传 2 位）。
+    <em>频率不变，带宽翻倍。</em>
+  </p>
+
+  <p>
+    代价是<strong>信噪比</strong>。四个电平挤在同样的电压范围里，
+    每一级之间的差距只有原来的三分之一。
+    接收端要分辨这么小的差别，误码率会上升。
+  </p>
+
+  <p>
+    所以 6.0 加了一套<strong>前向纠错</strong>（FEC）：
+    发送端额外加一些校验位，接收端自己纠正错误，不用重传。
+    <em>纠错要花时间，所以 6.0 的延迟反而比 5.0 高一点——
+    这是「用延迟换带宽」的一次交易。</em>
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>版本</th><th class="c">调制</th><th class="c">纠错</th><th class="c">×16 有效</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>PCIe 4.0</td><td class="c">NRZ 两电平</td><td class="c">重传</td><td class="c">31.5 GB/s</td></tr>
+      <tr><td>PCIe 5.0</td><td class="c">NRZ 两电平</td><td class="c">重传</td><td class="c">63 GB/s</td></tr>
+      <tr><td>PCIe 6.0</td><td class="c">PAM4 四电平</td><td class="c">FEC + 重传</td><td class="c">121 GB/s</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>为什么 4.0 之后主板变贵了</h3>
+
+  <p>
+    速率翻倍不只是「芯片快一点」。信号在 PCB 上跑，
+    频率越高衰减越快，而且衰减是<strong>按长度指数增长</strong>的。
+  </p>
+
+  <p>
+    PCIe 3.0 时代，主板走线可以拉到 20 厘米不用管。
+    到 4.0，同样的线就快撑不住了；到 5.0，超过 10 厘米就要想办法。
+    办法有三个，一个比一个贵：
+  </p>
+
+  <ul>
+    <li><strong>换板材。</strong>普通 FR-4 的介电损耗大，换成低损耗材料（如 Megtron），成本翻倍。</li>
+    <li><strong>加层数。</strong>把信号层夹在两层地之间，减少辐射和串扰。8 层变 12 层。</li>
+    <li><strong>加中继芯片（retimer）。</strong>在走线中间插一颗芯片，把信号重新整形再发出去。</li>
+  </ul>
+
+  <p>
+    服务器主板上那些小方块（retimer），一颗几十美元。
+    <em>这就是为什么「支持 PCIe 5.0」的主板贵得不讲道理——贵在板材和这些芯片上，不在插槽。</em>
+  </p>
+
+  <p>
+    还有一个隐性代价：<strong>走线必须等长</strong>。
+    16 条 lane、64 根线，每一根的长度误差要控制在毫米级，
+    否则信号到达时间不一致，接收端采样就错。
+    <em>主板设计里最耗时间的环节之一，就是给这些线「绕等长」。</em>
+  </p>
+
+  <div class="warn">
+    <b>「PCIe 4.0 的硬盘比 3.0 快一倍」这句话要打折。</b>
+    接口带宽确实翻倍，但硬盘主控和闪存颗粒的速度才是瓶颈。
+    很多标 PCIe 4.0 的固态，实际读写只有 5000 MB/s，
+    离接口上限 31.5 GB/s 差得远——<em>它只是「用了 4.0 的接口」，不代表跑满了。</em>
+  </div>
+
+  <h2 id="p5"><span class="h2num">0.2.2-5</span>插槽里的针，真正干活的不到一半</h2>
+
+  <p>
+    拿起一块主板看那条最长的插槽，数一下针脚：<strong>164 根</strong>（两面各 82）。
+    但数据线只有 64 根（×16 的 16 条 lane × 4）。
+    剩下 100 根在干什么？
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>用途</th><th class="c">大约几根</th><th>干什么</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>数据（TX/RX）</td><td class="c">64</td><td>16 条 lane，每条两对差分</td></tr>
+      <tr><td>地</td><td class="c">40 多</td><td>每条 lane 之间隔地，防串扰</td></tr>
+      <tr><td>供电</td><td class="c">10 左右</td><td>12V 和 3.3V，给卡供电</td></tr>
+      <tr><td>参考时钟</td><td class="c">2</td><td>一对 100 MHz 差分时钟，所有 lane 共用</td></tr>
+      <tr><td>边带信号</td><td class="c">10 多</td><td>复位、唤醒、存在检测、调试、管理总线</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    有两组特别值得说：
+  </p>
+
+  <p>
+    <strong>参考时钟（REFCLK）。</strong>一对 100 兆赫的差分时钟，送到插槽里所有设备。
+    接收端靠它来采样。<em>这也是为什么 PCIe 对时钟质量极其敏感——
+    时钟抖一点，32 GT/s 的信号就采不准。</em>
+  </p>
+
+  <p>
+    <strong>存在检测（PRSNT）。</strong>插槽里有两根针是短接的，
+    卡插进去就把它们连上，主板据此知道「这个槽里有卡」。
+    这是最便宜的「有没有插」检测——<em>比软件去问一遍快得多，也可靠得多。</em>
+  </p>
+
+  <h3>M.2：把 PCIe 做成一条口香糖</h3>
+
+  <p>
+    固态硬盘现在长得像一片口香糖，插在主板的一个小槽里。
+    那个槽叫 <strong>M.2</strong>，本质上是「PCIe 的另一种物理形态」。
+  </p>
+
+  <p>
+    M.2 的出现是为了解决一个具体问题：2.5 英寸硬盘盒太大了，
+    笔记本塞不进去。于是把 PCIe 的四条通道直接引到一块小板上，
+    去掉外壳、去掉接口转换芯片，只留一颗闪存和一颗主控。
+    <em>体积缩到十分之一，速度反而更快（因为少了一道 SATA 桥接）。</em>
+  </p>
+
+  <p>
+    M.2 有一个很容易踩的坑：<strong>它有两种「钥匙」（key）</strong>。
+    接口上的缺口位置不同，决定了它能插什么：
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>缺口</th><th class="c">引脚</th><th>能跑什么</th><th>常见于</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>B key</td><td class="c">6 针</td><td>PCIe ×2 或 SATA</td><td>老款固态、WWAN 网卡</td></tr>
+      <tr><td>M key</td><td class="c">5 针</td><td>PCIe ×4（最快）</td><td>绝大多数 NVMe 固态</td></tr>
+      <tr><td>B+M key</td><td class="c">两个缺口</td><td>两种都能插，但只跑 PCIe ×2</td><td>便宜的兼容型固态</td></tr>
+      <tr><td>A/E key</td><td class="c">另一端</td><td>PCIe ×1 + USB</td><td>无线网卡</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    买固态前要确认两件事：<strong>主板这个槽支持 PCIe 还是 SATA、是 ×4 还是 ×2</strong>。
+    买错了插得进去但不认，或者速度只有一半。
+    <em>「M.2 接口」这四个字不保证速度——它只是个形状。</em>
+  </p>
+
+  <h3>那 75 瓦是怎么来的</h3>
+
+  <p>
+    插槽不只传数据，还要供电。PCIe 规范给插槽定的上限是
+    <strong>75 瓦</strong>，算法很直接：
+  </p>
+
+  <p>
+    3.3 伏那一路给 3 安（9.9 瓦），12 伏那一路给 5.5 安（66 瓦），
+    加起来 75.9 瓦，取整 75 瓦。
+  </p>
+
+  <p>
+    这个数字在 2003 年够用——当时的显卡功耗只有二三十瓦。
+    但显卡很快就不够了，于是有了<strong>外接供电</strong>：
+    6 针给 75 瓦，8 针给 150 瓦，12VHPWR 给 600 瓦。
+    <em>插槽的 75 瓦从此变成一个零头。</em>
+  </p>
+
+  <p>
+    服务器卡更夸张。有些加速卡要 300 瓦，靠专门的辅助供电接口（EPS 或专用端子）。
+    <strong>所以看一块卡要多少电，不能只看插槽规格，要看它有几个供电口。</strong>
+  </p>
+
+  <p>
+    顺带说一个安全设计：那几根供电针的<strong>长度不一样</strong>。
+    插入时地先接触、电后接触；拔出时电先断、地后断。
+    <em>这是为了让插拔瞬间的浪涌有一个安全的路径，不至于打火。</em>
+    显卡金手指上那些长短不一的针，就是这个道理。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/0.2.2-2-pcie-slot.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.2.2-2-pcie-slot.svg" alt="PCIe ×16 插槽的针脚分配：数据、地、供电、时钟、边带信号"></a>
+    <figcaption><b>图 0.2.2-2</b>　164 根针，真正传数据的只有 64 根。地比数据还多——这不是浪费，是让每条 lane 互不干扰的代价。</figcaption>
+  </figure>
+
+  <h2 id="p6"><span class="h2num">0.2.2-6</span>HDMI：三对线灌一路视频</h2>
+
+  <p>
+    从 PCIe 转到视频线，会发现一个巨大的反差：
+    <strong>HDMI 只有 19 根针，其中传数据的三对、传时钟的一对。</strong>
+  </p>
+
+  <p>
+    为什么这么少？因为视频是<strong>单向</strong>的。
+    播放器（显卡、机顶盒）只需要往屏幕灌数据，屏幕几乎不往回传东西。
+    不需要双向，就不需要两套收发线。
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>线对</th><th>传什么</th><th class="c">速率</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>TMDS 数据 0</td><td>蓝、以及行场同步</td><td class="c">最高约 6 Gbps</td></tr>
+      <tr><td>TMDS 数据 1</td><td>绿</td><td class="c">同上</td></tr>
+      <tr><td>TMDS 数据 2</td><td>红</td><td class="c">同上</td></tr>
+      <tr><td>TMDS 时钟</td><td>采样时钟</td><td class="c">数据率的 1/10</td></tr>
+      <tr><td>CEC / DDC / +5V</td><td>遥控联动、读显示器参数、供电</td><td class="c">很慢</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    这套方案叫 <strong>TMDS</strong>（最小化传输差分信号）。它的做法是：
+    把每个像素的 24 位颜色拆成三份，每份 8 位，分别从三对线上送出去，
+    再各自做 8b/10b 编码。
+  </p>
+
+  <p>
+    所以一个像素＝三个通道各传 8 位。<em>这就是为什么早期 HDMI 的「深色」模式
+    （10 位、12 位）会让带宽吃紧——每个通道要传更多位。</em>
+  </p>
+
+  <p>
+    还有一条线值得提：<strong>DDC</strong>（显示数据通道），本质是一路 I²C。
+    显卡通过它读显示器的 EDID——一张表，写着「我支持哪些分辨率、哪些刷新率、多大尺寸」。
+    <strong>插上显示器后系统能正确识别型号、给出合适的分辨率，靠的就是这条慢速的线。</strong>
+  </p>
+
+  <div class="note">
+    <b>一个经典故障：</b>开机黑屏、分辨率不对、显示器型号显示成「通用即插即用监视器」。
+    八成是 DDC 读失败——那一对线接触不良，或者线材省了这两根。
+    <em>HDMI 线里最容易被偷工减料的，就是这根不传画面的线。</em>
+  </div>
+
+  <h3>它其实是 DVI 的弟弟</h3>
+
+  <p>
+    HDMI 不是凭空发明的。它的电气部分几乎照搬了 <strong>DVI</strong>：
+    同样的 TMDS、同样的三对数据加一对时钟、同样的 8b/10b。
+  </p>
+
+  <p>
+    DVI 在 1999 年出现，只传视频。HDMI 在 2003 年出现，
+    做了三件事：<strong>把音频塞进去、把接口缩小、加了 CEC</strong>。
+    <em>所以一个 DVI 转 HDMI 的无源转接头，几块钱就能用——
+    因为它们说的本来就是同一种电信号。</em>
+  </p>
+
+  <p>
+    这也解释了一个老现象：早期的 HDMI 设备兼容性问题特别多。
+    因为「HDMI 认证」当时不严，很多线材只按 DVI 的标准做，
+    带宽不够、DDC 线偷工减料，接上就黑屏。
+    <em>DVI 时代没暴露的问题，在 HDMI 上全暴露了——因为 HDMI 还多了音频和内容保护。</em>
+  </p>
+
+  <h3>那根慢线上的两个功能：CEC 和 ARC</h3>
+
+  <p>
+    HDMI 有一根针专门做「设备互相指挥」，叫 <strong>CEC</strong>。
+    它是一根单线、低速、共享的总线，所有接在 HDMI 上的设备都挂在上面。
+  </p>
+
+  <p>
+    CEC 最日常的用处：<strong>用电视遥控器控制机顶盒</strong>。
+    按一下电视遥控的「音量」，电视发一条 CEC 消息「音量加」，
+    机顶盒或功放收到就跟着调。
+    <em>或者反过来：打开机顶盒，电视自动开机并切到对应输入。</em>
+  </p>
+
+  <p>
+    这根线的带宽极低（几百比特每秒），但够用——因为传的只是
+    「开机」「切换输入」「调音量」这样的短命令。
+    <strong>它是「设备之间用一根线互相通知」这个想法最早的家用实现。</strong>
+  </p>
+
+  <p>
+    另一个功能叫 <strong>ARC</strong>（音频回传通道）。它的作用是：
+    <em>让电视把声音「送回」功放。</em>
+  </p>
+
+  <p>
+    为什么需要回传？因为视频源（比如电视内置的流媒体 App）在电视这边，
+    声音却想让功放来放。没有 ARC，就得再拉一根光纤或同轴。
+    有 ARC，一根 HDMI 就够——视频往电视走，声音往功放走。
+  </p>
+
+  <p>
+    HDMI 2.1 把 ARC 升级成 <strong>eARC</strong>，带宽从 1 Mbps 提到 37 Mbps，
+    能传无损的杜比全景声。
+    <em>代价是它要用到那对「以太网/音频回传」针，所以老线不一定支持。</em>
+  </p>
+
+  <div class="note">
+    <b>一个常见故障：</b>接了功放，电视有画面没声音，或者声音和画面不同步。
+    先检查是不是插在了正确的 HDMI 口上——<strong>带 ARC 标记的那个口通常是唯一的</strong>。
+    再看 CEC 有没有被某个设备的「联动控制」开关关掉。
+  </div>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/0.2.2-3-hdmi.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.2.2-3-hdmi.svg" alt="HDMI 的 19 根针与 TMDS 三通道加时钟的结构"></a>
+    <figcaption><b>图 0.2.2-3</b>　三对线传 RGB，一对线传时钟。像素被拆成三份并行送出去——这就是为什么视频线可以比数据线少这么多针。</figcaption>
+  </figure>
+
+  <h2 id="p7"><span class="h2num">0.2.2-7</span>4K60 到底要多少带宽：算一遍就懂</h2>
+
+  <p>
+    显示器广告上写「4K60」，线材广告上写「18 Gbps」「48 Gbps」。
+    这两个数对不对得上？算一遍就知道，而且能顺便解释为什么有些线插上就黑屏。
+  </p>
+
+  <p>
+    第一步，算有效像素：3840 × 2160 = <strong>829 万</strong>像素。
+  </p>
+
+  <p>
+    第二步，乘刷新率：829 万 × 60 = 每秒 <strong>4.98 亿</strong>像素。
+  </p>
+
+  <p>
+    第三步，乘每像素的位数：8 位 RGB 是 24 位，4.98 亿 × 24 ≈ <strong>11.9 Gbps</strong>。
+  </p>
+
+  <p>
+    到这里还没完。真实的视频信号里，每一行、每一帧都有「消隐期」——
+    一段不传像素的时间，留给电子束回扫（CRT 时代留下的规矩，液晶时代还保留着）。
+    4K60 的标准时序是 4400 × 2250，比有效像素多出约 18%。
+  </p>
+
+  <p>
+    所以实际是 4400 × 2250 × 60 × 24 ≈ <strong>14.3 Gbps</strong>。
+    再乘上 TMDS 的 8b/10b 编码开销（×1.25）：
+    <strong>17.8 Gbps</strong>。
+  </p>
+
+  <p>
+    HDMI 2.0 的带宽是 <strong>18 Gbps</strong>。
+    <em>刚好够，一点余量都没有。</em>
+  </p>
+
+  <p>
+    这个「刚好」解释了很多事：
+  </p>
+
+  <ul>
+    <li>为什么 4K60 开 HDR（10 位色）就掉到 30 Hz——位数从 24 涨到 30，带宽涨 25%，18 Gbps 不够了。</li>
+    <li>为什么有些「支持 4K60」的线实际只能跑 4K30——线材带宽不够，协商时自动降级。</li>
+    <li>为什么 HDMI 2.1 要跳到 48 Gbps——4K120 需要 35 Gbps，8K60 需要 71 Gbps（得靠 DSC 压缩）。</li>
+  </ul>
+
+  <h3>一个能省一半带宽的技巧：色度抽样</h3>
+
+  <p>
+    上面算的是「每个像素 24 位」的最坏情况。但人眼有个特点：
+    <strong>对亮度极敏感，对颜色极不敏感。</strong>
+  </p>
+
+  <p>
+    所以视频编码会把颜色信息「降采样」：
+    亮度每个像素都记，颜色每两个像素记一次。
+    这叫 <strong>4:2:2</strong>（水平减半），更狠的是 <strong>4:2:0</strong>（横竖都减半）。
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>格式</th><th class="c">每像素平均位数</th><th class="c">相对带宽</th><th>用在哪</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>4:4:4</td><td class="c">24</td><td class="c">100%</td><td>文字、桌面、专业调色</td></tr>
+      <tr><td>4:2:2</td><td class="c">16</td><td class="c">67%</td><td>摄像机录制</td></tr>
+      <tr><td>4:2:0</td><td class="c">12</td><td class="c">50%</td><td>电影、流媒体、游戏机</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    这一省就是一半。所以 4K60 用 4:2:0 只需要 8.9 Gbps——
+    <em>HDMI 1.4 的 10.2 Gbps 理论上够，但 1.4 的规范只写到 4K30，
+    所以实际能不能跑要看设备。</em>
+  </p>
+
+  <p>
+    代价也很具体：<strong>红蓝边缘会出现彩边</strong>。
+    因为颜色分辨率只有亮度的一半，一个红色的字在白色背景上，
+    边缘的颜色是「糊」的。
+    <em>这就是为什么接电视当显示器时，文字总不如显示器锐利——
+    电视默认按 4:2:0 处理，PC 模式才会切回 4:4:4。</em>
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>分辨率与刷新率</th><th class="c">8 位所需</th><th class="c">10 位所需</th><th>最低接口</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1080p60</td><td class="c">4.5 Gbps</td><td class="c">5.6 Gbps</td><td>HDMI 1.4</td></tr>
+      <tr><td>1440p60</td><td class="c">7.9 Gbps</td><td class="c">9.9 Gbps</td><td>HDMI 1.4</td></tr>
+      <tr><td>4K30</td><td class="c">8.9 Gbps</td><td class="c">11.1 Gbps</td><td>1.4 / DP 1.2</td></tr>
+      <tr><td>4K60</td><td class="c">17.8 Gbps</td><td class="c">22.3 Gbps</td><td>HDMI 2.0 / 2.1</td></tr>
+      <tr><td>4K120</td><td class="c">35.6 Gbps</td><td class="c">44.5 Gbps</td><td>HDMI 2.1</td></tr>
+      <tr><td>8K60</td><td class="c">71.3 Gbps</td><td class="c">89.1 Gbps</td><td>2.1 + DSC</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    表里所有数字都可以用同一个公式复现：
+    <strong>水平总像素 × 垂直总行数 × 刷新率 × 位数 ÷ 0.8</strong>
+    （最后那个 0.8 是 8b/10b 的效率）。
+  </p>
+
+  <p>
+    这也解释了「为什么 8K 必须压缩」。8K60 10 位要 89 Gbps，
+    而 HDMI 2.1 只有 48 Gbps。<em>差的那一半，靠 DSC（显示流压缩）补上——
+    一种「视觉无损」的实时压缩，压缩比大约 3:1。</em>
+  </p>
+
+  <h2 id="p8"><span class="h2num">0.2.2-8</span>DisplayPort：为什么它更像网络</h2>
+
+  <p>
+    DisplayPort（DP）和 HDMI 干的是同一件事：把画面送到屏幕上。
+    但它的内部设计思路完全不同，而且更「现代」。
+  </p>
+
+  <p>
+    最大的区别是：<strong>DP 把视频打成包。</strong>
+    HDMI 的 TMDS 是「按像素流」传的——每一行、每一个像素有固定位置，
+    少一个就错位。DP 更像网络：画面被切成一个个数据包，包上带地址和序号，
+    接收端收到再拼起来。
+  </p>
+
+  <p>
+    这个改动带来三个能力：
+  </p>
+
+  <p>
+    <strong>一、多流（MST）。</strong>一条 DP 线可以同时送几路独立的画面。
+    一台笔记本用一根线接显示器 A，A 再从自己的 DP 口接显示器 B——
+    <em>两块屏显示不同的内容，因为它们各自有「地址」。</em>
+    HDMI 做不到这件事（HDMI 1.4 之后有个以太网通道，但不是干这个的）。
+  </p>
+
+  <p>
+    <strong>二、动态分配。</strong>一条 DP 线的总带宽是固定的（比如 32.4 Gbps），
+    但怎么分给几路视频、分给 USB 数据，可以谈。
+    <em>这和 PCIe 的「固定车道」又不一样，更像网络里的带宽调度。</em>
+  </p>
+
+  <p>
+    <strong>三、双向。</strong>DP 有一条独立的辅助通道（AUX），
+    速率不高但可以双向通信：读显示器的 EDID、调亮度、传触控数据。
+    HDMI 的 DDC 只能读，CEC 只能传很简单的遥控命令。
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th></th><th>HDMI</th><th>DisplayPort</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>传输方式</td><td>按像素流（TMDS）</td><td>打包（微包）</td></tr>
+      <tr><td>多显示器</td><td>一个口一块屏</td><td>MST 菊花链，一个口多块屏</td></tr>
+      <tr><td>双向通道</td><td>DDC 读参数，CEC 简单控制</td><td>AUX 双向，可传触控与固件</td></tr>
+      <tr><td>授权费</td><td>要交</td><td>免版税</td></tr>
+      <tr><td>主要阵地</td><td>电视、投影、游戏机</td><td>显示器、显卡、笔记本</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    DP 免版税，这是它能在 PC 领域站稳的关键。
+    <em>和 USB 赢火线是同一个道理：便宜的那一个赢。</em>
+  </p>
+
+  <h3>DP Alt Mode：Type-C 怎么把视频送出去</h3>
+
+  <p>
+    现在的笔记本只有一个 Type-C 口，既能充电又能接显示器。
+    这件事怎么做到的？靠 <strong>Alt Mode</strong>（交替模式）。
+  </p>
+
+  <p>
+    Type-C 里有四对超速线。默认它们归 USB 3.x 用。
+    但插上一个「支持 DP」的设备后，双方在 CC 线上谈一句：
+    <em>「我们要不要改用途？」</em>
+    谈成了，这四对线就重新分配：
+  </p>
+
+  <ul>
+    <li><strong>4 lane 全给 DP：</strong>能跑 4K120，但 USB 只剩 2.0 速度。</li>
+    <li><strong>2 lane 给 DP、2 lane 给 USB：</strong>4K60 + USB 3.0，最常见的折中。</li>
+    <li><strong>只给 1 lane：</strong>勉强 4K30，通常是线材或设备能力不足。</li>
+  </ul>
+
+  <p>
+    这就是为什么<strong>同一根 Type-C 转 DP 线，插不同电脑出来的分辨率不一样</strong>——
+    不是线的问题，是主机愿意分几条 lane 给视频。
+    <em>「我的笔记本接 4K 只能 30Hz」，八成是只谈到了 2 lane 甚至 1 lane。</em>
+  </p>
+
+  <p>
+    除了 DP，Type-C 还支持别的 Alt Mode：
+    <strong>雷电</strong>（PCIe + DP + USB 全都要）、
+    <strong>HDMI</strong>（较少见，需要额外芯片）、
+    <strong>MHL</strong>（手机视频输出，已基本淘汰）。
+    <em>一个口能变出这么多花样，是因为那四对线本来就是「通用」的。</em>
+  </p>
+
+  <h2 id="p9"><span class="h2num">0.2.2-9</span>网口：八根线，百兆只用四根</h2>
+
+  <p>
+    网口（RJ45）里有八根线，分成四对。但如果你做过网线，
+    会记得一个奇怪的事：<strong>百兆只需要接四根。</strong>
+  </p>
+
+  <p>
+    这不是偷懒，是历史。
+  </p>
+
+  <p>
+    最早的以太网（10BASE-T）只用两对：一对发、一对收。
+    百兆（100BASE-TX）沿用这个规矩，还是两对。
+    针脚是 1-2 和 3-6——注意 3-6 不是相邻的，中间隔了 4-5，
+    这是为了迁就老电话线的接线方式。
+  </p>
+
+  <p>
+    到千兆（1000BASE-T），四对全用上了。但它用了一个很聪明的办法：
+    <strong>每一对都同时收发。</strong>
+  </p>
+
+  <p>
+    同一对线上，两边的设备同时发信号，怎么分得开？
+    靠<strong>回波消除</strong>：每个设备都知道自己刚发了什么，
+    从接收到的混合信号里减掉自己发的那部分，剩下的就是对方的。
+    <em>这需要相当强的信号处理能力，也是千兆网卡比百兆贵的原因。</em>
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>标准</th><th class="c">用几对</th><th class="c">每对速率</th><th>怎么做到的</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>10BASE-T</td><td class="c">2</td><td class="c">10 Mbps</td><td>一对发、一对收</td></tr>
+      <tr><td>100BASE-TX</td><td class="c">2</td><td class="c">100 Mbps</td><td>还是两对，速率提高</td></tr>
+      <tr><td>1000BASE-T</td><td class="c">4</td><td class="c">250 Mbps ×2 方向</td><td>四对全用，每对双向（回波消除）</td></tr>
+      <tr><td>10GBASE-T</td><td class="c">4</td><td class="c">2.5 Gbps ×2 方向</td><td>更复杂的编码，Cat6a 以上</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    顺便解释一个装机时的困惑：<strong>为什么网线接错了四根，还能跑百兆？</strong>
+    因为百兆只用 1-2、3-6 这四根。剩下四根接不接都无所谓。
+    <em>但一旦升到千兆，那四根就成了瓶颈——这就是「百兆能通、千兆不通」的典型故障。</em>
+  </p>
+
+  <h3>八根线的颜色，和那个「交叉线」的传说</h3>
+
+  <p>
+    做网线要按固定顺序把八根芯压进水晶头。有两种标准：<strong>T568A 和 T568B</strong>，
+    区别只是橙色对和绿色对互换位置。现在几乎全用 B。
+  </p>
+
+  <p>
+    B 标准的顺序是：橙白、橙、绿白、蓝、蓝白、绿、棕白、棕。
+    记住一个规律：<strong>1-2 是一对（橙），3-6 是一对（绿），4-5 一对（蓝），7-8 一对（棕）。</strong>
+    引脚 3 和 6 中间隔着 4、5，这是历史遗留——当年要兼容电话线的接线方式。
+  </p>
+
+  <p>
+    老网络时代还有个「交叉线」的说法：一头按 A 做、一头按 B 做，
+    让发送对接到接收对，用于两台电脑直连。
+    <em>现在不需要了——网卡普遍支持 Auto-MDIX，会自动识别并交换收发。</em>
+    <strong>所以「交叉线」这个词，已经从必备知识变成了历史名词。</strong>
+  </p>
+
+  <p>
+    但线序做错仍然是最常见的故障：<strong>两头不一样，千兆会掉到百兆甚至不通。</strong>
+    因为千兆要求四对线同时双向工作，任何一对接反，回波消除就算不对。
+    <em>买一个几十块的测线仪，能省下几小时的排查。</em>
+  </p>
+
+  <h3>网线上的「Cat」是什么意思</h3>
+
+  <p>
+    买网线会看到 Cat5e、Cat6、Cat6a、Cat7 这些标记。
+    Cat 是「类别」（Category）的缩写，数字代表这根线能跑到多高的频率。
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>类别</th><th class="c">频率</th><th class="c">千兆最远</th><th class="c">万兆最远</th><th>结构</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Cat5e</td><td class="c">100 MHz</td><td class="c">100 m</td><td class="c">不支持</td><td>非屏蔽，四对</td></tr>
+      <tr><td>Cat6</td><td class="c">250 MHz</td><td class="c">100 m</td><td class="c">55 m</td><td>非屏蔽，中间有十字骨架</td></tr>
+      <tr><td>Cat6a</td><td class="c">500 MHz</td><td class="c">100 m</td><td class="c">100 m</td><td>更粗，常带屏蔽</td></tr>
+      <tr><td>Cat7</td><td class="c">600 MHz</td><td class="c">100 m</td><td class="c">100 m</td><td>每对单独屏蔽 + 总屏蔽</td></tr>
+      <tr><td>Cat8</td><td class="c">2000 MHz</td><td class="c">100 m</td><td class="c">30 m（25/40G）</td><td>机房短距离用</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    Cat6 里那个「十字骨架」值得看一眼：四对线中间隔一个塑料十字，
+    让它们之间的距离固定，减少相互串扰。
+    <em>这就是为什么 Cat6 比 Cat5e 硬、不好弯——里面有骨架撑着。</em>
+  </p>
+
+  <p>
+    屏蔽（STP/FTP）不是越贵越好。<strong>屏蔽线必须两端都正确接地</strong>，
+    否则屏蔽层自己变成一根天线，把干扰引进来，比不屏蔽还糟。
+    <em>家庭环境干扰不大，Cat6 非屏蔽通常比乱接的屏蔽线更稳。</em>
+  </p>
+
+  <div class="note">
+    <b>还有一个 100 米的限制。</b>双绞线的信号跑 100 米后衰减到接收端快认不出来。
+    这不是协议规定的，是物理决定的。想跑更远只有两条路：
+    中间加交换机（重新整形），或者换光纤。
+  </div>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/0.2.2-4-rj45.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.2.2-4-rj45.svg" alt="RJ45 八针的分配，以及百兆与千兆用线数量的差别"></a>
+    <figcaption><b>图 0.2.2-4</b>　八根针，百兆只用了 1-2 和 3-6 四根。千兆把四对全用上，还让每一对同时收发——靠回波消除把自己发的声音减掉。</figcaption>
+  </figure>
+
+  <h2 id="p10"><span class="h2num">0.2.2-10</span>网口里的变压器：为什么能热插拔、能扛雷</h2>
+
+  <p>
+    拆开一个网口，紧挨着 RJ45 插座会看到一个小方块，
+    上面绕着几圈铜线——那是<strong>网络变压器</strong>。
+    它是网口和主板芯片之间唯一的通道，也是这个接口最被低估的零件。
+  </p>
+
+  <p>
+    变压器在电路里的作用，一句话：<strong>让信号过去，不让电压过去。</strong>
+  </p>
+
+  <p>
+    两边各有一个线圈，中间没有电气连接，只有磁耦合。
+    交流的数据信号可以通过磁场传过去，
+    而两边的<strong>直流电位差</strong>被彻底隔断。
+  </p>
+
+  <p>
+    这一条隔离，解决了三个大问题：
+  </p>
+
+  <p>
+    <strong>一、地电位差。</strong>你的电脑和楼下的交换机，各自接在不同的插座上，
+    两个「地」之间可能有几伏甚至几十伏的电位差。
+    如果没有隔离，这个电压差会形成电流，顺着网线烧掉网卡。
+    <em>变压器把这个回路切断了。</em>
+  </p>
+
+  <p>
+    <strong>二、雷击与浪涌。</strong>网线是家里最长的「天线」，
+    一头在室内，一头可能拉到楼外。雷击在附近时，线上会感应出上千伏的尖峰。
+    变压器的隔离耐压通常做到 <strong>1500 伏</strong>，扛得住大部分感应雷。
+    <em>所以打雷时拔网线是真有用，不是迷信。</em>
+  </p>
+
+  <p>
+    <strong>三、热插拔。</strong>插网线的瞬间，两边的地电位可能不一样，
+    接触的一刹那会有火花。有变压器隔着，这个火花到不了芯片。
+    <em>同理，USB 能热插拔也是因为它有专门的保护电路——只是做法不同。</em>
+  </p>
+
+  <p>
+    变压器旁边通常还有一个<strong>共模扼流圈</strong>：
+    两股线同向绕在一个磁环上，差模信号（有用数据）磁场抵消，不受影响；
+    共模噪声（两根线同向的干扰）磁场叠加，被电感挡住。
+    <em>这和上一节讲的差分是配套的两件事：差分抗干扰，扼流圈滤干扰。</em>
+  </p>
+
+  <h3>PoE：网线怎么同时送电</h3>
+
+  <p>
+    监控摄像头、无线 AP、IP 电话，很多只拉一根网线就工作了——
+    电和数据都从这根线来。这套技术叫 <strong>PoE</strong>（以太网供电）。
+  </p>
+
+  <p>
+    它是怎么在不干扰数据的情况下送电的？答案是<strong>用共模电压</strong>。
+  </p>
+
+  <p>
+    数据信号是「差分」的——两根线上的电压差。
+    供电是「共模」的——两根线同时抬高 48 伏。
+    变压器的中心抽头把直流引出来，信号部分照常通过。
+    <em>一个走差值，一个走平均值，两者互不干扰。</em>
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>标准</th><th class="c">供电端功率</th><th class="c">设备端可用</th><th>典型设备</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>802.3af（PoE）</td><td class="c">15.4 W</td><td class="c">12.95 W</td><td>普通摄像头、IP 电话</td></tr>
+      <tr><td>802.3at（PoE+）</td><td class="c">30 W</td><td class="c">25.5 W</td><td>云台摄像头、Wi-Fi 6 AP</td></tr>
+      <tr><td>802.3bt Type 3</td><td class="c">60 W</td><td class="c">51 W</td><td>大功率 AP、显示屏</td></tr>
+      <tr><td>802.3bt Type 4</td><td class="c">100 W</td><td class="c">71 W</td><td>笔记本底座、电视</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    注意「供电端」和「设备端」差的那几瓦——那是 100 米网线上的损耗。
+    <em>和 USB 的压降是同一回事，只是这里电压高（48 伏），损耗小得多。</em>
+  </p>
+
+  <p>
+    还有一个很聪明的安全设计：<strong>先检测，再供电</strong>。
+    交换机不会一插上就给 48 伏，而是先加一个很小的电压，
+    测一下有没有一个 25 千欧的「签名电阻」。
+    有，才认定对面是 PoE 设备，逐步升压。
+    <em>这样把一台普通电脑插上去，不会被 48 伏烧掉。</em>
+  </p>
+
+  <div class="key">
+    <b>一句话记住：</b>网口能跑一百米、能热插拔、能扛雷，
+    靠的不是协议，是那个不起眼的小方块。
+    <em>它把「电」和「信号」分开了。</em>
+  </div>
+
+  <h2 id="p11"><span class="h2num">0.2.2-11</span>雷电：一根线里塞三种协议</h2>
+
+  <p>
+    最后回到那个「一根线通吃」的问题：雷电（Thunderbolt）和 USB4
+    怎么做到同时传视频、传文件、还充电？
+  </p>
+
+  <p>
+    答案是<strong>时间切片 + 隧道化</strong>。
+    40 Gbps 的总带宽不是给某一种协议专用的，
+    而是切成很小的时间片，按需分给三股数据流。
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>数据类型</th><th>本质是什么</th><th>怎么传</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>文件读写</td><td>PCIe 事务</td><td>打包成 PCIe 隧道</td></tr>
+      <tr><td>视频输出</td><td>DisplayPort 流</td><td>打包成 DP 隧道</td></tr>
+      <tr><td>USB 设备</td><td>USB 事务</td><td>走 USB 隧道或原生 USB</td></tr>
+      <tr><td>供电</td><td>PD 协商</td><td>走 CC 线，不占总带宽</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    关键在于「<strong>隧道</strong>」这个词。它不是把三种信号混在一起传，
+    而是把每种协议的包<strong>原样装进一个大信封</strong>，
+    信封上写着「这是 PCIe 的」「这是 DP 的」，到对面再拆开。
+  </p>
+
+  <p>
+    这样做的好处是<strong>兼容</strong>：外接显卡、外接硬盘、外接显示器，
+    它们各自以为自己插在正常的 PCIe 槽或 DP 口上，
+    完全不知道中间隔了一层隧道。
+    <em>驱动不用改，系统不用改。</em>
+  </p>
+
+  <p>
+    代价是<strong>延迟和开销</strong>。每个包都要多一层封装，
+    隧道本身要占用一点带宽。所以雷电的「40 Gbps」，
+    实际能用来传数据的不到 32 Gbps——剩下的是封装和协议开销。
+  </p>
+
+  <p>
+    还有一个现实约束：<strong>线材</strong>。
+    40 Gbps 在铜线上跑，衰减极快。被动线最多 0.8 米，
+    再长就必须用「有源线」——线两端各嵌一颗芯片，把信号重新整形。
+    <em>这就是为什么一根两米的全速雷电线能卖到几百块。</em>
+  </p>
+
+  <h3>外接显卡为什么总打折</h3>
+
+  <p>
+    雷电最诱人的宣传是「笔记本外接显卡，性能接近台式」。
+    实际用起来，通常会掉 10% 到 30%。原因有三层，一层比一层根本。
+  </p>
+
+  <p>
+    <strong>第一层：通道数。</strong>雷电 3 的 PCIe 隧道是 <strong>×4</strong>，
+    不是台式机显卡的 ×16。带宽只有四分之一。
+    <em>跑分时差距不大，因为跑分是连续传大数据；玩游戏时差距明显，
+    因为游戏要频繁地小批量传指令。</em>
+  </p>
+
+  <p>
+    <strong>第二层：封装开销。</strong>每个 PCIe 包都要装进雷电的信封，
+    到对面拆开。这一装一拆要花时间，延迟从微秒级涨到十几微秒。
+    <em>对显卡来说，延迟比带宽更致命——渲染一帧要等好几轮往返。</em>
+  </p>
+
+  <p>
+    <strong>第三层：分辨率越高越明显。</strong>
+    4K 下每帧数据量大，带宽成为瓶颈；
+    1080p 下数据量小，但 CPU 提交指令更频繁，延迟成为瓶颈。
+    <em>所以「外接显卡在 1080p 掉得比 4K 更狠」这个反直觉的现象是真的。</em>
+  </p>
+
+  <div class="note">
+    <b>一条实用建议：</b>外接显卡适合「偶尔需要独显」的场景（比如轻薄本回家接上玩游戏），
+    不适合「当主力机用」。真要长期用，台式机仍然便宜又稳。
+    <em>雷电解决了「便携 + 性能」的二选一，但没有免费解决。</em>
+  </div>
+
+  <h3>为什么有些「雷电」线便宜得可疑</h3>
+
+  <p>
+    雷电是一条<strong>全链路认证</strong>的生态：主机、设备、线材，
+    三样都要过认证，才能保证 40 Gbps、双 4K、外接显卡这些功能。
+  </p>
+
+  <p>
+    没认证的线插上去会怎样？不会烧，但会<strong>静默降级</strong>：
+    协商失败，退回 USB 模式。你看到的是一根「能用的 USB 线」，
+    速度只有 5 Gbps 或 480 Mbps。
+    <em>设备管理器里看不出异常，只是「怎么这么慢」。</em>
+  </p>
+
+  <p>
+    所以买雷电线的判断方法很实在：<strong>看有没有认证标志、看标称速率、看价格</strong>。
+    40 Gbps 被动线 0.8 米，正规产品不会便宜到几十块——
+    里面的铜和屏蔽是有成本的。
+  </p>
+
+  <p>
+    还有一条容易忽略的：<strong>雷电 3 和 USB4 长得一样，但能力不同。</strong>
+    雷电 3 必须支持 40 Gbps 和 PCIe 隧道；USB4 只要求 20 Gbps，
+    40 Gbps 是可选。<em>所以「USB4 接口」不一定能外接显卡，
+    「雷电 3/4 接口」一定可以。</em>
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/0.2.2-5-thunderbolt.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.2.2-5-thunderbolt.svg" alt="雷电的隧道化结构：PCIe、DisplayPort、USB 三股数据流复用一条线"></a>
+    <figcaption><b>图 0.2.2-5</b>　三种协议各打各的包，装进同一个信封，到对面再拆开。外接显卡以为自己插在 PCIe 槽里——它不知道中间隔了一条隧道。</figcaption>
+  </figure>
+
+  <h3>把这一排口放在一张表里</h3>
+
+  <p>
+    讲完了一圈，最后用一张表收拢。这张表可以当成「看到接口不知道是什么」时的对照卡。
+  </p>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th>接口</th><th class="c">针脚</th><th class="c">单口带宽</th><th class="c">距离</th><th class="c">供电</th><th>一句话定位</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>PCIe ×16</td><td class="c">164</td><td class="c">63 GB/s（5.0）</td><td class="c">机箱内</td><td class="c">75 W + 外接</td><td>显卡的专属高速</td></tr>
+      <tr><td>USB4</td><td class="c">24</td><td class="c">40 Gbps</td><td class="c">0.8 m 被动</td><td class="c">240 W</td><td>什么都能接</td></tr>
+      <tr><td>HDMI 2.1</td><td class="c">19</td><td class="c">48 Gbps</td><td class="c">几米</td><td class="c">很小</td><td>电视标准口</td></tr>
+      <tr><td>DisplayPort 2.0</td><td class="c">20</td><td class="c">80 Gbps</td><td class="c">几米</td><td class="c">很小</td><td>显示器口，可菊花链</td></tr>
+      <tr><td>RJ45</td><td class="c">8</td><td class="c">10 Gbps</td><td class="c">100 m</td><td class="c">PoE 100 W</td><td>唯一跑百米的</td></tr>
+      <tr><td>3.5 mm 音频</td><td class="c">3–5</td><td class="c">—</td><td class="c">几米</td><td class="c">无</td><td>模拟，最可靠</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    看这张表会发现一件事：<strong>带宽和距离是一对天生的敌人。</strong>
+    PCIe 带宽最高，但只能跑 20 厘米；网口带宽最低，却能跑 100 米。
+    <em>这不是技术不够好，是物理规律：频率越高，衰减越快。</em>
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/0.2.2-6-bandwidth-distance.svg" target="_blank" rel="noopener"><img src="../../assets/img/0.2.2-6-bandwidth-distance.svg" alt="常见接口在带宽与距离两个维度上的分布，以及一条经验边界"></a>
+    <figcaption><b>图 0.2.2-6</b>　把六种接口按「多快」和「多远」画在同一张图上，它们全贴着一条斜线。这不是巧合，是铜线的物理决定的。</figcaption>
+  </figure>
+
+  <p>
+    所以「为什么不用一根线把所有东西都连起来」这个问题，答案就在这张表的对角线里：
+    <strong>你要么要带宽，要么要距离，很难同时要。</strong>
+    光纤能同时做到，但贵、不能供电、接口复杂——所以它留在了机房和长距离骨干上。
+  </p>
+
+  <h2 id="p12"><span class="h2num">0.2.2-12</span>小结与十道自测题</h2>
+
+  <p>
+    把这一节压缩成六句话：
+  </p>
+
+  <ol>
+    <li>机箱后面的口分四类：点对点（PCIe）、主从（USB）、单向流（HDMI/DP）、网络（以太网）。</li>
+    <li>PCIe 给每个设备修一条私家高速，一根 lane 是四根线（两对差分），×16 就是 64 根。</li>
+    <li>PCIe 每两代换一次编码，8b/10b 到 128b/130b，同样的铜线多榨出 18% 的带宽。</li>
+    <li>HDMI 只传单向视频，所以三对数据加一对时钟就够；4K60 8 位正好吃掉 18 Gbps。</li>
+    <li>DP 把视频打成包，所以能多流、能菊花链、能动态分配——它更像网络。</li>
+    <li>网口靠变压器隔离地电位和雷击，靠四对线全双工跑千兆，靠 100 米的物理极限定规矩。</li>
+  </ol>
+
+  <div class="key">
+    <b>下一节的入口：</b>接口讲完了「怎么连」，接下来讲「连的是什么」。
+    <strong>键盘、鼠标、显示器</strong>——这三样东西每天都在用，
+    但很少有人想过：按下一个键，到屏幕上出现一个字，中间经过了多少层。
+    下一节从一次按键开始，把这条链路完整走一遍。
+  </div>
+
+  <div class="quiz">
+    <h4>自测：能答上 8 题，这一节就算过了</h4>
+    <ol>
+      <li>PCIe 和 USB 的拓扑有什么根本区别？为什么显卡需要前者？</li>
+      <li>一根 PCIe lane 是几根线？为什么必须是这个数？</li>
+      <li>×16 的插槽有多少根针？真正传数据的有几根？</li>
+      <li>PCIe 3.0 的 8 GT/s 为什么能跑出 985 MB/s，而不是 1 GB/s？</li>
+      <li>HDMI 为什么只需要三对数据线？第四对是干什么的？</li>
+      <li>算一下 4K60 8 位需要多少带宽，为什么说 HDMI 2.0「刚好够」？</li>
+      <li>DisplayPort 的「打包」带来了哪三个 HDMI 没有的能力？</li>
+      <li>百兆网线只用四根，是哪四根？为什么千兆必须八根全接？</li>
+      <li>网络变压器解决了哪三个问题？为什么打雷时拔网线有用？</li>
+      <li>雷电的「隧道化」是什么意思？为什么外接显卡不用装特殊驱动？</li>
+    </ol>
+    <details>
+      <summary>点开看简答（先自己想，别急着点）</summary>
+      <p>
+        1. PCIe 是点对点，每个设备一条专属通道；USB 是主从共享总线。显卡要独占大带宽、不能被别人抢占，所以必须点对点。<br>
+        2. 四根：一对发送、一对接收，各是差分。全双工要求收发分开走线。<br>
+        3. 164 根（两面各 82）。数据只有 64 根，其余是地、供电、时钟、边带。<br>
+        4. 8 GT/s × 128 ÷ 130 = 7.88 Gbps ≈ 985 MB/s。128b/130b 每 128 位加 2 位同步头，开销约 1.5%。<br>
+        5. 因为视频是单向的，不需要回传。三对传 RGB，第四对传时钟（TMDS clock）。<br>
+        6. 4400 × 2250 × 60 × 24 ÷ 0.8 ≈ 17.8 Gbps。HDMI 2.0 是 18 Gbps，余量不到 1%，所以 10 位色就撑不住。<br>
+        7. 多流（MST 菊花链）、动态带宽分配、双向 AUX 通道。<br>
+        8. 1-2 和 3-6 四根。千兆要让四对全部双向收发（每对 250 Mbps ×2），少一对就掉到百兆。<br>
+        9. 隔离地电位差、隔离雷击浪涌、支持热插拔。变压器让信号靠磁场过去，直流电位过不去。<br>
+        10. 把 PCIe、DP、USB 的包各装进统一的信封传，到对面拆开。设备以为自己插在原生接口上，所以不需要特殊驱动。
+      </p>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="0.2.1-usb.html">← 0.2.1 USB</a>
+    <span class="next todo-next">0.2.3 键盘、鼠标、显示器 · 尚未动笔</span>
+  </div>
+
+</div>
+</body>
+</html>
