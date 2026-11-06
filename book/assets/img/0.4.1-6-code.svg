@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="440" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">同一段求和，两种编译结果</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">x86 一条指令干两件事，ARM 拆成两条；行数几乎一样，写法不同</text>
+
+  <!-- C -->
+  <rect x="24" y="70" width="222" height="176" rx="5" fill="#12121c" stroke="#2a2a44"/>
+  <text x="38" y="90" fill="#c8c8d4" font-size="9">C 源码</text>
+  <text x="38" y="112" fill="#d8d8e4" font-size="9" font-family="monospace">int sum(int *a, int n) {</text>
+  <text x="38" y="122" fill="#9a9ab4" font-size="9" font-family="monospace">    int s = 0;</text>
+  <text x="38" y="133" fill="#9a9ab4" font-size="9" font-family="monospace">    for (int i = 0;</text>
+  <text x="38" y="144" fill="#9a9ab4" font-size="9" font-family="monospace">         i &lt; n; i++)</text>
+  <text x="38" y="154" fill="#9a9ab4" font-size="9" font-family="monospace">        s += a[i];</text>
+  <text x="38" y="164" fill="#9a9ab4" font-size="9" font-family="monospace">    return s;</text>
+  <text x="38" y="175" fill="#d8d8e4" font-size="9" font-family="monospace">}</text>
+
+  <!-- x86 -->
+  <rect x="264" y="70" width="222" height="176" rx="5" fill="#12121c" stroke="#f0606a"/>
+  <text x="278" y="90" fill="#f0a0aa" font-size="9">x86-64（11 条）</text>
+  <text x="278" y="112" fill="#f0a0aa" font-size="9" font-family="monospace">sum:</text>
+  <text x="278" y="122" fill="#9a9ab4" font-size="9" font-family="monospace">  xor  eax, eax</text>
+  <text x="278" y="133" fill="#9a9ab4" font-size="9" font-family="monospace">  test esi, esi</text>
+  <text x="278" y="144" fill="#9a9ab4" font-size="9" font-family="monospace">  jle  .L2</text>
+  <text x="278" y="154" fill="#6b6b85" font-size="9" font-family="monospace">.L1:</text>
+  <text x="278" y="164" fill="#f0606a" font-size="9" font-family="monospace">  add  eax, [rdi]</text>
+  <text x="278" y="175" fill="#9a9ab4" font-size="9" font-family="monospace">  add  rdi, 4</text>
+  <text x="278" y="186" fill="#9a9ab4" font-size="9" font-family="monospace">  dec  esi</text>
+  <text x="278" y="196" fill="#9a9ab4" font-size="9" font-family="monospace">  jnz  .L1</text>
+  <text x="278" y="206" fill="#6b6b85" font-size="9" font-family="monospace">.L2:</text>
+  <text x="278" y="217" fill="#f0a0aa" font-size="9" font-family="monospace">  ret</text>
+
+  <!-- ARM -->
+  <rect x="504" y="70" width="232" height="176" rx="5" fill="#12121c" stroke="#4ec9a3"/>
+  <text x="518" y="90" fill="#9fe0c9" font-size="9">ARM64（12 条）</text>
+  <text x="518" y="112" fill="#9fe0c9" font-size="9" font-family="monospace">sum:</text>
+  <text x="518" y="122" fill="#9a9ab4" font-size="9" font-family="monospace">  mov  w2, wzr</text>
+  <text x="518" y="133" fill="#9a9ab4" font-size="9" font-family="monospace">  cmp  w1, 0</text>
+  <text x="518" y="144" fill="#9a9ab4" font-size="9" font-family="monospace">  b.le .L2</text>
+  <text x="518" y="154" fill="#6b6b85" font-size="9" font-family="monospace">.L1:</text>
+  <text x="518" y="164" fill="#4ec9a3" font-size="9" font-family="monospace">  ldr  w3, [x0], 4</text>
+  <text x="518" y="175" fill="#4ec9a3" font-size="9" font-family="monospace">  add  w2, w2, w3</text>
+  <text x="518" y="186" fill="#9a9ab4" font-size="9" font-family="monospace">  subs w1, w1, 1</text>
+  <text x="518" y="196" fill="#9a9ab4" font-size="9" font-family="monospace">  b.ne .L1</text>
+  <text x="518" y="206" fill="#6b6b85" font-size="9" font-family="monospace">.L2:</text>
+  <text x="518" y="217" fill="#9a9ab4" font-size="9" font-family="monospace">  mov  w0, w2</text>
+  <text x="518" y="228" fill="#9fe0c9" font-size="9" font-family="monospace">  ret</text>
+
+  <!-- 框下注解 -->
+  <text x="278" y="262" fill="#f0606a" font-size="8">add 直接读内存：一条干两件事</text>
+  <text x="518" y="262" fill="#4ec9a3" font-size="8">ldr + add：两条，但都定长</text>
+
+  <line x1="24" y1="272" x2="736" y2="272" stroke="#2a2a44"/>
+
+  <text x="24" y="294" fill="#d8d8e4" font-size="10.5">三个能看出来的差别</text>
+
+  <text x="24" y="318" fill="#e8b84b" font-size="9">一、x86 的 add 直接吃内存操作数，ARM 必须经过寄存器。所以 ARM 的循环体多一条，但每条都是定长四字节。</text>
+  <text x="24" y="340" fill="#9a9ab4" font-size="9">二、x86 用 esi 当计数器、rdi 当指针、eax 当累加器——三个变量就把 8 个寄存器用掉一小半。</text>
+  <text x="24" y="362" fill="#9a9ab4" font-size="9">三、ARM64 用了 w1、w2、w3、x0 四个，还有二十多个空着。变量一多，这个差距就会放大成「溢出到栈」。</text>
+
+  <rect x="24" y="382" width="712" height="42" rx="5" fill="#171725" stroke="#2a2a44"/>
+  <text x="38" y="400" fill="#cfc6ff" font-size="8.5">这段代码两边行数只差一条，看不出谁快谁慢——真正的差距在别处：译码器多大、每周期能送几条进流水线、</text>
+  <text x="38" y="416" fill="#cfc6ff" font-size="8.5">以及同样的活要翻转多少晶体管。指令条数只是最表面的那一层。</text>
+</svg>

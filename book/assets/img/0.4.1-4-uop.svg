@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="400" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">x86 的两层结构：外面是历史，里面是现在</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">一条复杂指令进门前，先被拆成三条简单指令——这一步叫译码</text>
+
+  <!-- x86 指令 -->
+  <rect x="40" y="100" width="140" height="44" rx="4" fill="#3a1e26" stroke="#f0606a"/>
+  <text x="110" y="118" fill="#f0a0aa" font-size="8" text-anchor="middle">x86 指令</text>
+  <text x="110" y="134" fill="#f0606a" font-size="8.5" text-anchor="middle">add [rbx], 1</text>
+  <text x="110" y="162" fill="#6b6b85" font-size="7.5" text-anchor="middle">变长 · 可直接访问内存</text>
+
+  <!-- 箭头 -->
+  <path d="M184,122 L206,122" stroke="#9a9ab4" stroke-width="1.4" marker-end="url(#e1)"/>
+  <defs>
+    <marker id="e1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M1,0.5 L6,3.5 L1,6.5 z" fill="#9a9ab4"/>
+    </marker>
+  </defs>
+
+  <!-- 译码器 -->
+  <rect x="210" y="90" width="104" height="64" rx="4" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="262" y="112" fill="#cfc6ff" font-size="9" text-anchor="middle">译码器</text>
+  <text x="262" y="128" fill="#9a9ab4" font-size="7.5" text-anchor="middle">先算长度</text>
+  <text x="262" y="142" fill="#9a9ab4" font-size="7.5" text-anchor="middle">再拆动作</text>
+
+  <!-- 箭头 -->
+  <path d="M318,122 L342,122" stroke="#9a9ab4" stroke-width="1.4" marker-end="url(#e1)"/>
+
+  <!-- 三条 uop -->
+  <rect x="346" y="82" width="150" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="421" y="98" fill="#9fd4f5" font-size="8" text-anchor="middle">uop 1：load  [rbx] → t</text>
+
+  <rect x="346" y="110" width="150" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="421" y="126" fill="#9fd4f5" font-size="8" text-anchor="middle">uop 2：add   t, 1</text>
+
+  <rect x="346" y="138" width="150" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="421" y="154" fill="#9fd4f5" font-size="8" text-anchor="middle">uop 3：store t → [rbx]</text>
+
+  <text x="421" y="72" fill="#6b6b85" font-size="7.5" text-anchor="middle">译码产物：定长 · 只碰寄存器（load/store 除外）</text>
+
+  <!-- 箭头 -->
+  <path d="M500,122 L524,122" stroke="#9a9ab4" stroke-width="1.4" marker-end="url(#e1)"/>
+
+  <!-- 执行核心 -->
+  <rect x="528" y="70" width="196" height="118" rx="4" fill="#12121c" stroke="#4a4a68"/>
+  <text x="626" y="90" fill="#9fe0c9" font-size="9" text-anchor="middle">执行核心（RISC 风格）</text>
+
+  <g fill="#20303a" stroke="#4ec9a3">
+    <rect x="546" y="102" width="40" height="24" rx="2"/>
+    <rect x="594" y="102" width="40" height="24" rx="2"/>
+    <rect x="642" y="102" width="40" height="24" rx="2"/>
+  </g>
+  <g fill="#9fe0c9" font-size="7" text-anchor="middle">
+    <text x="566" y="117">ALU</text>
+    <text x="614" y="117">ALU</text>
+    <text x="662" y="117">访存</text>
+  </g>
+  <text x="626" y="146" fill="#6b6b85" font-size="7.5" text-anchor="middle">这里和 ARM 的核心是同一套思路</text>
+  <text x="626" y="164" fill="#6b6b85" font-size="7.5" text-anchor="middle">差别在门口那道工序</text>
+
+  <!-- uop cache -->
+  <rect x="210" y="198" width="200" height="62" rx="4" fill="#20303a" stroke="#4ec9a3" stroke-dasharray="4 3"/>
+  <text x="310" y="220" fill="#9fe0c9" font-size="9" text-anchor="middle">uop cache</text>
+  <text x="310" y="236" fill="#9a9ab4" font-size="7.5" text-anchor="middle">存上次译好的 uop 序列</text>
+  <text x="310" y="250" fill="#6b6b85" font-size="7.5" text-anchor="middle">循环第二次执行时直接命中</text>
+
+  <path d="M380,196 L380,170" stroke="#4ec9a3" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#e2)"/>
+  <defs>
+    <marker id="e2" markerWidth="7" markerHeight="7" refX="3.5" refY="6" orient="auto">
+      <path d="M0.5,1 L6.5,1 L3.5,6 z" fill="#4ec9a3"/>
+    </marker>
+  </defs>
+  <text x="390" y="190" fill="#4ec9a3" font-size="8">命中就跳过译码器（80%+）</text>
+
+  <text x="40" y="238" fill="#6b6b85" font-size="8">这一整块</text>
+  <text x="40" y="254" fill="#f0606a" font-size="8">就是 x86 多付的钱</text>
+
+  <line x1="24" y1="288" x2="736" y2="288" stroke="#2a2a44"/>
+
+  <text x="24" y="310" fill="#d8d8e4" font-size="10.5">从 1995 年的 Pentium Pro 起，x86 就变成了这个样子</text>
+
+  <text x="24" y="332" fill="#e8b84b" font-size="9">所以「CISC 和 RISC 的对立」在芯片内部已经消失了：两者都在跑 RISC 风格的核心。</text>
+  <text x="24" y="352" fill="#9a9ab4" font-size="9">剩下的区别只有一处——x86 在门口多一道翻译工序，而这道工序要占晶体管、要耗电。</text>
+  <text x="24" y="374" fill="#6b6b85" font-size="8.5">ARM 不需要这道工序，所以同样的面积能做更多执行单元，或者同样性能做得更省电。</text>
+</svg>

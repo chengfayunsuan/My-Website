@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 442" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="442" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">CISC 诞生在曲线最左边</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">每 KB 内存的价格（美元，对数刻度）。四十八年跌了两百五十万倍</text>
+
+  <!-- 坐标 -->
+  <line x1="90" y1="330" x2="720" y2="330" stroke="#4a4a68"/>
+  <line x1="90" y1="80" x2="90" y2="330" stroke="#4a4a68"/>
+
+  <!-- y 轴刻度 -->
+  <g fill="#6b6b85" font-size="7.5" text-anchor="end">
+    <text x="84" y="98">$10</text>
+    <text x="84" y="134">$1</text>
+    <text x="84" y="170">$0.1</text>
+    <text x="84" y="206">$0.01</text>
+    <text x="84" y="242">$0.001</text>
+    <text x="84" y="278">$0.0001</text>
+    <text x="84" y="314">$0.00001</text>
+  </g>
+  <g stroke="#232338" stroke-dasharray="3 4">
+    <line x1="90" y1="94" x2="720" y2="94"/>
+    <line x1="90" y1="130" x2="720" y2="130"/>
+    <line x1="90" y1="166" x2="720" y2="166"/>
+    <line x1="90" y1="202" x2="720" y2="202"/>
+    <line x1="90" y1="238" x2="720" y2="238"/>
+    <line x1="90" y1="274" x2="720" y2="274"/>
+    <line x1="90" y1="310" x2="720" y2="310"/>
+  </g>
+
+  <!-- x 轴刻度 -->
+  <g fill="#6b6b85" font-size="7.5" text-anchor="middle">
+    <text x="100" y="346">1975</text>
+    <text x="216" y="346">1985</text>
+    <text x="332" y="346">1995</text>
+    <text x="448" y="346">2005</text>
+    <text x="564" y="346">2015</text>
+    <text x="680" y="346">2025</text>
+  </g>
+
+  <!-- 曲线：1978 7.5 → 2026 0.000003 -->
+  <polyline points="110,95 216,131 332,167 448,215 564,264 700,322"
+            fill="none" stroke="#9b4df0" stroke-width="2.4"/>
+
+  <g fill="#cfc6ff">
+    <circle cx="110" cy="95" r="4.5"/>
+    <circle cx="216" cy="131" r="4"/>
+    <circle cx="332" cy="167" r="4"/>
+    <circle cx="448" cy="215" r="4"/>
+    <circle cx="564" cy="264" r="4"/>
+    <circle cx="700" cy="322" r="4.5"/>
+  </g>
+
+  <!-- 1978 标注 -->
+  <line x1="110" y1="95" x2="110" y2="60" stroke="#f0606a" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="116" y="66" fill="#f0606a" font-size="9">1978：每 KB 约 $7.5</text>
+  <text x="116" y="80" fill="#f0a0aa" font-size="8">8086 的 1MB 装满要 $7680</text>
+
+  <!-- 2026 标注 -->
+  <line x1="700" y1="328" x2="700" y2="360" stroke="#4ec9a3" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="700" y="374" fill="#4ec9a3" font-size="9" text-anchor="end">2026：约 $0.000003</text>
+
+  <!-- 差值 -->
+  <line x1="110" y1="108" x2="110" y2="360" stroke="#33334a"/>
+  <line x1="700" y1="330" x2="700" y2="360" stroke="#33334a"/>
+  <text x="405" y="398" fill="#e8b84b" font-size="9" text-anchor="middle">从 $7.5 跌到 $0.000003：中间隔了六个数量级</text>
+
+  <line x1="24" y1="408" x2="736" y2="408" stroke="#2a2a44"/>
+  <text x="24" y="426" fill="#9a9ab4" font-size="9">当年「一条指令省几个字节」是真金白银；今天这句理由已经消失，但指令集改不动了。</text>
+</svg>

@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="430" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">同一条流水线，两种字节流</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">每格一个字节。上面长短不一，下面四格一刀——译码器的难度就从这里分开</text>
+
+  <!-- 标尺 -->
+  <g stroke="#2a2a44" stroke-dasharray="2 4">
+    <line x1="80" y1="70" x2="80" y2="300"/>
+    <line x1="186.5" y1="70" x2="186.5" y2="300"/>
+    <line x1="293" y1="70" x2="293" y2="300"/>
+    <line x1="399.5" y1="70" x2="399.5" y2="300"/>
+    <line x1="506" y1="70" x2="506" y2="300"/>
+    <line x1="612.5" y1="70" x2="612.5" y2="300"/>
+    <line x1="719" y1="70" x2="719" y2="300"/>
+  </g>
+  <g fill="#4a4a68" font-size="7.5" text-anchor="middle">
+    <text x="80" y="66">0</text>
+    <text x="186.5" y="66">4</text>
+    <text x="293" y="66">8</text>
+    <text x="399.5" y="66">12</text>
+    <text x="506" y="66">16</text>
+    <text x="612.5" y="66">20</text>
+    <text x="719" y="66">24</text>
+  </g>
+
+  <!-- x86 -->
+  <text x="24" y="96" fill="#f0606a" font-size="10">x86-64　变长</text>
+
+  <g>
+    <rect x="80" y="106" width="79.5" height="30" fill="#3a1e26" stroke="#f0606a"/>
+    <text x="119.8" y="125" fill="#f0a0aa" font-size="7.5" text-anchor="middle">83 03 01</text>
+    <text x="119.8" y="150" fill="#6b6b85" font-size="7" text-anchor="middle">3 字节</text>
+
+    <rect x="159.5" y="106" width="106" height="30" fill="#3a1e26" stroke="#f0606a"/>
+    <text x="212.5" y="125" fill="#f0a0aa" font-size="7.5" text-anchor="middle">48 8B 45 F8</text>
+    <text x="212.5" y="150" fill="#6b6b85" font-size="7" text-anchor="middle">4 字节</text>
+
+    <rect x="265.5" y="106" width="132.5" height="30" fill="#3a1e26" stroke="#f0606a"/>
+    <text x="331.8" y="125" fill="#f0a0aa" font-size="7.5" text-anchor="middle">E8 12 34 00 00</text>
+    <text x="331.8" y="150" fill="#6b6b85" font-size="7" text-anchor="middle">5 字节</text>
+
+    <rect x="398" y="106" width="53" height="30" fill="#3a1e26" stroke="#f0606a"/>
+    <text x="424.5" y="125" fill="#f0a0aa" font-size="7.5" text-anchor="middle">75 F6</text>
+    <text x="424.5" y="150" fill="#6b6b85" font-size="7" text-anchor="middle">2</text>
+
+    <rect x="451" y="106" width="132.5" height="30" fill="#3a1e26" stroke="#f0606a"/>
+    <text x="517.3" y="125" fill="#f0a0aa" font-size="7.5" text-anchor="middle">0F 1F 44 00 00</text>
+    <text x="517.3" y="150" fill="#6b6b85" font-size="7" text-anchor="middle">5 字节</text>
+
+    <rect x="583.5" y="106" width="53" height="30" fill="#3a1e26" stroke="#f0606a"/>
+    <text x="610" y="125" fill="#f0a0aa" font-size="7.5" text-anchor="middle">89 D8</text>
+    <text x="610" y="150" fill="#6b6b85" font-size="7" text-anchor="middle">2</text>
+
+    <rect x="636.5" y="106" width="53" height="30" fill="#3a1e26" stroke="#f0606a"/>
+    <text x="663" y="125" fill="#f0a0aa" font-size="7.5" text-anchor="middle">5D C3</text>
+    <text x="663" y="150" fill="#6b6b85" font-size="7" text-anchor="middle">2</text>
+  </g>
+
+  <text x="80" y="172" fill="#f0606a" font-size="8">七条指令，长度 2 到 5 字节。译码器必须先算出第一条多长，才知道第二条从哪开始。</text>
+
+  <!-- ARM -->
+  <text x="24" y="208" fill="#4ec9a3" font-size="10">ARM64　定长</text>
+
+  <g>
+    <rect x="80" y="218" width="106" height="30" fill="#183028" stroke="#4ec9a3"/>
+    <rect x="186" y="218" width="106" height="30" fill="#183028" stroke="#4ec9a3"/>
+    <rect x="292" y="218" width="106" height="30" fill="#183028" stroke="#4ec9a3"/>
+    <rect x="398" y="218" width="106" height="30" fill="#183028" stroke="#4ec9a3"/>
+    <rect x="504" y="218" width="106" height="30" fill="#183028" stroke="#4ec9a3"/>
+    <rect x="610" y="218" width="106" height="30" fill="#183028" stroke="#4ec9a3"/>
+  </g>
+  <g fill="#9fe0c9" font-size="8" text-anchor="middle">
+    <text x="133" y="237">指令 1</text>
+    <text x="239" y="237">指令 2</text>
+    <text x="345" y="237">指令 3</text>
+    <text x="451" y="237">指令 4</text>
+    <text x="557" y="237">指令 5</text>
+    <text x="663" y="237">指令 6</text>
+  </g>
+  <g fill="#6b6b85" font-size="7" text-anchor="middle">
+    <text x="133" y="262">4 字节</text>
+    <text x="451" y="262">4 字节</text>
+  </g>
+
+  <text x="80" y="284" fill="#4ec9a3" font-size="8">每条都是四字节。切点固定，四个译码通道可以同时开工，不需要先算长度。</text>
+
+  <line x1="24" y1="304" x2="736" y2="304" stroke="#2a2a44"/>
+
+  <!-- 下方对比 -->
+  <text x="24" y="330" fill="#d8d8e4" font-size="10.5">差别的本质：能不能并行</text>
+
+  <rect x="24" y="342" width="348" height="72" rx="5" fill="#12121c" stroke="#2a2a44"/>
+  <text x="40" y="362" fill="#f0606a" font-size="9">x86：串行找边界</text>
+  <text x="40" y="382" fill="#9a9ab4" font-size="8">扫前缀 → 读操作码 → 读 ModR/M → 算长度</text>
+  <text x="40" y="400" fill="#6b6b85" font-size="8">第二条的起点，依赖第一条的结果</text>
+
+  <rect x="388" y="342" width="348" height="72" rx="5" fill="#12121c" stroke="#2a2a44"/>
+  <text x="404" y="362" fill="#4ec9a3" font-size="9">ARM64：并行切块</text>
+  <text x="404" y="382" fill="#9a9ab4" font-size="8">读 16 字节 = 4 条，位段同时解析</text>
+  <text x="404" y="400" fill="#6b6b85" font-size="8">没有「先算长度」这一步</text>
+</svg>
