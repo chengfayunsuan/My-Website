@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 442" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="442" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">量化误差：台阶与原信号的差，永远不超过半级</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">一条缓慢上升的斜坡，被切成 8 级台阶；下面把误差单独画出来，纵向放大了三倍</text>
+  <line x1="60" y1="208" x2="700" y2="208" stroke="#232336" stroke-width="0.8"/>
+  <text x="54" y="210" fill="#4a4a60" font-size="7" text-anchor="end">0</text>
+  <line x1="60" y1="191" x2="700" y2="191" stroke="#232336" stroke-width="0.8"/>
+  <text x="54" y="193" fill="#4a4a60" font-size="7" text-anchor="end">1</text>
+  <line x1="60" y1="174" x2="700" y2="174" stroke="#232336" stroke-width="0.8"/>
+  <text x="54" y="176" fill="#4a4a60" font-size="7" text-anchor="end">2</text>
+  <line x1="60" y1="157" x2="700" y2="157" stroke="#232336" stroke-width="0.8"/>
+  <text x="54" y="159" fill="#4a4a60" font-size="7" text-anchor="end">3</text>
+  <line x1="60" y1="140" x2="700" y2="140" stroke="#232336" stroke-width="0.8"/>
+  <text x="54" y="142" fill="#4a4a60" font-size="7" text-anchor="end">4</text>
+  <line x1="60" y1="123" x2="700" y2="123" stroke="#232336" stroke-width="0.8"/>
+  <text x="54" y="125" fill="#4a4a60" font-size="7" text-anchor="end">5</text>
+  <line x1="60" y1="106" x2="700" y2="106" stroke="#232336" stroke-width="0.8"/>
+  <text x="54" y="108" fill="#4a4a60" font-size="7" text-anchor="end">6</text>
+  <line x1="60" y1="89" x2="700" y2="89" stroke="#232336" stroke-width="0.8"/>
+  <text x="54" y="91" fill="#4a4a60" font-size="7" text-anchor="end">7</text>
+  <line x1="60" y1="72" x2="700" y2="72" stroke="#232336" stroke-width="0.8"/>
+  <text x="54" y="74" fill="#4a4a60" font-size="7" text-anchor="end">8</text>
+  <line x1="60" y1="207.2" x2="700" y2="82.2" stroke="#67b5ef" stroke-width="2"/>
+  <line x1="60.0" y1="208.0" x2="146.5" y2="208.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="146.5" y1="191.0" x2="233.0" y2="191.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="146.5" y1="208.0" x2="146.5" y2="191.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="233.0" y1="174.0" x2="319.5" y2="174.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="233.0" y1="191.0" x2="233.0" y2="174.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="319.5" y1="157.0" x2="405.9" y2="157.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="319.5" y1="174.0" x2="319.5" y2="157.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="405.9" y1="140.0" x2="492.4" y2="140.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="405.9" y1="157.0" x2="405.9" y2="140.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="492.4" y1="123.0" x2="578.9" y2="123.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="492.4" y1="140.0" x2="492.4" y2="123.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="578.9" y1="106.0" x2="665.4" y2="106.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="578.9" y1="123.0" x2="578.9" y2="106.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="665.4" y1="89.0" x2="700.0" y2="89.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="665.4" y1="106.0" x2="665.4" y2="89.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="60" y1="208" x2="700" y2="208" stroke="#3a3a52" stroke-width="1"/>
+  <text x="68" y="84" fill="#9fd4f5" font-size="9">原始信号（直线上升）</text>
+  <text x="68" y="100" fill="#9fe0c9" font-size="9">量化后的台阶：每一级就是 1 个 LSB</text>
+  <text x="60" y="262" fill="#f0a0a8" font-size="9">误差 = 台阶 − 原信号</text>
+  <line x1="60" y1="306" x2="700" y2="306" stroke="#2a2a3c" stroke-width="0.8" stroke-dasharray="3 3"/>
+  <line x1="60" y1="340" x2="700" y2="340" stroke="#3a3a52" stroke-width="1"/>
+  <line x1="60.0" y1="306.0" x2="70.7" y2="312.3" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="70.7" y1="312.3" x2="81.3" y2="318.6" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="81.3" y1="318.6" x2="92.0" y2="324.9" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="92.0" y1="324.9" x2="102.7" y2="331.2" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="102.7" y1="331.2" x2="113.3" y2="286.4" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="113.3" y1="286.4" x2="124.0" y2="292.7" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="124.0" y1="292.7" x2="134.7" y2="299.0" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="134.7" y1="299.0" x2="145.3" y2="305.3" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="145.3" y1="305.3" x2="156.0" y2="311.6" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="156.0" y1="311.6" x2="166.7" y2="317.9" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="166.7" y1="317.9" x2="177.3" y2="324.2" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="177.3" y1="324.2" x2="188.0" y2="330.5" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="188.0" y1="330.5" x2="198.7" y2="285.8" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="198.7" y1="285.8" x2="209.3" y2="292.1" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="209.3" y1="292.1" x2="220.0" y2="298.4" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="220.0" y1="298.4" x2="230.7" y2="304.6" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="230.7" y1="304.6" x2="241.3" y2="310.9" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="241.3" y1="310.9" x2="252.0" y2="317.2" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="252.0" y1="317.2" x2="262.7" y2="323.5" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="262.7" y1="323.5" x2="273.3" y2="329.8" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="273.3" y1="329.8" x2="284.0" y2="285.1" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="284.0" y1="285.1" x2="294.7" y2="291.4" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="294.7" y1="291.4" x2="305.3" y2="297.7" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="305.3" y1="297.7" x2="316.0" y2="304.0" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="316.0" y1="304.0" x2="326.7" y2="310.2" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="326.7" y1="310.2" x2="337.3" y2="316.5" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="337.3" y1="316.5" x2="348.0" y2="322.8" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="348.0" y1="322.8" x2="358.7" y2="329.1" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="358.7" y1="329.1" x2="369.3" y2="284.4" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="369.3" y1="284.4" x2="380.0" y2="290.7" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="380.0" y1="290.7" x2="390.7" y2="297.0" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="390.7" y1="297.0" x2="401.3" y2="303.3" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="401.3" y1="303.3" x2="412.0" y2="309.6" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="412.0" y1="309.6" x2="422.7" y2="315.9" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="422.7" y1="315.9" x2="433.3" y2="322.1" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="433.3" y1="322.1" x2="444.0" y2="328.4" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="444.0" y1="328.4" x2="454.7" y2="283.7" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="454.7" y1="283.7" x2="465.3" y2="290.0" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="465.3" y1="290.0" x2="476.0" y2="296.3" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="476.0" y1="296.3" x2="486.7" y2="302.6" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="486.7" y1="302.6" x2="497.3" y2="308.9" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="497.3" y1="308.9" x2="508.0" y2="315.2" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="508.0" y1="315.2" x2="518.7" y2="321.5" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="518.7" y1="321.5" x2="529.3" y2="327.8" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="529.3" y1="327.8" x2="540.0" y2="283.1" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="540.0" y1="283.1" x2="550.7" y2="289.3" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="550.7" y1="289.3" x2="561.3" y2="295.6" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="561.3" y1="295.6" x2="572.0" y2="301.9" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="572.0" y1="301.9" x2="582.7" y2="308.2" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="582.7" y1="308.2" x2="593.3" y2="314.5" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="593.3" y1="314.5" x2="604.0" y2="320.8" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="604.0" y1="320.8" x2="614.7" y2="327.1" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="614.7" y1="327.1" x2="625.3" y2="282.4" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="625.3" y1="282.4" x2="636.0" y2="288.7" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="636.0" y1="288.7" x2="646.7" y2="294.9" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="646.7" y1="294.9" x2="657.3" y2="301.2" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="657.3" y1="301.2" x2="668.0" y2="307.5" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="668.0" y1="307.5" x2="678.7" y2="313.8" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="678.7" y1="313.8" x2="689.3" y2="320.1" stroke="#ef6b6b" stroke-width="1.6"/>
+  <line x1="689.3" y1="320.1" x2="700.0" y2="326.4" stroke="#ef6b6b" stroke-width="1.6"/>
+  <text x="20" y="283" fill="#6b6b85" font-size="8">+½ 级</text>
+  <text x="20" y="334" fill="#6b6b85" font-size="8">−½ 级</text>
+  <line x1="30" y1="374" x2="730" y2="374" stroke="#2a2a3c"/>
+  <text x="30" y="394" fill="#d8d8e4" font-size="9">误差的形状是锯齿：信号每上升一级，误差从 +½ 级线性掉到 −½ 级，然后跳回去。它的平均值是零，但平方和不是零。</text>
+  <text x="30" y="412" fill="#9a9ab4" font-size="8.5">这个「非零的平方和」就是量化噪声。位深每加 1 位，噪声功率降到四分之一，信噪比提高约 6 dB：SNR ≈ 6.02n + 1.76。</text>
+  <text x="30" y="430" fill="#6b6b85" font-size="8.5">16 位 = 98 dB，24 位 = 146 dB。人耳的动态范围约 120 dB，所以 16 位对 playback 够用，24 位留给录音时的余量。</text>
+</svg>

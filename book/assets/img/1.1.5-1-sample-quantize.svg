@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="430" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">连续的量，切两刀就变成数字</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">先横着切（采样：在时间上取点），再竖着切（量化：在幅度上分级）</text>
+  <text x="40" y="80" fill="#9fd4f5" font-size="10">① 采样：横轴离散化</text>
+  <text x="416" y="80" fill="#9fe0c9" font-size="10">② 量化：纵轴离散化</text>
+  <line x1="416" y1="275.0" x2="728" y2="275.0" stroke="#2c2c42" stroke-width="0.8"/>
+  <line x1="416" y1="255.5" x2="728" y2="255.5" stroke="#2c2c42" stroke-width="0.8"/>
+  <line x1="416" y1="236.0" x2="728" y2="236.0" stroke="#2c2c42" stroke-width="0.8"/>
+  <line x1="416" y1="216.5" x2="728" y2="216.5" stroke="#2c2c42" stroke-width="0.8"/>
+  <line x1="416" y1="197.0" x2="728" y2="197.0" stroke="#2c2c42" stroke-width="0.8"/>
+  <line x1="416" y1="177.5" x2="728" y2="177.5" stroke="#2c2c42" stroke-width="0.8"/>
+  <line x1="416" y1="158.0" x2="728" y2="158.0" stroke="#2c2c42" stroke-width="0.8"/>
+  <line x1="416" y1="138.5" x2="728" y2="138.5" stroke="#2c2c42" stroke-width="0.8"/>
+  <line x1="416" y1="119.0" x2="728" y2="119.0" stroke="#2c2c42" stroke-width="0.8"/>
+  <polyline points="40.0,197.0 42.0,186.0 44.0,175.3 46.0,165.0 48.0,155.3 50.0,146.5 52.0,138.6 54.0,131.9 56.0,126.5 58.0,122.5 60.0,120.0 62.0,119.0 64.0,119.6 66.0,121.7 68.0,125.2 70.0,130.2 72.0,136.6 74.0,144.1 76.0,152.7 78.0,162.1 80.0,172.3 82.0,182.9 84.0,193.9 86.0,204.8 88.0,215.7 90.0,226.1 92.0,236.0 94.0,245.1 96.0,253.3 98.0,260.3 100.0,266.1 102.0,270.5 104.0,273.4 106.0,274.9 108.0,274.7 110.0,273.1 112.0,269.9 114.0,265.3 116.0,259.4 118.0,252.2 120.0,243.9 122.0,234.6 124.0,224.7 126.0,214.1 128.0,203.3 130.0,192.3 132.0,181.4 134.0,170.8 136.0,160.8 138.0,151.4 140.0,143.0 142.0,135.6 144.0,129.5 146.0,124.6 148.0,121.3 150.0,119.4 152.0,119.1 154.0,120.3 156.0,123.0 158.0,127.2 160.0,132.8 162.0,139.7 164.0,147.7 166.0,156.6 168.0,166.4 170.0,176.8 172.0,187.6 174.0,198.6 176.0,209.5 178.0,220.2 180.0,230.4 182.0,240.0 184.0,248.7 186.0,256.4 188.0,262.9 190.0,268.1 192.0,271.9 194.0,274.2 196.0,275.0 198.0,274.2 200.0,271.9 202.0,268.1 204.0,262.9 206.0,256.4 208.0,248.7 210.0,240.0 212.0,230.4 214.0,220.2 216.0,209.5 218.0,198.6 220.0,187.6 222.0,176.8 224.0,166.4 226.0,156.6 228.0,147.7 230.0,139.7 232.0,132.8 234.0,127.2 236.0,123.0 238.0,120.3 240.0,119.1 242.0,119.4 244.0,121.3 246.0,124.6 248.0,129.5 250.0,135.6 252.0,143.0 254.0,151.4 256.0,160.8 258.0,170.8 260.0,181.4 262.0,192.3 264.0,203.3 266.0,214.1 268.0,224.7 270.0,234.6 272.0,243.9 274.0,252.2 276.0,259.4 278.0,265.3 280.0,269.9 282.0,273.1 284.0,274.7 286.0,274.9 288.0,273.4 290.0,270.5 292.0,266.1 294.0,260.3 296.0,253.3 298.0,245.1 300.0,236.0 302.0,226.1 304.0,215.7 306.0,204.8 308.0,193.9 310.0,182.9 312.0,172.3 314.0,162.1 316.0,152.7 318.0,144.1 320.0,136.6 322.0,130.2 324.0,125.2 326.0,121.7 328.0,119.6 330.0,119.0 332.0,120.0 334.0,122.5 336.0,126.5 338.0,131.9 340.0,138.6 342.0,146.5 344.0,155.3 346.0,165.0 348.0,175.3 350.0,186.0 352.0,197.0" fill="none" stroke="#67b5ef" stroke-width="1.8"/>
+  <line x1="40.0" y1="197.0" x2="40.0" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="40.0" cy="197.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="62.3" y1="119.0" x2="62.3" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="62.3" cy="119.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="84.6" y1="197.0" x2="84.6" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="84.6" cy="197.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="106.9" y1="275.0" x2="106.9" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="106.9" cy="275.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="129.1" y1="197.0" x2="129.1" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="129.1" cy="197.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="151.4" y1="119.0" x2="151.4" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="151.4" cy="119.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="173.7" y1="197.0" x2="173.7" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="173.7" cy="197.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="196.0" y1="275.0" x2="196.0" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="196.0" cy="275.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="218.3" y1="197.0" x2="218.3" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="218.3" cy="197.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="240.6" y1="119.0" x2="240.6" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="240.6" cy="119.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="262.9" y1="197.0" x2="262.9" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="262.9" cy="197.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="285.1" y1="275.0" x2="285.1" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="285.1" cy="275.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="307.4" y1="197.0" x2="307.4" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="307.4" cy="197.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="329.7" y1="119.0" x2="329.7" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="329.7" cy="119.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="352.0" y1="197.0" x2="352.0" y2="290" stroke="#3a4a66" stroke-width="0.7" stroke-dasharray="2 3"/>
+  <circle cx="352.0" cy="197.0" r="3.2" fill="#e8b84b" stroke="#0e0e16" stroke-width="0.8"/>
+  <line x1="40" y1="290" x2="352" y2="290" stroke="#3a3a52" stroke-width="1"/>
+  <line x1="416" y1="290" x2="728" y2="290" stroke="#3a3a52" stroke-width="1"/>
+  <line x1="416.0" y1="158.0" x2="428.0" y2="158.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="428.0" y1="119.0" x2="440.0" y2="119.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="428.0" y1="158.0" x2="428.0" y2="119.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="440.0" y1="138.5" x2="452.0" y2="138.5" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="440.0" y1="119.0" x2="440.0" y2="138.5" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="452.0" y1="177.5" x2="464.0" y2="177.5" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="452.0" y1="138.5" x2="452.0" y2="177.5" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="464.0" y1="236.0" x2="476.0" y2="236.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="464.0" y1="177.5" x2="464.0" y2="236.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="476.0" y1="275.0" x2="488.0" y2="275.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="476.0" y1="236.0" x2="476.0" y2="275.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="488.0" y1="255.5" x2="500.0" y2="255.5" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="488.0" y1="275.0" x2="488.0" y2="255.5" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="500.0" y1="197.0" x2="512.0" y2="197.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="500.0" y1="255.5" x2="500.0" y2="197.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="512.0" y1="138.5" x2="524.0" y2="138.5" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="512.0" y1="197.0" x2="512.0" y2="138.5" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="524.0" y1="119.0" x2="536.0" y2="119.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="524.0" y1="138.5" x2="524.0" y2="119.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="536.0" y1="158.0" x2="548.0" y2="158.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="536.0" y1="119.0" x2="536.0" y2="158.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="548.0" y1="216.5" x2="560.0" y2="216.5" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="548.0" y1="158.0" x2="548.0" y2="216.5" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="560.0" y1="275.0" x2="572.0" y2="275.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="560.0" y1="216.5" x2="560.0" y2="275.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="572.0" y1="275.0" x2="584.0" y2="275.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="584.0" y1="216.5" x2="596.0" y2="216.5" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="584.0" y1="275.0" x2="584.0" y2="216.5" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="596.0" y1="158.0" x2="608.0" y2="158.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="596.0" y1="216.5" x2="596.0" y2="158.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="608.0" y1="119.0" x2="620.0" y2="119.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="608.0" y1="158.0" x2="608.0" y2="119.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="620.0" y1="138.5" x2="632.0" y2="138.5" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="620.0" y1="119.0" x2="620.0" y2="138.5" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="632.0" y1="197.0" x2="644.0" y2="197.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="632.0" y1="138.5" x2="632.0" y2="197.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="644.0" y1="255.5" x2="656.0" y2="255.5" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="644.0" y1="197.0" x2="644.0" y2="255.5" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="656.0" y1="275.0" x2="668.0" y2="275.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="656.0" y1="255.5" x2="656.0" y2="275.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="668.0" y1="236.0" x2="680.0" y2="236.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="668.0" y1="275.0" x2="668.0" y2="236.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="680.0" y1="177.5" x2="692.0" y2="177.5" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="680.0" y1="236.0" x2="680.0" y2="177.5" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="692.0" y1="138.5" x2="704.0" y2="138.5" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="692.0" y1="177.5" x2="692.0" y2="138.5" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="704.0" y1="119.0" x2="716.0" y2="119.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="704.0" y1="138.5" x2="704.0" y2="119.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="716.0" y1="158.0" x2="728.0" y2="158.0" stroke="#4ec9a3" stroke-width="2"/>
+  <line x1="716.0" y1="119.0" x2="716.0" y2="158.0" stroke="#4ec9a3" stroke-width="1.4"/>
+  <line x1="384" y1="104" x2="384" y2="290" stroke="#2a2a3c"/>
+  <text x="40" y="308" fill="#6b6b85" font-size="8.5">每秒取多少个点，叫采样率</text>
+  <text x="416" y="308" fill="#6b6b85" font-size="8.5">每级多高，叫位深。8 级 = 3 位；65536 级 = 16 位</text>
+  <line x1="30" y1="330" x2="730" y2="330" stroke="#2a2a3c"/>
+  <text x="30" y="350" fill="#d8d8e4" font-size="9">切得越细，越接近原曲线，也越占空间。整个数字音频和图像，都是在这两刀上做取舍。</text>
+  <text x="30" y="368" fill="#9a9ab4" font-size="8.5">注意：两刀缺一不可。只采样不量化，得到的是无限精度的小数；只量化不采样，得到的是无限长的一串数。</text>
+  <text x="30" y="386" fill="#6b6b85" font-size="8.5">采样出问题会产生「混叠」（假频率），量化出问题会产生「噪声」（沙沙声）。两类故障，两套治法。</text>
+  <text x="40" y="404" fill="#e8c47a" font-size="8.5">圆点是采样点；注意它并不总落在波峰上</text>
+  <text x="416" y="404" fill="#e8c47a" font-size="8.5">阶梯与原曲线的差，就是量化误差</text>
+</svg>

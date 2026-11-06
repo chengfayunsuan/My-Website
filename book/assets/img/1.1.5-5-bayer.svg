@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 368" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="368" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">拜耳滤镜：每个像素其实只认识一种颜色</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">传感器是色盲的，靠一层彩色滤片分工；绿色占一半，因为人眼对绿最敏感</text>
+  <rect x="50" y="84" width="48" height="48" fill="#3a1e22" stroke="#8a4a50" stroke-width="1"/>
+  <text x="74" y="113" fill="#f0a0a8" font-size="15" text-anchor="middle" font-family="monospace">R</text>
+  <rect x="98" y="84" width="48" height="48" fill="#1e3a2e" stroke="#3a6a5a" stroke-width="1"/>
+  <text x="122" y="113" fill="#9fe0c9" font-size="15" text-anchor="middle" font-family="monospace">G</text>
+  <rect x="146" y="84" width="48" height="48" fill="#3a1e22" stroke="#8a4a50" stroke-width="1"/>
+  <text x="170" y="113" fill="#f0a0a8" font-size="15" text-anchor="middle" font-family="monospace">R</text>
+  <rect x="194" y="84" width="48" height="48" fill="#1e3a2e" stroke="#3a6a5a" stroke-width="1"/>
+  <text x="218" y="113" fill="#9fe0c9" font-size="15" text-anchor="middle" font-family="monospace">G</text>
+  <rect x="50" y="132" width="48" height="48" fill="#1e3a2e" stroke="#3a6a5a" stroke-width="1"/>
+  <text x="74" y="161" fill="#9fe0c9" font-size="15" text-anchor="middle" font-family="monospace">G</text>
+  <rect x="98" y="132" width="48" height="48" fill="#1e2a3e" stroke="#3a5a7a" stroke-width="1"/>
+  <text x="122" y="161" fill="#9fd4f5" font-size="15" text-anchor="middle" font-family="monospace">B</text>
+  <rect x="146" y="132" width="48" height="48" fill="#1e3a2e" stroke="#3a6a5a" stroke-width="1"/>
+  <text x="170" y="161" fill="#9fe0c9" font-size="15" text-anchor="middle" font-family="monospace">G</text>
+  <rect x="194" y="132" width="48" height="48" fill="#1e2a3e" stroke="#3a5a7a" stroke-width="1"/>
+  <text x="218" y="161" fill="#9fd4f5" font-size="15" text-anchor="middle" font-family="monospace">B</text>
+  <rect x="50" y="180" width="48" height="48" fill="#3a1e22" stroke="#8a4a50" stroke-width="1"/>
+  <text x="74" y="209" fill="#f0a0a8" font-size="15" text-anchor="middle" font-family="monospace">R</text>
+  <rect x="98" y="180" width="48" height="48" fill="#1e3a2e" stroke="#3a6a5a" stroke-width="1"/>
+  <text x="122" y="209" fill="#9fe0c9" font-size="15" text-anchor="middle" font-family="monospace">G</text>
+  <rect x="146" y="180" width="48" height="48" fill="#3a1e22" stroke="#8a4a50" stroke-width="1"/>
+  <text x="170" y="209" fill="#f0a0a8" font-size="15" text-anchor="middle" font-family="monospace">R</text>
+  <rect x="194" y="180" width="48" height="48" fill="#1e3a2e" stroke="#3a6a5a" stroke-width="1"/>
+  <text x="218" y="209" fill="#9fe0c9" font-size="15" text-anchor="middle" font-family="monospace">G</text>
+  <rect x="50" y="228" width="48" height="48" fill="#1e3a2e" stroke="#3a6a5a" stroke-width="1"/>
+  <text x="74" y="257" fill="#9fe0c9" font-size="15" text-anchor="middle" font-family="monospace">G</text>
+  <rect x="98" y="228" width="48" height="48" fill="#1e2a3e" stroke="#3a5a7a" stroke-width="1"/>
+  <text x="122" y="257" fill="#9fd4f5" font-size="15" text-anchor="middle" font-family="monospace">B</text>
+  <rect x="146" y="228" width="48" height="48" fill="#1e3a2e" stroke="#3a6a5a" stroke-width="1"/>
+  <text x="170" y="257" fill="#9fe0c9" font-size="15" text-anchor="middle" font-family="monospace">G</text>
+  <rect x="194" y="228" width="48" height="48" fill="#1e2a3e" stroke="#3a5a7a" stroke-width="1"/>
+  <text x="218" y="257" fill="#9fd4f5" font-size="15" text-anchor="middle" font-family="monospace">B</text>
+  <text x="146" y="298" fill="#6b6b85" font-size="8.5" text-anchor="middle">传感器上的 4 × 4 个感光点：R 红　G 绿　B 蓝</text>
+  <line x1="320" y1="84" x2="320" y2="312" stroke="#2a2a3c"/>
+  <text x="344" y="104" fill="#d8d8e4" font-size="10">为什么绿色是一半</text>
+  <text x="344" y="126" fill="#9a9ab4" font-size="8.5">人眼的视锥细胞里，感绿的约占 60%，感红和感蓝各约 30% 和 10%。</text>
+  <text x="344" y="144" fill="#9a9ab4" font-size="8.5">所以拜耳阵列排成 RGGB：绿色占 50%，红蓝各 25%——按人眼的敏感度分配，</text>
+  <text x="344" y="162" fill="#9a9ab4" font-size="8.5">不是按颜色的「重要性」分配。</text>
+  <text x="344" y="192" fill="#d8d8e4" font-size="10">缺的两个颜色怎么办</text>
+  <text x="344" y="214" fill="#9a9ab4" font-size="8.5">靠邻居猜。比如一个红色像素，它的绿值取上下左右四个绿像素的平均，</text>
+  <text x="344" y="232" fill="#9a9ab4" font-size="8.5">蓝值取对角四个蓝像素的平均。这一步叫「去马赛克」（demosaic）。</text>
+  <text x="344" y="250" fill="#6b6b85" font-size="8.5">所以每一张照片里，有三分之二的色彩数据是算出来的，不是测出来的。</text>
+  <text x="344" y="280" fill="#d8d8e4" font-size="10">代价</text>
+  <text x="344" y="302" fill="#9a9ab4" font-size="8.5">细密的纹理（比如织物、远处的栅栏）容易出现彩色摩尔纹，</text>
+  <text x="344" y="320" fill="#9a9ab4" font-size="8.5">因为插值在「猜」的时候猜错了。这就是「伪色」的来源。</text>
+  <line x1="30" y1="326" x2="730" y2="326" stroke="#2a2a3c"/>
+  <text x="30" y="348" fill="#6b6b85" font-size="8.5">专业摄像机用三片传感器加分光棱镜，每个像素三个颜色都是实测的——代价是体积、重量和价格都翻几倍。</text>
+</svg>
