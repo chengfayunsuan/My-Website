@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="560" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">异或门与半加器：一个门管本位，一个门管进位</text>
+<line x1="18" y1="98" x2="60" y2="98" stroke="#c8c8dc" stroke-width="2"/>
+<line x1="18" y1="122" x2="60" y2="122" stroke="#c8c8dc" stroke-width="2"/>
+<path d="M60,80 Q94,80 114,110 Q94,140 60,140 Q74,110 60,80 Z" fill="#1e1e30" stroke="#b58ae8" stroke-width="2"/>
+<path d="M52,80 Q66,110 52,140" fill="none" stroke="#b58ae8" stroke-width="2"/>
+<line x1="114" y1="110" x2="154" y2="110" stroke="#c8c8dc" stroke-width="2"/>
+<text x="74" y="68" fill="#b58ae8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">XOR</text>
+<text x="160" y="115" fill="#b58ae8" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Y = A ⊕ B</text>
+<text x="24" y="176" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">输入端那条额外的弧线，就是「异或」和「或」的唯一区别：</text>
+<text x="24" y="194" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">多这一道，含义从「至少一个」变成「恰好一个」。</text>
+<rect x="24" y="240" width="62" height="23" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="55.0" y="256" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">A</text>
+<rect x="86" y="240" width="62" height="23" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="117.0" y="256" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">B</text>
+<rect x="148" y="240" width="62" height="23" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="179.0" y="256" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">Y</text>
+<rect x="24" y="263" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="55.0" y="279" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="86" y="263" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="117.0" y="279" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="148" y="263" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="179.0" y="279" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="24" y="286" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="55.0" y="302" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="86" y="286" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="117.0" y="302" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="148" y="286" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="179.0" y="302" fill="#b58ae8" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="24" y="309" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="55.0" y="325" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="86" y="309" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="117.0" y="325" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="148" y="309" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="179.0" y="325" fill="#b58ae8" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="24" y="332" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="55.0" y="348" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="86" y="332" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="117.0" y="348" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="148" y="332" width="62" height="23" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="179.0" y="348" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<text x="24" y="381" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">相同为 0，不同为 1 —— 所以叫「不等门」</text>
+<text x="24" y="403" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">异或 = 1 位加法扔掉进位</text>
+<text x="360" y="52" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">半加器：两只门，一次加法</text>
+<line x1="408" y1="114" x2="446" y2="114" stroke="#c8c8dc" stroke-width="2"/>
+<text x="400" y="110" fill="#67d9a0" font-size="13" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">A</text>
+<line x1="408" y1="138" x2="446" y2="138" stroke="#c8c8dc" stroke-width="2"/>
+<text x="400" y="134" fill="#e8b84b" font-size="13" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">B</text>
+<circle cx="418" cy="114" r="2.5" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="2"/>
+<circle cx="430" cy="138" r="2.5" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="2"/>
+<line x1="418" y1="114" x2="418" y2="262" stroke="#67d9a0" stroke-width="1.8"/>
+<line x1="418" y1="262" x2="446" y2="262" stroke="#67d9a0" stroke-width="1.8"/>
+<line x1="430" y1="138" x2="430" y2="286" stroke="#e8b84b" stroke-width="1.8"/>
+<line x1="430" y1="286" x2="446" y2="286" stroke="#e8b84b" stroke-width="1.8"/>
+<path d="M454,96 Q488,96 508,126 Q488,156 454,156 Q468,126 454,96 Z" fill="#1e1e30" stroke="#b58ae8" stroke-width="2"/>
+<path d="M446,96 Q460,126 446,156" fill="none" stroke="#b58ae8" stroke-width="2"/>
+<line x1="446" y1="114" x2="454" y2="114" stroke="#c8c8dc" stroke-width="2"/>
+<line x1="446" y1="138" x2="454" y2="138" stroke="#c8c8dc" stroke-width="2"/>
+<line x1="508" y1="126" x2="558" y2="126" stroke="#c8c8dc" stroke-width="2"/>
+<text x="566" y="131" fill="#b58ae8" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">S = A ⊕ B</text>
+<text x="566" y="152" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">本位和</text>
+<path d="M470,244 L498,244 A30,30 0 0 1 498,304 L470,304 Z" fill="#1e1e30" stroke="#67b5ef" stroke-width="2"/>
+<line x1="446" y1="262" x2="470" y2="262" stroke="#c8c8dc" stroke-width="2"/>
+<line x1="446" y1="286" x2="470" y2="286" stroke="#c8c8dc" stroke-width="2"/>
+<line x1="528" y1="274" x2="558" y2="274" stroke="#c8c8dc" stroke-width="2"/>
+<text x="566" y="279" fill="#67b5ef" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">C = A · B</text>
+<text x="566" y="300" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进位</text>
+<circle cx="418" cy="286" r="0" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="2"/>
+<text x="360" y="330" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一个 A、B 分两路：一路算「和」，一路算「进位」。</text>
+<text x="360" y="350" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">A、B 都是 1 时，S=0、C=1 —— 正好是二进制 10。</text>
+<rect x="360" y="388" width="58" height="24" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="389.0" y="404" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">A</text>
+<rect x="418" y="388" width="58" height="24" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="447.0" y="404" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">B</text>
+<rect x="476" y="388" width="58" height="24" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="505.0" y="404" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">S</text>
+<rect x="534" y="388" width="58" height="24" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="563.0" y="404" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">C</text>
+<rect x="592" y="388" width="58" height="24" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="621.0" y="404" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">A+B</text>
+<rect x="360" y="412" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="389.0" y="428" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">0</text>
+<rect x="418" y="412" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="447.0" y="428" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">0</text>
+<rect x="476" y="412" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="505.0" y="428" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">0</text>
+<rect x="534" y="412" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="563.0" y="428" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">0</text>
+<rect x="592" y="412" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="621.0" y="428" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">0</text>
+<rect x="360" y="436" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="389.0" y="452" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">0</text>
+<rect x="418" y="436" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="447.0" y="452" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">1</text>
+<rect x="476" y="436" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="505.0" y="452" fill="#b58ae8" font-size="10.5" text-anchor="middle" font-family="monospace">1</text>
+<rect x="534" y="436" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="563.0" y="452" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">0</text>
+<rect x="592" y="436" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="621.0" y="452" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">1</text>
+<rect x="360" y="460" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="389.0" y="476" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">1</text>
+<rect x="418" y="460" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="447.0" y="476" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">0</text>
+<rect x="476" y="460" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="505.0" y="476" fill="#b58ae8" font-size="10.5" text-anchor="middle" font-family="monospace">1</text>
+<rect x="534" y="460" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="563.0" y="476" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">0</text>
+<rect x="592" y="460" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="621.0" y="476" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">1</text>
+<rect x="360" y="484" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="389.0" y="500" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">1</text>
+<rect x="418" y="484" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="447.0" y="500" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">1</text>
+<rect x="476" y="484" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="505.0" y="500" fill="#b58ae8" font-size="10.5" text-anchor="middle" font-family="monospace">0</text>
+<rect x="534" y="484" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="563.0" y="500" fill="#67b5ef" font-size="10.5" text-anchor="middle" font-family="monospace">1</text>
+<rect x="592" y="484" width="58" height="24" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="621.0" y="500" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">2</text>
+<text x="360" y="532" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">左边四列是电路，右边一列是算术：</text>
+<text x="360" y="552" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">S、C 拼起来就是 A+B 的二进制结果。</text>
+</svg>
