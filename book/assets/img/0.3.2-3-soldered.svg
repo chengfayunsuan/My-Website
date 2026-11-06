@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="440" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">插槽还是焊死：五个毫米的战争</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">同一块主板，两种装内存的方式，差的不只是高度</text>
+
+  <!-- ================= 上：插槽方案 ================= -->
+  <text x="40" y="80" fill="#9fd4f5" font-size="10">插槽方案（SO-DIMM）</text>
+
+  <!-- 主板 -->
+  <rect x="40" y="168" width="380" height="10" rx="1" fill="#1a2a20" stroke="#2f4a3a"/>
+  <text x="46" y="194" fill="#6b6b85" font-size="7.5">主板</text>
+
+  <!-- 连接器 -->
+  <path d="M104,168 L104,146 L118,146 L118,168" fill="#2a2a30" stroke="#9a9ab4"/>
+  <path d="M344,168 L344,146 L358,146 L358,168" fill="#2a2a30" stroke="#9a9ab4"/>
+  <text x="111" y="140" fill="#9a9ab4" font-size="7" text-anchor="middle">卡扣</text>
+  <text x="351" y="140" fill="#9a9ab4" font-size="7" text-anchor="middle">卡扣</text>
+
+  <!-- 内存条 -->
+  <rect x="112" y="118" width="238" height="9" rx="1" fill="#2e2a3a" stroke="#9b4df0"/>
+  <g fill="#3a2a52" stroke="#9b4df0">
+    <rect x="126" y="103" width="26" height="15" rx="1"/>
+    <rect x="160" y="103" width="26" height="15" rx="1"/>
+    <rect x="194" y="103" width="26" height="15" rx="1"/>
+    <rect x="228" y="103" width="26" height="15" rx="1"/>
+    <rect x="262" y="103" width="26" height="15" rx="1"/>
+    <rect x="296" y="103" width="26" height="15" rx="1"/>
+  </g>
+  <text x="231" y="96" fill="#cfc6ff" font-size="8" text-anchor="middle">内存颗粒</text>
+  <text x="231" y="140" fill="#6b6b85" font-size="7.5" text-anchor="middle">PCB</text>
+
+  <!-- 高度箭头 -->
+  <line x1="380" y1="168" x2="380" y2="103" stroke="#f0606a" stroke-width="1"/>
+  <path d="M377,108 L380,102 L383,108" fill="none" stroke="#f0606a"/>
+  <path d="M377,163 L380,169 L383,163" fill="none" stroke="#f0606a"/>
+  <text x="386" y="138" fill="#f0606a" font-size="9">5–6 mm</text>
+
+  <!-- 走线示意 -->
+  <path d="M118,168 L118,127 M118,168 L130,127" stroke="#f0606a" stroke-width="1" stroke-dasharray="2 2"/>
+  <text x="150" y="200" fill="#f0606a" font-size="7.5">信号要穿过：连接器 → 内存条 PCB → 颗粒</text>
+
+  <!-- ================= 下：板载方案 ================= -->
+  <text x="40" y="248" fill="#9fe0c9" font-size="10">板载方案（LPDDR）</text>
+
+  <rect x="40" y="322" width="380" height="10" rx="1" fill="#1a2a20" stroke="#2f4a3a"/>
+  <text x="46" y="348" fill="#6b6b85" font-size="7.5">主板</text>
+
+  <g fill="#20303a" stroke="#4ec9a3">
+    <rect x="126" y="306" width="34" height="16" rx="1"/>
+    <rect x="176" y="306" width="34" height="16" rx="1"/>
+    <rect x="226" y="306" width="34" height="16" rx="1"/>
+    <rect x="276" y="306" width="34" height="16" rx="1"/>
+  </g>
+  <text x="218" y="298" fill="#9fe0c9" font-size="8" text-anchor="middle">颗粒直接焊在主板上</text>
+
+  <!-- 高度箭头 -->
+  <line x1="380" y1="322" x2="380" y2="306" stroke="#4ec9a3" stroke-width="1"/>
+  <path d="M377,311 L380,305 L383,311" fill="none" stroke="#4ec9a3"/>
+  <text x="386" y="320" fill="#4ec9a3" font-size="9">1 mm</text>
+
+  <!-- 点对点走线 -->
+  <path d="M143,322 L143,306" stroke="#4ec9a3" stroke-width="1" stroke-dasharray="2 2"/>
+  <text x="150" y="356" fill="#4ec9a3" font-size="7.5">点对点：走线 3–5 mm，不经过连接器</text>
+
+  <!-- ================= 右侧数据 ================= -->
+  <line x1="444" y1="72" x2="444" y2="360" stroke="#2a2a44"/>
+
+  <text x="466" y="90" fill="#d8d8e4" font-size="10">省下的五个毫米，代价是什么</text>
+
+  <text x="466" y="120" fill="#9fd4f5" font-size="8.5">插槽</text>
+  <text x="596" y="120" fill="#9fe0c9" font-size="8.5">板载</text>
+  <line x1="466" y1="128" x2="720" y2="128" stroke="#33334a"/>
+
+  <text x="466" y="148" fill="#6b6b85" font-size="8">频率上限</text>
+  <text x="466" y="166" fill="#9fd4f5" font-size="9">5600</text>
+  <text x="596" y="166" fill="#9fe0c9" font-size="9">8533 MT/s</text>
+
+  <text x="466" y="196" fill="#6b6b85" font-size="8">工作电压</text>
+  <text x="466" y="214" fill="#9fd4f5" font-size="9">1.10 V</text>
+  <text x="596" y="214" fill="#9fe0c9" font-size="9">1.05 V</text>
+
+  <text x="466" y="244" fill="#6b6b85" font-size="8">能不能换</text>
+  <text x="466" y="262" fill="#9fd4f5" font-size="9">能</text>
+  <text x="490" y="262" fill="#6b6b85" font-size="7.5">加一条、换一条都行</text>
+  <text x="596" y="262" fill="#f0606a" font-size="9">不能</text>
+  <text x="466" y="280" fill="#6b6b85" font-size="7.5">坏了换整块主板，想加只能买新的</text>
+
+  <line x1="466" y1="298" x2="720" y2="298" stroke="#33334a"/>
+  <text x="466" y="318" fill="#e8b84b" font-size="8.5">14 mm 机身：焊死是工程妥协</text>
+  <text x="466" y="334" fill="#e8b84b" font-size="8.5">22 mm 机身：焊死是商业选择</text>
+  <text x="466" y="352" fill="#6b6b85" font-size="8">判断方法：看厚度。&gt;20 mm 还说不过去</text>
+
+  <line x1="24" y1="378" x2="736" y2="378" stroke="#2a2a44"/>
+
+  <text x="24" y="400" fill="#e8b84b" font-size="9">顺便解释一个现象：同样标 16GB，板载的机器跑分往往高一点——不是颗粒更好，是走线更短。</text>
+  <text x="24" y="420" fill="#9a9ab4" font-size="9">这条规律在核显机器上尤其明显：核显没有独立显存，内存带宽就是它的显存带宽。</text>
+  <text x="24" y="438" fill="#6b6b85" font-size="8.5">双通道的 LPDDR5X 能到 130 GB/s 以上，单通道 DDR5 只有 70 GB/s 左右。</text>
+</svg>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="470" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">买笔记本的十项检查</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">前两项决定性能，第五、六项决定眼睛，最后两项决定每天背着的感受</text>
+
+  <rect x="36" y="72" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="50" y="96" fill="#6b6b85" font-size="9" font-family="monospace">1</text>
+  <text x="70" y="96" fill="#d8d8e4" font-size="10">CPU 持续功耗</text>
+  <text x="70" y="115" fill="#9a9ab4" font-size="8.5">评测里「30 分钟后的封装功耗」</text>
+  <rect x="324" y="84" width="42" height="16" rx="8" fill="none" stroke="#f0606a"/>
+  <text x="345" y="95" fill="#f0606a" font-size="7.5" text-anchor="middle">极高</text>
+  <rect x="392" y="72" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="406" y="96" fill="#6b6b85" font-size="9" font-family="monospace">2</text>
+  <text x="426" y="96" fill="#d8d8e4" font-size="10">显卡功耗 TGP</text>
+  <text x="426" y="115" fill="#9a9ab4" font-size="8.5">同型号有 35W–175W 多个版本</text>
+  <rect x="680" y="84" width="42" height="16" rx="8" fill="none" stroke="#f0606a"/>
+  <text x="701" y="95" fill="#f0606a" font-size="7.5" text-anchor="middle">极高</text>
+  <rect x="36" y="142" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="50" y="166" fill="#6b6b85" font-size="9" font-family="monospace">3</text>
+  <text x="70" y="166" fill="#d8d8e4" font-size="10">内存是否焊死</text>
+  <text x="70" y="185" fill="#9a9ab4" font-size="8.5">拆机图，或规格页写「板载」</text>
+  <rect x="324" y="154" width="42" height="16" rx="8" fill="none" stroke="#e8b84b"/>
+  <text x="345" y="165" fill="#e8b84b" font-size="7.5" text-anchor="middle">高</text>
+  <rect x="392" y="142" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="406" y="166" fill="#6b6b85" font-size="9" font-family="monospace">4</text>
+  <text x="426" y="166" fill="#d8d8e4" font-size="10">M.2 插槽数量</text>
+  <text x="426" y="185" fill="#9a9ab4" font-size="8.5">拆机图，看几个槽、多长</text>
+  <rect x="680" y="154" width="42" height="16" rx="8" fill="none" stroke="#e8b84b"/>
+  <text x="701" y="165" fill="#e8b84b" font-size="7.5" text-anchor="middle">高</text>
+  <rect x="36" y="212" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="50" y="236" fill="#6b6b85" font-size="9" font-family="monospace">5</text>
+  <text x="70" y="236" fill="#d8d8e4" font-size="10">屏幕亮度与色域</text>
+  <text x="70" y="255" fill="#9a9ab4" font-size="8.5">尼特数 + sRGB 百分比</text>
+  <rect x="324" y="224" width="42" height="16" rx="8" fill="none" stroke="#e8b84b"/>
+  <text x="345" y="235" fill="#e8b84b" font-size="7.5" text-anchor="middle">高</text>
+  <rect x="392" y="212" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="406" y="236" fill="#6b6b85" font-size="9" font-family="monospace">6</text>
+  <text x="426" y="236" fill="#d8d8e4" font-size="10">PWM 调光频率</text>
+  <text x="426" y="255" fill="#9a9ab4" font-size="8.5">评测实测，或手机慢动作拍</text>
+  <rect x="680" y="224" width="42" height="16" rx="8" fill="none" stroke="#6b8fd4"/>
+  <text x="701" y="235" fill="#6b8fd4" font-size="7.5" text-anchor="middle">中</text>
+  <rect x="36" y="282" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="50" y="306" fill="#6b6b85" font-size="9" font-family="monospace">7</text>
+  <text x="70" y="306" fill="#d8d8e4" font-size="10">接口能力</text>
+  <text x="70" y="325" fill="#9a9ab4" font-size="8.5">哪个能充电、出画面、雷电</text>
+  <rect x="324" y="294" width="42" height="16" rx="8" fill="none" stroke="#e8b84b"/>
+  <text x="345" y="305" fill="#e8b84b" font-size="7.5" text-anchor="middle">高</text>
+  <rect x="392" y="282" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="406" y="306" fill="#6b6b85" font-size="9" font-family="monospace">8</text>
+  <text x="426" y="306" fill="#d8d8e4" font-size="10">电池容量</text>
+  <text x="426" y="325" fill="#9a9ab4" font-size="8.5">Wh 数，不是「毫安时」</text>
+  <rect x="680" y="294" width="42" height="16" rx="8" fill="none" stroke="#6b8fd4"/>
+  <text x="701" y="305" fill="#6b8fd4" font-size="7.5" text-anchor="middle">中</text>
+  <rect x="36" y="352" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="50" y="376" fill="#6b6b85" font-size="9" font-family="monospace">9</text>
+  <text x="70" y="376" fill="#d8d8e4" font-size="10">重量（含电源）</text>
+  <text x="70" y="395" fill="#9a9ab4" font-size="8.5">「1.2 kg」通常不含那块砖</text>
+  <rect x="324" y="364" width="42" height="16" rx="8" fill="none" stroke="#6b8fd4"/>
+  <text x="345" y="375" fill="#6b8fd4" font-size="7.5" text-anchor="middle">中</text>
+  <rect x="392" y="352" width="344" height="58" rx="6" fill="#171725" stroke="#2a2a44"/>
+  <text x="406" y="376" fill="#6b6b85" font-size="9" font-family="monospace">10</text>
+  <text x="426" y="376" fill="#d8d8e4" font-size="10">满载噪音</text>
+  <text x="426" y="395" fill="#9a9ab4" font-size="8.5">评测分贝值，或性能模式实测</text>
+  <rect x="680" y="364" width="42" height="16" rx="8" fill="none" stroke="#6b8fd4"/>
+  <text x="701" y="375" fill="#6b8fd4" font-size="7.5" text-anchor="middle">中</text>
+
+  <line x1="24" y1="424" x2="736" y2="424" stroke="#2a2a44"/>
+  <text x="24" y="446" fill="#e8b84b" font-size="9">最容易被忽略的是第 9 项：宣传的「1.2 kg」不含电源，实际背着走可能 1.55 kg。</text>
+  <text x="24" y="464" fill="#6b6b85" font-size="8.5">最查不到的是第 6 项：PWM 频率从不写在规格页上，只能靠评测或者自己用手机拍。</text>
+</svg>

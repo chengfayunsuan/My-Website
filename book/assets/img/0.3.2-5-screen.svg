@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="430" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">一块屏好不好用，看四个数</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">前三个写在规格页上，第四个只能自己测</text>
+
+  <!-- 卡片 1：亮度 -->
+  <rect x="24" y="68" width="348" height="156" rx="6" fill="#12121c" stroke="#2a2a44"/>
+  <text x="40" y="90" fill="#9fd4f5" font-size="10">亮度</text>
+  <text x="80" y="90" fill="#6b6b85" font-size="8">300 尼特是及格线</text>
+
+  <defs>
+    <linearGradient id="lux" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#2a2a35"/>
+      <stop offset="40%" stop-color="#6b6b85"/>
+      <stop offset="70%" stop-color="#c8c8d4"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <rect x="40" y="112" width="300" height="14" rx="2" fill="url(#lux)"/>
+  <g stroke="#0e0e16" stroke-width="1.5">
+    <line x1="130" y1="112" x2="130" y2="126"/>
+    <line x1="178" y1="112" x2="178" y2="126"/>
+    <line x1="238" y1="112" x2="238" y2="126"/>
+    <line x1="298" y1="112" x2="298" y2="126"/>
+  </g>
+  <g fill="#9a9ab4" font-size="7.5" text-anchor="middle">
+    <text x="130" y="140">220</text>
+    <text x="178" y="140">300</text>
+    <text x="238" y="140">400</text>
+    <text x="298" y="140">500</text>
+  </g>
+  <text x="178" y="158" fill="#f0606a" font-size="7.5" text-anchor="middle">及格</text>
+  <text x="40" y="180" fill="#9a9ab4" font-size="8.5">220 尼特：窗边就没法看。400 以上才算舒服。</text>
+  <text x="40" y="198" fill="#6b6b85" font-size="8">室内照度 300–500 勒克斯，屏幕要比环境亮才行。</text>
+
+  <!-- 卡片 2：色域 -->
+  <rect x="388" y="68" width="348" height="156" rx="6" fill="#12121c" stroke="#2a2a44"/>
+  <text x="404" y="90" fill="#9fe0c9" font-size="10">色域</text>
+  <text x="444" y="90" fill="#6b6b85" font-size="8">100% sRGB 是底线</text>
+
+  <text x="404" y="116" fill="#6b6b85" font-size="7.5">45% NTSC</text>
+  <rect x="470" y="108" width="90" height="10" rx="2" fill="#3a1e26" stroke="#f0606a"/>
+  <text x="568" y="116" fill="#f0606a" font-size="7.5">发白、红色发橙</text>
+
+  <text x="404" y="140" fill="#6b6b85" font-size="7.5">100% sRGB</text>
+  <rect x="470" y="132" width="150" height="10" rx="2" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="628" y="140" fill="#9fe0c9" font-size="7.5">够用</text>
+
+  <text x="404" y="164" fill="#6b6b85" font-size="7.5">100% P3</text>
+  <rect x="470" y="156" width="176" height="10" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="654" y="164" fill="#9fd4f5" font-size="7.5">更艳，需校色</text>
+
+  <text x="404" y="188" fill="#9a9ab4" font-size="8.5">广色域没做色彩管理 = 过艳：红色发荧光，人脸发橙。</text>
+  <text x="404" y="206" fill="#6b6b85" font-size="8">Windows 的色彩管理一直是短板，Mac 做得早。</text>
+
+  <!-- 卡片 3：反射率 -->
+  <rect x="24" y="234" width="348" height="140" rx="6" fill="#12121c" stroke="#2a2a44"/>
+  <text x="40" y="256" fill="#cfc6ff" font-size="10">反射率</text>
+  <text x="90" y="256" fill="#6b6b85" font-size="8">镜面 4–6%，雾面 1–2%</text>
+
+  <!-- 镜面 -->
+  <rect x="40" y="272" width="140" height="52" rx="3" fill="#1a1a2a" stroke="#9a9ab4"/>
+  <rect x="70" y="278" width="34" height="22" rx="2" fill="#e8e8f0" fill-opacity="0.85"/>
+  <text x="110" y="316" fill="#9a9ab4" font-size="7.5" text-anchor="middle">镜面：能看到窗户</text>
+
+  <!-- 雾面 -->
+  <rect x="196" y="272" width="140" height="52" rx="3" fill="#1a1a2a" stroke="#9a9ab4"/>
+  <g fill="#e8e8f0" fill-opacity="0.28">
+    <circle cx="228" cy="286" r="7"/><circle cx="248" cy="296" r="9"/>
+    <circle cx="272" cy="284" r="6"/><circle cx="292" cy="300" r="8"/>
+    <circle cx="312" cy="288" r="6"/>
+  </g>
+  <text x="266" y="316" fill="#9a9ab4" font-size="7.5" text-anchor="middle">雾面：光被打散</text>
+
+  <text x="40" y="340" fill="#9a9ab4" font-size="8.5">镜面不是「更高级」，是「更便宜、更薄」；触摸屏必须镜面。</text>
+  <text x="40" y="358" fill="#6b6b85" font-size="8">真正决定舒不舒服的，是亮度和环境光的比值。</text>
+
+  <!-- 卡片 4：PWM -->
+  <rect x="388" y="234" width="348" height="140" rx="6" fill="#12121c" stroke="#2a2a44"/>
+  <text x="404" y="256" fill="#e8b84b" font-size="10">调光方式</text>
+  <text x="464" y="256" fill="#6b6b85" font-size="8">唯一查不到参数的</text>
+
+  <!-- 低频方波 -->
+  <text x="404" y="280" fill="#f0606a" font-size="7.5">200 Hz 低频 PWM</text>
+  <polyline points="404,300 412,300 412,286 424,286 424,300 432,300 432,286 444,286 444,300 452,300 452,286 464,286 464,300 472,300 472,286 484,286 484,300"
+            fill="none" stroke="#f0606a" stroke-width="1.2"/>
+  <text x="492" y="296" fill="#f0606a" font-size="7.5">看得见的闪烁</text>
+
+  <!-- 高频方波 -->
+  <text x="404" y="326" fill="#4ec9a3" font-size="7.5">2000 Hz 以上 / DC 调光</text>
+  <polyline points="404,346 406,346 406,332 410,332 410,346 412,346 412,332 416,332 416,346 418,346 418,332 422,332 422,346 424,346 424,332 428,332 428,346 430,346 430,332 434,332 434,346 436,346 436,332 440,332 440,346"
+            fill="none" stroke="#4ec9a3" stroke-width="1"/>
+  <text x="452" y="342" fill="#4ec9a3" font-size="7.5">眼睛不累</text>
+
+  <text x="404" y="366" fill="#9a9ab4" font-size="8.5">自己测：手机开慢动作拍屏幕，有黑条滚动就是低频 PWM。</text>
+
+  <line x1="24" y1="392" x2="736" y2="392" stroke="#2a2a44"/>
+  <text x="24" y="412" fill="#e8b84b" font-size="9">这四项里，只有「亮度」和「色域」会写在规格页上；反射率要看实拍，PWM 只能靠评测或自己测。</text>
+  <text x="24" y="428" fill="#6b6b85" font-size="8.5">所以「屏幕好」是一个综合判断，不是一个数字——这也是线下店仍然有价值的地方。</text>
+</svg>

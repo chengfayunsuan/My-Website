@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="360" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">同一个 60Wh 电池，三种命运</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">续航 = 瓦时 ÷ 瓦。公式只有一条，差别全在「瓦」这个数上</text>
+
+  <!-- 场景 1 -->
+  <text x="24" y="86" fill="#6b6b85" font-size="9">待机</text>
+  <text x="24" y="102" fill="#9a9ab4" font-size="8">3 W · 关 WiFi</text>
+  <rect x="140" y="76" width="560" height="26" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="152" y="94" fill="#9fd4f5" font-size="9">60 ÷ 3 = 20 小时</text>
+  <text x="712" y="94" fill="#9fd4f5" font-size="9">20 h</text>
+  <text x="560" y="71" fill="#e8b84b" font-size="8">宣传页在这里 ↓</text>
+
+  <!-- 场景 2 -->
+  <text x="24" y="136" fill="#6b6b85" font-size="9">看视频</text>
+  <text x="24" y="152" fill="#9a9ab4" font-size="8">10 W · 150 尼特</text>
+  <rect x="140" y="126" width="168" height="26" rx="3" fill="#183028" stroke="#4ec9a3"/>
+  <text x="152" y="144" fill="#9fe0c9" font-size="9">60 ÷ 10 = 6 小时</text>
+  <text x="318" y="144" fill="#9fe0c9" font-size="9">6 h</text>
+  <text x="200" y="121" fill="#f0606a" font-size="8">你大概在这里 ↓</text>
+
+  <!-- 场景 3 -->
+  <text x="24" y="186" fill="#6b6b85" font-size="9">满载</text>
+  <text x="24" y="202" fill="#9a9ab4" font-size="8">38 W · 双烤</text>
+  <rect x="140" y="176" width="45" height="26" rx="3" fill="#3a1e26" stroke="#f0606a"/>
+  <text x="195" y="194" fill="#f0606a" font-size="9">60 ÷ 38 ≈ 1.6 小时</text>
+  <text x="430" y="188" fill="#6b6b85" font-size="8">风扇会一直转，这不是「能用」，是「撑到插电」</text>
+
+  <!-- 刻度 -->
+  <line x1="140" y1="216" x2="700" y2="216" stroke="#2a2a44"/>
+  <g fill="#4a4a68" font-size="8" text-anchor="middle">
+    <text x="140" y="232">0</text>
+    <text x="280" y="232">5 h</text>
+    <text x="420" y="232">10 h</text>
+    <text x="560" y="232">15 h</text>
+    <text x="700" y="232">20 h</text>
+  </g>
+  <g stroke="#2a2a44">
+    <line x1="280" y1="212" x2="280" y2="219"/>
+    <line x1="420" y1="212" x2="420" y2="219"/>
+    <line x1="560" y1="212" x2="560" y2="219"/>
+  </g>
+
+  <line x1="24" y1="252" x2="736" y2="252" stroke="#2a2a44"/>
+
+  <text x="24" y="274" fill="#e8b84b" font-size="9">所以「18 小时」不是虚标，是它测的场景你根本不会用：3 瓦待机、本地视频、关掉无线。</text>
+  <text x="24" y="294" fill="#9a9ab4" font-size="9">真实使用落在中间那一行——浏览器开十个标签、亮度 250 尼特、微信在后台，大约 7 到 14 瓦。</text>
+  <text x="24" y="314" fill="#6b6b85" font-size="8.5">买之前看两个数：电池容量（Wh）和「150 尼特 + WiFi 开 + 循环网页」的实测续航。</text>
+  <text x="24" y="334" fill="#6b6b85" font-size="8.5">另一个变量是屏幕：OLED 显示白色画面时比 LCD 费电得多，同一机型选 OLED 可能少两小时。</text>
+</svg>

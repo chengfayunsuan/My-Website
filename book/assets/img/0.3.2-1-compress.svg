@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="470" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">同一套零件，两种形态</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">左边有四十升空间，右边只有十毫米高度——所有妥协都从这条红线开始</text>
+
+  <!-- 左：台式机 -->
+  <text x="40" y="80" fill="#9fd4f5" font-size="10.5">台式机 · 40–45 L</text>
+  <rect x="40" y="90" width="270" height="286" rx="6" fill="#12121c" stroke="#2a2a44"/>
+
+  <rect x="56" y="106" width="86" height="76" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="99" y="138" fill="#9fd4f5" font-size="8.5" text-anchor="middle">塔式散热</text>
+  <text x="99" y="154" fill="#6b6b85" font-size="8" text-anchor="middle">高 160 mm</text>
+
+  <rect x="152" y="106" width="60" height="76" rx="3" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="182" y="138" fill="#cfc6ff" font-size="8.5" text-anchor="middle">内存</text>
+  <text x="182" y="154" fill="#6b6b85" font-size="8" text-anchor="middle">竖插</text>
+
+  <rect x="222" y="106" width="72" height="76" rx="3" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="258" y="138" fill="#9fe0c9" font-size="8.5" text-anchor="middle">电源</text>
+  <text x="258" y="154" fill="#6b6b85" font-size="8" text-anchor="middle">150 mm</text>
+
+  <rect x="56" y="192" width="238" height="36" rx="3" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="175" y="215" fill="#cfc6ff" font-size="9" text-anchor="middle">显卡 · 横插 · 厚 50 mm</text>
+
+  <rect x="56" y="238" width="150" height="30" rx="3" fill="#2a2a30" stroke="#9a9ab4"/>
+  <text x="131" y="258" fill="#c8c8d4" font-size="9" text-anchor="middle">主板 305 × 244</text>
+
+  <rect x="216" y="238" width="78" height="30" rx="3" fill="#2a2a30" stroke="#9a9ab4"/>
+  <text x="255" y="258" fill="#c8c8d4" font-size="9" text-anchor="middle">3.5 寸硬盘</text>
+
+  <rect x="56" y="278" width="238" height="82" rx="3" fill="#171725" stroke="#33334a"/>
+  <text x="175" y="300" fill="#6b6b85" font-size="8.5" text-anchor="middle">十几厘米的空腔</text>
+  <text x="175" y="318" fill="#6b6b85" font-size="8.5" text-anchor="middle">风可以从任何方向穿过</text>
+  <text x="175" y="340" fill="#4a4a68" font-size="8.5" text-anchor="middle">零件之间互不干涉</text>
+
+  <!-- 中间箭头 -->
+  <path d="M330,232 L368,232" stroke="#e8b84b" stroke-width="1.4" marker-end="url(#ar)"/>
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1,1 L7,4 L1,7 z" fill="#e8b84b"/>
+    </marker>
+  </defs>
+  <text x="349" y="222" fill="#e8b84b" font-size="8.5" text-anchor="middle">压缩</text>
+  <text x="349" y="252" fill="#e8b84b" font-size="8" text-anchor="middle">1/33</text>
+
+  <!-- 右：笔记本 -->
+  <text x="392" y="80" fill="#f0606a" font-size="10.5">笔记本 · 1.2–1.4 L</text>
+  <rect x="392" y="90" width="330" height="286" rx="6" fill="#12121c" stroke="#2a2a44"/>
+
+  <!-- 机身剖面 -->
+  <rect x="406" y="196" width="302" height="70" rx="4" fill="#171725" stroke="#4a4a68"/>
+  <text x="557" y="186" fill="#6b6b85" font-size="8" text-anchor="middle">机身 15 mm</text>
+
+  <!-- 内部主要件 -->
+  <rect x="414" y="206" width="56" height="24" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="442" y="222" fill="#9fd4f5" font-size="7.5" text-anchor="middle">芯片</text>
+
+  <rect x="474" y="206" width="60" height="14" rx="2" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="504" y="217" fill="#cfc6ff" font-size="7.5" text-anchor="middle">热管</text>
+
+  <rect x="538" y="206" width="28" height="24" rx="2" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="552" y="222" fill="#9fe0c9" font-size="7" text-anchor="middle">鳍片</text>
+
+  <circle cx="586" cy="218" r="13" fill="#1a1a2a" stroke="#9a9ab4"/>
+  <text x="586" y="222" fill="#c8c8d4" font-size="7" text-anchor="middle">扇</text>
+
+  <rect x="610" y="206" width="88" height="24" rx="2" fill="#2a2a30" stroke="#9a9ab4"/>
+  <text x="654" y="222" fill="#c8c8d4" font-size="7.5" text-anchor="middle">电池 + 主板</text>
+
+  <!-- 红线：可用高度 -->
+  <line x1="406" y1="252" x2="708" y2="252" stroke="#f0606a" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <text x="708" y="278" fill="#f0606a" font-size="8" text-anchor="end">内部可用高度 ≈ 8–10 mm（虚线以上）</text>
+
+  <!-- 四条后果 -->
+  <text x="414" y="292" fill="#9a9ab4" font-size="8.5">内存不能插：插槽要 5–6 mm</text>
+  <text x="414" y="310" fill="#9a9ab4" font-size="8.5">散热不能立：只能摊平成热管</text>
+  <text x="414" y="328" fill="#9a9ab4" font-size="8.5">风扇不能大：靠转速换风量</text>
+  <text x="414" y="346" fill="#9a9ab4" font-size="8.5">电源必须外置：或改用 Type-C</text>
+  <text x="414" y="366" fill="#6b6b85" font-size="8">热只能从侧面出风 —— 出风口被挡住，整机就废了</text>
+
+  <line x1="24" y1="396" x2="736" y2="396" stroke="#2a2a44"/>
+
+  <text x="24" y="418" fill="#e8b84b" font-size="9">面积：744 cm² → 200 cm²（三分之一）　　容积：42 L → 1.3 L（三十分之一）</text>
+  <text x="24" y="438" fill="#9a9ab4" font-size="9">真正的约束不是面积，是厚度。台式机有十几厘米的纵深，笔记本只有十毫米。</text>
+  <text x="24" y="458" fill="#6b6b85" font-size="8.5">这也是为什么笔记本的每个零件都是定制件——标准件没有一个能塞进去。</text>
+</svg>

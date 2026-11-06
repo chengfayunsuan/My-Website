@@ -217,7 +217,7 @@ figure.zoom img { cursor: zoom-in; }
   border-radius: 12px; padding: 16px 20px; margin: 26px 0;
 }
 .minitoc h4 { margin: 0 0 10px; color: var(--txt-dim); font-size: 13px; letter-spacing: 1px; font-family: var(--mono); }
-.minitoc ol { margin: 0; padding-left: 22px; font-size: 14.5px; }
+.minitoc ol { margin: 0; padding-left: 2px; list-style: none; font-size: 14.5px; }
 .minitoc a { color: var(--txt); text-decoration: none; }
 .minitoc a:hover { color: var(--purple); }
 
@@ -314,7 +314,7 @@ a.fig-zoom:hover img { opacity: .9; }
   figcaption { font-size: 12px; }
 
   .minitoc { padding: 13px 15px 13px 10px; }
-  .minitoc ol { font-size: 14px; padding-left: 20px; }
+  .minitoc ol { font-size: 14px; padding-left: 2px; }
 
   /* 翻页两块并排太窄，竖着叠 */
   .pager { flex-direction: column; gap: 10px; margin-top: 46px; }

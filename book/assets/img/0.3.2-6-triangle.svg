@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="420" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">性能、便携、续航：只能取两个</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">每个机型都在这个三角形里选了一个位置，没有谁能站在中心</text>
+
+  <!-- 三角形 -->
+  <path d="M350,78 L224,296 L476,296 Z" fill="#12121c" stroke="#2a2a44" stroke-width="1.2"/>
+
+  <!-- 顶点 -->
+  <circle cx="350" cy="78" r="5" fill="#9b4df0"/>
+  <text x="350" y="66" fill="#cfc6ff" font-size="11" text-anchor="middle">性能</text>
+
+  <circle cx="224" cy="296" r="5" fill="#67b5ef"/>
+  <text x="200" y="316" fill="#9fd4f5" font-size="11" text-anchor="middle">便携</text>
+
+  <circle cx="476" cy="296" r="5" fill="#4ec9a3"/>
+  <text x="500" y="316" fill="#9fe0c9" font-size="11" text-anchor="middle">续航</text>
+
+  <!-- 边上的「只能取二」 -->
+  <text x="238" y="200" fill="#6b6b85" font-size="8" text-anchor="end">放弃续航</text>
+  <text x="452" y="200" fill="#6b6b85" font-size="8">放弃便携</text>
+  <text x="392" y="290" fill="#6b6b85" font-size="8">放弃性能</text>
+
+  <!-- 机型点 -->
+  <circle cx="300" cy="178" r="7" fill="#f0606a"/>
+  <text x="290" y="164" fill="#f0606a" font-size="9" text-anchor="end">游戏本</text>
+
+  <circle cx="312" cy="288" r="7" fill="#67b5ef"/>
+  <text x="296" y="316" fill="#9fd4f5" font-size="9" text-anchor="end">轻薄本</text>
+
+  <circle cx="366" cy="240" r="7" fill="#e8b84b"/>
+  <text x="380" y="236" fill="#e8b84b" font-size="9">全能本</text>
+
+  <!-- 右侧说明 -->
+  <line x1="560" y1="72" x2="560" y2="340" stroke="#2a2a44"/>
+
+  <circle cx="582" cy="90" r="5" fill="#f0606a"/>
+  <text x="596" y="94" fill="#f0606a" font-size="9.5">游戏本</text>
+  <text x="582" y="112" fill="#9a9ab4" font-size="8.5">2.6 kg + 280 W 电源</text>
+  <text x="582" y="128" fill="#9a9ab4" font-size="8.5">续航 2–4 小时</text>
+  <text x="582" y="144" fill="#6b6b85" font-size="8">用重量和续航，换台式机八成的性能</text>
+
+  <circle cx="582" cy="182" r="5" fill="#e8b84b"/>
+  <text x="596" y="186" fill="#e8b84b" font-size="9.5">全能本</text>
+  <text x="582" y="204" fill="#9a9ab4" font-size="8.5">1.8–2.2 kg</text>
+  <text x="582" y="220" fill="#9a9ab4" font-size="8.5">续航 5–8 小时</text>
+  <text x="582" y="236" fill="#6b6b85" font-size="8">什么都不极致，但什么都能干</text>
+
+  <circle cx="582" cy="274" r="5" fill="#67b5ef"/>
+  <text x="596" y="278" fill="#9fd4f5" font-size="9.5">轻薄本</text>
+  <text x="582" y="296" fill="#9a9ab4" font-size="8.5">1.2–1.5 kg</text>
+  <text x="582" y="312" fill="#9a9ab4" font-size="8.5">续航 8–14 小时</text>
+  <text x="582" y="328" fill="#6b6b85" font-size="8">用性能上限换每天背着不累</text>
+
+  <line x1="24" y1="356" x2="736" y2="356" stroke="#2a2a44"/>
+
+  <text x="24" y="374" fill="#e8b84b" font-size="9">这个三角形不是「厂商不努力」，是物理：高性能必然高功耗，高功耗必然要散热和电池。</text>
+  <text x="24" y="392" fill="#9a9ab4" font-size="9">所以「既轻薄又高性能又续航长」的宣传，一定有一项在打折——通常「高性能」指短时峰值。</text>
+  <text x="24" y="410" fill="#6b6b85" font-size="8.5">判断方法：看评测里的「持续负载 30 分钟」和「150 尼特实测续航」，两个数一起看。</text>
+</svg>
