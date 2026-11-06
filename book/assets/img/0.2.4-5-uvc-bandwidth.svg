@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="400" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">为什么免驱摄像头默认给你压缩画面</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">一条 1080p 的原始视频流，USB 2.0 的线根本抬不动</text>
+
+  <!-- 刻度线 -->
+  <line x1="211" y1="80" x2="211" y2="306" stroke="#ef6b6b" stroke-width="1.2" stroke-dasharray="5 4"/>
+  <text x="211" y="322" fill="#ef6b6b" font-size="8.5" text-anchor="middle">USB 2.0 天花板 40 MB/s</text>
+
+  <!-- 1 -->
+  <rect x="30" y="88" width="562" height="26" rx="3" fill="#8a3a3a" stroke="#d06060"/>
+  <text x="42" y="105" fill="#ffd8d8" font-size="9">YUY2 未压缩　1920 × 1080 × 2 字节 × 30 帧</text>
+  <text x="602" y="105" fill="#f0a0a0" font-size="10">124 MB/s</text>
+
+  <!-- 2 -->
+  <rect x="30" y="146" width="181" height="26" rx="3" fill="#6b5520" stroke="#e8b84b"/>
+  <text x="42" y="163" fill="#ffe8b0" font-size="9">USB 2.0 上限</text>
+  <text x="221" y="163" fill="#e8c47a" font-size="10">约 40 MB/s</text>
+
+  <!-- 3 -->
+  <rect x="30" y="204" width="70" height="26" rx="3" fill="#245045" stroke="#4ec9a3"/>
+  <text x="110" y="221" fill="#9fe0c9" font-size="10">MJPEG 压缩　约 15 MB/s</text>
+
+  <!-- 4 -->
+  <rect x="30" y="262" width="24" height="26" rx="3" fill="#1b3a52" stroke="#67b5ef"/>
+  <text x="64" y="279" fill="#9fd4f5" font-size="10">H.264 编码　约 5 MB/s</text>
+
+  <line x1="30" y1="342" x2="730" y2="342" stroke="#2a2a3c"/>
+  <text x="30" y="362" fill="#9a9ab4" font-size="9">第一根条已经冲到天花板外面去了——差了整整三倍。所以摄像头要么压，要么把分辨率降到 480p。</text>
+  <text x="30" y="382" fill="#6b6b85" font-size="8.5">顺带解释了另一件事：移动硬盘和摄像头插在同一个 Hub 上，摄像头就掉帧——它们在抢同一条总线的带宽。</text>
+</svg>

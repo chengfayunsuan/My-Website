@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 452" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="452" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">设备类：免驱的秘密全在这张表里</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">厂商只要挑一个现成的「类」照着说话，操作系统就已经认识它了</text>
+
+  <text x="34" y="72" fill="#6b6b85" font-size="8.5">类代码</text>
+  <text x="96" y="72" fill="#6b6b85" font-size="8.5">名字</text>
+  <text x="222" y="72" fill="#6b6b85" font-size="8.5">它和主机约定的「语言」</text>
+  <text x="592" y="72" fill="#6b6b85" font-size="8.5">典型设备</text>
+  <line x1="30" y1="80" x2="730" y2="80" stroke="#2a2a3c"/>
+
+  <!-- HID -->
+  <rect x="30" y="88" width="3" height="40" fill="#67b5ef"/>
+  <text x="42" y="114" fill="#9fd4f5" font-size="10" font-family="monospace">0x03</text>
+  <text x="96" y="114" fill="#d8d8e4" font-size="10">HID 人机接口</text>
+  <text x="222" y="106" fill="#9a9ab4" font-size="8.5">自带的报告描述符：每个字节哪几位是什么，</text>
+  <text x="222" y="120" fill="#9a9ab4" font-size="8.5">写成一段小程序交给主机</text>
+  <text x="592" y="114" fill="#8fa8c8" font-size="8.5">键盘、鼠标、手柄</text>
+
+  <!-- UVC -->
+  <rect x="30" y="136" width="3" height="40" fill="#e8b84b"/>
+  <text x="42" y="162" fill="#e8c47a" font-size="10" font-family="monospace">0x0E</text>
+  <text x="96" y="162" fill="#d8d8e4" font-size="10">UVC 视频</text>
+  <text x="222" y="154" fill="#9a9ab4" font-size="8.5">一张能力清单：支持哪些分辨率、帧率、像素格式，</text>
+  <text x="222" y="168" fill="#9a9ab4" font-size="8.5">主机挑一个，然后连续送帧</text>
+  <text x="592" y="162" fill="#8fa8c8" font-size="8.5">摄像头、采集卡</text>
+
+  <!-- UAC -->
+  <rect x="30" y="184" width="3" height="40" fill="#e8b84b"/>
+  <text x="42" y="210" fill="#e8c47a" font-size="10" font-family="monospace">0x01</text>
+  <text x="96" y="210" fill="#d8d8e4" font-size="10">UAC 音频</text>
+  <text x="222" y="202" fill="#9a9ab4" font-size="8.5">采样率、位深、通道数；音量旋钮是一个可读写的</text>
+  <text x="222" y="216" fill="#9a9ab4" font-size="8.5">「功能单元」，主机可以直接调它</text>
+  <text x="592" y="210" fill="#8fa8c8" font-size="8.5">麦克风、声卡、耳放</text>
+
+  <!-- MSC -->
+  <rect x="30" y="232" width="3" height="40" fill="#4ec9a3"/>
+  <text x="42" y="258" fill="#9fe0c9" font-size="10" font-family="monospace">0x08</text>
+  <text x="96" y="258" fill="#d8d8e4" font-size="10">MSC 大容量存储</text>
+  <text x="222" y="250" fill="#9a9ab4" font-size="8.5">把闪存切成一个个逻辑块，主机用 SCSI 命令读写，</text>
+  <text x="222" y="264" fill="#9a9ab4" font-size="8.5">文件系统在哪一层都不关它的事</text>
+  <text x="592" y="258" fill="#8fa8c8" font-size="8.5">U 盘、读卡器、移动硬盘</text>
+
+  <!-- Printer -->
+  <rect x="30" y="280" width="3" height="40" fill="#9b4df0"/>
+  <text x="42" y="306" fill="#cfc6ff" font-size="10" font-family="monospace">0x07</text>
+  <text x="96" y="306" fill="#d8d8e4" font-size="10">Printer 打印机</text>
+  <text x="222" y="298" fill="#9a9ab4" font-size="8.5">把我给你的这堆字节印出来。至于这堆字节是</text>
+  <text x="222" y="312" fill="#9a9ab4" font-size="8.5">页面描述还是位图，类本身不管</text>
+  <text x="592" y="306" fill="#8fa8c8" font-size="8.5">激光、喷墨、小票机</text>
+
+  <!-- CDC -->
+  <rect x="30" y="328" width="3" height="40" fill="#67b5ef"/>
+  <text x="42" y="354" fill="#9fd4f5" font-size="10" font-family="monospace">0x02</text>
+  <text x="96" y="354" fill="#d8d8e4" font-size="10">CDC 通信</text>
+  <text x="222" y="346" fill="#9a9ab4" font-size="8.5">假装成一个串口：两边各一个缓冲区，</text>
+  <text x="222" y="360" fill="#9a9ab4" font-size="8.5">谁都能随时往里塞字节</text>
+  <text x="592" y="354" fill="#8fa8c8" font-size="8.5">开发板、4G 模块、GPS</text>
+
+  <!-- Hub -->
+  <rect x="30" y="376" width="3" height="40" fill="#4ec9a3"/>
+  <text x="42" y="402" fill="#9fe0c9" font-size="10" font-family="monospace">0x09</text>
+  <text x="96" y="402" fill="#d8d8e4" font-size="10">Hub 集线器</text>
+  <text x="222" y="394" fill="#9a9ab4" font-size="8.5">「我下面还挂着几个口」——枚举会逐级往下走，</text>
+  <text x="222" y="408" fill="#9a9ab4" font-size="8.5">所以设备地址是树上的编号，不是物理端口号</text>
+  <text x="592" y="402" fill="#8fa8c8" font-size="8.5">扩展坞、显示器内置 Hub</text>
+
+  <line x1="30" y1="424" x2="730" y2="424" stroke="#2a2a3c"/>
+  <text x="30" y="444" fill="#6b6b85" font-size="9">没有出现在表里的设备（专业相机、示波器、工业板卡），就只能装厂商自己的驱动——那是另一套玩法。</text>
+</svg>

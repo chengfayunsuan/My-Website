@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 424" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="424" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">描述符：一棵四层的树</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">一个「键鼠套装接收器」的真实结构——它其实是三个设备挤在一个壳里</text>
+
+  <!-- 设备 -->
+  <rect x="26" y="66" width="300" height="52" rx="6" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="40" y="86" fill="#9fd4f5" font-size="9.5">设备 Device</text>
+  <text x="40" y="104" fill="#8fa8c8" font-size="8" font-family="monospace">VID 046D · PID C52B · bcdUSB 2.00</text>
+
+  <!-- 连线主干 -->
+  <line x1="46" y1="118" x2="46" y2="132" stroke="#3a4a66" stroke-width="1.2"/>
+  <line x1="46" y1="132" x2="66" y2="132" stroke="#3a4a66" stroke-width="1.2"/>
+
+  <!-- 配置 -->
+  <rect x="60" y="132" width="300" height="46" rx="6" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="74" y="151" fill="#cfc6ff" font-size="9.5">配置 Configuration</text>
+  <text x="74" y="168" fill="#8f88a8" font-size="8">bNumInterfaces = 3 · bMaxPower 98mA</text>
+
+  <line x1="80" y1="178" x2="80" y2="192" stroke="#3a4a66" stroke-width="1.2"/>
+  <line x1="80" y1="192" x2="620" y2="192" stroke="#3a4a66" stroke-width="1.2" stroke-dasharray="1 0"/>
+
+  <!-- 三个接口 -->
+  <line x1="130" y1="192" x2="130" y2="204" stroke="#3a4a66" stroke-width="1.2"/>
+  <rect x="26" y="204" width="208" height="42" rx="5" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="38" y="221" fill="#9fe0c9" font-size="9">接口 0 · HID · 键盘</text>
+  <text x="38" y="237" fill="#7f9e94" font-size="7.5">bInterfaceProtocol 1（boot）</text>
+
+  <line x1="376" y1="192" x2="376" y2="204" stroke="#3a4a66" stroke-width="1.2"/>
+  <rect x="272" y="204" width="208" height="42" rx="5" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="284" y="221" fill="#9fe0c9" font-size="9">接口 1 · HID · 鼠标</text>
+  <text x="284" y="237" fill="#7f9e94" font-size="7.5">bInterfaceProtocol 2（boot）</text>
+
+  <line x1="622" y1="192" x2="622" y2="204" stroke="#3a4a66" stroke-width="1.2"/>
+  <rect x="518" y="204" width="208" height="42" rx="5" fill="#3a2f24" stroke="#e8b84b"/>
+  <text x="530" y="221" fill="#e8c47a" font-size="9">接口 2 · 厂商自定义</text>
+  <text x="530" y="237" fill="#a89070" font-size="7.5">bInterfaceClass FF（灯效、升级）</text>
+
+  <!-- 端点 -->
+  <line x1="130" y1="246" x2="130" y2="262" stroke="#3a4a66" stroke-width="1.2"/>
+  <rect x="57" y="262" width="146" height="34" rx="4" fill="#171725" stroke="#4a5a6a"/>
+  <text x="69" y="277" fill="#93b4c8" font-size="8">端点 0x81 · 中断 IN</text>
+  <text x="69" y="290" fill="#6b6b85" font-size="7.5">8 字节 / 1ms</text>
+
+  <line x1="376" y1="246" x2="376" y2="262" stroke="#3a4a66" stroke-width="1.2"/>
+  <rect x="303" y="262" width="146" height="34" rx="4" fill="#171725" stroke="#4a5a6a"/>
+  <text x="315" y="277" fill="#93b4c8" font-size="8">端点 0x82 · 中断 IN</text>
+  <text x="315" y="290" fill="#6b6b85" font-size="7.5">4 字节 / 1ms</text>
+
+  <line x1="622" y1="246" x2="622" y2="262" stroke="#3a4a66" stroke-width="1.2"/>
+  <rect x="549" y="262" width="146" height="34" rx="4" fill="#171725" stroke="#4a5a6a"/>
+  <text x="561" y="277" fill="#93b4c8" font-size="8">端点 0x03 · 中断 OUT</text>
+  <text x="561" y="290" fill="#6b6b85" font-size="7.5">32 字节 / 8ms</text>
+
+  <!-- 右侧注释 -->
+  <line x1="30" y1="312" x2="730" y2="312" stroke="#2a2a3c"/>
+
+  <text x="30" y="332" fill="#9a9ab4" font-size="9">主机只从这棵树里读三件事：</text>
+  <text x="30" y="352" fill="#d8d8e4" font-size="9">① 是谁 —— VID / PID，用来在驱动表里精确找人</text>
+  <text x="30" y="371" fill="#d8d8e4" font-size="9">② 干什么 —— bInterfaceClass，0x03 是 HID、0x0E 是视频、0x07 是打印机</text>
+  <text x="30" y="390" fill="#d8d8e4" font-size="9">③ 怎么说话 —— 端点方向与类型：控制、中断、批量、等时，四种语气</text>
+  <text x="30" y="412" fill="#6b6b85" font-size="9">接口才是「功能」的单位。一个接口一套协议，互不干扰——这就是复合设备的做法。</text>
+</svg>

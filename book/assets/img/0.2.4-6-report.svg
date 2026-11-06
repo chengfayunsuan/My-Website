@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 436" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="436" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">一次按键，在线上是 8 个字节</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">键盘每 1 毫秒就把这 8 个字节重发一遍——不是发「按下」，是发「现在按着哪些」</text>
+
+  <!-- 字节格 -->
+  <text x="69" y="84" fill="#6b6b85" font-size="8" text-anchor="middle">byte 0</text>
+  <text x="157" y="84" fill="#6b6b85" font-size="8" text-anchor="middle">byte 1</text>
+  <text x="245" y="84" fill="#6b6b85" font-size="8" text-anchor="middle">byte 2</text>
+  <text x="333" y="84" fill="#6b6b85" font-size="8" text-anchor="middle">byte 3</text>
+  <text x="421" y="84" fill="#6b6b85" font-size="8" text-anchor="middle">byte 4</text>
+  <text x="509" y="84" fill="#6b6b85" font-size="8" text-anchor="middle">byte 5</text>
+  <text x="597" y="84" fill="#6b6b85" font-size="8" text-anchor="middle">byte 6</text>
+  <text x="685" y="84" fill="#6b6b85" font-size="8" text-anchor="middle">byte 7</text>
+
+  <rect x="28" y="90" width="82" height="58" rx="4" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="69" y="114" fill="#9fd4f5" font-size="9" text-anchor="middle">修饰键</text>
+  <text x="69" y="132" fill="#6f8aa8" font-size="7.5" text-anchor="middle">8 个 bit 各管一个</text>
+
+  <rect x="116" y="90" width="82" height="58" rx="4" fill="#1a1a26" stroke="#3a3a52"/>
+  <text x="157" y="114" fill="#6b6b85" font-size="9" text-anchor="middle">保留</text>
+  <text x="157" y="132" fill="#4a4a60" font-size="7.5" text-anchor="middle">永远是 0</text>
+
+  <rect x="204" y="90" width="82" height="58" rx="4" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="245" y="114" fill="#9fe0c9" font-size="9" text-anchor="middle">键码 1</text>
+  <text x="245" y="132" fill="#6f8a80" font-size="7.5" text-anchor="middle">0x04 = A</text>
+
+  <rect x="292" y="90" width="82" height="58" rx="4" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="333" y="114" fill="#9fe0c9" font-size="9" text-anchor="middle">键码 2</text>
+  <text x="333" y="132" fill="#6f8a80" font-size="7.5" text-anchor="middle">0x00 = 空</text>
+
+  <rect x="380" y="90" width="82" height="58" rx="4" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="421" y="114" fill="#9fe0c9" font-size="9" text-anchor="middle">键码 3</text>
+  <text x="421" y="132" fill="#6f8a80" font-size="7.5" text-anchor="middle">0x00 = 空</text>
+
+  <rect x="468" y="90" width="82" height="58" rx="4" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="509" y="114" fill="#9fe0c9" font-size="9" text-anchor="middle">键码 4</text>
+  <text x="509" y="132" fill="#6f8a80" font-size="7.5" text-anchor="middle">0x00 = 空</text>
+
+  <rect x="556" y="90" width="82" height="58" rx="4" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="597" y="114" fill="#9fe0c9" font-size="9" text-anchor="middle">键码 5</text>
+  <text x="597" y="132" fill="#6f8a80" font-size="7.5" text-anchor="middle">0x00 = 空</text>
+
+  <rect x="644" y="90" width="82" height="58" rx="4" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="685" y="114" fill="#9fe0c9" font-size="9" text-anchor="middle">键码 6</text>
+  <text x="685" y="132" fill="#6f8a80" font-size="7.5" text-anchor="middle">0x00 = 空</text>
+
+  <!-- byte0 展开 -->
+  <line x1="69" y1="148" x2="69" y2="164" stroke="#3a4a66" stroke-width="1"/>
+  <line x1="69" y1="164" x2="131" y2="164" stroke="#3a4a66" stroke-width="1"/>
+  <line x1="131" y1="164" x2="131" y2="176" stroke="#3a4a66" stroke-width="1"/>
+
+  <text x="28" y="190" fill="#9fd4f5" font-size="8.5">byte 0 拆开：八个 bit，各管一个修饰键</text>
+
+  <rect x="28" y="198" width="24" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="40" y="214" fill="#9fd4f5" font-size="8" text-anchor="middle">0</text>
+  <rect x="54" y="198" width="24" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="66" y="214" fill="#9fd4f5" font-size="8" text-anchor="middle">1</text>
+  <rect x="80" y="198" width="24" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="92" y="214" fill="#9fd4f5" font-size="8" text-anchor="middle">2</text>
+  <rect x="106" y="198" width="24" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="118" y="214" fill="#9fd4f5" font-size="8" text-anchor="middle">3</text>
+  <rect x="132" y="198" width="24" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="144" y="214" fill="#9fd4f5" font-size="8" text-anchor="middle">4</text>
+  <rect x="158" y="198" width="24" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="170" y="214" fill="#9fd4f5" font-size="8" text-anchor="middle">5</text>
+  <rect x="184" y="198" width="24" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="196" y="214" fill="#9fd4f5" font-size="8" text-anchor="middle">6</text>
+  <rect x="210" y="198" width="24" height="24" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="222" y="214" fill="#9fd4f5" font-size="8" text-anchor="middle">7</text>
+
+  <text x="252" y="207" fill="#8fa8c8" font-size="8.5">0 左 Ctrl　1 左 Shift　2 左 Alt　3 左 Win</text>
+  <text x="252" y="220" fill="#8fa8c8" font-size="8.5">4 右 Ctrl　5 右 Shift　6 右 Alt　7 右 Win</text>
+
+  <!-- 六槽括号 -->
+  <path d="M204 166 L204 174 L726 174 L726 166" fill="none" stroke="#4ec9a3" stroke-width="1.1"/>
+  <text x="726" y="190" fill="#9fe0c9" font-size="8.5" text-anchor="end">这六个格子，就是六个槽</text>
+
+  <line x1="30" y1="244" x2="730" y2="244" stroke="#2a2a3c"/>
+
+  <text x="30" y="266" fill="#e8c47a" font-size="9.5">于是就有了那个绕不开的限制：</text>
+  <text x="30" y="288" fill="#d8d8e4" font-size="9">报告里只有六个槽。你同时按十个键，它也只能报六个——<tspan fill="#9fe0c9">这不是键盘偷工减料，是这份表格只有六行。</tspan></text>
+  <text x="30" y="310" fill="#9a9ab4" font-size="9">所谓「全键无冲」，做法无非三种：把报告加长到 16 或 32 字节；拆成几个接口各报六个；</text>
+  <text x="30" y="328" fill="#9a9ab4" font-size="9">或者干脆不用 HID 的键盘协议，走厂商自定义接口——代价是必须装驱动，PE 里就认不出来。</text>
+
+  <line x1="30" y1="348" x2="730" y2="348" stroke="#2a2a3c"/>
+
+  <text x="30" y="368" fill="#9a9ab4" font-size="9">顺带一个实用推论：按住 A 不放，报告会一直重复同样的 8 个字节，主机靠这个判断「还按着」。</text>
+  <text x="30" y="388" fill="#9a9ab4" font-size="9">所以拔掉键盘时，主机会收到「没有报告了」——这正是某些系统卡住一个键不放的原因。</text>
+
+  <text x="30" y="416" fill="#6b6b85" font-size="8.5">键盘上那个「任意键唤醒」，读的就是 byte 2 有没有从 0x00 变成别的值。</text>
+</svg>

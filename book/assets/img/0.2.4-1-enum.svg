@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 452" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="a1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,1.2 L8,4.5 L0,7.8 z" fill="#67b5ef"/>
+    </marker>
+    <marker id="a2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,1.2 L8,4.5 L0,7.8 z" fill="#e8b84b"/>
+    </marker>
+    <marker id="a3" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,1.2 L8,4.5 L0,7.8 z" fill="#4ec9a3"/>
+    </marker>
+  </defs>
+  <rect width="760" height="452" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">枚举：插上去到能用，中间有九步</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">任何一步没回应，你看到的就是「未知 USB 设备（设备描述符请求失败）」</text>
+
+  <text x="150" y="76" fill="#9fd4f5" font-size="10.5" text-anchor="middle">主机 Host</text>
+  <text x="600" y="76" fill="#e8c47a" font-size="10.5" text-anchor="middle">设备 Device</text>
+  <line x1="150" y1="86" x2="150" y2="400" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="4 4"/>
+  <line x1="600" y1="86" x2="600" y2="400" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="4 4"/>
+
+  <!-- 1 -->
+  <circle cx="95" cy="117" r="9" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="95" y="120.5" fill="#9fd4f5" font-size="9" text-anchor="middle">1</text>
+  <text x="375" y="112" fill="#e8c47a" font-size="8.5" text-anchor="middle">D+ 上拉：告诉主机「这个口有东西」</text>
+  <line x1="596" y1="121" x2="158" y2="121" stroke="#e8b84b" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- 2 -->
+  <circle cx="95" cy="150" r="9" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="95" y="153.5" fill="#9fd4f5" font-size="9" text-anchor="middle">2</text>
+  <text x="375" y="145" fill="#9fd4f5" font-size="8.5" text-anchor="middle">总线复位，至少 10 毫秒</text>
+  <line x1="154" y1="154" x2="592" y2="154" stroke="#67b5ef" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- 3 -->
+  <circle cx="95" cy="183" r="9" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="95" y="186.5" fill="#9fd4f5" font-size="9" text-anchor="middle">3</text>
+  <text x="375" y="178" fill="#9fd4f5" font-size="8.5" text-anchor="middle">GET_DESCRIPTOR（设备），此时地址还是 0</text>
+  <line x1="154" y1="187" x2="592" y2="187" stroke="#67b5ef" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- 4 -->
+  <circle cx="95" cy="216" r="9" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="95" y="219.5" fill="#9fd4f5" font-size="9" text-anchor="middle">4</text>
+  <text x="375" y="211" fill="#e8c47a" font-size="8.5" text-anchor="middle">回 18 字节：VID、PID、设备类、最大包长</text>
+  <line x1="596" y1="220" x2="158" y2="220" stroke="#e8b84b" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- 5 -->
+  <circle cx="95" cy="249" r="9" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="95" y="252.5" fill="#9fd4f5" font-size="9" text-anchor="middle">5</text>
+  <text x="375" y="244" fill="#9fd4f5" font-size="8.5" text-anchor="middle">SET_ADDRESS：你以后叫 7 号</text>
+  <line x1="154" y1="253" x2="592" y2="253" stroke="#67b5ef" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- 6 -->
+  <circle cx="95" cy="282" r="9" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="95" y="285.5" fill="#9fd4f5" font-size="9" text-anchor="middle">6</text>
+  <text x="375" y="277" fill="#9fd4f5" font-size="8.5" text-anchor="middle">GET_DESCRIPTOR（配置）：你到底有几个功能</text>
+  <line x1="154" y1="286" x2="592" y2="286" stroke="#67b5ef" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- 7 -->
+  <circle cx="95" cy="315" r="9" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="95" y="318.5" fill="#9fd4f5" font-size="9" text-anchor="middle">7</text>
+  <text x="375" y="310" fill="#e8c47a" font-size="8.5" text-anchor="middle">回一整棵树：3 个接口，4 个端点</text>
+  <line x1="596" y1="319" x2="158" y2="319" stroke="#e8b84b" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- 8 -->
+  <circle cx="95" cy="348" r="9" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="95" y="351.5" fill="#9fd4f5" font-size="9" text-anchor="middle">8</text>
+  <text x="375" y="343" fill="#9fd4f5" font-size="8.5" text-anchor="middle">SET_CONFIGURATION(1)：按这套配置开工</text>
+  <line x1="154" y1="352" x2="592" y2="352" stroke="#67b5ef" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- 9 -->
+  <circle cx="95" cy="381" r="9" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="95" y="384.5" fill="#9fe0c9" font-size="9" text-anchor="middle">9</text>
+  <text x="375" y="376" fill="#9fe0c9" font-size="8.5" text-anchor="middle">内核按接口的类去挑驱动，挑到了就 probe</text>
+  <line x1="596" y1="385" x2="158" y2="385" stroke="#4ec9a3" stroke-width="1.5" marker-end="url(#a3)"/>
+
+  <line x1="30" y1="408" x2="730" y2="408" stroke="#2a2a3c"/>
+  <text x="30" y="428" fill="#9a9ab4" font-size="9">
+    全程不到 1 秒。第 3 步和第 6 步最容易失败——线太长、供电不足、Hub 太烂，都卡在这里。
+  </text>
+  <text x="30" y="445" fill="#6b6b85" font-size="9">
+    注意：设备自己从不声明「我是打印机」。它只报一个类代码，剩下的靠主机这边认。
+  </text>
+</svg>
