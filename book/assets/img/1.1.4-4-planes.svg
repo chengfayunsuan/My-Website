@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 438" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="438" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">Unicode 的 17 个平面：一共 111 万个位置</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">每个平面 65536 个码点，十七个里真正在用的只有三个</text>
+
+  <!-- 0 -->
+  <rect x="28" y="70" width="4" height="42" fill="#67b5ef"/>
+  <text x="44" y="88" fill="#9fd4f5" font-size="9" font-family="monospace">0</text>
+  <text x="44" y="104" fill="#6b6b85" font-size="7.5">BMP</text>
+  <text x="96" y="88" fill="#d8d8e4" font-size="9.5">基本多文种平面</text>
+  <text x="96" y="104" fill="#6b6b85" font-size="8">U+0000 – U+FFFF</text>
+  <text x="330" y="96" fill="#9fd4f5" font-size="9">日常用到的字符，99% 都在这一段</text>
+
+  <!-- 1 -->
+  <rect x="28" y="118" width="4" height="42" fill="#e8b84b"/>
+  <text x="44" y="136" fill="#e8c47a" font-size="9" font-family="monospace">1</text>
+  <text x="44" y="152" fill="#6b6b85" font-size="7.5">SMP</text>
+  <text x="96" y="136" fill="#d8d8e4" font-size="9.5">补充多文种平面</text>
+  <text x="96" y="152" fill="#6b6b85" font-size="8">U+10000 – U+1FFFF</text>
+  <text x="330" y="144" fill="#e8c47a" font-size="9">emoji、数学符号、古文字、乐谱</text>
+
+  <!-- 2 -->
+  <rect x="28" y="166" width="4" height="42" fill="#4ec9a3"/>
+  <text x="44" y="184" fill="#9fe0c9" font-size="9" font-family="monospace">2</text>
+  <text x="44" y="200" fill="#6b6b85" font-size="7.5">SIP</text>
+  <text x="96" y="184" fill="#d8d8e4" font-size="9.5">表意文字补充平面</text>
+  <text x="96" y="200" fill="#6b6b85" font-size="8">U+20000 – U+2FFFF</text>
+  <text x="330" y="192" fill="#9fe0c9" font-size="9">CJK 扩展 B，五万多个生僻汉字</text>
+
+  <!-- 3-13 -->
+  <rect x="28" y="214" width="4" height="42" fill="#2a2a3c"/>
+  <text x="44" y="232" fill="#6b6b85" font-size="9" font-family="monospace">3–13</text>
+  <text x="96" y="232" fill="#8a8aa0" font-size="9.5">未分配</text>
+  <text x="96" y="248" fill="#55556e" font-size="8">U+30000 – U+DFFFF</text>
+  <text x="330" y="240" fill="#8a8aa0" font-size="9">十一个平面全是空的，留给未来</text>
+
+  <!-- 14 -->
+  <rect x="28" y="262" width="4" height="42" fill="#9b4df0"/>
+  <text x="44" y="280" fill="#cfc6ff" font-size="9" font-family="monospace">14</text>
+  <text x="44" y="296" fill="#6b6b85" font-size="7.5">SSP</text>
+  <text x="96" y="280" fill="#d8d8e4" font-size="9.5">特别用途平面</text>
+  <text x="96" y="296" fill="#6b6b85" font-size="8">U+E0000 – U+EFFFF</text>
+  <text x="330" y="288" fill="#cfc6ff" font-size="9">标签字符——国旗 emoji 就是靠它拼出来的</text>
+
+  <!-- 15-16 -->
+  <rect x="28" y="310" width="4" height="42" fill="#6b6b85"/>
+  <text x="44" y="328" fill="#9a9ab4" font-size="9" font-family="monospace">15–16</text>
+  <text x="96" y="328" fill="#d8d8e4" font-size="9.5">私用区</text>
+  <text x="96" y="344" fill="#6b6b85" font-size="8">U+F0000 – U+10FFFF</text>
+  <text x="330" y="336" fill="#9a9ab4" font-size="9">谁都能占，不保证跨字体显示一致</text>
+
+  <line x1="30" y1="368" x2="730" y2="368" stroke="#2a2a3c"/>
+  <text x="30" y="388" fill="#d8d8e4" font-size="9">为什么上限刚好是 U+10FFFF？因为 UTF-16 用两个 16 位单元拼出一个字符，</text>
+  <text x="30" y="406" fill="#9a9ab4" font-size="9">最多能数到 0x10FFFF——编码格式反过来决定字符集的大小，这在历史上只发生过这一次。</text>
+  <text x="30" y="430" fill="#6b6b85" font-size="8.5">U+D800–U+DFFF 这 2048 个码点被永久保留，不分配给任何字符，专门给 UTF-16 做拼接头。</text>
+</svg>
