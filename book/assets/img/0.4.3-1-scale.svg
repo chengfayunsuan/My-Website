@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="430" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">三个数量级，同一套指令集</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">方块按芯片面积的平方根绘制（示意），下面的数字是真实量级</text>
+
+  <!-- 手机 -->
+  <rect x="60" y="300" width="60" height="60" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="90" y="376" fill="#9fd4f5" font-size="9" text-anchor="middle">手机 SoC</text>
+  <text x="90" y="160" fill="#67b5ef" font-size="9" text-anchor="middle">100 mm²</text>
+  <text x="90" y="176" fill="#6b6b85" font-size="8" text-anchor="middle">5 W</text>
+  <text x="90" y="190" fill="#6b6b85" font-size="8" text-anchor="middle">8 核</text>
+  <line x1="90" y1="200" x2="90" y2="296" stroke="#33334a" stroke-dasharray="3 3"/>
+
+  <!-- 平板 -->
+  <rect x="180" y="288" width="72" height="72" rx="3" fill="#183028" stroke="#4ec9a3"/>
+  <text x="216" y="376" fill="#9fe0c9" font-size="9" text-anchor="middle">平板 SoC</text>
+  <text x="216" y="228" fill="#4ec9a3" font-size="9" text-anchor="middle">150 mm²</text>
+  <text x="216" y="244" fill="#6b6b85" font-size="8" text-anchor="middle">15 W</text>
+  <text x="216" y="258" fill="#6b6b85" font-size="8" text-anchor="middle">8–10 核</text>
+  <line x1="216" y1="266" x2="216" y2="284" stroke="#33334a" stroke-dasharray="3 3"/>
+
+  <!-- 服务器 -->
+  <rect x="330" y="150" width="210" height="210" rx="4" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="435" y="376" fill="#cfc6ff" font-size="9" text-anchor="middle">服务器 CPU</text>
+  <text x="435" y="128" fill="#9b4df0" font-size="9" text-anchor="middle">约 1260 mm²（13 块拼起来）</text>
+  <text x="435" y="144" fill="#6b6b85" font-size="8" text-anchor="middle">360 W · 96 核</text>
+
+  <!-- 服务器内部的 chiplet 示意 -->
+  <g fill="#3a2a52" stroke="#9b4df0" stroke-width="0.8">
+    <rect x="342" y="162" width="42" height="42"/><rect x="390" y="162" width="42" height="42"/>
+    <rect x="438" y="162" width="42" height="42"/><rect x="486" y="162" width="42" height="42"/>
+    <rect x="342" y="210" width="42" height="42"/><rect x="390" y="210" width="42" height="42"/>
+    <rect x="438" y="210" width="42" height="42"/><rect x="486" y="210" width="42" height="42"/>
+    <rect x="342" y="258" width="42" height="42"/><rect x="390" y="258" width="42" height="42"/>
+    <rect x="438" y="258" width="42" height="42"/><rect x="486" y="258" width="42" height="42"/>
+  </g>
+  <rect x="342" y="306" width="186" height="42" rx="2" fill="#232338" stroke="#9a9ab4"/>
+  <text x="435" y="332" fill="#c8c8d4" font-size="8" text-anchor="middle">IO die：内存控制器 + PCIe</text>
+
+  <!-- 右侧对比 -->
+  <line x1="580" y1="90" x2="580" y2="356" stroke="#2a2a44"/>
+
+  <text x="600" y="104" fill="#d8d8e4" font-size="9.5">差在哪</text>
+
+  <text x="600" y="130" fill="#6b6b85" font-size="8">面积</text>
+  <text x="600" y="146" fill="#9fd4f5" font-size="8.5">12 倍</text>
+
+  <text x="600" y="172" fill="#6b6b85" font-size="8">功耗</text>
+  <text x="600" y="188" fill="#9fd4f5" font-size="8.5">70 倍</text>
+
+  <text x="600" y="214" fill="#6b6b85" font-size="8">核心</text>
+  <text x="600" y="230" fill="#9fd4f5" font-size="8.5">12 倍</text>
+
+  <text x="600" y="256" fill="#6b6b85" font-size="8">内存通道</text>
+  <text x="600" y="272" fill="#9fd4f5" font-size="8.5">12 倍</text>
+
+  <text x="600" y="298" fill="#6b6b85" font-size="8">单核功耗</text>
+  <text x="600" y="314" fill="#f0606a" font-size="8.5">5 – 8 倍</text>
+
+  <text x="600" y="340" fill="#6b6b85" font-size="8">面积利用率</text>
+  <text x="600" y="356" fill="#e8b84b" font-size="8.5">完全不同</text>
+
+  <line x1="24" y1="390" x2="736" y2="390" stroke="#2a2a44"/>
+  <text x="24" y="410" fill="#e8b84b" font-size="9">同一套 ARM 指令，可以是一平方厘米的 SoC，也可以是一千多平方毫米的拼装体——差别不在指令，在它被装进哪里。</text>
+</svg>

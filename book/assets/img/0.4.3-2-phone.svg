@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="440" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">一平方厘米上的十几样东西</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">每一个模块都是专用电路——因为它们干的活，用 CPU 做要贵十倍的电</text>
+
+  <!-- die -->
+  <rect x="60" y="70" width="300" height="300" rx="4" fill="#12121c" stroke="#4a4a68"/>
+  <text x="66" y="86" fill="#4a4a68" font-size="7">同一块 die（约 100 mm²）</text>
+
+  <!-- CPU -->
+  <rect x="72" y="94" width="140" height="80" rx="3" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="142" y="108" fill="#9fd4f5" font-size="7.5" text-anchor="middle">CPU · 4 大 + 4 小</text>
+  <g fill="#2a3a52" stroke="#67b5ef" stroke-width="0.8">
+    <rect x="80" y="116" width="28" height="22"/><rect x="112" y="116" width="28" height="22"/>
+    <rect x="144" y="116" width="28" height="22"/><rect x="176" y="116" width="28" height="22"/>
+    <rect x="80" y="144" width="22" height="20"/><rect x="106" y="144" width="22" height="20"/>
+    <rect x="132" y="144" width="22" height="20"/><rect x="158" y="144" width="22" height="20"/>
+  </g>
+
+  <!-- GPU -->
+  <rect x="220" y="94" width="128" height="80" rx="3" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="284" y="108" fill="#cfc6ff" font-size="7.5" text-anchor="middle">GPU</text>
+  <g fill="#3a2a52" stroke="#9b4df0" stroke-width="0.8">
+    <rect x="228" y="116" width="24" height="22"/><rect x="256" y="116" width="24" height="22"/>
+    <rect x="284" y="116" width="24" height="22"/><rect x="312" y="116" width="24" height="22"/>
+    <rect x="228" y="142" width="24" height="22"/><rect x="256" y="142" width="24" height="22"/>
+    <rect x="284" y="142" width="24" height="22"/><rect x="312" y="142" width="24" height="22"/>
+  </g>
+
+  <!-- NPU -->
+  <rect x="72" y="182" width="86" height="56" rx="3" fill="#183028" stroke="#4ec9a3"/>
+  <text x="115" y="204" fill="#9fe0c9" font-size="7.5" text-anchor="middle">NPU</text>
+  <text x="115" y="220" fill="#6b6b85" font-size="6.5" text-anchor="middle">拍照 / 语音</text>
+
+  <!-- ISP -->
+  <rect x="166" y="182" width="86" height="56" rx="3" fill="#332a18" stroke="#e8b84b"/>
+  <text x="209" y="204" fill="#e8b84b" font-size="7.5" text-anchor="middle">ISP</text>
+  <text x="209" y="220" fill="#6b6b85" font-size="6.5" text-anchor="middle">RAW → JPEG</text>
+
+  <!-- 基带 -->
+  <rect x="260" y="182" width="88" height="56" rx="3" fill="#3a1e26" stroke="#f0606a"/>
+  <text x="304" y="204" fill="#f0a0aa" font-size="7.5" text-anchor="middle">基带</text>
+  <text x="304" y="220" fill="#6b6b85" font-size="6.5" text-anchor="middle">2G → 5G</text>
+
+  <!-- 媒体 -->
+  <rect x="72" y="246" width="86" height="44" rx="3" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="115" y="264" fill="#cfc6ff" font-size="7.5" text-anchor="middle">媒体引擎</text>
+  <text x="115" y="280" fill="#6b6b85" font-size="6.5" text-anchor="middle">编解码</text>
+
+  <!-- 显示 -->
+  <rect x="166" y="246" width="86" height="44" rx="3" fill="#232338" stroke="#9a9ab4"/>
+  <text x="209" y="264" fill="#c8c8d4" font-size="7.5" text-anchor="middle">显示控制</text>
+  <text x="209" y="280" fill="#6b6b85" font-size="6.5" text-anchor="middle">高刷通路</text>
+
+  <!-- WiFi -->
+  <rect x="260" y="246" width="88" height="44" rx="3" fill="#183028" stroke="#4ec9a3"/>
+  <text x="304" y="264" fill="#9fe0c9" font-size="7.5" text-anchor="middle">WiFi / 蓝牙</text>
+  <text x="304" y="280" fill="#6b6b85" font-size="6.5" text-anchor="middle">短距通信</text>
+
+  <!-- 内存控制器 -->
+  <rect x="72" y="298" width="276" height="32" rx="3" fill="#2e2a3a" stroke="#cfc6ff"/>
+  <text x="210" y="318" fill="#cfc6ff" font-size="7.5" text-anchor="middle">内存控制器 · 128 位 LPDDR</text>
+
+  <!-- 电源管理 -->
+  <rect x="72" y="338" width="276" height="24" rx="3" fill="#232338" stroke="#6b8fd4"/>
+  <text x="210" y="354" fill="#a8c0ee" font-size="7.5" text-anchor="middle">电源管理 · 几十个独立电压域</text>
+
+  <!-- 右侧说明 -->
+  <line x1="384" y1="70" x2="384" y2="380" stroke="#2a2a44"/>
+
+  <text x="404" y="90" fill="#d8d8e4" font-size="10">为什么全集成</text>
+
+  <text x="404" y="116" fill="#e8b84b" font-size="8.5">每一段跨芯片连线都要耗电</text>
+  <text x="404" y="134" fill="#9a9ab4" font-size="8">数据在 PCB 上跑一厘米，要驱动 IO 电路，</text>
+  <text x="404" y="150" fill="#9a9ab4" font-size="8">功耗和走线长度、信号速率成正比。</text>
+
+  <rect x="404" y="166" width="332" height="52" rx="4" fill="#171725" stroke="#2a2a44"/>
+  <text x="418" y="184" fill="#f0606a" font-size="8">如果做成 PC 那样拼装：</text>
+  <text x="418" y="200" fill="#9a9ab4" font-size="8">光芯片之间的 IO 就要多耗 0.5 – 1 W</text>
+  <text x="418" y="214" fill="#6b6b85" font-size="7.5">对一台 3 W 的设备，这是 20%–30% 的续航</text>
+
+  <text x="404" y="242" fill="#e8b84b" font-size="8.5">而且还有三个连带好处</text>
+  <text x="404" y="262" fill="#9a9ab4" font-size="8">· 省地方：主板只有名片那么大</text>
+  <text x="404" y="280" fill="#9a9ab4" font-size="8">· 省成本：少几颗芯片、少几道组装</text>
+  <text x="404" y="298" fill="#9a9ab4" font-size="8">· 省延迟：共享缓存，不用来回搬</text>
+
+  <rect x="404" y="314" width="332" height="60" rx="4" fill="#171725" stroke="#2a2a44"/>
+  <text x="418" y="332" fill="#cfc6ff" font-size="8">代价：任何一个模块出问题，整颗换</text>
+  <text x="418" y="348" fill="#9a9ab4" font-size="8">而且「外挂」的选项也没了 ——</text>
+  <text x="418" y="364" fill="#6b6b85" font-size="7.5">基带做不出来，就只能外挂，然后费电、发热</text>
+
+  <line x1="24" y1="392" x2="736" y2="392" stroke="#2a2a44"/>
+  <text x="24" y="412" fill="#e8b84b" font-size="9">手机 SoC 是「集成度」这条路的终点：能塞进去的都塞进去，因为每一条出芯片的线都是成本。</text>
+</svg>

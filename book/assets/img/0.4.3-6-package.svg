@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="440" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">离得越近越省电，离得越远越可换</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">三种封装，三种「内存到芯片的距离」</text>
+
+  <!-- ============ 手机 ============ -->
+  <text x="30" y="82" fill="#67b5ef" font-size="10">手机 · PoP 堆叠</text>
+
+  <rect x="40" y="96" width="180" height="22" rx="2" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="130" y="111" fill="#cfc6ff" font-size="7.5" text-anchor="middle">LPDDR（上方）</text>
+
+  <rect x="40" y="124" width="180" height="30" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="130" y="143" fill="#9fd4f5" font-size="7.5" text-anchor="middle">SoC</text>
+
+  <rect x="40" y="160" width="180" height="16" rx="2" fill="#1a2a20" stroke="#2f4a3a"/>
+  <text x="130" y="172" fill="#6b6b85" font-size="7" text-anchor="middle">封装基板</text>
+
+  <rect x="40" y="182" width="180" height="14" rx="2" fill="#1a2a20" stroke="#2f4a3a"/>
+  <text x="130" y="193" fill="#6b6b85" font-size="7" text-anchor="middle">主板</text>
+
+  <text x="40" y="216" fill="#6b6b85" font-size="7">距离 0.3 – 0.5 mm</text>
+  <text x="40" y="232" fill="#9fe0c9" font-size="7.5">位宽 64 – 128 位</text>
+  <text x="40" y="248" fill="#f0606a" font-size="7.5">完全不能换</text>
+
+  <!-- ============ 笔记本 ============ -->
+  <text x="280" y="82" fill="#4ec9a3" font-size="10">笔记本 · 封装内</text>
+
+  <rect x="290" y="96" width="180" height="94" rx="3" fill="#171725" stroke="#33334a"/>
+  <text x="380" y="110" fill="#6b6b85" font-size="7" text-anchor="middle">封装基板</text>
+
+  <rect x="300" y="118" width="52" height="62" rx="2" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="326" y="153" fill="#cfc6ff" font-size="7" text-anchor="middle">LPDDR</text>
+
+  <rect x="358" y="118" width="102" height="62" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="409" y="153" fill="#9fd4f5" font-size="7" text-anchor="middle">SoC</text>
+
+  <rect x="290" y="196" width="180" height="14" rx="2" fill="#1a2a20" stroke="#2f4a3a"/>
+  <text x="380" y="207" fill="#6b6b85" font-size="7" text-anchor="middle">主板</text>
+
+  <text x="290" y="232" fill="#6b6b85" font-size="7">距离 3 – 8 mm</text>
+  <text x="290" y="248" fill="#9fe0c9" font-size="7.5">位宽 128 – 256 位</text>
+  <text x="290" y="264" fill="#f0606a" font-size="7.5">不能换</text>
+
+  <!-- ============ 服务器 ============ -->
+  <text x="530" y="82" fill="#9b4df0" font-size="10">服务器 · 插槽</text>
+
+  <!-- 内存条 -->
+  <text x="540" y="100" fill="#cfc6ff" font-size="7">24 条</text>
+  <rect x="540" y="106" width="18" height="90" rx="2" fill="#2e2a3a" stroke="#9b4df0"/>
+  <rect x="564" y="106" width="18" height="90" rx="2" fill="#2e2a3a" stroke="#9b4df0"/>
+
+  <!-- 封装 + 插槽 -->
+  <rect x="606" y="140" width="116" height="46" rx="2" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="664" y="166" fill="#cfc6ff" font-size="7" text-anchor="middle">封装内多 die</text>
+
+  <rect x="618" y="186" width="92" height="10" rx="1" fill="#2a2a30" stroke="#9a9ab4"/>
+
+  <!-- 走线示意 -->
+  <path d="M584,150 L604,150" stroke="#e8b84b" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="594" y="144" fill="#e8b84b" font-size="6.5" text-anchor="middle">走线</text>
+
+  <rect x="540" y="196" width="180" height="14" rx="2" fill="#1a2a20" stroke="#2f4a3a"/>
+  <text x="630" y="207" fill="#6b6b85" font-size="7" text-anchor="middle">主板</text>
+
+  <text x="540" y="232" fill="#6b6b85" font-size="7">距离 5 – 15 cm</text>
+  <text x="540" y="248" fill="#9fe0c9" font-size="7.5">位宽 768 位以上</text>
+  <text x="540" y="264" fill="#4ec9a3" font-size="7.5">随时能加、能换</text>
+
+  <line x1="24" y1="288" x2="736" y2="288" stroke="#2a2a44"/>
+
+  <!-- 规律 -->
+  <text x="24" y="312" fill="#d8d8e4" font-size="10.5">一条规律</text>
+
+  <text x="24" y="336" fill="#e8b84b" font-size="9">「离得越近，越省电；离得越远，越可换。」</text>
+
+  <text x="24" y="358" fill="#9a9ab4" font-size="8.5">手机把内存堆在芯片头顶，距离零点几毫米——最省电，但完全不能动。</text>
+  <text x="24" y="376" fill="#9a9ab4" font-size="8.5">服务器把内存插在主板上，距离十几厘米——最费电，但随时能加一条、换一条。</text>
+  <text x="24" y="394" fill="#6b6b85" font-size="8.5">中间那些形态（笔记本、平板、游戏机），都是在「省电」和「可维护」之间找平衡。</text>
+
+  <rect x="24" y="406" width="712" height="26" rx="4" fill="#171725" stroke="#2a2a44"/>
+  <text x="38" y="423" fill="#cfc6ff" font-size="8.5">所以「手机芯片比服务器先进」和「服务器比手机能干活」这两句话可以同时成立——它们衡量的不是同一个东西。</text>
+</svg>
