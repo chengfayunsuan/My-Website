@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="k1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,1.2 L8,4.5 L0,7.8 z" fill="#67b5ef"/>
+    </marker>
+    <marker id="k2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,1.2 L8,4.5 L0,7.8 z" fill="#9b4df0"/>
+    </marker>
+  </defs>
+  <rect width="760" height="470" fill="#0e0e16"/>
+
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">按下一个键，走十层才到眼睛</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">上半段是输入硬件，中间是操作系统，下半段是输出硬件</text>
+
+  <!-- 上排 -->
+  <g>
+    <rect x="73" y="86" width="110" height="58" rx="5" fill="#171725" stroke="#67b5ef"/>
+    <text x="128" y="110" fill="#9fd4f5" font-size="9.5" text-anchor="middle">手指按下</text>
+    <text x="128" y="127" fill="#6b6b85" font-size="8" text-anchor="middle">触点闭合</text>
+
+    <rect x="199" y="86" width="110" height="58" rx="5" fill="#171725" stroke="#67b5ef"/>
+    <text x="254" y="110" fill="#9fd4f5" font-size="9.5" text-anchor="middle">矩阵扫描</text>
+    <text x="254" y="127" fill="#6b6b85" font-size="8" text-anchor="middle">1 ms 一轮</text>
+
+    <rect x="325" y="86" width="110" height="58" rx="5" fill="#171725" stroke="#67b5ef"/>
+    <text x="380" y="110" fill="#9fd4f5" font-size="9.5" text-anchor="middle">去抖</text>
+    <text x="380" y="127" fill="#6b6b85" font-size="8" text-anchor="middle">等 5 ms 确认</text>
+
+    <rect x="451" y="86" width="110" height="58" rx="5" fill="#171725" stroke="#67b5ef"/>
+    <text x="506" y="110" fill="#9fd4f5" font-size="9.5" text-anchor="middle">编码</text>
+    <text x="506" y="127" fill="#6b6b85" font-size="8" text-anchor="middle">第 3 行第 5 列</text>
+
+    <rect x="577" y="86" width="110" height="58" rx="5" fill="#171725" stroke="#67b5ef"/>
+    <text x="632" y="110" fill="#9fd4f5" font-size="9.5" text-anchor="middle">USB 报告</text>
+    <text x="632" y="127" fill="#6b6b85" font-size="8" text-anchor="middle">8 字节，等主机问</text>
+  </g>
+
+  <g stroke="#67b5ef" stroke-width="1.4" marker-end="url(#k1)">
+    <line x1="185" y1="115" x2="195" y2="115"/>
+    <line x1="311" y1="115" x2="321" y2="115"/>
+    <line x1="437" y1="115" x2="447" y2="115"/>
+    <line x1="563" y1="115" x2="573" y2="115"/>
+  </g>
+
+  <!-- 折返 -->
+  <path d="M632,146 L632,186 L128,186 L128,222" fill="none" stroke="#9b4df0" stroke-width="1.6" marker-end="url(#k2)"/>
+  <text x="380" y="176" fill="#cfc6ff" font-size="8.5" text-anchor="middle">跨过系统边界</text>
+
+  <!-- 下排 -->
+  <g>
+    <rect x="73" y="226" width="110" height="58" rx="5" fill="#171725" stroke="#9b4df0"/>
+    <text x="128" y="250" fill="#cfc6ff" font-size="9.5" text-anchor="middle">内核分发</text>
+    <text x="128" y="267" fill="#6b6b85" font-size="8" text-anchor="middle">变成「键事件」</text>
+
+    <rect x="199" y="226" width="110" height="58" rx="5" fill="#171725" stroke="#9b4df0"/>
+    <text x="254" y="250" fill="#cfc6ff" font-size="9.5" text-anchor="middle">应用重绘</text>
+    <text x="254" y="267" fill="#6b6b85" font-size="8" text-anchor="middle">插入字符 a</text>
+
+    <rect x="325" y="226" width="110" height="58" rx="5" fill="#171725" stroke="#9b4df0"/>
+    <text x="380" y="250" fill="#cfc6ff" font-size="9.5" text-anchor="middle">合成</text>
+    <text x="380" y="267" fill="#6b6b85" font-size="8" text-anchor="middle">窗口叠成一张图</text>
+
+    <rect x="451" y="226" width="110" height="58" rx="5" fill="#171725" stroke="#9b4df0"/>
+    <text x="506" y="250" fill="#cfc6ff" font-size="9.5" text-anchor="middle">显卡</text>
+    <text x="506" y="267" fill="#6b6b85" font-size="8" text-anchor="middle">搬进显存，转信号</text>
+
+    <rect x="577" y="226" width="110" height="58" rx="5" fill="#171725" stroke="#4ec9a3"/>
+    <text x="632" y="250" fill="#9fe0c9" font-size="9.5" text-anchor="middle">显示器</text>
+    <text x="632" y="267" fill="#6b6b85" font-size="8" text-anchor="middle">液晶转身</text>
+  </g>
+
+  <g stroke="#9b4df0" stroke-width="1.4" marker-end="url(#k2)">
+    <line x1="185" y1="255" x2="195" y2="255"/>
+    <line x1="311" y1="255" x2="321" y2="255"/>
+    <line x1="437" y1="255" x2="447" y2="255"/>
+    <line x1="563" y1="255" x2="573" y2="255"/>
+  </g>
+
+  <!-- 时间条 -->
+  <line x1="24" y1="312" x2="736" y2="312" stroke="#2a2a44"/>
+  <text x="24" y="334" fill="#d8d8e4" font-size="10.5">各段大致耗时（单位毫秒，条宽不代表比例）</text>
+
+  <rect x="73" y="346" width="105" height="20" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="125" y="360" fill="#9fd4f5" font-size="8" text-anchor="middle">扫描 1</text>
+  <rect x="182" y="346" width="105" height="20" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="234" y="360" fill="#9fd4f5" font-size="8" text-anchor="middle">去抖 5</text>
+  <rect x="291" y="346" width="105" height="20" rx="2" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="343" y="360" fill="#9fd4f5" font-size="8" text-anchor="middle">USB 等 0.5</text>
+  <rect x="400" y="346" width="105" height="20" rx="2" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="452" y="360" fill="#cfc6ff" font-size="8" text-anchor="middle">系统 + 应用 3</text>
+  <rect x="509" y="346" width="105" height="20" rx="2" fill="#2e2a3a" stroke="#9b4df0"/>
+  <text x="561" y="360" fill="#cfc6ff" font-size="8" text-anchor="middle">渲染合成 8</text>
+  <rect x="618" y="346" width="105" height="20" rx="2" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="670" y="360" fill="#9fe0c9" font-size="8" text-anchor="middle">等刷新 8.3</text>
+
+  <text x="73" y="388" fill="#6b6b85" font-size="8">按 60 Hz 显示器估算。换 144 Hz，「等刷新」从 8.3 降到 3.5；换 240 Hz 降到 2.1。</text>
+
+  <!-- 底部结论 -->
+  <line x1="24" y1="404" x2="736" y2="404" stroke="#2a2a44"/>
+  <text x="24" y="426" fill="#e8b84b" font-size="9">总计约 25 毫秒——低于人眼能察觉的 100 毫秒，所以打字感觉是「即时」的。</text>
+  <text x="24" y="448" fill="#9a9ab4" font-size="9">每一层都在「等一等更省资源」：键盘不主动说话、系统不每字符重绘、显示器不随时刷新。</text>
+  <text x="24" y="462" fill="#6b6b85" font-size="8.5">每省一点，就多一点延迟——这就是为什么「低延迟」永远要花钱买。</text>
+</svg>
