@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 404" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="760" height="404" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">CMOS 反相器：两个管子，永远只有一个开</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">这是所有 CMOS 逻辑门的基本结构，也是「数字电路为什么省电」的答案</text>
+  <line x1="300" y1="84" x2="460" y2="84" stroke="#e8b84b" stroke-width="2"/>
+  <text x="470" y="88" fill="#e8c47a" font-size="9">VDD 3.3V</text>
+  <line x1="380" y1="84" x2="380" y2="100" stroke="#8a8aa0" stroke-width="1.6"/>
+  <rect x="336" y="100" width="88" height="42" rx="4" fill="#1b2740" stroke="#67b5ef"/>
+  <text x="380" y="120" fill="#9fd4f5" font-size="9.5" text-anchor="middle">PMOS</text>
+  <text x="380" y="134" fill="#6f8aa8" font-size="7">栅压低时导通</text>
+  <rect x="336" y="182" width="88" height="42" rx="4" fill="#20303a" stroke="#4ec9a3"/>
+  <text x="380" y="202" fill="#9fe0c9" font-size="9.5" text-anchor="middle">NMOS</text>
+  <text x="380" y="216" fill="#6f8a80" font-size="7">栅压高时导通</text>
+  <line x1="380" y1="142" x2="380" y2="182" stroke="#8a8aa0" stroke-width="1.6"/>
+  <line x1="380" y1="162" x2="510" y2="162" stroke="#e8b84b" stroke-width="2"/>
+  <circle cx="380" cy="162" r="3" fill="#e8b84b"/>
+  <text x="518" y="166" fill="#e8c47a" font-size="9">Vout</text>
+  <line x1="380" y1="224" x2="380" y2="248" stroke="#8a8aa0" stroke-width="1.6"/>
+  <line x1="358" y1="248" x2="402" y2="248" stroke="#8a8aa0" stroke-width="2"/>
+  <line x1="366" y1="254" x2="394" y2="254" stroke="#8a8aa0" stroke-width="2"/>
+  <line x1="374" y1="260" x2="386" y2="260" stroke="#8a8aa0" stroke-width="2"/>
+  <line x1="250" y1="162" x2="300" y2="162" stroke="#cfc6ff" stroke-width="2"/>
+  <line x1="300" y1="121" x2="300" y2="203" stroke="#cfc6ff" stroke-width="2"/>
+  <line x1="300" y1="121" x2="336" y2="121" stroke="#cfc6ff" stroke-width="2"/>
+  <line x1="300" y1="203" x2="336" y2="203" stroke="#cfc6ff" stroke-width="2"/>
+  <circle cx="300" cy="162" r="3" fill="#cfc6ff"/>
+  <text x="240" y="166" fill="#cfc6ff" font-size="9" text-anchor="end">Vin</text>
+  <text x="560" y="84" fill="#8a8aa0" font-size="8.5">两种输入，两个状态</text>
+  <text x="583" y="104" fill="#9a9ab4" font-size="8.5" text-anchor="middle">Vin</text>
+  <text x="629" y="104" fill="#9a9ab4" font-size="8.5" text-anchor="middle">PMOS</text>
+  <text x="675" y="104" fill="#9a9ab4" font-size="8.5" text-anchor="middle">NMOS</text>
+  <text x="721" y="104" fill="#9a9ab4" font-size="8.5" text-anchor="middle">Vout</text>
+  <line x1="560" y1="110" x2="744" y2="110" stroke="#3a3a52"/>
+  <text x="583" y="128" fill="#d8d8e4" font-size="8.5" text-anchor="middle">0</text>
+  <text x="629" y="128" fill="#9fd4f5" font-size="8.5" text-anchor="middle">导通</text>
+  <text x="675" y="128" fill="#9fe0c9" font-size="8.5" text-anchor="middle">截止</text>
+  <text x="721" y="128" fill="#e8c47a" font-size="8.5" text-anchor="middle">1</text>
+  <line x1="560" y1="136" x2="744" y2="136" stroke="#2a2a3c"/>
+  <text x="583" y="158" fill="#d8d8e4" font-size="8.5" text-anchor="middle">1</text>
+  <text x="629" y="158" fill="#9fd4f5" font-size="8.5" text-anchor="middle">截止</text>
+  <text x="675" y="158" fill="#9fe0c9" font-size="8.5" text-anchor="middle">导通</text>
+  <text x="721" y="158" fill="#e8c47a" font-size="8.5" text-anchor="middle">0</text>
+  <line x1="30" y1="286" x2="730" y2="286" stroke="#2a2a3c"/>
+  <text x="30" y="306" fill="#d8d8e4" font-size="9">输入 0：上面的 PMOS 开、下面的 NMOS 关，输出被拉到 VDD —— 得到 1。输入 1 时反过来，输出被拉到地。</text>
+  <text x="30" y="324" fill="#9a9ab4" font-size="8.5">关键在「永远只有一个开」：电流从 VDD 到地的那条路，任何时刻都是断的。所以静态功耗几乎为零，只有漏电。</text>
+  <text x="30" y="342" fill="#9a9ab4" font-size="8.5">对比一下早期用 NMOS 单独做的逻辑：导通时电流直接从电源流到地，一个门就耗几毫瓦，几万个门就烧了。</text>
+  <text x="30" y="362" fill="#6b6b85" font-size="8.5">CMOS 的代价是：每个门要两个管子，面积翻倍。但省下来的电，让集成度能一路涨到几百亿个管子。</text>
+  <text x="30" y="380" fill="#6b6b85" font-size="8.5">反相器是最简单的 CMOS 门。把它的输入输出按不同方式连起来，就能拼出与非、或非——下节讲。</text>
+  <text x="30" y="398" fill="#6b6b85" font-size="8.5">顺带一句：CMOS 全称是「互补金属氧化物半导体」，互补指的就是 PMOS 和 NMOS 这一对。</text>
+</svg>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.2 逻辑门：从开关到会算的电路</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部 电、逻辑与指令</a><span class="sep">/</span>
+    <span class="here">1.2 逻辑门</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">CHAPTER 1.2</span>
+    逻辑门：从开关到会算的电路
+  </h1>
+  <p class="part-sub">这一章回答一个问题：一堆只会「通」和「断」的开关，凭什么能算加法、能记住数</p>
+
+  <p class="lead">
+    上一章讲清了「信息怎么表示」，但存下来的 0 和 1 是死的。
+    要让它动起来，需要一个<strong>用小信号控制大信号</strong>的器件——晶体管。
+    这一章从晶体管的物理原理出发，一层一层搭上去：
+    管子配成门，门拼成加法器，加法器加上记忆，就是一台能算数的机器。
+  </p>
+
+  <p>
+    五节的顺序是有依赖的：先有「能开关的管子」（1.2.1），才能把管子接成
+    「会做逻辑判断的门」（1.2.2）；门拼成加法器（1.2.3）之后，
+    机器会算但记不住，所以要讲「怎么记住一个比特」（1.2.4）；
+    最后把所有部件绑到同一根时钟上（1.2.5），机器才有了心跳。
+    跳着看会断。
+  </p>
+
+  <div class="tw"><table>
+    <thead><tr><th>编号</th><th>标题</th><th>它解决什么</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>1.2.1</code></td>
+        <td><a href="1.2.1-transistor.html" style="color:#cfc6ff">晶体管：一个用电控制的水龙头</a></td>
+        <td>三极管为什么能放大；MOSFET 差在哪；CMOS 为什么省电</td>
+        <td><span class="tag done">已完稿</span></td>
+      </tr>
+      <tr>
+        <td><code>1.2.2</code></td>
+        <td>与、或、非、与非：真值表就是说明书</td>
+        <td>四个门各是什么；为什么 NAND 是万用门</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>1.2.3</code></td>
+        <td>加法器：从半加器到 64 位</td>
+        <td>两个门怎么算 1+1；进位为什么要等</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>1.2.4</code></td>
+        <td>锁存器与触发器：机器怎么记住一个比特</td>
+        <td>没有时钟也能存 1 位？边沿触发好在哪</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>1.2.5</code></td>
+        <td>时钟与时序：计算机的心跳</td>
+        <td>为什么需要时钟；一根线慢半拍会怎样</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="pager">
+    <a href="../index.html">← 第 1 部目录</a>
+    <a class="next" href="1.2.1-transistor.html">1.2.1 晶体管 →</a>
+  </div>
+
+</div>
+</body>
+</html>

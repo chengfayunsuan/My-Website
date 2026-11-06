@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 428" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="e1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 z" fill="#e8b84b"/></marker>
+    <marker id="e2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 z" fill="#67b5ef"/></marker>
+  </defs>
+  <rect width="760" height="428" fill="#0e0e16"/>
+  <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">PN 结：两种掺杂的硅贴在一起，接缝处自己长出一道墙</text>
+  <text x="24" y="48" fill="#d8d8e4" font-size="12.5">P 型多空穴，N 型多电子。接上的瞬间，两边互相扩散，留下不能动的离子</text>
+  <rect x="70" y="84" width="260" height="96" fill="#2e2030" stroke="#8a4a70"/>
+  <rect x="330" y="84" width="100" height="96" fill="#1a1a26" stroke="#3a3a52" stroke-dasharray="4 3"/>
+  <rect x="430" y="84" width="260" height="96" fill="#1e2a3e" stroke="#3a5a7a"/>
+  <text x="200" y="122" fill="#e8b0d0" font-size="11" text-anchor="middle">P 型</text>
+  <text x="200" y="140" fill="#a07090" font-size="8" text-anchor="middle">掺硼，空穴多</text>
+  <text x="560" y="122" fill="#9fd4f5" font-size="11" text-anchor="middle">N 型</text>
+  <text x="560" y="140" fill="#6f8aa8" font-size="8" text-anchor="middle">掺磷，电子多</text>
+  <text x="380" y="110" fill="#9a9ab4" font-size="7.5" text-anchor="middle">耗尽层</text>
+  <text x="96" y="172" fill="#d080a8" font-size="12">+</text>
+  <text x="132" y="172" fill="#d080a8" font-size="12">+</text>
+  <text x="168" y="172" fill="#d080a8" font-size="12">+</text>
+  <text x="204" y="172" fill="#d080a8" font-size="12">+</text>
+  <text x="240" y="172" fill="#d080a8" font-size="12">+</text>
+  <text x="276" y="172" fill="#d080a8" font-size="12">+</text>
+  <text x="456" y="172" fill="#7fb0d0" font-size="12">−</text>
+  <text x="492" y="172" fill="#7fb0d0" font-size="12">−</text>
+  <text x="528" y="172" fill="#7fb0d0" font-size="12">−</text>
+  <text x="564" y="172" fill="#7fb0d0" font-size="12">−</text>
+  <text x="600" y="172" fill="#7fb0d0" font-size="12">−</text>
+  <text x="636" y="172" fill="#7fb0d0" font-size="12">−</text>
+  <text x="340" y="152" fill="#e07090" font-size="11">−</text>
+  <text x="386" y="152" fill="#70a8c8" font-size="11">+</text>
+  <text x="354" y="152" fill="#e07090" font-size="11">−</text>
+  <text x="400" y="152" fill="#70a8c8" font-size="11">+</text>
+  <text x="368" y="152" fill="#e07090" font-size="11">−</text>
+  <text x="414" y="152" fill="#70a8c8" font-size="11">+</text>
+  <line x1="424" y1="200" x2="340" y2="200" stroke="#e8b84b" stroke-width="1.4" marker-end="url(#e1)"/>
+  <text x="382" y="216" fill="#e8c47a" font-size="8" text-anchor="middle">内建电场（从 N 指向 P）</text>
+  <text x="60" y="252" fill="#9fe0c9" font-size="9.5">正向偏置：P 接正，N 接负</text>
+  <rect x="60" y="262" width="146" height="54" fill="#2e2030" stroke="#8a4a70"/>
+  <rect x="206" y="262" width="26" height="54" fill="#1a1a26" stroke="#3a3a52"/>
+  <rect x="232" y="262" width="146" height="54" fill="#1e2a3e" stroke="#3a5a7a"/>
+  <text x="219" y="338" fill="#9fe0c9" font-size="8" text-anchor="middle">耗尽层变窄，电流通过</text>
+  <text x="430" y="252" fill="#f0a0a8" font-size="9.5">反向偏置：P 接负，N 接正</text>
+  <rect x="430" y="262" width="100" height="54" fill="#2e2030" stroke="#8a4a70"/>
+  <rect x="530" y="262" width="80" height="54" fill="#1a1a26" stroke="#3a3a52"/>
+  <rect x="610" y="262" width="100" height="54" fill="#1e2a3e" stroke="#3a5a7a"/>
+  <text x="570" y="338" fill="#f0a0a8" font-size="8" text-anchor="middle">耗尽层变宽，几乎没有电流</text>
+  <line x1="30" y1="360" x2="730" y2="360" stroke="#2a2a3c"/>
+  <text x="30" y="380" fill="#d8d8e4" font-size="9">这就是二极管：正向通、反向断，一个方向走到底。硅二极管的正向压降约 0.7 伏，锗约 0.3 伏。</text>
+  <text x="30" y="398" fill="#9a9ab4" font-size="8.5">反向偏置不能无限加：加到一定程度会「击穿」，电流突然变大。稳压二极管就是故意利用这个效应工作的。</text>
+  <text x="30" y="416" fill="#6b6b85" font-size="8.5">注意耗尽层里那排离子：它们被固定在晶格里，不能动。正是这道「墙」挡住了两边的载流子继续扩散。</text>
+</svg>
