@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="900" height="430" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.3.2-6  延迟的阶梯（横轴对数）</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">以 4 GHz 的一个时钟周期为单位；每往右一格，就贵一个数量级</text>
+<line x1="188" y1="82" x2="188" y2="380" stroke="#26262f" stroke-width="1"/>
+<text x="188" y="78" fill="#4a4a52" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1</text>
+<line x1="260" y1="82" x2="260" y2="380" stroke="#26262f" stroke-width="1"/>
+<text x="260" y="78" fill="#4a4a52" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">10</text>
+<line x1="332" y1="82" x2="332" y2="380" stroke="#26262f" stroke-width="1"/>
+<text x="332" y="78" fill="#4a4a52" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">100</text>
+<line x1="404" y1="82" x2="404" y2="380" stroke="#26262f" stroke-width="1"/>
+<text x="404" y="78" fill="#4a4a52" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1 千</text>
+<line x1="476" y1="82" x2="476" y2="380" stroke="#26262f" stroke-width="1"/>
+<text x="476" y="78" fill="#4a4a52" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1 万</text>
+<line x1="548" y1="82" x2="548" y2="380" stroke="#26262f" stroke-width="1"/>
+<text x="548" y="78" fill="#4a4a52" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">10 万</text>
+<line x1="620" y1="82" x2="620" y2="380" stroke="#26262f" stroke-width="1"/>
+<text x="620" y="78" fill="#4a4a52" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">100 万</text>
+<line x1="692" y1="82" x2="692" y2="380" stroke="#26262f" stroke-width="1"/>
+<text x="692" y="78" fill="#4a4a52" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1000 万</text>
+<text x="134" y="108" fill="#c8c8dc" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">寄存器</text>
+<rect x="148" y="92" width="40.0" height="22" rx="3" fill="#1a1a24" stroke="#67d9a0" stroke-width="1.2"/>
+<rect x="148" y="92" width="4" height="22" rx="0" fill="#67d9a0" stroke="none" stroke-width="1.5"/>
+<text x="198.0" y="108" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="monospace">0</text>
+<text x="134" y="143" fill="#c8c8dc" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">L1 缓存</text>
+<rect x="148" y="127" width="83.3483193756133" height="22" rx="3" fill="#1a1a24" stroke="#67d9a0" stroke-width="1.2"/>
+<rect x="148" y="127" width="4" height="22" rx="0" fill="#67d9a0" stroke="none" stroke-width="1.5"/>
+<text x="241.3483193756133" y="143" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="monospace">4</text>
+<text x="134" y="178" fill="#c8c8dc" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">L2 缓存</text>
+<rect x="148" y="162" width="117.701049715429" height="22" rx="3" fill="#1a1a24" stroke="#67b5ef" stroke-width="1.2"/>
+<rect x="148" y="162" width="4" height="22" rx="0" fill="#67b5ef" stroke="none" stroke-width="1.5"/>
+<text x="275.701049715429" y="178" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="monospace">12</text>
+<text x="134" y="213" fill="#c8c8dc" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">分支预测失败</text>
+<rect x="148" y="197" width="130.37962036743804" height="22" rx="3" fill="#1a1a24" stroke="#e8b84b" stroke-width="1.2"/>
+<rect x="148" y="197" width="4" height="22" rx="0" fill="#e8b84b" stroke="none" stroke-width="1.5"/>
+<text x="288.37962036743806" y="213" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="monospace">18</text>
+<text x="134" y="248" fill="#c8c8dc" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">L3 缓存</text>
+<rect x="148" y="232" width="155.3483193756133" height="22" rx="3" fill="#1a1a24" stroke="#67b5ef" stroke-width="1.2"/>
+<rect x="148" y="232" width="4" height="22" rx="0" fill="#67b5ef" stroke="none" stroke-width="1.5"/>
+<text x="313.3483193756133" y="248" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="monospace">40</text>
+<text x="134" y="283" fill="#c8c8dc" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">内存</text>
+<rect x="148" y="267" width="212.6516806243867" height="22" rx="3" fill="#1a1a24" stroke="#e8965a" stroke-width="1.2"/>
+<rect x="148" y="267" width="4" height="22" rx="0" fill="#e8965a" stroke="none" stroke-width="1.5"/>
+<text x="370.6516806243867" y="283" fill="#e8965a" font-size="9.5" text-anchor="start" font-family="monospace">250</text>
+<text x="134" y="318" fill="#c8c8dc" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">固态硬盘</text>
+<rect x="148" y="302" width="443.3483193756133" height="22" rx="3" fill="#1a1a24" stroke="#e87a8a" stroke-width="1.2"/>
+<rect x="148" y="302" width="4" height="22" rx="0" fill="#e87a8a" stroke="none" stroke-width="1.5"/>
+<text x="601.3483193756133" y="318" fill="#e87a8a" font-size="9.5" text-anchor="start" font-family="monospace">约 40 万</text>
+<text x="134" y="353" fill="#c8c8dc" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">机械硬盘</text>
+<rect x="148" y="337" width="587.3483193756133" height="22" rx="3" fill="#1a1a24" stroke="#e87a8a" stroke-width="1.2"/>
+<rect x="148" y="337" width="4" height="22" rx="0" fill="#e87a8a" stroke="none" stroke-width="1.5"/>
+<text x="745.3483193756133" y="353" fill="#e87a8a" font-size="9.5" text-anchor="start" font-family="monospace">约 4000 万</text>
+<text x="24" y="412" fill="#6a6a82" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注意 SSD 和 HDD 那两条：它们不是 CPU 直接访问的，要走缺页和驱动。放进来只为说明「等 IO」和「算一条指令」相差七个数量级。</text>
+</svg>

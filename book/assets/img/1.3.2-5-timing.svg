@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="900" height="480" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.3.2-5  三种实现：时钟越切越细，吞吐越堆越高</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一段程序，三种排法；格子宽度就是时钟周期</text>
+<text x="24" y="92" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">单周期</text>
+<text x="24" y="110" fill="#8a8aa0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一条指令 = 1 个时钟</text>
+<rect x="190" y="104" width="178" height="32" rx="2" fill="#22242e" stroke="#4a4a62" stroke-width="1.2"/>
+<text x="279" y="125" fill="#8a8aa0" font-size="8.6" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">取值 · 译码 · 执行 · 访存 · 写回</text>
+<text x="279" y="98" fill="#5a5a72" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">I1</text>
+<rect x="370" y="104" width="178" height="32" rx="2" fill="#22242e" stroke="#4a4a62" stroke-width="1.2"/>
+<text x="459" y="125" fill="#8a8aa0" font-size="8.6" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">取值 · 译码 · 执行 · 访存 · 写回</text>
+<text x="459" y="98" fill="#5a5a72" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">I2</text>
+<rect x="550" y="104" width="178" height="32" rx="2" fill="#22242e" stroke="#4a4a62" stroke-width="1.2"/>
+<text x="639" y="125" fill="#8a8aa0" font-size="8.6" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">取值 · 译码 · 执行 · 访存 · 写回</text>
+<text x="639" y="98" fill="#5a5a72" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">I3</text>
+<line x1="190" y1="140" x2="190" y2="150" stroke="#e8965a" stroke-width="1.6"/>
+<line x1="370" y1="140" x2="370" y2="150" stroke="#e8965a" stroke-width="1.6"/>
+<line x1="550" y1="140" x2="550" y2="150" stroke="#e8965a" stroke-width="1.6"/>
+<line x1="730" y1="140" x2="730" y2="150" stroke="#e8965a" stroke-width="1.6"/>
+<text x="756" y="148" fill="#e8965a" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">时钟沿：很稀</text>
+<text x="190" y="174" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">时钟周期必须容纳最慢的 load，add 在里面大半时间空等</text>
+<text x="24" y="190" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">多周期</text>
+<text x="24" y="208" fill="#8a8aa0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一条指令 = 5 个时钟</text>
+<rect x="190" y="202" width="34" height="32" rx="2" fill="#1c2430" stroke="#5a7a96" stroke-width="1"/>
+<text x="207" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">IF</text>
+<rect x="226" y="202" width="34" height="32" rx="2" fill="#1c2430" stroke="#5a7a96" stroke-width="1"/>
+<text x="243" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">ID</text>
+<rect x="262" y="202" width="34" height="32" rx="2" fill="#1c2430" stroke="#5a7a96" stroke-width="1"/>
+<text x="279" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">EX</text>
+<rect x="298" y="202" width="34" height="32" rx="2" fill="#1c2430" stroke="#5a7a96" stroke-width="1"/>
+<text x="315" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">MEM</text>
+<rect x="334" y="202" width="34" height="32" rx="2" fill="#1c2430" stroke="#5a7a96" stroke-width="1"/>
+<text x="351" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">WB</text>
+<text x="280" y="196" fill="#5a5a72" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">I1</text>
+<rect x="370" y="202" width="34" height="32" rx="2" fill="#20242e" stroke="#5a7a96" stroke-width="1"/>
+<text x="387" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">IF</text>
+<rect x="406" y="202" width="34" height="32" rx="2" fill="#20242e" stroke="#5a7a96" stroke-width="1"/>
+<text x="423" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">ID</text>
+<rect x="442" y="202" width="34" height="32" rx="2" fill="#20242e" stroke="#5a7a96" stroke-width="1"/>
+<text x="459" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">EX</text>
+<rect x="478" y="202" width="34" height="32" rx="2" fill="#20242e" stroke="#5a7a96" stroke-width="1"/>
+<text x="495" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">MEM</text>
+<rect x="514" y="202" width="34" height="32" rx="2" fill="#20242e" stroke="#5a7a96" stroke-width="1"/>
+<text x="531" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">WB</text>
+<text x="460" y="196" fill="#5a5a72" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">I2</text>
+<rect x="550" y="202" width="34" height="32" rx="2" fill="#1c2430" stroke="#5a7a96" stroke-width="1"/>
+<text x="567" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">IF</text>
+<rect x="586" y="202" width="34" height="32" rx="2" fill="#1c2430" stroke="#5a7a96" stroke-width="1"/>
+<text x="603" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">ID</text>
+<rect x="622" y="202" width="34" height="32" rx="2" fill="#1c2430" stroke="#5a7a96" stroke-width="1"/>
+<text x="639" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">EX</text>
+<rect x="658" y="202" width="34" height="32" rx="2" fill="#1c2430" stroke="#5a7a96" stroke-width="1"/>
+<text x="675" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">MEM</text>
+<rect x="694" y="202" width="34" height="32" rx="2" fill="#1c2430" stroke="#5a7a96" stroke-width="1"/>
+<text x="711" y="223" fill="#8fb0c8" font-size="7.5" text-anchor="middle" font-family="monospace">WB</text>
+<text x="640" y="196" fill="#5a5a72" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">I3</text>
+<line x1="190" y1="238" x2="190" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="226" y1="238" x2="226" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="262" y1="238" x2="262" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="298" y1="238" x2="298" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="334" y1="238" x2="334" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="370" y1="238" x2="370" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="406" y1="238" x2="406" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="442" y1="238" x2="442" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="478" y1="238" x2="478" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="514" y1="238" x2="514" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="550" y1="238" x2="550" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="586" y1="238" x2="586" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="622" y1="238" x2="622" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="658" y1="238" x2="658" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="694" y1="238" x2="694" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<line x1="730" y1="238" x2="730" y2="248" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="756" y="246" fill="#e8b84b" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">时钟沿：密 5 倍</text>
+<text x="24" y="288" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">流水线</text>
+<text x="24" y="306" fill="#8a8aa0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一条指令 = 5 拍，但每拍出结果</text>
+<rect x="190" y="300" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="226" y="300" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="262" y="300" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="298" y="300" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="334" y="300" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="370" y="300" width="34" height="20" rx="2" fill="#2a2418" stroke="#e8b84b" stroke-width="1"/>
+<text x="182" y="314" fill="#5a5a72" font-size="8" text-anchor="end" font-family="monospace">I1</text>
+<rect x="226" y="324" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="262" y="324" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="298" y="324" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="334" y="324" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="370" y="324" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="406" y="324" width="34" height="20" rx="2" fill="#2a2418" stroke="#e8b84b" stroke-width="1"/>
+<text x="182" y="338" fill="#5a5a72" font-size="8" text-anchor="end" font-family="monospace">I2</text>
+<rect x="262" y="348" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="298" y="348" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="334" y="348" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="370" y="348" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="406" y="348" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="442" y="348" width="34" height="20" rx="2" fill="#2a2418" stroke="#e8b84b" stroke-width="1"/>
+<text x="182" y="362" fill="#5a5a72" font-size="8" text-anchor="end" font-family="monospace">I3</text>
+<rect x="298" y="372" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="334" y="372" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="370" y="372" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="406" y="372" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="442" y="372" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="478" y="372" width="34" height="20" rx="2" fill="#2a2418" stroke="#e8b84b" stroke-width="1"/>
+<text x="182" y="386" fill="#5a5a72" font-size="8" text-anchor="end" font-family="monospace">I4</text>
+<rect x="334" y="396" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="370" y="396" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="406" y="396" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="442" y="396" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="478" y="396" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="514" y="396" width="34" height="20" rx="2" fill="#2a2418" stroke="#e8b84b" stroke-width="1"/>
+<text x="182" y="410" fill="#5a5a72" font-size="8" text-anchor="end" font-family="monospace">I5</text>
+<rect x="370" y="420" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="406" y="420" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="442" y="420" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="478" y="420" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="514" y="420" width="34" height="20" rx="2" fill="#1e2a22" stroke="#4a7a5a" stroke-width="1"/>
+<rect x="550" y="420" width="34" height="20" rx="2" fill="#2a2418" stroke="#e8b84b" stroke-width="1"/>
+<text x="182" y="434" fill="#5a5a72" font-size="8" text-anchor="end" font-family="monospace">I6</text>
+<text x="190" y="462" fill="#6a6a82" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 5 拍之后，每个时钟都有一条指令退休；前半段是流水线被填满的过程，这一段延迟叫「流水线填充」。</text>
+</svg>
