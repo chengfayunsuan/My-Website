@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 472" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="900" height="472" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">add3 从调用到返回：五步里栈和寄存器各发生了什么</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">-O2 编译，整个函数只有三条指令，rsp 只被 call 和 ret 动过</text>
+<rect x="40" y="96" width="820" height="30" rx="3" fill="#1a1a26" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="88" y="116" fill="#8a8aa2" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">指令</text>
+<text x="294" y="116" fill="#8a8aa2" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">rsp</text>
+<text x="410" y="116" fill="#8a8aa2" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">[rsp] 处的内容</text>
+<text x="608" y="116" fill="#8a8aa2" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">eax</text>
+<text x="668" y="116" fill="#8a8aa2" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">说明</text>
+<rect x="40" y="130" width="820" height="40" rx="3" fill="#191924" stroke="#2e2e44" stroke-width="1"/>
+<circle cx="60" cy="150" r="12" fill="#2a2a3c" stroke="#5a5a72" stroke-width="1.2"/>
+<text x="60" y="154" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="monospace">1</text>
+<text x="88" y="154" fill="#d8d8e4" font-size="10.5" text-anchor="start" font-family="monospace">mov edi,1 / esi,2 / edx,3</text>
+<text x="292" y="154" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="monospace">0x7ffc1000</text>
+<text x="408" y="154" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="monospace">—</text>
+<text x="606" y="154" fill="#5a5a72" font-size="10.5" text-anchor="start" font-family="monospace">—</text>
+<text x="666" y="154" fill="#9a9ab4" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">参数先放进 rdi rsi rdx</text>
+<rect x="40" y="176" width="820" height="40" rx="3" fill="#241c14" stroke="#2e2e44" stroke-width="1"/>
+<circle cx="60" cy="196" r="12" fill="#2a2a3c" stroke="#5a5a72" stroke-width="1.2"/>
+<text x="60" y="200" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="monospace">2</text>
+<text x="88" y="200" fill="#d8d8e4" font-size="10.5" text-anchor="start" font-family="monospace">call add3</text>
+<text x="292" y="200" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="monospace">0x7ffc0ff8</text>
+<text x="408" y="200" fill="#e8965a" font-size="10.5" text-anchor="start" font-family="monospace">0x401020  ← 返回地址</text>
+<text x="606" y="200" fill="#5a5a72" font-size="10.5" text-anchor="start" font-family="monospace">—</text>
+<text x="666" y="200" fill="#9a9ab4" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">压入返回地址，跳到 add3</text>
+<rect x="40" y="222" width="820" height="40" rx="3" fill="#191924" stroke="#2e2e44" stroke-width="1"/>
+<circle cx="60" cy="242" r="12" fill="#2a2a3c" stroke="#5a5a72" stroke-width="1.2"/>
+<text x="60" y="246" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="monospace">3</text>
+<text x="88" y="246" fill="#d8d8e4" font-size="10.5" text-anchor="start" font-family="monospace">lea eax, [rdi+rsi]</text>
+<text x="292" y="246" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="monospace">0x7ffc0ff8</text>
+<text x="408" y="246" fill="#e8965a" font-size="10.5" text-anchor="start" font-family="monospace">0x401020</text>
+<text x="606" y="246" fill="#67b5ef" font-size="10.5" text-anchor="start" font-family="monospace">3</text>
+<text x="666" y="246" fill="#9a9ab4" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">参数相加，不碰内存</text>
+<rect x="40" y="268" width="820" height="40" rx="3" fill="#191924" stroke="#2e2e44" stroke-width="1"/>
+<circle cx="60" cy="288" r="12" fill="#2a2a3c" stroke="#5a5a72" stroke-width="1.2"/>
+<text x="60" y="292" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="monospace">4</text>
+<text x="88" y="292" fill="#d8d8e4" font-size="10.5" text-anchor="start" font-family="monospace">add eax, edx</text>
+<text x="292" y="292" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="monospace">0x7ffc0ff8</text>
+<text x="408" y="292" fill="#e8965a" font-size="10.5" text-anchor="start" font-family="monospace">0x401020</text>
+<text x="606" y="292" fill="#67b5ef" font-size="10.5" text-anchor="start" font-family="monospace">6</text>
+<text x="666" y="292" fill="#9a9ab4" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">加第三个参数</text>
+<rect x="40" y="314" width="820" height="40" rx="3" fill="#14201a" stroke="#2e2e44" stroke-width="1"/>
+<circle cx="60" cy="334" r="12" fill="#2a2a3c" stroke="#5a5a72" stroke-width="1.2"/>
+<text x="60" y="338" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="monospace">5</text>
+<text x="88" y="338" fill="#d8d8e4" font-size="10.5" text-anchor="start" font-family="monospace">ret</text>
+<text x="292" y="338" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="monospace">0x7ffc1000</text>
+<text x="408" y="338" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="monospace">0x401020（内容还在）</text>
+<text x="606" y="338" fill="#67b5ef" font-size="10.5" text-anchor="start" font-family="monospace">6</text>
+<text x="666" y="338" fill="#9a9ab4" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">弹回调用者，rsp 复原</text>
+<text x="40" y="384" fill="#8a8aa2" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">call：−8　　ret：+8　　add3 自身：一动不动</text>
+<text x="40" y="414" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">整条路径零次访存。这就是「叶子函数不建帧」的样子——没有 push rbp，没有 sub rsp，也没有一次 load/store。</text>
+<text x="40" y="436" fill="#6a6a82" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">换成 -O0，同样的逻辑会变成十五条指令、十一次访存，因为它把每个变量都放回栈上，只为让调试器能取到地址。</text>
+</svg>

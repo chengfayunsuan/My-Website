@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 424" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="900" height="424" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">x86-64 寄存器全景（按调用约定分组）</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">青色：传参与返回　紫色：被调用者必须保存　橙色：调用者自己负责　灰色：有特殊地位，不能当普通变量</text>
+<rect x="40" y="100" width="100" height="48" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="90.0" y="124" fill="#67b5ef" font-size="15" text-anchor="middle" font-family="monospace">rax</text>
+<text x="90.0" y="139" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">返回值</text>
+<rect x="148" y="100" width="100" height="48" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="198.0" y="124" fill="#b58ae8" font-size="15" text-anchor="middle" font-family="monospace">rbx</text>
+<text x="198.0" y="139" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">基址</text>
+<rect x="256" y="100" width="100" height="48" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="306.0" y="124" fill="#67b5ef" font-size="15" text-anchor="middle" font-family="monospace">rcx</text>
+<text x="306.0" y="139" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">参数 4</text>
+<rect x="364" y="100" width="100" height="48" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="414.0" y="124" fill="#67b5ef" font-size="15" text-anchor="middle" font-family="monospace">rdx</text>
+<text x="414.0" y="139" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">参数 3</text>
+<rect x="472" y="100" width="100" height="48" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="522.0" y="124" fill="#67b5ef" font-size="15" text-anchor="middle" font-family="monospace">rsi</text>
+<text x="522.0" y="139" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">参数 2</text>
+<rect x="580" y="100" width="100" height="48" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="630.0" y="124" fill="#67b5ef" font-size="15" text-anchor="middle" font-family="monospace">rdi</text>
+<text x="630.0" y="139" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">参数 1</text>
+<rect x="688" y="100" width="100" height="48" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="738.0" y="124" fill="#b58ae8" font-size="15" text-anchor="middle" font-family="monospace">rbp</text>
+<text x="738.0" y="139" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">帧指针</text>
+<rect x="796" y="100" width="100" height="48" rx="4" fill="#14141e" stroke="#8a8aa0" stroke-width="1.5"/>
+<text x="846.0" y="124" fill="#8a8aa0" font-size="15" text-anchor="middle" font-family="monospace">rsp</text>
+<text x="846.0" y="139" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">栈顶</text>
+<rect x="40" y="156" width="100" height="48" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="90.0" y="180" fill="#67b5ef" font-size="15" text-anchor="middle" font-family="monospace">r8</text>
+<text x="90.0" y="195" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">参数 5</text>
+<rect x="148" y="156" width="100" height="48" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="198.0" y="180" fill="#67b5ef" font-size="15" text-anchor="middle" font-family="monospace">r9</text>
+<text x="198.0" y="195" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">参数 6</text>
+<rect x="256" y="156" width="100" height="48" rx="4" fill="#14141e" stroke="#e8965a" stroke-width="1.5"/>
+<text x="306.0" y="180" fill="#e8965a" font-size="15" text-anchor="middle" font-family="monospace">r10</text>
+<text x="306.0" y="195" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">临时</text>
+<rect x="364" y="156" width="100" height="48" rx="4" fill="#14141e" stroke="#e8965a" stroke-width="1.5"/>
+<text x="414.0" y="180" fill="#e8965a" font-size="15" text-anchor="middle" font-family="monospace">r11</text>
+<text x="414.0" y="195" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">临时</text>
+<rect x="472" y="156" width="100" height="48" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="522.0" y="180" fill="#b58ae8" font-size="15" text-anchor="middle" font-family="monospace">r12</text>
+<text x="522.0" y="195" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">长期变量</text>
+<rect x="580" y="156" width="100" height="48" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="630.0" y="180" fill="#b58ae8" font-size="15" text-anchor="middle" font-family="monospace">r13</text>
+<text x="630.0" y="195" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">长期变量</text>
+<rect x="688" y="156" width="100" height="48" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="738.0" y="180" fill="#b58ae8" font-size="15" text-anchor="middle" font-family="monospace">r14</text>
+<text x="738.0" y="195" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">长期变量</text>
+<rect x="796" y="156" width="100" height="48" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="846.0" y="180" fill="#b58ae8" font-size="15" text-anchor="middle" font-family="monospace">r15</text>
+<text x="846.0" y="195" fill="#a8a8c0" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">长期变量</text>
+<text x="40" y="226" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不参与这套分工的三个（外加控制浮点行为的 mxcsr）</text>
+<rect x="40" y="236" width="264" height="66" rx="4" fill="#14141e" stroke="#5a5a72" stroke-width="1.4"/>
+<text x="54" y="260" fill="#8a8aa0" font-size="13" text-anchor="start" font-family="monospace">rip</text>
+<text x="54" y="278" fill="#9a9ab4" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">下一条指令地址</text>
+<text x="54" y="294" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只能 lea 间接读，不能直接写</text>
+<rect x="316" y="236" width="264" height="66" rx="4" fill="#14141e" stroke="#5a5a72" stroke-width="1.4"/>
+<text x="330" y="260" fill="#8a8aa0" font-size="13" text-anchor="start" font-family="monospace">rflags</text>
+<text x="330" y="278" fill="#9a9ab4" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">ZF/SF/CF/OF 条件标志</text>
+<text x="330" y="294" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">cmp 写它，jcc 读它</text>
+<rect x="592" y="236" width="264" height="66" rx="4" fill="#14141e" stroke="#5a5a72" stroke-width="1.4"/>
+<text x="606" y="260" fill="#8a8aa0" font-size="13" text-anchor="start" font-family="monospace">fs</text>
+<text x="606" y="278" fill="#9a9ab4" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">线程局部存储的段基址</text>
+<text x="606" y="294" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">canary 存在 %fs:0x28</text>
+<rect x="40" y="336" width="12" height="12" rx="2" fill="#67b5ef" stroke="#67b5ef" stroke-width="0"/>
+<text x="58" y="346" fill="#9a9ab4" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">参数与返回值</text>
+<rect x="148" y="336" width="12" height="12" rx="2" fill="#b58ae8" stroke="#b58ae8" stroke-width="0"/>
+<text x="166" y="346" fill="#9a9ab4" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">被调用者保存</text>
+<rect x="256" y="336" width="12" height="12" rx="2" fill="#e8965a" stroke="#e8965a" stroke-width="0"/>
+<text x="274" y="346" fill="#9a9ab4" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">调用者保存</text>
+<rect x="354" y="336" width="12" height="12" rx="2" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<text x="372" y="346" fill="#9a9ab4" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">特殊</text>
+<text x="40" y="380" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">读汇编的经验：看序言 push 了哪些紫色寄存器，就能数出这个函数要保存几个长期变量；</text>
+<text x="40" y="400" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">看它从哪些青色寄存器取数，就能数出它有几个参数。</text>
+</svg>
