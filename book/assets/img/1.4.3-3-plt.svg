@@ -1,0 +1,53 @@
+<svg width="880" height="462" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 462" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="462" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.4.3-3  延迟绑定：第一次多绕一圈</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">PLT 与 GOT 怎么把「解析符号」推迟到真正用它的那一刻</text>
+<text x="50" y="92" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第一次调用</text>
+<text x="126" y="92" fill="#5f5f78" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">要绕五步</text>
+<rect x="50" y="106" width="138" height="68" rx="4" fill="#67b5ef14" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="60" y="132" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="monospace">call puts@plt</text>
+<text x="60" y="154" fill="#7a7a94" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你的代码</text>
+<line x1="188" y1="140.0" x2="204" y2="140.0" stroke="#3a3a52" stroke-width="1.3"/>
+<path d="M204,140.0 l-7,-3.5 l0,7 Z" fill="#3a3a52"/>
+<rect x="210" y="106" width="138" height="68" rx="4" fill="#67b5ef14" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="220" y="132" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="monospace">jmp *GOT[n]</text>
+<text x="220" y="154" fill="#7a7a94" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">PLT 桩，GOT 还没填</text>
+<line x1="348" y1="140.0" x2="364" y2="140.0" stroke="#3a3a52" stroke-width="1.3"/>
+<path d="M364,140.0 l-7,-3.5 l0,7 Z" fill="#3a3a52"/>
+<rect x="370" y="106" width="138" height="68" rx="4" fill="#67b5ef14" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="380" y="132" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="monospace">push n</text>
+<text x="380" y="154" fill="#7a7a94" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">jmp PLT0，报出编号</text>
+<line x1="508" y1="140.0" x2="524" y2="140.0" stroke="#3a3a52" stroke-width="1.3"/>
+<path d="M524,140.0 l-7,-3.5 l0,7 Z" fill="#3a3a52"/>
+<rect x="530" y="106" width="138" height="68" rx="4" fill="#e8965a14" stroke="#e8965a" stroke-width="1.2"/>
+<text x="540" y="132" fill="#e8965a" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">查已加载的库</text>
+<text x="540" y="154" fill="#7a7a94" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">_dl_runtime_resolve</text>
+<line x1="668" y1="140.0" x2="684" y2="140.0" stroke="#3a3a52" stroke-width="1.3"/>
+<path d="M684,140.0 l-7,-3.5 l0,7 Z" fill="#3a3a52"/>
+<rect x="690" y="106" width="138" height="68" rx="4" fill="#e8965a14" stroke="#e8965a" stroke-width="1.2"/>
+<text x="700" y="132" fill="#e8965a" font-size="9.5" text-anchor="start" font-family="monospace">写回 GOT[n]</text>
+<text x="700" y="154" fill="#7a7a94" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">然后跳到 puts</text>
+<rect x="228" y="188" width="84" height="26" rx="3" fill="#2a2214" stroke="#e8b84b" stroke-width="1"/>
+<text x="270" y="205" fill="#e8b84b" font-size="9" text-anchor="middle" font-family="monospace">GOT[n]</text>
+<path d="M759.0,174 L759.0,234 L270,234 L270,218" fill="none" stroke="#e8b84b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<path d="M270,218 l-3.5,-7 l7,0 Z" fill="#e8b84b"/>
+<text x="550" y="226" fill="#b8935a" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">解析完把地址写进去，下次直接跳</text>
+<text x="149" y="288" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">之后每一次调用</text>
+<text x="251" y="288" fill="#5f5f78" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只剩一步间接跳转</text>
+<rect x="149" y="302" width="170" height="58" rx="4" fill="#67b5ef12" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="159" y="326" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="monospace">call puts@plt</text>
+<text x="159" y="346" fill="#7a7a94" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">PLT 桩</text>
+<line x1="319" y1="331" x2="349" y2="331" stroke="#3a3a52" stroke-width="1.3"/>
+<path d="M349,331 l-7,-3.5 l0,7 Z" fill="#3a3a52"/>
+<rect x="355" y="302" width="170" height="58" rx="4" fill="#67d9a012" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="365" y="326" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="monospace">jmp *GOT[n]</text>
+<text x="365" y="346" fill="#7a7a94" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">GOT 里已是真实地址</text>
+<line x1="525" y1="331" x2="555" y2="331" stroke="#3a3a52" stroke-width="1.3"/>
+<path d="M555,331 l-7,-3.5 l0,7 Z" fill="#3a3a52"/>
+<rect x="561" y="302" width="170" height="58" rx="4" fill="#67d9a012" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="571" y="326" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="monospace">puts</text>
+<text x="571" y="346" fill="#7a7a94" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">真正执行</text>
+<rect x="36" y="390" width="808" height="52" rx="4" fill="#12121c" stroke="#26263a" stroke-width="1"/>
+<text x="52" y="411" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">为什么要 push n：加载器得知道「你问的是哪一格」。这个编号就是重定位表里的索引。</text>
+<text x="52" y="429" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价：第一次调用的耗时不可预测（要读符号表、可能要读文件），实时场景用 -z now 换掉它。</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg width="880" height="476" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 476" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="476" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.4.3-5  一个进程只有一张符号表</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所有 .so 的导出符号倒进同一个桶，同名只认最早的那个</text>
+<rect x="36" y="118" width="214" height="76" rx="4" fill="#14141f" stroke="#33334a" stroke-width="1.2"/>
+<text x="50" y="140" fill="#cfc6ff" font-size="10" text-anchor="start" font-family="monospace">主程序 a.out</text>
+<text x="50" y="162" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="monospace">导出 main, init</text>
+<rect x="36" y="210" width="214" height="76" rx="4" fill="#14141f" stroke="#33334a" stroke-width="1.2"/>
+<text x="50" y="232" fill="#67b5ef" font-size="10" text-anchor="start" font-family="monospace">liba.so</text>
+<text x="50" y="254" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="monospace">导出 log, init</text>
+<rect x="36" y="302" width="214" height="76" rx="4" fill="#14141f" stroke="#33334a" stroke-width="1.2"/>
+<text x="50" y="324" fill="#67d9a0" font-size="10" text-anchor="start" font-family="monospace">libb.so</text>
+<text x="50" y="346" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="monospace">导出 log, hash</text>
+<text x="376" y="82" fill="#e8b84b" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进程唯一的全局符号表</text>
+<rect x="376" y="96" width="468" height="40" fill="#2a1418" stroke="#26263a" stroke-width="1"/>
+<text x="388" y="121" fill="#e87a8a" font-size="10" text-anchor="start" font-family="monospace">malloc</text>
+<text x="498" y="121" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">LD_PRELOAD</text>
+<text x="616" y="121" fill="#6a6a82" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">插队到最前，连 libc 都被它盖住</text>
+<rect x="376" y="136" width="468" height="40" fill="#14141f" stroke="#26263a" stroke-width="1"/>
+<text x="388" y="161" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="monospace">main</text>
+<text x="498" y="161" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">主程序</text>
+<text x="616" y="161" fill="#6a6a82" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没人重名</text>
+<rect x="376" y="176" width="468" height="40" fill="#241f10" stroke="#26263a" stroke-width="1"/>
+<text x="388" y="201" fill="#e8b84b" font-size="10" text-anchor="start" font-family="monospace">init</text>
+<text x="498" y="201" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">主程序</text>
+<text x="616" y="201" fill="#6a6a82" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">liba 的 init 被丢弃</text>
+<rect x="376" y="216" width="468" height="40" fill="#241f10" stroke="#26263a" stroke-width="1"/>
+<text x="388" y="241" fill="#e8b84b" font-size="10" text-anchor="start" font-family="monospace">log</text>
+<text x="498" y="241" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">liba.so</text>
+<text x="616" y="241" fill="#6a6a82" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">libb 的 log 被丢弃</text>
+<rect x="376" y="256" width="468" height="40" fill="#14141f" stroke="#26263a" stroke-width="1"/>
+<text x="388" y="281" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="monospace">hash</text>
+<text x="498" y="281" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">libb.so</text>
+<text x="616" y="281" fill="#6a6a82" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没人重名</text>
+<line x1="376" y1="96" x2="844" y2="96" stroke="#3a3a52" stroke-width="1.2"/>
+<line x1="376" y1="296" x2="844" y2="296" stroke="#3a3a52" stroke-width="1.2"/>
+<line x1="376" y1="96" x2="376" y2="296" stroke="#3a3a52" stroke-width="1.2"/>
+<line x1="844" y1="96" x2="844" y2="296" stroke="#3a3a52" stroke-width="1.2"/>
+<path d="M252,156 L300,156 L300,156 L370,156" fill="none" stroke="#2a2a3e" stroke-width="1.1"/>
+<path d="M370,156 l-8,-4 l0,8 Z" fill="#2a2a3e"/>
+<path d="M252,248 L316,248 L316,196 L370,196" fill="none" stroke="#2a2a3e" stroke-width="1.1"/>
+<path d="M370,196 l-8,-4 l0,8 Z" fill="#2a2a3e"/>
+<path d="M252,340 L332,340 L332,276 L370,276" fill="none" stroke="#2a2a3e" stroke-width="1.1"/>
+<path d="M370,276 l-8,-4 l0,8 Z" fill="#2a2a3e"/>
+<rect x="36" y="372" width="808" height="78" rx="4" fill="#12121c" stroke="#26263a" stroke-width="1"/>
+<text x="52" y="396" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">加载顺序 = 表的优先级：主程序 → LD_PRELOAD → DT_NEEDED 依次。</text>
+<text x="52" y="416" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以 -fvisibility=hidden 不只是「少导出几个符号」——它把冲突的可能性也一起消掉了。</text>
+<text x="52" y="436" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两个库各自静态链进同一份第三方代码时互相踩，根因就在这张表：同名只能活一个。</text>
+</svg>

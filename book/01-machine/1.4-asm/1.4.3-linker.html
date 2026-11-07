@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.4.3 链接与动态库：一个 exe 是怎么被拼出来的</title>
+<link rel="stylesheet" href="../../style.css">
+<style>p code, li code, td code { overflow-wrap: anywhere; }</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+    <a href="index.html">1.4 从语言到机器码</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部</a><span class="sep">/</span>
+    <a href="index.html">1.4 从语言到机器码</a><span class="sep">/</span>
+    <span class="here">1.4.3</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">1.4.3</span>
+    链接与动态库：一个 exe 是怎么被拼出来的
+  </h1>
+  <p class="part-sub">
+    约 0.9 万字 · 5 张图 · 读完你能说清 <code>.o</code> 文件里到底装了什么，
+    链接器凭什么能把一堆碎块拼成一个能跑的程序，
+    以及「换了台机器就报 <code>cannot open shared object file</code>」到底是哪一环断了
+  </p>
+
+  <div class="lead">
+    <b>编译把一门语言变成了一堆零件，链接把零件变成一台机器。</b>
+    前两节讲的是「一条指令怎么写」「一行 C 怎么变成指令」，
+    产出的都是 <code>.o</code> 文件——里面有代码，有数据，
+    但每个跳转、每个地址都还是空的，写着「此处待填」。
+    填这些空、并把几十上百个 <code>.o</code> 和系统库缝在一起的，
+    是链接器 <code>ld</code>。
+    它是整条工具链里最不出声的一环：平时不报错你就感觉不到它存在，
+    一出错就是 <code>undefined reference</code>、<code>GLIBC_2.34 not found</code>
+    这种让人发懵的话。
+    这一节把它拆开看：链接器只做三件事，
+    但这三件事决定了你的程序能不能启动、能不能换机器、能不能打补丁。
+  </div>
+
+  <div class="minitoc">
+    <h4>本节的小部分</h4>
+    <ol>
+      <li><a href="#p1">1 一个可执行文件里装了什么</a></li>
+      <li><a href="#p2">2 链接器只做三件事</a></li>
+      <li><a href="#p3">3 重定位：那些空是怎么填上的</a></li>
+      <li><a href="#p4">4 符号表：名字是最脆弱的接口</a></li>
+      <li><a href="#p5">5 静态库就是一个压缩包</a></li>
+      <li><a href="#p6">6 库的顺序为什么重要</a></li>
+      <li><a href="#p7">7 动态库：同一份代码映射到每个进程</a></li>
+      <li><a href="#p8">8 位置无关：为什么代码不能写死地址</a></li>
+      <li><a href="#p9">9 GOT 与 PLT：第一次调用多花的那几步</a></li>
+      <li><a href="#p10">10 soname 与符号版本：换库就崩的真相</a></li>
+      <li><a href="#p11">11 符号可见性：默认全导出是个坑</a></li>
+      <li><a href="#p12">12 静态还是动态：真正的权衡</a></li>
+      <li><a href="#p13">13 链接器不检查什么</a></li>
+    </ol>
+  </div>
+
+  <h2 id="p1"><span class="h2num">1.4.3-1</span>一个可执行文件里装了什么</h2>
+
+  <p>
+    先建立最基本的图像。<code>gcc -c hello.c</code> 出来的 <code>hello.o</code>，
+    不是「一堆指令」，而是一个<strong>分格的容器</strong>。
+    Linux 上这个容器叫 ELF，Windows 上叫 PE/COFF，
+    叫法不同，装的东西几乎一样：
+  </p>
+
+  <div class="tw"><table style="min-width:600px">
+    <thead><tr><th>节名</th><th>装什么</th><th>占文件空间吗</th></tr></thead>
+    <tbody>
+      <tr><td><code>.text</code></td><td>机器码</td><td>占</td></tr>
+      <tr><td><code>.rodata</code></td><td>只读数据：字符串字面量、<code>const</code> 表</td><td>占</td></tr>
+      <tr><td><code>.data</code></td><td>初始化过的全局和静态变量（非零）</td><td>占</td></tr>
+      <tr><td><code>.bss</code></td><td>没初始化或初始化为零的全局和静态变量</td><td><strong>不占</strong>，只记大小</td></tr>
+      <tr><td><code>.symtab</code></td><td>符号表：这个文件定义了谁、引用了谁</td><td>占</td></tr>
+      <tr><td><code>.rela.text</code></td><td>重定位表：<code>.text</code> 里哪几个字节等着填</td><td>占</td></tr>
+      <tr><td><code>.debug_info</code></td><td>调试信息，只在加 <code>-g</code> 时出现</td><td>占，且很大</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    <code>.bss</code> 那行值得停一下。
+    你写 <code>int buf[1000000];</code>，编译出来的 <code>.o</code> 不会因此变大——
+    <code>.bss</code> 在文件里只是一个「本段需要 4000000 字节，全填零」的记号。
+    程序加载时内核直接给你一块清零的页，不用从磁盘读四兆的零。
+    <em>这是「零」在可执行文件里唯一被特殊对待的地方。</em>
+    相比之下 <code>int buf[1000000] = {1};</code> 会老老实实占四兆，
+    因为它得把第一个 1 和后面 999999 个 0 都写进文件。
+  </p>
+
+  <p>
+    链接之后，这些节被拼成一个可执行文件。用 <code>readelf -S</code> 能看到节，
+    用 <code>readelf -l</code> 能看到<strong>段</strong>（segment）——
+    节是给链接器看的，段是给加载器看的，
+    一个段通常由好几个节合并而成，比如「只读可执行段」里装着 <code>.text</code> 和 <code>.rodata</code>。
+  </p>
+
+<pre><code>readelf -S hello.o     # 看节
+readelf -l hello       # 看段（加载器视角）
+size hello             # 一句话看 text/data/bss 各多大</code></pre>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.4.3-1-merge.svg" target="_blank">
+    <img src="../../assets/img/1.4.3-1-merge.svg" alt="两个目标文件的同名节被链接器合并成一个可执行文件的过程" loading="lazy"></a>
+    <figcaption>图 1.4.3-1　链接的第一步是「合并」。<em>两个 <code>.o</code> 里各有一份 <code>.text</code>，链接后变成一段连续的代码</em>；两份 <code>.data</code> 拼成一份，两份 <code>.bss</code> 只是尺寸相加。注意合并之后，原来各自从 0 开始编的偏移全都不对了——这就是下一步必须重定位的原因。</figcaption>
+  </figure>
+
+  <h2 id="p2"><span class="h2num">1.4.3-2</span>链接器只做三件事</h2>
+
+  <p>
+    把链接器想象成一个非常笨的装配工。它不做语法检查，不理解你的函数在干什么，
+    甚至不知道 <code>printf</code> 的第一个参数是格式串。它只会：
+  </p>
+
+  <ol>
+    <li><strong>合并</strong>：把所有输入里的同名节拼起来，决定每一节最终落在文件的哪个偏移、加载后的哪个虚拟地址。</li>
+    <li><strong>解析符号</strong>：每个 <code>.o</code> 都带一张「我引用了谁」和「我定义了谁」的清单，
+        链接器把这些清单对账，保证每个被引用的名字都能在某个地方找到定义。</li>
+    <li><strong>重定位</strong>：把 <code>.text</code> 里那些「此处待填」的字节，填成最终地址（或地址的相对偏移）。</li>
+  </ol>
+
+  <p>
+    三件事里，<strong>只有第二件会跟你吵架</strong>。
+    合并和重定位是机械工作，符号解析才是所有链接错误的来源。
+    因为「符号」就是名字，而名字是软件里最不牢靠的东西：
+    它没有类型，没有签名，没有参数个数，
+    在 C 的链接层面，<code>int foo(int)</code> 和 <code>double foo(char*, long)</code>
+    是<strong>同一个符号</strong>，都叫 <code>foo</code>。
+  </p>
+
+  <p>
+    这就是链接和编译最根本的分工：
+    <em>编译器管语义，链接器只管名字和地址</em>。
+    编译器知道你调用 <code>foo</code> 时传了两个参数，它会按 ABI 把参数放进寄存器；
+    链接器只知道「有个叫 <code>foo</code> 的东西需要用」，它把地址填上就完事了。
+    两边对不上，程序会跑，只是跑出来的结果是垃圾。
+  </p>
+
+  <h2 id="p3"><span class="h2num">1.4.3-3</span>重定位：那些空是怎么填上的</h2>
+
+  <p>
+    在 <code>.o</code> 文件里，函数调用长这样：
+  </p>
+
+<pre><code>000000000000000e:  e8 00 00 00 00    call  13 &lt;main+0x13&gt;</code></pre>
+
+  <p>
+    <code>e8</code> 是 <code>call</code> 的编码，后面四个字节是<strong>相对偏移</strong>。
+    现在这四个字节全是 0，意思是「调用紧挨着的下一条指令」——显然不对。
+    为什么留 0？因为汇编器根本不知道 <code>puts</code> 最后会在哪。
+    它可能在同一个 <code>.o</code> 里，可能在另一个 <code>.o</code> 里，
+    可能在静态库里被抽出来，也可能在某个 <code>.so</code> 里——
+    这些都要等链接器决定布局之后才知道。
+  </p>
+
+  <p>
+    所以汇编器干的事是：把 0 填进去，然后在 <code>.rela.text</code> 里留一条记录：
+  「偏移 0x0f 处的 4 个字节，需要一个指向 <code>puts</code> 的相对地址，类型 <code>R_X86_64_PLT32</code>」。
+  </p>
+
+<pre><code>readelf -r hello.o
+
+Relocation section '.rela.text':
+  Offset          Info             Type       Sym. Name + Addend
+  00000000000f  000500000004 R_X86_64_PLT32  puts - 4</code></pre>
+
+  <p>
+    链接器做完布局，知道 <code>puts</code> 在虚拟地址 <code>0x401030</code>，
+    而这条 <code>call</code> 指令在 <code>0x401126</code>，下一条指令在 <code>0x40112b</code>。
+    于是把 <code>0x401030 - 0x40112b</code> 算出来，写进那四个字节。
+    <em>填的是相对差值，不是绝对地址</em>——
+    这样整段代码被搬到内存里任何位置，这条调用依然正确。
+  </p>
+
+  <p>
+    只在<strong>同一个可执行文件内部</strong>，相对寻址就够了。
+    一旦目标是外部动态库，情况就变了：
+    库加载到哪是运行时才决定的，链接时不可能算出偏移。
+    这时候链接器只能再留一个空——但这个空不能留在代码里，
+    否则每个进程都得改自己的代码段，那一份物理内存就没法共享了。
+    后面第 8、9 节讲的就是它怎么绕过这个矛盾。
+  </p>
+
+  <p>
+    还有一类重定位是<strong>数据</strong>用的。比如：
+  </p>
+
+<pre><code>char *msg = "hello";
+int (*fn)(const char *) = puts;   /* 函数指针 */</code></pre>
+
+  <p>
+    这两个变量的内容是<strong>地址</strong>，而且必须是运行时的绝对地址。
+    它们的重定位类型是 <code>R_X86_64_64</code>（填一个 64 位绝对地址），
+    发生在 <code>.data</code> 里而不是 <code>.text</code> 里。
+    数据段每个进程本来就是私有的，改它不破坏共享——
+    这是理解「为什么代码不能有绝对地址、数据可以有」的关键分界。
+  </p>
+
+  <h2 id="p4"><span class="h2num">1.4.3-4</span>符号表：名字是最脆弱的接口</h2>
+
+  <p>
+    <code>nm</code> 是最能说明问题的一个工具。它把符号表打出来，每个符号前面一个字母：
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>字母</th><th>含义</th><th>典型来源</th></tr></thead>
+    <tbody>
+      <tr><td><code>T</code> / <code>t</code></td><td>代码段里的符号，大写全局、小写局部</td><td>函数</td></tr>
+      <tr><td><code>D</code> / <code>d</code></td><td>已初始化的数据</td><td><code>int x = 1;</code></td></tr>
+      <tr><td><code>B</code> / <code>b</code></td><td>未初始化的数据</td><td><code>int x;</code></td></tr>
+      <tr><td><code>R</code> / <code>r</code></td><td>只读数据</td><td>字符串字面量</td></tr>
+      <tr><td><code>U</code></td><td><strong>未定义</strong>：这个文件引用了它，但没定义</td><td>调用了 <code>puts</code></td></tr>
+      <tr><td><code>W</code></td><td>弱符号</td><td><code>__attribute__((weak))</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    <code>U</code> 是链接器最关心的。它把每个 <code>.o</code> 的 <code>U</code> 收集起来列成一张欠账，
+    再用所有输入里的 <code>T</code>/<code>D</code>/<code>B</code> 去还。
+    还完还有欠账，就是那句 <code>undefined reference to 'xxx'</code>。
+  </p>
+
+  <p>
+    两个细节值得记住。
+    <strong>第一，<code>static</code> 函数在小写那一栏。</strong>
+    它变成了 <code>LOCAL</code> 绑定，链接器不会拿它去还别人的账，
+    也不会因为它和别的文件里的同名函数冲突——这就是「内部链接」的真实含义，
+    不是什么「作用域限制」的抽象说法，而是它的名字压根没进全局对账表。
+  </p>
+
+  <p>
+    <strong>第二，C++ 的名字是改过的。</strong>
+    因为 <code>int add(int,int)</code> 和 <code>double add(double,double)</code>
+    在 C 的符号层面必须是两个名字，C++ 编译器就把参数类型也编进名字里：
+  </p>
+
+<pre><code>namespace ns { int add(int, int); }
+
+# 实际符号名
+_ZN2ns3addEii
+
+# 逐段拆开
+_Z      前缀：这个名字被修饰过
+N       嵌套名开始
+2ns     命名空间 ns（2 是「ns」的长度）
+3add    函数名 add（3 是「add」的长度）
+E       名字结束
+ii      参数类型：int, int</code></pre>
+
+  <p>
+    这套规则叫 name mangling。它的存在解释了两个常见现象：
+    一是 <code>nm</code> 看 C++ 程序的输出全是乱码一样的 <code>_ZN...</code>，
+    要用 <code>nm -C</code> 或 <code>c++filt</code> 还原；
+    二是 C++ 调用 C 库必须写 <code>extern "C"</code>——
+    不是「告诉编译器这是 C 的」，而是<strong>「别改这个名字」</strong>，
+    因为对方库里那个符号就叫 <code>puts</code>，不叫 <code>_Z4putsv</code>。
+  </p>
+
+  <p>
+    顺带说清一件事：mangling 只编码<strong>名字和参数类型</strong>，
+    不含返回类型，也不含参数名。
+    这不是疏忽，是因为 C++ 允许「只看调用形式」就唯一确定重载——
+    而返回值不参与重载决议。代价是两个返回类型不同的同名同参函数没法共存，
+    这也正是「不能仅靠返回值重载」这条规则的底层原因。
+  </p>
+
+  <h2 id="p5"><span class="h2num">1.4.3-5</span>静态库就是一个压缩包</h2>
+
+  <p>
+    多个 <code>.o</code> 打包成 <code>.a</code>，用的是 <code>ar</code>。
+    它和 tar 是同一个年代的东西，格式简单到你能手写解析：
+  </p>
+
+<pre><code>gcc -c add.c mul.c
+ar rcs libmath.a add.o mul.o
+ar t libmath.a          # 列出成员：add.o mul.o</code></pre>
+
+  <p>
+    <code>.a</code> 就是「若干个 <code>.o</code> 加一张索引表」。
+    索引表记录「哪个符号在哪个成员里」，让链接器不用把整个包解开就能查。
+    注意它<strong>不是压缩的</strong>，<code>.a</code> 和里面 <code>.o</code> 的总和差不多大。
+  </p>
+
+  <p>
+    链接器处理静态库的方式有个专门的名字：<strong>按需抽取</strong>。
+    它不会把 <code>libmath.a</code> 里的所有成员都塞进你的程序，
+    而是扫一遍，看当前还有哪些 <code>U</code> 没还，
+    只把能还账的那些成员抽出来。
+    你只用了 <code>add</code>，<code>mul.o</code> 就完全不会进你的可执行文件。
+  </p>
+
+  <p>
+    这个机制的副作用，是链接顺序变得敏感。见下一节。
+  </p>
+
+  <h2 id="p6"><span class="h2num">1.4.3-6</span>库的顺序为什么重要</h2>
+
+  <p>
+    如果你写过 <code>gcc main.o -lm -lmath</code> 却报 <code>undefined reference to 'add'</code>，
+    而把顺序换成 <code>gcc main.o -lmath -lm</code> 就好了，那你撞上的就是这个：
+  </p>
+
+  <p>
+    <strong>链接器从左到右扫一遍输入，遇到 <code>.o</code> 就无条件收下它的定义和欠账；
+    遇到 <code>.a</code> 时，只解决「此刻已经存在的欠账」。</strong>
+    扫过去就不再回头。
+  </p>
+
+<pre><code># 反例：-lmath 在 main.o 左边
+ld ... -lmath main.o
+        ↑ 此时欠账表是空的，libmath.a 什么都不抽
+                    ↑ 现在欠账表里多了 add，但已经扫过去了
+
+# 正确
+ld ... main.o -lmath
+        ↑ 欠账表有了 add
+                ↑ libmath.a 抽出 add.o，欠账清空</code></pre>
+
+  <p>
+    所以规则是：<strong>被依赖的放右边，依赖别人的放左边</strong>。
+    这和直觉相反，因为人习惯「先拿工具再干活」。
+    但链接器是流水线式的，它只在看到需求之后才去找供给。
+  </p>
+
+  <p>
+    两个库互相依赖时，一遍扫不过去，得写两遍：
+  </p>
+
+<pre><code>gcc main.o -lfoo -lbar -lfoo          # 手工重复
+gcc main.o -Wl,--start-group -lfoo -lbar -Wl,--end-group   # 或者让链接器反复扫</code></pre>
+
+  <p>
+    <code>--start-group</code> 的意思是「这一组里的库反复扫，直到没有新的欠账被还上为止」。
+    代价是变慢，所以只在真有循环依赖时用。
+  </p>
+
+  <p>
+    顺带一个反方向的开关：<code>--whole-archive</code>。
+    它让链接器「把一个 <code>.a</code> 里的所有成员全都塞进来，不管有没有用到」。
+    什么时候需要？当库里有些东西<strong>没有任何符号引用，但必须存在</strong>时——
+    典型是静态注册表：某个 <code>.o</code> 里只有一个全局对象的构造函数，
+    靠它自己在启动时往注册表里塞一条记录，你的代码从头到尾没提过它的名字，
+    按需抽取就会把它丢掉，于是「注册失效」。
+  </p>
+
+<pre><code>gcc main.o -Wl,--whole-archive -lplugins -Wl,--no-whole-archive -lm</code></pre>
+
+  <p>
+    那个 <code>--no-whole-archive</code> 别忘了写，它的作用是把开关关掉，
+    否则后面的 <code>libm</code> 也会被整个拉进来，程序瞬间膨胀。
+  </p>
+
+  <h2 id="p7"><span class="h2num">1.4.3-7</span>动态库：同一份代码映射到每个进程</h2>
+
+  <p>
+    静态链接的<strong>后果</strong>很直接：如果系统里有 50 个程序都用了 libc，
+    磁盘上就有 50 份 libc 的副本，内存里也有 50 份——哪怕它们一模一样。
+  </p>
+
+  <p>
+    动态库解决的就是这个。思路简单到有点粗暴：
+    <strong>把库代码单独放一个文件，运行时把它映射进进程的地址空间，谁用谁映射</strong>。
+    物理内存里只有一份代码页，每个进程的页表都指向它。
+    因为代码页是只读的、位置无关的，共享不会出问题。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.4.3-2-static-vs-shared.svg" target="_blank">
+    <img src="../../assets/img/1.4.3-2-static-vs-shared.svg" alt="静态链接时每个进程各有一份库代码副本，动态链接时三个进程共享同一份物理页" loading="lazy"></a>
+    <figcaption>图 1.4.3-2　静态与动态的内存账。<em>左边三个进程各带一份 libc 的代码副本，物理内存里三份；右边三个进程的页表都指向同一个物理页</em>。省下的不只是内存，还有磁盘和加载时间。但共享的前提是「这份代码页谁都不能改」——下一节就讲这个前提怎么保证。</figcaption>
+  </figure>
+
+  <p>
+    做出来只要加 <code>-shared -fPIC</code>：
+  </p>
+
+<pre><code>gcc -shared -fPIC -o libmath.so add.c mul.c
+gcc main.c -L. -lmath -Wl,-rpath,'$ORIGIN'</code></pre>
+
+  <p>
+    生成的可执行文件里不会多出库的代码，只多一条记录：
+    「我依赖一个叫 <code>libmath.so</code> 的东西」。
+    这条记录在 ELF 里是 <code>DT_NEEDED</code>，用 <code>readelf -d</code> 能看见。
+  </p>
+
+<pre><code>readelf -d ./main | grep NEEDED
+ 0x0000000000000001 (NEEDED)  Shared library: [libmath.so]
+ 0x0000000000000001 (NEEDED)  Shared library: [libc.so.6]</code></pre>
+
+  <p>
+    真正把库加载进来的是另一个程序：动态加载器
+    <code>/lib64/ld-linux-x86-64.so.2</code>。
+    可执行文件自己的 <code>PT_INTERP</code> 段里写着它的路径，
+    内核执行时先启动它，由它去读依赖、映射库、做完所有重定位，再把控制权交给程序的入口。
+  </p>
+
+  <p>
+    这个链条还解释了「<code>main</code> 之前谁在跑」。
+    程序的真正入口不是 <code>main</code>，是 <code>_start</code>——
+    它来自 <code>crt1.o</code>，是链接时被自动拼进去的。
+    <code>_start</code> 把 <code>argc</code>/<code>argv</code> 整理好，
+    调用 <code>__libc_start_main</code>，后者才去调你的 <code>main</code>，
+    返回后再走 <code>exit</code>、跑 <code>atexit</code> 注册的函数、刷缓冲区。
+    <em>你的程序从来不是从 <code>main</code> 开始的，是从三个 crt 文件开始的。</em>
+  </p>
+
+  <h2 id="p8"><span class="h2num">1.4.3-8</span>位置无关：为什么代码不能写死地址</h2>
+
+  <p>
+    共享代码页有个硬性要求：<strong>这份代码在任何进程里、被映射到任何地址，都必须能正确运行</strong>。
+    因为每个进程的地址空间布局不一样，库被放哪由加载器临时决定
+    （还要考虑到 ASLR 每次启动都变）。
+  </p>
+
+  <p>
+    如果代码里写了绝对地址，比如：
+  </p>
+
+<pre><code>mov  edi, 0x402010      # 字符串的绝对地址
+call 0x401030           # puts 的绝对地址</code></pre>
+
+  <p>
+    那么这份代码只能在「字符串确实在 0x402010、puts 确实在 0x401030」的进程里跑。
+    换一个进程、换一次启动，地址全变，代码就得重写。
+    重写代码意味着代码页变成私有且可写——
+    <strong>共享没了，安全性也没了</strong>。
+  </p>
+
+  <p>
+    所以动态库必须用 <code>-fPIC</code> 编译（Position Independent Code）。
+    x86-64 有一件趁手的工具：<strong>RIP 相对寻址</strong>。
+    指令可以写「距离当前指令指针 +N 字节的那个地址」，
+    这样不管代码被搬到哪，相对距离都不变：
+  </p>
+
+<pre><code>lea  rdi, [rip+0x2f41]      # 指向本模块自己的数据，位置无关
+mov  rax, [rip+0x2f52]      # 从 GOT 里读一个地址</code></pre>
+
+  <p>
+    自己的数据好办，相对距离在链接时就定了。
+    麻烦的是<strong>外部符号</strong>：<code>puts</code> 在另一个 <code>.so</code> 里，
+    那个 <code>.so</code> 被映射到哪，自己的模块并不知道，
+    而且它还可能被<strong>别的同名符号顶替</strong>（符号介入，interposition）——
+    这是动态库的一个特性，不是 bug。
+    所以外部符号的地址不能事先算好，必须<strong>运行时查表</strong>。
+  </p>
+
+  <p>
+    那张表就是 GOT（Global Offset Table）。
+    <code>.data</code> 段里划出一片格子，每格 8 字节，装一个外部符号的地址。
+    代码里所有对外部符号的引用，都写成「从 GOT 的第 n 格读」。
+    数据段是每个进程私有的，改它不影响共享；
+    加载器把真实地址填进这些格子，代码本身一个字节都不用动。
+  </p>
+
+  <div class="note">
+    <b>顺手解释一个老古董。</b>
+    32 位 x86 没有 RIP 相对寻址，所以老式的 PIC 代码要把 GOT 的基址放进 <code>ebx</code>，
+    每次函数开头先调一段 <code>__x86.get_pc_thunk.bx</code> 把当前 <code>eip</code> 取出来，
+    再算出 GOT 在哪。你在 32 位反汇编里看到这一串，就知道它是 PIC 的产物。
+    x86-64 有了 RIP 相对之后，这段仪式就消失了。
+  </div>
+
+  <h2 id="p9"><span class="h2num">1.4.3-9</span>GOT 与 PLT：第一次调用多花的那几步</h2>
+
+  <p>
+    GOT 解决了「地址放哪」的问题，又带出一个新的浪费：
+    如果程序启动时把所有外部符号都解析一遍，而大部分函数这次运行根本不会被调用，
+    那些解析就白做了。
+    于是一个叫 PLT（Procedure Linkage Table）的东西加进来，把解析推迟到<strong>第一次调用</strong>。
+  </p>
+
+  <p>
+    PLT 是一小段一小段的桩代码，每个外部函数对应十几字节：
+  </p>
+
+<pre><code>puts@plt:
+  jmp   [GOT + n]        # 第一次：GOT[n] 指向下一行
+  push  n                # 把「我是第 n 号」压栈
+  jmp   PLT0             # 跳到公共入口，去解析
+
+PLT0:
+  push  [GOT + 8]        # link_map
+  jmp   [GOT + 16]       # _dl_runtime_resolve</code></pre>
+
+  <p>
+    <code>_dl_runtime_resolve</code> 是动态加载器里的函数。它按编号查符号、
+    在已加载的库中搜索、算出真实地址，
+    <strong>然后把地址写回 <code>GOT[n]</code></strong>，
+    最后跳到目标函数执行。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.4.3-3-plt.svg" target="_blank">
+    <img src="../../assets/img/1.4.3-3-plt.svg" alt="第一次调用经过 PLT 桩进入动态加载器解析，之后 GOT 已填好地址直接跳转" loading="lazy"></a>
+    <figcaption>图 1.4.3-3　延迟绑定。<em>第一次调用要绕一大圈：PLT 桩 → 压编号 → 加载器查找 → 填 GOT → 再跳</em>。第二次开始只剩一条 <code>jmp [GOT]</code>，开销和普通间接调用一样。这个设计用「一次性的慢」换掉了「启动时全解一遍的慢」——对调用了上千个函数但只用到几十个的程序，这买卖很划算。</figcaption>
+  </figure>
+
+  <p>
+    三个后果值得记。
+  </p>
+
+  <p>
+    <strong>一、第一次调用的开销是不可预测的。</strong>
+    它要遍历已加载的库、比对字符串、可能还要读文件。
+    在延迟敏感的代码里（音频、实时控制），第一次调用的抖动比稳态开销更麻烦。
+    解决办法是关掉延迟绑定：
+  </p>
+
+<pre><code>gcc main.c -Wl,-z,now        # 链接期：启动时全解析
+LD_BIND_NOW=1 ./main         # 运行期：临时的同样效果</code></pre>
+
+  <p>
+    <strong>二、<code>-z now</code> 还有一个安全收益。</strong>
+    GOT 在解析完成后就再也不用改了，可以<strong>设为只读</strong>。
+    配合 <code>-z relro</code>（GNU_RELRO 段），加载器在解析结束后把 GOT 所在的页
+    <code>mprotect</code> 成只读。
+    这样一来，「覆写 GOT 里某一格，让下次调用跳到我的代码」这条老攻击路径就断了。
+    默认 <code>relro</code> 是部分保护，<code>-z relro -z now</code> 才是完整保护——
+    <code>checksec</code> 里那个 <code>Full RELRO</code> 说的就是这个。
+  </p>
+
+  <p>
+    <strong>三、PLT 让「函数指针」和「直接调用」走了不同的路。</strong>
+    你写 <code>void (*p)(const char*) = puts;</code>，
+    取到的是 <code>puts</code> 的<strong>真实地址</strong>（从 GOT 里读出来的），
+    直接 <code>call p</code> 就绕过了 PLT。
+    所以同一个函数，「直接调用」和「通过指针调用」的第一次开销可能不一样，
+    性能分析里偶尔会看到这种诡异差异。
+  </p>
+
+  <h2 id="p10"><span class="h2num">1.4.3-10</span>soname 与符号版本：换库就崩的真相</h2>
+
+  <p>
+    现在解释那个最常见的运行时错误：
+  </p>
+
+<pre><code>error while loading shared libraries: libfoo.so.1:
+cannot open shared object file: No such file or directory</code></pre>
+
+  <p>
+    注意它要的是 <code>libfoo.so.1</code>，不是 <code>libfoo.so</code>。
+    这个差别是整套版本机制的核心。
+  </p>
+
+  <p>
+    一个正经的动态库在磁盘上是三个名字：
+  </p>
+
+  <div class="tw"><table style="min-width:600px">
+    <thead><tr><th>名字</th><th>角色</th><th>谁在用</th></tr></thead>
+    <tbody>
+      <tr><td><code>libfoo.so.1.2.3</code></td><td>真正的文件</td><td>包管理器</td></tr>
+      <tr><td><code>libfoo.so.1</code></td><td><strong>soname</strong>，指向实体</td><td>可执行文件的 <code>DT_NEEDED</code></td></tr>
+      <tr><td><code>libfoo.so</code></td><td>开发用链接名，指向 soname</td><td><code>gcc -lfoo</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    <code>DT_NEEDED</code> 里记的是 <strong>soname</strong>，不是文件名。
+    这个 soname 是编译库的时候用 <code>-Wl,-soname,libfoo.so.1</code> 写进库里的，
+    一旦写定，后面所有链接它的程序都用这个字符串作为依赖标识。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.4.3-4-soname.svg" target="_blank">
+    <img src="../../assets/img/1.4.3-4-soname.svg" alt="libfoo.so 到 soname 再到实体文件的软链关系，以及 soname 变化时两个版本并存" loading="lazy"></a>
+    <figcaption>图 1.4.3-4　三层名字。<em><code>-lfoo</code> 找 <code>libfoo.so</code>，链接器读它里面的 soname 写进依赖，运行时加载器按 soname 找实体</em>。升级到 1.2.4 时只换实体、把 <code>.so.1</code> 重新指过去，所有程序不用重编。一旦 ABI 破了，就发 <code>.so.2</code>，两代并存，各找各的。</figcaption>
+  </figure>
+
+  <p>
+    于是「升级库」这件事被拆成了两种情况：
+  </p>
+
+  <p>
+    <strong>只加接口、不改已有接口 → soname 不变。</strong>
+    装 <code>libfoo.so.1.2.4</code>，把 <code>libfoo.so.1</code> 这个软链指过去。
+    所有老程序无感，因为它们只记着 <code>libfoo.so.1</code>。
+    这就是「向后兼容」在文件系统层面的样子。
+  </p>
+
+  <p>
+    <strong>改了已有接口（删函数、改参数、改结构体布局）→ soname 变 <code>.so.2</code>。</strong>
+    新老两个版本同时装，各自被各自的程序找到。
+    老程序继续用 <code>.so.1</code>，不会因为升级而崩。
+    <em>这不是「讲礼貌」，是唯一能同时满足两边的做法</em>——
+    因为符号层面没法表达「这个函数签名变了」。
+  </p>
+
+  <p>
+    「名字里看不出接口变没变」这个根本缺陷，后来用另一套机制补了一部分：
+    <strong>符号版本</strong>。glibc 是最大的用户，你会在报错里见到它：
+  </p>
+
+<pre><code>./main: /lib/x86_64-linux-gnu/libc.so.6:
+version `GLIBC_2.34' not found (required by ./main)
+
+readelf -V ./main | head -20     # 看它要求哪些版本</code></pre>
+
+  <p>
+    这条错误的含义很精确：<strong>你在新系统上编译，拿到老系统上跑</strong>。
+    编译时 <code>pthread_create</code> 在 glibc 2.34 里被并进了 libc，
+    符号带上了 <code>GLIBC_2.34</code> 的版本标签；
+    老系统的 <code>libc.so.6</code> 里只有 <code>GLIBC_2.2.5</code> 那一版，标签对不上，直接拒绝启动。
+  </p>
+
+  <p>
+    符号版本让同一个 <code>.so</code> 里可以同时存在「老版 <code>foo</code>」和「新版 <code>foo</code>」，
+    各自带不同标签，老程序绑老的、新程序绑新的。
+    这是 soname 之外的第二层保险，通常只在 libc 这种「必须极度稳定」的库里用。
+  </p>
+
+  <div class="note">
+    <b>排查这类问题的最小套路。</b>
+    <code>ldd ./main</code> 看依赖找不找得到（注意 <code>ldd</code> 实际上是运行加载器，对不可信程序有风险，可以用 <code>objdump -p | grep NEEDED</code> 替代）；
+    <code>readelf -d ./main | grep -E 'NEEDED|RPATH|RUNPATH'</code> 看它去哪找；
+    <code>LD_DEBUG=libs,bindings ./main</code> 把加载器每一步都打出来——这个最有用，它会把「我搜了哪些目录、最后选了哪个文件」全列出来。
+  </div>
+
+  <h2 id="p11"><span class="h2num">1.4.3-11</span>符号可见性：默认全导出是个坑</h2>
+
+  <p>
+    到这里为止，符号一直是个「名字」。但动态链接里，符号还有另一个身份：
+    <strong>一张全局作用域里的占位</strong>。
+    程序启动时，加载器把所有 <code>.so</code> 的导出符号汇成一张表，
+    <em>同名只留一个</em>，先来的赢。
+    之后任何一次符号解析，都在这张表里找。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.4.3-5-symscope.svg" target="_blank">
+    <img src="../../assets/img/1.4.3-5-symscope.svg" alt="主程序与三个动态库的导出符号汇成一张全局符号表，同名符号按加载顺序取第一个" loading="lazy"></a>
+    <figcaption>图 1.4.3-5　全局符号作用域。<em>每个 <code>.so</code> 的导出符号都倒进同一个桶里，同名只认最早的那个</em>。这解释了为什么 <code>LD_PRELOAD</code> 能拦截 <code>malloc</code>（它排在最前面），也解释了为什么两个库各自静态链进同一份第三方代码时，会莫名其妙地互相踩——它们导出的是<strong>同名符号</strong>，只有一个能活。</figcaption>
+  </figure>
+
+  <p>
+    而默认情况下，<strong>你的库把一切都导出了</strong>。
+    只要不是 <code>static</code>，所有全局函数和全局变量都会进 <code>.dynsym</code>——
+    包括那些只在库内部调用、你根本没打算给别人用的辅助函数。
+  </p>
+
+<pre><code>nm -D libmath.so | head        # 看动态符号表（真正的导出表）
+readelf --dyn-syms libmath.so</code></pre>
+
+  <p>
+    这件事有三个代价，一个比一个隐蔽。
+  </p>
+
+  <p>
+    <strong>一、加载变慢、体积变大。</strong>
+    导出表要建哈希表，符号越多，加载器查得越久、占的内存越多。
+    一个中大型 C++ 库不加控制，导出几万个符号是常事，
+    其中绝大部分是模板实例化出来的内部实现。
+  </p>
+
+  <p>
+    <strong>二、你会被别人的同名符号顶掉，或者顶掉别人。</strong>
+    这是最恶心的一种。假设你的库内部有个辅助函数叫 <code>init</code>，
+    另一个八竿子打不着的库也有个 <code>init</code>。
+    两个库都被加载进同一个进程，全局表里只有一个 <code>init</code>——
+    谁先加载谁赢，另一个库的内部调用会跳到<strong>你的</strong> <code>init</code> 上，
+    参数含义完全不同，于是行为诡异，且极难定位。
+    这类 bug 的表现通常是「单独跑没问题，装到某个客户环境就崩」。
+  </p>
+
+  <p>
+    <strong>三、你不敢重构。</strong>
+    内部函数一旦导出，就有人可能链接它。
+    你把它改名或者删掉，别人的程序就起不来。
+    <em>于是「内部实现」事实上变成了「公开接口」，只是没人写进文档。</em>
+  </p>
+
+  <p>
+    标准解法只有一行编译选项：
+  </p>
+
+<pre><code>gcc -shared -fPIC -fvisibility=hidden -o libmath.so add.c mul.c</code></pre>
+
+  <p>
+    这一行的意思是：「默认<strong>不导出</strong>，想让谁可见，逐个标注」。然后在头文件里：
+  </p>
+
+<pre><code>#define API __attribute__((visibility("default")))
+
+API int  add(int a, int b);
+API void mul_reset(void);</code></pre>
+
+  <p>
+    注意 <code>hidden</code> 和 <code>static</code> 不是一回事，别混。
+    <code>static</code> 是<strong>文件内</strong>可见，跨 <code>.o</code> 就用不了；
+    <code>hidden</code> 是<strong>模块内</strong>可见，库里的 <code>add.o</code> 能调 <code>mul.o</code> 里的东西，
+    但外面看不到。
+    这才是「内部函数」想要的效果——<code>static</code> 往往做不到，因为要跨文件。
+  </p>
+
+  <p>
+    这个选项还有个附带好处：编译器知道某个符号不会被外部引用，
+    就能做一些原本不敢做的优化——不必再为「可能被顶替」保留一份间接跳转，
+    可以直接内联、可以直接算地址。
+    <strong>把符号藏起来，性能也会变好</strong>，这一点很多人不知道。
+  </p>
+
+  <p>
+    还有一个更粗的开关：<code>-Wl,--exclude-libs,ALL</code>。
+    它把「从静态库链进来的符号」全部隐藏，
+    典型场景是你静态链了某个第三方库进自己的 <code>.so</code>，
+    不希望它的符号污染全局表。
+  </p>
+
+  <div class="note">
+    <b>反方向的开关叫 <code>-Wl,-Bsymbolic</code>，慎用。</b>
+    它让库内部的调用<strong>优先绑定到自己</strong>，不参与全局竞争——
+    听起来正是你想要的，但它会破坏 C++ 的异常、RTTI 和单例语义：
+    同一个类的 <code>typeinfo</code> 出现两份，<code>catch</code> 就抓不住了。
+    需要「自己用自己的」时，先把符号藏起来，比开这个开关安全得多。
+  </div>
+
+  <h2 id="p12"><span class="h2num">1.4.3-12</span>静态还是动态：真正的权衡</h2>
+
+  <p>
+    教科书式的答案通常是「静态体积大、动态体积小」，这个答案不够用，
+    因为它漏掉了真正让人纠结的那几条：
+  </p>
+
+  <div class="tw"><table style="min-width:620px">
+    <thead><tr><th>维度</th><th>静态</th><th>动态</th></tr></thead>
+    <tbody>
+      <tr><td>部署</td><td>一个文件，拷过去就能跑</td><td>要保证目标机上有一整套匹配的库</td></tr>
+      <tr><td>启动速度</td><td>快，不用解析符号</td><td>慢一点，要加载、重定位、查符号</td></tr>
+      <tr><td>内存</td><td>每个进程各一份</td><td>代码页共享，只有数据各一份</td></tr>
+      <tr><td>打补丁</td><td>必须重新链接整个程序</td><td>换一个 <code>.so</code>，所有程序立刻受益</td></tr>
+      <tr><td>故障面</td><td>出错在编译期，跑起来就稳</td><td>出错在运行期，可能上线三个月后才炸</td></tr>
+      <tr><td>第三方库</td><td>许可证可能不允许静态链接</td><td>无此问题</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    那张表里最容易被低估的是「打补丁」和「故障面」，而这两条是<strong>相反的</strong>。
+    动态链接让安全更新变得极便宜——OpenSSL 出了漏洞，系统更新一个 <code>.so</code>，
+    机器上几百个程序一起修好。
+    但同一个特性也意味着：<strong>你的程序依赖一个你控制不了的外部文件</strong>。
+    它在你的测试机上是什么版本，在生产机上不一定是；你以为的接口，可能被另一个库抢先实现了。
+  </p>
+
+  <p>
+    所以老练的做法通常是<strong>混合</strong>，而不是二选一：
+  </p>
+
+<pre><code>gcc main.c -static-libgcc -static-libstdc++     # C++ 运行时静态，系统库动态
+gcc main.c -static                               # 全静态（glibc 全静态有坑，见下）
+gcc main.c -Wl,-rpath,'$ORIGIN/lib'              # 动态，但库跟着程序走</code></pre>
+
+  <p>
+    <code>-static-libstdc++</code> 是常见选择：libstdc++ 的版本在各发行版之间差异大，
+    静态掉它能省很多「<code>GLIBCXX_3.4.29 not found</code>」；
+    而 libc 保持动态，因为它和内核、NSS、locale 有千丝万缕的联系。
+  </p>
+
+  <p>
+    说到 glibc 全静态，有个经典坑值得单独提：
+    <strong>静态链接的 <code>getaddrinfo</code> 在运行时会崩或者行为异常</strong>。
+    原因是 glibc 的域名解析走 NSS（Name Service Switch），
+    而 NSS 的模块（<code>libnss_dns.so</code> 之类）是运行时 <code>dlopen</code> 加载的动态库。
+    全静态的程序没有动态加载器，这条链路就断了。
+    所以「全静态」听起来最保险，实际在涉及网络和用户查询的程序里反而最不安全。
+  </p>
+
+  <h2 id="p13"><span class="h2num">1.4.3-13</span>链接器不检查什么</h2>
+
+  <p>
+    这一节最后要划清一条界线：<strong>链接成功不等于程序正确</strong>。
+    链接器只保证「名字对得上、地址填得对」，它不知道你在干什么。
+  </p>
+
+  <p>
+    <strong>一、它不检查类型。</strong>
+    在 C 里，两个文件这样写是能链上的：
+  </p>
+
+<pre><code>/* a.c */  int  compute(int x) { return x * 2; }
+/* b.c */  double compute(double x);      /* 声明不一样 */
+           printf("%f\n", compute(1.5));   /* 链接通过，结果错 */</code></pre>
+
+  <p>
+    编译器各自看到各自的声明，都觉得没问题；
+    链接器只看到一个叫 <code>compute</code> 的符号，对上就放行。
+    运行时参数按 <code>double</code> 塞进 <code>xmm0</code>，而函数体去 <code>edi</code> 里读整数——
+    读到的是垃圾。这类错误在 C 里非常难查，因为它不崩，只是<strong>算错</strong>。
+  </p>
+
+  <p>
+    <strong>二、它不检查「重复定义是否一致」。</strong>
+    <code>multiple definition of 'x'</code> 它会报，
+    但那是「两个 <code>STRONG</code> 符号撞了」。
+    如果其中一个是弱符号（<code>__attribute__((weak))</code>），或者来自 C++ 的 <code>inline</code> 函数，
+    它<strong>会随便挑一个，不吭声</strong>。
+  </p>
+
+  <p>
+    C++ 的 ODR（单一定义规则）就是靠程序员自觉的。
+    两个 <code>.o</code> 里各有一份 <code>inline</code> 函数的不同实现（比如因为宏不同），
+    链接器挑第一个，另一个被丢弃，程序行为取决于<strong>文件顺序</strong>。
+    构建系统稍微一动，bug 就换个样子出现。
+  </p>
+
+  <p>
+    <strong>三、它不检查你链接进来的东西会不会互相踩。</strong>
+    两个库各自定义了一个同名的全局变量，谁赢看顺序；
+    一个库里的 <code>malloc</code> 包装想拦截内存分配，结果被 libc 的抢先；
+    一个插件注册了和主程序同名的类……这些链接器统统不管。
+    动态链接的符号介入机制本来是给「替换实现」用的（比如用 <code>LD_PRELOAD</code> 做内存检查），
+    但它在同一个程序里就是一把双刃剑。
+  </p>
+
+  <p>
+    <strong>四、它不保证运行环境对得上。</strong>
+    链接成功只说明「我这台机器上能找到这些符号」。
+    换一台机器，库的版本、路径、ABI 都可能不同。
+    这也是为什么容器和静态二进制在部署领域重新流行起来——
+    它们把「链接时看到的世界」和「运行时看到的世界」强行拉齐了。
+  </p>
+
+  <p>
+    把这一节和上一节连起来看：
+    编译器把语义压成了机器码，链接器把机器码缝成了文件。
+    到此为止，程序还是一个<strong>静态的、需要被操作系统加载才能活的东西</strong>。
+    下一节换个方向：如果根本不生成机器码，而是运行时一边读一边执行呢？
+    JavaScript 为什么能从「慢得没法用」变成「接近编译语言」，答案就在那条路上。
+  </p>
+
+  <div class="quiz">
+    <h4>自测：能答上 8 题，这一节就算过了</h4>
+    <ol>
+      <li><code>int buf[1000000];</code> 和 <code>int buf[1000000] = {1};</code> 在 <code>.o</code> 文件大小上差多少？为什么？</li>
+      <li>链接器做的三件事是什么？哪一件是绝大多数链接错误的来源？</li>
+      <li><code>.rela.text</code> 里记的是什么？为什么 <code>call</code> 后面填的是相对偏移而不是绝对地址？</li>
+      <li><code>nm</code> 输出里的 <code>U</code> 和 <code>T</code> 分别是什么意思？<code>static</code> 函数为什么是小写 <code>t</code>？</li>
+      <li><code>_ZN2ns3addEii</code> 拆开是什么？C++ 调 C 为什么要写 <code>extern "C"</code>？</li>
+      <li><code>gcc main.o -lm -lmath</code> 报 undefined reference 而换顺序就好了，为什么？</li>
+      <li>静态库按需抽取会漏掉什么？<code>--whole-archive</code> 解决什么问题？</li>
+      <li><code>-fPIC</code> 到底在避免什么？为什么数据段可以有绝对地址而代码段不行？</li>
+      <li>PLT 和 GOT 各是什么？延迟绑定省掉了什么，代价是什么？</li>
+      <li><code>soname</code> 是什么？为什么升级库时改它就能让新老程序共存？</li>
+    </ol>
+    <details><summary>点开看答案（先自己想，别急着点）</summary>
+    <ol>
+      <li>差约 4 MB。前者是 <code>.bss</code>，文件里只记「需要多少字节、全零」，不占空间；后者是 <code>.data</code>，第一个 1 和后面全部 0 都得真写进文件。</li>
+      <li>合并同名节、解析符号、重定位。第二件——符号解析——是所有错误的主因，因为符号只有名字，没有类型和签名。</li>
+      <li>记「哪个偏移处的几个字节、需要哪个符号、用哪种重定位类型」。填相对偏移是为了让整段代码搬到任何地址都还能用，这样代码页才能被共享。</li>
+      <li><code>U</code> 是本文件引用了但没定义的符号（欠账），<code>T</code> 是代码段里定义的全局符号。<code>static</code> 函数是 <code>LOCAL</code> 绑定，名字不进全局对账表，所以小写。</li>
+      <li><code>_Z</code> 前缀 + <code>N</code> 嵌套 + <code>2ns</code>（长度+名字）+ <code>3add</code> + <code>E</code> 结束 + <code>ii</code> 两个 int 参数。写 <code>extern "C"</code> 是让编译器别改这个名字，因为对方库里的符号就叫 <code>puts</code>。</li>
+      <li>链接器从左到右扫一遍不回头。先遇到 <code>-lm</code> 时还没有任何欠账，库里什么都不抽；等看到 <code>main.o</code> 产生欠账，已经扫过去了。所以被依赖的放右边。</li>
+      <li>会漏掉「没有任何符号引用、但必须存在」的东西，典型是只靠构造函数往注册表里注册的静态对象。会被整体丢掉的场景用 <code>--whole-archive</code> 强制全量拉进来。</li>
+      <li>避免代码里出现绝对地址。代码段要被多个进程共享就必须只读、位置无关；数据段每个进程私有，写绝对地址不影响别人。</li>
+      <li>GOT 是装外部符号地址的表，PLT 是每个外部函数对应的一小段桩代码。延迟绑定省掉了启动时解析所有符号的开销，代价是第一次调用要绕加载器、开销不可预测，而且 GOT 必须可写（除非用 <code>-z now</code>）。</li>
+      <li>soname 是写在库里的一个字符串，可执行文件的 <code>DT_NEEDED</code> 记的是它而不是文件名。ABI 破了就把 soname 从 <code>.so.1</code> 改成 <code>.so.2</code>，两代文件并存，各自被各自的程序找到。</li>
+    </ol>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="1.4.2-compiler.html">← 1.4.2 C 与编译器：一次编写，到处翻译</a>
+    <span class="next todo-next">1.4.4 解释器、JIT 与虚拟机：为什么 JS 也能越跑越快 · 尚未动笔</span>
+  </div>
+
+</div>
+</body>
+</html>

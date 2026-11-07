@@ -1,0 +1,63 @@
+<svg width="880" height="486" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 486" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="486" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.4.3-1  合并同名节</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">链接器第一步：把两个 .o 的同类内容拼成一段</text>
+<text x="120.0" y="86" fill="#cfc6ff" font-size="12.5" text-anchor="middle" font-family="monospace">a.o</text>
+<text x="120.0" y="102" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">编译器产出</text>
+<text x="272.0" y="86" fill="#cfc6ff" font-size="12.5" text-anchor="middle" font-family="monospace">b.o</text>
+<text x="272.0" y="102" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">编译器产出</text>
+<text x="535.0" y="86" fill="#cfc6ff" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">合并后的可执行文件</text>
+<text x="535.0" y="102" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">链接器产出</text>
+<rect x="56" y="118" width="128" height="44" rx="3" fill="#b58ae81a" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="66" y="136" fill="#b58ae8" font-size="10.5" text-anchor="start" font-family="monospace">.rodata</text>
+<text x="174" y="152" fill="#6a6a82" font-size="9" text-anchor="end" font-family="monospace">32 B</text>
+<rect x="208" y="118" width="128" height="44" rx="3" fill="#b58ae81a" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="218" y="136" fill="#b58ae8" font-size="10.5" text-anchor="start" font-family="monospace">.rodata</text>
+<text x="326" y="152" fill="#4e4e66" font-size="9" text-anchor="end" font-family="monospace">0 B</text>
+<rect x="56" y="174" width="128" height="44" rx="3" fill="#67b5ef1a" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="66" y="192" fill="#67b5ef" font-size="10.5" text-anchor="start" font-family="monospace">.text</text>
+<text x="174" y="208" fill="#6a6a82" font-size="9" text-anchor="end" font-family="monospace">200 B</text>
+<rect x="208" y="174" width="128" height="44" rx="3" fill="#67b5ef1a" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="218" y="192" fill="#67b5ef" font-size="10.5" text-anchor="start" font-family="monospace">.text</text>
+<text x="326" y="208" fill="#6a6a82" font-size="9" text-anchor="end" font-family="monospace">320 B</text>
+<rect x="56" y="230" width="128" height="44" rx="3" fill="#67d9a01a" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="66" y="248" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="monospace">.data</text>
+<text x="174" y="264" fill="#6a6a82" font-size="9" text-anchor="end" font-family="monospace">16 B</text>
+<rect x="208" y="230" width="128" height="44" rx="3" fill="#67d9a01a" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="218" y="248" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="monospace">.data</text>
+<text x="326" y="264" fill="#6a6a82" font-size="9" text-anchor="end" font-family="monospace">8 B</text>
+<rect x="56" y="286" width="128" height="44" rx="3" fill="#e8b84b1a" stroke="#e8b84b" stroke-width="1.2"/>
+<text x="66" y="304" fill="#e8b84b" font-size="10.5" text-anchor="start" font-family="monospace">.bss</text>
+<text x="174" y="320" fill="#6a6a82" font-size="9" text-anchor="end" font-family="monospace">8 B</text>
+<rect x="208" y="286" width="128" height="44" rx="3" fill="#e8b84b1a" stroke="#e8b84b" stroke-width="1.2"/>
+<text x="218" y="304" fill="#e8b84b" font-size="10.5" text-anchor="start" font-family="monospace">.bss</text>
+<text x="326" y="320" fill="#6a6a82" font-size="9" text-anchor="end" font-family="monospace">64 B</text>
+<line x1="336" y1="140.0" x2="424" y2="140.0" stroke="#2e2e44" stroke-width="1.2"/>
+<path d="M424,140.0 l-7,-3.5 l0,7 Z" fill="#2e2e44"/>
+<line x1="336" y1="196.0" x2="424" y2="196.0" stroke="#2e2e44" stroke-width="1.2"/>
+<path d="M424,196.0 l-7,-3.5 l0,7 Z" fill="#2e2e44"/>
+<line x1="336" y1="252.0" x2="424" y2="252.0" stroke="#2e2e44" stroke-width="1.2"/>
+<path d="M424,252.0 l-7,-3.5 l0,7 Z" fill="#2e2e44"/>
+<line x1="336" y1="308.0" x2="424" y2="308.0" stroke="#2e2e44" stroke-width="1.2"/>
+<path d="M424,308.0 l-7,-3.5 l0,7 Z" fill="#2e2e44"/>
+<rect x="430" y="118" width="110" height="44" rx="3" fill="#b58ae81a" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="440" y="136" fill="#b58ae8" font-size="10.5" text-anchor="start" font-family="monospace">.rodata</text>
+<text x="530" y="153" fill="#6a6a82" font-size="9" text-anchor="end" font-family="monospace">32 B</text>
+<text x="552" y="146" fill="#4e4e66" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">b.o 这一节是空的</text>
+<rect x="430" y="174" width="210" height="22" fill="#67b5ef2a" stroke="#67b5ef" stroke-width="1.2"/>
+<rect x="430" y="196" width="210" height="22" fill="#4a7fa833" stroke="#4a7fa8" stroke-width="1.2"/>
+<text x="440" y="189" fill="#67b5ef" font-size="10.5" text-anchor="start" font-family="monospace">.text</text>
+<text x="492" y="189" fill="#7fb0d8" font-size="8.5" text-anchor="start" font-family="monospace">a.o 200 B</text>
+<text x="440" y="211" fill="#9ac0e0" font-size="8.5" text-anchor="start" font-family="monospace">b.o 320 B</text>
+<rect x="430" y="230" width="210" height="44" rx="3" fill="#67d9a01a" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="440" y="248" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="monospace">.data</text>
+<text x="492" y="248" fill="#7fbf9f" font-size="8.5" text-anchor="start" font-family="monospace">a 16 + b 8</text>
+<text x="630" y="265" fill="#6a6a82" font-size="9" text-anchor="end" font-family="monospace">24 B</text>
+<rect x="430" y="286" width="210" height="44" rx="3" fill="#e8b84b0f" stroke="#e8b84b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="440" y="304" fill="#e8b84b" font-size="10.5" text-anchor="start" font-family="monospace">.bss</text>
+<text x="492" y="304" fill="#c0a060" font-size="8.5" text-anchor="start" font-family="monospace">a 8 + b 64</text>
+<text x="630" y="321" fill="#6a6a82" font-size="9" text-anchor="end" font-family="monospace">72 B（只在内存）</text>
+<rect x="36" y="400" width="808" height="62" rx="4" fill="#12121c" stroke="#26263a" stroke-width="1"/>
+<text x="52" y="424" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">a.o 和 b.o 的 .text 都从各自 0 开始编号。拼在一起后 b 的代码整体后移 200 字节，</text>
+<text x="52" y="444" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">b.o 里所有「跳到自己的第 x 字节」全部作废——这就是下一步重定位要修的东西。</text>
+</svg>
