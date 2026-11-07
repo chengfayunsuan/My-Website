@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" font-family="'PingFang SC','Microsoft YaHei',monospace">
+<svg width="640" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" font-family="'PingFang SC','Microsoft YaHei',monospace">
   <rect width="640" height="400" fill="#0e0e16"/>
 
   <text x="20" y="26" fill="#9a9ab4" font-size="12.5">五种位运算：同一对输入，五个不同的结果</text>

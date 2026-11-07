@@ -1,0 +1,49 @@
+<svg width="830" height="470" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 830 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="830" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">寄存器分配：活跃区间 → 冲突图 → 染色</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两个变量的生命周期只要不重叠，就能共用同一个寄存器；a 和 c 正是这样省下一个</text>
+<line x1="140" y1="214" x2="716" y2="214" stroke="#2a2a3e" stroke-width="1"/>
+<line x1="140" y1="210" x2="140" y2="218" stroke="#2a2a3e" stroke-width="1"/>
+<text x="140" y="232" fill="#4e4e66" font-size="8.5" text-anchor="middle" font-family="monospace">0</text>
+<line x1="204" y1="210" x2="204" y2="218" stroke="#2a2a3e" stroke-width="1"/>
+<text x="204" y="232" fill="#4e4e66" font-size="8.5" text-anchor="middle" font-family="monospace">1</text>
+<line x1="268" y1="210" x2="268" y2="218" stroke="#2a2a3e" stroke-width="1"/>
+<text x="268" y="232" fill="#4e4e66" font-size="8.5" text-anchor="middle" font-family="monospace">2</text>
+<line x1="332" y1="210" x2="332" y2="218" stroke="#2a2a3e" stroke-width="1"/>
+<text x="332" y="232" fill="#4e4e66" font-size="8.5" text-anchor="middle" font-family="monospace">3</text>
+<line x1="396" y1="210" x2="396" y2="218" stroke="#2a2a3e" stroke-width="1"/>
+<text x="396" y="232" fill="#4e4e66" font-size="8.5" text-anchor="middle" font-family="monospace">4</text>
+<line x1="460" y1="210" x2="460" y2="218" stroke="#2a2a3e" stroke-width="1"/>
+<text x="460" y="232" fill="#4e4e66" font-size="8.5" text-anchor="middle" font-family="monospace">5</text>
+<line x1="524" y1="210" x2="524" y2="218" stroke="#2a2a3e" stroke-width="1"/>
+<text x="524" y="232" fill="#4e4e66" font-size="8.5" text-anchor="middle" font-family="monospace">6</text>
+<line x1="588" y1="210" x2="588" y2="218" stroke="#2a2a3e" stroke-width="1"/>
+<text x="588" y="232" fill="#4e4e66" font-size="8.5" text-anchor="middle" font-family="monospace">7</text>
+<line x1="652" y1="210" x2="652" y2="218" stroke="#2a2a3e" stroke-width="1"/>
+<text x="652" y="232" fill="#4e4e66" font-size="8.5" text-anchor="middle" font-family="monospace">8</text>
+<text x="128" y="232" fill="#5f5f78" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">时间</text>
+<rect x="140" y="96" width="192" height="30" rx="3" fill="#16161f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="152" y="116" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="monospace">a：0 ~ 3</text>
+<rect x="268" y="136" width="192" height="30" rx="3" fill="#16161f" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="280" y="156" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="monospace">b：2 ~ 5</text>
+<rect x="396" y="176" width="192" height="30" rx="3" fill="#16161f" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="408" y="196" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="monospace">c：4 ~ 7</text>
+<text x="300" y="336" fill="#6a6a82" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">冲突图</text>
+<line x1="364" y1="318" x2="458" y2="272" stroke="#e87a8a" stroke-width="1.6"/>
+<line x1="482" y1="272" x2="576" y2="318" stroke="#e87a8a" stroke-width="1.6"/>
+<path d="M350,348 Q470,404 590,348" fill="none" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="4 4"/><circle cx="350" cy="330" r="19" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="350" y="335" fill="#67b5ef" font-size="12" text-anchor="middle" font-family="monospace" font-weight="bold">a</text>
+<circle cx="470" cy="262" r="19" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="470" y="267" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="monospace" font-weight="bold">b</text>
+<circle cx="590" cy="330" r="19" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="590" y="335" fill="#e8b84b" font-size="12" text-anchor="middle" font-family="monospace" font-weight="bold">c</text>
+<text x="410" y="288" fill="#e87a8a" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">重叠 2~3</text>
+<text x="530" y="288" fill="#e87a8a" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">重叠 4~5</text>
+<text x="470" y="400" fill="#5f5f78" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不重叠 → 无边</text>
+<rect x="700" y="240" width="106" height="74" rx="4" fill="#16161f" stroke="#3a3a52" stroke-width="1.1"/>
+<text x="712" y="262" fill="#67b5ef" font-size="10" text-anchor="start" font-family="monospace">R1: a, c</text>
+<text x="712" y="284" fill="#67d9a0" font-size="10" text-anchor="start" font-family="monospace">R2: b</text>
+<text x="712" y="302" fill="#5f5f78" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2 色就够</text>
+<text x="28" y="434" fill="#8a8aa4" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三个变量，两个寄存器够用——因为 a 结束之后 c 才开始，它们可以轮流住同一个格子。</text>
+<text x="28" y="456" fill="#8a8aa4" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">寄存器实在不够，就把某个变量溢出到栈上：每次用之前读回来、用完写回去。</text>
+</svg>

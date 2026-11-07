@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 452" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<svg width="760" height="452" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 452" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
   <rect width="760" height="452" fill="#0e0e16"/>
   <text x="24" y="26" fill="#9a9ab4" font-size="12.5" font-family="monospace">MOSFET 剖面：用一层绝缘的氧化硅，把控制端隔开</text>
   <text x="24" y="48" fill="#d8d8e4" font-size="12.5">栅极下面没有电流流过——它靠电场「隔空」把沟道里的载流子吸过来</text>

@@ -1,0 +1,56 @@
+<svg width="780" height="476" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 476" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="476" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">x = a + b * 2;  的三种形态：字符 → 记号 → 树</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">词法只按最长匹配切，语法才把优先级变成结构；树一旦建好，后面所有阶段都在树上走</text>
+<rect x="60" y="74" width="660" height="36" rx="5" fill="#141420" stroke="#2e2e44" stroke-width="1"/>
+<text x="80" y="97" fill="#b0b0c8" font-size="14" text-anchor="start" font-family="monospace">x = a + b * 2;</text>
+<text x="700" y="97" fill="#4e4e66" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">源码</text>
+<rect x="75.0" y="146" width="56" height="34" rx="3" fill="#16161f" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="103.0" y="168" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="monospace">x</text>
+<text x="103.0" y="194" fill="#4e4e66" font-size="8" text-anchor="middle" font-family="monospace">id</text>
+<rect x="157.0" y="146" width="56" height="34" rx="3" fill="#16161f" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="185.0" y="168" fill="#b58ae8" font-size="12.5" text-anchor="middle" font-family="monospace">=</text>
+<text x="185.0" y="194" fill="#4e4e66" font-size="8" text-anchor="middle" font-family="monospace">op</text>
+<rect x="239.0" y="146" width="56" height="34" rx="3" fill="#16161f" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="267.0" y="168" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="monospace">a</text>
+<text x="267.0" y="194" fill="#4e4e66" font-size="8" text-anchor="middle" font-family="monospace">id</text>
+<rect x="321.0" y="146" width="56" height="34" rx="3" fill="#16161f" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="349.0" y="168" fill="#b58ae8" font-size="12.5" text-anchor="middle" font-family="monospace">+</text>
+<text x="349.0" y="194" fill="#4e4e66" font-size="8" text-anchor="middle" font-family="monospace">op</text>
+<rect x="403.0" y="146" width="56" height="34" rx="3" fill="#16161f" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="431.0" y="168" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="monospace">b</text>
+<text x="431.0" y="194" fill="#4e4e66" font-size="8" text-anchor="middle" font-family="monospace">id</text>
+<rect x="485.0" y="146" width="56" height="34" rx="3" fill="#16161f" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="513.0" y="168" fill="#b58ae8" font-size="12.5" text-anchor="middle" font-family="monospace">*</text>
+<text x="513.0" y="194" fill="#4e4e66" font-size="8" text-anchor="middle" font-family="monospace">op</text>
+<rect x="567.0" y="146" width="56" height="34" rx="3" fill="#16161f" stroke="#e8b84b" stroke-width="1.2"/>
+<text x="595.0" y="168" fill="#e8b84b" font-size="12.5" text-anchor="middle" font-family="monospace">2</text>
+<text x="595.0" y="194" fill="#4e4e66" font-size="8" text-anchor="middle" font-family="monospace">num</text>
+<rect x="649.0" y="146" width="56" height="34" rx="3" fill="#16161f" stroke="#8a8aa0" stroke-width="1.2"/>
+<text x="677.0" y="168" fill="#8a8aa0" font-size="12.5" text-anchor="middle" font-family="monospace">;</text>
+<text x="677.0" y="194" fill="#4e4e66" font-size="8" text-anchor="middle" font-family="monospace">sep</text>
+<text x="46" y="168" fill="#5f5f78" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">记号</text>
+<line x1="374.3826238111394" y1="244.49390095108848" x2="316.39824499830365" y2="290.8814040013571" stroke="#3a3a52" stroke-width="1.3"/>
+<line x1="405.8775629200328" y1="244.1615375557698" x2="467.32855893396555" y2="291.2303855664417" stroke="#3a3a52" stroke-width="1.3"/>
+<line x1="471.1963120067104" y1="319.3644255919475" x2="437.44387239295406" y2="359.8673531284551" stroke="#3a3a52" stroke-width="1.3"/>
+<line x1="496.8036879932896" y1="319.3644255919475" x2="530.5561276070459" y2="359.8673531284551" stroke="#3a3a52" stroke-width="1.3"/>
+<line x1="532.6694235422586" y1="392.4808384839873" x2="511.89710528062835" y2="422.6951195918133" stroke="#3a3a52" stroke-width="1.3"/>
+<line x1="555.3305764577414" y1="392.4808384839873" x2="576.1028947193716" y2="422.6951195918133" stroke="#3a3a52" stroke-width="1.3"/>
+<circle cx="390" cy="232" r="19" fill="#16161f" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="390" y="237" fill="#b58ae8" font-size="12.5" text-anchor="middle" font-family="monospace">=</text>
+<circle cx="300" cy="304" r="19" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="300" y="309" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="monospace">x</text>
+<circle cx="484" cy="304" r="19" fill="#16161f" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="484" y="309" fill="#b58ae8" font-size="12.5" text-anchor="middle" font-family="monospace">+</text>
+<circle cx="424" cy="376" r="19" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="424" y="381" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="monospace">a</text>
+<circle cx="544" cy="376" r="19" fill="#16161f" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="544" y="381" fill="#b58ae8" font-size="12.5" text-anchor="middle" font-family="monospace">*</text>
+<circle cx="500" cy="440" r="19" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="500" y="445" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="monospace">b</text>
+<circle cx="588" cy="440" r="19" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="588" y="445" fill="#e8b84b" font-size="12.5" text-anchor="middle" font-family="monospace">2</text>
+<text x="650" y="300" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">乘法在加法下面</text>
+<text x="650" y="316" fill="#4e4e66" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以先算乘法</text>
+<path d="M650,296 L566,380" fill="none" stroke="#2e2e44" stroke-width="1" stroke-dasharray="3 3"/>
+</svg>
