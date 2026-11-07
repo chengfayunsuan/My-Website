@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 466" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="900" height="466" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">超线程：复制的是一小份上下文，共享的是一整排执行资源</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">8 核 16 线程 = 8 份执行资源，不是 16 份。这一点是所有误解的源头</text>
+<rect x="120" y="88" width="216" height="56" rx="3" fill="#141420" stroke="#67d9a0" stroke-width="1.6"/>
+<text x="132" y="108" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">线程 0 的架构状态</text>
+<text x="132" y="128" fill="#8a8aa2" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">通用寄存器 · PC · 标志位 · APIC</text>
+<rect x="364" y="88" width="216" height="56" rx="3" fill="#141420" stroke="#e8965a" stroke-width="1.6"/>
+<text x="376" y="108" fill="#e8965a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">线程 1 的架构状态</text>
+<text x="376" y="128" fill="#8a8aa2" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">通用寄存器 · PC · 标志位 · APIC</text>
+<rect x="120" y="182" width="460" height="36" rx="2" fill="#12121c" stroke="#4a4a62" stroke-width="1.4"/>
+<rect x="122" y="184" width="228" height="32" rx="2" fill="#122018" stroke="#67d9a0" stroke-width="1.2"/>
+<rect x="350" y="184" width="228" height="32" rx="2" fill="#241a12" stroke="#e8965a" stroke-width="1.2"/>
+<text x="236" y="205" fill="#67d9a0" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">T0 的项</text>
+<text x="464" y="205" fill="#e8965a" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">T1 的项</text>
+<text x="340" y="172" fill="#6a6a82" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">重排缓冲与保留站：按线程分区</text>
+<line x1="228" y1="144" x2="228" y2="180" stroke="#67d9a0" stroke-width="1.6"/>
+<path d="M228,178 L223,169 L232,169 Z" fill="#67d9a0" stroke="#67d9a0" stroke-width="0"/>
+<line x1="472" y1="144" x2="472" y2="180" stroke="#e8965a" stroke-width="1.6"/>
+<path d="M472,178 L467,169 L476,169 Z" fill="#e8965a" stroke="#e8965a" stroke-width="0"/>
+<text x="120" y="318" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">执行单元：完全共享，谁的操作数齐了谁用</text>
+<rect x="120" y="262" width="100" height="40" rx="2" fill="#141420" stroke="#5a5a78" stroke-width="1.3"/>
+<text x="170" y="287" fill="#a0a0b8" font-size="10" text-anchor="middle" font-family="monospace">ALU 0</text>
+<line x1="170" y1="220" x2="170" y2="260" stroke="#3a3a52" stroke-width="1.4"/>
+<path d="M170,260 L165,251 L174,251 Z" fill="#5a5a78" stroke="#5a5a78" stroke-width="0"/>
+<rect x="242" y="262" width="100" height="40" rx="2" fill="#141420" stroke="#5a5a78" stroke-width="1.3"/>
+<text x="292" y="287" fill="#a0a0b8" font-size="10" text-anchor="middle" font-family="monospace">ALU 1</text>
+<line x1="292" y1="220" x2="292" y2="260" stroke="#3a3a52" stroke-width="1.4"/>
+<path d="M292,260 L287,251 L296,251 Z" fill="#5a5a78" stroke="#5a5a78" stroke-width="0"/>
+<rect x="364" y="262" width="100" height="40" rx="2" fill="#141420" stroke="#5a5a78" stroke-width="1.3"/>
+<text x="414" y="287" fill="#a0a0b8" font-size="10" text-anchor="middle" font-family="monospace">FPU</text>
+<line x1="414" y1="220" x2="414" y2="260" stroke="#3a3a52" stroke-width="1.4"/>
+<path d="M414,260 L409,251 L418,251 Z" fill="#5a5a78" stroke="#5a5a78" stroke-width="0"/>
+<rect x="486" y="262" width="100" height="40" rx="2" fill="#141420" stroke="#5a5a78" stroke-width="1.3"/>
+<text x="536" y="287" fill="#a0a0b8" font-size="10" text-anchor="middle" font-family="monospace">LSU</text>
+<line x1="536" y1="220" x2="536" y2="260" stroke="#3a3a52" stroke-width="1.4"/>
+<path d="M536,260 L531,251 L540,251 Z" fill="#5a5a78" stroke="#5a5a78" stroke-width="0"/>
+<rect x="120" y="334" width="460" height="32" rx="2" fill="#101820" stroke="#4a6a80" stroke-width="1.4"/>
+<text x="350" y="355" fill="#8ab0c8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">L1 指令 / L1 数据 / L2 / TLB / 分支预测器：全部共享</text>
+<text x="636" y="86" fill="#9a9ab4" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">面积账</text>
+<rect x="636" y="102" width="218" height="36" rx="2" fill="#141420" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="646" y="117" fill="#67d9a0" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">复制一份上下文</text>
+<text x="646" y="132" fill="#7a7a92" font-size="9" text-anchor="start" font-family="monospace">约 5% 面积</text>
+<rect x="636" y="146" width="218" height="36" rx="2" fill="#141420" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="646" y="161" fill="#67b5ef" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">分区 ROB / 保留站</text>
+<text x="646" y="176" fill="#7a7a92" font-size="9" text-anchor="start" font-family="monospace">约 10% 面积</text>
+<rect x="636" y="190" width="218" height="36" rx="2" fill="#141420" stroke="#6a6a82" stroke-width="1.2"/>
+<text x="646" y="205" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">共享执行单元与缓存</text>
+<text x="646" y="220" fill="#7a7a92" font-size="9" text-anchor="start" font-family="monospace">剩下 85%</text>
+<text x="636" y="246" fill="#8a8aa2" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">5% 的代价</text>
+<text x="636" y="264" fill="#e8965a" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 单线程性能降 2～5%</text>
+<text x="636" y="284" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 双线程吞吐涨 15～30%</text>
+<text x="636" y="304" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 都卡在访存时能到 1.6 倍</text>
+<text x="636" y="328" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两个线程都在算浮点时，</text>
+<text x="636" y="346" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收益接近零，甚至会倒退。</text>
+<text x="24" y="424" fill="#8a8aa4" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">要注意的是上面那一排：执行单元只有一份。超线程不是把核切成两半，是在同一排执行单元的空档里塞进另一个线程的指令。</text>
+<text x="24" y="442" fill="#7a7a92" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以它填的是「等待」的空，不是「计算」的空。程序越爱等内存，它越有用；越爱算，它越没用。</text>
+<text x="24" y="459" fill="#6a6a82" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">云厂商卖 vCPU 时，一个 vCPU 往往就是一个超线程——4 vCPU 可能只对应 2 个物理核。</text>
+</svg>
