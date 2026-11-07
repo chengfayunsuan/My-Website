@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.4.2 C 与编译器：一次编写，到处翻译</title>
+<link rel="stylesheet" href="../../style.css">
+<style>p code, li code, td code { overflow-wrap: anywhere; }</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+    <a href="index.html">1.4 从语言到机器码</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部</a><span class="sep">/</span>
+    <a href="index.html">1.4 从语言到机器码</a><span class="sep">/</span>
+    <span class="here">1.4.2</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">1.4.2</span>
+    C 与编译器：一次编写，到处翻译
+  </h1>
+  <p class="part-sub">
+    约 1.0 万字 · 5 张图 · 读完你能说清 <code>gcc hello.c -o hello</code> 这一条命令里
+    藏了哪四个程序，明白优化器凭什么敢删掉你写的循环，
+    以及「未定义行为」为什么不是一句免责声明，而是编译器手里的一张空白支票
+  </p>
+
+  <div class="lead">
+    <b>上一节讲的是机器码的另一种写法，这一节讲「谁在写」。</b>
+    汇编和机器码一一对应，人写起来还是像机器。
+    C 是第一个真正意义上的「可移植的汇编」：它有变量、函数、循环，
+    但这些概念在硬件里一个都不存在，全靠编译器翻译。
+    翻译过程分四步，每一步都有一个独立的程序负责。
+    而编译器最让人不习惯的地方不是它会翻译，是它<strong>会改写</strong>——
+    它删代码、合并变量、调换顺序，依据是一份你从来没读过的规则书。
+    这一节要把这份规则书翻出来看：哪些改写是允许的，
+    「未定义行为」这张支票能兑现到什么程度。
+  </div>
+
+  <div class="minitoc">
+    <h4>本节的小部分</h4>
+    <ol>
+      <li><a href="#p1">1 一条命令背后的四个程序</a></li>
+      <li><a href="#p2">2 预处理：不是编译，是文本搬运</a></li>
+      <li><a href="#p3">3 词法与语法：把文字切成机器认识的块</a></li>
+      <li><a href="#p4">4 类型：C 的类型只说明两件事</a></li>
+      <li><a href="#p5">5 中间表示：为什么不直接生成汇编</a></li>
+      <li><a href="#p6">6 优化器的三条铁律</a></li>
+      <li><a href="#p7">7 未定义行为：一张空白支票</a></li>
+      <li><a href="#p8">8 别名：为什么加了 restrict 快一倍</a></li>
+      <li><a href="#p9">9 寄存器分配：从无限变量到十六个格子</a></li>
+      <li><a href="#p10">10 生成目标代码：指令选择与调度</a></li>
+      <li><a href="#p11">11 「一次编写，到处编译」的真实边界</a></li>
+      <li><a href="#p12">12 编译器看不见什么</a></li>
+    </ol>
+  </div>
+
+  <h2 id="p1"><span class="h2num">1.4.2-1</span>一条命令背后的四个程序</h2>
+
+  <p>
+    先看一条最普通的命令：
+  </p>
+
+<pre><code>gcc hello.c -o hello</code></pre>
+
+  <p>
+    它看起来像是一个程序在做一件事。实际上是四个程序接力：
+  </p>
+
+  <div class="tw"><table style="min-width:600px">
+    <thead><tr><th>阶段</th><th>程序</th><th>输入 → 输出</th><th>干什么</th></tr></thead>
+    <tbody>
+      <tr><td>预处理</td><td><code>cpp</code></td><td><code>.c</code> → <code>.i</code></td><td>展开宏、插入头文件、处理条件编译</td></tr>
+      <tr><td>编译</td><td><code>cc1</code></td><td><code>.i</code> → <code>.s</code></td><td>语法分析、类型检查、优化、生成汇编</td></tr>
+      <tr><td>汇编</td><td><code>as</code></td><td><code>.s</code> → <code>.o</code></td><td>把助记符编码成字节，生成重定位表</td></tr>
+      <tr><td>链接</td><td><code>ld</code></td><td><code>.o</code> + 库 → 可执行文件</td><td>拼段、解析符号、填地址</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    <code>gcc</code> 本身只是个<strong>驱动程序</strong>（driver）：它按顺序调用这四个程序，
+    传对应的参数，删中间文件。<code>-v</code> 能看到它实际执行了什么：
+  </p>
+
+<pre><code>gcc -v hello.c -o hello 2&gt;&amp;1 | grep -E 'cc1|as |collect2'</code></pre>
+
+  <p>
+    这四个阶段可以单独走。考试和排查问题都用得上：
+  </p>
+
+<pre><code>gcc -E hello.c -o hello.i    # 预处理
+gcc -S hello.i -o hello.s    # 编译
+gcc -c hello.s -o hello.o    # 汇编
+gcc hello.o -o hello         # 链接</code></pre>
+
+  <p>
+    分开跑最大的价值是<strong>定位错误发生在哪一步</strong>。
+    头文件找不到是预处理阶段的问题；
+    语法错、类型警告是编译阶段；
+    符号重定义是链接阶段。
+    报错信息里那些 <code>In file included from...</code>、
+    <code>undefined reference to...</code> 的差别，就是不同阶段在说话。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.4.2-1-four-stages.svg" target="_blank">
+    <img src="../../assets/img/1.4.2-1-four-stages.svg" alt="C 源文件经过预处理、编译、汇编、链接四个阶段生成可执行文件，每步的产物与体积变化" loading="lazy"></a>
+    <figcaption>图 1.4.2-1　四阶段流水线。<em>注意每一步的产物都在变大</em>：<code>hello.c</code> 二十行，预处理后变成几千行（头文件全都塞进来了），编译后又缩回几百字节的汇编，最后链接出来的可执行文件又涨到几万字节——因为运行库被拼了进去。体积的涨落本身就是理解这条流水线的线索。</figcaption>
+  </figure>
+
+  <h2 id="p2"><span class="h2num">1.4.2-2</span>预处理：不是编译，是文本搬运</h2>
+
+  <p>
+    很多人以为 <code>#include</code> 是「导入模块」。
+    不是。预处理器做的事情极其粗暴：<strong>把那个文件的内容原样复制过来</strong>，
+    从 <code>#include</code> 那一行开始粘贴。
+    一个 <code>#include &lt;stdio.h&gt;</code> 展开后是两千多行，
+    里面还套着十几个别的头文件。
+  </p>
+
+  <p>
+    用 <code>gcc -E</code> 看一眼就知道有多粗暴。一个二十行的 <code>hello.c</code>，
+    预处理后通常有三万行以上，其中 99.9% 你都用不到。
+    <em>这也是 C 编译慢的第一个原因——不是编译慢，是每次都要重新搬运一遍。</em>
+  </p>
+
+  <p>
+    预处理器的全部能力就三样：
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>指令</th><th>做什么</th><th>代价</th></tr></thead>
+    <tbody>
+      <tr><td><code>#include</code></td><td>把文件内容粘过来</td><td>重复展开，编译时间线性增长</td></tr>
+      <tr><td><code>#define</code></td><td>文本替换，不认类型也不认作用域</td><td>没有类型检查，宏参数被求值两次</td></tr>
+      <tr><td><code>#if / #ifdef</code></td><td>按条件保留或丢弃整段文本</td><td>同一份代码在不同宏组合下是不同程序</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    <code>#define</code> 的坑值得单独说一个，因为它能说明「文本替换」和「函数调用」的区别有多大：
+  </p>
+
+<pre><code>#define SQUARE(x) ((x) * (x))
+
+int a = SQUARE(3);        // 9，没问题
+int b = SQUARE(i++);      // i 自增两次
+int c = SQUARE(f());      // f() 被调用两次</code></pre>
+
+  <p>
+    这三个括号是必需的（<code>((x) * (x))</code>），但即使加了括号，
+    <strong>参数被求值两次</strong>这件事也躲不掉——因为预处理器只是把 <code>x</code>
+    换成 <code>i++</code>，替换后的文本就是 <code>((i++) * (i++))</code>。
+    这不是编译器不聪明，是预处理器根本不知道「求值」是什么，它只认字符。
+  </p>
+
+  <p>
+    现代 C 里这类宏基本被 <code>static inline</code> 函数取代了：
+    有类型检查、参数只求值一次、调试时能看到栈。
+    宏真正还不可替代的地方是<strong>需要字符串化（<code>#x</code>）
+    或者拼接标识符（<code>a##b</code>）</strong>的场合，
+    这两种操作函数语法做不到。
+  </p>
+
+  <div class="note">
+    <b>为什么 C++ 的 <code>#include</code> 被骂了三十年。</b>
+    因为它把「接口」和「实现细节」一起搬了进来：改一个私有成员，
+    所有包含这个头文件的文件都要重编。
+    模块（modules）想解决的就是这件事，但直到今天也没完全普及。
+    <em>这是文本包含模型的固有代价，不是某个编译器的问题。</em>
+  </div>
+
+  <h2 id="p3"><span class="h2num">1.4.2-3</span>词法与语法：把文字切成机器认识的块</h2>
+
+  <p>
+    预处理完的文本还是纯字符。编译器第一步要把字符变成<strong>记号</strong>（token）：
+    关键字、标识符、字面量、运算符、分隔符。
+    这一步叫词法分析，做的事很像人读句子时先断词。
+  </p>
+
+<pre><code>int  x  =  a  +  b  *  2  ;
+ ↑    ↑  ↑  ↑  ↑  ↑  ↑  ↑
+kw  id  =  id  +  id  *  num  ;</code></pre>
+
+  <p>
+    词法分析不看语法，只按最长匹配切。
+    所以 <code>a+++++b</code> 会被切成 <code>a ++ ++ + b</code>，
+    然后语法分析报错——切法本身没错，是这种写法本来就不合法。
+    这类「编译器报错位置很奇怪」的情况，多半出在这一层。
+  </p>
+
+  <p>
+    切完之后是语法分析。它按文法把记号组装成一棵<strong>语法树</strong>（AST）。
+    还是上面那行：
+  </p>
+
+<pre><code>        =
+       / \
+      x   +
+         / \
+        a   *
+           / \
+          b   2</code></pre>
+
+  <p>
+    树的意义在于<strong>把优先级和结合性变成了结构</strong>。
+    <code>a + b * 2</code> 之所以先算乘法，不是因为「乘号优先」这条规则被记住了，
+    是因为树里 <code>*</code> 在 <code>+</code> 的下面——必须先算子节点。
+    后面所有的优化都在树上（或者树变换出的图上）做，
+    改一个节点就改了整个表达式的意思。
+  </p>
+
+  <p>
+    语法树到这里还带着类型信息没填。下一步是<strong>语义分析</strong>：
+    查每个标识符声明过没有、类型对不对、函数参数个数匹配不匹配。
+    C 的「隐式声明」这个老坑就出在这一层——
+    老标准允许不声明就调用函数，编译器默认它返回 <code>int</code>，
+    于是 <code>double</code> 返回值被当成 <code>int</code> 解释，结果莫名其妙。
+    现代编译器对此至少给个警告，<code>-Werror</code> 能直接变成错误。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.4.2-2-ast.svg" target="_blank">
+    <img src="../../assets/img/1.4.2-2-ast.svg" alt="一行 C 代码的字符、记号序列与语法树三层表示" loading="lazy"></a>
+    <figcaption>图 1.4.2-2　同一行代码的三种形态：字符、记号、树。<em>树这一层才第一次表达出「谁先算」</em>。往后的所有阶段——类型检查、优化、代码生成——都在树上或它的变体上走，字符和记号的形态不再出现。</figcaption>
+  </figure>
+
+  <h2 id="p4"><span class="h2num">1.4.2-4</span>类型：C 的类型只说明两件事</h2>
+
+  <p>
+    C 的类型系统常被误会成「安全网」。实际上它只回答两个问题：
+    <strong>这块数据占几个字节，以及这些字节该怎么解释。</strong>
+  </p>
+
+  <p>
+    <code>int</code> 和 <code>float</code> 都是 4 字节。区别不在大小，
+    在解释方式：同一串 <code>0x3f800000</code>，
+    当 <code>int</code> 看是 1065353216，当 <code>float</code> 看是 1.0。
+    编译器做的事就是记住每个变量属于哪种解释，然后在生成指令时选对指令——
+    整数加法用 <code>add</code>，浮点加法用 <code>addss</code>，
+    两条指令在硬件上是完全不同的执行单元。
+  </p>
+
+  <p>
+    这里有个反直觉的结论：<strong>C 的类型基本不产生运行时代价</strong>。
+    没有类型标签，没有运行时检查，没有装箱。
+    <code>int</code> 就是一个 4 字节的内存位置，
+    类型信息全部在编译期被消化掉了。
+    这也是 C 能贴着硬件跑的根本原因，也是它不安全的原因——
+    类型错了，程序不会在运行时报错，只会算出另一个结果。
+  </p>
+
+  <p>
+    类型在编译期能做的事，比很多人以为的多。看这个例子：
+  </p>
+
+<pre><code>unsigned int a = 1;
+int b = -1;
+if (a &gt; b) printf("a &gt; b\n");
+else        printf("a &lt;= b\n");</code></pre>
+
+  <p>
+    数学上 1 &gt; −1，直觉上会打印 <code>a &gt; b</code>。
+    实际上打印的是 <code>a &lt;= b</code>。
+    因为比较发生在 <code>unsigned</code> 和 <code>int</code> 之间，
+    C 的规则是把 <code>int</code> 转成 <code>unsigned</code>——
+    −1 变成 4294967295，于是 1 小于它。
+    <strong>这个转换是编译期决定的，运行时没有任何检查。</strong>
+  </p>
+
+  <div class="note">
+    <b>这就是为什么编译器要警告 <code>-Wsign-compare</code>。</b>
+    它不报错，因为语法完全合法；但它几乎总是一个 bug。
+    打开 <code>-Wall -Wextra</code> 能挡掉一大半这类问题，
+    代价是编译输出变吵——这是值得的交换。
+  </div>
+
+  <p>
+    还有一件常被忽略的事：<strong>C 的类型大小不是固定的</strong>。
+    标准只保证 <code>char</code> ≤ <code>short</code> ≤ <code>int</code> ≤ <code>long</code> ≤ <code>long long</code>，
+    具体多少位由实现决定。今天主流的平台上 <code>int</code> 都是 32 位，
+    但二十年前的 16 位编译器上它是 16 位。
+    <code>&lt;stdint.h&gt;</code> 里的 <code>int32_t</code>、<code>uint64_t</code> 就是为了消除这种不确定性——
+    要写可移植的代码，凡是有位宽要求的地方都该用它们。
+  </p>
+
+  <h2 id="p5"><span class="h2num">1.4.2-5</span>中间表示：为什么不直接生成汇编</h2>
+
+  <p>
+    语法树是语言相关的：C 有一套节点，C++ 有另一套，Rust 又是另一套。
+    如果每个前端都直接生成 x86 汇编，那么 M 种语言 × N 种架构就要写 M×N 个后端。
+    这是编译器设计里最经典的工程问题。
+  </p>
+
+  <p>
+    解决办法是在中间加一层：所有语言先翻译成同一种<strong>中间表示</strong>（IR），
+    所有后端都从 IR 出发。这样只需要 M 个前端加 N 个后端，总数从 M×N 降到 M+N。
+    GCC 的 IR 叫 GIMPLE/RTL，LLVM 的叫 LLVM IR，二者思路一致。
+  </p>
+
+  <p>
+    IR 有几个共同特征，每一条都对应一个具体的工程理由：
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>特征</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>三地址码：每条指令最多一个运算</td><td>方便逐条改写，不用在嵌套表达式里找位置</td></tr>
+      <tr><td>无限多的虚拟寄存器</td><td>优化时不用操心寄存器够不够，最后再分配</td></tr>
+      <tr><td>显式的控制流图（基本块 + 跳转）</td><td>数据流分析要在图上跑，树做不了</td></tr>
+      <tr><td>类型信息简化到只剩位宽</td><td>后端不关心 <code>int</code> 还是 <code>enum</code>，只关心 32 位</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    最值得讲的是<strong>基本块</strong>这个概念。它是一段「只有一个入口、一个出口」的指令序列，
+    中间没有跳转、没有跳转目标。整个函数被切成一串基本块，
+    块之间用跳转连起来，就是控制流图。
+  </p>
+
+  <p>
+    为什么非要这么切？因为<strong>块内是顺序执行的，可以做局部推理</strong>。
+    块内第 5 条指令执行时，第 1～4 条一定已经执行过了，
+    所以可以放心地把它们的值缓存起来。一旦跨块，就得考虑「从哪条路径来的」，
+    复杂度差一个数量级。绝大多数优化都是「先在块内做，再想办法跨块做」。
+  </p>
+
+<pre><code>// 源码
+if (x &gt; 0) y = 1; else y = 2;
+return y * 10;
+
+// 控制流图
+  B1: t = x &gt; 0
+      br t, B2, B3
+  B2: y1 = 1
+      jmp B4
+  B3: y2 = 2
+      jmp B4
+  B4: y3 = φ(y1, y2)     ← 汇合点：y3 是 y1 还是 y2，取决于从哪来
+      r = y3 * 10
+      ret r</code></pre>
+
+  <p>
+    那个 <code>φ</code>（phi 函数）是 SSA 形式的核心记号。
+    SSA 全称「静态单赋值」，规则只有一条：<strong>每个变量只被赋值一次</strong>。
+    分支汇合时没法确定值来自哪边，就用 <code>φ</code> 把两个候选列出来，
+    语义上等于「看从哪条路径来，就取对应的那个」。
+  </p>
+
+  <p>
+    SSA 的好处是数据流变成了显式的：想知道 <code>r</code> 依赖谁，
+    顺着定义找就行，不用扫全函数。这让常量传播、死代码消除、公共子表达式
+    这些优化都变得很简单——简单到可以写成几十行的循环。
+    <em>现代编译器里几乎所有的优化都在 SSA 形式上做，这不是巧合。</em>
+  </p>
+
+  <h2 id="p6"><span class="h2num">1.4.2-6</span>优化器的三条铁律</h2>
+
+  <p>
+    优化器能改代码，但不是随便改。它守着三条铁律，
+    任何一条破了，这个优化就是 bug：
+  </p>
+
+  <p>
+    <strong>一、语义不能变。</strong>对<em>所有合法的输入</em>，
+    改完的程序必须和原来算出一样的结果。
+    注意「合法」这个词——不合法的输入（未定义行为）不受保护，
+    这是下一节的主题。
+  </p>
+
+  <p>
+    <strong>二、可观察行为不能变。</strong>什么叫可观察？
+    标准列了几条：写入文件、读写 <code>volatile</code> 变量、调用外部函数、
+    程序退出码。<strong>打印到屏幕不在这份清单里</strong>，
+    但实际上是（通过 <code>printf</code> 这个外部调用间接算）。
+    反过来，一个只写局部变量、最后又不用的循环，可以直接删掉——
+    它在标准眼里什么都没做。
+  </p>
+
+  <p>
+    <strong>三、不能引入原来没有的错误。</strong>不能因为优化就多出一次除零、
+    多读一个空指针。这条约束比前两条软，因为「错误」在 C 里本来就模糊，
+    很多编译器在这条线上有争议。
+  </p>
+
+  <p>
+    在这三条之内，优化器会做上百种变换。最常见的几种，看一遍就够认出来：
+  </p>
+
+  <div class="tw"><table style="min-width:600px">
+    <thead><tr><th>变换</th><th>做什么</th><th>典型效果</th></tr></thead>
+    <tbody>
+      <tr><td>常量折叠</td><td>编译期能算的立刻算</td><td><code>3 * 4 + 5</code> → <code>17</code></td></tr>
+      <tr><td>常量传播</td><td>把已知常量代进后续使用处</td><td><code>int n = 10;</code> 之后所有 <code>n</code> 换成 10</td></tr>
+      <tr><td>死代码消除</td><td>删掉结果没人用的计算</td><td><code>x = 1;</code> 后面没人读 <code>x</code> → 整句删掉</td></tr>
+      <tr><td>公共子表达式</td><td>同样的计算只做一次</td><td><code>a*b + a*b</code> → <code>t=a*b; t+t</code></td></tr>
+      <tr><td>强度削弱</td><td>贵的运算换成便宜的</td><td><code>x*8</code> → <code>x&lt;&lt;3</code>；<code>x%4</code> → <code>x&amp;3</code></td></tr>
+      <tr><td>循环不变量外提</td><td>循环里不变的计算搬到外面</td><td><code>for(...) s += n*8;</code> → 先算 <code>k=n*8</code></td></tr>
+      <tr><td>内联</td><td>把小函数体直接搬进调用处</td><td>省掉 <code>call</code>/<code>ret</code> 和栈帧</td></tr>
+      <tr><td>向量化</td><td>把多次标量运算并成一条 SIMD</td><td>4 次 <code>add</code> → 1 次 <code>paddd</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    这八种里，前六种几乎总在做，而且几乎总是赚的。
+    后两种（内联、向量化）要看情况，因为它们是<strong>用体积换速度</strong>：
+    内联多了指令缓存装不下，向量化多了寄存器不够用。
+    现代编译器的平衡点靠启发式规则找，这也是为什么
+    「同样的代码，换个编译器版本性能差 20%」是常态。
+  </p>
+
+  <p>
+    有一个现象值得单独提：<strong>优化是层层触发的</strong>。
+    常量传播之后，某个分支的条件变成已知，于是分支被删；
+    分支删掉之后，另一边变成死代码，跟着被删；
+    死代码删掉之后，某个变量没人用了，寄存器压力下降，又能做更激进的分配。
+    <em>一次优化喂出下一次优化，这是编译器比人强的核心原因——它能反复扫，人不会。</em>
+  </p>
+
+  <h2 id="p7"><span class="h2num">1.4.2-7</span>未定义行为：一张空白支票</h2>
+
+  <p>
+    C 标准里有一类条款长这样：「如果 X 发生，行为未定义」。
+    这听起来像免责声明，实际上是<strong>给编译器的一张空白支票</strong>——
+    只要它能证明 X 不会发生（在合法程序里），就可以假设 X 不发生，
+    并据此做任何优化。
+  </p>
+
+  <p>
+    最常被举的例子是有符号整数溢出：
+  </p>
+
+<pre><code>int f(int x) {
+    if (x + 1 &gt; x)
+        return 1;
+    return 0;
+}</code></pre>
+
+  <p>
+    人看这段：<code>x + 1</code> 什么时候不大于 <code>x</code>？
+    只有溢出的时候（<code>x == INT_MAX</code>）。所以这个函数
+    对绝大多数 <code>x</code> 返回 1，对 <code>INT_MAX</code> 返回 0。
+  </p>
+
+  <p>
+    但编译器生成的是：
+  </p>
+
+<pre><code>f:
+    mov eax, 1
+    ret</code></pre>
+
+  <p>
+    无条件返回 1。理由：<strong>有符号溢出在 C 里是未定义行为</strong>。
+    既然合法程序里不会溢出，那么 <code>x + 1 &gt; x</code> 恒为真，
+    <code>if</code> 可以直接拆掉。这个推理完全符合标准，
+    但和写代码的人脑子里想的不一样。
+  </p>
+
+  <p>
+    更常见的杀伤发生在指针上：
+  </p>
+
+<pre><code>int get(struct S *p) {
+    int v = p-&gt;field;      // 这里解引用了 p
+    if (p == NULL)
+        return -1;         // 这行永远不会执行
+    return v;
+}</code></pre>
+
+  <p>
+    这段代码的意图是「空指针返回 −1」，但顺序写反了。
+    编译器看到第一行已经解引用了 <code>p</code>，
+    就推断「<code>p</code> 一定非空」（否则程序已经是 UB 了，不用管），
+    于是把 <code>if</code> 判空整块删掉。
+    结果是：传空指针进来，程序不是返回 −1，是直接崩在 <code>p-&gt;field</code> 那一行。
+  </p>
+
+  <div class="note">
+    <b>为什么编译器不「帮个忙」保留判空？</b>
+    因为它不知道你想帮忙。删掉判空对合法程序是完全等价的（合法程序里 <code>p</code> 非空），
+    而少一个分支对性能有好处。编译器只对<em>合法程序</em>负责，
+    不合法程序的命运不在合同范围内。
+  </div>
+
+  <p>
+    未定义行为的清单不长，但每一条都能炸：
+    有符号整数溢出、数组越界、解引用空指针或已释放内存、
+    除以零、移位超过位宽、未初始化变量、严格别名违规、
+    <code>memcpy</code> 源和目的重叠。
+    这些东西的共同点是：<strong>它们不是「会报错」，是「没有约定」</strong>——
+    可能崩、可能算出垃圾、可能看起来正常工作几年，然后在某个编译器版本上炸掉。
+  </p>
+
+  <p>
+    实践上的应对只有三条：打开 <code>-fsanitize=undefined,address</code> 在测试时抓；
+    用 <code>-fwrapv</code> 把有符号溢出定义成回绕（代价是少一种优化）；
+    以及最根本的一条——<strong>别把「我的编译器上是这个结果」当成保证</strong>。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.4.2-3-ub.svg" target="_blank">
+    <img src="../../assets/img/1.4.2-3-ub.svg" alt="未定义行为如何让编译器删掉判空分支：从源码到推理到最终汇编" loading="lazy"></a>
+    <figcaption>图 1.4.2-3　判空被删掉的三步推理。<em>关键在第一步：解引用先于判空发生，这一事实本身就构成「p 非空」的证据</em>。编译器没有做错，它只是把标准里的规则老老实实执行了一遍。这类 bug 有个共同特征——在 <code>-O0</code> 下完全正常，一开优化就崩。</figcaption>
+  </figure>
+
+  <p>
+    顺带说一个常见的误解：<code>-O0</code> 下程序能跑，不代表程序是对的。
+    <code>-O0</code> 只是「不做那些需要推理的优化」，
+    于是 UB 的后果被掩盖了——变量恰好还在原来的位置，
+    越界恰好写到了没用的内存。等到 <code>-O2</code> 一开，
+    编译器开始按「UB 不会发生」重排代码，问题才暴露。
+    <strong>这类「换优化等级就崩」的 bug，九成是 UB，不是编译器 bug。</strong>
+  </p>
+
+  <h2 id="p8"><span class="h2num">1.4.2-8</span>别名：为什么加了 restrict 快一倍</h2>
+
+  <p>
+    看这个函数：
+  </p>
+
+<pre><code>void add(int *a, const int *b, int n) {
+    for (int i = 0; i &lt; n; i++)
+        a[i] += b[i];
+}</code></pre>
+
+  <p>
+    看起来可以向量化：一次处理 4 个 <code>int</code>，
+    四个加法并行。但编译器不敢。原因很简单：
+    <strong><code>a</code> 和 <code>b</code> 可能指向同一块内存</strong>。
+  </p>
+
+  <p>
+    如果 <code>a == b</code>，那么 <code>a[0] += b[0]</code> 会改变 <code>b[0]</code>，
+    而下一轮 <code>a[1] += b[1]</code> 里 <code>b[1]</code> 又可能受 <code>a[0]</code> 影响（若指针错位重叠）。
+    这种「同一块内存有两个名字」的情况叫<strong>别名</strong>（aliasing）。
+    一旦存在别名，循环的每一轮都依赖上一轮的结果，<strong>不能并行</strong>。
+  </p>
+
+  <p>
+    编译器无法在编译期确定两者是否重叠——<code>a</code> 和 <code>b</code> 是运行时传进来的。
+    所以它保守地生成逐次执行的代码，每次循环都重新从内存读 <code>b[i]</code>。
+  </p>
+
+  <p>
+    解法是告诉它：<strong>这两个指针绝不重叠</strong>。
+  </p>
+
+<pre><code>void add(int *restrict a, const int *restrict b, int n)</code></pre>
+
+  <p>
+    <code>restrict</code> 是 C99 加的关键字，语义是「在这个函数的作用域内，
+    只有这个指针能访问它指向的对象」。这是<strong>你对编译器的承诺</strong>，
+    它不验证。承诺之后，编译器就可以放心向量化——
+    因为「<code>b[i]</code> 被 <code>a[j]</code> 改了」这种情况被排除了。
+  </p>
+
+  <p>
+    效果通常很显著：一个简单的数组相加，加 <code>restrict</code> 后
+    从每轮一个 <code>add</code> 变成每四轮一组 <code>paddd</code>，
+    在支持 AVX2 的机器上能快 3～4 倍。
+    <em>这不是编译器变聪明了，是你把一条它需要的信息给了它。</em>
+  </p>
+
+  <div class="note">
+    <b><code>restrict</code> 的代价是「承诺要算数」。</b>
+    如果实际调用时真的传了两个重叠的指针，行为未定义——
+    编译器会按「不重叠」生成代码，结果就是错的，而且不报错。
+    这是 C 的一贯风格：给你工具，也给你责任。
+  </div>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.4.2-4-alias.svg" target="_blank">
+    <img src="../../assets/img/1.4.2-4-alias.svg" alt="有别名时循环必须逐次执行，无别名时可以四个一组并行" loading="lazy"></a>
+    <figcaption>图 1.4.2-4　同一段循环在两种假设下的执行方式。<em>左边每轮都要等上一轮写完，右边四轮互不相干可以并行</em>。编译器默认选左边，因为右边的假设它没法验证。加 <code>restrict</code> 就是把这个假设明确写下来。</figcaption>
+  </figure>
+
+  <h2 id="p9"><span class="h2num">1.4.2-9</span>寄存器分配：从无限变量到十六个格子</h2>
+
+  <p>
+    优化阶段用的是「无限多个虚拟寄存器」，想用多少用多少。
+    生成真实指令时，必须映射到硬件那十六个通用寄存器上。
+    这个过程叫<strong>寄存器分配</strong>，是编译器里最经典的图论问题之一。
+  </p>
+
+  <p>
+    做法分两步。先算<strong>活跃区间</strong>：一个变量从第一次被赋值到最后一次被使用，
+    这一段叫它的生命周期。如果两个变量的生命周期有重叠，它们就不能共用同一个寄存器。
+  </p>
+
+  <p>
+    然后把「不能共用」的关系画成一张图：每个变量一个点，
+    冲突就画一条边。问题变成<strong>给这张图染色，相邻的点不能同色</strong>，
+    颜色数等于可用寄存器数。这就是图着色问题。
+  </p>
+
+  <p>
+    图着色是 NP 完全问题，但编译器不等最优解，它用一个贪心近似：
+    反复找「度数小于颜色数」的点，删掉它、压栈，最后倒着弹回来染色。
+    如果卡住了（所有点度数都太大），就挑一个「溢出」到栈上——
+    这个变量每次用之前读回来、用完写回去。
+    <em>这就是为什么你会看到 <code>mov rax, [rbp-24]</code> 这种指令：那个变量被溢出到栈上了。</em>
+  </p>
+
+  <p>
+    一个反直觉的事实：<strong>寄存器不够用的时候，程序不一定慢很多</strong>。
+    因为现代 CPU 的 L1 缓存命中只要 4 拍，而栈一般就在 L1 里。
+    真正致命的是「溢出变量在循环里」——每轮都要读写一次内存，
+    那就等于把 1 拍的运算变成了 8 拍。所以编译器会优先保住循环内的变量，
+    宁可把循环外的临时量扔到栈上。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.4.2-5-regalloc.svg" target="_blank">
+    <img src="../../assets/img/1.4.2-5-regalloc.svg" alt="四个变量的活跃区间、冲突图与三色分配结果" loading="lazy"></a>
+    <figcaption>图 1.4.2-5　活跃区间（上）、冲突图（中）、染色结果（下）。<em>a 和 b 的生命周期重叠，所以有一条边，必须用不同寄存器</em>；c 在 a 结束之后才开始，两者可以共用同一个寄存器。三个颜色就够——这就是编译器省下寄存器的方式：不是变量少，是错开使用。</figcaption>
+  </figure>
+
+  <h2 id="p10"><span class="h2num">1.4.2-10</span>生成目标代码：指令选择与调度</h2>
+
+  <p>
+    寄存器分配完，IR 上每个值都有了具体的寄存器。最后一步是把 IR 指令翻译成目标机器的指令，
+    这一步有两件事要做：<strong>选哪条指令</strong>，以及<strong>按什么顺序排</strong>。
+  </p>
+
+  <p>
+    指令选择看着机械，其实有讲究。同一个 IR 操作可能有多种实现：
+    「乘 8」可以用 <code>imul</code>（3 拍），也可以 <code>shl</code>（1 拍）；
+    「加 8」可以用 <code>add</code>，也可以用 <code>lea</code> 顺带算出地址。
+    选择的标准不只看延迟，还要看<strong>能不能和相邻操作合并</strong>——
+    <code>lea rax, [rbx+rcx*8+16]</code> 一条指令干了三件事，
+    比三条独立指令省两个槽位。
+  </p>
+
+  <p>
+    一个具体的例子。要算 <code>x * 7</code>，有四种写法：
+  </p>
+
+<pre><code>imul eax, edi, 7         # 3 拍，一条指令
+lea  eax, [rdi*8]        # 1 拍，先算出 x*8
+sub  eax, edi            # 再减 x，得 x*7；两条一拍的指令，合计 2 拍</code></pre>
+
+  <p>
+    编译器会选后一种：两条一拍的指令，总延迟 2 拍，比 <code>imul</code> 少一拍，
+    而且用了两个不同的执行端口，可以和旁边的指令并行。
+    如果 <code>x*7</code> 出现在地址计算里，它甚至能合成一条
+    <code>lea rax, [rdi*8]</code> 配 <code>sub rax, rdi</code>，
+    连临时寄存器都不用占。
+  </p>
+
+  <p>
+    这类选择规则是编译器里的「代价模型」——一张表，记录每条指令在各代 CPU 上的延迟和吞吐。
+    表是人工维护的，也是编译器版本之间性能差异的来源之一：
+    新一代 CPU 出来，表要更新，旧代码重编一次就快了，源码一个字没改。
+  </p>
+
+  <p>
+    指令调度是另一件。现代 CPU 是乱序执行的，指令顺序对性能的影响被硬件吃掉了一大半，
+    但在两个地方仍然重要：<strong>访存指令要尽早发出</strong>（让缓存和内存早点开始工作），
+    以及<strong>长延迟操作要提前排</strong>（等结果的时候可以插别的活）。
+    调度器会重排指令，前提是不违反数据依赖。
+  </p>
+
+  <p>
+    一个典型场景：循环体里先算一个除法（20 拍），再访问数组。
+    乱序引擎虽然能把后面的访存提前，但能提前多少受限于重排序窗口的大小。
+    编译器如果主动把访存指令挪到除法前面，就不受这个窗口限制。
+    <em>这是「编译器调度」在乱序 CPU 上仍然有价值的少数场合之一。</em>
+  </p>
+
+  <div class="note">
+    <b>为什么「手写汇编优化」现在很难赢。</b>
+    因为编译器知道的分支延迟表、缓存行大小、执行单元端口分配，
+    比人背下来的那几条多得多。它还会做一次「调度」，把人写的顺序打散重排。
+    人手排的指令序列，经常在调度这一关被改得面目全非，
+    <em>最后跑起来还不如让编译器从头生成。</em>
+  </div>
+
+  <h2 id="p11"><span class="h2num">1.4.2-11</span>「一次编写，到处编译」的真实边界</h2>
+
+  <p>
+    C 的口号是「一次编写，到处编译」。这句话在语法层面基本成立，
+    在语义层面成立了八成，剩下两成是坑。坑集中在四个地方：
+  </p>
+
+  <div class="tw"><table style="min-width:600px">
+    <thead><tr><th>坑</th><th>表现</th><th>怎么躲</th></tr></thead>
+    <tbody>
+      <tr><td>类型宽度</td><td><code>int</code> 在 16 位平台是 16 位，<code>long</code> 在 Windows 是 32 位、Linux 是 64 位</td><td>用 <code>int32_t</code> / <code>int64_t</code></td></tr>
+      <tr><td>字节序</td><td>大端机上 <code>0x1234</code> 存成 <code>12 34</code>，小端机存成 <code>34 12</code></td><td>别用 <code>union</code> 或指针强转去拆字节，用移位运算</td></tr>
+      <tr><td>对齐要求</td><td>x86 容忍未对齐访问，ARM 某些指令直接崩</td><td>用 <code>memcpy</code> 代替指针强转</td></tr>
+      <tr><td><code>char</code> 是否有符号</td><td>ARM 上默认无符号，x86 上有符号，<code>c &gt; 127</code> 判断结果相反</td><td>需要 8 位无符号就用 <code>uint8_t</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    这四条里，字节序那一条最值得展开，因为它解释了「为什么 <code>memcpy</code> 比强转安全」。
+  </p>
+
+<pre><code>// 危险：假设了小端，也假设了对齐
+uint32_t v = *(uint32_t *)buf;
+
+// 安全：由编译器生成正确的字节读取序列
+uint32_t v;
+memcpy(&amp;v, buf, 4);</code></pre>
+
+  <p>
+    第二行看着「慢」，实际上编译器会把它内联成一条 <code>mov</code>——
+    在 x86 上和小端强转生成的代码完全一样。
+    在 ARM 上如果 <code>buf</code> 未对齐，<code>memcpy</code> 版本会自动生成分段读取，
+    强转版本直接崩。<strong>「看起来更慢的写法」在这里是零成本的，
+    因为它把「怎么读」的决定权交给了知道答案的那一层。</strong>
+  </p>
+
+  <p>
+    还有一个跨语言的边界：<strong>ABI</strong>（应用二进制接口）。
+    编译器除了翻译代码，还要遵守一套调用约定：参数放哪几个寄存器、
+    返回值放哪、栈怎么对齐、结构体怎么布局。
+    同一份 C 代码在 Linux 和 Windows 上编出的目标文件不能互相链接，
+    就是因为 ABI 不同。
+    <em>这也是「C 是可移植的汇编」这句话的准确含义：源码可移植，二进制不可移植。</em>
+  </p>
+
+  <h2 id="p12"><span class="h2num">1.4.2-12</span>编译器看不见什么</h2>
+
+  <p>
+    编译器很强，但它有四个天生的盲区。知道这四个，就知道什么时候该自己动手。
+  </p>
+
+  <p>
+    <strong>一、它看不见运行时的数据。</strong>
+    分支哪边更常走、数组实际多大、指针实际指向哪，
+    这些都要跑起来才知道。编译器只能猜，猜的依据是启发式规则。
+    PGO（profile-guided optimization）就是把这个盲区补上一半：
+    先跑一遍收集真实的分支频率，再按真实数据重新编译。
+    同一份代码开 PGO 通常能再快 10～20%，代价是多一轮构建。
+  </p>
+
+  <p>
+    <strong>二、它看不见别的编译单元。</strong>
+    把代码拆成十个 <code>.c</code> 文件，编译器一次只看到一个。
+    另一个文件里的函数能不能内联、那个全局变量会不会被改，
+    它一概不知。<code>-flto</code>（链接时优化）把这一层打通，
+    代价是链接变慢、内存占用暴涨。
+  </p>
+
+  <p>
+    <strong>三、它看不见指针背后的意图。</strong>
+    两个指针会不会重叠、这块内存能不能改、这个循环最多跑几次——
+    这些信息只有写代码的人有。所以有 <code>restrict</code>、
+    <code>const</code>、<code>__builtin_assume</code> 这些「给编译器递话」的工具。
+    <em>它们不改变程序行为，只改变编译器能做的推理范围。</em>
+  </p>
+
+  <p>
+    <strong>四、它看不见「你想要什么」。</strong>
+    这个最要命。编译器保证的是「和源码语义一致」，
+    如果你的源码本来就写错了算法，它会忠实地把错的算法优化到极致。
+    一段跑得很快的错误代码，比一段跑得慢的错误代码更难发现。
+  </p>
+
+  <p>
+    最后还有一件常被忽略的事：<strong>「优化」和「好的代码」不是同一件事</strong>。
+    把 <code>-O3</code> 打开，编译器会为了速度膨胀代码体积；
+    如果你的程序瓶颈在指令缓存，<code>-O2</code> 反而更快。
+    这类现象没法靠「开更高的优化等级」解决，
+    只能靠测——这也是为什么性能工程永远绕不开真实的测量。
+  </p>
+
+  <p>
+    1.4.1 讲的是「机器码的另一种写法」，这一节讲的是「谁在生成那些机器码」。
+    下一节再往下走一层：编译器产出的那个 <code>.o</code> 文件里到底有什么，
+    以及它是怎么和别的 <code>.o</code>、和系统库拼成一个可执行文件的。
+    那一步叫链接，它比编译更容易出问题，也更容易被忽略。
+  </p>
+
+  <div class="quiz">
+    <h4>自测：能答上 8 题，这一节就算过了</h4>
+    <ol>
+      <li><code>gcc hello.c -o hello</code> 这一条命令实际调用了哪四个程序？各自产物是什么？</li>
+      <li><code>#include</code> 的本质是什么？为什么它会让编译变慢？</li>
+      <li><code>#define SQUARE(x) ((x)*(x))</code> 用在 <code>SQUARE(i++)</code> 上会怎样？为什么括号救不了？</li>
+      <li>C 的类型系统实际只管哪两件事？为什么说它不产生运行时代价？</li>
+      <li><code>unsigned a = 1; int b = -1; a &gt; b</code> 的结果是什么？为什么？</li>
+      <li>为什么要有一层 IR？基本块和 SSA 各解决了什么问题？</li>
+      <li>优化器的三条铁律是什么？为什么「删掉一个空循环」是合法的？</li>
+      <li>有符号整数溢出是未定义行为，编译器据此能做出什么反直觉的优化？</li>
+      <li>什么叫指针别名？<code>restrict</code> 是怎么解决问题的，代价是什么？</li>
+      <li>寄存器分配用的图着色，点、边、颜色各对应什么？「溢出到栈」是什么意思？</li>
+    </ol>
+    <details><summary>点开看答案（先自己想，别急着点）</summary>
+    <ol>
+      <li><code>cpp</code>（<code>.c</code>→<code>.i</code>，展开宏与头文件）、<code>cc1</code>（<code>.i</code>→<code>.s</code>，语法分析优化生成汇编）、<code>as</code>（<code>.s</code>→<code>.o</code>，编码并生成重定位表）、<code>ld</code>（<code>.o</code>+库→可执行，拼段与解析符号）。</li>
+      <li>文本复制，把目标文件内容原样粘贴到 <code>#include</code> 所在位置，且会递归展开。头文件里的声明你只用几个，但每次编译都要全文重新处理一遍，所以编译时间随包含量线性增长。</li>
+      <li>展开成 <code>((i++)*(i++))</code>，<code>i</code> 自增两次。括号只保证运算优先级，不改变「参数出现几次就被求值几次」这个事实——预处理器只做文本替换，不知道什么是求值。</li>
+      <li>占几个字节、这些字节怎么解释。类型信息在编译期全部消化掉，运行时内存里没有类型标签，也没有检查。</li>
+      <li>结果是 <code>a &lt;= b</code>（即假）。比较时 <code>int</code> 被转换成 <code>unsigned</code>，−1 变成 4294967295，1 比它小。</li>
+      <li>IR 让 M 种语言 × N 种架构变成 M+N，前后端可以独立发展。基本块提供「块内顺序执行」的局部性，让大多数优化可以在块内放心做；SSA 让每个变量只定义一次，数据依赖变成显式的，常量传播、死代码消除都可以用很简单的遍历实现。</li>
+      <li>语义不变、可观察行为不变、不引入新错误。空循环只改局部变量且结果不被使用，可观察行为没有变化，所以删掉合法。</li>
+      <li><code>if (x + 1 &gt; x) return 1;</code> 可以直接编译成 <code>return 1</code>——因为合法程序里不会溢出，条件恒真。还有「解引用之后的判空可以删掉」这一类。</li>
+      <li>同一块内存有多个名字。存在别名时循环的每轮都可能依赖上一轮，无法向量化或重排。<code>restrict</code> 是程序员对编译器的承诺「这块内存只有这一个指针访问」，编译器据此可以并行化；代价是承诺若不算数，行为未定义且不报错。</li>
+      <li>点是一个变量，边是「两个变量生命周期重叠、不能共用寄存器」，颜色是物理寄存器。「溢出到栈」是指某个变量找不到可用寄存器，放到栈上，每次使用前读回、用后写回。</li>
+    </ol>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="1.4.1-assembly.html">← 1.4.1 汇编：给机器码起个人能念的名字</a>
+    <span class="next todo-next">1.4.3 链接与动态库：一个 exe 是怎么被拼出来的 · 尚未动笔</span>
+  </div>
+
+</div>
+</body>
+</html>
