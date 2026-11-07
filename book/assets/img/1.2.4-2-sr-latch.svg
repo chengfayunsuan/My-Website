@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 512" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="512" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.2.4-2  SR 锁存器：两个或非门交叉咬住</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">S 和 R 是外界唯一的两个插手点；Q 与 Q̄ 互相回到对面门的输入，形成自锁的环</text>
+<path d="M252,143.0 C282.8,143.0 301.28,153.0 308,168 C301.28,183.0 282.8,193.0 252,193.0 Q243.04,168 252,143.0 Z" fill="#1e1e30" stroke="#9a9ab4" stroke-width="2"/>
+<circle cx="314" cy="168" r="5" fill="#14141e" stroke="#8a8aa0" stroke-width="1.8"/>
+<text x="268" y="172" fill="#6a6a86" font-size="10" text-anchor="start" font-family="monospace">≥1</text>
+<path d="M252,273.0 C282.8,273.0 301.28,283.0 308,298 C301.28,313.0 282.8,323.0 252,323.0 Q243.04,298 252,273.0 Z" fill="#1e1e30" stroke="#9a9ab4" stroke-width="2"/>
+<circle cx="314" cy="298" r="5" fill="#14141e" stroke="#8a8aa0" stroke-width="1.8"/>
+<text x="268" y="302" fill="#6a6a86" font-size="10" text-anchor="start" font-family="monospace">≥1</text>
+<line x1="96" y1="155" x2="252" y2="155" stroke="#e8b84b" stroke-width="2"/>
+<text x="88" y="159" fill="#e8b84b" font-size="14" text-anchor="end" font-family="monospace" font-weight="bold">S</text>
+<text x="88" y="178" fill="#7a7a94" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">置位</text>
+<line x1="96" y1="311" x2="252" y2="311" stroke="#e8965a" stroke-width="2"/>
+<text x="88" y="316" fill="#e8965a" font-size="14" text-anchor="end" font-family="monospace" font-weight="bold">R</text>
+<text x="88" y="297" fill="#7a7a94" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">复位</text>
+<line x1="321" y1="168" x2="486" y2="168" stroke="#67d9a0" stroke-width="2"/>
+<line x1="321" y1="298" x2="486" y2="298" stroke="#67b5ef" stroke-width="2"/>
+<text x="494" y="173" fill="#67d9a0" font-size="15" text-anchor="start" font-family="monospace" font-weight="bold">Q</text>
+<text x="494" y="303" fill="#67b5ef" font-size="15" text-anchor="start" font-family="monospace" font-weight="bold">Q̄</text>
+<circle cx="330" cy="168" r="3.4" fill="#67d9a0"/>
+<path d="M330,168 L330,285 L252,285" fill="none" stroke="#67d9a0" stroke-width="2"/>
+<circle cx="360" cy="298" r="3.4" fill="#67b5ef"/>
+<path d="M360,298 L360,181 L337,181" fill="none" stroke="#67b5ef" stroke-width="2"/>
+<path d="M330,174 A7,7 0 0 1 330,188" fill="none" stroke="#67b5ef" stroke-width="2"/>
+<line x1="323" y1="181" x2="254" y2="181" stroke="#67b5ef" stroke-width="2"/>
+<text x="534" y="104" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">它能做什么</text>
+<rect x="534" y="118" width="44" height="26" rx="0" fill="#1c1c2a" stroke="#3a3a52" stroke-width="1"/>
+<text x="556.0" y="135" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">S</text>
+<rect x="578" y="118" width="44" height="26" rx="0" fill="#1c1c2a" stroke="#3a3a52" stroke-width="1"/>
+<text x="600.0" y="135" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">R</text>
+<rect x="622" y="118" width="128" height="26" rx="0" fill="#1c1c2a" stroke="#3a3a52" stroke-width="1"/>
+<text x="686.0" y="135" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">接下来</text>
+<rect x="534" y="144" width="44" height="30" rx="0" fill="#14141e" stroke="#2e2e42" stroke-width="1"/>
+<rect x="578" y="144" width="44" height="30" rx="0" fill="#14141e" stroke="#2e2e42" stroke-width="1"/>
+<rect x="622" y="144" width="128" height="30" rx="0" fill="#14141e" stroke="#2e2e42" stroke-width="1"/>
+<text x="556" y="164" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">0</text>
+<text x="600" y="164" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">0</text>
+<text x="630" y="164" fill="#9a9ab4" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">保持不变</text>
+<rect x="534" y="174" width="44" height="30" rx="0" fill="#14141e" stroke="#2e2e42" stroke-width="1"/>
+<rect x="578" y="174" width="44" height="30" rx="0" fill="#14141e" stroke="#2e2e42" stroke-width="1"/>
+<rect x="622" y="174" width="128" height="30" rx="0" fill="#14141e" stroke="#2e2e42" stroke-width="1"/>
+<text x="556" y="194" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">1</text>
+<text x="600" y="194" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">0</text>
+<text x="630" y="194" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Q 变 1</text>
+<rect x="534" y="204" width="44" height="30" rx="0" fill="#14141e" stroke="#2e2e42" stroke-width="1"/>
+<rect x="578" y="204" width="44" height="30" rx="0" fill="#14141e" stroke="#2e2e42" stroke-width="1"/>
+<rect x="622" y="204" width="128" height="30" rx="0" fill="#14141e" stroke="#2e2e42" stroke-width="1"/>
+<text x="556" y="224" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">0</text>
+<text x="600" y="224" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">1</text>
+<text x="630" y="224" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Q 变 0</text>
+<rect x="534" y="234" width="44" height="30" rx="0" fill="#241820" stroke="#2e2e42" stroke-width="1"/>
+<rect x="578" y="234" width="44" height="30" rx="0" fill="#241820" stroke="#2e2e42" stroke-width="1"/>
+<rect x="622" y="234" width="128" height="30" rx="0" fill="#241820" stroke="#2e2e42" stroke-width="1"/>
+<text x="556" y="254" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">1</text>
+<text x="600" y="254" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">1</text>
+<text x="630" y="254" fill="#e87a8a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">禁止</text>
+<text x="534" y="282" fill="#e87a8a" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">最后一行是事故，不是功能。</text>
+<text x="534" y="298" fill="#8a7a84" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两个输出同时变 0，环的自洽被破坏。</text>
+<line x1="24" y1="392" x2="736" y2="392" stroke="#2a2a3e" stroke-width="1"/>
+<text x="24" y="414" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">S=0、R=0 时两个或非门都退化成非门，电路正好变回双非门环 —— 自己维持自己。这就是「保持」。</text>
+<text x="24" y="436" fill="#9a9ab4" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">S=1 让上面那只门输出 0，这个 0 送进下面那只门，又逼出 Q=1；Q=1 回到上面，把状态钉死。</text>
+<text x="24" y="458" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">关键是「钉死」：即使你立刻把 S 撤回 0，Q 也会靠这条反馈线继续维持 —— 按一下就够了，不用一直按着。</text>
+<circle cx="30" cy="482" r="4" fill="#67d9a0"/>
+<text x="40" y="486" fill="#4f9e78" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">绿线：Q 的回路</text>
+<circle cx="170" cy="482" r="4" fill="#67b5ef"/>
+<text x="180" y="486" fill="#4a8bb8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">蓝线：Q̄ 的回路</text>
+<text x="320" y="486" fill="#6a6a84" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">输入和输出是同一批线 —— 信号会绕回来，组合逻辑里没有过这种事。</text>
+</svg>

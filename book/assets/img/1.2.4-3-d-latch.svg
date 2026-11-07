@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 566" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="566" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.2.4-3  门控 D 锁存器：一根线就够了</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">EN 是闸门：开着的时候它像根导线（透明），关上的时候它是个存储器（锁存）</text>
+<line x1="58" y1="132" x2="108" y2="132" stroke="#e8b84b" stroke-width="2"/>
+<path d="M108,132 A8,8 0 0 1 124,132" fill="none" stroke="#e8b84b" stroke-width="2"/>
+<line x1="124" y1="132" x2="178" y2="132" stroke="#e8b84b" stroke-width="2"/>
+<text x="50" y="137" fill="#e8b84b" font-size="14" text-anchor="end" font-family="monospace" font-weight="bold">D</text>
+<circle cx="132" cy="132" r="3.2" fill="#e8b84b"/>
+<line x1="132" y1="132" x2="132" y2="222" stroke="#e8b84b" stroke-width="2"/>
+<path d="M132,205.0 L162.6,222 L132,239.0 Z" fill="#1e1e30" stroke="#9a9ab4" stroke-width="2"/>
+<circle cx="168.6" cy="222" r="5" fill="#14141e" stroke="#9a9ab4" stroke-width="1.8"/>
+<circle cx="168.6" cy="222" r="5" fill="#14141e" stroke="#9a9ab4" stroke-width="1.8"/>
+<line x1="173.6" y1="222" x2="186" y2="222" stroke="#9a9ab4" stroke-width="2"/>
+<line x1="58" y1="270" x2="116" y2="270" stroke="#b58ae8" stroke-width="2"/>
+<text x="50" y="275" fill="#b58ae8" font-size="13" text-anchor="end" font-family="monospace" font-weight="bold">EN</text>
+<circle cx="116" cy="270" r="3.2" fill="#b58ae8"/>
+<line x1="116" y1="270" x2="116" y2="110" stroke="#b58ae8" stroke-width="2"/>
+<circle cx="116" cy="222" r="3.2" fill="#b58ae8"/>
+<line x1="116" y1="110" x2="196" y2="110" stroke="#b58ae8" stroke-width="2"/>
+<line x1="116" y1="222" x2="186" y2="222" stroke="#b58ae8" stroke-width="2"/>
+<line x1="178" y1="110" x2="196" y2="110" stroke="#e8b84b" stroke-width="2"/>
+<line x1="178" y1="132" x2="196" y2="132" stroke="#e8b84b" stroke-width="2"/>
+<path d="M196,99.0 L216.7,99.0 A22.0,22.0 0 0 1 216.7,143.0 L196,143.0 Z" fill="#1e1e30" stroke="#9a9ab4" stroke-width="2"/>
+<line x1="242" y1="121" x2="300" y2="121" stroke="#e8b84b" stroke-width="2"/>
+<line x1="186" y1="222" x2="196" y2="222" stroke="#9a9ab4" stroke-width="2"/>
+<line x1="196" y1="200" x2="196" y2="200" stroke="#67b5ef" stroke-width="2"/>
+<path d="M196,200.0 L216.7,200.0 A22.0,22.0 0 0 1 216.7,244.0 L196,244.0 Z" fill="#1e1e30" stroke="#9a9ab4" stroke-width="2"/>
+<line x1="242" y1="222" x2="300" y2="222" stroke="#67b5ef" stroke-width="2"/>
+<rect x="300" y="88" width="110" height="168" rx="6" fill="#16161f" stroke="#4a4a66" stroke-width="1.6"/>
+<text x="355" y="124" fill="#c8c8dc" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">SR</text>
+<text x="355" y="144" fill="#8a8aa4" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">锁存器</text>
+<text x="355" y="172" fill="#4a4a62" font-size="9" text-anchor="middle" font-family="monospace">1.2.4-2</text>
+<text x="355" y="188" fill="#4a4a62" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">那个电路</text>
+<line x1="410" y1="121" x2="520" y2="121" stroke="#67d9a0" stroke-width="2"/>
+<text x="528" y="126" fill="#67d9a0" font-size="15" text-anchor="start" font-family="monospace" font-weight="bold">Q</text>
+<line x1="410" y1="222" x2="470" y2="222" stroke="#67b5ef" stroke-width="2"/>
+<text x="478" y="227" fill="#67b5ef" font-size="13" text-anchor="start" font-family="monospace">Q̄</text>
+<text x="572" y="116" fill="#9a9ab4" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">EN=1：两个与门都开门，</text>
+<text x="572" y="134" fill="#9a9ab4" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">D 的值直接改写状态，</text>
+<text x="572" y="152" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Q 跟着 D 走 → 透明</text>
+<text x="572" y="196" fill="#9a9ab4" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">EN=0：两个与门都封死，</text>
+<text x="572" y="214" fill="#9a9ab4" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">S=R=0，环自己维持，</text>
+<text x="572" y="232" fill="#67b5ef" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Q 停在原地 → 锁存</text>
+<text x="24" y="300" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">同样的输入，两种命运</text>
+<rect x="72" y="354" width="356.16" height="160" rx="0" fill="#1a2a22" stroke="none" stroke-width="0"/>
+<rect x="428.16" y="354" width="279.84" height="160" rx="0" fill="#1a1a26" stroke="none" stroke-width="0"/>
+<line x1="428.16" y1="350" x2="428.16" y2="514" stroke="#4a4a66" stroke-width="1.4" stroke-dasharray="4 4"/>
+<text x="250.08" y="338" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">透明期：Q 跟着 D 变</text>
+<text x="568.08" y="338" fill="#8a8aa4" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">锁存期：Q 冻住，D 怎么变都没用</text>
+<text x="24" y="377" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="monospace">EN</text>
+<line x1="72" y1="372" x2="708" y2="372" stroke="#26263a" stroke-width="1"/>
+<path d="M72,346 L428.16,346 L428.16,346 L428.16,346 L428.16,372 L708,372 L708,372" fill="none" stroke="#b58ae8" stroke-width="2.4"/>
+<text x="24" y="429" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="monospace">D</text>
+<line x1="72" y1="424" x2="708" y2="424" stroke="#26263a" stroke-width="1"/>
+<path d="M72,424 L161.04000000000002,424 L161.04000000000002,424 L161.04000000000002,424 L161.04000000000002,398 L262.79999999999995,398 L262.79999999999995,398 L262.79999999999995,398 L262.79999999999995,424 L364.56,424 L364.56,424 L364.56,424 L364.56,398 L453.59999999999997,398 L453.59999999999997,398 L453.59999999999997,398 L453.59999999999997,424 L529.92,424 L529.92,424 L529.92,424 L529.92,398 L708,398 L708,398" fill="none" stroke="#e8b84b" stroke-width="2.4"/>
+<text x="24" y="481" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="monospace">Q</text>
+<line x1="72" y1="476" x2="708" y2="476" stroke="#26263a" stroke-width="1"/>
+<path d="M72,476 L161.04000000000002,476 L161.04000000000002,476 L161.04000000000002,476 L161.04000000000002,450 L262.79999999999995,450 L262.79999999999995,450 L262.79999999999995,450 L262.79999999999995,476 L364.56,476 L364.56,476 L364.56,476 L364.56,450 L708,450 L708,450" fill="none" stroke="#67d9a0" stroke-width="2.4"/>
+<line x1="453.59999999999997" y1="424" x2="453.59999999999997" y2="398" stroke="#e87a8a" stroke-width="1.4" stroke-dasharray="3 3"/>
+<line x1="529.92" y1="424" x2="529.92" y2="398" stroke="#e87a8a" stroke-width="1.4" stroke-dasharray="3 3"/>
+<text x="491.76000000000005" y="390" fill="#e87a8a" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">D 在这里又变了</text>
+<text x="491.76000000000005" y="442" fill="#67d9a0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Q 一动不动</text>
+<line x1="24" y1="536" x2="736" y2="536" stroke="#2a2a3e" stroke-width="1"/>
+<text x="24" y="556" fill="#9a9ab4" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">问题也在这里：透明期里 D 翻几次，Q 就跟着翻几次。它不是「记录一个瞬间」，而是「记录一整段」。</text>
+</svg>
