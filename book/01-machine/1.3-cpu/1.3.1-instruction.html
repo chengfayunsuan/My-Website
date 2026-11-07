@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.3.1 指令与机器码：0xB8 0x01 到底是什么意思</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+    <a href="index.html">1.3 CPU</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部</a><span class="sep">/</span>
+    <a href="index.html">1.3 CPU</a><span class="sep">/</span>
+    <span class="here">1.3.1</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">1.3.1</span>
+    指令与机器码：0xB8 0x01 到底是什么意思
+  </h1>
+  <p class="part-sub">
+    约 1.2 万字 · 6 张图 · 读完你能说清<em>一条指令由哪几段拼起来</em>、
+    看懂<em>反汇编器吐出来的那几列字节</em>、并且明白
+    「机器只认识几十条命令」这句话里的「几十条」到底是多少
+  </p>
+
+  <div class="lead">
+    <b>把 0xB8 0x01 0x00 0x00 0x00 这五个字节喂给一颗 x86 处理器，
+    它会把数字 1 放进一个叫 EAX 的寄存器里。</b>
+    没有第六个字节的解释，没有「这五个字节是一个整体的意思」的额外说明——
+    它就是这五个字节。五个字节里只有第 2 个是你真正想要的那个 1，
+    其余四个是「怎么做」的记账。
+    这一节把这笔账算清楚：指令是怎么被拆成字节的、字节又是怎么被机器读回来的、
+    为什么有的机器每条指令都占 4 个字节而 x86 的指令可以从 1 个字节长到 15 个字节。
+  </div>
+
+  <div class="minitoc">
+    <h4>本节的小部分</h4>
+    <ol>
+      <li><a href="#p1">1 一条指令的三副面孔</a></li>
+      <li><a href="#p2">2 指令的解剖：从 B8 到十个字段</a></li>
+      <li><a href="#p3">3 定长与变长：两条技术路线的分岔</a></li>
+      <li><a href="#p4">4 指令只会做五件事</a></li>
+      <li><a href="#p5">5 寻址方式：操作数从哪来</a></li>
+      <li><a href="#p6">6 寄存器：CPU 手里那十几张便签</a></li>
+      <li><a href="#p7">7 汇编器与反汇编器：两趟扫描与猜出来的边界</a></li>
+      <li><a href="#p8">8 字节序：小端为什么赢了</a></li>
+      <li><a href="#p9">9 标志位与条件跳转：比较不需要单独的比较器</a></li>
+      <li><a href="#p10">10 一条指令走完的一生</a></li>
+      <li><a href="#p11">11 指令集架构的五代：从累加器到 load-store</a></li>
+      <li><a href="#p12">12 把一段 C 拆到字节</a></li>
+    </ol>
+  </div>
+
+  <h2 id="p1"><span class="h2num">1.3.1-1</span>一条指令的三副面孔</h2>
+
+  <p>
+    先看三种写法，它们说的是同一件事：
+  </p>
+
+  <pre><code>C 语言：    a = 1;
+汇编：      mov eax, 1
+机器码：    B8 01 00 00 00</code></pre>
+
+  <p>
+    第一行是<strong>人想表达什么</strong>。第二行是<strong>人写给汇编器看的</strong>，
+    用助记符（mnemonic）<code>mov</code> 代替了一个数字。
+    第三行是<strong>机器真正吃的</strong>——一串写在内存里的字节，
+    通常还带着一个「它从哪个地址开始」的信息。
+  </p>
+
+  <p>
+    三者不是三种不同的东西，而是同一段含义的三层包装。
+    C 编译器把第一行变成第二行（还会顺手优化掉很多），
+    汇编器把第二行变成第三行。反过来的路也能走：
+    反汇编器把第三行变回第二行，但它永远变不回第一行——
+    变量名、类型、注释、循环结构，全在编译的那一步被抹掉了。
+    这就是为什么「反编译」出来的代码永远比源码难看。
+  </p>
+
+  <p>
+    现在盯住第三行。五个字节，为什么不是一个？
+    因为 <code>1</code> 要放进 EAX，而 EAX 是一个 32 位的盒子。
+    你如果想往里放一个任意大的数，就得给足 32 位，也就是 4 个字节。
+    4 个字节再加上前面那个说明「往哪放、怎么放」的字节，正好五个。
+  </p>
+
+  <p>
+    那个 <code>B8</code> 是整条指令的<strong>动词</strong>。
+    在 x86 的词汇表里，B8 的意思是「把一个 32 位立即数装进 EAX」。
+    注意它把两件事捆在了一起：动作是「装立即数」，目标是「EAX」。
+    换一个目标寄存器，动词就换一个编号：
+  </p>
+
+  <pre><code>B8 01 00 00 00     mov eax, 1
+B9 01 00 00 00     mov ecx, 1
+BA 01 00 00 00     mov edx, 1
+BB 01 00 00 00     mov ebx, 1
+BC 01 00 00 00     mov esp, 1
+BD 01 00 00 00     mov ebp, 1
+BE 01 00 00 00     mov esi, 1
+BF 01 00 00 00     mov edi, 1</code></pre>
+
+  <p>
+    从 B8 到 BF 连续八个编号，正好是八个通用寄存器。
+    看出规律了吗：这八个数的低三位是 000 到 111，
+    而 000 到 111 正好能编码八个东西。
+    <em>寄存器号被塞进了操作码的低三位</em>。
+    这是 x86 编码里最省事的一种做法，代价是「装立即数」这个动作只能占 8 个编号，
+    想要第 9 个寄存器（x86-64 里的 r8）就塞不进去了——这个坑后面 §2 会讲怎么绕。
+  </p>
+
+  <p>
+    再看那个 <code>01 00 00 00</code>。它为什么不是 <code>00 00 00 01</code>？
+    因为 x86 把低位字节放在低地址。这四个字节从地址 0x1000 开始排，
+    内存里看到的是：
+  </p>
+
+  <pre><code>地址    0x1000  0x1001  0x1002  0x1003
+内容      01      00      00      00
+              ↑
+        最低有效字节在这里</code></pre>
+
+  <p>
+    这叫<strong>小端</strong>（little-endian）。它是历史选择的结果，
+    不是数学上的必然，而且它带来的麻烦比很多人想的多——§8 专门讲。
+    现在只需要记住：你在反汇编输出里看到的那串字节，
+    <em>顺序就是内存里的顺序</em>，而不是你写数字时的顺序。
+  </p>
+
+  <div class="note">
+    <b>「指令」到底是什么。</b>
+    严格说，一条指令是「CPU 能识别并执行的最小动作单元」。
+    它不是「一行汇编」，因为一行汇编可能被汇编器展开成几条机器指令
+    （比如 x86 的 <code>mov eax, 0x123456789</code> 会被拆成
+    <code>mov eax, 0x23456789</code> 加 <code>mov eax, 0x1</code> 两条）；
+    它也不是「一次内存访问」，因为一条指令可能访问两次内存。
+    <em>它的边界由 CPU 的解码器定义，不由人的书写习惯定义。</em>
+  </div>
+
+  <h2 id="p2"><span class="h2num">1.3.1-2</span>指令的解剖：从 B8 到十个字段</h2>
+
+  <p>
+    B8 那条指令太简单，简单到看不出结构。换三条真实的、由 GCC 编出来的指令看看。
+    下面这段是某个函数被编译后的开头（x86-64，System V 调用约定）：
+  </p>
+
+  <pre><code>55                    push   rbp
+48 89 e5              mov    rbp, rsp
+89 7d fc              mov    DWORD PTR [rbp-0x4], edi
+8b 45 fc              mov    eax, DWORD PTR [rbp-0x4]
+e8 1a 00 00 00        call   401130 &lt;helper&gt;
+c3                    ret</code></pre>
+
+  <p>
+    左边一列是字节，中间是反汇编器还原出的汇编，右边是注释。
+    请把注意力放在字节那一列：长度分别是 1、3、3、3、5、1。
+    同一个程序里，指令长度差五倍。这就是<strong>变长指令</strong>。
+  </p>
+
+  <p>
+    x86 的一条指令最多可以分成下面这些段，按出现顺序排列：
+  </p>
+
+  <div class="tw"><table>
+    <thead><tr><th>段</th><th>长度</th><th>作用</th><th>例子</th></tr></thead>
+    <tbody>
+      <tr><td>指令前缀</td><td>0～4 字节</td><td>改这一次操作的行为：重复、锁、段覆盖、操作数宽度</td><td><code>F3</code> 重复　<code>F0</code> 加锁　<code>66</code> 改用 16 位</td></tr>
+      <tr><td>REX 前缀</td><td>0～1 字节</td><td>64 位扩展：加宽到 64 位、访问 r8～r15</td><td><code>48</code> 表示 64 位操作</td></tr>
+      <tr><td>操作码</td><td>1～3 字节</td><td>动词：干什么</td><td><code>B8</code>　<code>89</code>　<code>E8</code>　<code>0F B6</code></td></tr>
+      <tr><td>ModRM</td><td>0～1 字节</td><td>两个操作数各在哪：寄存器还是内存、怎么算地址</td><td><code>45</code>　<code>C3</code></td></tr>
+      <tr><td>SIB</td><td>0～1 字节</td><td>变址寻址的比例、索引寄存器、基址寄存器</td><td><code>44</code>　<code>3F</code></td></tr>
+      <tr><td>位移</td><td>0/1/2/4 字节</td><td>地址里的那个常数偏移</td><td><code>FC</code>（即 −4）</td></tr>
+      <tr><td>立即数</td><td>0/1/2/4/8 字节</td><td>指令里直接带的那个值</td><td><code>01 00 00 00</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.3.1-1-instruction-anatomy.svg" target="_blank">
+    <img src="../../assets/img/1.3.1-1-instruction-anatomy.svg" alt="三条 x86 指令的逐字节解剖：操作码、ModRM、位移、立即数各占哪几个字节" loading="lazy"></a>
+    <figcaption>图 1.3.1-1　三条真实指令的字节解剖。上面一条是最简单的 <code>B8</code>：一个动词加四个字节的值。中间一条 <code>89 7D FC</code> 只有三个字节，却表达了「把 EDI 写到 RBP 减 4 那个地址」这么复杂的意思——它的信息被压进了 ModRM 那一个字节的八个比特里（2 位模式、3 位寄存器、3 位基址）。下面一条 <code>E8</code> 是调用，后面四个字节不是地址而是<em>相对当前指令末尾的偏移</em>，所以整段代码搬到内存任何位置都不用改。</figcaption>
+  </figure>
+
+  <p>
+    挑中间那条 <code>89 7D FC</code> 拆一下，因为它最能说明问题。
+  </p>
+
+  <p>
+    <code>89</code> 是操作码，意思是「把寄存器写到内存/寄存器」。它自己不知道是哪个寄存器，
+    也不知道写到哪，这些信息全在下一个字节里。
+  </p>
+
+  <p>
+    <code>7D</code> 是 ModRM，八位拆成三段：高两位 <code>01</code> 是「模式」，
+    中间三位 <code>111</code> 是「寄存器」，低三位 <code>101</code> 是「基址/目标」。
+    模式 01 的意思是「后面还有一个 1 字节的位移」；
+    寄存器 111 是 EDI；基址 101 在这个模式下是 RBP。
+    于是这条指令的含义已经被完全确定了：
+    <em>把 EDI 写到「RBP 加上那个 1 字节位移」指向的地址</em>。
+  </p>
+
+  <p>
+    最后一个字节 <code>FC</code> 就是这个位移。它是有符号的 8 位数，
+    FC 按补码读是 −4。所以完整含义是 <code>mov [rbp-4], edi</code>。
+    三个字节，装下了一个「源寄存器 + 基址寄存器 + 偏移量 + 数据宽度」的四元组。
+  </p>
+
+  <p>
+    这就是变长编码的思路：<strong>常用的情况用最短的编码，罕见的情况才加长</strong>。
+    RBP 减 4 这种「访问一个局部变量」的操作在真实程序里出现的频率极高，
+    所以它被压到了三个字节。而访问一个绝对地址（比如全局变量）就要多几个字节，
+    因为它得带上完整的 32 位地址。
+  </p>
+
+  <div class="note">
+    <b>为什么 x86 的指令最长只能 15 字节。</b>
+    这条限制是 AMD 在 2000 年设计 x86-64 时正式写进手册的：
+    一条指令（含所有前缀）不得超过 15 字节，超过就触发非法指令异常。
+    为什么要定这个上限？因为前缀可以无限重复（<code>66 66 66 66…</code>），
+    理论上一条指令可以无限长。硬件需要一个有限的缓冲区去装它，
+    所以必须有一刀切在哪里。<em>15 这个数字不是美学选择，是「预留得足够宽松，
+    又不至于让解码器的移位寄存器太贵」的折中</em>。
+  </div>
+
+  <p>
+    还有一件事值得注意：操作码不止一个字节。
+    <code>0F</code> 是一个「逃逸字节」（escape），它的意思是
+    「这一个字节不是操作码，真正的操作码在下一个字节」。
+    这个设计是 80386 时代加的，因为 8086 留的一字节操作码空间用光了。
+    后来 SSE 指令又不够用，于是有了 <code>0F 38</code>、<code>0F 3A</code> 两级逃逸，
+    操作码变成三字节。你在反汇编输出里看到的 <code>0f b6 c0</code>（movzx eax, al），
+    开头的 <code>0f</code> 就是这个逃逸。
+  </p>
+
+  <h2 id="p3"><span class="h2num">1.3.1-3</span>定长与变长：两条技术路线的分岔</h2>
+
+  <p>
+    现在把 x86 放在一边，看看 ARM 怎么做同一件事。
+  </p>
+
+  <pre><code>ARM64：   mov  w0, #1        编码为   20 00 80 52
+          add  w0, w1, w2    编码为   20 00 02 0b
+          ret                编码为   c0 03 5f d6</code></pre>
+
+  <p>
+    每一条都是<strong>四个字节</strong>，一条不多一条不少。
+    这意味着两件在 x86 上做不到的事：解码器可以每四个字节切一刀，
+    八条指令可以同时切、同时译；程序跳转到任何一条指令都是对齐的，不用先算长度。
+  </p>
+
+  <p>
+    代价是代码变长。<code>mov w0, #1</code> 在 x86 上如果目标是 AL，
+    只需要两个字节（<code>B0 01</code>）；ARM64 一律四个字节。
+    一个大量使用小立即数、短跳转、简单寄存器的程序，
+    ARM64 编译出来的代码体积通常比 x86-64 大 20%～30%。
+    这不是小事：代码体积大意味着指令缓存更容易装不下，
+    而指令缓存未命中的代价是几十个周期。
+  </p>
+
+  <p>
+    所以 ARM 也做了妥协：<strong>Thumb</strong>。
+    一套 16 位的短指令编码，只能访问 8 个寄存器、立即数范围也小，
+    但体积能省三到四成。后来 Thumb-2 允许 16 位和 32 位混排，
+    于是 ARM 在 32 位时代也变成了「变长」——
+    只不过它的变长规则简单得多，看第一个 16 位字的最高几位就知道该读 2 字节还是 4 字节。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.3.1-2-fixed-vs-variable.svg" target="_blank">
+    <img src="../../assets/img/1.3.1-2-fixed-vs-variable.svg" alt="定长与变长指令流的对比：x86 字节边界不规则，ARM64 每四字节一格" loading="lazy"></a>
+    <figcaption>图 1.3.1-2　同一段逻辑在两种编码下的字节流。上面是 x86：指令边界参差不齐，解码器必须先扫出长度，才能知道下一条从哪开始，所以它只能顺序地、一条一条地切。下面是 ARM64：四字节一格，切分位置天生已知，可以一次切四格并行译码。左边那一列灰色的小格子是「浪费掉的空间」——ARM 为了定长付出的体积代价；上面那些窄条是 x86 用不规则换来的密度。</figcaption>
+  </figure>
+
+  <p>
+    RISC-V 走的是第三条路：基础指令集 32 位定长，
+    但预留了「低两位不为 11 就是 16 位短指令」的规则，
+    于是它天然支持变长，而且长度判断只看最低两位，不需要像 x86 那样扫前缀。
+    这是 2010 年代设计的后发优势：<em>能看到前两家各自踩过的坑</em>。
+  </p>
+
+  <p>
+    三条路线各有各的账，可以列成一张表：
+  </p>
+
+  <div class="tw"><table style="min-width:620px">
+    <thead><tr><th>架构</th><th>编码长度</th><th>解码难度</th><th>代码密度</th><th>它的理由</th></tr></thead>
+    <tbody>
+      <tr><td>x86 / x86-64</td><td>1～15 字节</td><td>高：要扫前缀、算长度</td><td>最好</td><td>1978 年内存按 KB 计价，省字节就是省钱；之后为了兼容只能加不能改</td></tr>
+      <tr><td>ARM64（A64）</td><td>固定 4 字节</td><td>低：按格切</td><td>较差</td><td>2000 年代以后内存不再稀缺，解码带宽和功耗变成主要矛盾</td></tr>
+      <tr><td>ARM Thumb-2</td><td>2 或 4 字节</td><td>中：看第一个半字</td><td>较好</td><td>微控制器上 Flash 容量直接等于成本</td></tr>
+      <tr><td>RISC-V</td><td>2 或 4 字节起，可扩</td><td>低：看最低两位</td><td>好</td><td>既要密度又要简单解码，用「长度编码进低两位」同时满足</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    这里有一个很容易被讲错的地方，得说清楚：
+    <strong>变长不等于落后，定长也不等于先进</strong>。
+    现代 x86 处理器内部根本不按 x86 的方式执行。
+    它把每一条 x86 指令译成一到几个定长的<strong>微操作</strong>（micro-op，简称 μop），
+    后端按 μop 调度。也就是说，在硬件实现层，
+    x86 早就是一台 RISC 机器了，变长的那一层只是一件外壳。
+    外壳的作用是兼容——让 1978 年的程序还能在 2026 年的芯片上跑。
+  </p>
+
+  <p>
+    这件外壳不便宜。它占了 x86 芯片里相当大的一块面积和功耗，
+    而且解码带宽长期是瓶颈：Intel 的前端每周期能取 16 字节，
+    但遇到一堆前缀或长指令，实际能译出的指令数会掉下来。
+    这就是为什么同一代工艺下，x86 的每瓦性能往往不如 ARM——
+    <em>它有一部分电，花在了「读懂自己」上</em>。
+  </p>
+
+  <h2 id="p4"><span class="h2num">1.3.1-4</span>指令只会做五件事</h2>
+
+  <p>
+    「一台只认识几十条命令的机器」这句话，容易被误解成「CPU 很笨」。
+    反过来才对：CPU 的词汇极少，但它能靠组合做出无限的事。
+    这就像音乐——十二个音，写尽了三百年的曲子。
+  </p>
+
+  <p>
+    把 x86-64 的一千多条指令（加上各种前缀和变体，实际编码数量更多）
+    按<strong>做的事</strong>分类，只有五类：
+  </p>
+
+  <div class="tw"><table>
+    <thead><tr><th>类别</th><th>典型指令</th><th>它把什么搬到哪里</th></tr></thead>
+    <tbody>
+      <tr><td>数据搬移</td><td><code>mov</code> <code>movzx</code> <code>movsx</code> <code>lea</code> <code>push</code> <code>pop</code> <code>xchg</code></td><td>寄存器↔寄存器、寄存器↔内存、内存↔内存（仅字符串指令）</td></tr>
+      <tr><td>算术与逻辑</td><td><code>add</code> <code>sub</code> <code>imul</code> <code>idiv</code> <code>and</code> <code>or</code> <code>xor</code> <code>not</code> <code>shl</code> <code>shr</code> <code>sar</code></td><td>在寄存器内部做运算，结果留在寄存器里</td></tr>
+      <tr><td>控制流</td><td><code>jmp</code> <code>jcc</code> <code>call</code> <code>ret</code> <code>loop</code></td><td>改 PC 的值，也就是「下一步去哪」</td></tr>
+      <tr><td>内存访问（独立成类）</td><td>ARM 的 <code>ldr</code> <code>str</code> <code>ldp</code> <code>stp</code></td><td>只有这一类指令能碰内存；x86 把它并进了 mov</td></tr>
+      <tr><td>系统与杂项</td><td><code>syscall</code> <code>int</code> <code>hlt</code> <code>cpuid</code> <code>rdtsc</code> <code>mfence</code> <code>cli</code></td><td>和 CPU 之外的世界打交道：进内核、停住、读时间戳、保证内存顺序</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    这张表里没有「打印」，没有「排序」，没有「打开文件」，没有「发一个网络包」。
+    这些事在机器码层面都不存在。它们要么是一长串 mov / cmp / jcc 的组合，
+    要么是一条 <code>syscall</code>——<em>把活交给操作系统</em>。
+  </p>
+
+  <p>
+    这也是理解「程序」的一个关键转折点：
+    你在屏幕上看到的一切，最终都是一串「搬数据、算一下、判断、跳走」。
+    一个 for 循环在机器码里就是「加一、比较、条件跳回」三条指令，
+    重复执行到你满足条件为止。没有任何一条指令叫「循环」。
+  </p>
+
+  <p>
+    五类里最容易被低估的是<strong>控制流</strong>。
+    没有它，CPU 只能从头到尾一条条执行，那就是一台计算器而不是计算机。
+    加了跳转，才有了「如果」「循环」「函数」这三个概念的物理基础。
+    而跳转的代价是：机器不知道下一步要跳到哪，
+    于是它没法提前把下一步的指令拿过来——这是后面 1.3.4 讲分支预测的起点。
+  </p>
+
+  <div class="note">
+    <b>指令数量到底是多少。</b>
+    说「几十条」是教学简化。真实的 x86-64 指令数量没有官方权威数字，
+    按助记符数大约一千多条；但按「有实际使用的编码」统计，
+    一个典型的 C 程序编出来只会用到八十到一百二十种。
+    编译器、操作系统内核用得多一些，也就两百种上下。
+    <em>换句话说：CPU 认识一千个词，日常说话只用一百个。</em>
+    这也是为什么指令集可以做得那么畸形却还能用——常用的那一百个被优化得很好。
+  </div>
+
+  <h2 id="p5"><span class="h2num">1.3.1-5</span>寻址方式：操作数从哪来</h2>
+
+  <p>
+    一条指令要说清两件事：做什么（操作码），对谁做（操作数）。
+    操作数可以是三种东西：<strong>指令里带着的值</strong>、
+    <strong>寄存器里的值</strong>、<strong>内存里某个地址的值</strong>。
+    第三种最麻烦，因为「某个地址」本身又可能是算出来的。
+  </p>
+
+  <p>
+    用图书馆打个比方。你要一本书，可以这样告诉管理员：
+  </p>
+
+  <div class="tw"><table>
+    <thead><tr><th>寻址方式</th><th>图书馆里的说法</th><th>x86 写法</th><th>用在哪</th></tr></thead>
+    <tbody>
+      <tr><td>立即数</td><td>「就这本，我手上这本」</td><td><code>mov eax, 42</code></td><td>常数、掩码</td></tr>
+      <tr><td>寄存器</td><td>「我桌上那张便签写的编号」</td><td><code>mov eax, ebx</code></td><td>临时变量</td></tr>
+      <tr><td>直接</td><td>「三楼 302 架」</td><td><code>mov eax, [0x404000]</code></td><td>全局变量、静态数据</td></tr>
+      <tr><td>寄存器间接</td><td>「便签上那个编号对应的架子」</td><td><code>mov eax, [rbx]</code></td><td>指针解引用</td></tr>
+      <tr><td>基址 + 偏移</td><td>「便签编号加三格」</td><td><code>mov eax, [rbp-8]</code></td><td>局部变量、结构体成员</td></tr>
+      <tr><td>基址 + 变址×比例 + 偏移</td><td>「便签编号，隔两格取第 i 本」</td><td><code>mov eax, [rbx+rcx*4+8]</code></td><td>数组、结构体数组</td></tr>
+      <tr><td>PC 相对</td><td>「从我站的这格往前数 16 格」</td><td><code>mov eax, [rip+0x2a4c]</code></td><td>全局变量（PIE）、跳转</td></tr>
+    </tbody>
+  </table></div>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.3.1-3-addressing.svg" target="_blank">
+    <img src="../../assets/img/1.3.1-3-addressing.svg" alt="七种寻址方式示意：立即数、寄存器、直接、间接、基址偏移、变址、PC 相对" loading="lazy"></a>
+    <figcaption>图 1.3.1-3　同一个「取一个数」的动作，七种找法。每一格里左边是 CPU 手上的东西，右边是内存里的东西，箭头表示「这一次要读哪」。前两格根本不碰内存；第三格地址直接写在指令里；第四到第六格地址是算出来的，只是算法越来越复杂；最后一格的地址是「当前指令的位置」加上一个偏移——这条设计让程序可以整体搬到内存任何地方，是动态链接和地址随机化的基础。</figcaption>
+  </figure>
+
+  <p>
+    为什么需要这么多种？因为程序里访问的东西正好分这几类。
+    数组要「基址 + 下标 × 元素大小」，结构体要「基址 + 成员偏移」，
+    局部变量要「栈帧基址 − 偏移」，全局变量要「一个固定位置」。
+    如果只有一种寻址方式，那每种访问都得先用几条 add 算出地址再读——慢且费指令。
+    硬件直接用一条指令做完整地址计算，是<strong>把复杂度压进编码</strong>的典型手法。
+  </p>
+
+  <p>
+    x86 的变址寻址里有一个细节很能说明「编码是按需求设计的」：
+    比例因子只能取 1、2、4、8。为什么正好是这四个？
+    因为 C 语言里 <code>char</code> 是 1 字节、<code>short</code> 是 2、
+    <code>int</code> 是 4、<code>double</code> 是 8。
+    <em>这四个数字就是「数组元素大小」的全部可能</em>。
+    这个字段在 SIB 字节里占两位，一位都不多。
+  </p>
+
+  <p>
+    还有一个历史包袱必须提：<strong>段寄存器</strong>。
+    8086 的地址总线是 20 位，但寄存器只有 16 位，装不下一个完整地址。
+    Intel 的解法是用两个 16 位数拼：<code>段:偏移</code>，
+    实际地址等于段值乘 16 再加偏移。于是内存被切成一个个 64KB 的段，
+    每个段有一个段寄存器（CS 代码段、DS 数据段、SS 栈段、ES 附加段）。
+    这在 1978 年是聪明的省钱办法，到 32 位时代就变成了纯粹的负担：
+    平坦内存模型下所有段基址都是 0，段寄存器只剩下 <code>FS</code>、
+    <code>GS</code> 还有用——它们是线程局部存储（TLS）的实现方式。
+    你在 Linux 上调试多线程程序，看到 <code>fs:0x28</code> 这样的地址，
+    那就是段寄存器最后的一点残余用途：栈保护金丝雀。
+  </p>
+
+  <h2 id="p6"><span class="h2num">1.3.1-6</span>寄存器：CPU 手里那十几张便签</h2>
+
+  <p>
+    为什么不能把变量全放在内存里？因为距离。
+    从寄存器取一个数，是「零周期」——它就在执行单元旁边，
+    指令译码的时候值已经到了。从 L1 缓存取，大约 4 个周期；
+    从内存取，现代机器上是 200 到 300 个周期。
+    <em>同一个动作，差了两个数量级。</em>
+  </p>
+
+  <p>
+    所以 CPU 手里有一小把寄存器，用来放「此刻正在算的东西」。
+    x86-64 有 16 个通用寄存器，名字是这样的：
+  </p>
+
+  <div class="tw"><table style="min-width:640px">
+    <thead><tr><th>64 位</th><th>32 位</th><th>16 位</th><th>8 位高/低</th><th>名字的来历</th><th>今天的常规用途</th></tr></thead>
+    <tbody>
+      <tr><td><code>rax</code></td><td><code>eax</code></td><td><code>ax</code></td><td><code>ah</code>/<code>al</code></td><td>accumulator，累加器</td><td>返回值、乘除法隐含操作数</td></tr>
+      <tr><td><code>rbx</code></td><td><code>ebx</code></td><td><code>bx</code></td><td><code>bh</code>/<code>bl</code></td><td>base，基址</td><td>被调用者保存的临时变量</td></tr>
+      <tr><td><code>rcx</code></td><td><code>ecx</code></td><td><code>cx</code></td><td><code>ch</code>/<code>cl</code></td><td>counter，计数器</td><td>循环计数、移位量</td></tr>
+      <tr><td><code>rdx</code></td><td><code>edx</code></td><td><code>dx</code></td><td><code>dh</code>/<code>dl</code></td><td>data，数据</td><td>乘除法高位、第三个参数</td></tr>
+      <tr><td><code>rsi</code></td><td><code>esi</code></td><td><code>si</code></td><td>—</td><td>source index，源变址</td><td>第二个参数、字符串源</td></tr>
+      <tr><td><code>rdi</code></td><td><code>edi</code></td><td><code>di</code></td><td>—</td><td>destination index，目的变址</td><td>第一个参数、字符串目的</td></tr>
+      <tr><td><code>rsp</code></td><td><code>esp</code></td><td><code>sp</code></td><td>—</td><td>stack pointer，栈指针</td><td>永远指向栈顶，不能挪作他用</td></tr>
+      <tr><td><code>rbp</code></td><td><code>ebp</code></td><td><code>bp</code></td><td>—</td><td>base pointer，帧指针</td><td>指向当前栈帧底部</td></tr>
+      <tr><td><code>r8</code>～<code>r15</code></td><td><code>r8d</code>～<code>r15d</code></td><td><code>r8w</code>～<code>r15w</code></td><td><code>r8b</code>～<code>r15b</code></td><td>没有名字，就是编号</td><td>x86-64 新增的八个</td></tr>
+    </tbody>
+  </table></div>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.3.1-4-register-file.svg" target="_blank">
+    <img src="../../assets/img/1.3.1-4-register-file.svg" alt="x86 与 ARM64 寄存器命名对比：x86 有重叠的历史名字，ARM64 是平铺的 31 个" loading="lazy"></a>
+    <figcaption>图 1.3.1-4　两套命名哲学。左边是 x86：rax 这一根柱子里嵌着 eax、ax、ah、al 四层，它们是<em>同一块物理存储的不同切片</em>，写 al 不改其他位，写 eax 会把高 32 位清零——这种重叠写法带来了几十年的「部分寄存器停顿」问题。右边是 ARM64：x0 到 x30 平铺，w0 就是 x0 的低 32 位，写 w0 自动清零高半截，没有中间态，也没有 ah/al 这种半截名字。</figcaption>
+  </figure>
+
+  <p>
+    这张表里藏着一个完整的计算机史。
+    <code>ax</code>、<code>bx</code>、<code>cx</code>、<code>dx</code> 的全名分别是累加器、基址、计数、数据——
+    这些不是随便起的，是 1970 年代每条指令都专用一个寄存器时的分工。
+    8086 把这些专用寄存器做成了「半通用」的，
+    于是名字留下来了，专用性却没了。到今天，
+    你在编译器输出里看到的 <code>rax</code> 大多数时候就是一个普通临时变量，
+    和「累加」没有半点关系。
+  </p>
+
+  <p>
+    更要命的是 <code>ah</code>/<code>al</code> 这种拆分。
+    8080 是 8 位机器，只有一个 8 位累加器 A。
+    8086 要兼容它，就把 16 位的 AX 拆成高 8 位和低 8 位，分别叫 AH 和 AL，
+    这样 8080 的代码可以一字不改地跑。<em>兼容性带来的代价延续了四十年</em>：
+    写 <code>al</code> 之后读 <code>eax</code>，硬件必须等两个写口合并，
+    这个等待在老处理器上叫「部分寄存器停顿」，能白白损失几个周期。
+    现代处理器用寄存器重命名缓解了这个问题，但编码上的怪相保留至今。
+  </p>
+
+  <p>
+    ARM64 是 2011 年重新设计的，没有这个包袱：
+    <code>x0</code> 到 <code>x30</code> 三十一个通用寄存器，加一个栈指针 <code>sp</code>，
+    加一个恒为零的 <code>xzr</code>。
+    写 <code>w0</code> 就是写 <code>x0</code> 的低 32 位并清零高 32 位，
+    语义干净，硬件也好做。
+    这就是「后发优势」在指令集设计上的具体样子：
+    <em>不是更聪明，只是不用背历史</em>。
+  </p>
+
+  <p>
+    寄存器数量为什么是 16 或 31，而不是 1000？因为编码空间。
+    x86 用 3 个比特表示寄存器，只能有 8 个；x86-64 加了一个 REX 前缀位，扩到 16 个。
+    ARM64 用 5 个比特，32 个（其中一个留给零寄存器）。
+    想要更多寄存器，就得在每条指令里多留几位，指令就变长，代码就变大。
+    <em>寄存器数量和代码密度是一笔此消彼长的交易。</em>
+  </p>
+
+  <div class="note">
+    <b>架构寄存器与物理寄存器不是一回事。</b>
+    你在汇编里看到的 16 个寄存器叫「架构寄存器」，
+    是 ISA 规定的、程序能看见的。芯片内部实际有 180 个以上的「物理寄存器」。
+    执行时，硬件把架构寄存器动态映射到空闲的物理寄存器上（寄存器重命名），
+    于是 <code>mov eax, 1</code> 之后再 <code>mov eax, 2</code> 不需要等前一条写完——
+    它俩被分到了不同的物理寄存器。
+    <em>架构上只有 16 个，是为了编码省字节；物理上有 180 个，是为了并行。</em>
+    这两件事被刻意分开了。
+  </div>
+
+  <p>
+    除了通用寄存器，还有几类必须知道：
+    <code>rip</code>（指令指针，指向下一条要执行的指令）、
+    <code>rflags</code>（标志寄存器，下一节讲）、
+    ARM64 的 <code>nzcv</code>（四位条件标志）、
+    以及一堆控制寄存器（页表基址 <code>cr3</code>、调试寄存器、性能计数器）。
+    它们不在通用编码空间里，只能用专门的指令读写。
+  </p>
+
+  <p>
+    一个实操上的观察：如果你用调试器看过程序崩溃时的寄存器快照，
+    会发现 <code>rip</code> 指向的那条指令往往不是「出错的那条」，
+    而是它后面几条。原因是现代处理器乱序执行，
+    <code>rip</code> 反映的是「最后退休的那条」，不是「正在执行的那条」。
+    这是 1.3.4 的话题，先记着。
+  </p>
+
+  <h2 id="p7"><span class="h2num">1.3.1-7</span>汇编器与反汇编器：两趟扫描与猜出来的边界</h2>
+
+  <p>
+    最早的程序是手写机器码的。1949 年 EDSAC 上跑第一段程序时，
+    操作员把一长串十进制数打在纸带上，每个数字是一位「初始指令」——
+    那套「初始指令」本身也是一段程序，作用是读纸带、把后面的数字装进内存。
+    <em>连「装载器」都得靠手写数字来实现</em>。
+  </p>
+
+  <p>
+    汇编器的出现就是为了终结这件事。它做的事情简单到可以用一句话说清：
+    <strong>查表替换，加上地址回填</strong>。
+    查表：把 <code>mov</code> 换成 B8，把 <code>add</code> 换成 03，以此类推。
+    回填：把 <code>jmp loop</code> 里的 <code>loop</code> 换成真实的地址偏移。
+  </p>
+
+  <p>
+    回填为什么需要两趟？因为程序里常有「往前跳」：
+  </p>
+
+  <pre><code>start:
+    cmp  eax, 0
+    je   done        ; done 在下面，此刻还不知道它在哪
+    ...
+done:
+    ret</code></pre>
+
+  <p>
+    汇编器读到 <code>je done</code> 的时候，<code>done</code> 还没出现。
+    它只能先留一个空位（占 4 个字节），记下「这里要填 done 的地址」，
+    等整段扫完、所有标号的位置都知道了，再回头把空位填上。
+    这就是<strong>两趟扫描</strong>（two-pass assembler）。
+  </p>
+
+  <p>
+    第一次扫描收集标号，第二次扫描生成字节并回填。
+    这个模式一直用到今天：现代汇编器仍然分两趟，
+    只不过「回填」这件事被推迟到了链接阶段——
+    如果是跨文件的符号（比如调用另一个 .c 里的函数），
+    汇编器根本不知道地址，只能在目标文件里留一条<strong>重定位记录</strong>，
+    让链接器最后去填。
+  </p>
+
+  <p>
+    反过来，把机器码变回汇编，叫做反汇编。这条路要难得多，
+    因为<em>信息丢了</em>。反汇编器看到的只是一串字节，
+    它必须猜「哪里是一条指令的开头」。
+  </p>
+
+  <p>
+    x86 上这个猜测可以猜错。同一串字节，
+    从偏移 0 开始解是一条指令，从偏移 1 开始解可能是完全另一条指令。
+    更麻烦的是数据：一个跳转表、一段字符串常量、一段被 <code>.byte</code>
+    直接写进去的数据，在反汇编器眼里和代码没有区别——
+    它会老老实实把它们「翻译」成指令，输出一堆看上去像代码的垃圾。
+    所以真实的反汇编输出里常能看到莫名其妙的 <code>(bad)</code>、
+    或者明显不对的 <code>add byte ptr [rax], al</code>（字节 <code>00 00</code>）。
+  </p>
+
+  <p>
+    即便解对了边界，丢的东西也补不回来：
+    变量名变成 <code>[rbp-0x8]</code>，函数名变成 <code>sub_401130</code>，
+    结构体变成「基址加几个偏移」，循环变成「往回跳的 jmp」，
+    内联过的函数根本不存在。加上 <code>-O2</code> 之后，
+    <em>你写的东西和机器执行的东西已经不是一对一的关系</em>。
+    这就是为什么逆向工程是件苦活：不是难在读懂指令，是难在重建结构。
+  </p>
+
+  <div class="note">
+    <b>为什么反汇编输出里跳转目标写成 <code>401130 &lt;helper&gt;</code>。</b>
+    因为 <code>call</code> 编码里存的是相对偏移，不是绝对地址。
+    反汇编器先算出「当前指令末尾 + 偏移」得到目标地址，
+    再查一遍符号表，把地址翻译成名字。
+    如果那个地址不在符号表里，就只能显示裸地址 <code>401130</code>。
+    <em>符号表是链接时留下的副产品，strip 掉之后就再也找不回来了。</em>
+  </div>
+
+  <h2 id="p8"><span class="h2num">1.3.1-8</span>字节序：小端为什么赢了</h2>
+
+  <p>
+    一个 32 位整数在内存里占四个字节。这四个字节按什么顺序排，
+    是计算机史上最无谓、也最纠缠的一场争论。
+  </p>
+
+  <p>
+    取 <code>0x12345678</code>，从地址 0x1000 开始放：
+  </p>
+
+  <pre><code>            0x1000  0x1001  0x1002  0x1003
+大端（BE）    12      34      56      78      ← 高位在前，读起来像写出来的样子
+小端（LE）    78      56      34      12      ← 低位在前，和书写顺序相反</code></pre>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.3.1-5-endian.svg" target="_blank">
+    <img src="../../assets/img/1.3.1-5-endian.svg" alt="同一个数在大端与小端内存中的排布，以及读取前两个字节得到的不同结果" loading="lazy"></a>
+    <figcaption>图 1.3.1-5　同一个 32 位数，两种排法，以及由此产生的实际后果。上面一行是大端：从低地址往高地址读，正好是书写顺序，人看着舒服。下面一行是小端：低位在低地址。最下面的两行是关键——如果你把这四个字节的前两个按 16 位去读，大端得到 <code>0x1234</code>，小端得到 <code>0x5678</code>。<em>同一个内存内容，读法不同，答案完全不同</em>，这就是所有字节序 bug 的根源。</figcaption>
+  </figure>
+
+  <p>
+    大端的优点是直觉：内存dump 出来，从左往右读就是数字本身，
+    调试的时候一眼能认。网络协议因此选了大端，
+    并且把它命名为「网络字节序」——TCP/IP 头里的端口号、序号、长度，
+    全是高位在前。你在写 socket 程序时调用的 <code>htons</code>、<code>htonl</code>，
+    就是在做「主机序 → 网络序」的转换。
+  </p>
+
+  <p>
+    小端的优点不那么直观，但它是性能上的：
+    <strong>从低位开始算，加法可以从第一个字节就开始进位</strong>。
+    这在只有 8 位 ALU 的年代是实打实的收益——
+    做一次 32 位加法，四个字节从低到高依次加，进位顺着地址往上走，
+    指针也顺着往上走，一次循环搞定。
+    反过来如果高位在低地址，就得倒着遍历，指针递减，多花指令。
+    6502 的间接变址寻址把这个优势放大到了极致，而 6502 又影响了 8086，
+    8086 影响了整个 x86 家族——<em>于是今天全世界大多数电脑是小端</em>。
+  </p>
+
+  <p>
+    这场争论本来在 1980 年代就该结束。IEEE 754 浮点标准、
+    TCP/IP、POSIX 都选了各自的一边，然后大家学会了「在边界处转换」。
+    但边界总是有漏的，于是坑一直存在：
+  </p>
+
+  <div class="tw"><table>
+    <thead><tr><th>场景</th><th>踩的是什么</th><th>典型症状</th></tr></thead>
+    <tbody>
+      <tr><td>读二进制文件</td><td>文件格式规定了字节序，程序没转</td><td>读出来的数大得离谱或小得离谱，正好是字节倒过来</td></tr>
+      <tr><td>解析网络包</td><td>协议是大端，直接 <code>memcpy</code> 到结构体</td><td>端口号变成 0x1F90 这种奇怪的数</td></tr>
+      <tr><td>位图与图片格式</td><td>BMP 小端、PNG 大端、JPEG 大端</td><td>宽高读成几十万，程序申请内存失败</td></tr>
+      <tr><td>UTF-16 文本</td><td>没有 BOM 就不知道是 LE 还是 BE</td><td>中文变乱码，英文看起来正常（因为 ASCII 部分高低字节一个是 0）</td></tr>
+      <tr><td>跨架构通信</td><td>一端 x86 一端 PowerPC/网络设备</td><td>只有多字节字段错，单字节字段全对</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    判断一台机器的字节序，最省事的办法不是查资料，是让机器自己说：
+    Python 里 <code>sys.byteorder</code> 直接返回 <code>'little'</code> 或 <code>'big'</code>；
+    C 里用一个 <code>union { uint32_t i; uint8_t c[4]; }</code> 写进去再逐个字节读；
+    命令行上 <code>lscpu</code> 的 Byte Order 一行也写着。
+  </p>
+
+  <p>
+    还有一个反直觉的点：<strong>字节序只影响「多字节数据在内存里的排布」，
+    不影响寄存器的值</strong>。你把 0x12345678 装进 eax，无论大小端机器，
+    eax 里都是 0x12345678。差别只在你把它写进内存、或者从内存读出来的时候。
+    所以字节序问题永远出现在<em>跨越「内存表示」这个边界</em>的地方：
+    文件、网络、共享内存、指针强转。
+  </p>
+
+  <h2 id="p9"><span class="h2num">1.3.1-9</span>标志位与条件跳转：比较不需要单独的比较器</h2>
+
+  <p>
+    到这里，机器能搬数、能算数、能跳转。但它还不会「判断」。
+    <code>if (a &lt; b)</code> 在硬件上是怎么实现的？
+  </p>
+
+  <p>
+    答案有点出人意料：<strong>没有比较器</strong>。
+    实现比较用的是减法——1.2.3 里那个加法器，把 b 取反加一，再加 a。
+    减完的结果不写回任何寄存器，只留下一组<strong>标志位</strong>。
+    这条「减了但不存」的指令就是 <code>cmp</code>。
+  </p>
+
+  <p>
+    标志位里最关键的是四个：
+  </p>
+
+  <div class="tw"><table>
+    <thead><tr><th>标志</th><th>全名</th><th>什么时候置 1</th><th>它回答什么问题</th></tr></thead>
+    <tbody>
+      <tr><td><code>ZF</code></td><td>Zero Flag</td><td>结果为零</td><td>两个数相等吗</td></tr>
+      <tr><td><code>SF</code></td><td>Sign Flag</td><td>结果的最高位是 1（即「看起来是负数」）</td><td>结果是负的吗</td></tr>
+      <tr><td><code>CF</code></td><td>Carry Flag</td><td>无符号运算从最高位进位/借位出去</td><td>无符号数比大小：a 比 b 小吗</td></tr>
+      <tr><td><code>OF</code></td><td>Overflow Flag</td><td>有符号运算溢出（两个同号数相加得到异号结果）</td><td>这个结果还可信吗</td></tr>
+    </tbody>
+  </table></div>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.3.1-6-cmp-jcc.svg" target="_blank">
+    <img src="../../assets/img/1.3.1-6-cmp-jcc.svg" alt="CMP 指令如何设置四个标志位，条件跳转如何读这些标志决定跳不跳" loading="lazy"></a>
+    <figcaption>图 1.3.1-6　一次判断的完整链路。左边 <code>cmp</code> 走的是加法器，算 <code>a + (~b) + 1</code>，结果扔掉，只把四个标志位写进标志寄存器。中间那八位就是 <code>rflags</code> 的低半截，ZF、SF、CF、OF 各占一位。右边每一条 <code>jcc</code> 都是「读某一位（或某两位的组合），据此决定要不要改 rip」——所以条件跳转<em>本身不做任何计算</em>，它只是看别人算好的结论。</figcaption>
+  </figure>
+
+  <p>
+    为什么需要 CF 和 OF 两个「进位」标志？因为同一个位模式有两种解释。
+    看这个例子：<code>a = 0xFFFFFFFF</code>，<code>b = 1</code>，做 <code>a - b</code>：
+  </p>
+
+  <pre><code>把 a 和 b 都看成无符号数：  4294967295 - 1 = 4294967294，正常，CF = 0
+把 a 和 b 都看成有符号数：  -1 - 1 = -2，正常，OF = 0</code></pre>
+
+  <p>
+    再换一组：<code>a = 0x80000000</code>（有符号是 −2147483648），<code>b = 1</code>：
+  </p>
+
+  <pre><code>无符号看：  2147483648 - 1 = 2147483647，正常，CF = 0
+有符号看：  -2147483648 - 1 = -2147483649，超出 32 位范围，OF = 1</code></pre>
+
+  <p>
+    同样一条 <code>sub</code>，同一组标志位，两种解释下「是否出问题」的答案不同。
+    所以硬件干脆两个都算、两个都存，
+    <em>由后面的跳转指令自己决定看哪一个</em>。
+  </p>
+
+  <p>
+    于是同一句 <code>if (a &lt; b)</code>，编译出来有两种可能：
+  </p>
+
+  <pre><code>cmp  eax, ebx
+jl   less          ; 有符号比较：SF ≠ OF 就跳（jump if less）
+; 或者
+cmp  eax, ebx
+jb   less          ; 无符号比较：CF = 1 就跳（jump if below）</code></pre>
+
+  <p>
+    选哪一个，取决于 C 里 a 和 b 的类型。这就是为什么
+    <strong>在 C 里混用有符号和无符号整数会出 bug</strong>：
+    编译器按语言规则选了 <code>jb</code>，而你以为它在按 <code>jl</code> 比。
+    经典例子：
+  </p>
+
+  <pre><code>// 这段代码在任何平台上都是死循环
+for (unsigned i = n; i >= 0; i--) { ... }</code></pre>
+
+  <p>
+    因为 <code>i</code> 是无符号的，<code>i &gt;= 0</code> 永远成立，
+    编译器把它优化成「无条件跳回」。而且它不会警告你——
+    在它的语义模型里，这段代码就是「一直循环」，完全正确。
+  </p>
+
+  <p>
+    完整的条件跳转表没必要背，但值得知道它分成两组，
+    每组的名字带着明显的方向感。有符号那一组看 <code>SF</code>、<code>OF</code>、<code>ZF</code>，
+    无符号那一组看 <code>CF</code>、<code>ZF</code>：
+  </p>
+
+  <div class="tw"><table>
+    <thead><tr><th>有符号</th><th>含义</th><th>无符号</th><th>含义</th></tr></thead>
+    <tbody>
+      <tr><td><code>je</code> / <code>jz</code></td><td>相等</td><td><code>je</code> / <code>jz</code></td><td>相等（两条一样的）</td></tr>
+      <tr><td><code>jne</code> / <code>jnz</code></td><td>不等</td><td><code>jne</code> / <code>jnz</code></td><td>不等</td></tr>
+      <tr><td><code>jl</code></td><td>小于（less）</td><td><code>jb</code></td><td>低于（below）</td></tr>
+      <tr><td><code>jle</code></td><td>小于等于</td><td><code>jbe</code></td><td>低于等于</td></tr>
+      <tr><td><code>jg</code></td><td>大于（greater）</td><td><code>ja</code></td><td>高于（above）</td></tr>
+      <tr><td><code>jge</code></td><td>大于等于</td><td><code>jae</code></td><td>高于等于</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    <code>l</code>/<code>g</code> 是 less/greater，<code>b</code>/<code>a</code> 是 below/above。
+    用两套词不是啰嗦，是提醒：<em>它们回答的是两个不同的问题</em>。
+  </p>
+
+  <p>
+    标志位还有一个副作用值得知道：它们会被后面的指令覆盖。
+    所以编译器在两条判断之间插指令时非常小心，
+    尽量把「比较」和「跳转」放在相邻位置。
+    这种「标志位是一种隐式的、全局的中间结果」的设计，
+    在 RISC 架构里被认为是个缺陷——ARM 就把「要不要更新标志」
+    做成了指令里的一个可选位（早期的 <code>S</code> 后缀，ARM64 里是 <code>adds</code>/<code>subs</code> 这种写法），
+    而不是每条指令都无条件覆盖。
+  </p>
+
+  <div class="note">
+    <b>多字节加法靠 CF 串起来。</b>
+    64 位机器算 128 位加法，用的还是同一个加法器：
+    低 64 位用 <code>add</code>，高位用 <code>adc</code>（add with carry）。
+    <code>adc</code> 会把上一次的 CF 加进去。
+    于是「进位」这个 1.2.3 里讲过的信号，在指令层面变成了一个可以跨指令传递的状态。
+    <em>硬件的进位链只连一个字的宽度，跨字的进位靠软件用标志位接力。</em>
+  </div>
+
+  <h2 id="p10"><span class="h2num">1.3.1-10</span>一条指令走完的一生</h2>
+
+  <p>
+    现在把一条指令从生到死走一遍，作为下一节的引子。
+    无论什么架构，过程都是五步：
+  </p>
+
+  <pre><code>1. 取指   rip 指向的地址 → 指令缓存 → 取出若干字节
+2. 译码   字节 → 这条指令要干什么、操作数在哪
+3. 执行   算术逻辑单元（ALU）做运算，或算出内存地址
+4. 访存   如果操作数在内存，这一拍去读或写
+5. 写回   结果写进目标寄存器，标志位更新</code></pre>
+
+  <p>
+    在老式机器上，这五步是一条一条串着走的：
+    一条指令走完五个时钟，下一条才开始。
+    8086 就是这种结构，一条指令要 4 到 20 个时钟周期。
+    所以 8086 跑 5 MHz，实际每秒只能执行几十万条指令。
+  </p>
+
+  <p>
+    现代处理器不这么干。它把五步拆成五级流水线，
+    每个时钟都有一条指令在取指、另一条在译码、另一条在执行。
+    理想情况下，每个时钟就有一条指令完成。
+    4 GHz 的处理器，每秒四十亿条——这个数量级就是这么来的。
+  </p>
+
+  <p>
+    这里有个概念必须分清：<strong>指令周期和时钟周期不是一回事</strong>。
+    时钟周期是硬件的节拍（1/4 GHz = 0.25 纳秒）；
+    指令周期是「一条指令从进流水线到退休」经过的拍数，现代机器上是十几个到几十个。
+    衡量性能的指标叫 <strong>IPC</strong>（instructions per cycle，每周期指令数），
+    现代高性能核心能做到 4 到 6；而流水线拉长会降低 IPC，
+    但能提高主频，两者的乘积才是实际性能。
+  </p>
+
+  <p>
+    x86 在这五步之外还多了一层：<strong>微码</strong>。
+    简单指令（mov、add、jmp）由硬件直接译成 μop，
+    但复杂指令（<code>cpuid</code>、<code>rep movsb</code>、老的字符串操作、
+    甚至一些寻址方式组合）会被译成一小段「存在芯片内部的程序」，
+    由它展开成一串 μop。这段内部程序就是微码。
+  </p>
+
+  <p>
+    微码的存在解释了很多现象：
+    为什么有些指令慢得离谱（要跑几十上百个周期）、
+    为什么 CPU 厂商能通过「更新微码」修 bug（2018 年熔断漏洞的缓解措施就是微码更新）、
+    为什么 1997 年 Pentium 的 F00F bug 能让机器死机——
+    那条非法指令的微码进入了一个死循环，取指单元被锁住，
+    连「处理异常」的代码都取不出来。
+  </p>
+
+  <p>
+    反过来说，ARM 这类 RISC 架构基本没有微码，
+    每条指令都由固定的组合逻辑直接译出控制信号（硬布线）。
+    好处是快、省电、可预测；坏处是改不了——
+    硬布线一旦流片，任何设计错误都只能靠软件绕过或者重新流片。
+    <em>微码是一层「可以打补丁的软件」，代价是面积和功耗。</em>
+  </p>
+
+  <h2 id="p11"><span class="h2num">1.3.1-11</span>指令集架构的五代：从累加器到 load-store</h2>
+
+  <p>
+    如果要给指令集排一个谱系，可以按「操作数住在哪」分成五代。
+    这个视角比按年代分更有用，因为它解释了<em>为什么不同机器的指令长得不一样</em>。
+  </p>
+
+  <p>
+    <strong>第一代：累加器机。</strong>
+    EDSAC、6502、8080、8051 都是这样。
+    机器里只有一个「主角」寄存器，叫累加器（A）。
+    所有算术都必须经过它：
+  </p>
+
+  <pre><code>; 计算 c = a + b（a、b 在内存里）
+lda  a        ; 把 a 装进累加器
+add  b        ; 累加器 += b
+sta  c        ; 累加器存回 c</code></pre>
+
+  <p>
+    指令短（一字节操作码 + 一两字节地址），硬件简单（只有一个输入端要管），
+    但代码长——每算一个数都要来回搬。
+    这在 1975 年是合理的，因为晶体管比字节贵得多。
+  </p>
+
+  <p>
+    <strong>第二代：栈机。</strong>
+    操作数放在一个栈上，指令不带地址，默认弹栈顶两个、算完压回去：
+  </p>
+
+  <pre><code>; 计算 c = a + b
+push a
+push b
+add        ; 弹出两个，相加，结果压回
+pop  c</code></pre>
+
+  <p>
+    这种「零地址指令」的代码非常短（<code>add</code> 只有一个字节），
+    编译器也特别好写——表达式求值天然对应栈操作。
+    x87 浮点协处理器、Java 字节码、.NET 的 CIL、Forth、PostScript 全是栈机。
+    <em>JVM 选栈机不是因为它快，而是因为它可移植</em>：
+    栈机不依赖具体有多少个寄存器，任何平台都能高效模拟；
+    而且字节码可以被静态验证（栈深度可算），这对下载执行的安全模型至关重要。
+  </p>
+
+  <p>
+    代价是慢：每次操作都要读写栈（哪怕栈在寄存器堆里），
+    而且栈顶的依赖是串行的，很难并行。
+    这就是为什么 JIT 编译器一定要把字节码再编成寄存器机器码——
+    <em>栈机适合传输和验证，不适合执行</em>。
+  </p>
+
+  <p>
+    <strong>第三代：通用寄存器机。</strong>
+    PDP-11 开了头，x86、VAX 是代表。指令可以直接指定两三个寄存器：
+  </p>
+
+  <pre><code>; 计算 c = a + b
+mov  eax, [a]
+add  eax, [b]
+mov  [c], eax</code></pre>
+
+  <p>
+    灵活得多，但指令编码复杂（要描述每个操作数在哪），
+    而且「操作数可以在内存」这一条让指令长度不可控——
+    这正是 x86 变长的根源。
+  </p>
+
+  <p>
+    <strong>第四代：load-store 架构。</strong>
+    ARM、MIPS、RISC-V、PowerPC。
+    规矩只有一条，但是铁的：<strong>只有 load 和 store 能碰内存，其余指令一律只操作寄存器</strong>。
+  </p>
+
+  <pre><code>; 计算 c = a + b
+ldr  w0, [x1]      ; 只有这条碰内存
+ldr  w2, [x3]
+add  w0, w0, w2    ; 纯寄存器
+str  w0, [x4]</code></pre>
+
+  <p>
+    这条规矩带来的好处是一连串的：指令定长（因为不用编码「内存操作数」）、
+    译码简单、流水线规整、每条指令的执行时间可预测（除了访存）。
+    这是 1980 年代 RISC 运动的核心理念：
+    <em>把复杂性从硬件推给编译器</em>。
+  </p>
+
+  <p>
+    <strong>第五代（没有成为主流的那一代）：VLIW。</strong>
+    Intel Itanium（安腾）是最大的一次尝试。
+    思路是「让编译器一次性排好几条并行指令，打包成一条超长指令，
+    硬件不做调度，照着执行就行」。
+    听起来很美，实际失败了，原因值得记住：
+    <em>编译器看不见运行时的信息</em>——缓存有没有命中、
+    分支会往哪走、内存访问要等多久，这些在编译时都不知道，
+    所以它没法可靠地把指令排满。硬件做调度虽然贵，但它有实时信息。
+  </p>
+
+  <p>
+    把五代放在一起看，会发现一个收敛的趋势：
+    累加器机（1 个操作数位置）→ 栈机（0 个地址，靠栈）→
+    通用寄存器机（2～3 个操作数，可在内存）→ load-store（3 个操作数，只在寄存器）。
+    <strong>寄存器的数量和自由度在增加，内存访问在收窄。</strong>
+    原因不是审美，是速度：内存比寄存器慢两个数量级，
+    而每一条「操作数在内存」的指令，都意味着一次额外的等待。
+  </p>
+
+  <p>
+    至于 x86 为什么明明知道这个道理还不改？因为它不能改。
+    1978 年定下的编码，是 2026 年所有 Windows 程序、所有游戏、
+    所有驱动的二进制契约。改一个字，整个软件生态就崩了。
+    <em>指令集是一种一旦发布就几乎不可撤回的承诺。</em>
+  </p>
+
+  <h2 id="p12"><span class="h2num">1.3.1-12</span>把一段 C 拆到字节</h2>
+
+  <p>
+    最后做一次完整的练习，把一句 C 追到字节，看看前面这些东西怎么合起来用。
+  </p>
+
+  <pre><code>int f(int x) { return x * 2 + 1; }</code></pre>
+
+  <p>
+    GCC 用 <code>-O2</code> 编出来是这样（x86-64）：
+  </p>
+
+  <pre><code>f:
+    lea    eax, [rdi+rdi*1+0x1]     ; 8d 44 3f 01
+    ret                             ; c3</code></pre>
+
+  <p>
+    四个字节，一条指令，加上一个 <code>ret</code>。逐字节拆：
+  </p>
+
+  <div class="tw"><table>
+    <thead><tr><th>字节</th><th>是什么</th><th>拆开看</th></tr></thead>
+    <tbody>
+      <tr><td><code>8d</code></td><td>操作码</td><td><code>lea</code>（load effective address）：算地址但不读内存</td></tr>
+      <tr><td><code>44</code></td><td>ModRM</td><td><code>01</code> 模式（带 1 字节位移）+ <code>000</code> 目标 EAX + <code>100</code> 说明「后面跟 SIB」</td></tr>
+      <tr><td><code>3f</code></td><td>SIB</td><td><code>00</code> 比例 ×1 + <code>111</code> 索引 RDI + <code>111</code> 基址 RDI</td></tr>
+      <tr><td><code>01</code></td><td>位移</td><td>1</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    合起来的地址是 <code>RDI + RDI × 1 + 1</code>，也就是 <code>2x + 1</code>。
+    注意 <code>lea</code> 的作用：它本来是「把地址算出来」的指令，
+    但因为它算完把结果放进寄存器、不去读内存，
+    所以可以当「三个数的加法器」用——而且<strong>不设置标志位</strong>、
+    不占用 ALU 的加法通路。编译器特别喜欢这一招，
+    大量「乘 2 加常数」「乘 3、5、9」都被它变成一条 lea。
+  </p>
+
+  <p>
+    一个自然的疑问：为什么不用 <code>imul</code>？因为 <code>imul</code> 要 3 个周期，
+    而且只算乘法，还得再来一条 <code>add</code>。
+    而 lea 走的是地址生成单元（AGU），本来闲着，
+    一条指令一个周期搞定，还不动标志位。
+    <em>这是编译器比你更懂硬件的典型例子</em>。
+  </p>
+
+  <p>
+    再看一个带函数调用的，把调用约定也串进来。x86-64 System V 的规矩是：
+    前六个整数参数依次放 <code>rdi</code>、<code>rsi</code>、<code>rdx</code>、<code>rcx</code>、<code>r8</code>、<code>r9</code>，
+    返回值放 <code>rax</code>，多出来的参数压栈。
+  </p>
+
+  <pre><code>int g(int a, int b) { return f(a) + b; }
+
+; 编译结果
+g:
+    push   rbx                  ; 53
+    mov    ebx, esi             ; 89 f3     先把 b 存起来（esi 会被 f 覆盖）
+    call   f                    ; e8 xx xx xx xx
+    add    eax, ebx             ; 01 d8
+    pop    rbx                  ; 5b
+    ret                         ; c3</code></pre>
+
+  <p>
+    五条指令，四个字节到五个字节不等。
+    注意 <code>mov ebx, esi</code>：为什么要多这一步？
+    因为 <code>edi</code> 里已经是 a 了（第一个参数），
+    但 <code>esi</code> 里的 b 会在 <code>call f</code> 之后被覆盖——
+    调用约定允许被调用者随便改 <code>esi</code>（它是「调用者保存」寄存器）。
+    所以得先把 b 挪到一个「被调用者保存」的寄存器里，也就是 <code>rbx</code>。
+    <em>这一行汇编，就是「寄存器谁来保护」这条协议的具体代价。</em>
+  </p>
+
+  <p>
+    这就是指令层面看到的世界：没有变量、没有函数、没有类型，
+    只有寄存器编号、内存地址、字节偏移，和一条条按顺序执行的命令。
+    所有高级语言的抽象，最后都要落到这些东西上。
+  </p>
+
+  <p>
+    下一节开始讲这台机器怎么把这些指令一条条执行完：
+    取指单元怎么知道下一条在哪、译码器怎么识别 <code>8d 44 3f 01</code> 这种字节、
+    以及为什么一条指令退休的时候，前面的指令可能还没执行完。
+  </p>
+
+  <div class="quiz">
+    <h4>自测：能答上 8 题，这一节就算过了</h4>
+    <ol>
+      <li><code>B8 01 00 00 00</code> 这五个字节里，哪几个字节是「做什么」，哪几个是「对谁做」？</li>
+      <li>为什么 x86 的指令最长只能 15 字节？这个上限是谁定的？</li>
+      <li>ARM64 每条指令都是 4 字节，它为此付出了什么代价？又用什么办法弥补？</li>
+      <li>「现代 x86 内部其实是一台 RISC 机器」，这句话指的是什么？</li>
+      <li>说出指令能做的五类事，并举一个「不在五类里」的操作，说明它怎么实现。</li>
+      <li>x86 的变址比例因子为什么只能是 1、2、4、8？</li>
+      <li>写 <code>al</code> 之后读 <code>eax</code>，为什么会有一个额外的等待？ARM64 为什么没有这个问题？</li>
+      <li>反汇编器为什么可能把数据当成指令？</li>
+      <li>同一条 <code>cmp</code> 之后，判断「有符号小于」和「无符号小于」分别看哪个标志位？</li>
+      <li>用一句话解释：为什么 <code>for (unsigned i = n; i &gt;= 0; i--)</code> 是死循环。</li>
+    </ol>
+    <details><summary>点开看答案（先自己想，别急着点）</summary>
+    <ol>
+      <li><code>B8</code> 是「做什么」（把 32 位立即数装进 EAX，寄存器号藏在低三位里），后四个字节 <code>01 00 00 00</code> 是「装什么」——按小端读出来是 1。至于「对谁做」，被捆在操作码里了，没有单独的字段。</li>
+      <li>因为指令前缀可以无限重复，理论上指令可以无限长。AMD 在定义 x86-64 时规定 15 字节上限，超过就触发非法指令异常，目的是让解码器的缓冲区有个界。</li>
+      <li>代价是代码体积比 x86 大 20%～30%，指令缓存压力更大。弥补办法是 Thumb／Thumb-2：16 位短编码与 32 位混排，靠第一个半字的高位判断长度。</li>
+      <li>指 x86 解码后会把每条指令译成一到几个定长的微操作（μop），后端按 μop 调度执行，和 RISC 的做法一致。变长编码只是兼容外壳。</li>
+      <li>搬移、算术逻辑、控制流、访存、系统。「打印到屏幕」不在其中：它是一条 <code>syscall</code> 把活交给内核，内核再用 <code>mov</code> 往显存或帧缓冲写字节。</li>
+      <li>因为这四个数正好是 C 基本类型的大小：char 1、short 2、int 4、double 8。这个字段只有两位，编码 1/2/4/8 刚好用完。</li>
+      <li>因为它们共享同一块物理存储，写入 al 只改了低 8 位，硬件读 eax 时要把新低 8 位和旧高 24 位合并，产生依赖等待。ARM64 的 w0 是 x0 的低半截，写 w0 自动清零高半截，不存在「部分更新」。</li>
+      <li>因为字节流里没有「这里是代码」的标记。跳转表、字符串常量、内联数据与指令混在一起，反汇编器只能从已知入口顺着解，一旦入口猜错或者数据被当成代码，后面全乱。</li>
+      <li>有符号小于看 <code>SF ≠ OF</code>（对应 <code>jl</code>），无符号小于看 <code>CF = 1</code>（对应 <code>jb</code>）。</li>
+      <li><code>i</code> 是无符号数，永远大于等于 0，判断条件恒真，编译器直接把它优化成无条件跳回——而且在它的语义里这个优化完全正确。</li>
+    </ol>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="index.html">← 1.3 CPU：目录</a>
+    <span class="next todo-next">1.3.2 取指、译码、执行、写回 · 尚未动笔</span>
+  </div>
+
+</div>
+</body>
+</html>

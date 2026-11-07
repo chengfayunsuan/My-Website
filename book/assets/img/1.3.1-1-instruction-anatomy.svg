@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 506" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="900" height="506" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.3.1-1  三条 x86 指令的字节解剖</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一条指令里，动词、操作数在哪、操作数是什么，被压进了不同长度的字段</text>
+<text x="24" y="123" fill="#c8c8dc" font-size="13" text-anchor="start" font-family="monospace">mov eax, 1</text>
+<rect x="250" y="96" width="44" height="42" rx="3" fill="#1a1a28" stroke="#e8965a" stroke-width="1.4"/>
+<text x="272.0" y="122.0" fill="#e8965a" font-size="13" text-anchor="middle" font-family="monospace" font-weight="600">B8</text>
+<rect x="298" y="96" width="44" height="42" rx="3" fill="#1a1a28" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="320.0" y="122.0" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="monospace" font-weight="600">01</text>
+<rect x="346" y="96" width="44" height="42" rx="3" fill="#1a1a28" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="368.0" y="122.0" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="monospace" font-weight="600">00</text>
+<rect x="394" y="96" width="44" height="42" rx="3" fill="#1a1a28" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="416.0" y="122.0" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="monospace" font-weight="600">00</text>
+<rect x="442" y="96" width="44" height="42" rx="3" fill="#1a1a28" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="464.0" y="122.0" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="monospace" font-weight="600">00</text>
+<text x="250" y="84" fill="#e8965a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">opcode：低三位就是寄存器号</text>
+<text x="580" y="84" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="monospace">imm32 = 1</text>
+<text x="24" y="223" fill="#c8c8dc" font-size="13" text-anchor="start" font-family="monospace">mov [rbp-4], edi</text>
+<rect x="250" y="196" width="44" height="42" rx="3" fill="#1a1a28" stroke="#e8965a" stroke-width="1.4"/>
+<text x="272.0" y="222.0" fill="#e8965a" font-size="13" text-anchor="middle" font-family="monospace" font-weight="600">89</text>
+<rect x="298" y="196" width="44" height="42" rx="3" fill="#1a1a28" stroke="#b58ae8" stroke-width="1.4"/>
+<text x="320.0" y="222.0" fill="#b58ae8" font-size="13" text-anchor="middle" font-family="monospace" font-weight="600">7D</text>
+<rect x="346" y="196" width="70.4" height="42" rx="3" fill="#1a1a28" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="381.2" y="222.0" fill="#67b5ef" font-size="13" text-anchor="middle" font-family="monospace" font-weight="600">FC</text>
+<text x="426.4" y="223" fill="#67b5ef" font-size="11.5" text-anchor="start" font-family="monospace">disp8 = -4</text>
+<text x="250" y="186" fill="#e8965a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">opcode</text>
+<text x="298" y="186" fill="#b58ae8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">ModRM</text>
+<text x="346" y="186" fill="#67b5ef" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">位移</text>
+<rect x="298" y="254" width="29" height="26" rx="2" fill="#20202e" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="312.5" y="272" fill="#b58ae8" font-size="12" text-anchor="middle" font-family="monospace">01</text>
+<text x="312.5" y="299" fill="#b58ae8" font-size="9.5" text-anchor="middle" font-family="monospace">mod</text>
+<rect x="328" y="254" width="44" height="26" rx="2" fill="#20202e" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="350.0" y="272" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="monospace">111</text>
+<text x="350.0" y="299" fill="#67d9a0" font-size="9.5" text-anchor="middle" font-family="monospace">reg</text>
+<rect x="373" y="254" width="44" height="26" rx="2" fill="#20202e" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="395.0" y="272" fill="#67b5ef" font-size="12" text-anchor="middle" font-family="monospace">101</text>
+<text x="395.0" y="299" fill="#67b5ef" font-size="9.5" text-anchor="middle" font-family="monospace">r/m</text>
+<text x="288" y="272" fill="#7a7a94" font-size="10.5" text-anchor="end" font-family="monospace">ModRM =</text>
+<text x="448" y="271" fill="#9a9ab4" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">mod=01 表示后面还有一个 1 字节的位移</text>
+<text x="448" y="290" fill="#9a9ab4" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">reg=111 是 EDI，r/m=101 在这一模式下是 RBP</text>
+<text x="448" y="309" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三个字节就把「源寄存器 + 基址 + 偏移 + 宽度」全说清了</text>
+<text x="24" y="361" fill="#c8c8dc" font-size="13" text-anchor="start" font-family="monospace">call helper</text>
+<rect x="250" y="334" width="44" height="42" rx="3" fill="#1a1a28" stroke="#e8965a" stroke-width="1.4"/>
+<text x="272.0" y="360.0" fill="#e8965a" font-size="13" text-anchor="middle" font-family="monospace" font-weight="600">E8</text>
+<rect x="298" y="334" width="188" height="42" rx="3" fill="#2a2418" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="392.0" y="361" fill="#e8b84b" font-size="13" text-anchor="middle" font-family="monospace">1A 00 00 00</text>
+<text x="496" y="354" fill="#e8b84b" font-size="11.5" text-anchor="start" font-family="monospace">rel32 = +0x1A</text>
+<text x="496" y="371" fill="#9a9ab4" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">相对本条指令末尾的偏移</text>
+<text x="250" y="324" fill="#e8965a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">opcode</text>
+<path d="M392.0,380 L392.0,416 L550,416" fill="none" stroke="#e8b84b" stroke-width="1.6" stroke-dasharray="5 4"/>
+<path d="M550,416 l-7,-4 l0,8 z" fill="#e8b84b"/>
+<rect x="556" y="400" width="150" height="34" rx="3" fill="#1c1c2a" stroke="#4a4a62" stroke-width="1.3"/>
+<text x="631" y="422" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">0x401130</text>
+<text x="556" y="454" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">helper 的地址不用写进指令</text>
+<text x="24" y="484" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">变长编码的原则：常用的情形压到最短，罕见的情形才加长。B8 只带一个值；89 要带「谁、往哪、多宽」三件事。</text>
+</svg>

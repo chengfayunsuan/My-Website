@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="900" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.3.1-4  寄存器：两套命名哲学</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">x86 的名字是四层套娃，ARM64 是平铺的 31 个</text>
+<text x="24" y="84" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">x86-64：一根柱子，四个名字</text>
+<text x="24" y="102" fill="#6a6a82" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一块物理存储，切片越切越细</text>
+<rect x="60" y="116" width="380" height="42" rx="3" fill="#1a1a28" stroke="#e8965a" stroke-width="1.5"/>
+<text x="250.0" y="141.0" fill="#e8965a" font-size="13" text-anchor="middle" font-family="monospace" font-weight="600">RAX</text>
+<text x="70" y="133" fill="#6a6a82" font-size="8.5" text-anchor="start" font-family="monospace">64 位 / 8 字节</text>
+<rect x="60" y="178" width="190" height="40" rx="3" fill="#1a1a28" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="155.0" y="202.0" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="monospace" font-weight="600">EAX</text>
+<text x="258" y="202" fill="#8a8aa0" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">32 位：低半截</text>
+<rect x="60" y="238" width="95" height="38" rx="3" fill="#1a1a28" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="107.5" y="261.0" fill="#67b5ef" font-size="12" text-anchor="middle" font-family="monospace" font-weight="600">AX</text>
+<text x="163" y="261" fill="#8a8aa0" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">16 位</text>
+<rect x="60" y="296" width="47" height="38" rx="3" fill="#1a1a28" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="83.5" y="319.0" fill="#b58ae8" font-size="11" text-anchor="middle" font-family="monospace" font-weight="600">AL</text>
+<rect x="108" y="296" width="47" height="38" rx="3" fill="#1a1a28" stroke="#e87a8a" stroke-width="1.5"/>
+<text x="131.5" y="319.0" fill="#e87a8a" font-size="11" text-anchor="middle" font-family="monospace" font-weight="600">AH</text>
+<text x="163" y="312" fill="#8a8aa0" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">AL、AH 各 8 位，并排挤在低 16 位里</text>
+<text x="163" y="328" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">写 AL 只改低 8 位，高 56 位不动</text>
+<line x1="60" y1="158" x2="60" y2="168" stroke="#4a4a62" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="440" y1="158" x2="440" y2="168" stroke="#4a4a62" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="24" y="350" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">名字的来历：A 累加器 / B 基址 / C 计数 / D 数据，</text>
+<text x="24" y="366" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">都是 1970 年代专职寄存器的分工，如今只剩名字。</text>
+<text x="500" y="84" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">ARM64：平铺 31 个，加一个零寄存器</text>
+<text x="500" y="102" fill="#6a6a82" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有 ah/al 这种半截名字</text>
+<rect x="500" y="116" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="522" y="133" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x0</text>
+<rect x="548" y="116" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="570" y="133" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x1</text>
+<rect x="596" y="116" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="618" y="133" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x2</text>
+<rect x="644" y="116" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="666" y="133" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x3</text>
+<rect x="692" y="116" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="714" y="133" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x4</text>
+<rect x="740" y="116" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="762" y="133" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x5</text>
+<rect x="788" y="116" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="810" y="133" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x6</text>
+<rect x="836" y="116" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="858" y="133" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x7</text>
+<rect x="500" y="146" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="522" y="163" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x8</text>
+<rect x="548" y="146" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="570" y="163" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x9</text>
+<rect x="596" y="146" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="618" y="163" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x10</text>
+<rect x="644" y="146" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="666" y="163" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x11</text>
+<rect x="692" y="146" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="714" y="163" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x12</text>
+<rect x="740" y="146" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="762" y="163" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x13</text>
+<rect x="788" y="146" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="810" y="163" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x14</text>
+<rect x="836" y="146" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="858" y="163" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x15</text>
+<rect x="500" y="176" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="522" y="193" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x16</text>
+<rect x="548" y="176" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="570" y="193" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x17</text>
+<rect x="596" y="176" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="618" y="193" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x18</text>
+<rect x="644" y="176" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="666" y="193" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x19</text>
+<rect x="692" y="176" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="714" y="193" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x20</text>
+<rect x="740" y="176" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="762" y="193" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x21</text>
+<rect x="788" y="176" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="810" y="193" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x22</text>
+<rect x="836" y="176" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="858" y="193" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x23</text>
+<rect x="500" y="206" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="522" y="223" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x24</text>
+<rect x="548" y="206" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="570" y="223" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x25</text>
+<rect x="596" y="206" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="618" y="223" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x26</text>
+<rect x="644" y="206" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="666" y="223" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x27</text>
+<rect x="692" y="206" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="714" y="223" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x28</text>
+<rect x="740" y="206" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="762" y="223" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x29</text>
+<rect x="788" y="206" width="44" height="24" rx="2" fill="#20202e" stroke="#4a4a62" stroke-width="1.0"/>
+<text x="810" y="223" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="monospace">x30</text>
+<rect x="836" y="206" width="44" height="24" rx="2" fill="#2a2432" stroke="#e8965a" stroke-width="1.0"/>
+<text x="858" y="223" fill="#e8965a" font-size="9" text-anchor="middle" font-family="monospace">sp</text>
+<text x="500" y="254" fill="#8a8aa0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">x0～x30 三十一个通用寄存器；sp 单列；xzr 恒为零（读出来永远是 0）。</text>
+<text x="500" y="272" fill="#8a8aa0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">w0 就是 x0 的低 32 位：写 w0 会同时把 x0 的高 32 位清零。</text>
+<text x="500" y="290" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有「部分更新」，所以没有合并等待。</text>
+<rect x="24" y="392" width="852" height="60" rx="4" fill="#14141e" stroke="#2a2a3e" stroke-width="1.2"/>
+<text x="40" y="414" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">为什么不是 1000 个寄存器：编码空间。x86 用 3 位编码寄存器，只有 8 个；加一个 REX 位扩到 16 个。</text>
+<text x="40" y="436" fill="#8a8aa0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">ARM64 用 5 位，32 个。寄存器越多，每条指令要留的位越多，代码就越大——这是笔此消彼长的交易。</text>
+</svg>
