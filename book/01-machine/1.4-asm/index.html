@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.4 从语言到机器码：人怎么跟机器说话</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部 电、逻辑与指令</a><span class="sep">/</span>
+    <span class="here">1.4 从语言到机器码</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">CHAPTER 1.4</span>
+    从语言到机器码：人怎么跟机器说话
+  </h1>
+  <p class="part-sub">这一章回答一个问题：一个人脑子里想的事情，要经过几次翻译才能变成 CPU 认识的那串字节</p>
+
+  <p class="lead">
+    1.3 章讲的是「机器怎么执行指令」。这一章反过来问：<em>这些指令是谁写的</em>。
+    答案有四层，从低到高：<strong>汇编</strong>是机器码的另一种写法，一一对应；
+    <strong>编译器</strong>把 C 这种带类型的语言翻译成汇编；
+    <strong>链接器</strong>把一堆目标文件拼成一个可执行文件；
+    <strong>解释器和 JIT</strong> 干脆不生成可执行文件，边跑边翻。
+    四层走完，你会明白「写代码」和「程序运行」之间到底隔着什么。
+  </p>
+
+  <div class="tw"><table>
+    <thead><tr><th>编号</th><th>标题</th><th>它解决什么</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>1.4.1</code></td>
+        <td><a href="1.4.1-assembly.html" style="color:#cfc6ff">汇编：给机器码起个人能念的名字</a></td>
+        <td>一条指令的字节怎么分段；寄存器为什么叫 rax；汇编器为什么要扫两遍</td>
+        <td><span class="tag done">已完稿</span></td>
+      </tr>
+      <tr>
+        <td><code>1.4.2</code></td>
+        <td>C 与编译器：一次编写，到处翻译</td>
+        <td>预处理、编译、汇编、链接四步各做什么；优化器凭什么敢改写代码</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>1.4.3</code></td>
+        <td>链接与动态库：一个 exe 是怎么被拼出来的</td>
+        <td>符号表怎么解析；静态库和动态库差在哪；为什么换了库程序就起不来</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>1.4.4</code></td>
+        <td>解释器、JIT 与虚拟机：为什么 JS 也能越跑越快</td>
+        <td>解释执行慢在哪；JIT 怎么靠运行时的信息反超静态编译</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="pager">
+    <a href="../index.html">← 第 1 部目录</a>
+    <a class="next" href="1.4.1-assembly.html">1.4.1 汇编：给机器码起个人能念的名字 →</a>
+  </div>
+
+</div>
+</body>
+</html>

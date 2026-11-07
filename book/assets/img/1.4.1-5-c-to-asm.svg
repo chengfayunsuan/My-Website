@@ -1,0 +1,62 @@
+<svg width="880" height="512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 512" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="512" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">同一个 sum 函数：C、-O0 汇编、-O2 汇编、机器码</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三列讲同一件事；-O0 一行对一行，-O2 里索引 i 和 n 已经消失，循环变成指针在数组上滑动</text>
+<text x="40" y="84" fill="#b0b0c8" font-size="10.5" text-anchor="start" font-family="monospace" font-weight="bold">C 源码</text>
+<text x="228" y="84" fill="#5f5f78" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">7 行</text>
+<rect x="36" y="94" width="196" height="340" rx="4" fill="#141420" stroke="#2e2e44" stroke-width="1"/>
+<text x="248" y="84" fill="#e8965a" font-size="10.5" text-anchor="start" font-family="monospace" font-weight="bold">gcc -O0</text>
+<text x="436" y="84" fill="#5f5f78" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">30+ 行</text>
+<rect x="244" y="94" width="196" height="340" rx="4" fill="#141420" stroke="#2e2e44" stroke-width="1"/>
+<text x="456" y="84" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="monospace" font-weight="bold">gcc -O2</text>
+<text x="652" y="84" fill="#5f5f78" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">11 行</text>
+<rect x="452" y="94" width="204" height="340" rx="4" fill="#141420" stroke="#2e2e44" stroke-width="1"/>
+<text x="672" y="84" fill="#b58ae8" font-size="10.5" text-anchor="start" font-family="monospace" font-weight="bold">机器码（-O2）</text>
+<text x="852" y="84" fill="#5f5f78" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">11 条</text>
+<rect x="668" y="94" width="188" height="340" rx="4" fill="#141420" stroke="#2e2e44" stroke-width="1"/>
+<text x="52" y="120" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">long sum(long *a, long n)</text>
+<text x="52" y="145" fill="#6a6a82" font-size="9.8" text-anchor="start" font-family="monospace">{</text>
+<text x="52" y="170" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">    long s = 0;</text>
+<text x="52" y="195" fill="#e8b84b" font-size="9.8" text-anchor="start" font-family="monospace">    for (long i = 0; i &lt; n; i++)</text>
+<text x="52" y="220" fill="#e8b84b" font-size="9.8" text-anchor="start" font-family="monospace">        s += a[i];</text>
+<text x="52" y="245" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">    return s;</text>
+<text x="52" y="270" fill="#6a6a82" font-size="9.8" text-anchor="start" font-family="monospace">}</text>
+<text x="260" y="120" fill="#67d9a0" font-size="9.8" text-anchor="start" font-family="monospace">sum:</text>
+<text x="260" y="145" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  push  rbp</text>
+<text x="260" y="170" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  mov   rbp, rsp</text>
+<text x="260" y="195" fill="#8a8aa4" font-size="9.8" text-anchor="start" font-family="monospace">  mov   [rbp-24], rdi</text>
+<text x="260" y="220" fill="#8a8aa4" font-size="9.8" text-anchor="start" font-family="monospace">  mov   [rbp-32], rsi</text>
+<text x="260" y="245" fill="#8a8aa4" font-size="9.8" text-anchor="start" font-family="monospace">  mov   [rbp-8], 0</text>
+<text x="260" y="270" fill="#e8b84b" font-size="9.8" text-anchor="start" font-family="monospace">.L2:</text>
+<text x="260" y="295" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  mov   rax, [rbp-8]</text>
+<text x="260" y="320" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  lea   rdx, [rax*8]</text>
+<text x="260" y="345" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  add   rax, rdx</text>
+<text x="260" y="370" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  mov   rax, [rbp-24]</text>
+<text x="260" y="395" fill="#5f5f78" font-size="9.8" text-anchor="start" font-family="monospace">  …  后面还有 20 行，全是同一套读写</text>
+<text x="468" y="120" fill="#67d9a0" font-size="9.8" text-anchor="start" font-family="monospace">sum:</text>
+<text x="468" y="145" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  xor   eax, eax</text>
+<text x="468" y="170" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  test  rsi, rsi</text>
+<text x="468" y="195" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  jle   .L4</text>
+<text x="468" y="220" fill="#e8b84b" font-size="9.8" text-anchor="start" font-family="monospace">  lea   rdx, [rdi+rsi*8]</text>
+<text x="468" y="245" fill="#e8b84b" font-size="9.8" text-anchor="start" font-family="monospace">.L3:</text>
+<text x="468" y="270" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  add   rax, [rdi]</text>
+<text x="468" y="295" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  add   rdi, 8</text>
+<text x="468" y="320" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  cmp   rdi, rdx</text>
+<text x="468" y="345" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  jne   .L3</text>
+<text x="468" y="370" fill="#e8b84b" font-size="9.8" text-anchor="start" font-family="monospace">.L4:</text>
+<text x="468" y="395" fill="#b0b0c8" font-size="9.8" text-anchor="start" font-family="monospace">  ret</text>
+<text x="684" y="145" fill="#b58ae8" font-size="9.8" text-anchor="start" font-family="monospace">31 c0</text>
+<text x="684" y="170" fill="#b58ae8" font-size="9.8" text-anchor="start" font-family="monospace">48 85 f6</text>
+<text x="684" y="195" fill="#b58ae8" font-size="9.8" text-anchor="start" font-family="monospace">7e 0d</text>
+<text x="684" y="220" fill="#b58ae8" font-size="9.8" text-anchor="start" font-family="monospace">48 8d 14 f7</text>
+<text x="684" y="270" fill="#b58ae8" font-size="9.8" text-anchor="start" font-family="monospace">48 03 07</text>
+<text x="684" y="295" fill="#b58ae8" font-size="9.8" text-anchor="start" font-family="monospace">48 83 c7 08</text>
+<text x="684" y="320" fill="#b58ae8" font-size="9.8" text-anchor="start" font-family="monospace">48 39 d7</text>
+<text x="684" y="345" fill="#b58ae8" font-size="9.8" text-anchor="start" font-family="monospace">75 f4</text>
+<text x="684" y="395" fill="#b58ae8" font-size="9.8" text-anchor="start" font-family="monospace">c3</text>
+<line x1="240" y1="94" x2="240" y2="434" stroke="#26263a" stroke-width="1"/>
+<line x1="448" y1="94" x2="448" y2="434" stroke="#26263a" stroke-width="1"/>
+<line x1="664" y1="94" x2="664" y2="434" stroke="#26263a" stroke-width="1"/>
+<text x="36" y="470" fill="#8a8aa4" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">-O0 里 a[i] 要算两遍 i*8，因为 C 的语义要求每次都重新求值；-O2 把「索引」整个改写成「指针」，乘法就变成了 add rdi, 8。</text>
+<text x="36" y="489" fill="#8a8aa4" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两边功能完全一样，指令数差三倍。这也是为什么调试构建和发布构建的表现有时对不上——不是 bug，是这三十行和十一行的差别。</text>
+</svg>
