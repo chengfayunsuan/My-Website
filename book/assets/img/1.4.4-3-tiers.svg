@@ -1,0 +1,37 @@
+<svg width="880" height="478" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 478" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="478" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.4.4-3  分层编译的阶梯</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">往上爬一层快一截，编译代价也高一截</text>
+<line x1="48" y1="322" x2="800" y2="322" stroke="#3a3a52" stroke-width="1.2"/>
+<rect x="60" y="267" width="160" height="55" rx="3" fill="#8a8aa014" stroke="#8a8aa0" stroke-width="1.4"/>
+<text x="140" y="257" fill="#8a8aa0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">×1</text>
+<text x="140" y="292" fill="#9a9ab4" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">编译代价 无</text>
+<text x="140" y="342" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">解释器</text>
+<text x="140" y="358" fill="#5f5f78" font-size="8.5" text-anchor="middle" font-family="monospace">Ignition</text>
+<rect x="240" y="197" width="160" height="125" rx="3" fill="#67b5ef14" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="320" y="187" fill="#67b5ef" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">×3~5</text>
+<text x="320" y="292" fill="#9a9ab4" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">编译代价 低</text>
+<text x="320" y="342" fill="#67b5ef" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">基线 JIT</text>
+<text x="320" y="358" fill="#5f5f78" font-size="8.5" text-anchor="middle" font-family="monospace">Sparkplug</text>
+<rect x="420" y="122" width="160" height="200" rx="3" fill="#b58ae814" stroke="#b58ae8" stroke-width="1.4"/>
+<text x="500" y="112" fill="#b58ae8" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">×10</text>
+<text x="500" y="292" fill="#9a9ab4" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">编译代价 中</text>
+<text x="500" y="342" fill="#b58ae8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">中层 JIT</text>
+<text x="500" y="358" fill="#5f5f78" font-size="8.5" text-anchor="middle" font-family="monospace">Maglev</text>
+<rect x="600" y="57" width="160" height="265" rx="3" fill="#e8965a14" stroke="#e8965a" stroke-width="1.4"/>
+<text x="680" y="47" fill="#e8965a" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">×30</text>
+<text x="680" y="292" fill="#9a9ab4" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">编译代价 高</text>
+<text x="680" y="342" fill="#e8965a" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">优化 JIT</text>
+<text x="680" y="358" fill="#5f5f78" font-size="8.5" text-anchor="middle" font-family="monospace">TurboFan</text>
+<path d="M224,243 L236,173" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="3 3"/>
+<path d="M234,177 l8,-6 l2,8 Z" fill="#3a3a52"/>
+<path d="M404,173 L416,98" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="3 3"/>
+<path d="M414,102 l8,-6 l2,8 Z" fill="#3a3a52"/>
+<path d="M584,98 L596,33" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="3 3"/>
+<path d="M594,37 l8,-6 l2,8 Z" fill="#3a3a52"/>
+<path d="M760,322 L792,322 L792,388 L42,388 L42,296 L56,296" fill="none" stroke="#e87a8a" stroke-width="1.3" stroke-dasharray="5 4"/>
+<path d="M56,296 l-9,-4 l0,8 Z" fill="#e87a8a"/>
+<text x="420" y="416" fill="#c07a86" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">猜测被推翻，退回解释器重跑</text>
+<text x="36" y="448" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">阶梯的意义：编译成本也只花在配得上的地方。中间那层「基线 JIT」最容易被忽略——它编译极快、几乎不优化，</text>
+<text x="36" y="466" fill="#6a6a82" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">但把「每执行一条都分派一次」变成了「顺序执行的固定几条指令」，光这一项就常常够本。</text>
+</svg>

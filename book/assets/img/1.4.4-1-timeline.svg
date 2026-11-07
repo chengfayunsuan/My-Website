@@ -1,0 +1,29 @@
+<svg width="880" height="430" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="430" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.4.4-1  两条路的累计成本</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">编译一次跑一万遍，还是每一遍都现场翻译一次</text>
+<line x1="104" y1="257.6470588235294" x2="660" y2="257.6470588235294" stroke="#1e1e2c" stroke-width="1"/>
+<text x="94" y="261.6470588235294" fill="#3e3e56" font-size="8.5" text-anchor="end" font-family="monospace">100</text>
+<line x1="104" y1="195.29411764705884" x2="660" y2="195.29411764705884" stroke="#1e1e2c" stroke-width="1"/>
+<text x="94" y="199.29411764705884" fill="#3e3e56" font-size="8.5" text-anchor="end" font-family="monospace">200</text>
+<line x1="104" y1="132.94117647058823" x2="660" y2="132.94117647058823" stroke="#1e1e2c" stroke-width="1"/>
+<text x="94" y="136.94117647058823" fill="#3e3e56" font-size="8.5" text-anchor="end" font-family="monospace">300</text>
+<line x1="104" y1="320" x2="660" y2="320" stroke="#3a3a52" stroke-width="1.2"/>
+<line x1="104" y1="108" x2="104" y2="320" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="92" y="90" fill="#6a6a82" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">累计耗时</text>
+<text x="660" y="366" fill="#6a6a82" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">执行次数 →</text>
+<path d="M104.0,320.0 L660.0,120.47058823529412" fill="none" stroke="#e87a8a" stroke-width="2"/>
+<path d="M104.0,301.29411764705884 L660.0,238.94117647058823" fill="none" stroke="#67b5ef" stroke-width="2"/>
+<line x1="110" y1="319.0" x2="110" y2="299.4235294117647" stroke="#67b5ef" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="108" y="350" fill="#5f8fb8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一次性翻译成本</text>
+<circle cx="187.39999999999998" cy="291.94117647058823" r="4.5" fill="#0e0e16" stroke="#e8b84b" stroke-width="1.6"/>
+<line x1="187.39999999999998" y1="285.94117647058823" x2="187.39999999999998" y2="271.94117647058823" stroke="#e8b84b" stroke-width="1"/>
+<text x="187.39999999999998" y="265.94117647058823" fill="#e8b84b" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">交叉点</text>
+<text x="678" y="116.47058823529412" fill="#e87a8a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">解释执行</text>
+<text x="678" y="133.47058823529412" fill="#8a5a64" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每一条都重新</text>
+<text x="678" y="146.47058823529412" fill="#8a5a64" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">翻译一遍</text>
+<text x="678" y="234.94117647058823" fill="#67b5ef" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">提前编译</text>
+<text x="678" y="251.94117647058823" fill="#4a7a9a" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只翻译一次</text>
+<text x="36" y="388" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两条线的斜率差，就是「解释器每执行一条要付的那套壳」；纵向的高度差，是「一次性翻译成本」。</text>
+<text x="36" y="406" fill="#6a6a82" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">程序活多久，决定了该走哪条路——这正是 JIT 存在的前提：它要在运行时才知道自己活多久。</text>
+</svg>
