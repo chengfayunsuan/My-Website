@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 380" width="880" height="380" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="380" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.5.2-4  线性探测：聚集是怎么滚起来的</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">冲突就查下一个槽 —— 顺路、缓存友好，但连续占用的段会越滚越长</text>
+<rect x="56" y="150" width="46" height="52" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1.1"/>
+<text x="79.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">0</text>
+<rect x="104" y="150" width="46" height="52" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1.1"/>
+<text x="127.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">1</text>
+<rect x="152" y="150" width="46" height="52" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1.1"/>
+<text x="175.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">2</text>
+<rect x="200" y="150" width="46" height="52" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1.1"/>
+<text x="223.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">3</text>
+<rect x="248" y="150" width="46" height="52" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1.1"/>
+<text x="271.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">4</text>
+<rect x="296" y="150" width="46" height="52" rx="3" fill="#1b3346" stroke="#3a5a7a" stroke-width="1.1"/>
+<text x="319.0" y="182" fill="#8fb8d8" font-size="12" text-anchor="middle" font-family="monospace">a</text>
+<text x="319.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">5</text>
+<rect x="344" y="150" width="46" height="52" rx="3" fill="#1b3346" stroke="#3a5a7a" stroke-width="1.1"/>
+<text x="367.0" y="182" fill="#8fb8d8" font-size="12" text-anchor="middle" font-family="monospace">b</text>
+<text x="367.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">6</text>
+<rect x="392" y="150" width="46" height="52" rx="3" fill="#1b3346" stroke="#3a5a7a" stroke-width="1.1"/>
+<text x="415.0" y="182" fill="#8fb8d8" font-size="12" text-anchor="middle" font-family="monospace">c</text>
+<text x="415.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">7</text>
+<rect x="440" y="150" width="46" height="52" rx="3" fill="#1b3346" stroke="#3a5a7a" stroke-width="1.1"/>
+<text x="463.0" y="182" fill="#8fb8d8" font-size="12" text-anchor="middle" font-family="monospace">d</text>
+<text x="463.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">8</text>
+<rect x="488" y="150" width="46" height="52" rx="3" fill="#16281c" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="511.0" y="182" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="monospace">k1</text>
+<text x="511.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">9</text>
+<rect x="536" y="150" width="46" height="52" rx="3" fill="#2a2214" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="559.0" y="182" fill="#e8b84b" font-size="12" text-anchor="middle" font-family="monospace">k2</text>
+<text x="559.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">10</text>
+<rect x="584" y="150" width="46" height="52" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1.1"/>
+<text x="607.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">11</text>
+<rect x="632" y="150" width="46" height="52" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1.1"/>
+<text x="655.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">12</text>
+<rect x="680" y="150" width="46" height="52" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1.1"/>
+<text x="703.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">13</text>
+<rect x="728" y="150" width="46" height="52" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1.1"/>
+<text x="751.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">14</text>
+<rect x="776" y="150" width="46" height="52" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1.1"/>
+<text x="799.0" y="217" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">15</text>
+<path d="M337.0,134 Q345.0,114 353.0,134" fill="none" stroke="#67d9a0" stroke-width="1.5"/>
+<polygon points="357.0,134 349.0,129.5 349.0,138.5" fill="#67d9a0"/>
+<path d="M385.0,134 Q393.0,114 401.0,134" fill="none" stroke="#67d9a0" stroke-width="1.5"/>
+<polygon points="405.0,134 397.0,129.5 397.0,138.5" fill="#67d9a0"/>
+<path d="M433.0,134 Q441.0,114 449.0,134" fill="none" stroke="#67d9a0" stroke-width="1.5"/>
+<polygon points="453.0,134 445.0,129.5 445.0,138.5" fill="#67d9a0"/>
+<path d="M481.0,134 Q489.0,114 497.0,134" fill="none" stroke="#67d9a0" stroke-width="1.5"/>
+<polygon points="501.0,134 493.0,129.5 493.0,138.5" fill="#67d9a0"/>
+<path d="M433.0,110 Q441.0,90 449.0,110" fill="none" stroke="#e8b84b" stroke-width="1.5"/>
+<polygon points="453.0,110 445.0,105.5 445.0,114.5" fill="#e8b84b"/>
+<path d="M481.0,110 Q489.0,90 497.0,110" fill="none" stroke="#e8b84b" stroke-width="1.5"/>
+<polygon points="501.0,110 493.0,105.5 493.0,114.5" fill="#e8b84b"/>
+<path d="M529.0,110 Q537.0,90 545.0,110" fill="none" stroke="#e8b84b" stroke-width="1.5"/>
+<polygon points="549.0,110 541.0,105.5 541.0,114.5" fill="#e8b84b"/>
+<text x="56" y="82" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="monospace">k1：h = 5 —— 5~8 全被占，一路退到 9</text>
+<text x="56" y="106" fill="#e8b84b" font-size="10.5" text-anchor="start" font-family="monospace">k2：h = 7 —— 7~9 全被占，再退一格到 10</text>
+<path d="M296,224 Q296,230 304,230 L574,230 Q582,230 582,224" fill="none" stroke="#e87a8a" stroke-width="1.4"/><text x="439.0" y="247" fill="#e87a8a" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">原始聚集：一段连续占用的槽，哈希落进来谁都得排队走到队尾</text>
+<text x="36" y="300" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">k1 本来只跟槽 5 有关，现在跟整段 5~9 都纠缠在一起；k2 更冤 —— 它只想用槽 7，却在队尾多排了三步。</text>
+<text x="36" y="318" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">聚集会自我加强：段越长，周围落进来的 key 越要走到队尾，队尾继续外延。</text>
+<text x="36" y="340" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">改进：二次探测（h+1²、h+2²……，跳得远但会「二次聚集」）；双重散列（第二个哈希决定步长）—— 更均匀，贵一点。</text>
+<text x="36" y="364" fill="#6a6a82" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">开放寻址删元素不能把槽清空：探测链会断。留下「墓碑」标记 —— 查找时当有人、插入时当空位。</text>
+</svg>

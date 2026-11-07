@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 470" width="880" height="470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.5.2-1  哈希函数：把任何东西压成一个数</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">槽位 = h(key) % m，没有查找这个动作，只有一次函数调用</text>
+<text x="60" y="64" fill="#8a8aa0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">key：随便什么东西</text>
+<rect x="60" y="76" width="180" height="40" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.3"/>
+<text x="150" y="101" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">zhang wei</text>
+<line x1="240" y1="96" x2="298" y2="122" stroke="#67b5ef" stroke-width="1.4"/>
+<polygon points="298,122 292.0,122.0 294.0,117.5" fill="#67b5ef"/>
+<rect x="60" y="130" width="180" height="40" rx="4" fill="#14141e" stroke="#67d9a0" stroke-width="1.3"/>
+<text x="150" y="155" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">li lei</text>
+<line x1="240" y1="150" x2="298" y2="150" stroke="#67d9a0" stroke-width="1.4"/>
+<polygon points="298,150 292.5,152.4 292.5,147.6" fill="#67d9a0"/>
+<rect x="60" y="184" width="180" height="40" rx="4" fill="#14141e" stroke="#e8965a" stroke-width="1.3"/>
+<text x="150" y="209" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="monospace">13800138000</text>
+<line x1="240" y1="204" x2="298" y2="178" stroke="#e8965a" stroke-width="1.4"/>
+<polygon points="298,178 294.0,182.5 292.0,178.0" fill="#e8965a"/>
+<rect x="300" y="102" width="170" height="96" rx="6" fill="#1b1b2c" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="385" y="142" fill="#c8c8dc" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">哈希函数</text>
+<text x="385" y="164" fill="#67b5ef" font-size="12" text-anchor="middle" font-family="monospace">h(k)</text>
+<text x="385" y="184" fill="#7a7a94" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">输出固定范围内的整数</text>
+<text x="385" y="94" fill="#6a6a82" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一个 key 每次算出的值都一样</text>
+<line x1="470" y1="110" x2="508" y2="104" stroke="#67b5ef" stroke-width="1.4"/>
+<polygon points="508,104 503.0,107.3 502.2,102.4" fill="#67b5ef"/>
+<text x="516" y="108" fill="#67b5ef" font-size="11.5" text-anchor="start" font-family="monospace">h = 40971263</text>
+<text x="638" y="108" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="monospace">% 8 → 槽 7</text>
+<line x1="470" y1="148" x2="508" y2="160" stroke="#67d9a0" stroke-width="1.4"/>
+<polygon points="508,160 502.0,160.7 503.5,156.0" fill="#67d9a0"/>
+<text x="516" y="164" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="monospace">h = 21851042</text>
+<text x="638" y="164" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="monospace">% 8 → 槽 2</text>
+<line x1="470" y1="186" x2="508" y2="216" stroke="#e8965a" stroke-width="1.4"/>
+<polygon points="508,216 502.2,214.5 505.2,210.7" fill="#e8965a"/>
+<text x="516" y="220" fill="#e8965a" font-size="11.5" text-anchor="start" font-family="monospace">h = 93045108</text>
+<text x="638" y="220" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="monospace">% 8 → 槽 4</text>
+<text x="470" y="262" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">算出的编号就是槽的下标，直接落位 —— 中途不比较任何东西</text>
+<text x="104" y="302" fill="#8a8aa0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">m = 8 个槽</text>
+<rect x="104" y="316" width="84" height="46" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1"/>
+<text x="146.0" y="378" fill="#5f5f78" font-size="10" text-anchor="middle" font-family="monospace">0</text>
+<rect x="188" y="316" width="84" height="46" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1"/>
+<text x="230.0" y="378" fill="#5f5f78" font-size="10" text-anchor="middle" font-family="monospace">1</text>
+<rect x="272" y="316" width="84" height="46" rx="3" fill="#14141e" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="314.0" y="344" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">li lei</text>
+<text x="314.0" y="378" fill="#8a8aa0" font-size="10" text-anchor="middle" font-family="monospace">2</text>
+<rect x="356" y="316" width="84" height="46" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1"/>
+<text x="398.0" y="378" fill="#5f5f78" font-size="10" text-anchor="middle" font-family="monospace">3</text>
+<rect x="440" y="316" width="84" height="46" rx="3" fill="#14141e" stroke="#e8965a" stroke-width="1.4"/>
+<text x="482.0" y="344" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">13800…</text>
+<text x="482.0" y="378" fill="#8a8aa0" font-size="10" text-anchor="middle" font-family="monospace">4</text>
+<rect x="524" y="316" width="84" height="46" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1"/>
+<text x="566.0" y="378" fill="#5f5f78" font-size="10" text-anchor="middle" font-family="monospace">5</text>
+<rect x="608" y="316" width="84" height="46" rx="3" fill="#14141e" stroke="#2e2e44" stroke-width="1"/>
+<text x="650.0" y="378" fill="#5f5f78" font-size="10" text-anchor="middle" font-family="monospace">6</text>
+<rect x="692" y="316" width="84" height="46" rx="3" fill="#14141e" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="734.0" y="344" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="monospace">zhang wei</text>
+<text x="734.0" y="378" fill="#8a8aa0" font-size="10" text-anchor="middle" font-family="monospace">7</text>
+<text x="36" y="418" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">插入和查询走的是同一条路：算哈希 → 对槽数取模 → 直接到槽。全程没有「扫一遍找找看」。</text>
+<text x="36" y="436" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">槽位与 key 的内容无关、与别的 key 存不存在无关 —— 所以百万个 key 和十个 key，找一次的步骤一样多。</text>
+<text x="36" y="456" fill="#6a6a82" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不同 key 落进同一个槽（比如槽 7 已经有人）怎么办 —— 这叫冲突，是后面几节的主角。</text>
+</svg>
