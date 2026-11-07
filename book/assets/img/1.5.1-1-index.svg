@@ -1,0 +1,58 @@
+<svg width="880" height="442" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 442" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="442" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.5.1-1  下标就是偏移量</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有查找这个动作，只有一次乘法加一次加法</text>
+<rect x="60" y="84" width="88" height="46" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="104.0" y="112" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">a[0]</text>
+<text x="104.0" y="146" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">0x1000</text>
+<rect x="148" y="84" width="88" height="46" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="192.0" y="112" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">a[1]</text>
+<text x="192.0" y="146" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">0x1004</text>
+<rect x="236" y="84" width="88" height="46" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="280.0" y="112" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">a[2]</text>
+<text x="280.0" y="146" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">0x1008</text>
+<rect x="324" y="84" width="88" height="46" rx="0" fill="#2a2214" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="368.0" y="112" fill="#e8b84b" font-size="12" text-anchor="middle" font-family="monospace">a[3]</text>
+<text x="368.0" y="146" fill="#8a7a4a" font-size="9" text-anchor="middle" font-family="monospace">0x100C</text>
+<rect x="412" y="84" width="88" height="46" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="456.0" y="112" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">a[4]</text>
+<text x="456.0" y="146" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">0x1010</text>
+<rect x="500" y="84" width="88" height="46" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="544.0" y="112" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">a[5]</text>
+<text x="544.0" y="146" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">0x1014</text>
+<rect x="588" y="84" width="88" height="46" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="632.0" y="112" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">a[6]</text>
+<text x="632.0" y="146" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">0x1018</text>
+<rect x="676" y="84" width="88" height="46" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="720.0" y="112" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">a[7]</text>
+<text x="720.0" y="146" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">0x101C</text>
+<text x="52" y="146" fill="#5f5f78" font-size="8.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">首地址</text>
+<text x="368.0" y="75" fill="#e8b84b" font-size="10.5" text-anchor="middle" font-family="monospace">i = 3</text>
+<line x1="368.0" y1="78" x2="368.0" y2="83" stroke="#e8b84b" stroke-width="1.2"/>
+<rect x="60" y="200" width="760" height="46" rx="4" fill="#14141e" stroke="#2e2e44" stroke-width="1"/>
+<text x="80" y="229" fill="#67b5ef" font-size="12" text-anchor="start" font-family="monospace">地址(a[i])</text>
+<text x="186" y="229" fill="#6a6a82" font-size="12" text-anchor="start" font-family="monospace">=</text>
+<text x="206" y="229" fill="#a8a8c0" font-size="12" text-anchor="start" font-family="monospace">地址(a[0])</text>
+<text x="310" y="229" fill="#6a6a82" font-size="12" text-anchor="start" font-family="monospace">+</text>
+<text x="330" y="229" fill="#e8b84b" font-size="12" text-anchor="start" font-family="monospace">i</text>
+<text x="348" y="229" fill="#6a6a82" font-size="12" text-anchor="start" font-family="monospace">×</text>
+<text x="370" y="229" fill="#a8a8c0" font-size="12" text-anchor="start" font-family="monospace">sizeof(元素)</text>
+<text x="510" y="229" fill="#67d9a0" font-size="12" text-anchor="start" font-family="monospace">=  0x1000 + 3 × 4  =  0x100C</text>
+<rect x="60" y="286" width="210" height="52" rx="3" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="74" y="307" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">取 i</text>
+<text x="74" y="327" fill="#67b5ef" font-size="13" text-anchor="start" font-family="monospace">3</text>
+<line x1="272" y1="312" x2="314" y2="312" stroke="#3a3a52" stroke-width="1.2"/>
+<path d="M314,312 l-8,-4 l0,8 Z" fill="#3a3a52"/>
+<rect x="318" y="286" width="210" height="52" rx="3" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="332" y="307" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">乘元素大小</text>
+<text x="332" y="327" fill="#67b5ef" font-size="13" text-anchor="start" font-family="monospace">12</text>
+<line x1="530" y1="312" x2="572" y2="312" stroke="#3a3a52" stroke-width="1.2"/>
+<path d="M572,312 l-8,-4 l0,8 Z" fill="#3a3a52"/>
+<rect x="576" y="286" width="210" height="52" rx="3" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="590" y="307" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">加首地址</text>
+<text x="590" y="327" fill="#67d9a0" font-size="13" text-anchor="start" font-family="monospace">0x100C</text>
+<text x="60" y="276" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不管数组有 10 个还是 10 亿个元素，都只走这三步，指令条数一模一样</text>
+<text x="36" y="390" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">CPU 的寻址方式允许「基址 + 变址 × 比例」，比例只能是 1、2、4、8 ——</text>
+<text x="36" y="408" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">int 是 4、double 是 8，正好落在允许的集合里，所以乘法由地址生成单元顺手做掉，不占 ALU。</text>
+<text x="36" y="428" fill="#6a6a82" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">元素大小若不是 2 的幂，就得真做一次乘法 —— 这就是对齐要求存在的一个现实理由。</text>
+</svg>

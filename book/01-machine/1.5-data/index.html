@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.5 数据怎么组织：摆法决定速度</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部 电、逻辑与指令</a><span class="sep">/</span>
+    <span class="here">1.5 数据怎么组织</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">CHAPTER 1.5</span>
+    数据怎么组织：摆法决定速度
+  </h1>
+  <p class="part-sub">同样的数据，摆法不同，取一次的时间能差一百倍。这一章讲清楚差在哪</p>
+
+  <p class="lead">
+    1.4 章讲的是「程序怎么被翻译成机器码」。这一章换个角度：
+    <em>程序真正要处理的是数据，而数据得先有地方待着</em>。
+    内存是一排编号的格子，你能做的只有「往第 N 号格子写」和「从第 N 号格子读」，
+    就这两件事。
+    <br><br>
+    所谓数据结构，就是<strong>把一堆数据摆进这排格子里，摆成什么形状、取的时候按什么规矩找</strong>。
+    摆得紧凑，一次搬回来的东西就多；摆得松散，插入就方便。
+    这个取舍在纸面上看不出来（都是 O(n)，都是 O(1)），
+    落到真机上却能差五到十倍——因为现代 CPU 取一次内存要几十纳秒，
+    而算一次只要零点几纳秒，于是「取了几次」远比「算了几步」重要。
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>编号</th><th>标题</th><th>它解决什么</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>1.5.1</code></td>
+        <td><a href="1.5.1-array-list.html" style="color:#cfc6ff">数组、链表、栈、队列：四种最基础的装东西的方式</a></td>
+        <td>下标为什么能直接算地址；链表为什么理论更快实际更慢；栈和队列只允许在哪儿动手</td>
+        <td><span class="tag done">已完稿</span></td>
+      </tr>
+      <tr>
+        <td><code>1.5.2</code></td>
+        <td>哈希表：为什么它能一秒查到一百万人里的你</td>
+        <td>哈希函数在做什么；冲突了怎么办；为什么扩容要重新散列</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>1.5.3</code></td>
+        <td>树与索引：数据库为什么能翻得那么快</td>
+        <td>二叉树、B 树、B+ 树各解决什么；为什么磁盘上的树要长得又矮又胖</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>1.5.4</code></td>
+        <td>复杂度：为什么有的程序一秒钟能做完，有的要一年</td>
+        <td>大 O 到底在比什么；为什么常数因子常常比阶数更重要</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="pager">
+    <a href="../index.html">← 第 1 部目录</a>
+    <a class="next" href="1.5.1-array-list.html">1.5.1 数组、链表、栈、队列：四种最基础的装东西的方式 →</a>
+  </div>
+
+</div>
+</body>
+</html>

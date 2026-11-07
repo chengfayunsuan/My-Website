@@ -1,0 +1,66 @@
+<svg width="880" height="466" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 466" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="466" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.5.1-2  插入和删除要整体挪动</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">挪的是内存，不是指针</text>
+<text x="36" y="78" fill="#67b5ef" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">插入：在位置 2 放进 99</text>
+<text x="844" y="78" fill="#6a6a82" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价 = 挪 n − i 个元素</text>
+<rect x="78" y="92" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="138.0" y="118" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">10</text>
+<rect x="198" y="92" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="258.0" y="118" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">20</text>
+<rect x="318" y="92" width="120" height="40" rx="0" fill="#12261e" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="378.0" y="118" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="monospace">30</text>
+<rect x="438" y="92" width="120" height="40" rx="0" fill="#12261e" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="498.0" y="118" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="monospace">40</text>
+<rect x="558" y="92" width="120" height="40" rx="0" fill="#12261e" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="618.0" y="118" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="monospace">50</text>
+<rect x="678" y="92" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="738.0" y="118" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">—</text>
+<line x1="322" y1="142" x2="674" y2="142" stroke="#67d9a0" stroke-width="1.3"/>
+<line x1="322" y1="142" x2="322" y2="149" stroke="#67d9a0" stroke-width="1.3"/>
+<line x1="674" y1="142" x2="674" y2="149" stroke="#67d9a0" stroke-width="1.3"/>
+<text x="498.0" y="166" fill="#67d9a0" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这三格整体右移一格 ↓</text>
+<rect x="78" y="196" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="138.0" y="222" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">10</text>
+<rect x="198" y="196" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="258.0" y="222" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">20</text>
+<rect x="318" y="196" width="120" height="40" rx="0" fill="#2a2214" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="378.0" y="222" fill="#e8b84b" font-size="12" text-anchor="middle" font-family="monospace">99</text>
+<rect x="438" y="196" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="498.0" y="222" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">30</text>
+<rect x="558" y="196" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="618.0" y="222" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">40</text>
+<rect x="678" y="196" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="738.0" y="222" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">50</text>
+<text x="378.0" y="189" fill="#e8b84b" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">新元素</text>
+<text x="36" y="288" fill="#e87a8a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">删除：把位置 3 的 30 拿掉</text>
+<text x="844" y="288" fill="#6a6a82" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价 = 挪 n − i − 1 个元素</text>
+<rect x="78" y="304" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="138.0" y="330" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">10</text>
+<rect x="198" y="304" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="258.0" y="330" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">20</text>
+<rect x="318" y="304" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="378.0" y="330" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">99</text>
+<rect x="438" y="304" width="120" height="40" rx="0" fill="#2a1620" stroke="#e87a8a" stroke-width="1.4"/>
+<text x="498.0" y="330" fill="#e87a8a" font-size="12" text-anchor="middle" font-family="monospace">30</text>
+<rect x="558" y="304" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="618.0" y="330" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">40</text>
+<rect x="678" y="304" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="738.0" y="330" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">50</text>
+<line x1="562" y1="354" x2="794" y2="354" stroke="#e87a8a" stroke-width="1.3"/>
+<line x1="562" y1="354" x2="562" y2="361" stroke="#e87a8a" stroke-width="1.3"/>
+<line x1="794" y1="354" x2="794" y2="361" stroke="#e87a8a" stroke-width="1.3"/>
+<text x="678.0" y="378" fill="#e87a8a" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这两格左移一格 ↓</text>
+<rect x="78" y="410" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="138.0" y="436" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">10</text>
+<rect x="198" y="410" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="258.0" y="436" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">20</text>
+<rect x="318" y="410" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="378.0" y="436" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">99</text>
+<rect x="438" y="410" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="498.0" y="436" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">40</text>
+<rect x="558" y="410" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="618.0" y="436" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">50</text>
+<rect x="678" y="410" width="120" height="40" rx="0" fill="#16161f" stroke="#2e2e44" stroke-width="1"/>
+<text x="738.0" y="436" fill="#a8a8c0" font-size="12" text-anchor="middle" font-family="monospace">—</text>
+</svg>

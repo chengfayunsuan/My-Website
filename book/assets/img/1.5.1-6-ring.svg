@@ -1,0 +1,51 @@
+<svg width="880" height="436" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 436" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="436" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.5.1-6  环形队列：走到头就绕回 0</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">出队腾出来的空间，入队立刻能接着用</text>
+<circle cx="214" cy="218" r="100" fill="none" stroke="#242436" stroke-width="1.2" stroke-dasharray="3 5"/>
+<circle cx="214.0" cy="118.0" r="21" fill="#14141e" stroke="#33334a" stroke-width="1.4"/>
+<text x="214.0" y="123.0" fill="#5a5a72" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<circle cx="284.71067811865476" cy="147.28932188134524" r="21" fill="#14141e" stroke="#33334a" stroke-width="1.4"/>
+<text x="284.71067811865476" y="152.28932188134524" fill="#5a5a72" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<circle cx="314.0" cy="218.0" r="21" fill="#1b3346" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="314.0" y="223.0" fill="#8fb8d8" font-size="11" text-anchor="middle" font-family="monospace">2</text>
+<circle cx="284.71067811865476" cy="288.71067811865476" r="21" fill="#1b3346" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="284.71067811865476" y="293.71067811865476" fill="#8fb8d8" font-size="11" text-anchor="middle" font-family="monospace">3</text>
+<circle cx="214.0" cy="318.0" r="21" fill="#1b3346" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="214.0" y="323.0" fill="#8fb8d8" font-size="11" text-anchor="middle" font-family="monospace">4</text>
+<circle cx="143.28932188134524" cy="288.71067811865476" r="21" fill="#1b3346" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="143.28932188134524" y="293.71067811865476" fill="#8fb8d8" font-size="11" text-anchor="middle" font-family="monospace">5</text>
+<circle cx="114.0" cy="218.0" r="21" fill="#1b3346" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="114.0" y="223.0" fill="#8fb8d8" font-size="11" text-anchor="middle" font-family="monospace">6</text>
+<circle cx="143.28932188134524" cy="147.28932188134524" r="21" fill="#14141e" stroke="#33334a" stroke-width="1.4"/>
+<text x="143.28932188134524" y="152.28932188134524" fill="#5a5a72" font-size="11" text-anchor="middle" font-family="monospace">7</text>
+<line x1="381.0" y1="218.0" x2="341.0" y2="218.0" stroke="#e8b84b" stroke-width="1.6"/>
+<path d="M340,218 l10,-5 l0,10 Z" fill="#e8b84b"/>
+<text x="361.0" y="209.0" fill="#e8b84b" font-size="10" text-anchor="middle" font-family="monospace">head</text>
+<text x="361.0" y="238.0" fill="#8a7a4a" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">出队在这头</text>
+<line x1="143.28932188134524" y1="95.28932188134524" x2="143.28932188134524" y2="120.28932188134524" stroke="#67d9a0" stroke-width="1.6"/>
+<path d="M143,121 l-5,10 l10,0 Z" fill="#67d9a0"/>
+<text x="143.28932188134524" y="91.28932188134524" fill="#67d9a0" font-size="10" text-anchor="middle" font-family="monospace">tail</text>
+<text x="143.28932188134524" y="77.28932188134524" fill="#6a8a76" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">下一个空位</text>
+<text x="214" y="204" fill="#e8b84b" font-size="9.5" text-anchor="middle" font-family="monospace">head = 2</text>
+<text x="214" y="220" fill="#67d9a0" font-size="9.5" text-anchor="middle" font-family="monospace">tail = 7</text>
+<text x="214" y="236" fill="#8a8aa4" font-size="9.5" text-anchor="middle" font-family="monospace">count = 5</text>
+<text x="404" y="92" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三个变量就够了</text>
+<text x="404" y="116" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="monospace">int buf[8];</text>
+<text x="522" y="116" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">8 个格子绕成环</text>
+<text x="404" y="142" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="monospace">int head;</text>
+<text x="522" y="142" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">出队从这里取</text>
+<text x="404" y="168" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="monospace">int tail;</text>
+<text x="522" y="168" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">入队写这里</text>
+<text x="404" y="194" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="monospace">int count;</text>
+<text x="522" y="194" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">现在有几个</text>
+<text x="404" y="244" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">为什么不能只存 head 和 tail</text>
+<text x="404" y="266" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">空的时候 head == tail，</text>
+<text x="404" y="284" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">满的时候也是 head == tail。</text>
+<text x="404" y="302" fill="#a06a78" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">光看这两个数，分不出来。</text>
+<text x="404" y="336" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两种解法</text>
+<text x="404" y="356" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">① 多存一个 count（上图的做法，最清楚）</text>
+<text x="404" y="374" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">② 永远空一格：tail 的下一个等于 head 就算满</text>
+<text x="404" y="392" fill="#5f5f78" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">　　少 4 个字节，少用一格容量</text>
+<text x="36" y="420" fill="#6a6a82" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">next(i) = (i + 1) &amp; 7 —— 容量取 2 的幂，取模就变成一次按位与，比除法快得多。</text>
+</svg>
