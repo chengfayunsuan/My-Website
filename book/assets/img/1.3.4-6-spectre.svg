@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 448" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="900" height="448" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.3.4-6  Spectre：推测执行留下的物理痕迹</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">架构上看什么都没发生，缓存里却留下了一行被拉进来的数据</text>
+<rect x="24" y="96" width="268" height="232" rx="4" fill="#141420" stroke="#5aa9e6" stroke-width="1.2"/>
+<text x="36" y="118" fill="#5aa9e6" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">① 训练预测器</text>
+<rect x="316" y="96" width="268" height="232" rx="4" fill="#141420" stroke="#f0a44a" stroke-width="1.2"/>
+<text x="328" y="118" fill="#f0a44a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">② 沿错误路径执行</text>
+<rect x="608" y="96" width="268" height="232" rx="4" fill="#141420" stroke="#f06a7a" stroke-width="1.2"/>
+<text x="620" y="118" fill="#f06a7a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">③ 用计时把值读出来</text>
+<text x="40" y="148" fill="#b8b8cc" font-size="9.5" text-anchor="start" font-family="monospace">if (i &lt; len) {</text>
+<text x="52" y="166" fill="#b8b8cc" font-size="9.5" text-anchor="start" font-family="monospace">y = tab2[tab1[i] * 64];</text>
+<text x="40" y="184" fill="#b8b8cc" font-size="9.5" text-anchor="start" font-family="monospace">}</text>
+<text x="40" y="216" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">攻击者先用合法的 i 反复调用：</text>
+<text x="40" y="234" fill="#5aa9e6" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">跳、跳、跳、跳、跳……</text>
+<rect x="40" y="248" width="236" height="56" rx="3" fill="#171722" stroke="#2f2f44" stroke-width="1"/>
+<text x="52" y="268" fill="#9a9ab4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两位计数器已经饱和在「强跳」</text>
+<text x="52" y="288" fill="#67d9a0" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">下次一定猜「跳」，信心满格</text>
+<text x="332" y="148" fill="#7a7a94" font-size="9" text-anchor="start" font-family="monospace">tab1</text>
+<rect x="332" y="156" width="26" height="22" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<rect x="362" y="156" width="26" height="22" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<rect x="392" y="156" width="26" height="22" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<rect x="422" y="156" width="26" height="22" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<rect x="452" y="156" width="26" height="22" rx="2" fill="#1a1a26" stroke="#f06a7a" stroke-width="1.1"/>
+<rect x="482" y="156" width="26" height="22" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<text x="332" y="202" fill="#f06a7a" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">i 越界，读到不属于自己的字节</text>
+<text x="332" y="224" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">× 64 之后，拿它当 tab2 的下标</text>
+<rect x="332" y="234" width="30" height="26" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<rect x="366" y="234" width="30" height="26" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<rect x="400" y="234" width="30" height="26" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<rect x="434" y="234" width="30" height="26" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<rect x="468" y="234" width="30" height="26" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<rect x="502" y="234" width="30" height="26" rx="2" fill="#1a1a26" stroke="#4a4a62" stroke-width="1.1"/>
+<rect x="434" y="234" width="30" height="26" rx="2" fill="#2a1622" stroke="#f06a7a" stroke-width="1.8"/>
+<text x="538" y="252" fill="#5f5f78" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">…</text>
+<text x="332" y="286" fill="#f06a7a" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这一行被拉进缓存</text>
+<text x="332" y="304" fill="#7a7a94" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">（分支随后被判定猜错，全部作废）</text>
+<text x="624" y="148" fill="#8a8aa4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">给 tab2 的 256 个候选位置计时：</text>
+<rect x="624" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="635" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="646" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="657" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="668" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="679" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="690" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="701" y="232" width="8" height="34" rx="1" fill="#f06a7a" stroke="none" stroke-width="0"/>
+<rect x="712" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="723" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="734" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="745" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="756" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="767" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="778" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="789" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="800" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="811" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="822" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="833" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="844" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<rect x="855" y="190" width="8" height="76" rx="1" fill="#4a4a62" stroke="none" stroke-width="0"/>
+<line x1="620" y1="266" x2="866" y2="266" stroke="#3a3a52" stroke-width="1"/>
+<circle cx="705" cy="232" r="3" fill="#f06a7a"/>
+<text x="624" y="288" fill="#9a9ab4" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">快，说明它已经在缓存里——</text>
+<text x="624" y="306" fill="#f06a7a" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这一个下标就是那个字节的值。</text>
+<path d="M296,206.0 L312,212.0 L296,218.0" fill="none" stroke="#8a8aa0" stroke-width="1.8"/>
+<path d="M588,206.0 L604,212.0 L588,218.0" fill="none" stroke="#8a8aa0" stroke-width="1.8"/>
+<text x="24" y="366" fill="#8a8aa4" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">关键在最后一步：分支猜错后，寄存器、标志位、内存全被回滚，唯独缓存的状态没有被回滚——</text>
+<text x="24" y="384" fill="#f06a7a" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">因为它「只是性能结构，不算架构状态」。这条假设在 2018 年被证明是错的。</text>
+<text x="24" y="412" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">缓解：在敏感分支处插推测屏障（lfence）、把边界检查改成无分支的掩码算术（array_index_nospec）、</text>
+<text x="24" y="430" fill="#6a6a82" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">以及把敏感数据搬进与索引无关的地址——三种做法都在做同一件事：不给攻击者一个能作用于控制流的把手。</text>
+</svg>
