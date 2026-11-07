@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 474" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="474" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">半加器：一只异或管本位，一只与门管进位</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一对输入分两路：异或问「两个一样吗」，与门问「两个都是 1 吗」</text>
+<path d="M24,115 L200,115" fill="none" stroke="#67b5ef" stroke-width="2"/>
+<text x="24" y="104" fill="#67b5ef" font-size="13" text-anchor="start" font-family="monospace">A</text>
+<path d="M24,215 L250,215" fill="none" stroke="#e8b84b" stroke-width="2"/>
+<text x="24" y="204" fill="#e8b84b" font-size="13" text-anchor="start" font-family="monospace">B</text>
+<path d="M200,115 L200,106 L280,106" fill="none" stroke="#67b5ef" stroke-width="2"/>
+<path d="M200,115 L200,201 L280,201" fill="none" stroke="#67b5ef" stroke-width="2"/>
+<circle cx="200" cy="115" r="3" fill="#67b5ef"/>
+<path d="M250,215 L250,134 L280,134" fill="none" stroke="#e8b84b" stroke-width="2"/>
+<path d="M250,215 L250,194" fill="none" stroke="#e8b84b" stroke-width="2"/>
+<path d="M250,194 A7,7 0 0 1 250,208" fill="none" stroke="#e8b84b" stroke-width="2"/>
+<path d="M250,208 L250,229 L280,229" fill="none" stroke="#e8b84b" stroke-width="2"/>
+<circle cx="250" cy="215" r="3" fill="#e8b84b"/>
+<path d="M280,92.0 Q298.9,120 322,120 Q298.9,120 280,148.0 Q289.24,120 280,92.0 Z" fill="#1e1e30" stroke="#8a8aa0" stroke-width="2"/>
+<path d="M270,92.0 Q279.24,120 270,148.0" fill="none" stroke="#8a8aa0" stroke-width="2"/>
+<path d="M280,187.0 L297.0,187.0 A28.0,28.0 0 0 1 297.0,243.0 L280,243.0 Z" fill="#1e1e30" stroke="#8a8aa0" stroke-width="2"/>
+<text x="292" y="72" fill="#67d9a0" font-size="11" text-anchor="start" font-family="monospace">XOR</text>
+<text x="292" y="262" fill="#67d9a0" font-size="11" text-anchor="start" font-family="monospace">AND</text>
+<path d="M322,120 L368,120" fill="none" stroke="#67d9a0" stroke-width="2"/>
+<text x="376" y="125" fill="#67d9a0" font-size="15" text-anchor="start" font-family="monospace">S</text>
+<text x="392" y="125" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">本位和</text>
+<path d="M325,215 L368,215" fill="none" stroke="#e87a8a" stroke-width="2"/>
+<text x="376" y="220" fill="#e87a8a" font-size="15" text-anchor="start" font-family="monospace">C</text>
+<text x="392" y="220" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进位</text>
+<text x="470" y="72" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">四种情况，只有最后一行会进位</text>
+<rect x="470" y="80" width="58" height="26" rx="0" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="499.0" y="97" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">A</text>
+<rect x="528" y="80" width="58" height="26" rx="0" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="557.0" y="97" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">B</text>
+<rect x="586" y="80" width="58" height="26" rx="0" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="615.0" y="97" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">S</text>
+<rect x="644" y="80" width="58" height="26" rx="0" fill="#1a1a26" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="673.0" y="97" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">C</text>
+<rect x="470" y="106" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="499.0" y="123" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="528" y="106" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="557.0" y="123" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="586" y="106" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="615.0" y="123" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="644" y="106" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="673.0" y="123" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="470" y="132" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="499.0" y="149" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="528" y="132" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="557.0" y="149" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="586" y="132" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="615.0" y="149" fill="#67d9a0" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="644" y="132" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="673.0" y="149" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="470" y="158" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="499.0" y="175" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="528" y="158" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="557.0" y="175" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="586" y="158" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="615.0" y="175" fill="#67d9a0" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="644" y="158" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="673.0" y="175" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="470" y="184" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="499.0" y="201" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="528" y="184" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="557.0" y="201" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<rect x="586" y="184" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="615.0" y="201" fill="#67d9a0" font-size="11" text-anchor="middle" font-family="monospace">0</text>
+<rect x="644" y="184" width="58" height="26" rx="0" fill="#14141e" stroke="#2f2f45" stroke-width="0.8"/>
+<text x="673.0" y="201" fill="#e87a8a" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<text x="470" y="232" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">S 列 = 异或真值表　　C 列 = 与门真值表</text>
+<text x="24" y="300" fill="#67d9a0" font-size="14" text-anchor="start" font-family="monospace">S = A ⊕ B</text>
+<text x="120" y="300" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">（异或：两个不同才出 1）</text>
+<text x="24" y="326" fill="#e87a8a" font-size="14" text-anchor="start" font-family="monospace">C = A · B</text>
+<text x="120" y="326" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">（与门：两个都是 1 才出 1）</text>
+<text x="24" y="374" fill="#a0a0b8" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">为什么叫「半」：它只认自己这两个输入，</text>
+<text x="24" y="396" fill="#a0a0b8" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">完全不知道低位可能已经送来一个进位。</text>
+<text x="24" y="430" fill="#9a9ab4" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">真实加法里每一位要加的是三个数：A、B、低位进位。</text>
+<text x="24" y="452" fill="#67d9a0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">补上第三个输入，就是下一页的全加器。</text>
+</svg>

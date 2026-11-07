@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="560" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">四位行波进位：进位像水波一样一格一格推过去</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">上：四个全加器串成链　下：进位信号不是同时到位，而是一个接一个爬起来</text>
+<rect x="40" y="92" width="100" height="84" rx="5" fill="#16161f" stroke="#4a4a66" stroke-width="1.6"/>
+<text x="90" y="126" fill="#c8c8dc" font-size="13" text-anchor="middle" font-family="monospace">FA0</text>
+<text x="90" y="150" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="monospace">A0  B0</text>
+<path d="M68,74 L68,92" fill="none" stroke="#67b5ef" stroke-width="1.4"/>
+<path d="M112,74 L112,92" fill="none" stroke="#e8b84b" stroke-width="1.4"/>
+<path d="M90,176 L90,204" fill="none" stroke="#67d9a0" stroke-width="1.6"/>
+<text x="90" y="220" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="monospace">S0</text>
+<rect x="210" y="92" width="100" height="84" rx="5" fill="#16161f" stroke="#4a4a66" stroke-width="1.6"/>
+<text x="260" y="126" fill="#c8c8dc" font-size="13" text-anchor="middle" font-family="monospace">FA1</text>
+<text x="260" y="150" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="monospace">A1  B1</text>
+<path d="M238,74 L238,92" fill="none" stroke="#67b5ef" stroke-width="1.4"/>
+<path d="M282,74 L282,92" fill="none" stroke="#e8b84b" stroke-width="1.4"/>
+<path d="M260,176 L260,204" fill="none" stroke="#67d9a0" stroke-width="1.6"/>
+<text x="260" y="220" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="monospace">S1</text>
+<rect x="380" y="92" width="100" height="84" rx="5" fill="#16161f" stroke="#4a4a66" stroke-width="1.6"/>
+<text x="430" y="126" fill="#c8c8dc" font-size="13" text-anchor="middle" font-family="monospace">FA2</text>
+<text x="430" y="150" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="monospace">A2  B2</text>
+<path d="M408,74 L408,92" fill="none" stroke="#67b5ef" stroke-width="1.4"/>
+<path d="M452,74 L452,92" fill="none" stroke="#e8b84b" stroke-width="1.4"/>
+<path d="M430,176 L430,204" fill="none" stroke="#67d9a0" stroke-width="1.6"/>
+<text x="430" y="220" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="monospace">S2</text>
+<rect x="550" y="92" width="100" height="84" rx="5" fill="#16161f" stroke="#4a4a66" stroke-width="1.6"/>
+<text x="600" y="126" fill="#c8c8dc" font-size="13" text-anchor="middle" font-family="monospace">FA3</text>
+<text x="600" y="150" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="monospace">A3  B3</text>
+<path d="M578,74 L578,92" fill="none" stroke="#67b5ef" stroke-width="1.4"/>
+<path d="M622,74 L622,92" fill="none" stroke="#e8b84b" stroke-width="1.4"/>
+<path d="M600,176 L600,204" fill="none" stroke="#67d9a0" stroke-width="1.6"/>
+<text x="600" y="220" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="monospace">S3</text>
+<path d="M8,134 L40,134" fill="none" stroke="#e87a8a" stroke-width="2"/>
+<text x="8" y="124" fill="#e87a8a" font-size="10.5" text-anchor="start" font-family="monospace">C0</text>
+<path d="M140,134 L210,134" fill="none" stroke="#e87a8a" stroke-width="2"/>
+<text x="175" y="126" fill="#e87a8a" font-size="10" text-anchor="middle" font-family="monospace">C1</text>
+<path d="M310,134 L380,134" fill="none" stroke="#e87a8a" stroke-width="2"/>
+<text x="345" y="126" fill="#e87a8a" font-size="10" text-anchor="middle" font-family="monospace">C2</text>
+<path d="M480,134 L550,134" fill="none" stroke="#e87a8a" stroke-width="2"/>
+<text x="515" y="126" fill="#e87a8a" font-size="10" text-anchor="middle" font-family="monospace">C3</text>
+<path d="M650,134 L700,134" fill="none" stroke="#e87a8a" stroke-width="2"/>
+<text x="700" y="128" fill="#e87a8a" font-size="10.5" text-anchor="start" font-family="monospace">C4</text>
+<text x="700" y="150" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">溢出</text>
+<text x="24" y="272" fill="#9a9ab4" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进位信号随时间爬升（横轴是时间，不是位置）</text>
+<text x="44" y="329" fill="#e87a8a" font-size="11" text-anchor="start" font-family="monospace">C1</text>
+<line x1="90" y1="338" x2="706" y2="338" stroke="#2a2a3e" stroke-width="1"/>
+<path d="M90,338 L200,338 L200,304 L706,304" fill="none" stroke="#e8965a" stroke-width="2"/>
+<text x="206" y="298" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="monospace">↑ 1 级</text>
+<text x="44" y="377" fill="#e87a8a" font-size="11" text-anchor="start" font-family="monospace">C2</text>
+<line x1="90" y1="386" x2="706" y2="386" stroke="#2a2a3e" stroke-width="1"/>
+<path d="M90,386 L310,386 L310,352 L706,352" fill="none" stroke="#e8965a" stroke-width="2"/>
+<text x="316" y="346" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="monospace">↑ 2 级</text>
+<text x="44" y="425" fill="#e87a8a" font-size="11" text-anchor="start" font-family="monospace">C3</text>
+<line x1="90" y1="434" x2="706" y2="434" stroke="#2a2a3e" stroke-width="1"/>
+<path d="M90,434 L420,434 L420,400 L706,400" fill="none" stroke="#e8965a" stroke-width="2"/>
+<text x="426" y="394" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="monospace">↑ 3 级</text>
+<text x="44" y="473" fill="#e87a8a" font-size="11" text-anchor="start" font-family="monospace">C4</text>
+<line x1="90" y1="482" x2="706" y2="482" stroke="#2a2a3e" stroke-width="1"/>
+<path d="M90,482 L530,482 L530,448 L706,448" fill="none" stroke="#e8965a" stroke-width="2"/>
+<text x="536" y="442" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="monospace">↑ 4 级</text>
+<line x1="200" y1="308" x2="200" y2="482" stroke="#3a3a52" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="310" y1="308" x2="310" y2="482" stroke="#3a3a52" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="420" y1="308" x2="420" y2="482" stroke="#3a3a52" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="530" y1="308" x2="530" y2="482" stroke="#3a3a52" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="90" y1="506" x2="706" y2="506" stroke="#3a3a52" stroke-width="1"/>
+<text x="90" y="522" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">t = 0</text>
+<text x="706" y="522" fill="#7a7a94" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">时间 →</text>
+<text x="24" y="548" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每级进位要穿过两道门；n 位最坏要 2n 级。32 位就是 64 级，远超一个时钟周期。</text>
+</svg>

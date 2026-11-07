@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 600" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="600" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">全加器：两个半加器 + 一只或门</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第一个处理 A、B，第二个把「中间和」与低位进位再加一次，两个进位用或门合并</text>
+<path d="M24,150 L70,150" fill="none" stroke="#67b5ef" stroke-width="2"/>
+<text x="24" y="140" fill="#67b5ef" font-size="13" text-anchor="start" font-family="monospace">A</text>
+<path d="M24,190 L70,190" fill="none" stroke="#e8b84b" stroke-width="2"/>
+<text x="24" y="180" fill="#e8b84b" font-size="13" text-anchor="start" font-family="monospace">B</text>
+<path d="M170,150 L250,150" fill="none" stroke="#67d9a0" stroke-width="2"/>
+<text x="186" y="140" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="monospace">S1</text>
+<text x="186" y="172" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">中间和</text>
+<path d="M24,80 L290,80 L290,125" fill="none" stroke="#e8965a" stroke-width="2"/>
+<text x="24" y="70" fill="#e8965a" font-size="12.5" text-anchor="start" font-family="monospace">Cin</text>
+<text x="42" y="99" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">低位进位</text>
+<path d="M350,150 L470,150" fill="none" stroke="#67d9a0" stroke-width="2"/>
+<text x="478" y="156" fill="#67d9a0" font-size="15" text-anchor="start" font-family="monospace">S</text>
+<text x="496" y="156" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">本位和</text>
+<path d="M120,215 L120,335 L380,335" fill="none" stroke="#e87a8a" stroke-width="2"/>
+<text x="210" y="326" fill="#e87a8a" font-size="11.5" text-anchor="start" font-family="monospace">C1</text>
+<path d="M290,215 L290,305 L380,305" fill="none" stroke="#b58ae8" stroke-width="2"/>
+<text x="300" y="296" fill="#b58ae8" font-size="11.5" text-anchor="start" font-family="monospace">C2</text>
+<rect x="70" y="125" width="100" height="90" rx="6" fill="#16161f" stroke="#4a4a66" stroke-width="1.6"/>
+<text x="120.0" y="166.0" fill="#67d9a0" font-size="13.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">半加器 1</text>
+<text x="120.0" y="186.0" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">⊕ 与 &amp;</text>
+<rect x="250" y="125" width="100" height="90" rx="6" fill="#16161f" stroke="#4a4a66" stroke-width="1.6"/>
+<text x="300.0" y="166.0" fill="#67d9a0" font-size="13.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">半加器 2</text>
+<text x="300.0" y="186.0" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">⊕ 与 &amp;</text>
+<rect x="380" y="270" width="90" height="80" rx="6" fill="#16161f" stroke="#4a4a66" stroke-width="1.6"/>
+<text x="425.0" y="306.0" fill="#e87a8a" font-size="13.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">或门</text>
+<text x="425.0" y="326.0" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">≥ 1</text>
+<path d="M470,320 L556,320" fill="none" stroke="#e87a8a" stroke-width="2"/>
+<text x="564" y="326" fill="#e87a8a" font-size="14" text-anchor="start" font-family="monospace">Cout</text>
+<text x="564" y="346" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进位</text>
+<text x="564" y="120" fill="#9a9ab4" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三个输入</text>
+<text x="564" y="140" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="monospace">A · B · Cin</text>
+<text x="564" y="178" fill="#9a9ab4" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两个输出</text>
+<text x="564" y="198" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">S  本位和</text>
+<text x="564" y="216" fill="#e87a8a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Cout  进位</text>
+<text x="24" y="396" fill="#9a9ab4" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">从低位送来的进位，到送给高位的进位，只穿过两道门：</text>
+<text x="24" y="428" fill="#e8965a" font-size="12.5" text-anchor="start" font-family="monospace">Cin  →  半加器 2 的与门  →  或门  →  Cout</text>
+<text x="24" y="456" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这两级门延迟，就是进位链每一节的长度。位数越多，串得越长。</text>
+<text x="24" y="516" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="monospace">S = A ⊕ B ⊕ Cin　　　Cout = A·B + A·Cin + B·Cin</text>
+<text x="24" y="548" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进位那一条，和上一节的「三人多数表决器」长得一模一样——</text>
+<text x="24" y="570" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三个 1 位相加，和最多是 3；往高位送不送，看有没有过半。</text>
+</svg>
