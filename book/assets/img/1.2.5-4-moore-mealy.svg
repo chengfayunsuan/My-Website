@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 432" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="432" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.2.5-4  同一个功能，两种写法：差一拍</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">检测「连续两个 1」就报警 —— Moore 等状态，Mealy 直接看输入</text>
+<text x="24" y="156" fill="#e8b84b" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">CLK</text>
+<line x1="150" y1="150" x2="646" y2="150" stroke="#24243a" stroke-width="1"/>
+<text x="24" y="214" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">IN</text>
+<line x1="150" y1="208" x2="646" y2="208" stroke="#24243a" stroke-width="1"/>
+<text x="24" y="282" fill="#67b5ef" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Moore</text>
+<line x1="150" y1="276" x2="646" y2="276" stroke="#24243a" stroke-width="1"/>
+<text x="24" y="342" fill="#b58ae8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Mealy</text>
+<line x1="150" y1="336" x2="646" y2="336" stroke="#24243a" stroke-width="1"/>
+<path d="M150,126 L174,126 L174,150 L212,150 L212,126 L236,126 L236,150 L274,150 L274,126 L298,126 L298,150 L336,150 L336,126 L360,126 L360,150 L398,150 L398,126 L422,126 L422,150 L460,150 L460,126 L484,126 L484,150 L522,150 L522,126 L546,126 L546,150 L584,150 L584,126 L608,126 L608,150" fill="none" stroke="#e8b84b" stroke-width="2.4"/>
+<path d="M150,208 L212,208 L212,184 L274,184 L274,184 L336,184 L336,208 L398,208 L398,184 L460,184 L460,184 L522,184 L522,208 L584,208 L584,184" fill="none" stroke="#67d9a0" stroke-width="2.4"/>
+<path d="M150,276 L212,276 L212,276 L274,276 L274,276 L336,276 L336,252 L398,252 L398,276 L460,276 L460,276 L522,276 L522,252 L584,252 L584,276" fill="none" stroke="#67b5ef" stroke-width="2.4"/>
+<path d="M150,336 L274,336 L274,312 L460,312 L460,312 L494,312 L494,336 L502,336 L502,312 L522,312 L522,336 L646,336 L646,336" fill="none" stroke="#b58ae8" stroke-width="2.4"/>
+<line x1="212" y1="164" x2="212" y2="348" stroke="#2a2a3e" stroke-width="1" stroke-dasharray="2 4"/>
+<line x1="274" y1="164" x2="274" y2="348" stroke="#2a2a3e" stroke-width="1" stroke-dasharray="2 4"/>
+<line x1="336" y1="164" x2="336" y2="348" stroke="#2a2a3e" stroke-width="1" stroke-dasharray="2 4"/>
+<line x1="398" y1="164" x2="398" y2="348" stroke="#2a2a3e" stroke-width="1" stroke-dasharray="2 4"/>
+<line x1="460" y1="164" x2="460" y2="348" stroke="#2a2a3e" stroke-width="1" stroke-dasharray="2 4"/>
+<line x1="522" y1="164" x2="522" y2="348" stroke="#2a2a3e" stroke-width="1" stroke-dasharray="2 4"/>
+<line x1="584" y1="164" x2="584" y2="348" stroke="#2a2a3e" stroke-width="1" stroke-dasharray="2 4"/>
+<line x1="494" y1="184" x2="494" y2="230" stroke="#c86a7a" stroke-width="1" stroke-dasharray="2 3"/>
+<line x1="502" y1="184" x2="502" y2="230" stroke="#c86a7a" stroke-width="1" stroke-dasharray="2 3"/>
+<text x="510" y="244" fill="#e87a8a" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">输入毛刺</text>
+<text x="508" y="370" fill="#e87a8a" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">原样穿到输出</text>
+<line x1="274" y1="380" x2="336" y2="380" stroke="#e8b84b" stroke-width="1.4"/>
+<path d="M274,380 l7,-3.5 l0,7 z" fill="#e8b84b"/>
+<path d="M336,380 l-7,-3.5 l0,7 z" fill="#e8b84b"/>
+<text x="305.0" y="368" fill="#e8b84b" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一个时钟周期</text>
+<line x1="274" y1="338" x2="274" y2="380" stroke="#4a4a62" stroke-width="1" stroke-dasharray="2 3"/>
+<line x1="336" y1="278" x2="336" y2="380" stroke="#4a4a62" stroke-width="1" stroke-dasharray="2 3"/>
+<text x="24" y="404" fill="#9a9ab4" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Mealy 在第 2 个 1 到来时就拉高；Moore 要等状态进 S2，慢一个周期。</text>
+<text x="24" y="424" fill="#6a6a84" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">但 Moore 的输出只在时钟沿变化，干净；Mealy 的高电平宽度取决于输入能维持多久，中间还带着输入的毛刺。</text>
+</svg>

@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 486" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="486" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">1.2.5-3  同一排触发器，四种用法</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">触发器数量一样，区别只在「数据从哪一头进、从哪一头出」</text>
+<rect x="20" y="62" width="360" height="182" rx="4" fill="#14141e" stroke="#2a2a3e" stroke-width="1.2"/>
+<text x="34" y="84" fill="#b58ae8" font-size="12" text-anchor="start" font-family="monospace" font-weight="bold">SISO</text>
+<text x="86" y="84" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">串行进 · 串行出</text>
+<path d="M30,149.0 L55.0,149.0" stroke="#e8b84b" stroke-width="2" fill="none"/>
+<path d="M61,149.0 L55.0,152.2 L55.0,145.8 z" fill="#e8b84b"/>
+<text x="32" y="142.0" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="monospace">IN</text>
+<rect x="62" y="132" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="83.0" y="153" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M105,149.0 L123.0,149.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M129,149.0 L123.0,152.2 L123.0,145.8 z" fill="#67b5ef"/>
+<rect x="130" y="132" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="151.0" y="153" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M173,149.0 L191.0,149.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M197,149.0 L191.0,152.2 L191.0,145.8 z" fill="#67b5ef"/>
+<rect x="198" y="132" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="219.0" y="153" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M241,149.0 L259.0,149.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M265,149.0 L259.0,152.2 L259.0,145.8 z" fill="#67b5ef"/>
+<rect x="266" y="132" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="287.0" y="153" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M309,149.0 L358.0,149.0" stroke="#e8b84b" stroke-width="2" fill="none"/>
+<path d="M364,149.0 L358.0,152.2 L358.0,145.8 z" fill="#e8b84b"/>
+<text x="338" y="142.0" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="monospace">OUT</text>
+<rect x="400" y="62" width="360" height="182" rx="4" fill="#14141e" stroke="#2a2a3e" stroke-width="1.2"/>
+<text x="414" y="84" fill="#b58ae8" font-size="12" text-anchor="start" font-family="monospace" font-weight="bold">SIPO</text>
+<text x="466" y="84" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">串行进 · 并行出</text>
+<path d="M410,149.0 L435.0,149.0" stroke="#e8b84b" stroke-width="2" fill="none"/>
+<path d="M441,149.0 L435.0,152.2 L435.0,145.8 z" fill="#e8b84b"/>
+<text x="412" y="142.0" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="monospace">IN</text>
+<rect x="442" y="132" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="463.0" y="153" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M485,149.0 L503.0,149.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M509,149.0 L503.0,152.2 L503.0,145.8 z" fill="#67b5ef"/>
+<rect x="510" y="132" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="531.0" y="153" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M553,149.0 L571.0,149.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M577,149.0 L571.0,152.2 L571.0,145.8 z" fill="#67b5ef"/>
+<rect x="578" y="132" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="599.0" y="153" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M621,149.0 L639.0,149.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M645,149.0 L639.0,152.2 L639.0,145.8 z" fill="#67b5ef"/>
+<rect x="646" y="132" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="667.0" y="153" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M689,149.0 L738.0,149.0" stroke="#e8b84b" stroke-width="2" fill="none"/>
+<path d="M744,149.0 L738.0,152.2 L738.0,145.8 z" fill="#e8b84b"/>
+<text x="718" y="142.0" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="monospace">OUT</text>
+<path d="M463.0,167 L463.0,198.0" stroke="#67b5ef" stroke-width="1.6" fill="none"/>
+<path d="M463.0,204 L459.8,198.0 L466.2,198.0 z" fill="#67b5ef"/>
+<text x="463.0" y="220" fill="#67b5ef" font-size="9" text-anchor="middle" font-family="monospace">Q0</text>
+<path d="M531.0,167 L531.0,198.0" stroke="#67b5ef" stroke-width="1.6" fill="none"/>
+<path d="M531.0,204 L527.8,198.0 L534.2,198.0 z" fill="#67b5ef"/>
+<text x="531.0" y="220" fill="#67b5ef" font-size="9" text-anchor="middle" font-family="monospace">Q1</text>
+<path d="M599.0,167 L599.0,198.0" stroke="#67b5ef" stroke-width="1.6" fill="none"/>
+<path d="M599.0,204 L595.8,198.0 L602.2,198.0 z" fill="#67b5ef"/>
+<text x="599.0" y="220" fill="#67b5ef" font-size="9" text-anchor="middle" font-family="monospace">Q2</text>
+<path d="M667.0,167 L667.0,198.0" stroke="#67b5ef" stroke-width="1.6" fill="none"/>
+<path d="M667.0,204 L663.8,198.0 L670.2,198.0 z" fill="#67b5ef"/>
+<text x="667.0" y="220" fill="#67b5ef" font-size="9" text-anchor="middle" font-family="monospace">Q3</text>
+<rect x="20" y="258" width="360" height="182" rx="4" fill="#14141e" stroke="#2a2a3e" stroke-width="1.2"/>
+<text x="34" y="280" fill="#b58ae8" font-size="12" text-anchor="start" font-family="monospace" font-weight="bold">PISO</text>
+<text x="86" y="280" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">并行进 · 串行出</text>
+<rect x="62" y="328" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="83.0" y="349" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M105,345.0 L123.0,345.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M129,345.0 L123.0,348.2 L123.0,341.8 z" fill="#67b5ef"/>
+<rect x="130" y="328" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="151.0" y="349" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M173,345.0 L191.0,345.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M197,345.0 L191.0,348.2 L191.0,341.8 z" fill="#67b5ef"/>
+<rect x="198" y="328" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="219.0" y="349" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M241,345.0 L259.0,345.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M265,345.0 L259.0,348.2 L259.0,341.8 z" fill="#67b5ef"/>
+<rect x="266" y="328" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="287.0" y="349" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M309,345.0 L358.0,345.0" stroke="#e8b84b" stroke-width="2" fill="none"/>
+<path d="M364,345.0 L358.0,348.2 L358.0,341.8 z" fill="#e8b84b"/>
+<text x="338" y="338.0" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="monospace">OUT</text>
+<line x1="83.0" y1="304" x2="287.0" y2="304" stroke="#67d9a0" stroke-width="1.8"/>
+<line x1="83.0" y1="304" x2="83.0" y2="327" stroke="#67d9a0" stroke-width="1.8"/>
+<circle cx="83.0" cy="304" r="2.8" fill="#67d9a0"/>
+<line x1="151.0" y1="304" x2="151.0" y2="327" stroke="#67d9a0" stroke-width="1.8"/>
+<circle cx="151.0" cy="304" r="2.8" fill="#67d9a0"/>
+<line x1="219.0" y1="304" x2="219.0" y2="327" stroke="#67d9a0" stroke-width="1.8"/>
+<circle cx="219.0" cy="304" r="2.8" fill="#67d9a0"/>
+<line x1="287.0" y1="304" x2="287.0" y2="327" stroke="#67d9a0" stroke-width="1.8"/>
+<circle cx="287.0" cy="304" r="2.8" fill="#67d9a0"/>
+<text x="34" y="300" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">并行入</text>
+<rect x="400" y="258" width="360" height="182" rx="4" fill="#14141e" stroke="#2a2a3e" stroke-width="1.2"/>
+<text x="414" y="280" fill="#b58ae8" font-size="12" text-anchor="start" font-family="monospace" font-weight="bold">PIPO</text>
+<text x="466" y="280" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">并行进 · 并行出</text>
+<rect x="442" y="328" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="463.0" y="349" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M485,345.0 L503.0,345.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M509,345.0 L503.0,348.2 L503.0,341.8 z" fill="#67b5ef"/>
+<rect x="510" y="328" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="531.0" y="349" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M553,345.0 L571.0,345.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M577,345.0 L571.0,348.2 L571.0,341.8 z" fill="#67b5ef"/>
+<rect x="578" y="328" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="599.0" y="349" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M621,345.0 L639.0,345.0" stroke="#67b5ef" stroke-width="1.8" fill="none"/>
+<path d="M645,345.0 L639.0,348.2 L639.0,341.8 z" fill="#67b5ef"/>
+<rect x="646" y="328" width="42" height="34" rx="2" fill="#191926" stroke="#6a6a8e" stroke-width="1.4"/>
+<text x="667.0" y="349" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="monospace">FF</text>
+<path d="M689,345.0 L738.0,345.0" stroke="#e8b84b" stroke-width="2" fill="none"/>
+<path d="M744,345.0 L738.0,348.2 L738.0,341.8 z" fill="#e8b84b"/>
+<text x="718" y="338.0" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="monospace">OUT</text>
+<line x1="463.0" y1="304" x2="667.0" y2="304" stroke="#67d9a0" stroke-width="1.8"/>
+<line x1="463.0" y1="304" x2="463.0" y2="327" stroke="#67d9a0" stroke-width="1.8"/>
+<circle cx="463.0" cy="304" r="2.8" fill="#67d9a0"/>
+<line x1="531.0" y1="304" x2="531.0" y2="327" stroke="#67d9a0" stroke-width="1.8"/>
+<circle cx="531.0" cy="304" r="2.8" fill="#67d9a0"/>
+<line x1="599.0" y1="304" x2="599.0" y2="327" stroke="#67d9a0" stroke-width="1.8"/>
+<circle cx="599.0" cy="304" r="2.8" fill="#67d9a0"/>
+<line x1="667.0" y1="304" x2="667.0" y2="327" stroke="#67d9a0" stroke-width="1.8"/>
+<circle cx="667.0" cy="304" r="2.8" fill="#67d9a0"/>
+<text x="414" y="300" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">并行入</text>
+<path d="M463.0,363 L463.0,394.0" stroke="#67b5ef" stroke-width="1.6" fill="none"/>
+<path d="M463.0,400 L459.8,394.0 L466.2,394.0 z" fill="#67b5ef"/>
+<text x="463.0" y="416" fill="#67b5ef" font-size="9" text-anchor="middle" font-family="monospace">Q0</text>
+<path d="M531.0,363 L531.0,394.0" stroke="#67b5ef" stroke-width="1.6" fill="none"/>
+<path d="M531.0,400 L527.8,394.0 L534.2,394.0 z" fill="#67b5ef"/>
+<text x="531.0" y="416" fill="#67b5ef" font-size="9" text-anchor="middle" font-family="monospace">Q1</text>
+<path d="M599.0,363 L599.0,394.0" stroke="#67b5ef" stroke-width="1.6" fill="none"/>
+<path d="M599.0,400 L595.8,394.0 L602.2,394.0 z" fill="#67b5ef"/>
+<text x="599.0" y="416" fill="#67b5ef" font-size="9" text-anchor="middle" font-family="monospace">Q2</text>
+<path d="M667.0,363 L667.0,394.0" stroke="#67b5ef" stroke-width="1.6" fill="none"/>
+<path d="M667.0,400 L663.8,394.0 L670.2,394.0 z" fill="#67b5ef"/>
+<text x="667.0" y="416" fill="#67b5ef" font-size="9" text-anchor="middle" font-family="monospace">Q3</text>
+<text x="24" y="470" fill="#9a9ab4" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">SISO 当延迟线用（打拍、跨域同步）；SIPO 是串口接收；PISO 是串口发送；PIPO 是流水线里最常见的一级。</text>
+</svg>
