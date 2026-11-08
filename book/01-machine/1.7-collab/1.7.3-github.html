@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.7.3 GitHub 与开源协作：issue、PR、review</title>
+<link rel="stylesheet" href="../../style.css">
+<style>p code, li code, td code { overflow-wrap: anywhere; }</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+    <a href="index.html">1.7 代码怎么协作</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部</a><span class="sep">/</span>
+    <a href="index.html">1.7 代码怎么协作</a><span class="sep">/</span>
+    <span class="here">1.7.3</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">1.7.3</span>
+    GitHub 与开源协作：issue、PR、review
+  </h1>
+  <p class="part-sub">
+    约 0.6 万字 · 6 张图 · 读完你能说清 fork 和 clone 差在哪、
+    一个 PR 要过几道关、许可证的传染性边界在哪，
+    以及为什么有些 PR 三个月没人理
+  </p>
+
+  <div class="lead">
+    <b>上一节收尾说：fork 能让陌生人贡献代码，是因为 Git 的仓库是去中心化的。</b>
+    这一节讲这套机制在真实世界里是怎么运转的。
+    <br><br>
+    它和团队内部协作有个根本区别：<strong>你不认识对方，对方也没有写权限</strong>。
+    没有写权限，就不能直接推；不认识，就不知道该不该信他的代码。
+    于是所有开源协作都在解决这两个问题：<em>怎么让外人提交</em>（fork + PR）、
+    <strong>怎么判断该不该收</strong>（review + CI + 治理规则）。
+    <br><br>
+    这套机制运行了二十多年，产出了 Linux、Python、Kubernetes 这样的东西，
+    也积累了大量的挫败感——「我的 PR 三个月没人理」「维护者说话太冲」「这么明显的 bug 为什么不修」。
+    这一节除了讲机制，也会讲这些挫败感背后的结构性原因。
+  </div>
+
+  <div class="minitoc">
+    <h4>本节的小部分</h4>
+    <ol>
+      <li><a href="#p1">1 fork 和 clone 差在哪</a></li>
+      <li><a href="#p2">2 PR 的本质是一个请求</a></li>
+      <li><a href="#p3">3 Issue 不只是报 bug</a></li>
+      <li><a href="#p4">4 一个 PR 要过几道关</a></li>
+      <li><a href="#p5">5 为什么有些 PR 三个月没人理</a></li>
+      <li><a href="#p6">6 治理结构：谁说了算</a></li>
+      <li><a href="#p7">7 许可证：你贡献的代码归谁</a></li>
+      <li><a href="#p8">8 维护者的日常</a></li>
+      <li><a href="#p9">9 开源不等于免费劳动力</a></li>
+      <li><a href="#p10">10 它撑不起什么</a></li>
+      <li><a href="#p11">11 第 1 部到这里讲完了</a></li>
+      <li><a href="#p12">12 下一部：一台机器，很多人用</a></li>
+    </ol>
+  </div>
+
+  <h2 id="p1"><span class="h2num">1.7.3-1</span>fork 和 clone 差在哪</h2>
+
+  <p>
+    这两个词长得像，作用完全不同，混淆了会浪费很多时间。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.3-1-fork.svg" target="_blank">
+    <img src="../../assets/img/1.7.3-1-fork.svg" alt="三个盒子：右上角是原仓库（你没有写权限），右下角是你 fork 的仓库（你有全部权限），下方是你本地；箭头分别表示 fork、clone、fetch upstream、PR" loading="lazy"></a>
+    <figcaption>图 1.7.3-1　fork 与 clone。<em>fork 是服务端复制，clone 是下载到本地</em>。fork 出来的仓库所有权归你，和原仓库没有任何自动同步关系；clone 出来的只是本地的一份工作副本，推回去的地址由 remote 决定。所以「同步最新代码」的正确做法是从 upstream 拉，不是从 origin 拉。</figcaption>
+  </figure>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th></th><th>clone</th><th>fork</th></tr></thead>
+    <tbody>
+      <tr><td>发生在哪</td><td>你的机器上</td><td>GitHub 的服务器上</td></tr>
+      <tr><td>结果</td><td>本地多一份工作副本</td><td>你名下多一个仓库</td></tr>
+      <tr><td>要权限吗</td><td>只要能读</td><td>只要能读（fork 不需要写权限）</td></tr>
+      <tr><td>和原仓库的关系</td><td>remote 指向它</td><td>只是记录了一个「上游」链接</td></tr>
+      <tr><td>用来干什么</td><td>干活</td><td>提交改动</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    典型的工作流是这样的：
+  </p>
+
+  <pre><code># 1. 在网页上点 Fork（服务端复制一份到你名下）
+# 2. 下载你自己的那份
+git clone git@github.com:you/project.git
+
+# 3. 把原仓库加为第二个 remote
+git remote add upstream https://github.com/original/project.git
+
+# 4. 干活前后同步上游
+git fetch upstream
+git rebase upstream/main
+
+# 5. 推到你自己的 fork，然后在网页上发 PR
+git push origin my-feature</code></pre>
+
+  <p>
+    第 3 步是新手最容易漏的。不加上游，你 fork 的那份就永远停在 fork 那一刻，
+    越差越远，最后连 PR 都发不出去（因为冲突太多）。
+  </p>
+
+  <h2 id="p2"><span class="h2num">1.7.3-2</span>PR 的本质是一个请求</h2>
+
+  <p>
+    Pull Request 这个名字起得很准：它的字面意思是<strong>「请你 pull 我的改动」</strong>。
+    它不是一次合并，是一个<em>请求</em>；不是 Git 的功能，是 GitHub 加的一层包装。
+  </p>
+
+  <p>
+    这层包装的价值在于：它把一个「分支」变成了一个<strong>可以讨论的东西</strong>。
+    一个 PR 页面里同时装着：
+  </p>
+
+  <p>
+    改动的 diff、讨论的每一轮、CI 的每一次结果、reviewer 的每一条评论、
+    以及最后 merge 时的选项。<em>所有决策的上下文都在一个页面上</em>——
+    这是 GitHub 对开源协作最大的贡献，比 Git 本身更影响工作方式。
+  </p>
+
+  <p>
+    一个 PR 的生命周期大概是：
+  </p>
+
+  <div class="tw"><table style="min-width:520px">
+    <thead><tr><th>状态</th><th>含义</th></tr></thead>
+    <tbody>
+      <tr><td>Draft</td><td>还在写，别急着看</td></tr>
+      <tr><td>Open</td><td>写完了，请 review</td></tr>
+      <tr><td>Changes requested</td><td>有问题，回去改</td></tr>
+      <tr><td>Approved</td><td>可以合了</td></tr>
+      <tr><td>Merged / Closed</td><td>合了 / 没合就关了</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    「Closed 但没 merge」这个状态很常见，而且往往是好事：
+    可能讨论之后发现方向不对，可能已经有别的 PR 解决了，
+    可能维护者觉得这个改动不该进主干。<em>被拒绝的 PR 不等于失败的贡献</em>，
+    它至少让讨论发生了。
+  </p>
+
+  <h2 id="p3"><span class="h2num">1.7.3-3</span>Issue 不只是报 bug</h2>
+
+  <p>
+    issue 这个词容易误解成「问题」。实际上它是项目的<strong>公共讨论区</strong>，
+    装的东西大概分四类：
+  </p>
+
+  <div class="tw"><table style="min-width:520px">
+    <thead><tr><th>类型</th><th>例子</th><th>通常怎么处理</th></tr></thead>
+    <tbody>
+      <tr><td>Bug 报告</td><td>「导出 CSV 时金额少两位」</td><td>复现 → 修 → 关</td></tr>
+      <tr><td>功能请求</td><td>「能不能支持批量导入」</td><td>讨论 → 排期 / 拒绝</td></tr>
+      <tr><td>提问</td><td>「这个配置项是什么意思」</td><td>回答 → 转成文档 → 关</td></tr>
+      <tr><td>设计讨论</td><td>「v3 的 API 应该长什么样」</td><td>可能开几个月</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    写得好的 bug 报告有一个共同的骨架：<strong>能让人照着做一遍</strong>。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.3-2-issue.svg" target="_blank">
+    <img src="../../assets/img/1.7.3-2-issue.svg" alt="左边是一个写得好的 issue：标题、环境、复现步骤、期望、实际、附件六个字段都填全；右边是一个被关掉的 issue：标题只有「有 bug」，内容只有一句「导出不对，麻烦修一下」" loading="lazy"></a>
+    <figcaption>图 1.7.3-2　好 issue 和差 issue。<em>差别不在礼貌，在信息量</em>。维护者看不到你的屏幕，也说不出「你说的是哪个版本」——他一天要处理几十个，最省事的做法就是打上 needs-info 然后关掉。这不是冷漠，是没有第二种处理方式。</figcaption>
+  </figure>
+
+  <p>
+    成熟的项目会把这份骨架做进 <strong>issue 模板</strong>：
+    在 <code>.github/ISSUE_TEMPLATE/</code> 下放几个 Markdown 文件，
+    你点「新建 issue」的时候表单会预填好字段。
+  </p>
+
+  <pre><code>---
+name: Bug report
+about: 报告一个能复现的问题
+---
+- 版本：
+- 系统：
+- 复现步骤：
+  1.
+  2.
+- 期望：
+- 实际：</code></pre>
+
+  <p>
+    这不是形式主义。它把「该提供什么信息」<em>从维护者的口头要求，变成了界面的一部分</em>——
+    好的模板能让「信息不足」的 issue 少一半，等于给维护者省下几个小时。
+  </p>
+
+  <p>
+    值得注意的是最后一行：<strong>很多「功能请求」最后会变成文档改进</strong>。
+    因为提问的人不是唯一困惑的人，把答案写进文档，能一次性解决后面所有人的问题。
+    <em>这是开源项目里性价比最高的一种贡献——不用写代码</em>。
+  </p>
+
+  <h2 id="p4"><span class="h2num">1.7.3-4</span>一个 PR 要过几道关</h2>
+
+  <p>
+    从「提交」到「合进主干」，中间通常有五道：
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.3-3-pipeline.svg" target="_blank">
+    <img src="../../assets/img/1.7.3-3-pipeline.svg" alt="七个节点的横向流程：提交 PR、CI 跑测试、人工 review、改、再 CI、approve、merge；下方一条红色虚线从 approve 指回「改」，表示不通过要打回" loading="lazy"></a>
+    <figcaption>图 1.7.3-3　PR 的流水线。<em>现实里这条链通常不是走一遍就完</em>。常见的往返是：reviewer 说「这里加个测试」→ 改 → 再跑 CI → reviewer 又说「命名能不能换一个」→ 再改。三轮下来一周就过去了。这不是刁难，是因为每轮只看一小块，比一次看全部更容易发现问题。</figcaption>
+  </figure>
+
+  <p>
+    想让 PR 合得快，四件事最有效，按性价比排：
+  </p>
+
+  <p>
+    <strong>一是改小。</strong>两百行以内。超过这个数，reviewer 的注意力就撑不住了（1.7.2 讲过这条曲线）。
+  </p>
+
+  <p>
+    <strong>二是带测试。</strong>没有测试的改动，维护者要自己验证一遍才敢合——那是他的时间成本。
+  </p>
+
+  <p>
+    <strong>三是描述里写清「为什么」。</strong>代码能看出「改了什么」，看不出「为什么改」。
+    一段能节省十分钟的三行描述，可能让 PR 早两周被合。
+  </p>
+
+  <p>
+    <strong>四是主动回应。</strong>reviewer 提了三条，你改了两条、第三条解释为什么不改——
+    这比沉默好得多。<em>沉默会被理解成「他不在意」</em>。
+  </p>
+
+  <p>
+    CI 那一环值得多说一句，因为它常被当成黑盒。GitHub Actions 的运行方式是：
+    <strong>仓库里放一个 yml 文件，描述「在什么事件发生时、按什么步骤跑」</strong>。
+  </p>
+
+  <pre><code>on: [pull_request]          # 有 PR 就触发
+jobs:
+  test:
+    runs-on: ubuntu-latest  # 起一台临时虚拟机
+    steps:
+      - uses: actions/checkout@v4   # 把代码拉下来
+      - run: npm ci                 # 装依赖
+      - run: npm test               # 跑测试</code></pre>
+
+  <p>
+    所以「CI 挂了」通常不是玄学，是某一步命令真的退出了非零状态。
+    <em>点开那次运行的日志，能看到它在哪一行停的</em>——
+    这个动作能解决大部分「为什么 CI 不过」的困惑。
+  </p>
+
+  <h2 id="p5"><span class="h2num">1.7.3-5</span>为什么有些 PR 三个月没人理</h2>
+
+  <p>
+    这是开源社区最常见的挫败感来源。原因通常不是「维护者傲慢」，而是下面五种之一：
+  </p>
+
+  <p>
+    <strong>一是他根本没时间。</strong>
+    很多热门的库由一两个人在业余时间维护，一天能挤出两小时。
+    这两小时要先处理安全漏洞、再修崩溃、再看 issue，轮到 PR 时已经没了。
+  </p>
+
+  <p>
+    <strong>二是 PR 太大，看不完。</strong>
+    八百行的 PR，reviewer 打开就想关掉。不是不想看，是<em>看了也看不出问题</em>，
+    那不如不看。
+  </p>
+
+  <p>
+    <strong>三是不符合项目方向。</strong>
+    你想要的功能很好，但维护者已经决定「这个库只做 A，不做 B」。
+    这种拒绝和你写得好不好无关。
+  </p>
+
+  <p>
+    <strong>四是没有测试、没有文档、或者改了公共接口。</strong>
+    前两个增加他的工作量，后一个会破坏别人的代码。
+  </p>
+
+  <p>
+    <strong>五是态度。</strong>
+    「这个 bug 这么明显你们为什么不修」「这个功能必须加」——
+    这种语气会让 PR 排到最后。<em>不是因为玻璃心，是因为没人愿意在自己唯一的休息时间里跟人吵架</em>。
+  </p>
+
+  <div class="note">
+    <b>一个实用判断：</b>
+    发 PR 之前，先翻这个项目最近三个月的合并记录。
+    <strong>如果它三个月没合过任何 PR，那你的 PR 大概率也不会被合</strong>——
+    不是你的问题，是这个项目已经进入「只维护不开发」的状态了。
+    <em>与其等，不如 fork 一份自己维护</em>。这正是 fork 机制存在的意义。
+  </div>
+
+  <p>
+    最后补一句：<strong>对开源项目来说，最有价值的贡献往往不是代码</strong>。
+  </p>
+
+  <p>
+    把一段看不懂的文档改清楚、把中文文档翻译成英文、把一个模糊的 bug 复现出来并写成步骤、
+    给新来的 issue 打标签分类、在讨论区回答别人的问题——
+    这些事维护者最缺人做，也最容易上手。
+  </p>
+
+  <p>
+    <em>而且它们有一个共同的好处：做这些事的过程中，你会真的读懂这个项目</em>。
+    读懂之后再提代码 PR，质量和成功率都完全不同。
+  </p>
+
+  <h2 id="p6"><span class="h2num">1.7.3-6</span>治理结构：谁说了算</h2>
+
+  <p>
+    同一个 PR，在不同的项目里命运完全不同。差别不在代码质量，在<strong>决策权在谁手里</strong>。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.3-4-governance.svg" target="_blank">
+    <img src="../../assets/img/1.7.3-4-governance.svg" alt="三张卡片：个人项目由一个人（BDFL）决定，典型是大量个人工具和库；基金会由委员会投票，典型是 Apache、Linux、CNCF；公司主导由公司内部团队决定，典型是 React、Kubernetes" loading="lazy"></a>
+    <figcaption>图 1.7.3-4　三种治理结构。<em>看清结构之后，很多困惑就有答案了</em>：「为什么我的 PR 没人理」可能因为项目是公司主导的，路线不由社区定；「为什么这个明显的 bug 拖了两年」可能因为唯一的维护者已经没时间了。选一个项目来贡献之前，先看它的治理结构和最近半年的活跃度——比看 star 数有用得多。</figcaption>
+  </figure>
+
+  <p>
+    三种结构各有各的毛病：
+  </p>
+
+  <p>
+    <strong>个人项目</strong>决策最快（一个人点头就行），但也最脆弱——
+    作者一旦没兴趣，项目就停在那了。<em>大量「半死不活」的库都是这一类</em>。
+  </p>
+
+  <p>
+    <strong>基金会</strong>最稳定，但决策慢。一个 API 改动可能要经过邮件列表讨论、投票、几轮实现。
+    好处是没人能凭一己之见砍掉一个功能。
+  </p>
+
+  <p>
+    <strong>公司主导</strong>资源最足（有人在上班时间写），但方向由公司战略决定。
+    你提的 PR 如果和他们的路线冲突，写得再好也不会合。
+    <em>Kubernetes 属于 CNCF，但主要贡献者还是那几家公司的员工</em>。
+  </p>
+
+  <h2 id="p7"><span class="h2num">1.7.3-7</span>许可证：你贡献的代码归谁</h2>
+
+  <p>
+    这一节不讲技术，但每个要贡献代码的人都该知道。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.3-5-license.svg" target="_blank">
+    <img src="../../assets/img/1.7.3-5-license.svg" alt="一条横向光谱：从绿色宽松的 MIT、Apache 2.0，到黄色 LGPL（库要开源），到红色 GPL、AGPL（用了就开源）" loading="lazy"></a>
+    <figcaption>图 1.7.3-5　许可证是一条光谱。<em>左边是「随便用，改了也不必开源」，右边是「用了我的代码，你的代码也得开源」</em>。选错不会立刻出事，等公司做大被律师找上门才发现——那时候改已经来不及了。这一节只讲大体边界，具体项目一定看原文或者问法务。</figcaption>
+  </figure>
+
+  <p>
+    三个最常问的问题，答案大致是：
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>问题</th><th>宽松（MIT / Apache / BSD）</th><th>传染（GPL / AGPL）</th></tr></thead>
+    <tbody>
+      <tr><td>能用在闭源产品里吗</td><td>可以</td><td>不行，整个产品都得开源</td></tr>
+      <tr><td>改了要开源吗</td><td>不用</td><td>改了的部分要</td></tr>
+      <tr><td>要保留版权声明吗</td><td>要</td><td>要</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    LGPL 是中间的折中：<strong>改了库本身要开源，但用这个库的程序不用</strong>。
+    它想解决的是「库被 GPL 挡住没人敢用」的问题。
+  </p>
+
+  <p>
+    MIT 和 Apache 2.0 通常被归为同一类，但有一个实质差别：
+    <strong>Apache 2.0 里有一条明确的专利授权</strong>——
+    贡献者授权你用他的专利，如果他用专利起诉你，这个授权自动终止。
+    MIT 没有这一条。
+  </p>
+
+  <p>
+    所以公司用开源库时，法务通常更认 Apache 2.0：
+    <em>它把「专利地雷」提前排掉了一部分</em>。
+    自己发项目时选哪个，也取决于你想不想在专利上留个说法。
+  </p>
+
+  <p>
+    查一个项目用什么许可证，看仓库根目录的 <code>LICENSE</code> 文件就行。
+    没有这个文件的话——<strong>默认是「保留所有权利」</strong>，
+    法律上你连复制都不行。<em>「代码公开在 GitHub 上」不等于「你可以用」</em>，
+    这是很多人搞错的一点。
+  </p>
+
+  <p>
+    还有一份东西叫 <strong>CLA</strong>（贡献者许可协议）。很多公司在收 PR 之前要求你签：
+    签了之后，<em>你贡献的代码版权归项目方，你保留著作权但授权他随便用（包括商用、包括改许可证）</em>。
+  </p>
+
+  <p>
+    这也是为什么有些公司禁止员工给特定项目贡献代码——
+    一旦签了 CLA，公司可能失去对员工产出的控制权。
+    <strong>这件事在贡献之前就要搞清楚，不是事后补</strong>。
+  </p>
+
+  <h2 id="p8"><span class="h2num">1.7.3-8</span>维护者的日常</h2>
+
+  <p>
+    站在维护者那边看，一天大概是这样的：
+  </p>
+
+  <pre><code>早上：三个安全漏洞报告，其中一个要今天发版
+上午：二十个新 issue，其中十五个信息不足，五个是真 bug
+中午：两个 PR 要 review，一个八百行，一个改了公共接口
+下午：写代码 —— 但只写了半小时，被评论打断四次
+晚上：回复攒了一天的讨论，处理到第十一条时不想再看</code></pre>
+
+  <p>
+    这个日程解释了很多看起来不合理的现象：
+    <strong>为什么回复很短</strong>（没时间写长的）、
+    <strong>为什么关 issue 很果断</strong>（不果断就永远处理不完）、
+    <strong>为什么对「顺手改一下」的 PR 很警惕</strong>（每一次合并都要他负责）。
+  </p>
+
+  <p>
+    有一个反直觉的事实：<strong>拒绝比接受更耗精力</strong>。
+    接受只需要点一下按钮；拒绝要写清理由、要应对反驳、要承担「这个人以后不来了」的后果。
+    所以维护者最怕的不是 PR 质量差，是<em>「看起来不错但需要仔细验证」</em>的那种——
+    它既不值得直接拒，又没简单到能直接合。
+  </p>
+
+  <p>
+    至于 review 里的评论，大致分三层，分清楚能省很多来回：
+  </p>
+
+  <div class="tw"><table style="min-width:520px">
+    <thead><tr><th>层次</th><th>写法</th><th>作者该怎么做</th></tr></thead>
+    <tbody>
+      <tr><td>必须改</td><td>「这里会空指针，加个判空」</td><td>改，别争</td></tr>
+      <tr><td>建议改</td><td>「如果拆成两个函数可能更清楚」</td><td>可以不改，但要说明为什么不改</td></tr>
+      <tr><td>只是讨论</td><td>「这块为什么用 A 不用 B？」</td><td>回答就行，不一定要动代码</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    有经验的项目会用前缀标出来，比如 <code>nit:</code>（小问题，不改也行）、
+    <code>question:</code>（只是想问）、<code>blocking:</code>（不改不能合）。
+    <em>没有前缀的时候，作者容易把「随便一问」当成「必须改」，来回浪费好几轮</em>。
+  </p>
+
+  <div class="warn">
+    <b>所以有一句话在开源圈流传很广：</b>
+    <strong>「不要提交没人要的 PR」</strong>。
+    意思是：先开 issue 问「这个改动你们要不要」，得到肯定答复再动手写。
+    <em>写完一千行再被拒，双方都亏</em>。这一句话能让你的贡献成功率提高好几倍。
+  </div>
+
+  <h2 id="p9"><span class="h2num">1.7.3-9</span>开源不等于免费劳动力</h2>
+
+  <p>
+    这一节讲一个不太技术、但绕不过去的事实。
+  </p>
+
+  <p>
+    有张著名的漫画：一个人站在一摞摇摇欲坠的积木上，
+    最底下那一块写着「一个默默无闻的人维护的小项目」，
+    上面每一块都写着「某个大公司的核心系统」。
+    旁白是：「整个现代数字基础设施，靠的是无数人业余时间维护的小项目。」
+  </p>
+
+  <p>
+    这不是夸张。2021 年底的 Log4j 漏洞就是现实版：
+    一个主要由志愿者维护的 Java 日志库，被全世界几百万个系统依赖，
+    漏洞一出，从银行到医院都得连夜打补丁。<em>而维护者本身没有资源做安全审计</em>。
+  </p>
+
+  <p>
+    这类问题的根源不是「开源模式不好」，是<strong>「用的人」和「维护的人」严重不对等</strong>：
+    一家公司靠某个库省了几百万美元的开发成本，却可能一分钱都没给过它。
+  </p>
+
+  <p>
+    现在的应对方式大概有三种：
+  </p>
+
+  <div class="tw"><table style="min-width:520px">
+    <thead><tr><th>方式</th><th>怎么做</th><th>效果</th></tr></thead>
+    <tbody>
+      <tr><td>赞助</td><td>GitHub Sponsors、Open Collective</td><td>能覆盖一部分时间，但通常不够全职</td></tr>
+      <tr><td>双许可</td><td>社区版 GPL，商业版付费</td><td>可行，但会流失一部分用户</td></tr>
+      <tr><td>托管服务</td><td>软件免费，托管（SaaS）收费</td><td>目前最主流的商业化路径</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    作为使用者，能做的其实很简单：<strong>如果你靠它赚钱，就给它一点支持</strong>。
+    不必是钱——写文档、回 issue、修 bug 都算。
+    <em>开源的成本不会消失，只是从「付费」变成了「有人默默承担」</em>。
+  </p>
+
+  <h2 id="p10"><span class="h2num">1.7.3-10</span>它撑不起什么</h2>
+
+  <p>
+    这套机制很强，但有四件事它做不好：
+  </p>
+
+  <p>
+    <strong>一是实时协作。</strong>
+    PR 是异步的：你提、他看、你改。两个人同时改同一行，还是要冲突。
+    <em>它是「排队」模型，不是「同时编辑」模型</em>。
+  </p>
+
+  <p>
+    <strong>二是大文件和二进制。</strong>
+    Git 存快照，一个 1 GB 的模型文件改一次就是新的一份。LFS 能缓解，但协作体验仍然很差。
+  </p>
+
+  <p>
+    <strong>三是精细权限。</strong>
+    仓库级：能读就全读，能写就全写。做不到「这个目录只有 A 能改」。
+  </p>
+
+  <p>
+    <strong>四是治理和文化。</strong>
+    工具能定义「怎么提交」，定义不了「什么样的贡献被尊重」。
+    <em>一个项目可以流程完美、CI 全绿，同时让所有新人都待不下去</em>。
+    这属于人的问题，不在工具范围内。
+  </p>
+
+  <h2 id="p11"><span class="h2num">1.7.3-11</span>第 1 部到这里讲完了</h2>
+
+  <p>
+    从 0.1 到 1.7，三十节，一条线穿下来是这样的：
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.3-6-map.svg" target="_blank">
+    <img src="../../assets/img/1.7.3-6-map.svg" alt="七层堆叠图，自下而上是物理（电、二进制）、逻辑（晶体管、门电路）、机器（CPU、指令、内存）、翻译（汇编、编译、链接、虚拟机）、数据（数组、哈希、树、复杂度）、工具（编辑器、调试器、测试、性能分析）、协作（Git、分支、冲突、开源治理）" loading="lazy"></a>
+    <figcaption>图 1.7.3-6　第 1 部的七层。<em>下面一层撑着上面一层</em>。想不通某个问题，往往是因为看错了层：「为什么慢」可能是数据层选错了结构，也可能是机器层缓存没命中——两个答案都对，只是层不同。</figcaption>
+  </figure>
+
+  <p>
+    回头看这几层之间是怎么接上的：
+  </p>
+
+  <p>
+    <strong>电变成 0 和 1</strong>（0.1、1.1），是因为高低电平只有两种稳定状态；
+    <strong>0 和 1 变成逻辑</strong>（1.2），是因为几个晶体管能搭出「与或非」；
+    <strong>逻辑变成计算</strong>（1.3），是因为门电路能拼出加法器，加法器加控制能拼出 CPU；
+    <strong>计算变成程序</strong>（1.4），是因为有人发明了「用符号写指令」这件事，
+    再做一层翻译把它变回机器码。
+  </p>
+
+  <p>
+    再往上，<strong>程序要处理数据</strong>（1.5），于是有了「怎么摆、怎么找」的问题；
+    <strong>人写程序需要工具</strong>（1.6），于是有了编辑器、调试器、测试、性能分析；
+    <strong>一群人写同一个程序需要规则</strong>（1.7），于是有了 Git、分支、review。
+  </p>
+
+  <p>
+    这条线有一个贯穿始终的主题：<strong>每一层都在给上一层「提供抽象」，
+    同时把下一层的复杂藏起来</strong>。
+    你写 <code>a + b</code> 的时候不用想晶体管，
+    写 <code>git commit</code> 的时候不用想哈希链——
+    <em>抽象让你能站在高处干活，代价是你不知道底下在发生什么</em>。
+  </p>
+
+  <p>
+    这一部想做的事，就是把这些抽象揭开一层：
+    <strong>不是让你以后写代码时都想这些，而是让你在出问题时知道该往下看哪一层</strong>。
+  </p>
+
+  <h2 id="p12"><span class="h2num">1.7.3-12</span>下一部：一台机器，很多人用</h2>
+
+  <p>
+    这一部从头到尾有一个隐含前提：<strong>这台机器只有一个人在用一个程序</strong>。
+    你写的程序独占了 CPU、独占了内存、独占了磁盘。所有资源都是你的。
+  </p>
+
+  <p>
+    现实不是这样。一台服务器上同时跑着几百个进程，
+    你的浏览器开着二十个标签页，手机后台挂着十几个应用。
+    <strong>它们互相不知道对方存在，却要共享同一批硬件</strong>。
+  </p>
+
+  <p>
+    这就冒出了一堆这一部没法回答的问题：
+  </p>
+
+  <p>
+    一个进程怎么才能不踩到另一个进程的内存？
+    CPU 只有一个，十个进程都要跑，谁先谁后？
+    一个程序死循环了，怎么让它别把整台机器拖死？
+    内存不够了，把谁换出去？
+    磁盘上几万个文件，怎么找到你要的那个？
+  </p>
+
+  <p>
+    这些问题的答案，构成了<strong>操作系统</strong>。
+    它是这一部所有东西的「上一层使用者」——
+    它用 CPU 的指令实现隔离，用内存管理单元实现虚拟地址，
+    用中断和调度器实现「同时运行」的假象。
+  </p>
+
+  <p>
+    第 2 部就从「一个进程到底是什么」开始。
+  </p>
+
+  <div class="quiz">
+    <h4>自测：能答上 6 题，这一节就算过了</h4>
+    <ol>
+      <li>fork 和 clone 分别发生在哪儿？为什么 fork 不需要写权限？</li>
+      <li>为什么要给本地仓库加一个 upstream remote？</li>
+      <li>「PR 的本质是一个请求」这句话是什么意思？它不是 Git 的功能？</li>
+      <li>一个好 bug 报告应该包含哪几样东西？</li>
+      <li>为什么维护者会果断关掉「信息不足」的 issue？</li>
+      <li>让 PR 合得快的四件事是什么？</li>
+      <li>「PR 三个月没人理」的五个常见原因？</li>
+      <li>三种治理结构各自的问题是什么？</li>
+      <li>MIT 和 GPL 的核心区别是什么？LGPL 折中在哪？</li>
+      <li>CLA 是什么？为什么公司会禁止员工给某些项目贡献？</li>
+      <li>为什么说「拒绝比接受更耗精力」？</li>
+      <li>「不要提交没人要的 PR」这句话在防什么？</li>
+    </ol>
+    <details><summary>点开看答案（先自己想，别急着点）</summary>
+    <ol>
+      <li>clone 发生在你机器上，把仓库下载成工作副本；fork 发生在 GitHub 服务器上，在你名下复制一个仓库。fork 不需要写权限，因为它只是「读一份出来」，不改原仓库。</li>
+      <li>因为你的 fork 和原仓库没有自动同步关系。不加 upstream，你那份就停在 fork 那一刻，越差越远，最后连 PR 都发不出去。</li>
+      <li>Pull Request 的字面意思是「请你 pull 我的改动」，它是一个请求而不是一次合并。它是 GitHub 加在 Git 之上的一层包装，把「分支」变成了一个可以讨论、可以跑 CI、可以留评论的容器。</li>
+      <li>标题（一句话说清现象）、环境（版本、系统）、复现步骤（能照着做一遍）、期望、实际、必要的附件。</li>
+      <li>因为他一天要处理几十个，而「信息不足」的 issue 没法动手。他只能问几个问题等回复，没回复就关掉——不是敷衍，是没有第二种处理方式。</li>
+      <li>改小（两百行以内）、带测试、描述里写清「为什么」、主动回应评论。前两个降低他的验证成本，后两个降低他的沟通成本。</li>
+      <li>他没时间；PR 太大看不完；不符合项目方向；没有测试或改了公共接口；态度问题。</li>
+      <li>个人项目决策快但脆弱（作者一走就停）；基金会稳定但慢；公司主导资源足但方向由公司战略决定。</li>
+      <li>MIT 是宽松的，可以用在闭源产品里、改了也不必开源；GPL 是传染的，用了它的代码你的产品也得开源。LGPL 折中：改库本身要开源，用库的程序不用。</li>
+      <li>贡献者许可协议。签了之后你贡献的代码版权归项目方（你保留著作权但授权他随便用）。公司禁止员工贡献，是因为签了 CLA 可能让公司失去对员工产出的控制权。</li>
+      <li>因为接受只要点一下按钮，拒绝要写理由、要应对反驳、要承担对方流失的后果。尤其「看起来不错但需要仔细验证」的 PR 最难受——既不值得直接拒，又没简单到能直接合。</li>
+      <li>防「写完一千行才被拒」的双输。先开 issue 问「这个改动你们要不要」，得到肯定答复再动手，成功率能高好几倍。</li>
+    </ol>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="1.7.2-merge.html">← 1.7.2 分支、合并与冲突：多人改同一个文件会发生什么</a>
+    <a class="next" href="../../02-os/index.html">第 2 部 操作系统：把一台机器分成很多间房 →</a>
+  </div>
+
+</div>
+</body>
+</html>

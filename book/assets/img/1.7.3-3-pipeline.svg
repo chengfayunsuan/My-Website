@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 450" width="880" height="450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.7.3-3  一个 PR 从提交到合并，要过几道关</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每一道都可能是「回去改」，而改完之后前面几道要重跑</text>
+<rect x="40" y="100" width="108" height="76" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.3"/>
+<text x="94.0" y="128" fill="#67b5ef" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">提交 PR</text>
+<text x="94.0" y="150" fill="#6f6f88" font-size="7.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">描述改了什么、为什么</text>
+<line x1="150" y1="138" x2="156" y2="138" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M156,134 L162,138 L156,134 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<rect x="160" y="100" width="108" height="76" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.3"/>
+<text x="214.0" y="128" fill="#b58ae8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">CI 跑测试</text>
+<text x="214.0" y="150" fill="#6f6f88" font-size="7.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">编译、单测、lint</text>
+<line x1="270" y1="138" x2="276" y2="138" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M276,134 L282,138 L276,134 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<rect x="280" y="100" width="108" height="76" rx="4" fill="#14141e" stroke="#e8b84b" stroke-width="1.3"/>
+<text x="334.0" y="128" fill="#e8b84b" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">人工 review</text>
+<text x="334.0" y="150" fill="#6f6f88" font-size="7.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">至少一个维护者</text>
+<line x1="390" y1="138" x2="396" y2="138" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M396,134 L402,138 L396,134 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<rect x="400" y="100" width="108" height="76" rx="4" fill="#14141e" stroke="#e8965a" stroke-width="1.3"/>
+<text x="454.0" y="128" fill="#e8965a" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">改</text>
+<text x="454.0" y="150" fill="#6f6f88" font-size="7.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">按评论修，可能好几轮</text>
+<line x1="510" y1="138" x2="516" y2="138" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M516,134 L522,138 L516,134 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<rect x="520" y="100" width="108" height="76" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.3"/>
+<text x="574.0" y="128" fill="#b58ae8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">再 CI</text>
+<text x="574.0" y="150" fill="#6f6f88" font-size="7.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每次都重跑</text>
+<line x1="630" y1="138" x2="636" y2="138" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M636,134 L642,138 L636,134 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<rect x="640" y="100" width="108" height="76" rx="4" fill="#14141e" stroke="#67d9a0" stroke-width="1.3"/>
+<text x="694.0" y="128" fill="#67d9a0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">approve</text>
+<text x="694.0" y="150" fill="#6f6f88" font-size="7.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">点了通过</text>
+<line x1="750" y1="138" x2="756" y2="138" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M756,134 L762,138 L756,134 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<rect x="760" y="100" width="108" height="76" rx="4" fill="#14141e" stroke="#67d9a0" stroke-width="1.3"/>
+<text x="814.0" y="128" fill="#67d9a0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">merge</text>
+<text x="814.0" y="150" fill="#6f6f88" font-size="7.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">选一种合并方式</text>
+<path d="M694,176 L694,214 L454,214 L454,184" fill="none" stroke="#e87a8a" stroke-width="1.2" stroke-dasharray="3 3"/>
+<path d="M450,184 L454,176 L458,184 Z" fill="#e87a8a" stroke="#e87a8a" stroke-width="1"/>
+<text x="574" y="232" fill="#e87a8a" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不通过，打回改</text>
+<path d="M508,90 L508,66 L214,66 L214,96" fill="none" stroke="#5a5a76" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="361" y="58" fill="#6f6f88" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每次 push 都重跑一遍 CI</text>
+<line x1="30" y1="262" x2="850" y2="262" stroke="#2a2a3e" stroke-width="1"/>
+<text x="30" y="288" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">现实里这条链通常不是走一遍就完</text>
+<text x="30" y="314" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">常见的往返：reviewer 说「这里加个测试」→ 改 → 再跑 CI → reviewer 又说「命名能不能换一个」→ 再改。</text>
+<text x="30" y="336" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三轮下来一周就过去了 —— 这不是刁难，是因为每轮只看一小块，比一次看全部更容易发现问题。</text>
+<text x="30" y="372" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以想让 PR 合得快，四件事最有效：</text>
+<text x="30" y="398" fill="#67d9a0" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">① 改小（两百行以内）</text>
+<text x="230" y="398" fill="#67d9a0" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">② 带测试</text>
+<text x="430" y="398" fill="#67d9a0" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">③ 描述里写清「为什么」</text>
+<text x="630" y="398" fill="#67d9a0" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">④ 主动回应评论</text>
+<text x="30" y="434" fill="#7a7a92" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">反过来，最容易石沉大海的 PR 是：一次改八百行、没有测试、描述只有「优化性能」四个字。</text>
+</svg>

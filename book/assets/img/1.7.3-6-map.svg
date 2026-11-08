@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 560" width="880" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="560" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.7.3-6  第 1 部讲完了：七层，从电到协作</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">下面一层撑着上面一层。想不通某个问题，往往是因为看错了层</text>
+<rect x="268.0" y="92" width="224.0" height="44" rx="3" fill="#201a2e" stroke="#b58ae8" stroke-width="1.3"/>
+<text x="284.0" y="116" fill="#b58ae8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">协作</text>
+<text x="332.0" y="116" fill="#5f5f78" font-size="8.5" text-anchor="start" font-family="monospace">1.7</text>
+<text x="284.0" y="132" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Git、分支、冲突、开源治理</text>
+<rect x="234.4" y="144" width="291.2" height="44" rx="3" fill="#2a2018" stroke="#e8965a" stroke-width="1.3"/>
+<text x="250.4" y="168" fill="#e8965a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">工具</text>
+<text x="298.4" y="168" fill="#5f5f78" font-size="8.5" text-anchor="start" font-family="monospace">1.6</text>
+<text x="250.4" y="184" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">编辑器、调试器、测试、性能分析</text>
+<rect x="200.79999999999998" y="196" width="358.40000000000003" height="44" rx="3" fill="#2a2410" stroke="#e8b84b" stroke-width="1.3"/>
+<text x="216.79999999999998" y="220" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">数据</text>
+<text x="264.79999999999995" y="220" fill="#5f5f78" font-size="8.5" text-anchor="start" font-family="monospace">1.5</text>
+<text x="216.79999999999998" y="236" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">数组、哈希、树、复杂度</text>
+<rect x="167.2" y="248" width="425.6" height="44" rx="3" fill="#16281c" stroke="#67d9a0" stroke-width="1.3"/>
+<text x="183.2" y="272" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">翻译</text>
+<text x="231.2" y="272" fill="#5f5f78" font-size="8.5" text-anchor="start" font-family="monospace">1.4</text>
+<text x="183.2" y="288" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">汇编、编译、链接、虚拟机</text>
+<rect x="133.6" y="300" width="492.8" height="44" rx="3" fill="#16202c" stroke="#67b5ef" stroke-width="1.3"/>
+<text x="149.6" y="324" fill="#67b5ef" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">机器</text>
+<text x="197.6" y="324" fill="#5f5f78" font-size="8.5" text-anchor="start" font-family="monospace">1.3</text>
+<text x="149.6" y="340" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">CPU、指令、内存、流水线</text>
+<rect x="100.0" y="352" width="560.0" height="44" rx="3" fill="#182430" stroke="#7a9ac0" stroke-width="1.3"/>
+<text x="116.0" y="376" fill="#7a9ac0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">逻辑</text>
+<text x="164.0" y="376" fill="#5f5f78" font-size="8.5" text-anchor="start" font-family="monospace">1.2</text>
+<text x="116.0" y="392" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">晶体管、门电路、加法器</text>
+<rect x="100.0" y="404" width="560.0" height="44" rx="3" fill="#1a1a24" stroke="#9a9ab0" stroke-width="1.3"/>
+<text x="116.0" y="428" fill="#9a9ab0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">物理</text>
+<text x="164.0" y="428" fill="#5f5f78" font-size="8.5" text-anchor="start" font-family="monospace">0.x / 1.1</text>
+<text x="116.0" y="444" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">电、二进制、0 和 1</text>
+<text x="690" y="120" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">一条建议</text>
+<text x="690" y="144" fill="#8a8aa2" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">遇到问题时，</text>
+<text x="690" y="161" fill="#8a8aa2" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">先判断它在</text>
+<text x="690" y="178" fill="#8a8aa2" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">哪一层。</text>
+<text x="690" y="212" fill="#8a8aa2" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">「为什么慢」</text>
+<text x="690" y="229" fill="#8a8aa2" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">可能是数据层</text>
+<text x="690" y="246" fill="#8a8aa2" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">（选错结构），</text>
+<text x="690" y="263" fill="#8a8aa2" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">也可能是机器层</text>
+<text x="690" y="280" fill="#8a8aa2" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">（缓存没命中）。</text>
+<text x="690" y="322" fill="#6f9a82" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两个答案都对，</text>
+<text x="690" y="339" fill="#6f9a82" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只是层不同。</text>
+<text x="30" y="496" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">下一部换个视角：这一部讲的是「一台机器怎么跑起来、一个程序怎么做出来」；</text>
+<text x="30" y="520" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 2 部讲「怎么让很多程序同时跑在一台机器上」—— 那才是操作系统要解决的问题。</text>
+<text x="30" y="546" fill="#7a7a92" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一台机器，从「一个人用」变成「很多人抢」，需要的东西完全不同：隔离、调度、权限、虚拟内存。</text>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 470" width="880" height="470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.7.3-4  谁说了算：三种治理结构</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一个 PR，在三种项目里命运完全不同 —— 差别不在代码质量，在决策权在谁手里</text>
+<rect x="30" y="90" width="270" height="296" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.4"/>
+<text x="46" y="118" fill="#b58ae8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">个人项目</text>
+<text x="46" y="136" fill="#5f5f78" font-size="8" text-anchor="start" font-family="monospace">BDFL</text>
+<text x="46" y="170" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">谁决定</text>
+<text x="46" y="188" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一个人，通常是作者</text>
+<text x="46" y="224" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">典型</text>
+<text x="46" y="242" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">大量个人工具和库</text>
+<text x="46" y="278" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你的影响</text>
+<text x="46" y="296" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">说服他 ——</text>
+<text x="46" y="311" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">靠 demo、靠耐心</text>
+<text x="46" y="332" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">风险</text>
+<text x="46" y="350" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">他累了停更一年，</text>
+<text x="46" y="365" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">项目就死了</text>
+<rect x="315" y="90" width="270" height="296" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="331" y="118" fill="#67b5ef" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">基金会</text>
+<text x="331" y="136" fill="#5f5f78" font-size="8" text-anchor="start" font-family="monospace">Foundation</text>
+<text x="331" y="170" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">谁决定</text>
+<text x="331" y="188" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">委员会 / PMC 投票</text>
+<text x="331" y="224" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">典型</text>
+<text x="331" y="242" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Apache、Linux、CNCF</text>
+<text x="331" y="278" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你的影响</text>
+<text x="331" y="296" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">先进贡献者名单，</text>
+<text x="331" y="311" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">再进委员会</text>
+<text x="331" y="332" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">风险</text>
+<text x="331" y="350" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">决策慢，方向保守</text>
+<rect x="600" y="90" width="270" height="296" rx="4" fill="#14141e" stroke="#e8965a" stroke-width="1.4"/>
+<text x="616" y="118" fill="#e8965a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">公司主导</text>
+<text x="616" y="136" fill="#5f5f78" font-size="8" text-anchor="start" font-family="monospace">Corporate</text>
+<text x="616" y="170" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">谁决定</text>
+<text x="616" y="188" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">公司内部的团队</text>
+<text x="616" y="224" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">典型</text>
+<text x="616" y="242" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">React、Kubernetes</text>
+<text x="616" y="278" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你的影响</text>
+<text x="616" y="296" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">修 bug 容易，</text>
+<text x="616" y="311" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">影响路线很难</text>
+<text x="616" y="332" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">风险</text>
+<text x="616" y="350" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">公司战略一变，</text>
+<text x="616" y="365" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">项目可能被放弃</text>
+<text x="30" y="416" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">看清结构之后，很多困惑就有答案了：「为什么我的 PR 没人理」可能因为项目是公司主导的，路线不由社区定；</text>
+<text x="30" y="438" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">「为什么这个明显的 bug 拖了两年」可能因为唯一的维护者已经没时间了。</text>
+<text x="30" y="462" fill="#7a7a92" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">选一个项目来贡献之前，先看它的治理结构和最近半年的活跃度 —— 比看 star 数有用得多。</text>
+</svg>

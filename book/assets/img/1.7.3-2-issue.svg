@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" width="880" height="440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.7.3-2  一个好 issue 长什么样</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">维护者看不到你的屏幕，只能说「信息不足」然后关掉 —— 那不是敷衍，是没别的办法</text>
+<text x="30" y="84" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">能让人动手修的 issue</text>
+<rect x="30" y="96" width="430" height="296" rx="4" fill="#14141e" stroke="#2a4a36" stroke-width="1.2"/>
+<text x="46" y="118" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">标题</text>
+<text x="120" y="118" fill="#67d9a0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">导出 CSV 时金额少两位小数</text>
+<text x="46" y="151" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">环境</text>
+<text x="120" y="151" fill="#a8a8c0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">v2.3.1 / Linux / MySQL 8.0</text>
+<text x="46" y="184" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">复现步骤</text>
+<text x="120" y="184" fill="#a8a8c0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1. 建两个金额 0.015 的订单</text>
+<text x="120" y="199" fill="#a8a8c0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2. 导出 CSV</text>
+<text x="120" y="214" fill="#a8a8c0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">3. 看「金额」列</text>
+<text x="46" y="247" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">期望</text>
+<text x="120" y="247" fill="#67d9a0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0.02</text>
+<text x="46" y="280" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">实际</text>
+<text x="120" y="280" fill="#e87a8a" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0.01</text>
+<text x="46" y="313" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">附件</text>
+<text x="120" y="313" fill="#a8a8c0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">截图 + 一段脱敏的 CSV</text>
+<text x="500" y="84" fill="#e87a8a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">会被关掉的 issue</text>
+<rect x="500" y="96" width="350" height="148" rx="4" fill="#2a1a20" stroke="#e87a8a" stroke-width="1.2"/>
+<text x="516" y="122" fill="#c8a8b0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">标题：有 bug</text>
+<text x="516" y="142" fill="#c8a8b0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif"></text>
+<text x="516" y="162" fill="#c8a8b0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">内容：导出不对，麻烦修一下</text>
+<text x="516" y="182" fill="#8a6a74" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif"></text>
+<text x="516" y="202" fill="#8a6a74" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">（没有版本、没有步骤、没有截图）</text>
+<text x="500" y="268" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">维护者的处理</text>
+<text x="500" y="290" fill="#8a8aa2" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 打上 needs-info 标签</text>
+<text x="500" y="310" fill="#8a8aa2" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 问三个问题，等两周</text>
+<text x="500" y="330" fill="#8a8aa2" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 没回复 → 关闭</text>
+<text x="500" y="350" fill="#a8707c" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 提的人觉得「没人管」</text>
+<text x="30" y="416" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这并不是「开源社区冷漠」。一天收到三十个「有 bug」的维护者，除了关掉之外没有第二种处理方式。</text>
+</svg>
