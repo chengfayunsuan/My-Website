@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 388" width="880" height="388" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="388" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.1.5-5  SDR 篮子里有五种货币，人民币占 12.28%</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2022 年 8 月生效的权重。看起来是「五种货币的组合」，实际用起来完全不是</text>
+<text x="164" y="120" fill="#67b5ef" font-size="11" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">美元</text>
+<rect x="180" y="96" width="462.72" height="34" rx="3" fill="#1a2434" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="652.72" y="119" fill="#67b5ef" font-size="9.6" text-anchor="start" font-family="monospace">43.38%</text>
+<text x="164" y="172" fill="#b58ae8" font-size="11" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">欧元</text>
+<rect x="180" y="148" width="312.64" height="34" rx="3" fill="#201a2e" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="502.64" y="171" fill="#b58ae8" font-size="9.6" text-anchor="start" font-family="monospace">29.31%</text>
+<text x="164" y="224" fill="#e87a8a" font-size="11" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">人民币</text>
+<rect x="180" y="200" width="130.98666666666665" height="34" rx="3" fill="#2a1a20" stroke="#e87a8a" stroke-width="1.2"/>
+<text x="320.9866666666667" y="223" fill="#e87a8a" font-size="9.6" text-anchor="start" font-family="monospace">12.28%</text>
+<text x="164" y="276" fill="#e8b84b" font-size="11" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">日元</text>
+<rect x="180" y="252" width="80.96" height="34" rx="3" fill="#2a2410" stroke="#e8b84b" stroke-width="1.2"/>
+<text x="270.96" y="275" fill="#e8b84b" font-size="9.6" text-anchor="start" font-family="monospace">7.59%</text>
+<text x="164" y="328" fill="#67d9a0" font-size="11" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">英镑</text>
+<rect x="180" y="304" width="79.36" height="34" rx="3" fill="#16281c" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="269.36" y="327" fill="#67d9a0" font-size="9.6" text-anchor="start" font-family="monospace">7.44%</text>
+<text x="40" y="360" fill="#a0a0b8" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">权重每五年调整一次，按「出口额」和「储备占比」算。人民币 2016 年进入篮子，权重从 10.92% 升到 12.28%。</text>
+</svg>

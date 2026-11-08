@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 340" width="880" height="340" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="340" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.1.5-2  储备从哪儿来：三条路，都会变成美元</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不管从哪条路来，最后都停在央行的账上，变成一笔外汇资产</text>
+<rect x="560" y="148" width="240" height="110" rx="6" fill="#1a2434" stroke="#67b5ef" stroke-width="1.6"/>
+<text x="680" y="190" fill="#67b5ef" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">外汇储备</text>
+<text x="680" y="214" fill="#8a9aac" font-size="8.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">集中在央行账上</text>
+<text x="680" y="234" fill="#9aa8bc" font-size="8.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">3.2 万亿美元</text>
+<rect x="50" y="92" width="360" height="68" rx="4" fill="#2a2410" stroke="#e8b84b" stroke-width="1.3"/>
+<text x="72" y="116" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">贸易顺差</text>
+<text x="72" y="134" fill="#9a9ab4" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">出口赚的比进口花的多</text>
+<text x="72" y="150" fill="#6f6f88" font-size="7.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">企业把美元卖给银行，银行卖给央行</text>
+<line x1="416" y1="126" x2="548" y2="126" stroke="#e8b84b" stroke-width="1.3"/>
+<line x1="548" y1="126" x2="548" y2="203" stroke="#e8b84b" stroke-width="1.3"/>
+<rect x="50" y="176" width="360" height="68" rx="4" fill="#16281c" stroke="#67d9a0" stroke-width="1.3"/>
+<text x="72" y="200" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">外商直接投资</text>
+<text x="72" y="218" fill="#9a9ab4" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">外资来建厂、买公司</text>
+<text x="72" y="234" fill="#6f6f88" font-size="7.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">美元进来要换成人民币才能用</text>
+<line x1="416" y1="210" x2="548" y2="210" stroke="#67d9a0" stroke-width="1.3"/>
+<line x1="548" y1="210" x2="548" y2="203" stroke="#67d9a0" stroke-width="1.3"/>
+<rect x="50" y="260" width="360" height="68" rx="4" fill="#2a2018" stroke="#e8965a" stroke-width="1.3"/>
+<text x="72" y="284" fill="#e8965a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">资本流入</text>
+<text x="72" y="302" fill="#9a9ab4" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">买债、买股、热钱套利</text>
+<text x="72" y="318" fill="#6f6f88" font-size="7.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">来得快，走得也快，最不稳定</text>
+<line x1="416" y1="294" x2="548" y2="294" stroke="#e8965a" stroke-width="1.3"/>
+<line x1="548" y1="294" x2="548" y2="203" stroke="#e8965a" stroke-width="1.3"/>
+<line x1="548" y1="203" x2="552" y2="203" stroke="#67b5ef" stroke-width="1.3"/>
+<path d="M552,203 L562,203 L552,198 L552,208 Z" fill="#67b5ef" stroke="#67b5ef" stroke-width="1"/>
+</svg>
