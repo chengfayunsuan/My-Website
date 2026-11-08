@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" width="880" height="440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.7.1-2  三个区域：你改的、你要提交的、已经提交的</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">git add 把改动挪进中间那层，git commit 把中间那层定格成一个快照</text>
+<rect x="30" y="84" width="200" height="112" rx="5" fill="#16281c" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="130.0" y="114" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">工作区</text>
+<text x="130.0" y="132" fill="#6f6f88" font-size="8.5" text-anchor="middle" font-family="monospace">working tree</text>
+<text x="130.0" y="162" fill="#a8a8c0" font-size="8.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你打开、编辑的那些文件</text>
+<rect x="340" y="84" width="200" height="112" rx="5" fill="#2a2410" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="440.0" y="114" fill="#e8b84b" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">暂存区</text>
+<text x="440.0" y="132" fill="#6f6f88" font-size="8.5" text-anchor="middle" font-family="monospace">index / stage</text>
+<text x="440.0" y="162" fill="#a8a8c0" font-size="8.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">下一次提交要包含什么</text>
+<rect x="650" y="84" width="200" height="112" rx="5" fill="#16202c" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="750.0" y="114" fill="#67b5ef" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">仓库</text>
+<text x="750.0" y="132" fill="#6f6f88" font-size="8.5" text-anchor="middle" font-family="monospace">repository</text>
+<text x="750.0" y="162" fill="#a8a8c0" font-size="8.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">.git 里的历史，只增不改</text>
+<line x1="236" y1="140" x2="326" y2="140" stroke="#4a4a66" stroke-width="1.4"/>
+<path d="M326,136 L334,140 L326,144 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<text x="285" y="130" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="monospace">git add</text>
+<line x1="546" y1="140" x2="636" y2="140" stroke="#4a4a66" stroke-width="1.4"/>
+<path d="M636,136 L644,140 L636,144 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<text x="595" y="130" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="monospace">git commit</text>
+<line x1="130" y1="236" x2="440" y2="236" stroke="#67d9a0" stroke-width="1.4" stroke-dasharray="4 4"/>
+<text x="285" y="226" fill="#67d9a0" font-size="8.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">有差别 = 改了但没 add</text>
+<line x1="440" y1="268" x2="750" y2="268" stroke="#e8b84b" stroke-width="1.4" stroke-dasharray="4 4"/>
+<text x="595" y="258" fill="#e8b84b" font-size="8.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">有差别 = add 了但没 commit</text>
+<circle cx="130" cy="236" r="3" fill="#67d9a0"/>
+<circle cx="440" cy="236" r="3" fill="#67d9a0"/>
+<circle cx="440" cy="268" r="3" fill="#e8b84b"/>
+<circle cx="750" cy="268" r="3" fill="#e8b84b"/>
+<text x="30" y="306" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">git status 做的事，就是在这两处各比一次，然后分两段告诉你结果。</text>
+<text x="30" y="342" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">为什么要有中间这一层：让你能「只提交一部分改动」。</text>
+<text x="30" y="364" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">比如你顺手修了个格式问题，又改了个功能 —— 分开提交，将来回退功能时不会把格式改动一起扔掉。</text>
+<text x="30" y="392" fill="#7a7a92" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有暂存区的版本控制（比如早期的 SVN），只能整个目录一起提交，没法拆。</text>
+<text x="30" y="418" fill="#7a7a92" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价是多一步 git add —— 这也是初学者最常忘、最容易困惑的一步。</text>
+</svg>

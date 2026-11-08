@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 450" width="880" height="450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.7.1-1  存差异，还是存快照</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">上面是「每次只记改了哪儿」，下面是「每次都拍一张完整照片」。Git 选的是后者</text>
+<text x="30" y="84" fill="#8a8aa2" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">存差异（CVS / SVN 那种）</text>
+<rect x="30" y="98" width="110" height="46" rx="3" fill="#16202c" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="85" y="118" fill="#67b5ef" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">v1</text>
+<text x="85" y="135" fill="#5f7f9a" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">完整文件</text>
+<rect x="160" y="98" width="90" height="46" rx="3" fill="#14141e" stroke="#67d9a0" stroke-width="1"/>
+<text x="205" y="118" fill="#67d9a0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">差异 1</text>
+<text x="205" y="135" fill="#6f6f88" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">+5 行</text>
+<line x1="150" y1="121" x2="158" y2="121" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M158,117 L165,121 L158,125 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<rect x="266" y="98" width="90" height="46" rx="3" fill="#14141e" stroke="#67d9a0" stroke-width="1"/>
+<text x="311" y="118" fill="#67d9a0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">差异 2</text>
+<text x="311" y="135" fill="#6f6f88" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">+3 行</text>
+<line x1="256" y1="121" x2="264" y2="121" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M264,117 L271,121 L264,125 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<rect x="372" y="98" width="90" height="46" rx="3" fill="#14141e" stroke="#e87a8a" stroke-width="1"/>
+<text x="417" y="118" fill="#e87a8a" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">差异 3</text>
+<text x="417" y="135" fill="#6f6f88" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">−2 行</text>
+<line x1="362" y1="121" x2="370" y2="121" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M370,117 L377,121 L370,125 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<text x="30" y="168" fill="#6f6f88" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">要得到第 4 版，得把 v1 读出来，一路把三个差异叠上去 —— 恢复第 100 版要重放 99 次</text>
+<text x="30" y="206" fill="#8a8aa2" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">存快照（Git 的做法）</text>
+<rect x="30" y="222" width="138" height="108" rx="4" fill="#12121c" stroke="#2e2e44" stroke-width="1"/>
+<text x="99" y="240" fill="#8a8aa2" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 1 版</text>
+<rect x="44" y="250" width="110" height="20" rx="2" fill="#161620" stroke="#3a4a5a" stroke-width="1"/>
+<text x="52" y="264" fill="#7a7a92" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">A</text>
+<rect x="44" y="274" width="110" height="20" rx="2" fill="#161620" stroke="#3a4a5a" stroke-width="1"/>
+<text x="52" y="288" fill="#7a7a92" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">B</text>
+<rect x="44" y="298" width="110" height="20" rx="2" fill="#161620" stroke="#3a4a5a" stroke-width="1"/>
+<text x="52" y="312" fill="#7a7a92" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">C</text>
+<line x1="170" y1="276" x2="186" y2="276" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M186,272 L194,276 L186,280 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<rect x="188" y="222" width="138" height="108" rx="4" fill="#12121c" stroke="#2e2e44" stroke-width="1"/>
+<text x="257" y="240" fill="#8a8aa2" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 2 版</text>
+<rect x="202" y="250" width="110" height="20" rx="2" fill="#161620" stroke="#3a4a5a" stroke-width="1"/>
+<text x="210" y="264" fill="#7a7a92" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">A</text>
+<rect x="202" y="274" width="110" height="20" rx="2" fill="#2a2018" stroke="#e8965a" stroke-width="1"/>
+<text x="210" y="288" fill="#e8965a" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">B 改了</text>
+<rect x="202" y="298" width="110" height="20" rx="2" fill="#161620" stroke="#3a4a5a" stroke-width="1"/>
+<text x="210" y="312" fill="#7a7a92" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">C</text>
+<line x1="328" y1="276" x2="344" y2="276" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M344,272 L352,276 L344,280 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<rect x="346" y="222" width="138" height="108" rx="4" fill="#12121c" stroke="#2e2e44" stroke-width="1"/>
+<text x="415" y="240" fill="#8a8aa2" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 3 版</text>
+<rect x="360" y="250" width="110" height="20" rx="2" fill="#2a2018" stroke="#e8965a" stroke-width="1"/>
+<text x="368" y="264" fill="#e8965a" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">A 改了</text>
+<rect x="360" y="274" width="110" height="20" rx="2" fill="#2a2018" stroke="#e8965a" stroke-width="1"/>
+<text x="368" y="288" fill="#e8965a" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">B 改了</text>
+<rect x="360" y="298" width="110" height="20" rx="2" fill="#161620" stroke="#3a4a5a" stroke-width="1"/>
+<text x="368" y="312" fill="#7a7a92" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">C</text>
+<text x="30" y="356" fill="#6f6f88" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">未变的文件不重存，只在新快照里留一个指针指向旧的那份 —— 所以「快照」不等于「体积翻倍」</text>
+<line x1="30" y1="384" x2="850" y2="384" stroke="#2a2a3e" stroke-width="1"/>
+<text x="30" y="408" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">为什么后者更好：切分支不用重放补丁（O(1) 换指针）、比对任意两版不用算中间态、某个版本损坏不会连累其他版本。</text>
+<text x="30" y="430" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价是「看某一行是谁改的」要多做一步推导 —— 这就是 git blame 比 svn blame 慢一点的原因。</text>
+</svg>

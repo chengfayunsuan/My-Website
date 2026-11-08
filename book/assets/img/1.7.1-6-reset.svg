@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 450" width="880" height="450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.7.1-6  reset 的三种模式，区别只在于「动几处」</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一个命令，加不加参数，后果从「什么都不丢」到「改动全没」</text>
+<text x="363.0" y="78" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">分支指针</text>
+<text x="363.0" y="96" fill="#6f6f88" font-size="8.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">HEAD 指向哪个快照</text>
+<text x="553.0" y="78" fill="#e8b84b" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">暂存区</text>
+<text x="553.0" y="96" fill="#6f6f88" font-size="8.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">下一次提交包含什么</text>
+<text x="743.0" y="78" fill="#67b5ef" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">工作区</text>
+<text x="743.0" y="96" fill="#6f6f88" font-size="8.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">磁盘上真正的内容</text>
+<rect x="30" y="104" width="216" height="76" rx="4" fill="#2a2410" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="46" y="130" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="monospace" font-weight="600">--soft</text>
+<text x="46" y="150" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只挪指针</text>
+<text x="46" y="168" fill="#c8a860" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">改动都还在，回到「已 add」状态</text>
+<rect x="268" y="104" width="176" height="76" rx="3" fill="#16281c" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="356.0" y="134" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">重置</text>
+<text x="356.0" y="154" fill="#5a7a68" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">回到目标快照</text>
+<rect x="458" y="104" width="176" height="76" rx="3" fill="#12121c" stroke="#2a2a3e" stroke-width="1.2"/>
+<text x="546.0" y="134" fill="#4a4a5e" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不动</text>
+<text x="546.0" y="154" fill="#3a3a4e" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">原样保留</text>
+<rect x="648" y="104" width="176" height="76" rx="3" fill="#12121c" stroke="#2a2a3e" stroke-width="1.2"/>
+<text x="736.0" y="134" fill="#4a4a5e" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不动</text>
+<text x="736.0" y="154" fill="#3a3a4e" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">原样保留</text>
+<rect x="30" y="194" width="216" height="76" rx="4" fill="#2a2018" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="46" y="220" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="monospace" font-weight="600">--mixed（默认）</text>
+<text x="46" y="240" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">挪指针 + 清暂存区</text>
+<text x="46" y="258" fill="#e8965a" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">改动还在，但要重新 add</text>
+<rect x="268" y="194" width="176" height="76" rx="3" fill="#16281c" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="356.0" y="224" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">重置</text>
+<text x="356.0" y="244" fill="#5a7a68" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">回到目标快照</text>
+<rect x="458" y="194" width="176" height="76" rx="3" fill="#16281c" stroke="#e8b84b" stroke-width="1.2"/>
+<text x="546.0" y="224" fill="#e8b84b" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">重置</text>
+<text x="546.0" y="244" fill="#5a7a68" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">回到目标快照</text>
+<rect x="648" y="194" width="176" height="76" rx="3" fill="#12121c" stroke="#2a2a3e" stroke-width="1.2"/>
+<text x="736.0" y="224" fill="#4a4a5e" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不动</text>
+<text x="736.0" y="244" fill="#3a3a4e" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">原样保留</text>
+<rect x="30" y="284" width="216" height="76" rx="4" fill="#2a1a20" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="46" y="310" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="monospace" font-weight="600">--hard</text>
+<text x="46" y="330" fill="#a8a8c0" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三处全重置</text>
+<text x="46" y="348" fill="#e87a8a" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">改动真的没了，只能靠 reflog</text>
+<rect x="268" y="284" width="176" height="76" rx="3" fill="#16281c" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="356.0" y="314" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">重置</text>
+<text x="356.0" y="334" fill="#5a7a68" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">回到目标快照</text>
+<rect x="458" y="284" width="176" height="76" rx="3" fill="#16281c" stroke="#e8b84b" stroke-width="1.2"/>
+<text x="546.0" y="314" fill="#e8b84b" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">重置</text>
+<text x="546.0" y="334" fill="#5a7a68" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">回到目标快照</text>
+<rect x="648" y="284" width="176" height="76" rx="3" fill="#16281c" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="736.0" y="314" fill="#67b5ef" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">重置</text>
+<text x="736.0" y="334" fill="#5a7a68" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">回到目标快照</text>
+<text x="30" y="400" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">「危险」的判断标准很简单：动到工作区的那个最危险（--hard），因为它不给你反悔的机会。</text>
+<text x="30" y="424" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">而 --soft 最安全：它只把指针挪回去，你的文件一个字节都没动，可以立刻重新提交。</text>
+</svg>

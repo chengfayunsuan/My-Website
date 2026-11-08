@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.7.1 Git：给每一次修改拍一张快照</title>
+<link rel="stylesheet" href="../../style.css">
+<style>p code, li code, td code { overflow-wrap: anywhere; }</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+    <a href="index.html">1.7 代码怎么协作</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部</a><span class="sep">/</span>
+    <a href="index.html">1.7 代码怎么协作</a><span class="sep">/</span>
+    <span class="here">1.7.1</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">1.7.1</span>
+    Git：给每一次修改拍一张快照
+  </h1>
+  <p class="part-sub">
+    约 0.6 万字 · 6 张图 · 读完你能说清 Git 到底存了什么、
+    分支为什么能瞬间创建、reset 的三种模式各丢了什么，
+    以及为什么「把密钥删掉再提交」根本没用
+  </p>
+
+  <div class="lead">
+    <b>先想一个场景：昨天还好好的，今天一跑就崩，你想回到昨天。</b>
+    没有版本控制的世界里，办法是复制文件夹：
+    <code>项目</code>、<code>项目-备份</code>、<code>项目-final</code>、
+    <code>项目-final-真的最终</code>、<code>项目-用这个</code>。
+    <br><br>
+    这个土办法能救急，但解决不了四件事：
+    <strong>谁改的</strong>（文件夹不记人）、
+    <strong>为什么改</strong>（文件名写不下原因）、
+    <strong>两处改动怎么合</strong>（两个人各存一份，谁合并都会丢东西）、
+    以及<strong>怎么回到「上周三下午那个能跑的状态」</strong>（你得记得是哪个文件夹）。
+    <br><br>
+    Git 解决的就是这四件事。它被用得如此普遍，以至于大多数人只记住了十几条命令，
+    却没想过它内部其实非常简单：<em>一个存内容的仓库，加几个装着哈希的文件</em>。
+    想明白这一点，那些「为什么同一个操作有三种写法」「为什么 reset 会丢东西」
+    「为什么分支能一瞬间建好」的困惑，会一次消掉大半。
+  </div>
+
+  <div class="minitoc">
+    <h4>本节的小部分</h4>
+    <ol>
+      <li><a href="#p1">1 存差异，还是存快照</a></li>
+      <li><a href="#p2">2 三个区域：改的、要提交的、提交过的</a></li>
+      <li><a href="#p3">3 对象模型：只有三种东西</a></li>
+      <li><a href="#p4">4 分支只是一个装着哈希的文件</a></li>
+      <li><a href="#p5">5 为什么 commit 改不了</a></li>
+      <li><a href="#p6">6 git diff 为什么让人困惑</a></li>
+      <li><a href="#p7">7 merge 和 rebase：留岔口还是抹平</a></li>
+      <li><a href="#p8">8 reset 的三种模式</a></li>
+      <li><a href="#p9">9 不该提交的东西</a></li>
+      <li><a href="#p10">10 密钥提交了，删掉就行吗</a></li>
+      <li><a href="#p11">11 它撑不起什么</a></li>
+      <li><a href="#p12">12 收尾：一个人很顺，一群人会撞</a></li>
+    </ol>
+  </div>
+
+  <h2 id="p1"><span class="h2num">1.7.1-1</span>存差异，还是存快照</h2>
+
+  <p>
+    大部分人第一次听说 Git 时，会以为它记录的是「每次改了哪几行」——
+    像一个不断追加的补丁堆。这个印象来自更早的工具（CVS、SVN），
+    它们确实是这么干的：存一份原始文件，之后每次只存差异。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.1-1-snapshot.svg" target="_blank">
+    <img src="../../assets/img/1.7.1-1-snapshot.svg" alt="上半部分是存差异的方式：一个完整文件 v1，后面跟着三个差异补丁；下半部分是存快照的方式：三个完整快照，每个里有三个文件格，未变的文件用灰色标出" loading="lazy"></a>
+    <figcaption>图 1.7.1-1　存差异，还是存快照。<em>上面那种要拿到第 4 版，得从 v1 开始把三个补丁一个个叠上去</em>；下面那种每一版都是完整的，取哪一版都是直接拿。Git 选的是下面这种，而未变的文件通过指针复用，所以「快照」不等于「体积翻倍」。</figcaption>
+  </figure>
+
+  <p>
+    这两种设计的分歧，会在几个具体场景里暴露出来：
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>场景</th><th>存差异</th><th>存快照</th></tr></thead>
+    <tbody>
+      <tr><td>取第 100 版</td><td>要把前 99 个补丁全叠一遍</td><td>直接拿那一份</td></tr>
+      <tr><td>切分支</td><td>要算出「从当前状态到目标状态」的差异再应用</td><td>改一个指针，完成</td></tr>
+      <tr><td>比对任意两版</td><td>要先把两边都还原出来</td><td>两边都是现成的，直接比</td></tr>
+      <tr><td>某一版损坏</td><td>后面所有版本全废</td><td>只影响那一版</td></tr>
+      <tr><td>看某行是谁改的</td><td>直接查补丁，快</td><td>要往前推导，稍慢</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    注意最后一行：<strong>快照方案唯一的劣势，恰好是「追溯某一行」这件事</strong>。
+    这就是为什么 <code>git blame</code> 比 <code>svn blame</code> 慢一点——
+    它得从当前快照出发，一层层往前比对，才能确定某一行是哪个提交引入的。
+    <em>这不是实现不好，是数据结构决定的代价</em>。
+  </p>
+
+  <p>
+    但换来的好处大得多：<strong>分支操作变成了 O(1)</strong>。
+    这一点在下一节会展开——它是 Git 能普及的根本原因。
+  </p>
+
+  <h2 id="p2"><span class="h2num">1.7.1-2</span>三个区域：改的、要提交的、提交过的</h2>
+
+  <p>
+    Git 里有三个地方放东西，初学者最容易在这里迷路。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.1-2-three-areas.svg" target="_blank">
+    <img src="../../assets/img/1.7.1-2-three-areas.svg" alt="三个盒子从左到右：工作区、暂存区、仓库，中间用 git add 和 git commit 两个箭头连接；下方两条虚线分别标出「有差别等于改了但没 add」和「有差别等于 add 了但没 commit」" loading="lazy"></a>
+    <figcaption>图 1.7.1-2　三个区域。<em><code>git add</code> 是把改动挪进中间那层，<code>git commit</code> 是把中间那层定格成一张快照</em>。中间这一层叫暂存区（index / stage），它存在的唯一理由是：让你能「只提交一部分改动」。</figcaption>
+  </figure>
+
+  <p>
+    三个区域各管一件事：
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>区域</th><th>是什么</th><th>谁在改它</th></tr></thead>
+    <tbody>
+      <tr><td>工作区</td><td>你在编辑器里打开的那些文件，磁盘上真实存在</td><td>你自己</td></tr>
+      <tr><td>暂存区</td><td>一个文件，记着「下次提交包含哪些内容」</td><td><code>git add</code></td></tr>
+      <tr><td>仓库</td><td><code>.git</code> 目录里的历史，只增不改</td><td><code>git commit</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    为什么非要中间这一层？因为<strong>「改了什么」和「这次要提交什么」不是一回事</strong>。
+  </p>
+
+  <p>
+    举个真实的例子：你本来在修一个 bug，顺手把旁边一段代码的缩进调了，
+    又把一个变量名改得更清楚。这三件事混在一起，如果只能整体提交，
+    将来想回退那个 bug 修复，就会把缩进和改名一起扔掉。
+  </p>
+
+  <pre><code>git add bugfix.c          # 只把 bug 修复那部分加进暂存区
+git commit -m "修：订单金额算错"
+git add .                 # 剩下的（缩进、改名）再提交
+git commit -m "整理：调整缩进和变量名"</code></pre>
+
+  <p>
+    没有暂存区的版本控制做不到这一点——只能整个目录一起提交。
+    <em>这也是为什么早期的 SVN 用户会觉得「一次提交里混了五件事」很正常</em>，
+    而现在这被当成坏习惯。
+  </p>
+
+  <p>
+    提交信息值得单独说一句，因为它是<strong>写给半年后的自己看的</strong>。
+    半年后你只会看到一行 <code>git log</code>，那时候「改了改」和「fix bug」
+    一点信息量都没有。
+  </p>
+
+  <pre><code>差：  update code
+      修了个问题
+      fix
+
+好：  修：下单时库存为 0 仍然扣款
+      原因：reserve() 返回 0 被当成「成功」
+      影响：订单表金额和库存对不上
+      修法：0 视为失败，直接返回「库存不足」</code></pre>
+
+  <p>
+    好的提交信息回答三件事：<strong>改了什么、为什么改、怎么改的</strong>。
+    第一行写结论（五十字以内，能当标题用），空一行，下面写原因。
+    <em>这个格式不是为了好看，是为了让 <code>git log --oneline</code> 能当变更日志读</em>。
+  </p>
+
+  <h2 id="p3"><span class="h2num">1.7.1-3</span>对象模型：只有三种东西</h2>
+
+  <p>
+    <code>.git</code> 目录里那堆看不懂的文件，其实只在存三种东西。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.1-3-objects.svg" target="_blank">
+    <img src="../../assets/img/1.7.1-3-objects.svg" alt="对象关系图：最上面是 commit，它指向一个根 tree；根 tree 下面是一个 blob（README.md）和一个 src tree；src tree 下面又是两个 blob（main.c 和 util.c），每个对象都标着它的哈希前缀" loading="lazy"></a>
+    <figcaption>图 1.7.1-3　Git 里的三种对象。<em>blob 存文件内容，tree 存目录结构，commit 存「一张快照的入口」</em>。注意 blob 里没有文件名——文件名记在 tree 里。所以同一个文件内容被改名之后，blob 一个字节都不用动，只改 tree 里那一行。</figcaption>
+  </figure>
+
+  <p>
+    三者各管一件事：
+  </p>
+
+  <p>
+    <strong>blob</strong> 就是一段字节。它不知道自己是 <code>main.c</code> 还是 <code>README.md</code>，
+    也不知道权限是 644 还是 755——那些信息在 tree 里。<em>blob 只认内容</em>。
+  </p>
+
+  <p>
+    <strong>tree</strong> 是一层目录。它是一张表：名字 → 哈希。
+    比如「<code>README.md</code> 指向 <code>e5f6a7b</code>」、「<code>src/</code> 指向 <code>c9d0e1f</code>」。
+    tree 可以嵌套，形成整个项目的目录树。
+  </p>
+
+  <p>
+    <strong>commit</strong> 是一张快照的入口。它记着：一个根 tree 的哈希、
+    父 commit 的哈希（可能不止一个）、作者、时间、提交信息。
+    <em>注意它不直接存文件</em>，只指向一棵 tree。
+  </p>
+
+  <p>
+    三者的名字都是<strong>内容算出来的哈希</strong>，不是自增编号。这带来三个直接后果：
+  </p>
+
+  <p>
+    <strong>一是天然去重。</strong>同样的内容算出来的哈希一样。
+    你把一个大文件复制一份，Git 只会存一份——因为内容相同，blob 相同，两个 tree 条目指向同一个哈希。
+  </p>
+
+  <p>
+    <strong>二是内容可校验。</strong>任何字节被改动，哈希就变。
+    所以「仓库损坏」这件事，Git 自己能发现——它随时可以重算哈希比对。
+  </p>
+
+  <p>
+    <strong>三是名字不连续。</strong>哈希看起来是乱码（<code>a1b2c3d...</code>），
+    不像 1、2、3 那样能排序。这也是为什么 Git 的历史要靠 <code>parent</code> 指针串起来，
+    而不是靠编号顺序。
+  </p>
+
+  <p>
+    如果你打开 <code>.git</code> 看一眼，会看到这么几个东西，各自的职责很清楚：
+  </p>
+
+  <pre><code>.git/objects/    所有对象（blob / tree / commit），按哈希前两位分目录
+.git/refs/       分支和标签，每个文件一行哈希
+.git/HEAD        你现在在哪（指向某个 refs 里的文件）
+.git/index       暂存区（一个二进制文件，记录路径和哈希）
+.git/config      这个仓库的配置（远程地址、用户名）</code></pre>
+
+  <p>
+    所以「Git 仓库」不是一个神秘的黑盒，是<em>一个内容仓库加几个指针文件</em>。
+    理解了这一点，那些「为什么删了分支代码还在」「为什么改了历史要重新克隆」
+    的问题就都变成了常识。
+  </p>
+
+  <div class="note">
+    <b>一个常见误解：</b>
+    「我把文件改名，Git 应该记录成 rename 吧？」
+    <b>其实 Git 不记录 rename。</b>它只看到「旧名字没了，新名字出现了，两边的 blob 哈希一样」，
+    于是在 <code>git log --follow</code> 或 <code>git diff</code> 的时候<em>推断</em>出这是一次重命名。
+    推断的依据是内容相似度——所以改个名同时大改内容，Git 就会认为这是「删一个文件 + 加一个文件」。
+  </div>
+
+  <h2 id="p4"><span class="h2num">1.7.1-4</span>分支只是一个装着哈希的文件</h2>
+
+  <p>
+    这一节可能是整章里最值得记住的一段：<strong>Git 的分支不是「一份代码的副本」，
+    而是一个文本文件，里面只有一行哈希</strong>。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.1-4-branch.svg" target="_blank">
+    <img src="../../assets/img/1.7.1-4-branch.svg" alt="两条提交链：main 从 C1 到 C4，feature 从 C2 分出去到 F1、F2；main 指针指向 C4，feature 指针指向 F2，HEAD 指向 main" loading="lazy"></a>
+    <figcaption>图 1.7.1-4　分支与 HEAD。<em>main 和 feature 各是一个文件，内容就是某个 commit 的哈希</em>。所谓「切换分支」，就是把 HEAD 指向另一个文件，再把工作区的文件换成那个快照的样子。所以建分支不用复制任何代码——它只是写一个 41 字节的文件（40 位哈希加一个换行）。</figcaption>
+  </figure>
+
+  <p>
+    具体到磁盘上，长这样：
+  </p>
+
+  <pre><code>.git/refs/heads/main      内容：3f7a2b1c9d0e...（40 位十六进制）
+.git/refs/heads/feature   内容：8b4c6d2e1f0a...
+.git/HEAD                 内容：ref: refs/heads/main</code></pre>
+
+  <p>
+    三个文件就解释了三件事：
+  </p>
+
+  <p>
+    <strong>建分支为什么瞬间完成。</strong>写一个 41 字节的文件，不需要复制任何代码。
+    所以「一个人开两百个分支」在 Git 里毫无压力——换成「复制目录」的方案，
+    两百个分支就是两百份代码。
+  </p>
+
+  <p>
+    <strong>切分支为什么也很快。</strong>改 HEAD 那一行，然后把工作区的文件换成目标快照的样子。
+    只有真的不同的文件才会被改写，其余的原样不动。
+  </p>
+
+  <p>
+    <strong>删分支为什么「代码还在」。</strong>删的只是那个文件名。
+    commit 对象还在 <code>.git</code> 里，只是没有名字指着它了——
+    这时候叫「游离」（dangling）。它会在垃圾回收时才真的消失（默认两周）。
+  </p>
+
+  <div class="warn">
+    <b>所以「分支」和「文件夹」的直觉是反的：</b>
+    很多人以为分支是「一份独立的代码」，于是不敢多建。
+    实际上它是<strong>一个标签</strong>。你可以随手建十个分支试不同的方案，
+    不满意就删掉——没有复制、没有编译、没有磁盘开销。
+    <em>不敢建分支的人，通常是在用「文件夹」的心智模型用 Git</em>。
+  </div>
+
+  <h2 id="p5"><span class="h2num">1.7.1-5</span>为什么 commit 改不了</h2>
+
+  <p>
+    commit 的哈希是怎么算的？把它的全部内容（根 tree 哈希、父哈希、作者、时间、信息）
+    拼起来，算一个哈希。这意味着<strong>任何一处改动，哈希都会变</strong>。
+  </p>
+
+  <p>
+    于是「改一个历史提交」这件事，实际发生的是：
+  </p>
+
+  <pre><code>你想改 C2 的提交信息
+→ C2 的哈希变了，变成 C2'
+→ C3 的 parent 指向 C2，现在指向一个不存在的哈希，所以 C3 也要重算，变成 C3'
+→ C4 同理，变成 C4'
+→ 分支指针跟着移到 C4'
+→ 原来那条链变成「游离」状态，等着被回收</code></pre>
+
+  <p>
+    这就是「改写历史」的真实含义：<em>不是修改，是「造一条新的链，把标签挪过去」</em>。
+    原来的提交还在，只是没人指着它了。
+  </p>
+
+  <p>
+    这件事有一个非常重要的推论：<strong>凡是别人已经基于你的提交往上写了的，你都不能改写</strong>。
+    因为对方手里的历史指向旧哈希，你这边指向新哈希，两边对不上，
+    Git 会认为「这是两条完全不同的历史」，合并时一片混乱。
+  </p>
+
+  <div class="key">
+    <b>一条简单规则：</b>
+    已经推到共享分支（<code>main</code>、<code>develop</code>）的提交，<strong>不要改写</strong>；
+    只在自己本地、还没推出去的提交，随便改。
+    这就是 <code>git rebase</code> 和 <code>git commit --amend</code> 的适用边界。
+  </div>
+
+  <p>
+    反过来说，这个「改不了」也带来一个好处：<strong>它防篡改</strong>。
+    如果有人偷偷改了仓库里的某个历史文件，哈希对不上，Git 立刻能发现。
+    区块链那一套「用哈希链保证内容不被改」的思路，Git 在 2005 年就已经在用了。
+  </p>
+
+  <h2 id="p6"><span class="h2num">1.7.1-6</span>git diff 为什么让人困惑</h2>
+
+  <p>
+    因为「diff」这个词在 Git 里指三个不同的比较，而它们的写法长得很像。
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>命令</th><th>比的是</th><th>回答什么问题</th></tr></thead>
+    <tbody>
+      <tr><td><code>git diff</code></td><td>工作区 vs 暂存区</td><td>我改了但还没 add 的，有哪些</td></tr>
+      <tr><td><code>git diff --cached</code></td><td>暂存区 vs 最后一次提交</td><td>我 add 了但还没 commit 的，有哪些</td></tr>
+      <tr><td><code>git diff HEAD</code></td><td>工作区 vs 最后一次提交</td><td>从上次提交到现在，总共改了什么</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    三个都能叫「我改了什么」，但答案完全不同。
+    最容易踩的坑是：<strong>你已经 <code>git add</code> 了，然后跑 <code>git diff</code> 发现是空的，以为改动丢了</strong>。
+    其实没丢，只是 <code>git diff</code> 不看暂存区里的东西——要看它得用 <code>--cached</code>。
+  </p>
+
+  <p>
+    还有一个更隐蔽的：<strong><code>git diff</code> 对新增文件完全不显示</strong>。
+    因为新文件还没被 Git 跟踪（untracked），不在任何一次比较的范围里。
+    要让它出现，得先 <code>git add</code>。
+  </p>
+
+  <div class="note">
+    <b>记住一组对应关系就不会乱：</b>
+    <code>git status</code> 显示的上下两段，正好对应两个 diff：
+    上段「Changes not staged」= <code>git diff</code>；
+    下段「Changes to be committed」= <code>git diff --cached</code>。
+    <em>看到哪一段，就用哪个命令去看细节</em>。
+  </div>
+
+  <p>
+    顺便提一个「改到一半要切分支」的场景：手上有半成品，没法提交，
+    但又要立刻去修另一个分支的紧急问题。这时候用 <code>git stash</code>：
+  </p>
+
+  <pre><code>git stash          # 把当前改动收进一个临时栈，工作区变干净
+git switch hotfix  # 去修 bug
+...
+git switch main
+git stash pop      # 把刚才的改动放回来</code></pre>
+
+  <p>
+    它本质上就是「临时提交到一个不在任何分支上的地方」。
+    <em>不要用它长期存东西</em>——stash 没有描述、没有历史，
+    放一个月之后你完全想不起来那坨改动是干嘛的。
+  </p>
+
+  <h2 id="p7"><span class="h2num">1.7.1-7</span>merge 和 rebase：留岔口还是抹平</h2>
+
+  <p>
+    把一条分支的改动合进另一条，有两种做法。它们在「最终代码」上结果一样，
+    但在<strong>历史形状</strong>上完全不同。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.1-5-merge-rebase.svg" target="_blank">
+    <img src="../../assets/img/1.7.1-5-merge-rebase.svg" alt="上半部分 merge：main 的 C1 到 C4，feature 从 C2 分出 F1、F2，最后合成一个有两个父提交的 M；下半部分 rebase：C1 到 C4 后面直接接上 F1' 和 F2'，形成一条直线" loading="lazy"></a>
+    <figcaption>图 1.7.1-5　merge 留一个岔口，rebase 抹平它。<em>merge 造一个「有两个父提交」的新提交</em>，历史保留了「这两条线曾经并行过」这个事实；<em>rebase 把 F1 F2 复制一份接到 C4 后面</em>，历史变成一条直线，但所有被复制的提交哈希都变了。</figcaption>
+  </figure>
+
+  <p>
+    <strong>merge</strong> 做的事：找到两条分支的共同祖先，把两边的改动合起来，
+    造一个新提交 <code>M</code>，它的父提交有两个（C4 和 F2）。
+    好处是<em>真实</em>——历史上确实并行过；坏处是历史图会长出很多岔口，
+    时间线不再是直的。
+  </p>
+
+  <p>
+    <strong>rebase</strong> 做的事：把 feature 上的每个提交「摘下来」，
+    一个个重新应用到 main 的末尾。因为父提交变了，每个提交的哈希都会重算，
+    于是得到 F1'、F2' 两个新提交，旧的 F1、F2 被丢弃。
+    好处是<em>干净</em>——历史是一条直线，读起来像一个人按顺序写的；
+    坏处是它<strong>撒谎</strong>：历史上并不是这么顺序发生的。
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th></th><th>merge</th><th>rebase</th></tr></thead>
+    <tbody>
+      <tr><td>历史形状</td><td>保留岔口</td><td>一条直线</td></tr>
+      <tr><td>提交哈希</td><td>不变</td><td>全部重算</td></tr>
+      <tr><td>能不能对已推送的用</td><td>可以</td><td>不行，会害到别人</td></tr>
+      <tr><td>冲突处理</td><td>一次解决完</td><td>可能每个提交都要解一次</td></tr>
+      <tr><td>适合</td><td>合进共享分支</td><td>本地整理自己的提交</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    所以常见的团队约定是：<strong>本地用自己的分支时随便 rebase（把零碎提交整理干净），
+    要合进 main 时用 merge</strong>。这样既保持了个人提交的整洁，
+    又不改写别人已经看到的历史。
+  </p>
+
+  <div class="warn">
+    <b>rebase 最危险的一种用法：</b>
+    对<strong>已经推到远程、别人可能已经拉过</strong>的分支做 rebase。
+    你这边哈希全变了，对方那边的历史还是旧的，下次一拉就是一堆「重复的提交」和冲突。
+    救回来的办法是 <code>git reflog</code> 找到 rebase 之前的哈希，把分支挪回去。
+    <em>但只要有人已经基于你的旧提交写了新代码，就救不干净了</em>。
+  </div>
+
+  <p>
+    还有一种「搬运改动」的方式叫 <code>cherry-pick</code>：
+    只把某一个提交摘出来，应用到当前分支。
+  </p>
+
+  <pre><code>git cherry-pick a1b2c3d    # 把那个提交的改动，复制到当前分支并提交</code></pre>
+
+  <p>
+    典型场景是「这个修复在 main 上做了，但发布分支也要」。
+    它和 rebase 的区别是：<strong>rebase 搬一串，cherry-pick 搬一个</strong>。
+    同样会重算哈希，同样只适合还没共享的提交。
+  </p>
+
+  <h2 id="p8"><span class="h2num">1.7.1-8</span>reset 的三种模式</h2>
+
+  <p>
+    <code>git reset</code> 被很多人当成「危险命令」，其实危险程度完全取决于加哪个参数。
+    三种模式的区别只有一个：<strong>动几处</strong>。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.1-6-reset.svg" target="_blank">
+    <img src="../../assets/img/1.7.1-6-reset.svg" alt="三行三列的矩阵：行是 soft、mixed、hard 三种模式，列是分支指针、暂存区、工作区；soft 只重置指针，mixed 重置指针和暂存区，hard 三处全重置" loading="lazy"></a>
+    <figcaption>图 1.7.1-6　reset 的三种模式。<em>区别只在于「动几处」</em>：<code>--soft</code> 只挪指针，改动全在；<code>--mixed</code> 连暂存区一起清，改动还在但要重新 add；<code>--hard</code> 连工作区都重置，改动真的没了。不加参数时默认是 <code>--mixed</code>。</figcaption>
+  </figure>
+
+  <p>
+    具体到「我刚才提交错了，想重来一次」这个场景：
+  </p>
+
+  <pre><code>git reset --soft HEAD~1    # 撤销提交，改动回到暂存区
+                           # 然后 git commit -m "新的信息" 就行
+
+git reset HEAD~1           # 撤销提交，改动回到工作区（默认 --mixed）
+                           # 要重新 git add 才能提交
+
+git reset --hard HEAD~1    # 撤销提交，改动直接删掉
+                           # 慎用：文件内容真的没了</code></pre>
+
+  <p>
+    所以 <code>--soft</code> 其实是「改提交信息」最安全的做法：
+    它把指针挪回去，你的文件一个字节都没动，可以立刻重新提交。
+  </p>
+
+  <p>
+    那 <code>--hard</code> 真的没办法救吗？<strong>有，但只有很短的时间窗口</strong>：
+    <code>git reflog</code> 记录了 HEAD 每一次移动，包括被 reset 掉的那次。
+    找到那个哈希，<code>git reset --hard &lt;哈希&gt;</code> 就回来了。
+  </p>
+
+  <pre><code>$ git reflog
+a1b2c3d HEAD@{0}: reset: moving to HEAD~1
+9f8e7d6 HEAD@{1}: commit: 修：订单金额算错    ← 要找回的那个
+...</code></pre>
+
+  <p>
+    但 reflog 是本地记录，默认保留 90 天，而且<em>只在「提交过」的对象上有效</em>。
+    如果你 <code>--hard</code> 掉的是从来没提交过的改动，reflog 里没有，那就真没了。
+  </p>
+
+  <h2 id="p9"><span class="h2num">1.7.1-9</span>不该提交的东西</h2>
+
+  <p>
+    有些东西天生不该进版本库，因为它们<strong>要么能重新生成，要么不该共享</strong>：
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>类型</th><th>例子</th><th>为什么</th></tr></thead>
+    <tbody>
+      <tr><td>编译产物</td><td><code>*.o</code>、<code>dist/</code>、<code>target/</code></td><td>能重新生成，提交了只会让 diff 变脏</td></tr>
+      <tr><td>依赖目录</td><td><code>node_modules/</code>、<code>venv/</code></td><td>体积巨大，用锁文件还原就行</td></tr>
+      <tr><td>密钥凭证</td><td><code>.env</code>、<code>*.pem</code>、<code>id_rsa</code></td><td>泄露就是安全事故</td></tr>
+      <tr><td>大二进制</td><td>视频、数据集、设计稿源文件</td><td>每次改都存整份，仓库会爆炸</td></tr>
+      <tr><td>个人配置</td><td><code>.idea/</code>、<code>.vscode/</code></td><td>每个人的编辑器不一样</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    用一个 <code>.gitignore</code> 文件就能挡住它们：
+  </p>
+
+  <pre><code>node_modules/
+dist/
+*.log
+.env
+.env.local
+.DS_Store</code></pre>
+
+  <p>
+    有一个容易忽略的细节：<strong><code>.gitignore</code> 只对「还没被跟踪的文件」生效</strong>。
+    如果一个文件已经被提交过，之后再加进 <code>.gitignore</code> 是没用的——
+    Git 会继续跟踪它。要让它真的消失，得先：
+  </p>
+
+  <pre><code>git rm --cached .env     # 从索引里删掉，但保留磁盘上的文件
+git commit -m "移除误提交的配置"</code></pre>
+
+  <p>
+    注意 <code>--cached</code>：不加的话，磁盘上的文件也会被删掉。
+  </p>
+
+  <h2 id="p10"><span class="h2num">1.7.1-10</span>密钥提交了，删掉就行吗</h2>
+
+  <p>
+    <strong>不行。而且这是本节最该记住的一条。</strong>
+  </p>
+
+  <p>
+    Git 的历史是只增不改的。你把密钥文件删掉、再提交一次，
+    只在「最新版本」里看不到它了——<strong>但历史里那份还在</strong>。
+    任何人 <code>git log</code> 翻到上一个提交，就能看到完整的密钥。
+  </p>
+
+  <p>
+    所以正确的处理顺序是：
+  </p>
+
+  <pre><code>1. 立刻吊销这把密钥      ← 这才是真正的止损，一分钟都不能等
+2. 生成新的密钥
+3. 把新密钥放进环境变量 / 密钥管理服务，不要进仓库
+4. 之后再考虑要不要清洗历史（git filter-repo 之类）</code></pre>
+
+  <p>
+    第 1 步和第 4 步的顺序不能反。因为<em>清洗历史是一个慢动作</em>：
+    要重写所有相关提交，所有协作者都得重新克隆。
+    而在这段时间里，密钥一直是有效的——扫描 GitHub 的机器人几分钟就能抓到它。
+  </p>
+
+  <div class="warn">
+    <b>换个角度想：</b>
+    一旦密钥被推到了任何远程仓库（哪怕是私有库），就要当成<strong>已经泄露</strong>。
+    因为你不确定谁克隆过、谁配置了 CI、谁在什么时候把仓库权限给了谁。
+    <em>「删掉提交」是在擦指纹，不是在锁门</em>。
+  </div>
+
+  <h2 id="p11"><span class="h2num">1.7.1-11</span>它撑不起什么</h2>
+
+  <p>
+    Git 很强，但它有四件事做不好，而且这四件事都有替代方案：
+  </p>
+
+  <p>
+    <strong>一是大二进制文件。</strong>
+    Git 存快照，一个 1 GB 的视频改一次就是新的一份 1 GB。
+    虽然有增量压缩，但效果有限。<em>替代方案是 Git LFS</em>：
+    仓库里只存一个指针，真文件放外部存储。
+  </p>
+
+  <p>
+    <strong>二是精细的权限控制。</strong>
+    Git 的权限是仓库级的：能读就能读全部，能写就能写全部。
+    做不到「这个目录只有 A 能改」。
+    <em>替代方案是把仓库拆开</em>，或者用支持目录级权限的平台。
+  </p>
+
+  <p>
+    <strong>三是实时协作。</strong>
+    Git 是异步的：你改你的、我改我的，最后合并。
+    两个人同时改同一行，必然要有人手动解决。
+    <em>实时协作（像文档编辑器那样光标跟着动）是另一类技术</em>，Git 不做这件事。
+  </p>
+
+  <p>
+    <strong>四是二进制内容的合并。</strong>
+    文本可以按行合并，图片、音频、Office 文档不行。
+    两个人同时改一张图，Git 只能说「冲突了，你自己选一个」——
+    它没法把两张图「合起来」。
+  </p>
+
+  <h2 id="p12"><span class="h2num">1.7.1-12</span>收尾：一个人很顺，一群人会撞</h2>
+
+  <p>
+    这一节讲的全是「一个人用 Git」：提交、看历史、回退、切分支。
+    在这个范围内，Git 几乎是无摩擦的——它快、它可靠、它什么都不会丢。
+  </p>
+
+  <p>
+    但真正的麻烦从第二个人加入开始。
+  </p>
+
+  <p>
+    两个人改了同一个文件的两处不同地方，Git 能自动合；
+    改了同一行，就要人来决定留哪个。这还算好的——
+    更麻烦的是<strong>「分开看都对，合在一起就崩」</strong>：
+    你改了一个函数的参数顺序，他加了一个调用这个函数的地方，
+    两边都没有冲突，合并成功，但一跑就错。
+  </p>
+
+  <p>
+    <em>Git 能保证「文本层面合得起来」，保证不了「语义层面是对的」</em>。
+    这条界限是下一节的主题：分支、合并、冲突，
+    以及为什么两个改不同文件的人也会撞车。
+  </p>
+
+  <div class="quiz">
+    <h4>自测：能答上 6 题，这一节就算过了</h4>
+    <ol>
+      <li>Git 存的是差异还是快照？这个选择带来哪些好处和代价？</li>
+      <li>三个区域分别是什么？为什么需要暂存区这一层？</li>
+      <li>blob、tree、commit 各存什么？为什么 blob 里没有文件名？</li>
+      <li>为什么「改文件名」在 Git 里不算一次重命名操作？</li>
+      <li>建一个分支实际发生了什么？为什么它这么快？</li>
+      <li>为什么已经推给别人的提交不能 rebase？</li>
+      <li><code>git diff</code>、<code>--cached</code>、<code>HEAD</code> 三者各比什么？</li>
+      <li>已经 <code>git add</code> 了，跑 <code>git diff</code> 为什么是空的？</li>
+      <li>reset 的三种模式各动哪几处？哪种最危险，为什么？</li>
+      <li><code>--hard</code> 之后还有救吗？靠什么？</li>
+      <li>密钥提交了，为什么「删掉再提交」没用？正确顺序是什么？</li>
+      <li>Git 做不好的四件事是什么？</li>
+    </ol>
+    <details><summary>点开看答案（先自己想，别急着点）</summary>
+    <ol>
+      <li>存快照，未变的文件用指针复用。好处：取任意版本都是直接拿、切分支是 O(1)、两版比对不用还原、单版损坏不连累其他。代价：追溯「某一行是谁改的」要多做一步推导，所以 git blame 比 svn blame 慢。</li>
+      <li>工作区（磁盘上的文件）、暂存区（下次提交包含什么）、仓库（.git 里的历史）。暂存区让你能「只提交一部分改动」——比如把 bug 修复和格式调整拆成两次提交。</li>
+      <li>blob 存文件内容，tree 存一层目录（名字到哈希的映射），commit 存一张快照的入口（根 tree + 父提交 + 作者信息）。blob 只认内容，文件名记在 tree 里——所以改名时 blob 一个字节都不用动。</li>
+      <li>因为 Git 不记录 rename。它只看到「旧名字消失、新名字出现、两边 blob 哈希相同」，然后在 diff 或 log 时按内容相似度推断这是一次重命名。改名同时大改内容，就会被当成「删一个 + 加一个」。</li>
+      <li>在 .git/refs/heads/ 下写一个 41 字节的文件，内容是某个 commit 的哈希。不复制任何代码，所以瞬间完成，建几百个也没压力。</li>
+      <li>因为 rebase 会重算所有相关提交的哈希。别人如果已经基于你的旧提交往下写了，两边历史对不上，合并会一片混乱。规则：已推到共享分支的提交不改写，本地没推的随便改。</li>
+      <li><code>git diff</code> 比工作区和暂存区；<code>--cached</code> 比暂存区和最后一次提交；<code>git diff HEAD</code> 比工作区和最后一次提交。</li>
+      <li>因为 <code>git diff</code> 不看暂存区里的内容。你已经 add 了，工作区和暂存区就一致了，所以显示为空。要看已 add 的改动得用 <code>git diff --cached</code>。另外新增文件在 add 之前完全不出现在 diff 里。</li>
+      <li><code>--soft</code> 只动分支指针；<code>--mixed</code>（默认）动指针和暂存区；<code>--hard</code> 三处全动。<code>--hard</code> 最危险，因为它动到工作区，文件内容真的没了。</li>
+      <li>有，靠 <code>git reflog</code>。它记录了 HEAD 的每一次移动，找到 reset 之前的哈希再 reset 回去就行。但只对「提交过的对象」有效，从没提交过的改动救不回来。</li>
+      <li>因为历史是只增不改的，删掉再提交只是让最新版本里没有它，历史里那份还在，任何人翻到上一个提交就能看到。正确顺序是：立刻吊销密钥 → 生成新的 → 放进环境变量 → 最后才考虑清洗历史。</li>
+      <li>大二进制文件（用 LFS）、精细权限（仓库级，拆仓库）、实时协作（异步模型）、二进制内容合并（做不到，只能二选一）。</li>
+    </ol>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="../1.6-tools/1.6.4-profiling.html">← 1.6.4 性能分析：程序慢在哪一行</a>
+    <span class="next todo-next">1.7.2 分支、合并与冲突 · 尚未动笔</span>
+  </div>
+
+</div>
+</body>
+</html>

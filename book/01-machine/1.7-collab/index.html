@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.7 代码怎么协作</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部 电、逻辑与指令</a><span class="sep">/</span>
+    <span class="here">1.7 代码怎么协作</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">CHAPTER 1.7</span>
+    代码怎么协作
+  </h1>
+  <p class="part-sub">一个人的时候叫「版本管理」，一群人的时候叫「别互相踩脚」</p>
+
+  <p class="lead">
+    1.6 章讲的是一个人怎么把程序做出来。这一章讲的是<em>一群人怎么把同一个程序做出来</em>。
+    <br><br>
+    这件事听起来只是「多几个人写」，实际上会冒出一堆单干时根本不存在的问题：
+    你改的文件别人也在改、你想回退但别人已经基于你的改动往上写了、
+    两个改动分开看都对合在一起就崩、以及——<strong>三周后你忘了当初为什么这么改</strong>。
+    <br><br>
+    解决这些问题的工具叫版本控制，现在几乎只剩一个赢家：Git。
+    它被用得如此普遍，以至于大多数人只记住了十几条命令，
+    却从没想过<strong>它内部其实只是一个「键值存储 + 几个指针」</strong>。
+    想明白这一点，那些「为什么同一个操作有三种写法」「为什么 reset 会丢东西」
+    的困惑会一次消掉大半。
+    <br><br>
+    这一章就从 Git 的内部结构讲起，然后讲多人改同一个文件会发生什么，
+    最后讲开源社区是怎么用这套工具协作的。
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>编号</th><th>标题</th><th>它解决什么</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>1.7.1</code></td>
+        <td><a href="1.7.1-git.html" style="color:#cfc6ff">Git：给每一次修改拍一张快照</a></td>
+        <td>Git 到底存了什么；分支为什么这么便宜；reset 为什么会丢东西</td>
+        <td><span class="tag done">已完稿</span></td>
+      </tr>
+      <tr>
+        <td><code>1.7.2</code></td>
+        <td>分支、合并与冲突：多人改同一个文件会发生什么</td>
+        <td>冲突是怎么产生的；merge 和 rebase 该用哪个；PR 里那些按钮在干什么</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>1.7.3</code></td>
+        <td>GitHub 与开源协作：issue、PR、review</td>
+        <td>一个开源项目是怎么运转的；fork 和 clone 差在哪；review 在审什么</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="pager">
+    <a href="../index.html">← 第 1 部目录</a>
+    <a class="next" href="1.7.1-git.html">1.7.1 Git：给每一次修改拍一张快照 →</a>
+  </div>
+
+</div>
+</body>
+</html>
