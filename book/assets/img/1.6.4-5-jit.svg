@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 430" width="880" height="430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="430" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.6.4-5  前一千次跑出来的数字，不能信</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一段代码刚启动时慢 40 倍，跑一会儿才降到真实速度。这就是微基准测试最容易踩的坑</text>
+<line x1="96.0" y1="346" x2="96.0" y2="351" stroke="#3a3a52" stroke-width="1"/>
+<text x="96.0" y="366" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">1</text>
+<line x1="262.0" y1="346" x2="262.0" y2="351" stroke="#3a3a52" stroke-width="1"/>
+<text x="262.0" y="366" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">10</text>
+<line x1="428.0" y1="346" x2="428.0" y2="351" stroke="#3a3a52" stroke-width="1"/>
+<text x="428.0" y="366" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">100</text>
+<line x1="594.0" y1="346" x2="594.0" y2="351" stroke="#3a3a52" stroke-width="1"/>
+<text x="594.0" y="366" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">1000</text>
+<line x1="760.0" y1="346" x2="760.0" y2="351" stroke="#3a3a52" stroke-width="1"/>
+<text x="760.0" y="366" fill="#5f5f78" font-size="9" text-anchor="middle" font-family="monospace">10000</text>
+<line x1="96" y1="346.0" x2="760" y2="346.0" stroke="#222232" stroke-width="1"/>
+<text x="86" y="349.5" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">0</text>
+<line x1="96" y1="288.8571428571429" x2="760" y2="288.8571428571429" stroke="#222232" stroke-width="1"/>
+<text x="86" y="292.3571428571429" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">50</text>
+<line x1="96" y1="231.71428571428572" x2="760" y2="231.71428571428572" stroke="#222232" stroke-width="1"/>
+<text x="86" y="235.21428571428572" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">100</text>
+<line x1="96" y1="174.57142857142856" x2="760" y2="174.57142857142856" stroke="#222232" stroke-width="1"/>
+<text x="86" y="178.07142857142856" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">150</text>
+<line x1="96" y1="117.42857142857144" x2="760" y2="117.42857142857144" stroke="#222232" stroke-width="1"/>
+<text x="86" y="120.92857142857144" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">200</text>
+<text x="86" y="94" fill="#6f6f88" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">微秒 / 次</text>
+<path d="M96.0,118.2 L101.5,118.3 L107.1,118.4 L112.6,118.4 L118.2,118.5 L123.7,118.6 L129.3,118.7 L134.8,118.8 L140.4,118.9 L145.9,119.0 L151.5,119.1 L157.0,119.3 L162.6,119.4 L168.1,119.6 L173.7,119.8 L179.2,119.9 L184.8,120.1 L190.3,120.4 L195.9,120.6 L201.4,120.8 L207.0,121.1 L212.5,121.4 L218.1,121.7 L223.6,122.1 L229.2,122.4 L234.7,122.8 L240.3,123.2 L245.8,123.7 L251.4,124.2 L256.9,124.7 L262.5,125.3 L268.0,125.9 L273.5,126.6 L279.1,127.3 L284.6,128.1 L290.2,128.9 L295.7,129.8 L301.3,130.7 L306.8,131.8 L312.4,132.9 L317.9,134.1 L323.5,135.3 L329.0,136.7 L334.6,138.2 L340.1,139.8 L345.7,141.4 L351.2,143.2 L356.8,145.2 L362.3,147.2 L367.9,149.4 L373.4,151.8 L379.0,154.3 L384.5,157.0 L390.1,159.8 L395.6,162.8 L401.2,166.0 L406.7,169.4 L412.3,173.0 L417.8,176.8 L423.4,180.8 L428.9,185.1 L434.4,189.5 L440.0,194.1 L445.5,199.0 L451.1,204.0 L456.6,209.3 L462.2,214.7 L467.7,220.4 L473.3,226.2 L478.8,232.1 L484.4,238.2 L489.9,244.4 L495.5,250.6 L501.0,256.9 L506.6,263.2 L512.1,269.5 L517.7,275.7 L523.2,281.8 L528.8,287.8 L534.3,293.5 L539.9,299.0 L545.4,304.2 L551.0,309.1 L556.5,313.6 L562.1,317.8 L567.6,321.6 L573.2,324.9 L578.7,327.9 L584.3,330.4 L589.8,332.6 L595.4,334.4 L600.9,335.9 L606.4,337.1 L612.0,338.0 L617.5,338.7 L623.1,339.2 L628.6,339.6 L634.2,339.8 L639.7,340.0 L645.3,340.1 L650.8,340.2 L656.4,340.2 L661.9,340.3 L667.5,340.3 L673.0,340.3 L678.6,340.3 L684.1,340.3 L689.7,340.3 L695.2,340.3 L700.8,340.3 L706.3,340.3 L711.9,340.3 L717.4,340.3 L723.0,340.3 L728.5,340.3 L734.1,340.3 L739.6,340.3 L745.2,340.3 L750.7,340.3 L756.3,340.3" fill="none" stroke="#e8965a" stroke-width="2.4"/>
+<line x1="96" y1="340.2857142857143" x2="760" y2="340.2857142857143" stroke="#67d9a0" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="756" y="328.2857142857143" fill="#67d9a0" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">稳态：约 5 微秒</text>
+<text x="180" y="96" fill="#e8965a" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">解释执行</text>
+<text x="180" y="112" fill="#a07040" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">约 200 微秒，慢 40 倍</text>
+<text x="391.1731075636848" y="208.85714285714286" fill="#e8b84b" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">JIT 开始编译热点</text>
+<line x1="594.0" y1="106" x2="594.0" y2="346" stroke="#5a3a44" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="594.0" y="98" fill="#a8707c" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">前 1000 次</text>
+<text x="30" y="384" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三个让微基准失效的东西：一是 JIT 预热（上图）；二是死代码消除（算出来的值没人用，编译器直接把整个循环删了）；</text>
+<text x="30" y="406" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三是缓存预热（第一次读内存慢，之后都快）。所以正经的基准测试框架要跑几千轮、丢弃预热段、还要防止结果被优化掉。</text>
+</svg>
