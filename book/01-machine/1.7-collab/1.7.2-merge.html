@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.7.2 分支、合并与冲突：多人改同一个文件会发生什么</title>
+<link rel="stylesheet" href="../../style.css">
+<style>p code, li code, td code { overflow-wrap: anywhere; }</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+    <a href="index.html">1.7 代码怎么协作</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部</a><span class="sep">/</span>
+    <a href="index.html">1.7 代码怎么协作</a><span class="sep">/</span>
+    <span class="here">1.7.2</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">1.7.2</span>
+    分支、合并与冲突：多人改同一个文件会发生什么
+  </h1>
+  <p class="part-sub">
+    约 0.6 万字 · 6 张图 · 读完你能说清合并到底在比对什么、
+    冲突标记怎么读、为什么改不同文件也会撞车，
+    以及 PR 上那三个合并按钮该怎么选
+  </p>
+
+  <div class="lead">
+    <b>上一节收尾说：Git 能保证「文本层面合得起来」，保证不了「语义层面是对的」。</b>
+    这一节就把这条界线拆开。
+    <br><br>
+    一个人用 Git 时，它是无摩擦的：提交、回退、切分支，每一步都很快。
+    第二个人加入后，冒出三个新问题：
+    <strong>两个人的改动怎么合</strong>、
+    <strong>合不上的时候谁来决定</strong>、
+    <strong>怎么保证合完之后程序还是对的</strong>。
+    <br><br>
+    三个问题的答案分别是：三方合并、人来解冲突、测试和 review。
+    前两个是机制，第三个是纪律——<em>Git 只负责前两个，第三个得靠团队自己</em>。
+    这一节就按这个顺序讲：先看合并的算法，
+    再看冲突长什么样，最后看那些「没冲突但照样崩」的情况。
+  </div>
+
+  <div class="minitoc">
+    <h4>本节的小部分</h4>
+    <ol>
+      <li><a href="#p1">1 三个人同时改一个仓库</a></li>
+      <li><a href="#p2">2 三种分支模型</a></li>
+      <li><a href="#p3">3 合并到底在比对什么</a></li>
+      <li><a href="#p4">4 冲突长什么样</a></li>
+      <li><a href="#p5">5 为什么改不同文件也会撞车</a></li>
+      <li><a href="#p6">6 解决冲突的正确姿势</a></li>
+      <li><a href="#p7">7 PR 上那三个合并按钮</a></li>
+      <li><a href="#p8">8 Code Review 在审什么</a></li>
+      <li><a href="#p9">9 受保护分支与 CI</a></li>
+      <li><a href="#p10">10 长期分支的代价</a></li>
+      <li><a href="#p11">11 它撑不起什么</a></li>
+      <li><a href="#p12">12 收尾：仓库之内，仓库之外</a></li>
+    </ol>
+  </div>
+
+  <h2 id="p1"><span class="h2num">1.7.2-1</span>三个人同时改一个仓库</h2>
+
+  <p>
+    具体的场景最容易看清问题。三个人，一个仓库，一天之内：
+  </p>
+
+  <pre><code>A：改了登录页的 header，动了 layout.css 和 login.html
+B：改了同一页的 footer，也动了 layout.css
+C：加了一个新页面，新建了 profile.html，并在路由表里加了一行</code></pre>
+
+  <p>
+    三个人各自提交，谁都没碰上谁——直到要合进 <code>main</code>。
+  </p>
+
+  <p>
+    A 最先合，顺利。<br>
+    B 再合，<strong>冲突了</strong>：两人都动了 <code>layout.css</code>，
+    而且改的位置挨得很近（一个在文件上半段，一个在下半段，但如果中间只隔几行，
+    Git 会认为这是「同一块区域」）。<br>
+    C 最后合，文件不冲突，但<em>路由表那一行</em>和 A 的改动正好相邻，也冲突了。
+  </p>
+
+  <p>
+    这里已经能看出三件事：<strong>冲突和「改哪个文件」有关，但更和「改的位置有多近」有关</strong>；
+    <strong>越晚合的人越倒霉</strong>（要解的冲突越多）；
+    <strong>先合的人占便宜</strong>（他的版本成了「基准」）。
+  </p>
+
+  <p>
+    补一句「挨得近」到底有多近：<strong>默认的上下文是 3 行</strong>。
+    意思是，如果两处改动之间隔着 6 行以上的没动过的代码，Git 就认为它们是两块独立的改动，能自动合；
+    隔得少于这个距离，就当成同一块，让你来决定。
+  </p>
+
+  <p>
+    这个数值可以调（<code>git merge -X diff3</code> 或者配置 <code>merge.conflictStyle</code>），
+    但大多数人不该调——<em>它是一道安全边界，调松了会更容易「合出一个悄悄坏掉的版本」</em>。
+  </p>
+
+  <p>
+    这套「谁先谁后」的不公平，是所有分支模型试图解决的问题。下面看三种主流解法。
+  </p>
+
+  <h2 id="p2"><span class="h2num">1.7.2-2</span>三种分支模型</h2>
+
+  <p>
+    分支模型不是 Git 的功能，是团队的约定：<strong>什么时候开分支、分支活多久、往哪儿合</strong>。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.2-1-models.svg" target="_blank">
+    <img src="../../assets/img/1.7.2-1-models.svg" alt="三种分支模型的示意：主干开发是一条直线加一个活一天的小分支；Git Flow 有 main 和 develop 两条主线，外加 feature、release、hotfix 三种支线；GitHub Flow 是 main 加三个带 PR 标记的短分支" loading="lazy"></a>
+    <figcaption>图 1.7.2-1　三种分支模型。<em>复杂度差一个量级</em>。主干开发最快，所有人往 main 上合；Git Flow 最重，五条线并行；GitHub Flow 是中间路线，也是开源社区最常用的形态。选哪个不看哪个「专业」，看团队多大、发布多频繁、需不需要同时维护几个版本。</figcaption>
+  </figure>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>模型</th><th>分支活多久</th><th>适合</th><th>代价</th></tr></thead>
+    <tbody>
+      <tr><td>主干开发</td><td>几小时到两天</td><td>持续交付、自动化测试强</td><td>要靠特性开关兜住半成品</td></tr>
+      <tr><td>Git Flow</td><td>几天到几周</td><td>同时维护多个发布版本</td><td>分支多、合并次数多、心智负担重</td></tr>
+      <tr><td>GitHub Flow</td><td>一两天</td><td>绝大多数 Web 团队</td><td>要求 main 随时可发布</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    主干开发为什么最快？因为<strong>分支活得越短，冲突窗口越小</strong>。
+    你上午开分支、下午合，中间只有几个小时的改动可能撞车；
+    你开一个分支活两周，这两周里 main 上发生的所有改动都可能和你冲突。
+  </p>
+
+  <p>
+    那 Git Flow 为什么还存在？因为有些产品真的需要「同时维护 2.0 和 3.0」：
+    2.0 只修紧急 bug，3.0 在开发新功能。<em>这种场景下必须有长期分支</em>，
+    代价就是每次 hotfix 都要往两条线上各合一次。
+  </p>
+
+  <div class="key">
+    <b>一条通用原则：</b>
+    分支的寿命，等于「冲突的风险窗口」。<strong>能今天合就别拖到明天</strong>。
+    如果一件事非做两周不可，那就把它拆成几个能独立上线的小块，
+    或者用特性开关把它藏在 main 上（代码合了，功能不生效）。
+  </div>
+
+  <h2 id="p3"><span class="h2num">1.7.2-3</span>合并到底在比对什么</h2>
+
+  <p>
+    很多人以为合并是「把两个文件合起来」。不是——
+    <strong>是拿「共同祖先」当基准，看两边各改了什么</strong>。这叫三方合并。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.2-2-three-way.svg" target="_blank">
+    <img src="../../assets/img/1.7.2-2-three-way.svg" alt="三列代码并排：左边是共同祖先 base，中间是我的分支 ours，右边是他的分支 theirs；只有两边改动的那几行用底色标出；下方是合并结果，逐行说明每一行采用了哪一边" loading="lazy"></a>
+    <figcaption>图 1.7.2-2　三方比对。<em>关键在「base」这一列</em>：有了它，Git 才能判断「这一行是被谁改的」。如果只看两个版本，它没法区分「我改的」和「他改的」——那只能变成「选一个」，而不是「合起来」。</figcaption>
+  </figure>
+
+  <p>
+    逐行的判断规则只有三条：
+  </p>
+
+  <div class="tw"><table style="min-width:520px">
+    <thead><tr><th>情况</th><th>处理</th></tr></thead>
+    <tbody>
+      <tr><td>只有一边改了这一行</td><td>采用改的那边</td></tr>
+      <tr><td>两边改成了同样的内容</td><td>采用任意一边（结果一样）</td></tr>
+      <tr><td>两边改得不一样</td><td>冲突，交给人</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    这就是为什么「自动合并成功」值得警惕：它只说明<strong>没有一行被两边同时改</strong>，
+    不说明合起来是对的。
+  </p>
+
+  <p>
+    还有一个细节：Git 判断「同一块区域」的单位不是行，是<strong>「改动块」（hunk）加上下文</strong>。
+    默认上下文是 3 行，意思是：两边改的行如果隔了 6 行以上，就不算冲突。
+    这也是为什么有时你会看到「明明改的是不同地方，怎么就冲突了」——
+    因为中间隔得太近，被算成同一块了。
+  </p>
+
+  <h2 id="p4"><span class="h2num">1.7.2-4</span>冲突长什么样</h2>
+
+  <p>
+    冲突的时候，Git 不会替你选，它把两个版本<strong>都塞进文件里</strong>，
+    用三个标记隔开，让你自己决定。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.2-3-conflict.svg" target="_blank">
+    <img src="../../assets/img/1.7.2-3-conflict.svg" alt="左边是带冲突标记的文件内容，依次是普通行、七个小于号加 HEAD、我的版本、七个等号、他的版本、七个大于号加分支名、普通行；右边标注每段的含义；下方是三种处理方式" loading="lazy"></a>
+    <figcaption>图 1.7.2-3　冲突标记。<em>七个小于号到七个等号之间是你的版本，七个等号到七个大于号之间是对方的</em>。三个标记本身不是代码，解决冲突时必须全部删干净——留一个，文件就是语法错误的，而报错信息通常指向别处，很难查。</figcaption>
+  </figure>
+
+  <p>
+    处理方式只有三种，选哪个取决于<strong>业务意图</strong>，不是取决于代码：
+  </p>
+
+  <p>
+    <strong>只留我的。</strong>说明对方的改动在这个位置不需要（可能他改的是旧逻辑）。
+  </p>
+
+  <p>
+    <strong>只留他的。</strong>说明我的改动是错的，或者他改的覆盖了我的需求。
+  </p>
+
+  <p>
+    <strong>写第三种。</strong>最常见的情况：<em>两边都对，但合起来不对</em>。
+    比如他改成了 <code>&gt;= 0</code>，我改成了带参数的新调用，
+    真正需要的是「<code>&gt;= 0</code> 加新参数」——这就是第三种。
+  </p>
+
+  <p>
+    顺带说一个能解释很多命令的细节：<strong>冲突期间，Git 的索引里同时存着三份这个文件</strong>。
+    一份是共同祖先（stage 1），一份是我的（stage 2），一份是他的（stage 3）。
+  </p>
+
+  <pre><code>git checkout --ours   &lt;文件&gt;   # 直接取我这一份（stage 2）
+git checkout --theirs &lt;文件&gt;   # 直接取他那一份（stage 3）
+git diff              &lt;文件&gt;   # 看「合并结果 vs 我的」，冲突标记也会显示出来</code></pre>
+
+  <p>
+    所以「解决冲突」在底层就是：<em>把索引里那三份合并成一份，然后 <code>git add</code></em>。
+    <code>git add</code> 之后 stage 1/2/3 消失，只剩 stage 0（正常状态），
+    这个文件就不再是「冲突中」了。
+  </p>
+
+  <div class="warn">
+    <b>解决冲突时最容易犯的错：</b>
+    只看代码，不看<strong>为什么这么改</strong>。
+    正确做法是先跑 <code>git log</code> 看两边的提交信息，必要时 <code>git blame</code> 看那一行的来历，
+    <em>搞清楚意图再动手</em>。否则你会「解完冲突、测试也过」，但把别人的需求悄悄改没了。
+  </div>
+
+  <h2 id="p5"><span class="h2num">1.7.2-5</span>为什么改不同文件也会撞车</h2>
+
+  <p>
+    这是多人协作里最容易被低估的一类问题：<strong>Git 说没冲突，合起来却崩了</strong>。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.2-4-semantic.svg" target="_blank">
+    <img src="../../assets/img/1.7.2-4-semantic.svg" alt="上半部分两个 PR 各改一个文件：PR A 给 getUser 加了一个参数，PR B 新增了一处 getUser 调用；中间标着 Git 判断无冲突；下半部分合并后编译报错 too few arguments" loading="lazy"></a>
+    <figcaption>图 1.7.2-4　语义冲突。<em>两个文件不同、没有重叠的行，Git 自动合并成功</em>——但一边改了函数签名，另一边按旧签名调用，合起来直接编译不过。更麻烦的是类型对得上、行为变了的情况：编译通过、测试可能也过，等线上才炸。</figcaption>
+  </figure>
+
+  <p>
+    常见的四种「无冲突但会崩」：
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>类型</th><th>具体情形</th><th>怎么发现</th></tr></thead>
+    <tbody>
+      <tr><td>接口变了</td><td>A 改函数签名，B 新增调用</td><td>编译（静态语言）；测试（动态语言）</td></tr>
+      <tr><td>重命名 / 搬家</td><td>A 把函数移到另一个文件，B 在原地改它</td><td>编译报「找不到符号」，或者改动悄悄失效</td></tr>
+      <tr><td>共享配置</td><td>两人往同一个 JSON 数组里各加一项</td><td>有时能合，有时数组结构坏掉</td></tr>
+      <tr><td>约定变了</td><td>A 改了「金额单位是分还是元」，B 按旧单位算</td><td>只能靠测试和 review</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    最后一种最阴——<strong>它连编译都过，测试也可能过</strong>。
+    因为单测里 A 和 B 各自的用例都对，只有「A 的改动 + B 的改动」同时存在时才错。
+    这类问题只能靠<em>合并之后跑全量集成测试</em>发现。
+  </p>
+
+  <div class="key">
+    <b>所以有两条硬规矩：</b>
+    一、<strong>合并前先把目标分支合到自己分支上</strong>，在自己的分支里解冲突、跑测试；
+    二、<strong>合并之后必须跑一遍完整测试</strong>，不能只看「没冲突」就点通过。
+    这两条能挡掉上面四类里的绝大部分。
+  </div>
+
+  <h2 id="p6"><span class="h2num">1.7.2-6</span>解决冲突的正确姿势</h2>
+
+  <p>
+    把前面几节的东西串起来，一次冲突的处理大概是这样：
+  </p>
+
+  <pre><code>1. 先看清楚          git log --oneline main..HEAD   我这边改了啥
+                     git log --oneline HEAD..main   他那边改了啥
+2. 把 main 合进来     git merge main（或 git rebase main）
+3. 一个个文件解       git status 看哪些是 both modified
+4. 理解意图           git log -p &lt;文件&gt; / git blame &lt;行&gt;
+5. 动手改             留我的、留他的、或者写第三种
+6. 标记为已解决       git add &lt;文件&gt;
+7. 跑测试             别急着 commit，先确认没改坏
+8. 完成合并           git commit（merge）或 git rebase --continue</code></pre>
+
+  <p>
+    第 1 步经常被跳过，但它决定了后面所有判断的质量。
+    <em>不知道两边为什么这么改，你解的只是「文本」，不是「意图」</em>。
+  </p>
+
+  <p>
+    第 7 步也是。很多人解完冲突就直接推了，结果 CI 挂在一片红里，
+    再去翻是哪个冲突解错了——那时候已经很难定位了。
+  </p>
+
+  <p>
+    还有一个减少冲突的实用技巧：<strong>频繁地把 main 合到自己分支</strong>，
+    哪怕还没做完。每次合一点点，冲突就小；攒两周再合，冲突就是一大坨，
+    而且你已经忘了当初为什么那么写。
+  </p>
+
+  <p>
+    至于用命令行还是图形化工具：<strong>三方合并的界面确实更适合图形工具</strong>。
+    VS Code 内置的合并编辑器、<code>meld</code>、<code>kdiff3</code> 都能把三个版本并排显示，
+    点一下「采用左边」「采用右边」，比手工删标记快得多，也更不容易漏。
+  </p>
+
+  <p>
+    但有一点要注意：<em>工具只帮你搬文本，不帮你判断意图</em>。
+    如果两边改的是同一个逻辑，工具显示的仍然是「两份文本」，
+    真正的决策（要不要写第三种）还是得你自己做。
+  </p>
+
+  <h2 id="p7"><span class="h2num">1.7.2-7</span>PR 上那三个合并按钮</h2>
+
+  <p>
+    GitHub、GitLab 上的 PR 页面都有三个合并按钮，它们合并出来的历史形状完全不同。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.2-5-merge-buttons.svg" target="_blank">
+    <img src="../../assets/img/1.7.2-5-merge-buttons.svg" alt="三种合并方式的历史对比：merge 保留三个提交并加一个合并提交；squash 把三个提交压成一个；rebase 把三个提交逐个重放到 main 末尾，哈希都变了" loading="lazy"></a>
+    <figcaption>图 1.7.2-5　三种合并按钮。<em>同样的三个提交，合出来的历史完全不一样</em>。Merge 保留完整脉络（包括「曾经并行过」），Squash 压成一个（main 很干净，但细节丢了），Rebase 逐个重放（每个提交独立，但哈希全变）。选哪个是团队约定，没有对错。</figcaption>
+  </figure>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>方式</th><th>main 上多出几个提交</th><th>适合</th><th>代价</th></tr></thead>
+    <tbody>
+      <tr><td>Merge commit</td><td>4 个（3 个原提交 + 1 个合并）</td><td>想保留分支脉络</td><td>历史图会长出很多岔口</td></tr>
+      <tr><td>Squash</td><td>1 个</td><td>分支上是一堆「改改改」的碎提交</td><td>丢失中间过程，bisect 变难</td></tr>
+      <tr><td>Rebase</td><td>3 个（哈希全变）</td><td>每个提交都干净、有意义</td><td>不能对已共享的分支用</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    Squash 有一个隐藏代价值得说：<strong>它让 <code>git bisect</code> 变难</strong>。
+    bisect 是「二分查找哪个提交引入了 bug」，它依赖提交粒度足够细。
+    如果你把十个改动压成一个，bisect 只能定位到「这十个之一」，还得人再翻。
+    <em>方便了 review，牺牲了排查</em>。
+  </p>
+
+  <h2 id="p8"><span class="h2num">1.7.2-8</span>Code Review 在审什么</h2>
+
+  <p>
+    很多人以为 review 是「检查代码有没有写错」。不是——<strong>语法和低级错误该由 linter 和测试管</strong>，
+    让人去查这些是浪费。
+  </p>
+
+  <p>
+    Review 真正在审的是四件机器判断不了的事：
+  </p>
+
+  <p>
+    <strong>一是设计合不合理。</strong>这个抽象对不对？是不是在错误的地方加了逻辑？
+    有没有更简单的做法？
+  </p>
+
+  <p>
+    <strong>二是边界处理全不全。</strong>空输入、超大输入、并发、失败重试——
+    这些测试可能覆盖了，也可能没覆盖，看代码更容易发现遗漏。
+  </p>
+
+  <p>
+    <strong>三是命名和可读性。</strong><code>data</code>、<code>temp</code>、<code>flag</code>
+    这种名字在写的时候很清楚，半年后看就是灾难。
+  </p>
+
+  <p>
+    <strong>四是有没有测试。</strong>没有测试的功能改动，等于把回归风险留给下一个人。
+  </p>
+
+  <p>
+    而 review 的质量，和 <strong>PR 的大小</strong>强相关。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/1.7.2-6-pr-size.svg" target="_blank">
+    <img src="../../assets/img/1.7.2-6-pr-size.svg" alt="曲线图：横轴是 PR 改动行数的对数刻度，纵轴是缺陷发现率，曲线从左侧 85% 一路降到右侧 15%，中间一条红色虚线标出 400 行" loading="lazy"></a>
+    <figcaption>图 1.7.2-6　PR 越大，认真看的人越少。<em>这不是态度问题，是注意力有上限</em>：一次看五百行，人只能扫个大概，看不出设计问题。所以「写小 PR」不是为了管流程，是为了让 review 这件事真的发生。经验值是一个 PR 控制在 200 到 400 行以内（含测试）。</figcaption>
+  </figure>
+
+  <p>
+    400 行这条线不是硬规定，但它背后的机制很硬：
+    <strong>人的短期注意力撑不住一次处理几百个判断</strong>。
+    超过这个量，review 就退化成「扫一眼，看着像对的，通过」。
+  </p>
+
+  <p>
+    评论的写法也很影响协作。同一个问题，两种说法：
+  </p>
+
+  <pre><code>差：  这里不对，改一下。
+      为什么要用这个？看不懂。
+
+好：  这里的 flag 如果传 true，会不会在并发下重复写？
+      我看 order.c:120 那个调用点没加锁。
+      （如果是有意为之，能不能补一句注释说明？）</code></pre>
+
+  <p>
+    差别在于：<strong>好评论指出具体位置、说出担心的场景、并且承认自己可能看错</strong>。
+    它把「你错了」变成「我们一起看看这里」，对方不会防御，讨论才能继续。
+  </p>
+
+  <p>
+    反过来，作者也有一条义务：<em>每条评论都要回</em>。
+    哪怕只是「有道理，我改」或者「这里是有意的，因为……」。
+    一条没人回的评论，下次就没人愿意提了。
+  </p>
+
+  <div class="note">
+    <b>拆不动怎么办：</b>
+    如果一个改动拆不出小 PR，往往说明<em>这次改动本身耦合太重</em>——
+    它同时改了接口、实现、调用方、配置。这本身就是个设计信号，
+    值得先停下来想想「是不是该分两步走」。
+  </div>
+
+  <h2 id="p9"><span class="h2num">1.7.2-9</span>受保护分支与 CI</h2>
+
+  <p>
+    前面讲的都是「应该怎么做」。要让它真的发生，需要一点强制手段。
+  </p>
+
+  <p>
+    最常见的两条：
+  </p>
+
+  <p>
+    <strong>一是受保护分支。</strong><code>main</code> 不允许直接 push，
+    只能通过 PR 合入。这一条挡住了「本地跑通了就直接推」的冲动。
+  </p>
+
+  <p>
+    <strong>二是 CI 门禁。</strong>PR 必须满足三个条件才能合：
+    自动化测试全过、至少一个人 approve、没有未解决的对话。
+  </p>
+
+  <p>
+    这两条看起来是「不信任开发者」，实际效果相反：
+    <em>它把「检查」变成了默认动作，而不是靠人记得</em>。
+    一个人再细心，也有赶时间的时候；而规则不会赶时间。
+  </p>
+
+  <div class="warn">
+    <b>但门禁有一个反作用要注意：</b>
+    如果 CI 跑一次要四十分钟，人就会开始想办法绕过它——
+    拆成更小的 PR 硬塞、或者干脆关掉某些检查。
+    <strong>门禁的价值取决于它有多快</strong>：五分钟能出结果的门禁会被遵守，
+    四十分钟的会被绕过。所以「把 CI 做快」本身就是协作基础设施的一部分。
+  </div>
+
+  <p>
+    那 CI 里到底该跑什么？按「能不能挡住问题」排，顺序大概是：
+  </p>
+
+  <div class="tw"><table style="min-width:520px">
+    <thead><tr><th>阶段</th><th>跑什么</th><th>大概耗时</th></tr></thead>
+    <tbody>
+      <tr><td>第一层</td><td>编译、lint、格式检查</td><td>几十秒</td></tr>
+      <tr><td>第二层</td><td>单元测试</td><td>一到三分钟</td></tr>
+      <tr><td>第三层</td><td>集成测试（真数据库、真容器）</td><td>几分钟到十几分钟</td></tr>
+      <tr><td>第四层</td><td>端到端、构建产物、镜像</td><td>十几分钟</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>
+    分层的目的不是「分类」，是<strong>让前面几层先失败</strong>：
+    编译都过不了，就别浪费十分钟跑集成测试了。
+    <em>所以 CI 里步骤的顺序，应该按「失败概率」从高到低排</em>，
+    而不是按「重要性」。
+  </p>
+
+  <h2 id="p10"><span class="h2num">1.7.2-10</span>长期分支的代价</h2>
+
+  <p>
+    这一节把前面散落的线索收一下：<strong>为什么长期分支是灾难</strong>。
+  </p>
+
+  <p>
+    假设你开了一个分支，做了两周。这两周里 main 上前进了 40 个提交。
+    现在你要合回去，冲突的数量大致和<strong>「你改动的位置」×「别人改动的位置」</strong>成正比。
+    两周的改动量 × 40 个提交的改动量，这个乘积很大。
+  </p>
+
+  <p>
+    而且更麻烦的是：<strong>解冲突的时候，你已经忘了当初为什么那么写</strong>。
+    两周前的设计决策，现在只剩代码，没有上下文。
+  </p>
+
+  <p>
+    业界的说法叫「合并地狱」（merge hell）：分支拖得越久，
+    合并越像一场考古，最后往往以「算了，我重写一遍」收场——
+    而那两周的工作就白费了。
+  </p>
+
+  <p>
+    解法有两个，都不是「更努力地解冲突」：
+  </p>
+
+  <p>
+    <strong>一是拆小。</strong>把两周的活拆成五个能独立上线的 PR，
+    每个都当天合。功能没做完就先藏着（特性开关）。
+  </p>
+
+  <p>
+    <strong>二是频繁同步。</strong>每天把 main 合到自己分支一次。
+    这样每次冲突都只有一天的量，好解，而且你还记得上下文。
+  </p>
+
+  <div class="key">
+    <b>特性开关（feature flag）为什么重要：</b>
+    它让你可以「代码合进 main，但功能不生效」。
+    于是长期分支就不需要了——<em>没写完的代码也能合，只是被开关关着</em>。
+    这是主干开发能成立的技术前提，也是「持续集成」这个词里「持续」的真实含义。
+  </div>
+
+  <h2 id="p11"><span class="h2num">1.7.2-11</span>它撑不起什么</h2>
+
+  <p>
+    Git 的合并能力有明确的边界，四条：
+  </p>
+
+  <p>
+    <strong>一是语义冲突。</strong>
+    前面讲过：它只比对文本。两个改动合起来逻辑错了，它完全不知道。
+    <em>这一条只能靠测试和 review 补</em>。
+  </p>
+
+  <p>
+    <strong>二是二进制文件。</strong>
+    图片、音频、Office 文档没法按行合并。两个人同时改，Git 只能说「冲突了，选一个」——
+    它没法把两张图「合起来」。
+  </p>
+
+  <p>
+    <strong>三是大规模重构。</strong>
+    你把一个文件拆成五个、把类改名、把目录结构调整——
+    这类改动会让所有并行分支的路径全部失效。
+    <em>重构期间最好冻结其他人的改动</em>，或者选在大家都不忙的时候做。
+  </p>
+
+  <p>
+    <strong>四是「谁改的」在合并之后就模糊了。</strong>
+    merge commit 里两个父提交的改动混在一起，<code>git blame</code> 会显示
+    「这一行来自 merge commit」，而不是真正改它的人。
+    要看清得加 <code>-m</code> 参数，或者看 merge 之前的历史。
+  </p>
+
+  <h2 id="p12"><span class="h2num">1.7.2-12</span>收尾：仓库之内，仓库之外</h2>
+
+  <p>
+    这一节讲的所有东西，都发生在<strong>一个仓库之内</strong>：
+    分支、合并、冲突、review、门禁。
+    它们解决的是「同一个团队的几个人，怎么改同一份代码」。
+  </p>
+
+  <p>
+    但开源协作是另一回事：<strong>你不认识对方，对方也没有仓库的写权限</strong>。
+    那怎么让他贡献代码？
+  </p>
+
+  <p>
+    答案是 fork：他先把你的仓库复制一份到自己名下，在自己的副本里改，
+    然后发起一个「请把这个改动合进你的仓库」的请求。
+    这个请求叫 PR（Pull Request），意思是「请你 pull 我的改动」。
+    <em>它能成立，是因为 Git 的仓库是去中心化的</em>——
+    任何两份历史只要有一个共同祖先，就能合并。
+  </p>
+
+  <p>
+    下一节就讲这套机制：fork 和 clone 差在哪、一个开源项目是怎么运转的、
+    以及为什么有些 PR 三个月没人理——那不是傲慢，是维护者的时间真的有限。
+  </p>
+
+  <div class="quiz">
+    <h4>自测：能答上 6 题，这一节就算过了</h4>
+    <ol>
+      <li>为什么「越晚合的人越倒霉」？</li>
+      <li>主干开发和 Git Flow 的核心差别是什么？各自适合什么场景？</li>
+      <li>三方合并里的「三方」分别是什么？为什么少了 base 就不行？</li>
+      <li>Git 判断「同一块区域」的单位是什么？为什么会出现「改不同地方也冲突」？</li>
+      <li>冲突标记的三个符号各是什么含义？为什么必须全部删掉？</li>
+      <li>举出两种「改不同文件、Git 说没冲突、合起来却崩」的情况。</li>
+      <li>「合并前先把 main 合到自己分支」为什么能减少问题？</li>
+      <li>Merge、Squash、Rebase 三个按钮合出来的历史有什么区别？</li>
+      <li>Squash 有什么隐藏代价？</li>
+      <li>Code Review 该审什么、不该审什么？</li>
+      <li>为什么 PR 要控制在几百行以内？拆不动意味着什么？</li>
+      <li>长期分支为什么会导致「合并地狱」？两个解法是什么？</li>
+    </ol>
+    <details><summary>点开看答案（先自己想，别急着点）</summary>
+    <ol>
+      <li>因为他要面对的「别人已合入的改动」最多。先合的人把 main 推到了自己的版本上，后合的人得在这个新基准上解冲突。分支活得越久，这个差距越大。</li>
+      <li>主干开发是所有人往 main 上合、分支活不过一两天；Git Flow 有五条长期分支（main、develop、feature、release、hotfix），适合同时维护多个发布版本。前者快但要靠特性开关和自动化测试兜底，后者重但能应付多版本并行。</li>
+      <li>base（共同祖先）、ours（我的分支）、theirs（他的分支）。没有 base 就分不清「这一行是谁改的」——只能看到两个不同的版本，那就变成「选一个」而不是「合起来」。</li>
+      <li>是「改动块加上下文行」（默认上下 3 行）。两边改的行如果隔得近（中间不到 6 行），会被算成同一块，于是冲突。所以「改的位置离得近」比「改同一个文件」更能决定是否冲突。</li>
+      <li>七个小于号加分支名是冲突开始（下面是你的），七个等号是分隔线，七个大于号是冲突结束（下面是对方的）。必须全删，因为它们不是代码，留着就是语法错误——而且报错通常指向别处，很难查。</li>
+      <li>一是 A 改了函数签名、B 按旧签名新增调用（编译不过）；二是 A 改了「金额单位」这类约定、B 按旧约定算（编译能过、单测也能过，线上才炸）。另外还有「A 把函数搬到别的文件、B 在原地改」这类。</li>
+      <li>因为冲突在自己分支里解，不污染 main；而且解完能立刻跑测试验证。如果直接在 PR 里解，一旦解错，main 就带上了错误。</li>
+      <li>Merge 保留三个原提交再加一个合并提交（两条父）；Squash 把三个压成一个（main 干净但细节丢失）；Rebase 把三个逐个重放到 main 末尾（每个独立但哈希全变）。</li>
+      <li>它让 <code>git bisect</code> 变难。bisect 靠「二分查找哪个提交引入 bug」，依赖提交粒度够细；压成一个之后只能定位到「这一堆改动之一」，还得人再翻。</li>
+      <li>该审：设计是否合理、边界是否处理全、命名是否清楚、有没有测试。不该审：语法错误、格式、明显的低级 bug——那些该由 linter 和测试管，让人查是浪费。</li>
+      <li>因为人的短期注意力撑不住一次处理几百个判断，超过就退化成「扫一眼就通过」。拆不动往往说明这次改动本身耦合太重（同时改了接口、实现、调用方、配置），是个设计信号。</li>
+      <li>因为冲突数量和「你的改动量 × 别人这两周的改动量」成正比，而两周后你已经忘了当初为什么那么写，解冲突变成考古。两个解法：拆成能独立上线的小块（配合特性开关），以及每天把 main 合到自己分支。</li>
+    </ol>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="1.7.1-git.html">← 1.7.1 Git：给每一次修改拍一张快照</a>
+    <span class="next todo-next">1.7.3 GitHub 与开源协作 · 尚未动笔</span>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 462" width="880" height="462" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="462" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.7.2-2  合并其实是在做三方比对</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不是「把两个文件合起来」，是「拿共同祖先当基准，看两边各改了什么」</text>
+<text x="40" y="86" fill="#3a3a52" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">base（共同祖先）</text>
+<rect x="40" y="98" width="240" height="24" rx="2" fill="#14141e" stroke="#2a2a3e" stroke-width="1"/>
+<text x="50" y="115" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">int count = 0;</text>
+<rect x="40" y="126" width="240" height="24" rx="2" fill="#14141e" stroke="#2a2a3e" stroke-width="1"/>
+<text x="50" y="143" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">if (count > 0) {</text>
+<rect x="40" y="154" width="240" height="24" rx="2" fill="#14141e" stroke="#2a2a3e" stroke-width="1"/>
+<text x="50" y="171" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">    log("ok");</text>
+<rect x="40" y="182" width="240" height="24" rx="2" fill="#14141e" stroke="#2a2a3e" stroke-width="1"/>
+<text x="50" y="199" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">}</text>
+<text x="320" y="86" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">ours（我的分支）</text>
+<rect x="320" y="98" width="240" height="24" rx="2" fill="#16281c" stroke="#2a2a3e" stroke-width="1"/>
+<text x="330" y="115" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">int count = 0;</text>
+<rect x="320" y="126" width="240" height="24" rx="2" fill="#16281c" stroke="#2a2a3e" stroke-width="1"/>
+<text x="330" y="143" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">if (count > 0) {</text>
+<rect x="320" y="154" width="240" height="24" rx="2" fill="#2a2410" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="330" y="171" fill="#67d9a0" font-size="8.2" text-anchor="start" font-family="monospace">    log("ok", count);</text>
+<rect x="320" y="182" width="240" height="24" rx="2" fill="#16281c" stroke="#2a2a3e" stroke-width="1"/>
+<text x="330" y="199" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">}</text>
+<text x="600" y="86" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">theirs（他的分支）</text>
+<rect x="600" y="98" width="240" height="24" rx="2" fill="#16202c" stroke="#2a2a3e" stroke-width="1"/>
+<text x="610" y="115" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">int count = 0;</text>
+<rect x="600" y="126" width="240" height="24" rx="2" fill="#1a2a38" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="610" y="143" fill="#67b5ef" font-size="8.2" text-anchor="start" font-family="monospace">if (count >= 0) {</text>
+<rect x="600" y="154" width="240" height="24" rx="2" fill="#16202c" stroke="#2a2a3e" stroke-width="1"/>
+<text x="610" y="171" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">    log("ok");</text>
+<rect x="600" y="182" width="240" height="24" rx="2" fill="#16202c" stroke="#2a2a3e" stroke-width="1"/>
+<text x="610" y="199" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">}</text>
+<path d="M160,220 L160,284" fill="none" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M440,220 L440,250 L160,250" fill="none" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M720,220 L720,250 L160,250" fill="none" stroke="#4a4a66" stroke-width="1.2"/>
+<path d="M156,284 L160,292 L164,284 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<text x="40" y="300" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">合并结果</text>
+<rect x="40" y="312" width="240" height="24" rx="2" fill="#14141e" stroke="#2a2a3e" stroke-width="1"/>
+<text x="50" y="329" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">int count = 0;</text>
+<text x="296" y="329" fill="#6f6f88" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两边都没改 → 用任意一边</text>
+<rect x="40" y="340" width="240" height="24" rx="2" fill="#14141e" stroke="#2a2a3e" stroke-width="1"/>
+<text x="50" y="357" fill="#67b5ef" font-size="8.2" text-anchor="start" font-family="monospace">if (count >= 0) {</text>
+<text x="296" y="357" fill="#6f6f88" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只有他改了 → 用他的</text>
+<rect x="40" y="368" width="240" height="24" rx="2" fill="#14141e" stroke="#2a2a3e" stroke-width="1"/>
+<text x="50" y="385" fill="#67d9a0" font-size="8.2" text-anchor="start" font-family="monospace">    log("ok", count);</text>
+<text x="296" y="385" fill="#6f6f88" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只有我改了 → 用我的</text>
+<rect x="40" y="396" width="240" height="24" rx="2" fill="#14141e" stroke="#2a2a3e" stroke-width="1"/>
+<text x="50" y="413" fill="#8a8aa2" font-size="8.2" text-anchor="start" font-family="monospace">}</text>
+<text x="296" y="413" fill="#6f6f88" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif"></text>
+<text x="520" y="312" fill="#c8c8dc" font-size="9.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">三条规则</text>
+<circle cx="528" cy="332.5" r="3" fill="#67d9a0"/>
+<text x="540" y="336" fill="#a8a8c0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只有一边改了这一行</text>
+<text x="700" y="336" fill="#67d9a0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">用改的那边</text>
+<circle cx="528" cy="358.5" r="3" fill="#8a8aa2"/>
+<text x="540" y="362" fill="#a8a8c0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两边改成一样了</text>
+<text x="700" y="362" fill="#8a8aa2" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">用任意一边</text>
+<circle cx="528" cy="384.5" r="3" fill="#e87a8a"/>
+<text x="540" y="388" fill="#a8a8c0" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两边改得不一样</text>
+<text x="700" y="388" fill="#e87a8a" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">冲突，交给人</text>
+<text x="30" y="442" fill="#a0a0b8" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注意右边两行：我的改动和他的一行都没冲突，各自被采用了 —— 所以「自动合并成功」这件事，本质上是逐行做出的判断。</text>
+</svg>
