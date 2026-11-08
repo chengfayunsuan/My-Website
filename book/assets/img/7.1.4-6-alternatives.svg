@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 436" width="880" height="436" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="436" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.1.4-6  替代系统：规模还差两个数量级</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">按日处理金额画（对数尺度的直观版）。美元这一格是 Fedwire 加 CHIPS 的量级</text>
+<text x="232" y="138" fill="#67b5ef" font-size="11" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">美元体系</text>
+<text x="232" y="158" fill="#6f6f88" font-size="8" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">SWIFT 报文 + CHIPS + Fedwire</text>
+<rect x="250" y="116" width="480" height="46" rx="3" fill="#1a2434" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="742" y="145" fill="#67b5ef" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">约 5.8 万亿美元 / 天</text>
+<text x="232" y="230" fill="#e8b84b" font-size="11" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">人民币 CIPS</text>
+<text x="232" y="250" fill="#6f6f88" font-size="8" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2015 年上线，专做人民币跨境</text>
+<rect x="250" y="208" width="90" height="46" rx="3" fill="#2a2410" stroke="#e8b84b" stroke-width="1.2"/>
+<text x="352" y="237" fill="#e8b84b" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">约 0.5 万亿美元 / 天</text>
+<text x="232" y="322" fill="#e8965a" font-size="11" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">俄罗斯 SPFS</text>
+<text x="232" y="342" fill="#6f6f88" font-size="8" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2014 年开始建，主要国内</text>
+<rect x="250" y="300" width="26" height="46" rx="3" fill="#2a2018" stroke="#e8965a" stroke-width="1.2"/>
+<text x="288" y="329" fill="#e8965a" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">规模小一个量级以上</text>
+<text x="40" y="378" fill="#a0a0b8" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注意这不代表「人民币马上能替代美元」：CIPS 处理的是人民币，而全球贸易大部分还是用美元计价。量级差的是使用场景，不只是技术。</text>
+<text x="40" y="402" fill="#8a8aa2" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">SWIFT 的报文量是另一回事：它不处理钱，所以「多少条报文」和「多少钱」不能直接比。</text>
+</svg>

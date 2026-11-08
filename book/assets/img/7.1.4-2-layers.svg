@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 416" width="880" height="416" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="416" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.1.4-2  三层：报文、清算、结算，各干各的</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">很多人把这三件事混成一件。混了之后，「SWIFT 制裁」就理解错了</text>
+<rect x="40" y="92" width="800" height="92" rx="5" fill="#1a2434" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="62" y="122" fill="#67b5ef" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">报文层</text>
+<text x="62" y="142" fill="#9a9ab4" font-size="9" text-anchor="start" font-family="monospace">SWIFT</text>
+<text x="230" y="124" fill="#c0c4d4" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">告诉对方「我要付你 100 万」</text>
+<text x="230" y="148" fill="#7f7f98" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不碰钱，只传话</text>
+<text x="800" y="138" fill="#e87a8a" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">✕ 不动钱</text>
+<rect x="40" y="200" width="800" height="92" rx="5" fill="#2a2410" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="62" y="230" fill="#e8b84b" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">清算层</text>
+<text x="62" y="250" fill="#9a9ab4" font-size="9" text-anchor="start" font-family="monospace">CHIPS / 网联</text>
+<text x="230" y="232" fill="#c0c4d4" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">把一堆付款指令轧差，算出谁净欠谁多少</text>
+<text x="230" y="256" fill="#7f7f98" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">记账，但不搬钱</text>
+<text x="800" y="246" fill="#e87a8a" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">✕ 不动钱</text>
+<rect x="40" y="308" width="800" height="92" rx="5" fill="#16281c" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="62" y="338" fill="#67d9a0" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">结算层</text>
+<text x="62" y="358" fill="#9a9ab4" font-size="9" text-anchor="start" font-family="monospace">Fedwire / 央行大额</text>
+<text x="230" y="340" fill="#c0c4d4" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">在中央银行的账户上，真的把数字划过去</text>
+<text x="230" y="364" fill="#7f7f98" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这一步钱才真的动了</text>
+<text x="800" y="354" fill="#67d9a0" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">✓ 动了钱</text>
+</svg>
