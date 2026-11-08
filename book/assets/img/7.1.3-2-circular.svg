@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 492" width="880" height="492" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="492" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.1.3-2  美元环流：一圈转下来，货留在外面，钱回到美国</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这不是阴谋，是一个自洽的循环。每一环都有人得利，所以谁都懒得改</text>
+<line x1="533.0" y1="147.4" x2="634.3" y2="194.7" stroke="#55557a" stroke-width="1.7"/>
+<path d="M643.4,198.9 L630.3,198.7 L634.8,189.0 Z" fill="#55557a" stroke="#55557a" stroke-width="1"/>
+<line x1="647.0" y1="287.4" x2="545.7" y2="334.7" stroke="#55557a" stroke-width="1.7"/>
+<path d="M536.6,338.9 L545.2,329.0 L549.7,338.7 Z" fill="#55557a" stroke="#55557a" stroke-width="1"/>
+<line x1="347.0" y1="340.6" x2="245.7" y2="293.3" stroke="#55557a" stroke-width="1.7"/>
+<path d="M236.6,289.1 L249.7,289.3 L245.2,299.0 Z" fill="#55557a" stroke="#55557a" stroke-width="1"/>
+<line x1="233.0" y1="200.6" x2="334.3" y2="153.3" stroke="#55557a" stroke-width="1.7"/>
+<path d="M343.4,149.1 L334.8,159.0 L330.3,149.3 Z" fill="#55557a" stroke="#55557a" stroke-width="1"/>
+<rect x="322.0" y="64.0" width="236" height="80" rx="5" fill="#1a2434" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="440" y="98" fill="#67b5ef" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">美国</text>
+<text x="440" y="121" fill="#8f93a8" font-size="8.6" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">印美元，买商品（逆差）</text>
+<rect x="622.0" y="204.0" width="236" height="80" rx="5" fill="#2a2410" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="740" y="238" fill="#e8b84b" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">出口国</text>
+<text x="740" y="261" fill="#8f93a8" font-size="8.6" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">中国、日本、沙特收到美元</text>
+<rect x="322.0" y="344.0" width="236" height="80" rx="5" fill="#16281c" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="440" y="378" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">出口国</text>
+<text x="440" y="401" fill="#8f93a8" font-size="8.6" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">买美国国债、股票、房子</text>
+<rect x="22.0" y="204.0" width="236" height="80" rx="5" fill="#2a2018" stroke="#e8965a" stroke-width="1.4"/>
+<text x="140" y="238" fill="#e8965a" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">美国</text>
+<text x="140" y="261" fill="#8f93a8" font-size="8.6" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">拿到融资，继续逆差</text>
+<text x="440" y="234" fill="#c8c8dc" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">美元环流</text>
+<text x="440" y="256" fill="#6f6f88" font-size="8.6" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一圈下来，货留在外面</text>
+<text x="440" y="272" fill="#6f6f88" font-size="8.6" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">债留在美国</text>
+<text x="40" y="448" fill="#a0a0b8" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">关键在最后一步：出口国拿到的美元，如果只是放在床底下，美国的逆差就撑不下去；它必须买美国资产，钱才能回流。</text>
+<text x="40" y="470" fill="#8a8aa2" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以「美国逆差」和「外国买美债」是同一件事的两面 —— 一个是实物，一个是账本。</text>
+</svg>

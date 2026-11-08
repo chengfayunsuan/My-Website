@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 432" width="880" height="432" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="432" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.1.3-5  同一件事的另一面：美国制造业占 GDP 的比重</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">从 1970 年的 22% 掉到 2024 年的 11% 左右。这条线和贸易逆差是同一枚硬币的两面</text>
+<line x1="100" y1="326.0" x2="806" y2="326.0" stroke="#242434" stroke-width="1"/>
+<text x="90" y="330.0" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">0%</text>
+<line x1="100" y1="280.0" x2="806" y2="280.0" stroke="#242434" stroke-width="1"/>
+<text x="90" y="284.0" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">5%</text>
+<line x1="100" y1="234.0" x2="806" y2="234.0" stroke="#242434" stroke-width="1"/>
+<text x="90" y="238.0" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">10%</text>
+<line x1="100" y1="188.0" x2="806" y2="188.0" stroke="#242434" stroke-width="1"/>
+<text x="90" y="192.0" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">15%</text>
+<line x1="100" y1="142.0" x2="806" y2="142.0" stroke="#242434" stroke-width="1"/>
+<text x="90" y="146.0" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">20%</text>
+<line x1="100" y1="96.0" x2="806" y2="96.0" stroke="#242434" stroke-width="1"/>
+<text x="90" y="100.0" fill="#5f5f78" font-size="9" text-anchor="end" font-family="monospace">25%</text>
+<line x1="100.0" y1="326" x2="100.0" y2="331" stroke="#3a3a52" stroke-width="1"/>
+<text x="100.0" y="346" fill="#6f6f88" font-size="9" text-anchor="middle" font-family="monospace">1970</text>
+<line x1="230.74074074074073" y1="326" x2="230.74074074074073" y2="331" stroke="#3a3a52" stroke-width="1"/>
+<text x="230.74074074074073" y="346" fill="#6f6f88" font-size="9" text-anchor="middle" font-family="monospace">1980</text>
+<line x1="361.48148148148147" y1="326" x2="361.48148148148147" y2="331" stroke="#3a3a52" stroke-width="1"/>
+<text x="361.48148148148147" y="346" fill="#6f6f88" font-size="9" text-anchor="middle" font-family="monospace">1990</text>
+<line x1="492.22222222222223" y1="326" x2="492.22222222222223" y2="331" stroke="#3a3a52" stroke-width="1"/>
+<text x="492.22222222222223" y="346" fill="#6f6f88" font-size="9" text-anchor="middle" font-family="monospace">2000</text>
+<line x1="622.9629629629629" y1="326" x2="622.9629629629629" y2="331" stroke="#3a3a52" stroke-width="1"/>
+<text x="622.9629629629629" y="346" fill="#6f6f88" font-size="9" text-anchor="middle" font-family="monospace">2010</text>
+<line x1="806.0" y1="326" x2="806.0" y2="331" stroke="#3a3a52" stroke-width="1"/>
+<text x="806.0" y="346" fill="#6f6f88" font-size="9" text-anchor="middle" font-family="monospace">2024</text>
+<path d="M100.0,120.8 L230.7,142.0 L361.5,172.4 L492.2,195.4 L623.0,216.5 L806.0,226.6" fill="none" stroke="#e8965a" stroke-width="2.6"/>
+<circle cx="100.0" cy="120.84" r="3.6" fill="#e8965a"/>
+<circle cx="230.74074074074073" cy="142.0" r="3.6" fill="#e8965a"/>
+<circle cx="361.48148148148147" cy="172.36" r="3.6" fill="#e8965a"/>
+<circle cx="492.22222222222223" cy="195.36" r="3.6" fill="#e8965a"/>
+<circle cx="622.9629629629629" cy="216.51999999999998" r="3.6" fill="#e8965a"/>
+<circle cx="806.0" cy="226.64" r="3.6" fill="#e8965a"/>
+<text x="110.0" y="106.84" fill="#e8965a" font-size="11" text-anchor="start" font-family="monospace">22%</text>
+<text x="800.0" y="212.64" fill="#e8965a" font-size="11" text-anchor="end" font-family="monospace">11%</text>
+<text x="439.9259259259259" y="137.4" fill="#a08868" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">去掉的这 11 个百分点</text>
+<text x="439.9259259259259" y="154.4" fill="#8a7a68" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">去了金融、保险、房地产</text>
+<text x="40" y="382" fill="#a0a0b8" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这不是「美国不造东西了」，是「造东西的环节搬走了」：设计、品牌、金融留在国内，组装、零件、生产搬到了亚洲。</text>
+<text x="40" y="406" fill="#8a8aa2" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价是中西部城市空心化、蓝领工资停滞 —— 这部分人后来成了贸易战和「把工作拿回来」的政治基础。</text>
+</svg>

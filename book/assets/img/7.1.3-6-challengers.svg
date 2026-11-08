@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 452" width="880" height="452" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="452" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.1.3-6  三条挑战美元的路，各自卡在哪一步</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不是「谁想不想」，是「条件够不够」。三条路都走了一半，都走不完</text>
+<rect x="40" y="84" width="260" height="300" rx="5" fill="#1a2434" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="58" y="118" fill="#67b5ef" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">欧元计价</text>
+<line x1="58" y1="132" x2="282" y2="132" stroke="#33334a" stroke-width="1"/>
+<text x="58" y="162" fill="#7f7f98" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">做法</text>
+<text x="58" y="180" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1999 年欧元诞生，直接对标美元</text>
+<text x="58" y="236" fill="#7f7f98" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进展</text>
+<text x="58" y="254" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">欧元区内部贸易用欧元，部分能源</text>
+<text x="58" y="270" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">合同改欧元结算</text>
+<text x="58" y="310" fill="#7f7f98" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卡在哪</text>
+<text x="58" y="328" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有统一财政，各国债券各卖各的</text>
+<text x="58" y="344" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">深度不够，装不下大资金</text>
+<rect x="320" y="84" width="260" height="300" rx="5" fill="#2a2410" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="338" y="118" fill="#e8b84b" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">人民币结算</text>
+<line x1="338" y1="132" x2="562" y2="132" stroke="#33334a" stroke-width="1"/>
+<text x="338" y="162" fill="#7f7f98" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">做法</text>
+<text x="338" y="180" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2018 年上海原油期货上线，可</text>
+<text x="338" y="196" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">用人民币计价</text>
+<text x="338" y="236" fill="#7f7f98" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进展</text>
+<text x="338" y="254" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">中俄、中沙部分贸易改本币结算</text>
+<text x="338" y="310" fill="#7f7f98" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卡在哪</text>
+<text x="338" y="328" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">资本管制：钱进来容易，出去难</text>
+<text x="338" y="344" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">拿在手里花不掉</text>
+<rect x="600" y="84" width="260" height="300" rx="5" fill="#16281c" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="618" y="118" fill="#67d9a0" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">本币互换</text>
+<line x1="618" y1="132" x2="842" y2="132" stroke="#33334a" stroke-width="1"/>
+<text x="618" y="162" fill="#7f7f98" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">做法</text>
+<text x="618" y="180" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两国央行互开额度，贸易直接用</text>
+<text x="618" y="196" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">本币，绕开美元</text>
+<text x="618" y="236" fill="#7f7f98" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进展</text>
+<text x="618" y="254" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">金砖、东盟、上合都在推</text>
+<text x="618" y="310" fill="#7f7f98" font-size="8.4" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卡在哪</text>
+<text x="618" y="328" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对方收了你的货币，买不到东西</text>
+<text x="618" y="344" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">额度再大也用不掉</text>
+<text x="40" y="412" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三条路的共同障碍不是经济，是「网络效应」：所有人都在用美元，你一个人换，交易对手要重新定价、重新对冲，成本比省下的多。</text>
+<text x="40" y="436" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以真正的变化不会发生在「某个国家宣布不用美元」，而会发生在「某一块业务里美元变得不方便」—— 比如被制裁的贸易。</text>
+</svg>
