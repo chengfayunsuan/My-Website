@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.6 把程序做出来的一套工具</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 1 部</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 1 部 电、逻辑与指令</a><span class="sep">/</span>
+    <span class="here">1.6 把程序做出来的一套工具</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">CHAPTER 1.6</span>
+    把程序做出来的一套工具
+  </h1>
+  <p class="part-sub">写、调、测、优化。四件事各有各的工具，也各有各的原理</p>
+
+  <p class="lead">
+    前五章讲的都是「机器那头」：电怎么变成逻辑、逻辑怎么变成指令、
+    指令怎么处理数据。这一章换到「人这头」——
+    <em>你坐在屏幕前写代码的那几个小时里，到底在跟什么打交道</em>。
+    <br><br>
+    这段过程可以拆成四件事：<strong>把想法变成代码</strong>（编辑器）、
+    <strong>弄明白它为什么不按你想的跑</strong>（调试器）、
+    <strong>证明它以后也不会跑错</strong>（测试）、
+    <strong>让它跑得够快</strong>（性能分析）。
+    四件事用的工具看起来毫不相干，底下的原理却互相咬得很紧：
+    编辑器要解析代码，调试器要用编译器生成的调试信息，
+    性能分析器要用同一套符号表把地址翻译回函数名。
+    <br><br>
+    这一章就讲这四件工具各自是怎么做到的，以及它们为什么只能做到这个程度。
+  </p>
+
+  <div class="tw"><table style="min-width:560px">
+    <thead><tr><th>编号</th><th>标题</th><th>它解决什么</th><th>状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>1.6.1</code></td>
+        <td><a href="1.6.1-editor.html" style="color:#cfc6ff">编辑器与 IDE：补全、跳转和语法高亮是怎么做到的</a></td>
+        <td>代码在编辑器里到底是什么；补全为什么会猜；跳转为什么有时不准</td>
+        <td><span class="tag done">已完稿</span></td>
+      </tr>
+      <tr>
+        <td><code>1.6.2</code></td>
+        <td>调试器：断点、单步与看变量，程序怎么被“冻住”</td>
+        <td>断点是怎么插进去的；单步为什么能一次走一行；变量值从哪儿读</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>1.6.3</code></td>
+        <td>测试：单元、集成与压测</td>
+        <td>测什么、测多少才算够；为什么覆盖率会骗人；压测在测什么</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+      <tr>
+        <td><code>1.6.4</code></td>
+        <td>性能分析：程序慢在哪一行</td>
+        <td>采样和插桩的区别；火焰图怎么读；优化该从哪儿下手</td>
+        <td><span class="tag todo">待写</span></td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="pager">
+    <a href="../index.html">← 第 1 部目录</a>
+    <a class="next" href="1.6.1-editor.html">1.6.1 编辑器与 IDE：补全、跳转和语法高亮是怎么做到的 →</a>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 456" width="880" height="456" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="456" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.6.1-3  补全的四层：越准的越贵</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同样是按 Tab 补全，底层只看这一份文件，顶层要懂整个项目加所有依赖库</text>
+<rect x="40" y="296" width="186" height="64" rx="4" fill="#16281c" stroke="#67d9a0" stroke-width="1.3"/>
+<text x="52" y="318" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">① 词法补全</text>
+<text x="52" y="338" fill="#a8a8c0" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一份文件里出现过的词</text>
+<text x="52" y="354" fill="#67d9a0" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">扫一遍全文就能干</text>
+<rect x="242" y="224" width="186" height="64" rx="4" fill="#16202c" stroke="#67b5ef" stroke-width="1.3"/>
+<text x="254" y="246" fill="#67b5ef" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">② 语法补全</text>
+<text x="254" y="266" fill="#a8a8c0" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">当前作用域能看见的符号</text>
+<text x="254" y="282" fill="#67b5ef" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">要一次轻量解析</text>
+<rect x="444" y="152" width="186" height="64" rx="4" fill="#201a2e" stroke="#b58ae8" stroke-width="1.3"/>
+<text x="456" y="174" fill="#b58ae8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">③ 语义补全</text>
+<text x="456" y="194" fill="#a8a8c0" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这个对象的类型上有哪些成员</text>
+<text x="456" y="210" fill="#b58ae8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">要完整的类型信息</text>
+<rect x="646" y="80" width="186" height="64" rx="4" fill="#2a2018" stroke="#e8965a" stroke-width="1.3"/>
+<text x="658" y="102" fill="#e8965a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">④ 跨文件补全</text>
+<text x="658" y="122" fill="#a8a8c0" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">整个项目 + 依赖库的符号</text>
+<text x="658" y="138" fill="#e8965a" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">要建索引，几秒到几分钟</text>
+<path d="M226,360 L242,360 L242,256.0 L242,256.0" fill="none" stroke="#3a3a52" stroke-width="1" stroke-dasharray="3 3"/>
+<path d="M428,288 L444,288 L444,184.0 L444,184.0" fill="none" stroke="#3a3a52" stroke-width="1" stroke-dasharray="3 3"/>
+<path d="M630,216 L646,216 L646,112.0 L646,112.0" fill="none" stroke="#3a3a52" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="856" y1="84" x2="856" y2="362" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="866" y="88" fill="#6f6f88" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">贵</text>
+<text x="866" y="360" fill="#6f6f88" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">便宜</text>
+<text x="30" y="392" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">真实编辑器里这四层是叠在一起工作的：先用词法结果垫底（保证一定有东西弹出来），</text>
+<text x="30" y="414" fill="#8a8aa2" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">再叠上语法和语义结果（保证排在前面的对）。所以你偶尔会看到列表里混着一两个不该出现的词 ——</text>
+<text x="30" y="436" fill="#8a8aa2" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">那是底层兜底兜上来的。</text>
+</svg>
