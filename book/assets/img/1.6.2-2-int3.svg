@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 460" width="880" height="460" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="460" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.6.2-2  下断点，就是把一个字节换成 0xCC</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">x86 上 0xCC 是 int3 指令，一字节长。命中之后要把原字节换回去，否则下次还会再触发</text>
+<text x="80" y="84" fill="#8a8aa2" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">地址 0x401136 处的指令：mov eax, 1</text>
+<text x="84" y="118" fill="#8a8aa2" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">原来</text>
+<rect x="96" y="96" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="121.0" y="118" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">B8</text>
+<rect x="150" y="96" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="175.0" y="118" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">01</text>
+<rect x="204" y="96" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="229.0" y="118" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">00</text>
+<rect x="258" y="96" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="283.0" y="118" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">00</text>
+<rect x="312" y="96" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="337.0" y="118" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">00</text>
+<text x="96" y="147" fill="#6f6f88" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">b8 01 00 00 00 就是 mov eax, 1 的机器码</text>
+<text x="84" y="202" fill="#e87a8a" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">下断点后</text>
+<rect x="96" y="180" width="50" height="34" rx="3" fill="#15151f" stroke="#e87a8a" stroke-width="1.2"/>
+<text x="121.0" y="202" fill="#e87a8a" font-size="12" text-anchor="middle" font-family="monospace">CC</text>
+<rect x="150" y="180" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="175.0" y="202" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">01</text>
+<rect x="204" y="180" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="229.0" y="202" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">00</text>
+<rect x="258" y="180" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="283.0" y="202" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">00</text>
+<rect x="312" y="180" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="337.0" y="202" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">00</text>
+<text x="96" y="231" fill="#6f6f88" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只改首字节，其余不动；执行到这儿就会掉进异常</text>
+<text x="84" y="286" fill="#67d9a0" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">命中后</text>
+<rect x="96" y="264" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="121.0" y="286" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">B8</text>
+<rect x="150" y="264" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="175.0" y="286" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">01</text>
+<rect x="204" y="264" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="229.0" y="286" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">00</text>
+<rect x="258" y="264" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="283.0" y="286" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">00</text>
+<rect x="312" y="264" width="50" height="34" rx="3" fill="#15151f" stroke="#5a8a6a" stroke-width="1.2"/>
+<text x="337.0" y="286" fill="#5a8a6a" font-size="12" text-anchor="middle" font-family="monospace">00</text>
+<text x="96" y="315" fill="#6f6f88" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">先把 B8 换回来，再把 PC 往回退一格</text>
+<text x="430" y="104" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">① 你点行号</text>
+<text x="430" y="122" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">编辑器把行号翻译成地址，</text>
+<text x="430" y="138" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">调试器往那个地址写一个 CC</text>
+<text x="430" y="188" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">② 程序跑到这儿</text>
+<text x="430" y="206" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">CPU 不认识 CC 后面的字节组合，</text>
+<text x="430" y="222" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">触发断点异常，内核转告调试器</text>
+<text x="430" y="272" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">③ 你看到它停了</text>
+<text x="430" y="290" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这时代码还是「原样」，你可以看变量、</text>
+<text x="430" y="306" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">看栈。要继续，就再把 CC 写回去</text>
+<line x1="98" y1="322" x2="98" y2="300" stroke="#e8b84b" stroke-width="1.4" stroke-dasharray="3 3"/>
+<path d="M93,320 L98,332 L103,320 Z" fill="#e8b84b" stroke="#e8b84b" stroke-width="1"/>
+<text x="110" y="336" fill="#e8b84b" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">PC 退回这一格 —— 否则一继续就又撞上同一个断点</text>
+<text x="30" y="392" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">为什么不能直接让程序「停在这一行」：CPU 没有「停在这一行」的指令。它只会一条一条地执行，</text>
+<text x="30" y="414" fill="#8a8aa2" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以所有断点都得借助某种「执行到这儿就会出事」的机制。改字节是最便宜的一种。</text>
+<text x="30" y="438" fill="#7a7a92" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">副作用：代码段只读（比如单片机里的 ROM）就改不了，只能改用硬件断点。</text>
+</svg>

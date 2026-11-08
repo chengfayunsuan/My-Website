@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" width="880" height="440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.6.2-6  变量在哪？调试信息说的和你想的不一样</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">「看变量」不是去内存里找一个叫 x 的盒子，而是按一张表去寄存器或栈上取</text>
+<rect x="60" y="120" width="300" height="64" rx="3" fill="#14141e" stroke="#3a4a5a" stroke-width="1.3"/>
+<text x="72" y="142" fill="#3a4a5a" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">main 的栈帧</text>
+<text x="72" y="162" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">返回地址 / 保存的寄存器 / 局部变量</text>
+<rect x="60" y="196" width="300" height="64" rx="3" fill="#16202c" stroke="#67b5ef" stroke-width="1.3"/>
+<text x="72" y="218" fill="#67b5ef" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">foo 的栈帧</text>
+<text x="72" y="238" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">返回地址 / 保存的寄存器 / 局部变量</text>
+<rect x="60" y="272" width="300" height="64" rx="3" fill="#2a2410" stroke="#e8b84b" stroke-width="1.3"/>
+<text x="72" y="294" fill="#e8b84b" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">bar 的栈帧  ← 当前</text>
+<text x="72" y="314" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">返回地址 / 保存的寄存器 / 局部变量</text>
+<text x="60" y="108" fill="#5f5f78" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">栈（往下长，高地址在上）</text>
+<line x1="60" y1="100" x2="60" y2="112" stroke="#3a3a52" stroke-width="1"/>
+<text x="400" y="108" fill="#8a8aa2" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">当前帧里，调试信息是这么描述的</text>
+<rect x="400" y="120" width="250" height="140" rx="3" fill="#14141e" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="416" y="148" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="monospace">变量 x</text>
+<text x="500" y="148" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="monospace">rbp - 8</text>
+<text x="416" y="163" fill="#5f5f78" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">栈上，4 字节</text>
+<text x="416" y="186" fill="#b58ae8" font-size="9.5" text-anchor="start" font-family="monospace">变量 y</text>
+<text x="500" y="186" fill="#b58ae8" font-size="9.5" text-anchor="start" font-family="monospace">rbx</text>
+<text x="416" y="201" fill="#5f5f78" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">寄存器里</text>
+<text x="416" y="224" fill="#e87a8a" font-size="9.5" text-anchor="start" font-family="monospace">变量 tmp</text>
+<text x="500" y="224" fill="#e87a8a" font-size="9.5" text-anchor="start" font-family="monospace">rbp - 16</text>
+<text x="416" y="239" fill="#5f5f78" font-size="8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">已被优化掉</text>
+<path d="M400,148 L370,148 L370,300 L360,300" fill="none" stroke="#67d9a0" stroke-width="1.2" stroke-dasharray="3 3"/>
+<text x="374" y="330" fill="#67d9a0" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">x 在栈上</text>
+<text x="672" y="132" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">三种可能</text>
+<text x="672" y="158" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">在栈上</text>
+<text x="672" y="174" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">局部变量最常见的位置，</text>
+<text x="672" y="188" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">按 rbp 偏移取</text>
+<text x="672" y="220" fill="#b58ae8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">在寄存器里</text>
+<text x="672" y="236" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">优化后的变量常常只在寄存器</text>
+<text x="672" y="250" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">里活几行</text>
+<text x="672" y="282" fill="#e87a8a" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">不存在</text>
+<text x="672" y="298" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">被常量折叠、被复用、</text>
+<text x="672" y="312" fill="#6f6f88" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">或者根本没用到</text>
+<text x="30" y="372" fill="#a0a0b8" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">「变量被优化掉了」不是 bug，是编译器发现它没必要存在——比如 a 恒等于 5，那所有用到 a 的地方直接写 5。</text>
+<text x="30" y="394" fill="#8a8aa2" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这时候调试器只能显示 optimized out。要看真实值，只能编一个关掉优化的版本。</text>
+<text x="30" y="420" fill="#7a7a92" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一份代码，-O0 和 -O2 编出来的调试体验能差到像两个程序。原因全在这张表上。</text>
+</svg>

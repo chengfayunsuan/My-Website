@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 450" width="880" height="450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.6.2-3  四种「让程序停下来」的手段</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">名字都叫断点，底下的机制完全不同。选错了会遇到「下不上」「数量不够」「慢得离谱」</text>
+<rect x="30" y="100" width="196" height="262" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="44" y="124" fill="#67b5ef" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">软件断点</text>
+<rect x="152" y="108" width="60" height="22" rx="3" fill="#0e0e16" stroke="#67b5ef" stroke-width="1"/>
+<text x="182" y="123" fill="#67b5ef" font-size="8.5" text-anchor="middle" font-family="monospace">0xCC</text>
+<text x="44" y="162" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">原理</text>
+<text x="44" y="180" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">首字节改成 int3</text>
+<text x="44" y="212" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">数量</text>
+<text x="44" y="230" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不限，看内存有多少</text>
+<text x="44" y="262" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价</text>
+<text x="44" y="280" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">改不了只读代码</text>
+<text x="44" y="312" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">典型</text>
+<text x="44" y="330" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">点行号下断点</text>
+<rect x="238" y="100" width="196" height="262" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.4"/>
+<text x="252" y="124" fill="#b58ae8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">硬件断点</text>
+<rect x="360" y="108" width="60" height="22" rx="3" fill="#0e0e16" stroke="#b58ae8" stroke-width="1"/>
+<text x="390" y="123" fill="#b58ae8" font-size="8.5" text-anchor="middle" font-family="monospace">DR0–3</text>
+<text x="252" y="162" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">原理</text>
+<text x="252" y="180" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">CPU 比较地址寄存器</text>
+<text x="252" y="212" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">数量</text>
+<text x="252" y="230" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">x86 只有 4 个</text>
+<text x="252" y="262" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价</text>
+<text x="252" y="280" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不改内存，能给 ROM 下</text>
+<text x="252" y="312" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">典型</text>
+<text x="252" y="330" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">内核调试、固件</text>
+<rect x="446" y="100" width="196" height="262" rx="4" fill="#14141e" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="460" y="124" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">监视点</text>
+<rect x="568" y="108" width="60" height="22" rx="3" fill="#0e0e16" stroke="#e8b84b" stroke-width="1"/>
+<text x="598" y="123" fill="#e8b84b" font-size="8.5" text-anchor="middle" font-family="monospace">watch</text>
+<text x="460" y="162" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">原理</text>
+<text x="460" y="180" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">地址被读写就停</text>
+<text x="460" y="212" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">数量</text>
+<text x="460" y="230" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">4 个，和硬件断点抢</text>
+<text x="460" y="262" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价</text>
+<text x="460" y="280" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">命中频繁时很卡</text>
+<text x="460" y="312" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">典型</text>
+<text x="460" y="330" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">查谁改了这个变量</text>
+<rect x="654" y="100" width="196" height="262" rx="4" fill="#14141e" stroke="#e8965a" stroke-width="1.4"/>
+<text x="668" y="124" fill="#e8965a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">单步</text>
+<rect x="776" y="108" width="60" height="22" rx="3" fill="#0e0e16" stroke="#e8965a" stroke-width="1"/>
+<text x="806" y="123" fill="#e8965a" font-size="8.5" text-anchor="middle" font-family="monospace">TF 位</text>
+<text x="668" y="162" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">原理</text>
+<text x="668" y="180" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每条指令都触发异常</text>
+<text x="668" y="212" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">数量</text>
+<text x="668" y="230" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">无限制</text>
+<text x="668" y="262" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价</text>
+<text x="668" y="280" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">极慢，几微秒一步</text>
+<text x="668" y="312" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">典型</text>
+<text x="668" y="330" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">逐行走查逻辑</text>
+<text x="30" y="392" fill="#a0a0b8" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">最实用的组合是：主逻辑用软件断点（随便下），排查「谁改了我的变量」用监视点（只有 4 个，省着用），</text>
+<text x="30" y="414" fill="#8a8aa2" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进到某个函数之后再用单步（只在必要时走几步）。三者混着用，才不浪费时间。</text>
+<text x="30" y="438" fill="#7a7a92" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">硬件断点的那个「4 个」是 CPU 的硬限制，不是软件舍不得给 —— 换台机器也还是 4 个。</text>
+</svg>
