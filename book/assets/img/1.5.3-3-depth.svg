@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 420" width="880" height="420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="420" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.5.3-3  同样是查 100 万条：20 次读盘 和 1 次读盘</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">差别不在算法，只在「一个节点装几个 key」</text>
+<text x="44" y="84" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">二叉搜索树：树高 20，每个节点一个 key</text>
+<text x="44" y="104" fill="#6f6f88" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">走一层 = 换一个节点 = 一次随机读</text>
+<rect x="44" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="62" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="80" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="98" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="116" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="134" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="152" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="170" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="188" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="206" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="224" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="242" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="260" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="278" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="296" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="314" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="332" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="350" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="368" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<rect x="386" y="118" width="15" height="15" rx="2" fill="#2a1418" stroke="#8a4a56" stroke-width="1"/>
+<text x="412" y="130" fill="#e87a8a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">20 次</text>
+<rect x="44" y="146" width="620" height="26" rx="3" fill="#2a1418" stroke="#8a4a56" stroke-width="1.5"/>
+<text x="56" y="164" fill="#e87a8a" font-size="10.5" text-anchor="start" font-family="monospace">20 × 5 ms = 100 ms</text>
+<text x="44" y="214" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">B+ 树：树高 3，每个节点一千多个 key</text>
+<text x="44" y="234" fill="#6f6f88" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">走一层 = 读一页 = 一次随机读，但一层就跨过一千多条分支</text>
+<rect x="44" y="248" width="15" height="15" rx="2" fill="#16281c" stroke="#67d9a0" stroke-width="1"/>
+<text x="70" y="260" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1 次（上面两层都在缓存里）</text>
+<rect x="44" y="276" width="31" height="26" rx="3" fill="#16281c" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="85" y="294" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="monospace">1 × 5 ms = 5 ms</text>
+<text x="40" y="340" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同样的数据量、同样的「小往左大往右」比较逻辑，唯一区别是每个节点装一个 key 还是一千个。</text>
+<text x="40" y="362" fill="#8a8aa2" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一页 16 KB 读进来之后，页内那一千次比较几乎不花钱 —— 它们都发生在缓存里，比一次 IO 便宜五个数量级。</text>
+<text x="40" y="384" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以磁盘上的树要「又矮又胖」：矮 = 层数少 = IO 少；胖 = 一层里装得多 = 层数能少。这两个字是同一件事的两面。</text>
+<text x="40" y="406" fill="#6a6a82" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">严格说两边最上面几层都会被缓存：二叉树的 20 层里可能只剩 10 层要读盘，B+ 树只剩叶子这 1 层。差距从 20 倍缩到 10 倍，结论不变。</text>
+</svg>

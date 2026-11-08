@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" width="880" height="440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.5.3-6  回表：按姓名查手机号，为什么要走两棵树</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">二级索引的叶子里没有行，只有主键 —— 想拿别的列就得再查一次聚簇索引</text>
+<rect x="50" y="84" width="570" height="76" rx="3" fill="#182634" stroke="#3a5a7a" stroke-width="1.4"/>
+<text x="66" y="112" fill="#8fb8d8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">① 二级索引（key = name）</text>
+<text x="66" y="136" fill="#6f8aa0" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">叶子只存 (name, id) —— 没有手机号，也没有地址</text>
+<line x1="520" y1="160" x2="520.0" y2="167.0" stroke="#3a4a5a" stroke-width="1.6"/>
+<polygon points="520,174 516.3,165.8 523.7,165.8" fill="#3a4a5a"/>
+<rect x="420" y="176" width="200" height="38" rx="3" fill="#2a2214" stroke="#8a6a2a" stroke-width="1.5"/>
+<text x="520" y="200" fill="#e8b84b" font-size="11" text-anchor="middle" font-family="monospace">id = 73104</text>
+<line x1="520" y1="214" x2="520.0" y2="239.0" stroke="#e8b84b" stroke-width="1.8"/>
+<polygon points="520,246 516.3,237.8 523.7,237.8" fill="#e8b84b"/>
+<text x="534" y="236" fill="#e8b84b" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">回表</text>
+<rect x="50" y="250" width="570" height="76" rx="3" fill="#1c1626" stroke="#6a4a8a" stroke-width="1.4"/>
+<text x="66" y="278" fill="#b58ae8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">② 聚簇索引（key = id）</text>
+<text x="66" y="302" fill="#8a7aa0" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">叶子就是整行 —— 主键索引和表本身是同一个东西</text>
+<line x1="520" y1="326" x2="520.0" y2="337.0" stroke="#6a4a8a" stroke-width="1.6"/>
+<polygon points="520,344 516.3,335.8 523.7,335.8" fill="#6a4a8a"/>
+<rect x="390" y="346" width="230" height="38" rx="3" fill="#1c1626" stroke="#6a4a8a" stroke-width="1.5"/>
+<text x="505" y="370" fill="#b58ae8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">整行（含 phone、地址）</text>
+<text x="664" y="116" fill="#7f9fb8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 第一次查找</text>
+<text x="664" y="140" fill="#6f6f88" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">  2 ~ 3 次 IO</text>
+<text x="664" y="176" fill="#e8b84b" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 第二次查找</text>
+<text x="664" y="200" fill="#6f6f88" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">  又一次 2 ~ 3 次 IO</text>
+<text x="664" y="236" fill="#e87a8a" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 查 100 行</text>
+<text x="664" y="260" fill="#8a5a62" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">  = 200 ~ 600 次 IO</text>
+<text x="40" y="412" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">如果 SELECT 只要 name 和 id，第一步就已经拿到了 —— 这叫覆盖索引，省掉整个回表。</text>
+<text x="40" y="434" fill="#7a7a94" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">反过来说，SELECT * 是最不划算的写法：它逼着你回表，把索引唯一的优势（叶子就能答完）扔掉了。</text>
+</svg>
