@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 424" width="880" height="424" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="424" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.1.1-4  特里芬难题：两个目标互相拆台</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1960 年特里芬在国会作证时指出的结构性矛盾。它不是谁犯了错，是这套设计本身走不通</text>
+<rect x="90" y="84" width="700" height="94" rx="5" fill="#1a2434" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="112" y="112" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">目标 A：让世界有足够的美元用</text>
+<text x="112" y="138" fill="#9aa8bc" font-size="9.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">战后贸易在长，美元不够就结算不了。美国得持续逆差，</text>
+<text x="112" y="158" fill="#9aa8bc" font-size="9.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">把钱送到别人手里 —— 逆差在这里是「义务」，不是「失败」。</text>
+<line x1="600" y1="182" x2="600" y2="197" stroke="#e87a8a" stroke-width="1.8"/>
+<path d="M595,197 L600,208 L605,197 Z" fill="#e87a8a" stroke="#e87a8a" stroke-width="1"/>
+<line x1="600" y1="252" x2="600" y2="237" stroke="#e87a8a" stroke-width="1.8"/>
+<path d="M595,237 L600,226 L605,237 Z" fill="#e87a8a" stroke="#e87a8a" stroke-width="1"/>
+<line x1="594" y1="211" x2="606" y2="223" stroke="#ff8a9a" stroke-width="1.8"/>
+<line x1="594" y1="223" x2="606" y2="211" stroke="#ff8a9a" stroke-width="1.8"/>
+<text x="576" y="208" fill="#e87a8a" font-size="11" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">同一件事</text>
+<text x="576" y="226" fill="#8a6a72" font-size="8.8" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两个方向</text>
+<rect x="90" y="252" width="700" height="94" rx="5" fill="#2a1a20" stroke="#e87a8a" stroke-width="1.4"/>
+<text x="112" y="280" fill="#e87a8a" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">目标 B：让每一美元都能兑到黄金</text>
+<text x="112" y="306" fill="#b09aa0" font-size="9.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">逆差一直存在，海外美元就越积越多，总有一天超过国库里的</text>
+<text x="112" y="326" fill="#b09aa0" font-size="9.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">黄金 —— 到那时候，「35 美元一盎司」就是一句空话。</text>
+<text x="40" y="380" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这就是「特里芬难题」：储备货币国必须不断输出货币，可输出得越多，兑换承诺就越不可信。</text>
+<text x="40" y="404" fill="#8a8aa2" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">换任何国家来当这个角色都一样 —— 问题不在美国，在这个位置。</text>
+</svg>

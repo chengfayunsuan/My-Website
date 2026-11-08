@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 416" width="880" height="416" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="416" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.1.1-1  钱的三代形态：从「有人要」到「政府认」</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每一代都解决了上一代的一个问题，也都留下了一个新的问题</text>
+<rect x="40" y="76" width="258" height="234" rx="6" fill="#2a2018" stroke="#e8965a" stroke-width="1.5"/>
+<text x="60" y="106" fill="#e8965a" font-size="9.5" text-anchor="start" font-family="monospace">第 1 代</text>
+<text x="60" y="140" fill="#dfe4f0" font-size="19" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">商品货币</text>
+<text x="60" y="164" fill="#7f7f98" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">公元前 — 19 世纪</text>
+<line x1="60" y1="180" x2="278" y2="180" stroke="#33334a" stroke-width="1"/>
+<text x="60" y="202" fill="#7f7f98" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">长什么样</text>
+<text x="60" y="220" fill="#b8bccd" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">贝壳、盐、布、牛</text>
+<text x="60" y="242" fill="#7f7f98" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">被什么限制</text>
+<text x="60" y="260" fill="#b8bccd" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">得刚好有人要</text>
+<text x="60" y="282" fill="#7f7f98" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价</text>
+<text x="60" y="300" fill="#b8bccd" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">搬不动、存不久</text>
+<rect x="321" y="76" width="258" height="234" rx="6" fill="#2a2410" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="341" y="106" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="monospace">第 2 代</text>
+<text x="341" y="140" fill="#dfe4f0" font-size="19" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">金本位</text>
+<text x="341" y="164" fill="#7f7f98" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1816 — 1914</text>
+<line x1="341" y1="180" x2="559" y2="180" stroke="#33334a" stroke-width="1"/>
+<text x="341" y="202" fill="#7f7f98" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">长什么样</text>
+<text x="341" y="220" fill="#b8bccd" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">金币，或能兑金币的纸</text>
+<text x="341" y="242" fill="#7f7f98" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">被什么限制</text>
+<text x="341" y="260" fill="#b8bccd" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">黄金产量</text>
+<text x="341" y="282" fill="#7f7f98" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价</text>
+<text x="341" y="300" fill="#b8bccd" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">央行没法印钱救急</text>
+<rect x="602" y="76" width="258" height="234" rx="6" fill="#1a2434" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="622" y="106" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="monospace">第 3 代</text>
+<text x="622" y="140" fill="#dfe4f0" font-size="19" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">法币</text>
+<text x="622" y="164" fill="#7f7f98" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1971 — 现在</text>
+<line x1="622" y1="180" x2="840" y2="180" stroke="#33334a" stroke-width="1"/>
+<text x="622" y="202" fill="#7f7f98" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">长什么样</text>
+<text x="622" y="220" fill="#b8bccd" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">纸，和数据库里的一行</text>
+<text x="622" y="242" fill="#7f7f98" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">被什么限制</text>
+<text x="622" y="260" fill="#b8bccd" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">政府信用</text>
+<text x="622" y="282" fill="#7f7f98" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价</text>
+<text x="622" y="300" fill="#b8bccd" font-size="10.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">通胀没有硬约束</text>
+<text x="40" y="348" fill="#a0a0b8" font-size="9.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每一次换代的动机都一样：上一代的「钱不够用」或者「不放心」。</text>
+<text x="40" y="372" fill="#8a8aa2" font-size="9.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商品货币的问题是稀缺性不稳定；金本位的问题是货币量被挖矿速度卡死；法币的问题是发行量没人硬性约束。</text>
+<text x="40" y="396" fill="#8a8aa2" font-size="9.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注意 1971 这个年份 —— 它是第三代真正的起点，也是这一节要讲的那扇窗。</text>
+</svg>
