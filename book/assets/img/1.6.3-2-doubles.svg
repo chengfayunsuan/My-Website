@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" width="880" height="440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.6.3-2  三种替身：都叫 mock，干的活完全不一样</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">测试里碰到数据库、网络、时间，得找个东西顶上。顶法有三种，选错了测试会又脆又假</text>
+<rect x="30" y="92" width="262" height="250" rx="4" fill="#14141e" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="46" y="120" fill="#67b5ef" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">Stub</text>
+<text x="104" y="120" fill="#6f6f88" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">打桩</text>
+<text x="46" y="152" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">做法</text>
+<text x="46" y="169" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">写死一个返回值</text>
+<text x="46" y="200" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">关心</text>
+<text x="46" y="217" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">我的代码拿到这个值会怎样</text>
+<text x="46" y="248" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">例子</text>
+<text x="46" y="265" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">getUser() → 返回一个假用户</text>
+<text x="46" y="296" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">风险</text>
+<text x="46" y="313" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">和真实行为差太远</text>
+<rect x="308" y="92" width="262" height="250" rx="4" fill="#14141e" stroke="#b58ae8" stroke-width="1.4"/>
+<text x="324" y="120" fill="#b58ae8" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">Mock</text>
+<text x="382" y="120" fill="#6f6f88" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">断言</text>
+<text x="324" y="152" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">做法</text>
+<text x="324" y="169" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">记录被调用了几次、参数是什么</text>
+<text x="324" y="200" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">关心</text>
+<text x="324" y="217" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">我有没有按时调用它</text>
+<text x="324" y="248" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">例子</text>
+<text x="324" y="265" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">断言 sendMail 被调用了 1 次</text>
+<text x="324" y="296" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">风险</text>
+<text x="324" y="313" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">测的是实现，改结构就崩</text>
+<rect x="586" y="92" width="262" height="250" rx="4" fill="#14141e" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="602" y="120" fill="#67d9a0" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">Fake</text>
+<text x="660" y="120" fill="#6f6f88" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">替身实现</text>
+<text x="602" y="152" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">做法</text>
+<text x="602" y="169" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">写一个简化但真能干活的版本</text>
+<text x="602" y="200" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">关心</text>
+<text x="602" y="217" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">整条流程能不能走通</text>
+<text x="602" y="248" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">例子</text>
+<text x="602" y="265" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">内存里的哈希表当数据库</text>
+<text x="602" y="296" fill="#5f5f78" font-size="8.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">风险</text>
+<text x="602" y="313" fill="#a8a8c0" font-size="8.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">自己也要维护，会跑偏</text>
+<text x="30" y="378" fill="#a0a0b8" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">选哪个看你想验证什么：想验证「算出什么」用 stub，想验证「有没有做」用 mock，想验证「整条路通不通」用 fake。</text>
+<text x="30" y="400" fill="#8a8aa2" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三者经常被统称为「mock」，论坛上吵架一半是因为这个词指的东西不一样。</text>
+<text x="30" y="426" fill="#7a7a92" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一个经验：能用 fake 就别用 mock。mock 断言的是「怎么做的」，实现一重构就全红——那测的不是行为，是代码长相。</text>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 450" width="880" height="450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.6.3-1  测试金字塔：越往上越像真的，也越贵</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">底下那一层决定你改代码时敢不敢动，顶上那一层决定用户能不能走通</text>
+<path d="M225,96 L375,96 L450,196 L150,196 Z" fill="#2a2018" stroke="#e8965a" stroke-width="1.5"/>
+<text x="300" y="138.0" fill="#e8965a" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">端到端测试</text>
+<text x="300" y="158.0" fill="#b8b8cc" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">开真浏览器，走完整流程</text>
+<text x="466.0" y="142.0" fill="#e8965a" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">几个到几十个</text>
+<text x="466.0" y="160.0" fill="#6f6f88" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">分钟级</text>
+<path d="M150,196 L450,196 L515,306 L85,306 Z" fill="#201a2e" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="300" y="243.0" fill="#b58ae8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">集成测试</text>
+<text x="300" y="263.0" fill="#b8b8cc" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">真连数据库、真发 HTTP</text>
+<text x="531.0" y="247.0" fill="#b58ae8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">几十到几百个</text>
+<text x="531.0" y="265.0" fill="#6f6f88" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">秒级</text>
+<path d="M85,306 L515,306 L580,416 L20,416 Z" fill="#16281c" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="300" y="353.0" fill="#67d9a0" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">单元测试</text>
+<text x="300" y="373.0" fill="#b8b8cc" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一个函数、一个类，不碰外部</text>
+<text x="596.0" y="357.0" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">几百到几万个</text>
+<text x="596.0" y="375.0" fill="#6f6f88" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">毫秒级</text>
+<line x1="48" y1="100" x2="48" y2="414" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="38" y="104" fill="#6f6f88" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">少</text>
+<text x="38" y="412" fill="#6f6f88" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">多</text>
+<text x="38" y="254" fill="#5f5f78" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">数量</text>
+<line x1="690" y1="110" x2="690" y2="410" stroke="#2a2a3e" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="700" y="120" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">越往上：更像真实，</text>
+<text x="700" y="136" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">也越慢、越脆、越贵</text>
+<text x="700" y="380" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">越往下：越快、越稳，</text>
+<text x="700" y="396" fill="#8a8aa2" font-size="9" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">但离真实越远</text>
+<text x="30" y="438" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">倒过来就是反模式「冰淇淋筒」：端到端测一大堆、单元测试没几个 —— 跑一次半小时，挂了还不知道是哪儿。</text>
+</svg>
