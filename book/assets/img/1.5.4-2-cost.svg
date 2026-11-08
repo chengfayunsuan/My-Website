@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" width="880" height="440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.5.4-2  十亿条数据，六种阶要跑多久</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">按每秒 10 亿次简单操作折算。横轴对数：每往右一格，慢 10 倍</text>
+<line x1="505.0" y1="78" x2="505.0" y2="356" stroke="#4a4a62" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="505.0" y="72" fill="#4a4a62" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1 秒</text>
+<line x1="664.613944340151" y1="78" x2="664.613944340151" y2="356" stroke="#5a4a3a" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="664.613944340151" y="72" fill="#5a4a3a" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1 天</text>
+<line x1="747.4453745725305" y1="78" x2="747.4453745725305" y2="356" stroke="#6a3a44" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="747.4453745725305" y="72" fill="#6a3a44" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1 年</text>
+<text x="200" y="96" fill="#67d9a0" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">O(1)</text>
+<text x="200" y="112" fill="#6f6f88" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">哈希查找</text>
+<rect x="214" y="84" width="6" height="28" rx="2" fill="#67d9a0" stroke="none" stroke-width="1.5"/>
+<text x="229" y="103" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1 纳秒</text>
+<text x="200" y="144" fill="#67b5ef" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">O(log n)</text>
+<text x="200" y="160" fill="#6f6f88" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">平衡树查找</text>
+<rect x="214" y="132" width="47.760253902602415" height="28" rx="2" fill="#67b5ef" stroke="none" stroke-width="1.5"/>
+<text x="270.7602539026024" y="151" fill="#67b5ef" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">30 纳秒</text>
+<text x="200" y="192" fill="#b58ae8" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">O(√n)</text>
+<text x="200" y="208" fill="#6f6f88" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">试除到根号 n</text>
+<rect x="214" y="180" width="145.50009920033813" height="28" rx="2" fill="#b58ae8" stroke="none" stroke-width="1.5"/>
+<text x="368.5000992003381" y="199" fill="#b58ae8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">32 微秒</text>
+<text x="200" y="240" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">O(n)</text>
+<text x="200" y="256" fill="#6f6f88" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">从头扫一遍</text>
+<rect x="214" y="228" width="291.0" height="28" rx="2" fill="#c8c8dc" stroke="none" stroke-width="1.5"/>
+<text x="514.0" y="247" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1 秒</text>
+<text x="200" y="288" fill="#e8b84b" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">O(n log n)</text>
+<text x="200" y="304" fill="#6f6f88" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">排序</text>
+<rect x="214" y="276" width="338.76025390260247" height="28" rx="2" fill="#e8b84b" stroke="none" stroke-width="1.5"/>
+<text x="561.7602539026025" y="295" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">30 秒</text>
+<text x="200" y="336" fill="#e87a8a" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">O(n²)</text>
+<text x="200" y="352" fill="#6f6f88" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">双重循环</text>
+<rect x="214" y="324" width="582.0" height="28" rx="2" fill="#e87a8a" stroke="none" stroke-width="1.5"/>
+<text x="805.0" y="343" fill="#e87a8a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">31 年</text>
+<text x="34" y="400" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一台机器、同样十亿条数据，只因为算法的阶不同：1 纳秒和 31 年。</text>
+<text x="34" y="422" fill="#8a8aa2" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这就是为什么「能跑」和「跑得动」之间隔着一条河 —— 河的名字叫数据量。</text>
+</svg>

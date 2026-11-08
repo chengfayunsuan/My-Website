@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 470" width="880" height="470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 1.5.4-4  单次最坏 O(n)，摊还下来是 O(1)</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">动态数组 push_back：平时一步，赶上扩容那次要把整屋家当搬一遍</text>
+<line x1="90" y1="348.0" x2="812" y2="348.0" stroke="#222232" stroke-width="1"/>
+<text x="82" y="351.5" fill="#5f5f78" font-size="9.5" text-anchor="end" font-family="monospace">0</text>
+<line x1="90" y1="298.4" x2="812" y2="298.4" stroke="#222232" stroke-width="1"/>
+<text x="82" y="301.9" fill="#5f5f78" font-size="9.5" text-anchor="end" font-family="monospace">2</text>
+<line x1="90" y1="248.8" x2="812" y2="248.8" stroke="#222232" stroke-width="1"/>
+<text x="82" y="252.3" fill="#5f5f78" font-size="9.5" text-anchor="end" font-family="monospace">4</text>
+<line x1="90" y1="199.20000000000002" x2="812" y2="199.20000000000002" stroke="#222232" stroke-width="1"/>
+<text x="82" y="202.70000000000002" fill="#5f5f78" font-size="9.5" text-anchor="end" font-family="monospace">6</text>
+<line x1="90" y1="149.6" x2="812" y2="149.6" stroke="#222232" stroke-width="1"/>
+<text x="82" y="153.1" fill="#5f5f78" font-size="9.5" text-anchor="end" font-family="monospace">8</text>
+<line x1="90" y1="100.0" x2="812" y2="100.0" stroke="#222232" stroke-width="1"/>
+<text x="82" y="103.5" fill="#5f5f78" font-size="9.5" text-anchor="end" font-family="monospace">10</text>
+<rect x="86.45161290322581" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="109.54838709677419" y="298.4" width="19.096774193548388" height="49.60000000000002" rx="1" fill="#e8965a" stroke="none" stroke-width="1.5"/>
+<text x="119.09677419354838" y="290.4" fill="#e8965a" font-size="9.5" text-anchor="middle" font-family="monospace">2</text>
+<rect x="132.64516129032256" y="273.6" width="19.096774193548388" height="74.39999999999998" rx="1" fill="#e8965a" stroke="none" stroke-width="1.5"/>
+<text x="142.19354838709677" y="265.6" fill="#e8965a" font-size="9.5" text-anchor="middle" font-family="monospace">3</text>
+<rect x="155.74193548387098" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="178.83870967741933" y="224.0" width="19.096774193548388" height="124.0" rx="1" fill="#e8965a" stroke="none" stroke-width="1.5"/>
+<text x="188.38709677419354" y="216.0" fill="#e8965a" font-size="9.5" text-anchor="middle" font-family="monospace">5</text>
+<rect x="201.93548387096774" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="225.03225806451613" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="248.1290322580645" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="271.22580645161287" y="124.79999999999998" width="19.096774193548388" height="223.20000000000002" rx="1" fill="#e8965a" stroke="none" stroke-width="1.5"/>
+<text x="280.7741935483871" y="116.79999999999998" fill="#e8965a" font-size="9.5" text-anchor="middle" font-family="monospace">9</text>
+<rect x="294.3225806451613" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="317.4193548387097" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="340.51612903225805" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="363.61290322580646" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="386.7096774193548" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="409.80645161290323" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="432.9032258064516" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="456.0" y="100.0" width="19.096774193548388" height="248.0" rx="1" fill="#e8965a" stroke="none" stroke-width="1.5"/>
+<text x="465.5483870967742" y="92.0" fill="#e8965a" font-size="9.5" text-anchor="middle" font-family="monospace">17</text>
+<rect x="479.09677419354836" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="502.19354838709677" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="525.2903225806451" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="548.3870967741937" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="571.483870967742" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="594.5806451612904" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="617.6774193548388" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="640.7741935483872" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="663.8709677419355" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="686.9677419354839" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="710.0645161290323" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="733.1612903225807" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="756.258064516129" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="779.3548387096774" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<rect x="802.4516129032259" y="323.2" width="19.096774193548388" height="24.80000000000001" rx="1" fill="#4a6a8a" stroke="none" stroke-width="1.5"/>
+<line x1="96" y1="294.928" x2="812" y2="294.928" stroke="#67d9a0" stroke-width="1.4" stroke-dasharray="5 4"/>
+<text x="806" y="286.928" fill="#67d9a0" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">摊还：平均每次约 2 步</text>
+<line x1="165.29032258064518" y1="348" x2="165.29032258064518" y2="353" stroke="#3a3a52" stroke-width="1"/>
+<text x="165.29032258064518" y="367" fill="#5f5f78" font-size="9.5" text-anchor="middle" font-family="monospace">4</text>
+<line x1="257.6774193548387" y1="348" x2="257.6774193548387" y2="353" stroke="#3a3a52" stroke-width="1"/>
+<text x="257.6774193548387" y="367" fill="#5f5f78" font-size="9.5" text-anchor="middle" font-family="monospace">8</text>
+<line x1="442.4516129032258" y1="348" x2="442.4516129032258" y2="353" stroke="#3a3a52" stroke-width="1"/>
+<text x="442.4516129032258" y="367" fill="#5f5f78" font-size="9.5" text-anchor="middle" font-family="monospace">16</text>
+<line x1="812.0" y1="348" x2="812.0" y2="353" stroke="#3a3a52" stroke-width="1"/>
+<text x="812.0" y="367" fill="#5f5f78" font-size="9.5" text-anchor="middle" font-family="monospace">32</text>
+<line x1="96" y1="348" x2="812" y2="348" stroke="#3a3a52" stroke-width="1.2"/>
+<line x1="96" y1="100" x2="96" y2="348" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="82" y="90" fill="#6f6f88" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这一次做了几步</text>
+<text x="34" y="402" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">尖峰出现在第 2、4、9、17 次 —— 每次扩容的间隔翻一倍，尖峰越来越稀，摊到每一次上就是常数。</text>
+<text x="34" y="426" fill="#8a8aa2" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三十二次插入一共做了 63 步：32 次写入，加上 0+1+2+4+8+16=31 次搬运。63/32 不到 2。</text>
+</svg>
