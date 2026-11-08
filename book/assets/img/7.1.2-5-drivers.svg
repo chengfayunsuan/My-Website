@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 448" width="880" height="448" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="448" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.1.2-5  汇率为什么会动：五个方向的钱，一个价格</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">汇率不是「一个国家值多少钱」，是两种货币之间的兑换比价，所以两边的事都会推它</text>
+<line x1="298.3" y1="137.0" x2="374.8" y2="182.9" stroke="#e8b84b" stroke-width="1.3" stroke-dasharray="4 3"/>
+<path d="M374.8,182.9 L364.7,182.2 L369.5,174.3 Z" fill="#e8b84b" stroke="#e8b84b" stroke-width="1"/>
+<rect x="158.0" y="79.0" width="184" height="58" rx="4" fill="#16161f" stroke="#e8b84b" stroke-width="1.3"/>
+<text x="250" y="104" fill="#e8b84b" font-size="10.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">利率差</text>
+<text x="250" y="123" fill="#7f7f98" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这边利息高，钱往这边跑</text>
+<line x1="581.7" y1="137.0" x2="505.2" y2="182.9" stroke="#e8965a" stroke-width="1.3" stroke-dasharray="4 3"/>
+<path d="M505.2,182.9 L510.5,174.3 L515.3,182.2 Z" fill="#e8965a" stroke="#e8965a" stroke-width="1"/>
+<rect x="538.0" y="79.0" width="184" height="58" rx="4" fill="#16161f" stroke="#e8965a" stroke-width="1.3"/>
+<text x="630" y="104" fill="#e8965a" font-size="10.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">通胀差</text>
+<text x="630" y="123" fill="#7f7f98" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">涨得快，购买力掉得快</text>
+<line x1="242.0" y1="242.5" x2="364.4" y2="229.8" stroke="#67d9a0" stroke-width="1.3" stroke-dasharray="4 3"/>
+<path d="M364.4,229.8 L355.9,235.3 L355.0,226.2 Z" fill="#67d9a0" stroke="#67d9a0" stroke-width="1"/>
+<rect x="58.0" y="223.0" width="184" height="58" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.3"/>
+<text x="150" y="248" fill="#67d9a0" font-size="10.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">贸易收支</text>
+<text x="150" y="267" fill="#7f7f98" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卖得多，本币被需要</text>
+<line x1="638.0" y1="242.5" x2="515.6" y2="229.8" stroke="#b58ae8" stroke-width="1.3" stroke-dasharray="4 3"/>
+<path d="M515.6,229.8 L525.0,226.2 L524.1,235.3 Z" fill="#b58ae8" stroke="#b58ae8" stroke-width="1"/>
+<rect x="638.0" y="223.0" width="184" height="58" rx="4" fill="#16161f" stroke="#b58ae8" stroke-width="1.3"/>
+<text x="730" y="248" fill="#b58ae8" font-size="10.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">资本流动</text>
+<text x="730" y="267" fill="#7f7f98" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一避险，钱往美元跑</text>
+<line x1="440.0" y1="343.0" x2="440.0" y2="298.0" stroke="#67b5ef" stroke-width="1.3" stroke-dasharray="4 3"/>
+<path d="M440.0,298.0 L444.6,307.0 L435.4,307.0 Z" fill="#67b5ef" stroke="#67b5ef" stroke-width="1"/>
+<rect x="348.0" y="343.0" width="184" height="58" rx="4" fill="#16161f" stroke="#67b5ef" stroke-width="1.3"/>
+<text x="440" y="368" fill="#67b5ef" font-size="10.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">央行与预期</text>
+<text x="440" y="387" fill="#7f7f98" font-size="8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">觉得会跌，就真会跌</text>
+<circle cx="440" cy="222" r="70" fill="#1e1e30" stroke="#5a5a80" stroke-width="1.6"/>
+<text x="440" y="218" fill="#d8d8e4" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">汇　率</text>
+<text x="440" y="240" fill="#7f7f98" font-size="8.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">两种货币的比价</text>
+<text x="40" y="418" fill="#a0a0b8" font-size="9.3" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">短期看利率和情绪，中期看贸易和资本，长期看通胀。三条时间尺度叠在一起，就是你在行情软件上看到的那条线。</text>
+</svg>
