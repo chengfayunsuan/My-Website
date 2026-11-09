@@ -1,0 +1,52 @@
+<svg width="880" height="314" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 314" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="314" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">一笔转账，账本上发生了什么</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你给小李转 500 块。全程只改同一张表里的两行。</text>
+<text x="44" y="92" fill="#c8c8dc" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">转之前</text>
+<rect x="44" y="106" width="316" height="170" rx="0" fill="#131320" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="56" y="124" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">行号</text>
+<text x="104" y="124" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">户名</text>
+<text x="220" y="124" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">余额</text>
+<line x1="44" y1="132" x2="360" y2="132" stroke="#3a3a52" stroke-width="1"/>
+<text x="56" y="155" fill="#a0a0b8" font-size="12.5" text-anchor="start" font-family="monospace">1006</text>
+<text x="104" y="155" fill="#a0a0b8" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">王建国</text>
+<text x="220" y="155" fill="#a0a0b8" font-size="12.5" text-anchor="start" font-family="monospace">58,214.60</text>
+<rect x="48" y="171" width="308" height="34" rx="4" fill="#1c2a3e" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="56" y="191" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="monospace">1047</text>
+<text x="104" y="191" fill="#c8c8dc" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">陈默</text>
+<text x="220" y="191" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="monospace" font-weight="600">3,527.18</text>
+<rect x="48" y="207" width="308" height="34" rx="4" fill="#1c2a3e" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="56" y="227" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="monospace">2103</text>
+<text x="104" y="227" fill="#c8c8dc" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">小李</text>
+<text x="220" y="227" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="monospace" font-weight="600">1,200.00</text>
+<text x="56" y="263" fill="#a0a0b8" font-size="12.5" text-anchor="start" font-family="monospace">1233</text>
+<text x="104" y="263" fill="#a0a0b8" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">孙雅</text>
+<text x="220" y="263" fill="#a0a0b8" font-size="12.5" text-anchor="start" font-family="monospace">12,860.00</text>
+<text x="520" y="92" fill="#c8c8dc" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">转之后</text>
+<rect x="520" y="106" width="316" height="170" rx="0" fill="#131320" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="532" y="124" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">行号</text>
+<text x="580" y="124" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">户名</text>
+<text x="696" y="124" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">余额</text>
+<line x1="520" y1="132" x2="836" y2="132" stroke="#3a3a52" stroke-width="1"/>
+<text x="532" y="155" fill="#a0a0b8" font-size="12.5" text-anchor="start" font-family="monospace">1006</text>
+<text x="580" y="155" fill="#a0a0b8" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">王建国</text>
+<text x="696" y="155" fill="#a0a0b8" font-size="12.5" text-anchor="start" font-family="monospace">58,214.60</text>
+<rect x="524" y="171" width="308" height="34" rx="4" fill="#1c2a3e" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="532" y="191" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="monospace">1047</text>
+<text x="580" y="191" fill="#c8c8dc" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">陈默</text>
+<text x="696" y="191" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="monospace" font-weight="600">3,027.18</text>
+<rect x="524" y="207" width="308" height="34" rx="4" fill="#1c2a3e" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="532" y="227" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="monospace">2103</text>
+<text x="580" y="227" fill="#c8c8dc" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">小李</text>
+<text x="696" y="227" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="monospace" font-weight="600">1,700.00</text>
+<text x="532" y="263" fill="#a0a0b8" font-size="12.5" text-anchor="start" font-family="monospace">1233</text>
+<text x="580" y="263" fill="#a0a0b8" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">孙雅</text>
+<text x="696" y="263" fill="#a0a0b8" font-size="12.5" text-anchor="start" font-family="monospace">12,860.00</text>
+<line x1="376" y1="190" x2="504" y2="190" stroke="#8a8aa0" stroke-width="2"/>
+<path d="M504,184 L518,190 L504,196 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="1"/>
+<text x="440" y="176" fill="#c8c8dc" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">转账 500</text>
+<text x="440" y="216" fill="#a0a0b8" font-size="11" text-anchor="middle" font-family="monospace">第 1047 行</text>
+<text x="440" y="232" fill="#67b5ef" font-size="11.5" text-anchor="middle" font-family="monospace">− 500</text>
+<text x="440" y="258" fill="#a0a0b8" font-size="11" text-anchor="middle" font-family="monospace">第 2103 行</text>
+<text x="440" y="274" fill="#67d9a0" font-size="11.5" text-anchor="middle" font-family="monospace">＋ 500</text>
+</svg>
