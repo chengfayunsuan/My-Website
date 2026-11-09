@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="366" viewBox="0 0 880 366" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="366" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.1.6 / 图 1</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同样是扫码，钱在三条不同的链路上走</text>
+<text x="160" y="88" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">数字人民币</text>
+<rect x="24" y="104" width="272" height="50" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="160" y="134" fill="#cfcfe0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">央行发行</text>
+<path d="M160,154 L160,168" fill="none" stroke="#8a8aa0" stroke-width="1.3"/>
+<path d="M155,168 L160,174 L165,168 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="24" y="174" width="272" height="50" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="160" y="204" fill="#cfcfe0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">运营机构兑换</text>
+<path d="M160,224 L160,238" fill="none" stroke="#8a8aa0" stroke-width="1.3"/>
+<path d="M155,238 L160,244 L165,238 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="24" y="244" width="272" height="50" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="160" y="274" fill="#cfcfe0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">到你手里</text>
+<text x="160" y="342" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">央行的直接负债</text>
+<text x="442" y="88" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">微信 / 支付宝</text>
+<rect x="306" y="104" width="272" height="50" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="442" y="134" fill="#cfcfe0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你充值</text>
+<path d="M442,154 L442,168" fill="none" stroke="#8a8aa0" stroke-width="1.3"/>
+<path d="M437,168 L442,174 L447,168 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="306" y="174" width="272" height="50" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="442" y="204" fill="#cfcfe0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">支付机构记账</text>
+<path d="M442,224 L442,238" fill="none" stroke="#8a8aa0" stroke-width="1.3"/>
+<path d="M437,238 L442,244 L447,238 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="306" y="244" width="272" height="50" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="442" y="274" fill="#cfcfe0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">真钱存央行备付金</text>
+<text x="442" y="342" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">支付机构的负债</text>
+<text x="724" y="88" fill="#e8b84b" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行卡</text>
+<rect x="588" y="104" width="272" height="50" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="724" y="134" fill="#cfcfe0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你存款</text>
+<path d="M724,154 L724,168" fill="none" stroke="#8a8aa0" stroke-width="1.3"/>
+<path d="M719,168 L724,174 L729,168 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="588" y="174" width="272" height="50" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="724" y="204" fill="#cfcfe0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商业银行记账</text>
+<path d="M724,224 L724,238" fill="none" stroke="#8a8aa0" stroke-width="1.3"/>
+<path d="M719,238 L724,244 L729,238 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="588" y="244" width="272" height="50" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="724" y="274" fill="#cfcfe0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">准备金存央行</text>
+<text x="724" y="342" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商业银行的负债</text>
+</svg>

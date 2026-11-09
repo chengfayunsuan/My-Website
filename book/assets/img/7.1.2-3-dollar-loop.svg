@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="372" viewBox="0 0 880 372" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="372" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.1.2 / 图 3</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">美元环流：印出去的钱，怎么又回到美国</text>
+<rect x="40" y="84" width="260" height="76" rx="10" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="170.0" y="114" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">美国：买石油、买商品</text>
+<text x="170.0" y="138" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">付出去的是美元</text>
+<rect x="560" y="84" width="280" height="76" rx="10" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="700.0" y="114" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">产油国、出口国</text>
+<text x="700.0" y="138" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收到一堆美元</text>
+<rect x="560" y="242" width="280" height="76" rx="10" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="700.0" y="272" fill="#e8b84b" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">买美国国债</text>
+<text x="700.0" y="296" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">钱又借回给美国</text>
+<rect x="40" y="242" width="260" height="76" rx="10" fill="#16161f" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="170.0" y="272" fill="#b58ae8" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">美元回到美国市场</text>
+<text x="170.0" y="296" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">利率被压低，继续花</text>
+<path d="M304,122 L548,122" fill="none" stroke="#8a8aa0" stroke-width="1.7"/>
+<path d="M548,116 L558,122 L548,128 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<text x="426" y="108" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">① 买货付美元</text>
+<path d="M700,164 L700,234" fill="none" stroke="#8a8aa0" stroke-width="1.7"/>
+<path d="M694,234 L700,244 L706,234 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<text x="712" y="204" fill="#8a8aa0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">② 美元太多，买债</text>
+<path d="M556,280 L312,280" fill="none" stroke="#8a8aa0" stroke-width="1.7"/>
+<path d="M312,274 L302,280 L312,286 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<text x="430" y="268" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">③ 钱回美国</text>
+<path d="M170,238 L170,168" fill="none" stroke="#8a8aa0" stroke-width="1.7"/>
+<path d="M164,168 L170,158 L176,168 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<text x="130" y="204" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">④ 继续买</text>
+<text x="24" y="344" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这个圈能转，靠的是别人愿意收美元、愿意买美债。哪天不愿意了，圈就转不动——这就是「去美元化」讨论的实质。</text>
+</svg>

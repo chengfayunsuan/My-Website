@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="322" viewBox="0 0 880 322" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="322" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.1.5 / 图 1</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有中心，一本账同时存在于成千上万个地方</text>
+<rect x="310" y="110" width="260" height="110" rx="10" fill="#16161f" stroke="#e8b84b" stroke-width="1.6"/>
+<text x="440" y="144" fill="#e8b84b" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一本账</text>
+<text x="440" y="172" fill="#cfcfe0" font-size="10.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每一页记着：谁转给谁多少</text>
+<text x="440" y="196" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每个人手里都有一份完整副本</text>
+<circle cx="120" cy="100" r="26" fill="#1c1c2a" stroke="#4a4a62" stroke-width="1.4"/>
+<text x="120" y="104" fill="#9a9ab4" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">节点</text>
+<line x1="120" y1="100" x2="310" y2="142" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="4 4"/>
+<circle cx="120" cy="230" r="26" fill="#1c1c2a" stroke="#4a4a62" stroke-width="1.4"/>
+<text x="120" y="234" fill="#9a9ab4" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">节点</text>
+<line x1="120" y1="230" x2="310" y2="188" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="4 4"/>
+<circle cx="760" cy="100" r="26" fill="#1c1c2a" stroke="#4a4a62" stroke-width="1.4"/>
+<text x="760" y="104" fill="#9a9ab4" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">节点</text>
+<line x1="760" y1="100" x2="570" y2="142" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="4 4"/>
+<circle cx="760" cy="230" r="26" fill="#1c1c2a" stroke="#4a4a62" stroke-width="1.4"/>
+<text x="760" y="234" fill="#9a9ab4" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">节点</text>
+<line x1="760" y1="230" x2="570" y2="188" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="4 4"/>
+<circle cx="440" cy="60" r="26" fill="#1c1c2a" stroke="#4a4a62" stroke-width="1.4"/>
+<text x="440" y="64" fill="#9a9ab4" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">节点</text>
+<line x1="440" y1="60" x2="440" y2="110" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="4 4"/>
+<circle cx="440" cy="270" r="26" fill="#1c1c2a" stroke="#4a4a62" stroke-width="1.4"/>
+<text x="440" y="274" fill="#9a9ab4" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">节点</text>
+<line x1="440" y1="270" x2="440" y2="220" stroke="#3a3a52" stroke-width="1.2" stroke-dasharray="4 4"/>
+<text x="24" y="300" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有哪一份是"正本"。改一笔账，得让大多数人手里的副本一起接受，否则改不动。</text>
+</svg>

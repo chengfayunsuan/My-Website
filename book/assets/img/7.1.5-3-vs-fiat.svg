@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="356" viewBox="0 0 880 356" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="356" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.1.5 / 图 3</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">把比特币和普通的钱放在一起看</text>
+<rect x="30" y="78" width="820" height="38" rx="5" fill="#1c1c2a" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="44" y="102" fill="#9a9ab4" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">问题</text>
+<text x="300" y="102" fill="#9a9ab4" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">法定货币（人民币、美元）</text>
+<text x="640" y="102" fill="#9a9ab4" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">比特币</text>
+<line x1="30" y1="116" x2="850" y2="116" stroke="#26263a" stroke-width="1"/>
+<text x="44" y="146" fill="#e0e0ec" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">谁发行</text>
+<text x="300" y="146" fill="#b8b8cc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">央行，一家说了算</text>
+<text x="640" y="146" fill="#b8b8cc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有发行方，规则写死在代码里</text>
+<line x1="30" y1="168" x2="850" y2="168" stroke="#26263a" stroke-width="1"/>
+<text x="44" y="198" fill="#e0e0ec" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">供给</text>
+<text x="300" y="198" fill="#b8b8cc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">可以增发，看政策</text>
+<text x="640" y="198" fill="#b8b8cc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">上限 2100 万个，谁都改不了</text>
+<line x1="30" y1="220" x2="850" y2="220" stroke="#26263a" stroke-width="1"/>
+<text x="44" y="250" fill="#e0e0ec" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">价值靠什么</text>
+<text x="300" y="250" fill="#b8b8cc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">国家信用、税收、法律</text>
+<text x="640" y="250" fill="#b8b8cc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只有共识：下一个买家愿意出多少</text>
+<line x1="30" y1="272" x2="850" y2="272" stroke="#26263a" stroke-width="1"/>
+<text x="44" y="302" fill="#e0e0ec" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一天波动</text>
+<text x="300" y="302" fill="#b8b8cc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">通常不到 1%</text>
+<text x="640" y="302" fill="#b8b8cc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">3%～10% 很常见</text>
+<line x1="30" y1="324" x2="850" y2="324" stroke="#26263a" stroke-width="1"/>
+<text x="44" y="350" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有现金流、没有利息、没有抵押物，所以它没有「估值」这套算法，只有供需。</text>
+</svg>

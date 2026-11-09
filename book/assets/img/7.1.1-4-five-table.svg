@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="424" viewBox="0 0 880 424" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="424" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.1.1 / 图 4</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">五种钱，按四个问题排一遍就清楚了</text>
+<rect x="30" y="76" width="820" height="40" rx="6" fill="#1c1c2a" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="40" y="102" fill="#9a9ab4" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">种类</text>
+<text x="180" y="102" fill="#9a9ab4" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">谁欠你</text>
+<text x="384" y="102" fill="#9a9ab4" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">有利息吗</text>
+<text x="512" y="102" fill="#9a9ab4" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">有保险吗</text>
+<text x="640" y="102" fill="#9a9ab4" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能直接付吗</text>
+<line x1="30" y1="114" x2="850" y2="114" stroke="#26263a" stroke-width="1"/>
+<text x="40" y="146" fill="#e8b84b" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">现金</text>
+<text x="180" y="146" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">央行</text>
+<text x="384" y="146" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有</text>
+<text x="512" y="146" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不适用</text>
+<text x="640" y="146" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能</text>
+<line x1="30" y1="166" x2="850" y2="166" stroke="#26263a" stroke-width="1"/>
+<text x="40" y="198" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">活期存款</text>
+<text x="180" y="198" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商业银行</text>
+<text x="384" y="198" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">有，很低</text>
+<text x="512" y="198" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">有，50 万</text>
+<text x="640" y="198" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能</text>
+<line x1="30" y1="218" x2="850" y2="218" stroke="#26263a" stroke-width="1"/>
+<text x="40" y="250" fill="#67d9a0" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">支付余额</text>
+<text x="180" y="250" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">支付机构</text>
+<text x="384" y="250" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有</text>
+<text x="512" y="250" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有</text>
+<text x="640" y="250" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能</text>
+<line x1="30" y1="270" x2="850" y2="270" stroke="#26263a" stroke-width="1"/>
+<text x="40" y="302" fill="#b58ae8" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">货币基金</text>
+<text x="180" y="302" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">基金公司</text>
+<text x="384" y="302" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">有，浮动</text>
+<text x="512" y="302" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有</text>
+<text x="640" y="302" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">要先赎回</text>
+<line x1="30" y1="322" x2="850" y2="322" stroke="#26263a" stroke-width="1"/>
+<text x="40" y="354" fill="#e87a8a" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">信用卡额度</text>
+<text x="180" y="354" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行（还没借）</text>
+<text x="384" y="354" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">—</text>
+<text x="512" y="354" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">—</text>
+<text x="640" y="354" fill="#b8b8cc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能刷，要还</text>
+<line x1="30" y1="374" x2="850" y2="374" stroke="#26263a" stroke-width="1"/>
+<text x="40" y="396" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同样是「一万块」，被谁欠、有没有兜底，差别比金额本身大得多。</text>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="318" viewBox="0 0 880 318" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="318" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.1.1 / 图 2</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一家银行、同一个人：本息合计 50 万以内，全额赔</text>
+<text x="24" y="124" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">储户 A</text>
+<rect x="86" y="96" width="150" height="44" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<text x="161" y="124" fill="#cfcfe0" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">存 20 万</text>
+<path d="M250,118 L286,118" fill="none" stroke="#8a8aa0" stroke-width="1.6"/>
+<path d="M286,112 L296,118 L286,124 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="302" y="96" width="150" height="44" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="377" y="124" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">赔 20 万</text>
+<text x="474" y="124" fill="#8a8aa0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">全额拿回</text>
+<text x="24" y="182" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">储户 B</text>
+<rect x="86" y="154" width="150" height="44" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<text x="161" y="182" fill="#cfcfe0" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">存 60 万</text>
+<path d="M250,176 L286,176" fill="none" stroke="#8a8aa0" stroke-width="1.6"/>
+<path d="M286,170 L296,176 L286,182 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="302" y="154" width="150" height="44" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="377" y="182" fill="#e8b84b" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">赔 50 万</text>
+<text x="474" y="182" fill="#8a8aa0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">损失 10 万</text>
+<text x="24" y="240" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">储户 C</text>
+<rect x="86" y="212" width="150" height="44" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<text x="161" y="240" fill="#cfcfe0" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">存 200 万</text>
+<path d="M250,234 L286,234" fill="none" stroke="#8a8aa0" stroke-width="1.6"/>
+<path d="M286,228 L296,234 L286,240 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="302" y="212" width="150" height="44" rx="6" fill="#16161f" stroke="#e87a8a" stroke-width="1.4"/>
+<text x="377" y="240" fill="#e87a8a" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">赔 50 万</text>
+<text x="474" y="240" fill="#8a8aa0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">损失 150 万</text>
+<text x="24" y="284" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">依据是 2015 年 5 月施行的《存款保险条例》，覆盖境内所有吸收存款的银行。</text>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="286" viewBox="0 0 880 286" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="286" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.1.2 / 图 2</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">人民币换泰铢：多数时候要先换成美元，再换泰铢</text>
+<rect x="30" y="92" width="200" height="82" rx="10" fill="#16161f" stroke="#c8c8dc" stroke-width="1.6"/>
+<text x="130.0" y="126" fill="#c8c8dc" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">人民币 CNY</text>
+<text x="130.0" y="152" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你手上的钱</text>
+<rect x="340" y="92" width="200" height="82" rx="10" fill="#16161f" stroke="#67b5ef" stroke-width="1.6"/>
+<text x="440.0" y="126" fill="#67b5ef" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">美元 USD</text>
+<text x="440.0" y="152" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">中间那一站</text>
+<rect x="650" y="92" width="200" height="82" rx="10" fill="#16161f" stroke="#67d9a0" stroke-width="1.6"/>
+<text x="750.0" y="126" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">泰铢 THB</text>
+<text x="750.0" y="152" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你要花的钱</text>
+<path d="M234,132 L330,132" fill="none" stroke="#8a8aa0" stroke-width="1.8"/>
+<path d="M330,126 L340,132 L330,138 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<path d="M544,132 L640,132" fill="none" stroke="#8a8aa0" stroke-width="1.8"/>
+<path d="M640,126 L650,132 L640,138 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<text x="282" y="116" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">换汇</text>
+<text x="592" y="116" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">换汇</text>
+<path d="M130,198 L130,214 L750,214 L750,198" fill="none" stroke="#4a4a62" stroke-width="1.4" stroke-dasharray="5 4"/>
+<text x="440" y="236" fill="#8a8aa0" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">直接换也可以，但量小、报价差，银行更愿意走美元这条大路</text>
+<text x="30" y="268" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以美元的地位不是「美国人规定的」，是市场为了省事自己走出来的。</text>
+</svg>

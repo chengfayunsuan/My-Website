@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="352" viewBox="0 0 880 352" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="352" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.1.4 / 图 1</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1 USDT 换 1 美元：一条双向的兑换通道</text>
+<rect x="50" y="96" width="210" height="104" rx="10" fill="#16161f" stroke="#67b5ef" stroke-width="1.6"/>
+<text x="155" y="126" fill="#e8e8f2" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你</text>
+<text x="155" y="152" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">拿人民币买 USDT 的人</text>
+<text x="155" y="176" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">或持币待换回的人</text>
+<rect x="620" y="96" width="210" height="104" rx="10" fill="#16161f" stroke="#67d9a0" stroke-width="1.6"/>
+<text x="725" y="126" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Tether 公司</text>
+<text x="725" y="152" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发行方，在境外注册</text>
+<text x="725" y="176" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">手里握着储备资产</text>
+<path d="M266,128 L610,128" fill="none" stroke="#8a8aa0" stroke-width="1.7"/>
+<path d="M610,122 L620,128 L610,134 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<text x="438" y="114" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">① 你交 1 美元</text>
+<path d="M610,172 L266,172" fill="none" stroke="#8a8aa0" stroke-width="1.7"/>
+<path d="M266,166 L256,172 L266,178 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<text x="438" y="196" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">② 它给你 1 个 USDT</text>
+<text x="440" y="234" fill="#a0a0b8" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">反向也一样：交回 1 个 USDT，它还你 1 美元（理论上）</text>
+<text x="24" y="274" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">二级市场上，价格跌到 0.99 就有人买入、去换回 1 美元赚差价；涨到 1.01 就有人拿美元来发行新的。</text>
+<text x="24" y="300" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这个套利机制把它钉在 1 美元附近——前提是：这家公司真的还得起。</text>
+</svg>
