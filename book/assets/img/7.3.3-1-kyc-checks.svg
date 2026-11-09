@@ -1,0 +1,27 @@
+<svg width="880" height="382" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 382" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="382" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">开一张借记卡，系统要过五道核验</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你觉得「麻烦」的每一个环节，对应一个真实风险。</text>
+<rect x="40" y="92" width="480" height="40" rx="5" fill="#15151f" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="56" y="118" fill="#67b5ef" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">身份证真伪</text>
+<text x="190" y="118" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">读卡 + 公安部联网核查（2007 年起）</text>
+<text x="548" y="118" fill="#8a8aa0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">挡假证、冒名</text>
+<rect x="40" y="140" width="480" height="40" rx="5" fill="#15151f" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="56" y="166" fill="#67b5ef" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">人证合一</text>
+<text x="190" y="166" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">柜面或机具人脸比对，本人到场</text>
+<text x="548" y="166" fill="#8a8aa0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">挡代开、买来的身份</text>
+<rect x="40" y="188" width="480" height="40" rx="5" fill="#15151f" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="56" y="214" fill="#67b5ef" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">手机号实名</text>
+<text x="190" y="214" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">核验手机号登记人与你一致</text>
+<text x="548" y="214" fill="#8a8aa0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">挡虚拟号段、黑卡</text>
+<rect x="40" y="236" width="480" height="40" rx="5" fill="#15151f" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="56" y="262" fill="#67b5ef" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">用途询问</text>
+<text x="190" y="262" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">职业、开卡目的、住址</text>
+<text x="548" y="262" fill="#8a8aa0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">反洗钱尽调的法定动作</text>
+<rect x="40" y="284" width="480" height="40" rx="5" fill="#15151f" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="56" y="310" fill="#67b5ef" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">留档</text>
+<text x="190" y="310" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">身份证复印件、签字、影像</text>
+<text x="548" y="310" fill="#8a8aa0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">出事后可回溯</text>
+<line x1="40" y1="340" x2="844" y2="340" stroke="#3a3a52" stroke-width="1"/>
+<text x="40" y="366" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这五步里任何一步不过，柜员都无权通融——权限在系统里，不在人身上。</text>
+</svg>

@@ -1,0 +1,31 @@
+<svg width="880" height="330" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 330" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="330" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">一张被收购的银行卡走过的路</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你卖出去的不是一张卡，是这条链的第一环。</text>
+<rect x="40" y="96" width="164" height="108" rx="6" fill="#15151f" stroke="#e8965a" stroke-width="1.4"/>
+<text x="54" y="122" fill="#e8965a" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">卖卡人</text>
+<text x="54" y="148" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">「借你的卡收点流水」，</text>
+<text x="54" y="168" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一张 1000～2000 元</text>
+<rect x="252" y="96" width="164" height="108" rx="6" fill="#15151f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="266" y="122" fill="#67b5ef" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">卡贩子</text>
+<text x="266" y="148" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">攒够几十张打包卖给</text>
+<text x="266" y="168" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">上游「料商」</text>
+<rect x="464" y="96" width="164" height="108" rx="6" fill="#15151f" stroke="#b58ae8" stroke-width="1.4"/>
+<text x="478" y="122" fill="#b58ae8" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">跑分团伙</text>
+<text x="478" y="148" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">赃款打进这批卡，</text>
+<text x="478" y="168" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">秒级拆分转出</text>
+<rect x="676" y="96" width="164" height="108" rx="6" fill="#15151f" stroke="#e87a8a" stroke-width="1.4"/>
+<text x="690" y="122" fill="#e87a8a" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">卡主</text>
+<text x="690" y="148" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">赃款一旦被追到这张卡，</text>
+<text x="690" y="168" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第一个被冻的是卡主</text>
+<path d="M204,150 L240,150" fill="none" stroke="#8a8aa0" stroke-width="1.6"/>
+<path d="M240,143 L252,150 L240,157 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="1"/>
+<path d="M416,150 L452,150" fill="none" stroke="#8a8aa0" stroke-width="1.6"/>
+<path d="M452,143 L464,150 L452,157 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="1"/>
+<path d="M628,150 L664,150" fill="none" stroke="#8a8aa0" stroke-width="1.6"/>
+<path d="M664,143 L676,150 L664,157 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="1"/>
+<line x1="40" y1="232" x2="844" y2="232" stroke="#3a3a52" stroke-width="1"/>
+<text x="40" y="258" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卖卡人往往以为只是「借个卡」。实际后果：名下所有账户 5 年暂停非柜面业务，</text>
+<text x="40" y="280" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">3 年不能开新户；情节重的是帮助信息网络犯罪活动罪——2021 年起诉人数比前一年翻了三倍多。</text>
+<text x="40" y="306" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这条链的每一环都是断卡行动的打击对象，但卡始终是最稀缺的一环——所以才管得这么严。</text>
+</svg>
