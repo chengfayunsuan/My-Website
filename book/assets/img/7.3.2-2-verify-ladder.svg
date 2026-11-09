@@ -1,0 +1,28 @@
+<svg width="880" height="418" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 418" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="418" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">额度是核身成本的价格</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">越难确认「你是谁」，能动的钱就越少。这条斜线就是三类户的分界线。</text>
+<line x1="96" y1="310" x2="800" y2="310" stroke="#4a4a66" stroke-width="1.4"/>
+<line x1="96" y1="310" x2="96" y2="104" stroke="#4a4a66" stroke-width="1.4"/>
+<path d="M800,310 L790,305 L790,315 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<path d="M96,94 L91,104 L101,104 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<text x="800" y="298" fill="#8a8aa0" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">核身强度</text>
+<text x="108" y="120" fill="#8a8aa0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">可用额度</text>
+<line x1="100" y1="302.732" x2="752" y2="96.048" stroke="#5a5a7a" stroke-width="1.6" stroke-dasharray="5 5"/>
+<circle cx="168" cy="281.176" r="6.5" fill="#e8965a"/>
+<line x1="168" y1="281.176" x2="168" y2="310" stroke="#e8965a" stroke-width="1" stroke-dasharray="3 4"/>
+<text x="168" y="265.176" fill="#e8965a" font-size="13.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">III 类户</text>
+<text x="168" y="332" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只验手机号 + 身份证</text>
+<text x="168" y="352" fill="#e8965a" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">余额不超 2000</text>
+<circle cx="420" cy="201.292" r="6.5" fill="#67d9a0"/>
+<line x1="420" y1="201.292" x2="420" y2="310" stroke="#67d9a0" stroke-width="1" stroke-dasharray="3 4"/>
+<text x="420" y="185.292" fill="#67d9a0" font-size="13.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">II 类户</text>
+<text x="420" y="332" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">再用本人的 I 类卡验四要素</text>
+<text x="420" y="352" fill="#67d9a0" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">日 1 万 / 年 20 万</text>
+<circle cx="672" cy="121.40799999999999" r="6.5" fill="#67b5ef"/>
+<line x1="672" y1="121.40799999999999" x2="672" y2="310" stroke="#67b5ef" stroke-width="1" stroke-dasharray="3 4"/>
+<text x="672" y="105.40799999999999" fill="#67b5ef" font-size="13.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">I 类户</text>
+<text x="672" y="332" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">柜面面签、留影像、当面核身</text>
+<text x="672" y="352" fill="#67b5ef" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有上限</text>
+<text x="96" y="396" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">省掉了一维：现实里还有「这家银行有没有你的历史」。老客户线上开户，额度也能放宽。</text>
+</svg>

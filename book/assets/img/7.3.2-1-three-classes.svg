@@ -1,0 +1,42 @@
+<svg width="880" height="344" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 344" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="344" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">三个类，不是三张卡，是三种实名程度</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一套账户体系里，按开户时「怎么确认是你」分成 I、II、III 三类，功能和额度跟着变。</text>
+<rect x="40" y="84" width="256" height="206" rx="6" fill="#15151f" stroke="#67b5ef" stroke-width="1.3"/>
+<rect x="40" y="84" width="256" height="34" rx="6" fill="#1c1c2b" stroke="#67b5ef" stroke-width="1.3"/>
+<rect x="40" y="104" width="256" height="14" rx="0" fill="#1c1c2b" stroke="none" stroke-width="0"/>
+<text x="56" y="106" fill="#67b5ef" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">I 类户</text>
+<text x="56" y="140" fill="#8a8aa0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">怎么开</text>
+<text x="56" y="160" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">柜面当面办，或自助机具</text>
+<text x="56" y="176" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">上人脸比对加人工核验</text>
+<text x="56" y="204" fill="#8a8aa0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能干什么</text>
+<text x="56" y="224" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">存、取、转、消费、理财</text>
+<text x="56" y="240" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">全都能做</text>
+<line x1="56" y1="258" x2="280" y2="258" stroke="#2e2e44" stroke-width="1"/>
+<text x="56" y="280" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">没有上限</text>
+<rect x="312" y="84" width="256" height="206" rx="6" fill="#15151f" stroke="#67d9a0" stroke-width="1.3"/>
+<rect x="312" y="84" width="256" height="34" rx="6" fill="#1c1c2b" stroke="#67d9a0" stroke-width="1.3"/>
+<rect x="312" y="104" width="256" height="14" rx="0" fill="#1c1c2b" stroke="none" stroke-width="0"/>
+<text x="328" y="106" fill="#67d9a0" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">II 类户</text>
+<text x="328" y="140" fill="#8a8aa0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">怎么开</text>
+<text x="328" y="160" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">手机上开，但要绑一张</text>
+<text x="328" y="176" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">本人的 I 类卡做验证</text>
+<text x="328" y="204" fill="#8a8aa0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能干什么</text>
+<text x="328" y="224" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">存钱、理财、消费、转账</text>
+<text x="328" y="240" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不能存取现金</text>
+<line x1="328" y1="258" x2="552" y2="258" stroke="#2e2e44" stroke-width="1"/>
+<text x="328" y="280" fill="#67d9a0" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">日 1 万 / 年 20 万</text>
+<rect x="584" y="84" width="256" height="206" rx="6" fill="#15151f" stroke="#e8965a" stroke-width="1.3"/>
+<rect x="584" y="84" width="256" height="34" rx="6" fill="#1c1c2b" stroke="#e8965a" stroke-width="1.3"/>
+<rect x="584" y="104" width="256" height="14" rx="0" fill="#1c1c2b" stroke="none" stroke-width="0"/>
+<text x="600" y="106" fill="#e8965a" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">III 类户</text>
+<text x="600" y="140" fill="#8a8aa0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">怎么开</text>
+<text x="600" y="160" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">手机上开，验手机号</text>
+<text x="600" y="176" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">和身份证就够</text>
+<text x="600" y="204" fill="#8a8aa0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能干什么</text>
+<text x="600" y="224" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只能小额消费和缴费</text>
+<text x="600" y="240" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不能转给他人</text>
+<line x1="600" y1="258" x2="824" y2="258" stroke="#2e2e44" stroke-width="1"/>
+<text x="600" y="280" fill="#e8965a" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">余额不超 2000</text>
+<text x="40" y="320" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三类都是「本人账户」，都能收款；区别只在核身强度换来的可用额度。</text>
+</svg>

@@ -1,0 +1,23 @@
+<svg width="880" height="342" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 342" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="342" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">限额按人头算，但不跨银行合并</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">「日累计 1 万」限制的是同一家银行里的同一个你，不是所有银行加起来的你。</text>
+<rect x="40" y="76" width="800" height="38" rx="5" fill="#1c1c2b" stroke="#5a5a7a" stroke-width="1.2"/>
+<text x="60" y="101" fill="#c8c8dc" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">你</text>
+<text x="96" y="100" fill="#8a8aa0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一张身份证，同一部手机</text>
+<path d="M440,114 L440,138 L170,138 L170,170" fill="none" stroke="#8a8aa0" stroke-width="1.6"/>
+<path d="M440,114 L440,138 L440,138 L440,170" fill="none" stroke="#8a8aa0" stroke-width="1.6"/>
+<path d="M440,114 L440,138 L710,138 L710,170" fill="none" stroke="#8a8aa0" stroke-width="1.6"/>
+<rect x="40" y="170" width="260" height="62" rx="5" fill="#15151f" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="58" y="196" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">A 银行</text>
+<text x="58" y="217" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">II 类户　日累计 1 万</text>
+<rect x="310" y="170" width="260" height="62" rx="5" fill="#15151f" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="328" y="196" fill="#67d9a0" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">B 银行</text>
+<text x="328" y="217" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">II 类户　日累计 1 万</text>
+<rect x="580" y="170" width="260" height="62" rx="5" fill="#15151f" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="598" y="196" fill="#b58ae8" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">C 银行</text>
+<text x="598" y="217" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">II 类户　日累计 1 万</text>
+<line x1="40" y1="258" x2="840" y2="258" stroke="#2e2e44" stroke-width="1"/>
+<text x="60" y="286" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三家银行各 1 万，同一天可以转出 3 万。</text>
+<text x="60" y="312" fill="#e8965a" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">但同一家银行里，你就算开三个 II 类户，也是合起来 1 万。</text>
+</svg>
