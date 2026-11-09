@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="296" viewBox="0 0 880 296" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="296" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.2.1 / 图 4</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行赚的是利差，但利差要养一大摊子</text>
+<line x1="60" y1="150" x2="820" y2="150" stroke="#4a4a62" stroke-width="1.4"/>
+<line x1="150" y1="100" x2="150" y2="200" stroke="#67b5ef" stroke-width="2"/>
+<line x1="700" y1="100" x2="700" y2="200" stroke="#e8b84b" stroke-width="2"/>
+<text x="150" y="88" fill="#67b5ef" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">存款利率 1.5%</text>
+<text x="700" y="88" fill="#e8b84b" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">贷款利率 4.5%</text>
+<rect x="150" y="138" width="128" height="24" rx="3" fill="#e87a8a" stroke="#e87a8a" stroke-width="0"/>
+<text x="214.0" y="132" fill="#e87a8a" font-size="9.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">坏账准备</text>
+<rect x="278" y="138" width="183" height="24" rx="3" fill="#e8965a" stroke="#e8965a" stroke-width="0"/>
+<text x="369.5" y="132" fill="#e8965a" font-size="9.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">人工与网点</text>
+<rect x="461" y="138" width="238" height="24" rx="3" fill="#67d9a0" stroke="#67d9a0" stroke-width="0"/>
+<text x="580.0" y="132" fill="#67d9a0" font-size="9.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">资本成本与利润</text>
+<text x="440" y="190" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这 3 个百分点，就是这么分的</text>
+<text x="40" y="246" fill="#a0a0b8" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以利率一降再降，先被压缩的是银行自己的利差，不是存款人的本金。</text>
+<text x="40" y="272" fill="#a0a0b8" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">反过来，存款利率降得比贷款利率慢，银行就会难受——这就是“净息差收窄”。</text>
+</svg>

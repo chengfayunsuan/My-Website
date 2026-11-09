@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="300" viewBox="0 0 880 300" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="300" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.2.4 / 图 3</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行缺现金时，最后一个能敲的门</text>
+<rect x="40" y="96" width="220" height="104" rx="10" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="150" y="126" fill="#67b5ef" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">某商业银行</text>
+<text x="150" y="152" fill="#cfcfe0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">手上有国债、票据</text>
+<text x="150" y="176" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">但拿不出现金</text>
+<path d="M264,148 L330,148" fill="none" stroke="#8a8aa0" stroke-width="1.7"/>
+<path d="M330,142 L340,148 L330,154 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<text x="300" y="132" fill="#8a8aa0" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">抵押</text>
+<rect x="348" y="96" width="200" height="104" rx="10" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="448" y="126" fill="#e8b84b" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">央行</text>
+<text x="448" y="152" fill="#cfcfe0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">接受合格抵押品</text>
+<text x="448" y="176" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">放出短期资金</text>
+<path d="M552,148 L620,148" fill="none" stroke="#8a8aa0" stroke-width="1.7"/>
+<path d="M620,142 L630,148 L620,154 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<text x="600" y="132" fill="#8a8aa0" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">给钱</text>
+<rect x="638" y="96" width="200" height="104" rx="10" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="738" y="126" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行缓过来</text>
+<text x="738" y="152" fill="#cfcfe0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能应付取款</text>
+<text x="738" y="176" fill="#8a8aa0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不用甩卖资产</text>
+<text x="40" y="240" fill="#a0a0b8" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这个角色叫「最后贷款人」。它的意义不是救某一家银行，是防止一家银行的挤兑传染成整个体系的挤兑。</text>
+<text x="40" y="266" fill="#a0a0b8" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价是「道德风险」：知道有人兜底，银行可能更敢冒险。所以央行通常只救流动性，不救资不抵债的机构。</text>
+</svg>
