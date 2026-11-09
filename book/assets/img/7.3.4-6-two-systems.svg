@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="440" viewBox="0 0 880 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.3.4 fig6 · 你身上有两套信用体系</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">左边是央行征信，右边是平台评分，别混为一谈</text>
+<rect x="30" y="80" width="400" height="290" rx="8" fill="#16161f" stroke="#67d9a0" stroke-width="2"/>
+<text x="50" y="112" fill="#67d9a0" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">央行征信中心</text>
+<text x="50" y="146" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">数据从哪来</text>
+<text x="50" y="166" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">持牌金融机构报送：银行、消费</text>
+<text x="50" y="184" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">金融、小贷、已接入的网贷</text>
+<text x="50" y="202" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">记什么</text>
+<text x="50" y="222" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">借了什么、还没还、逾期了没有</text>
+<text x="50" y="258" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">谁在用</text>
+<text x="50" y="278" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行贷款审批、信用卡审批、</text>
+<text x="50" y="296" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">司法办案</text>
+<text x="50" y="314" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">法律地位</text>
+<text x="50" y="334" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">《征信业管理条例》监管的</text>
+<text x="50" y="352" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">国家金融信用信息基础数据库</text>
+<rect x="450" y="80" width="400" height="290" rx="8" fill="#16161f" stroke="#b58ae8" stroke-width="2"/>
+<text x="470" y="112" fill="#b58ae8" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">市场化信用分（芝麻分等）</text>
+<text x="470" y="146" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">数据从哪来</text>
+<text x="470" y="166" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">平台自己掌握的消费与行为数据</text>
+<text x="470" y="202" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">记什么</text>
+<text x="470" y="222" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">购物、缴费、守约行为，算成一个分</text>
+<text x="470" y="258" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">谁在用</text>
+<text x="470" y="278" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">平台自家场景：免押金、先享后付</text>
+<text x="470" y="314" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">法律地位</text>
+<text x="470" y="334" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不是征信报告，不能替代银行审批</text>
+<text x="24" y="404" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">中间还有两家持牌个人征信机构：百行（2018）、朴道（2020），</text>
+<text x="24" y="424" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">它们把各家平台的数据整合后按持牌规矩对外提供——网贷数据主要通过这个口进银行。</text>
+</svg>

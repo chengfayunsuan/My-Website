@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="340" viewBox="0 0 880 340" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="340" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.3.4 fig3 · 一行逾期记录怎么读</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">某行贷记卡 2023-08 至 2024-11 逐月还款状态：连三在这里</text>
+<text x="128" y="104" fill="#7a7a94" font-size="10.5" text-anchor="middle" font-family="monospace">2023</text>
+<text x="502.0" y="104" fill="#7a7a94" font-size="10.5" text-anchor="middle" font-family="monospace">2024</text>
+<line x1="40" y1="110" x2="254" y2="110" stroke="#4a4a62" stroke-width="1"/>
+<line x1="260" y1="110" x2="694" y2="110" stroke="#4a4a62" stroke-width="1"/>
+<text x="58.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">08</text>
+<rect x="40" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="58.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="102.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">09</text>
+<rect x="84" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="102.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="146.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">10</text>
+<rect x="128" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="146.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="190.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">11</text>
+<rect x="172" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="190.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="234.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">12</text>
+<rect x="216" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#e87a8a" stroke-width="1.5"/>
+<text x="234.0" y="162" fill="#e87a8a" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">1</text>
+<text x="278.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">01</text>
+<rect x="260" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#e87a8a" stroke-width="1.5"/>
+<text x="278.0" y="162" fill="#e87a8a" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">2</text>
+<text x="322.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">02</text>
+<rect x="304" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#e87a8a" stroke-width="1.5"/>
+<text x="322.0" y="162" fill="#e87a8a" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">3</text>
+<text x="366.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">03</text>
+<rect x="348" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="366.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="410.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">04</text>
+<rect x="392" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="410.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="454.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">05</text>
+<rect x="436" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="454.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="498.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">06</text>
+<rect x="480" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="498.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="542.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">07</text>
+<rect x="524" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="542.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="586.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">08</text>
+<rect x="568" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="586.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="630.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">09</text>
+<rect x="612" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="630.0" y="162" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">N</text>
+<text x="674.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">10</text>
+<rect x="656" y="138" width="36" height="34" rx="4" fill="#16161f" stroke="#8a8aa0" stroke-width="1.5"/>
+<text x="674.0" y="162" fill="#8a8aa0" font-size="15" text-anchor="middle" font-family="monospace" font-weight="bold">C</text>
+<text x="718.0" y="128" fill="#7a7a94" font-size="9.5" text-anchor="middle" font-family="monospace">11</text>
+<rect x="211" y="133" width="134" height="44" rx="4" fill="none" stroke="#e87a8a" stroke-width="2"/>
+<text x="282.0" y="206" fill="#e87a8a" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">连续三期逾期（连三）</text>
+<text x="40" y="250" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">N 正常还款　·　1 逾期 1~30 天　·　2 逾期 31~60 天　·　3 逾期 61~90 天　·　C 本月结清销户　·　* 无卡未用</text>
+<text x="40" y="280" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">数字最大到 7：7 代表逾期 180 天以上，基本就是呆账。</text>
+<text x="40" y="312" fill="#e8b84b" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">审批口诀「连三累六」：连续三期，或两年内累计六期，大多数银行直接拒。</text>
+</svg>

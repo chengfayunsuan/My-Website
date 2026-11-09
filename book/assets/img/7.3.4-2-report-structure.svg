@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="440" viewBox="0 0 880 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.3.4 fig2 · 个人信用报告的六大块</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">二代征信（2020 年 1 月起）的报告结构：审批者基本只看前三块</text>
+<rect x="30" y="80" width="400" height="100" rx="8" fill="#16161f" stroke="#3a3a52" stroke-width="2"/>
+<text x="50" y="112" fill="wht" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">① 个人基本信息</text>
+<text x="50" y="138" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">身份证、职业、居住信息</text>
+<text x="50" y="160" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">来自你办业务时自己填的表</text>
+<rect x="450" y="80" width="400" height="100" rx="8" fill="#16161f" stroke="#3a3a52" stroke-width="2"/>
+<text x="470" y="112" fill="wht" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">② 信息概要</text>
+<text x="470" y="138" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">几张卡、几笔贷、总额、逾期汇总</text>
+<text x="470" y="160" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">审批者先看这一页</text>
+<rect x="30" y="200" width="400" height="100" rx="8" fill="#16161f" stroke="#3a3a52" stroke-width="2"/>
+<text x="50" y="232" fill="wht" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">③ 信贷交易明细</text>
+<text x="50" y="258" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每笔借款逐月的还款记录</text>
+<text x="50" y="280" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">好坏历史全在这，最长看五年</text>
+<rect x="450" y="200" width="400" height="100" rx="8" fill="#16161f" stroke="#3a3a52" stroke-width="2"/>
+<text x="470" y="232" fill="wht" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">④ 公共信息明细</text>
+<text x="470" y="258" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">欠税、民事判决、强制执行</text>
+<text x="470" y="280" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">来自法院和政府部门</text>
+<rect x="30" y="320" width="400" height="100" rx="8" fill="#16161f" stroke="#3a3a52" stroke-width="2"/>
+<text x="50" y="352" fill="wht" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">⑤ 异议与声明</text>
+<text x="50" y="378" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你对某条记录提出异议的处理标注</text>
+<text x="50" y="400" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">处理完就更新</text>
+<rect x="450" y="320" width="400" height="100" rx="8" fill="#16161f" stroke="#3a3a52" stroke-width="2"/>
+<text x="470" y="352" fill="wht" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">⑥ 查询记录</text>
+<text x="470" y="378" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">谁、什么时候、以什么原因查过你</text>
+<text x="470" y="400" fill="#7a7a94" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">包括贷款审批和贷后管理</text>
+</svg>
