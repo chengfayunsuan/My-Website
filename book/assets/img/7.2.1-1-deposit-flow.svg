@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 470" width="880" height="470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.2.1-1  你的一万块，在银行账上去了哪</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不是替你保管，是汇成资金池再分配。全国银行都这么干，法律允许</text>
+<rect x="44" y="92" width="180" height="96" rx="5" fill="#1a2434" stroke="#67b5ef" stroke-width="1.6"/>
+<text x="134" y="116" fill="#67b5ef" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你的银行卡</text>
+<text x="134" y="146" fill="#e6e6f0" font-size="17" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">10,000 元</text>
+<text x="134" y="170" fill="#7a8aa2" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这是你的资产</text>
+<line x1="226" y1="140" x2="292" y2="140" stroke="#67b5ef" stroke-width="1.6"/>
+<path d="M292,134 L302,140 L292,146 Z" fill="#67b5ef" stroke="#67b5ef" stroke-width="1"/>
+<text x="259" y="130" fill="#67b5ef" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">存进池子</text>
+<rect x="304" y="88" width="250" height="104" rx="5" fill="#201a2e" stroke="#b58ae8" stroke-width="1.6"/>
+<text x="429" y="112" fill="#b58ae8" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">某家商业银行</text>
+<text x="429" y="136" fill="#e6e6f0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">吸收存款 100 亿</text>
+<text x="429" y="160" fill="#9a8ab4" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这一百亿是它欠储户的</text>
+<text x="429" y="178" fill="#9a8ab4" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">记在负债栏</text>
+<line x1="429" y1="192" x2="429" y2="222" stroke="#c8c8dc" stroke-width="1.5"/>
+<line x1="208" y1="222" x2="616" y2="222" stroke="#c8c8dc" stroke-width="1.5"/>
+<line x1="208" y1="222" x2="208" y2="246" stroke="#c8c8dc" stroke-width="1.5"/>
+<line x1="616" y1="222" x2="616" y2="246" stroke="#c8c8dc" stroke-width="1.5"/>
+<path d="M202,246 L208,256 L214,246 Z" fill="#c8c8dc" stroke="#c8c8dc" stroke-width="1"/>
+<path d="M610,246 L616,256 L622,246 Z" fill="#c8c8dc" stroke="#c8c8dc" stroke-width="1"/>
+<text x="429" y="216" fill="#a0a0b8" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">分成两堆</text>
+<rect x="60" y="258" width="296" height="104" rx="5" fill="#16281c" stroke="#67d9a0" stroke-width="1.6"/>
+<text x="208" y="282" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">法定准备金 6.3 亿</text>
+<text x="208" y="306" fill="#7a9a8a" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">按 6.3% 的比例，存在央行账户</text>
+<text x="208" y="328" fill="#7a9a8a" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不能放贷、不能买债、不能取现</text>
+<text x="208" y="348" fill="#5f7f6f" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">利息很低，对银行是成本</text>
+<rect x="468" y="258" width="296" height="104" rx="5" fill="#2c2216" stroke="#e8965a" stroke-width="1.6"/>
+<text x="616" y="282" fill="#e8965a" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">放贷、买债 93.7 亿</text>
+<text x="616" y="306" fill="#a8907a" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">变成别人的首付、工资、设备款</text>
+<text x="616" y="328" fill="#a8907a" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行靠这堆钱的利息赚钱</text>
+<text x="616" y="348" fill="#8a7460" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">但收不回来就成了坏账</text>
+<path d="M766,310 L812,310 L812,140 L562,140" fill="none" stroke="#4a4a66" stroke-width="1.2" stroke-dasharray="5 4"/>
+<path d="M562,134 L552,140 L562,146 Z" fill="#4a4a66" stroke="#4a4a66" stroke-width="1"/>
+<text x="806" y="236" fill="#8a8aa2" font-size="8.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">花出去的钱</text>
+<text x="806" y="252" fill="#8a8aa2" font-size="8.8" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">又存回银行</text>
+<text x="40" y="408" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注意这是「汇总」不是「一对一」：银行不会把你这一万块单独放进保险箱，而是把所有人的存款汇成资金池，按比例留准备金、其余配置成资产。</text>
+<text x="40" y="432" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以「我存的钱被银行借走了」这句话对，但不精确——你的一万块早就融进池子里，你在账上拥有的是「随时可取一万块」的债权。</text>
+<text x="40" y="456" fill="#8a8aa2" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这也解释了利息从哪来：银行用 1.5% 借你的钱，用 4% 贷给别人，中间的差价就是它的毛利。</text>
+</svg>

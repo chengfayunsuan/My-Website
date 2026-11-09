@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 408" width="880" height="408" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="408" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">图 7.2.1-6  谁管银行：三个机构，分工不同</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2018 年和 2023 年改过两次。记住分工，比记住名字有用</text>
+<rect x="40" y="88" width="260" height="200" rx="5" fill="#201a2e" stroke="#b58ae8" stroke-width="1.4"/>
+<text x="58" y="122" fill="#b58ae8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">中国人民银行</text>
+<line x1="58" y1="136" x2="282" y2="136" stroke="#33334a" stroke-width="1"/>
+<text x="58" y="166" fill="#b58ae8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">·</text>
+<text x="72" y="166" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">货币政策：利率、准备金</text>
+<text x="58" y="202" fill="#b58ae8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">·</text>
+<text x="72" y="202" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">宏观审慎：系统重要性银行</text>
+<text x="58" y="238" fill="#b58ae8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">·</text>
+<text x="72" y="238" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">支付清算：网联、征信</text>
+<rect x="320" y="88" width="260" height="200" rx="5" fill="#1a2434" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="338" y="122" fill="#67b5ef" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">金融监管总局</text>
+<line x1="338" y1="136" x2="562" y2="136" stroke="#33334a" stroke-width="1"/>
+<text x="338" y="166" fill="#67b5ef" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">·</text>
+<text x="352" y="166" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">机构监管：准入门槛、牌照</text>
+<text x="338" y="202" fill="#67b5ef" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">·</text>
+<text x="352" y="202" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">行为监管：销售、收费、催收</text>
+<text x="338" y="238" fill="#67b5ef" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">·</text>
+<text x="352" y="238" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">消费者保护、风险处置</text>
+<rect x="600" y="88" width="260" height="200" rx="5" fill="#2a2410" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="618" y="122" fill="#e8b84b" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">中国证监会</text>
+<line x1="618" y1="136" x2="842" y2="136" stroke="#33334a" stroke-width="1"/>
+<text x="618" y="166" fill="#e8b84b" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">·</text>
+<text x="632" y="166" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">资本市场：股票、债券发行</text>
+<text x="618" y="202" fill="#e8b84b" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">·</text>
+<text x="632" y="202" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">上市公司信息披露</text>
+<text x="618" y="238" fill="#e8b84b" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">·</text>
+<text x="632" y="238" fill="#b0b4c6" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">证券基金机构监管</text>
+<rect x="40" y="316" width="800" height="52" rx="4" fill="#16161f" stroke="#5a5a80" stroke-width="1.2"/>
+<text x="60" y="340" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">存款保险基金</text>
+<text x="60" y="358" fill="#7f7f98" font-size="8.6" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">50 万元以内的存款，银行倒了也全额赔付</text>
+<text x="800" y="346" fill="#6f6f88" font-size="8.4" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2015 年 5 月实施</text>
+<text x="40" y="392" fill="#a0a0b8" font-size="9.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这三家不是「上下级」，是分工：央行管总量和系统性风险，监管总局管机构和行为，证监会管市场。真正的协调机制在国务院金融委。</text>
+</svg>
