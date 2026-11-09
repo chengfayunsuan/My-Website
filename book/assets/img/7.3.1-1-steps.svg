@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="286" viewBox="0 0 880 286" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="286" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.3.1 / 图 1</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">办一张卡，柜员在系统里走了六步</text>
+<rect x="20" y="96" width="124" height="62" rx="8" fill="#16161f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="82" y="122" fill="#cfcfe0" font-size="11.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">取号填单</text>
+<text x="82" y="144" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 1 步</text>
+<path d="M146,127 L156,127" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M156,122 L164,127 L156,132 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="162" y="96" width="124" height="62" rx="8" fill="#16161f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="224" y="122" fill="#cfcfe0" font-size="11.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">读身份证</text>
+<text x="224" y="144" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 2 步</text>
+<path d="M288,127 L298,127" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M298,122 L306,127 L298,132 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="304" y="96" width="124" height="62" rx="8" fill="#16161f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="366" y="122" fill="#cfcfe0" font-size="11.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">联网核查</text>
+<text x="366" y="144" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 3 步</text>
+<path d="M430,127 L440,127" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M440,122 L448,127 L440,132 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="446" y="96" width="124" height="62" rx="8" fill="#16161f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="508" y="122" fill="#cfcfe0" font-size="11.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">人脸比对</text>
+<text x="508" y="144" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 4 步</text>
+<path d="M572,127 L582,127" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M582,122 L590,127 L582,132 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="588" y="96" width="124" height="62" rx="8" fill="#16161f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="650" y="122" fill="#cfcfe0" font-size="11.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">设密码</text>
+<text x="650" y="144" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 5 步</text>
+<path d="M714,127 L724,127" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M724,122 L732,127 L724,132 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="730" y="96" width="124" height="62" rx="8" fill="#16161f" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="792" y="122" fill="#cfcfe0" font-size="11.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">领卡激活</text>
+<text x="792" y="144" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 6 步</text>
+<text x="26" y="200" fill="#a0a0b8" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你在柜台前站了二十分钟，系统里跑的是这几件事。任何一步不过，卡就办不下来。</text>
+<text x="26" y="226" fill="#a0a0b8" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">六步里有四步是在确认「你是你」，只有最后一步是在给你东西。</text>
+<text x="26" y="258" fill="#e8b84b" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这就是为什么柜员一直让你抬头、眨眼、签字——不是在为难你。</text>
+</svg>

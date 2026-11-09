@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7.3.3 KYC 和反洗钱：为什么追着问你钱从哪来</title>
+<link rel="stylesheet" href="../../style.css">
+<style>p code, li code, td code { overflow-wrap: anywhere; }
+.title-br { display: none; }
+@media (max-width: 640px) {
+  .title-br { display: inline; }
+  h1.part-title { font-size: 21px; }
+  h2 { font-size: 19px; }
+}</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="../../index.html">计算机是<span>怎么长出来的</span></a>
+  <nav>
+    <a href="../../index.html">总目录</a>
+    <a href="../index.html">第 07 部</a>
+    <a href="index.html">7.3 开户</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="../../index.html">总目录</a><span class="sep">/</span>
+    <a href="../index.html">第 07 部</a><span class="sep">/</span>
+    <a href="index.html">7.3 开户</a><span class="sep">/</span>
+    <span class="here">7.3.3</span>
+  </div>
+
+  <h1 class="part-title">
+    <span class="num">7.3.3</span>
+    KYC 和反洗钱：<br class="title-br">为什么追着问你钱从哪来
+  </h1>
+  <p class="part-sub">
+    约 0.2 万字 · 3 张图 · 银行不是警察，但它有一项法定的"报告义务"
+  </p>
+
+  <div class="lead">
+    你给朋友转 6 万块，手机弹出一行提示："请补充转账用途。"
+    你选了"借款"，转过去了。过两天，卡突然不能用了，
+    打客服说是"账户存在风险，请到柜台核实"。
+    <br><br>
+    这类体验很容易让人火大：我的钱，凭什么管我？
+    <strong>因为银行有一个甩不掉的法定义务：反洗钱。</strong>
+    它不问，要被罚；问得不够，也要被罚。这一节讲清楚它在问什么、
+    为什么要问、以及卡被冻了该怎么办。
+  </div>
+
+  <div class="minitoc">
+    <h4>本节的小部分</h4>
+    <ol>
+      <li><a href="#p1">1 那三个问题</a></li>
+      <li><a href="#p2">2 洗钱到底怎么洗</a></li>
+      <li><a href="#p3">3 银行要报两种报告</a></li>
+      <li><a href="#p4">4 为什么银行这么怕</a></li>
+      <li><a href="#p5">5 断卡行动与惩戒</a></li>
+      <li><a href="#p6">6 卡被冻了怎么办</a></li>
+      <li><a href="#p7">7 普通人怎么避免踩雷</a></li>
+    </ol>
+  </div>
+
+  <h2 id="p1"><span class="h2num">7.3.3-1</span>那三个问题</h2>
+
+  <p>
+    这套流程有个专业名字，叫 KYC，意思是"了解你的客户"。
+    落到操作上，就是三个问题。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/7.3.3-1-kyc.svg" target="_blank"><img src="../../assets/img/7.3.3-1-kyc.svg" alt="KYC 的三个核心问题"></a>
+    <figcaption>三个问题层层递进：先确认人，再确认钱，最后确认用途。</figcaption>
+  </figure>
+
+  <p>
+    <strong>你是谁</strong>：身份证、人脸、手机号实名。开户时做过，之后大额交易还会再核。
+  </p>
+
+  <p>
+    <strong>钱从哪来</strong>：工资、经营收入、卖房、继承、投资盈利。
+    这一问最容易被问住，因为很多人说不清自己的钱是怎么攒下来的。
+  </p>
+
+  <p>
+    <strong>钱要去哪</strong>：消费、还债、投资、给家人。用途要跟身份和收入匹配——
+    一个每月工资八千的人，突然要转 50 万给境外账户，就会被标记。
+  </p>
+
+  <h2 id="p2"><span class="h2num">7.3.3-2</span>洗钱到底怎么洗</h2>
+
+  <p>
+    要理解银行为什么问，得先知道它在防什么。洗钱分三步，教科书上叫"处置、离析、融合"。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/7.3.3-2-laundering.svg" target="_blank"><img src="../../assets/img/7.3.3-2-laundering.svg" alt="洗钱的三个步骤"></a>
+    <figcaption>三步的核心都是同一件事：让钱和它的来源脱钩。</figcaption>
+  </figure>
+
+  <p>
+    <strong>处置</strong>：把现金塞进能收现金的生意里——小店、棋牌室、美容院，
+    做成"营业收入"。
+  </p>
+
+  <p>
+    <strong>离析</strong>：几十个账户来回倒，买理财、买虚拟币、跨境汇款，
+    每一层都切一刀，让追查的人跟丢。
+  </p>
+
+  <p>
+    <strong>融合</strong>：钱再出现时，已经是"卖房所得"、"投资收益"、"亲戚借款"，
+    可以光明正大地花。
+  </p>
+
+  <p>
+    整个过程里，<strong>银行账户是最关键的一环</strong>。
+    没有账户，钱只能在现金层面打转，规模上不去。所以反洗钱的核心战场就在银行。
+  </p>
+
+  <h2 id="p3"><span class="h2num">7.3.3-3</span>银行要报两种报告</h2>
+
+  <p>
+    很多人以为银行"盯着"自己的账户。准确说，它是按规则报数据。
+    报的东西分两种，逻辑完全不同。
+  </p>
+
+  <figure>
+    <a class="fig-zoom" href="../../assets/img/7.3.3-3-reports.svg" target="_blank"><img src="../../assets/img/7.3.3-3-reports.svg" alt="大额交易报告与可疑交易报告的区别"></a>
+    <figcaption>一个看金额，一个看形态；一个自动跑，一个靠人判断。</figcaption>
+  </figure>
+
+  <p>
+    <strong>大额交易报告</strong>是自动的，只要过了线就报，不问原因。
+    目前的大致标准是：现金收支 5 万元以上、境内转账 50 万元以上、
+    跨境转账 20 万元以上（自然人口径，企业更高）。
+  </p>
+
+  <p>
+    这个报告的量非常大，全国每天几百万笔。它的作用不是"抓人"，是"留痕"——
+    万一以后查案，这些记录能还原资金路径。
+  </p>
+
+  <p>
+    <strong>可疑交易报告</strong>是人工判断的，没有金额门槛。
+    一块钱也可能被报，只要形态可疑：比如一个学生账户突然每天进出几十万、
+    一个账户给几百个陌生人转账、深夜频繁大额、快进快出不留余额。
+  </p>
+
+  <p>
+    银行报了不等于你有事。它只是把疑点交给反洗钱监测分析中心，
+    由那边判断要不要转给公安。但反过来说，<strong>该报不报，银行要被罚</strong>，
+    所以它宁可多报。
+  </p>
+
+  <h2 id="p4"><span class="h2num">7.3.3-4</span>为什么银行这么怕</h2>
+
+  <p>
+    因为罚得很重，而且是双罚：罚机构，也罚人。
+  </p>
+
+  <p>
+    2020 年以来，央行对银行的反洗钱罚单经常是千万级，个别案子过亿。
+    除了罚款，相关负责人可能被处罚、被禁业。对网点来说，
+    开的账户涉案，客户经理要被追责，绩效扣光。
+  </p>
+
+  <p>
+    所以你在柜台感受到的那种"过度谨慎"，本质是<strong>风险传导到了最末端</strong>：
+    监管罚银行，银行罚网点，网点只能对客户严。
+  </p>
+
+  <h2 id="p5"><span class="h2num">7.3.3-5</span>断卡行动与惩戒</h2>
+
+  <p>
+    2020 年 10 月起，公安部等部门搞了"断卡行动"，专打买卖电话卡、银行卡。
+    背景是电信诈骗的资金链：骗子要收钱，必须有卡。
+  </p>
+
+  <p>
+    惩戒措施很实际：<strong>出租、出借、出售银行卡的人，
+    5 年内不能开新户、不能使用手机银行和网上银行、不能扫码支付</strong>，
+    只能用柜台业务。这个惩罚对现代人来说，几乎等于"金融生活停摆"。
+  </p>
+
+  <p>
+    更重的还有刑事责任：明知是犯罪所得还帮忙转账、取现、买币，
+    可能构成"掩饰、隐瞒犯罪所得罪"或"帮信罪"。
+    很多涉案的年轻人以为只是"兼职跑分"，最后判了刑。
+  </p>
+
+  <h2 id="p6"><span class="h2num">7.3.3-6</span>卡被冻了怎么办</h2>
+
+  <p>
+    先分清是哪种冻结，处理方式完全不同。
+  </p>
+
+  <p>
+    <strong>第一种：银行风控冻结。</strong>
+    短信或 App 会提示"账户存在风险"。带身份证去柜台，
+    说明资金来源，一般当天能解。
+  </p>
+
+  <p>
+    <strong>第二种：公安冻结。</strong>
+    客服会告诉你"司法冻结"，但不会说具体案子。
+    你需要联系办案单位（通常是异地的某公安局），
+    提供工资流水、合同、聊天记录等证明自己不知情、资金来源合法。
+  </p>
+
+  <p>
+    <strong>第三种：惩戒名单。</strong>
+    如果被认定出租出借账户，会被列入惩戒名单，
+    五年内限制业务。这种情况申诉难度大，需要走行政复议或者诉讼。
+  </p>
+
+  <p>
+    一个实用建议：<strong>冻结期间别再往这张卡里打钱</strong>，
+    也别急着销户。销户解决不了冻结，反而可能被视为规避调查。
+  </p>
+
+  <h2 id="p7"><span class="h2num">7.3.3-7</span>普通人怎么避免踩雷</h2>
+
+  <p>
+    四条，都很具体。
+  </p>
+
+  <ul>
+    <li><strong>不要出借银行卡、收款码、身份证。</strong>哪怕对方是亲戚朋友，哪怕只借一天。"帮个忙"是这类案子最常见的开场白。</li>
+    <li><strong>不要帮人"过账"。</strong>别人打钱给你，让你取现或转给别人，这是典型的三方转账，风控必盯。</li>
+    <li><strong>不要参与"跑分""刷单"。</strong>用你的账户走流水，给你佣金——这是洗钱链条的末端。</li>
+    <li><strong>大额转账写清用途。</strong>备注"借款""还款""货款"这些真实用途，能在被核查时省很多事。</li>
+  </ul>
+
+  <p>
+    下一节讲开户流程的最后一块拼图，也是跟每个人关系最久的一样东西：
+    征信。那份关于你的档案里，到底写了什么。
+  </p>
+
+  <div class="note">
+    <b>本节要点：</b>
+    KYC 问三件事：你是谁、钱从哪来、钱要去哪。
+    大额报告按金额自动报，可疑报告按形态人工报。
+    出租出借银行卡会被惩戒五年，严重的构成犯罪。
+    冻结分三种，处理方式不同。
+  </div>
+
+  <div class="pager">
+    <a href="7.3.2-three-classes.html">← 7.3.2 一类、二类、三类户</a>
+    <a class="next" href="7.3.4-credit-report.html">7.3.4 征信：那份关于你的档案里写了什么 →</a>
+  </div>
+
+</div>
+</body>
+</html>

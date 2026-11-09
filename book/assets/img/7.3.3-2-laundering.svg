@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="306" viewBox="0 0 880 306" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="306" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.3.3 / 图 2</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">洗钱就三步，目的是让钱看起来像挣来的</text>
+<rect x="26" y="96" width="254" height="116" rx="10" fill="#16161f" stroke="#e87a8a" stroke-width="1.5"/>
+<text x="153" y="126" fill="#e87a8a" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第一步 处置</text>
+<text x="153" y="158" fill="#cfcfe0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">把黑钱混进合法渠道</text>
+<text x="153" y="184" fill="#8a8aa0" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">存进小店流水、买成购物卡</text>
+<path d="M284,154 L306,154" fill="none" stroke="#8a8aa0" stroke-width="1.5"/>
+<path d="M306,149 L314,154 L306,159 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="306" y="96" width="254" height="116" rx="10" fill="#16161f" stroke="#e8965a" stroke-width="1.5"/>
+<text x="433" y="126" fill="#e8965a" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第二步 离析</text>
+<text x="433" y="158" fill="#cfcfe0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">层层转账，切断来源</text>
+<text x="433" y="184" fill="#8a8aa0" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">几十个账户来回倒</text>
+<path d="M564,154 L586,154" fill="none" stroke="#8a8aa0" stroke-width="1.5"/>
+<path d="M586,149 L594,154 L586,159 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="586" y="96" width="254" height="116" rx="10" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="713" y="126" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第三步 融合</text>
+<text x="713" y="158" fill="#cfcfe0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">钱看起来干净了</text>
+<text x="713" y="184" fill="#8a8aa0" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">买房、投资、正常消费</text>
+<text x="26" y="250" fill="#a0a0b8" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">反洗钱就是在这三步上设卡：处置时查现金、离析时查流水、融合时查大额资产来源。</text>
+<text x="26" y="276" fill="#a0a0b8" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以银行问你「这笔钱干什么用」，问的其实是第二步——它怕自己在无意中当了转账的一环。</text>
+</svg>

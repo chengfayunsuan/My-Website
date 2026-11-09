@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="316" viewBox="0 0 880 316" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="316" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.3.2 / 图 2</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">开在哪里，决定了它有多「重」</text>
+<line x1="60" y1="250" x2="820" y2="250" stroke="#4a4a62" stroke-width="1.4"/>
+<line x1="60" y1="250" x2="60" y2="100" stroke="#4a4a62" stroke-width="1.4"/>
+<rect x="70" y="90" width="700" height="44" rx="5" fill="#67b5ef" stroke="#67b5ef" stroke-width="0"/>
+<text x="82" y="118" fill="#101018" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一类（柜台面签）</text>
+<rect x="70" y="120" width="420" height="44" rx="5" fill="#67d9a0" stroke="#67d9a0" stroke-width="0"/>
+<text x="82" y="148" fill="#101018" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">二类（手机银行 + 绑卡验证）</text>
+<rect x="70" y="150" width="220" height="44" rx="5" fill="#e8b84b" stroke="#e8b84b" stroke-width="0"/>
+<text x="82" y="178" fill="#101018" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三类（手机银行，最轻）</text>
+<text x="40" y="76" fill="#8a8aa0" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">核验强度</text>
+<text x="40" y="274" fill="#a0a0b8" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">越往柜台走，核验越重，能开的权限越大；越往线上走，越方便，限额越紧。</text>
+<text x="40" y="298" fill="#a0a0b8" font-size="11.2" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这不是技术限制，是刻意的设计：方便和安全，总要换。</text>
+</svg>
