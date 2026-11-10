@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="720" height="420" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">轧差（netting）：五笔账轧成两笔划拨</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行之间不逐笔转账，只结净差额，这才是清算的核心动作</text>
+<rect x="20" y="62" width="320" height="270" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="40" y="88" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">清算文件里的原始记录</text>
+<text x="44" y="118" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">A 行 → B 行</text>
+<text x="316" y="118" fill="#a0a0b8" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">300 元</text>
+<text x="44" y="150" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">B 行 → A 行</text>
+<text x="316" y="150" fill="#a0a0b8" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">120 元</text>
+<text x="44" y="182" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">A 行 → C 行</text>
+<text x="316" y="182" fill="#a0a0b8" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">80 元</text>
+<text x="44" y="214" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">C 行 → A 行</text>
+<text x="316" y="214" fill="#a0a0b8" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">40 元</text>
+<text x="44" y="246" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">A 行 → B 行</text>
+<text x="316" y="246" fill="#a0a0b8" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">60 元</text>
+<line x1="40" y1="282" x2="320" y2="282" stroke="#3a3a52" stroke-width="1"/>
+<text x="40" y="306" fill="#e8965a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">五笔都要动钱 → 五次跨行划拨</text>
+<text x="40" y="326" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每次都占系统资源、都要对账</text>
+<defs><marker id="n1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 z" fill="#67d9a0"/></marker></defs><line x1="350" y1="196" x2="386" y2="196" stroke="#67d9a0" stroke-width="2" marker-end="url(#n1)"/><text x="368" y="182" fill="#67d9a0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">轧差</text>
+<rect x="396" y="62" width="304" height="270" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="416" y="88" fill="#67d9a0" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">按银行合并同一天的所有应收应付</text>
+<rect x="416" y="108" width="264" height="34" rx="4" fill="#0e0e16" stroke="#2a2a3e" stroke-width="1"/>
+<text x="430" y="130" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">A 行</text>
+<text x="662" y="130" fill="#e8965a" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">付 280 元</text>
+<rect x="416" y="150" width="264" height="34" rx="4" fill="#0e0e16" stroke="#2a2a3e" stroke-width="1"/>
+<text x="430" y="172" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">B 行</text>
+<text x="662" y="172" fill="#67b5ef" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">收 240 元</text>
+<rect x="416" y="192" width="264" height="34" rx="4" fill="#0e0e16" stroke="#2a2a3e" stroke-width="1"/>
+<text x="430" y="214" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">C 行</text>
+<text x="662" y="214" fill="#67b5ef" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">收 40 元</text>
+<line x1="416" y1="266" x2="680" y2="266" stroke="#3a3a52" stroke-width="1"/>
+<text x="416" y="290" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只做两笔：A→B 240，A→C 40</text>
+<text x="416" y="310" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收支相抵的那部分，一分钱都不用动</text>
+<text x="360" y="368" fill="#c8c8dc" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">轧差的账在央行清算账户上完成：银行都在央行开户，转账就是改两个账户的数字</text>
+<text x="360" y="392" fill="#a0a0b8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这笔「改数字」是真钱，但一天只改一次总额——所以清算是慢的，也是便宜的</text>
+</svg>

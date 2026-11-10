@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="350" viewBox="0 0 760 350" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="350" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">授权（authorization）：从「滴」到「叮」之间</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一条请求走完全程再回来，通常不到 2 秒</text>
+<text x="380" y="84" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">① 授权请求往右走（约 0.4 秒）</text>
+<defs><marker id="ag" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 z" fill="#67d9a0"/></marker><marker id="ao" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 z" fill="#e8965a"/></marker></defs><line x1="20" y1="96" x2="740" y2="96" stroke="#67d9a0" stroke-width="2" marker-end="url(#ag)"/><rect x="20" y="110" width="128" height="62" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="84.0" y="136" fill="#67b5ef" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">持卡人</text>
+<text x="84.0" y="156" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">插卡 / 贴手机</text>
+<rect x="168" y="110" width="128" height="62" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="232.0" y="136" fill="#67b5ef" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">商户 POS</text>
+<text x="232.0" y="156" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">打包交易信息</text>
+<rect x="316" y="110" width="128" height="62" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="380.0" y="136" fill="#67b5ef" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">收单行</text>
+<text x="380.0" y="156" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商户的银行</text>
+<rect x="464" y="110" width="128" height="62" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="528.0" y="136" fill="#67b5ef" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">卡组织</text>
+<text x="528.0" y="156" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">路由大脑</text>
+<rect x="612" y="110" width="128" height="62" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="676.0" y="136" fill="#e8b84b" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">发卡行</text>
+<text x="676.0" y="156" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">真正做决定</text>
+<line x1="740" y1="200" x2="20" y2="200" stroke="#e8965a" stroke-width="2" marker-end="url(#ao)"/><text x="380" y="222" fill="#e8965a" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">② 应答原路返回：批准（带授权码）或拒绝（约 0.4 秒）</text>
+<rect x="60" y="250" width="640" height="72" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="80" y="274" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">POS 亮绿灯「叮」——你以为是扣了钱，其实只是拿到一张通行证。</text>
+<text x="80" y="298" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这一刻资金没动，只是被你银行「圈」起来了。真金白银要等清结算。</text>
+</svg>

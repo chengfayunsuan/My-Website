@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="470" viewBox="0 0 780 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">一天的交易怎么攒成一批：日切（cut-off）</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">实时授权是零散的，清算是攒够了再一次性算</text>
+<line x1="40" y1="120" x2="740" y2="120" stroke="#8a8aa0" stroke-width="2"/>
+<circle cx="80" cy="120" r="4" fill="#67b5ef"/>
+<text x="80" y="146" fill="#67b5ef" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">08:00</text>
+<line x1="80" y1="120" x2="80" y2="100" stroke="#67b5ef" stroke-width="1.5"/>
+<rect x="42" y="70" width="76" height="30" rx="5" fill="#121a2a" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="80" y="89" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一笔交易</text>
+<circle cx="170" cy="120" r="4" fill="#67b5ef"/>
+<text x="170" y="146" fill="#67b5ef" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">12:30</text>
+<line x1="170" y1="120" x2="170" y2="100" stroke="#67b5ef" stroke-width="1.5"/>
+<rect x="132" y="70" width="76" height="30" rx="5" fill="#121a2a" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="170" y="89" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一笔交易</text>
+<circle cx="260" cy="120" r="4" fill="#67b5ef"/>
+<text x="260" y="146" fill="#67b5ef" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">19:40</text>
+<line x1="260" y1="120" x2="260" y2="100" stroke="#67b5ef" stroke-width="1.5"/>
+<rect x="222" y="70" width="76" height="30" rx="5" fill="#121a2a" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="260" y="89" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一笔交易</text>
+<circle cx="350" cy="120" r="4" fill="#67b5ef"/>
+<text x="350" y="146" fill="#67b5ef" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">22:58</text>
+<line x1="350" y1="120" x2="350" y2="100" stroke="#67b5ef" stroke-width="1.5"/>
+<rect x="312" y="70" width="76" height="30" rx="5" fill="#121a2a" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="350" y="89" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一笔交易</text>
+<circle cx="470" cy="120" r="5" fill="#e8b84b"/>
+<text x="470" y="146" fill="#e8b84b" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">23:00 日切</text>
+<line x1="470" y1="120" x2="470" y2="100" stroke="#e8b84b" stroke-width="2"/>
+<rect x="400" y="70" width="140" height="30" rx="5" fill="#2a1f12" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="470" y="89" fill="#e8b84b" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">当天账目封口</text>
+<defs><marker id="c1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#8a8aa0"/></marker></defs><rect x="44" y="190" width="216" height="94" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="60" y="216" fill="#e8b84b" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">① 日切</text>
+<text x="60" y="240" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">23:00 截断</text>
+<text x="60" y="262" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">之后的算第二天</text>
+<line x1="264" y1="237.0" x2="284" y2="237.0" stroke="#8a8aa0" stroke-width="2" marker-end="url(#c1)"/><rect x="290" y="190" width="216" height="94" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="306" y="216" fill="#67d9a0" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">② 生成清算文件</text>
+<text x="306" y="240" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">次日 02:00</text>
+<text x="306" y="262" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">几千万笔压成一张表</text>
+<line x1="510" y1="237.0" x2="530" y2="237.0" stroke="#8a8aa0" stroke-width="2" marker-end="url(#c1)"/><rect x="536" y="190" width="216" height="94" rx="6" fill="#16161f" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="552" y="216" fill="#b58ae8" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">③ 商户到账</text>
+<text x="552" y="240" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">次日 09:00</text>
+<text x="552" y="262" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">钱真的进账户</text>
+<rect x="44" y="310" width="700" height="140" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="64" y="336" fill="#e8b84b" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">为什么非要「日切」这个动作？</text>
+<text x="64" y="362" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 银行之间要算净额，得有个明确的「一天」边界，不然永远算不完</text>
+<text x="64" y="386" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 每笔单独转账成本高，攒成一批只做一次总额划拨</text>
+<text x="64" y="410" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 日切之后的交易算第二天，23:59 刷的卡，商户晚一天拿钱</text>
+<text x="64" y="434" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 节假日不算工作日，周五晚上的消费，商户可能等到下周一</text>
+</svg>

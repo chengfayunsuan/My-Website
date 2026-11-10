@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="440" viewBox="0 0 760 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">同样 100 元，刷卡和扫码为什么费率不一样</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">差别不在「先进不先进」，在路径上少了一层「发卡行」</text>
+<defs><marker id="p1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#8a8aa0"/></marker></defs><text x="30" y="74" fill="#e8b84b" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">刷卡：钱要经过一个「发卡行」角色，它要抽交换费</text>
+<rect x="30" y="92" width="164" height="72" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="112" y="118" fill="#e8b84b" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">你的发卡行</text>
+<text x="112" y="140" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">借你钱、担风险</text>
+<text x="112" y="156" fill="#e8b84b" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">交换费 0.45%</text>
+<line x1="196" y1="128" x2="216" y2="128" stroke="#8a8aa0" stroke-width="2" marker-end="url(#p1)"/><rect x="220" y="92" width="164" height="72" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="302" y="118" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">卡组织</text>
+<text x="302" y="140" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">路由 + 清算</text>
+<text x="302" y="156" fill="#67d9a0" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">网络费 0.065%</text>
+<line x1="386" y1="128" x2="406" y2="128" stroke="#8a8aa0" stroke-width="2" marker-end="url(#p1)"/><rect x="410" y="92" width="164" height="72" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="492" y="118" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">收单机构</text>
+<text x="492" y="140" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">给商户装机器</text>
+<text x="492" y="156" fill="#67b5ef" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收单费 0.15%</text>
+<line x1="576" y1="128" x2="596" y2="128" stroke="#8a8aa0" stroke-width="2" marker-end="url(#p1)"/><rect x="600" y="92" width="164" height="72" rx="6" fill="#16161f" stroke="#c8c8dc" stroke-width="1.5"/>
+<text x="682" y="118" fill="#c8c8dc" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">商户</text>
+<text x="682" y="140" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收 99.34 元</text>
+<text x="30" y="204" fill="#67d9a0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">扫码：付款方不是「银行卡」，中间没人垫钱，也就没人收交换费</text>
+<rect x="30" y="222" width="164" height="72" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="112" y="248" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">你的钱包 / 绑卡</text>
+<text x="112" y="270" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">余额或银行卡</text>
+<line x1="196" y1="258" x2="216" y2="258" stroke="#8a8aa0" stroke-width="2" marker-end="url(#p1)"/><rect x="220" y="222" width="164" height="72" rx="6" fill="#16161f" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="302" y="248" fill="#b58ae8" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">支付机构</text>
+<text x="302" y="270" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">聚合收单 + 风控</text>
+<text x="302" y="286" fill="#b58ae8" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">服务费 0.2% 上下</text>
+<line x1="386" y1="258" x2="406" y2="258" stroke="#8a8aa0" stroke-width="2" marker-end="url(#p1)"/><rect x="410" y="222" width="164" height="72" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="492" y="248" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">网联 / 银联</text>
+<text x="492" y="270" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">转接清算</text>
+<text x="492" y="286" fill="#67d9a0" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">清算费 0.01% 级</text>
+<line x1="576" y1="258" x2="596" y2="258" stroke="#8a8aa0" stroke-width="2" marker-end="url(#p1)"/><rect x="600" y="222" width="164" height="72" rx="6" fill="#16161f" stroke="#c8c8dc" stroke-width="1.5"/>
+<text x="682" y="248" fill="#c8c8dc" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">商户</text>
+<text x="682" y="270" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收 99.6 元左右</text>
+<rect x="30" y="318" width="700" height="100" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="50" y="344" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">真正的差别：刷卡是「先垫后收」，扫码是「直接转」</text>
+<text x="50" y="368" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 刷卡那 0.45% 是付给「替你垫了钱、担了你赖账风险」的发卡行</text>
+<text x="50" y="390" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 扫码时钱从你的余额直接到商户，没人垫钱，省下来的就是这一块</text>
+<text x="50" y="410" fill="#e8965a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 但扫码没有拒付保护，转错了、被诈骗了，追回来的难度高得多</text>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="410" viewBox="0 0 760 410" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="410" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">2016 年 9 月 6 日：手续费从「看行业」改成「看卡种」</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">费改之前，同样刷 100 元，餐馆和超市交的钱能差三倍</text>
+<rect x="24" y="64" width="344" height="286" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="44" y="92" fill="#e8965a" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">费改前：按商户行业定价</text>
+<text x="44" y="118" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">餐娱类</text>
+<text x="200" y="118" fill="#e8b84b" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">1.25%</text>
+<text x="220" y="118" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">餐馆、KTV、珠宝</text>
+<text x="44" y="156" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一般类</text>
+<text x="200" y="156" fill="#e8b84b" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">0.78%</text>
+<text x="220" y="156" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">百货、批发</text>
+<text x="44" y="194" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">民生类</text>
+<text x="200" y="194" fill="#e8b84b" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">0.38%</text>
+<text x="220" y="194" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">超市、水电煤</text>
+<text x="44" y="232" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">公益类</text>
+<text x="200" y="232" fill="#e8b84b" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">0</text>
+<text x="220" y="232" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">公立医院、学校</text>
+<line x1="44" y1="286" x2="348" y2="286" stroke="#3a3a52" stroke-width="1"/>
+<text x="44" y="310" fill="#e8965a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">问题：同一家店换个招牌，费率就变了</text>
+<text x="44" y="332" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">套码、跳码横行——理发店挂个「超市」的码</text>
+<rect x="392" y="64" width="344" height="286" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="412" y="92" fill="#67d9a0" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">费改后：借贷分离 + 取消分类</text>
+<text x="412" y="118" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">借记卡</text>
+<text x="560" y="118" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发卡费 ≤0.35%</text>
+<text x="412" y="136" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">单笔封顶 13 元</text>
+<text x="412" y="170" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">信用卡</text>
+<text x="560" y="170" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发卡费 ≤0.45%</text>
+<text x="412" y="188" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不封顶</text>
+<text x="412" y="222" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">网络服务费</text>
+<text x="560" y="222" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0.065%</text>
+<text x="412" y="240" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">单笔封顶 6.5 元</text>
+<text x="412" y="274" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收单服务费</text>
+<text x="560" y="274" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">市场调节</text>
+<text x="412" y="292" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">自己跟收单方谈</text>
+<text x="380" y="378" fill="#c8c8dc" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">封顶是关键：一笔 1 万元的借记卡消费，按 0.35% 该收 35 元，但封顶只收 13 元</text>
+<text x="380" y="398" fill="#a0a0b8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以大额消费刷借记卡，商户的实际费率远低于 0.35%——这叫「封顶效应」</text>
+</svg>

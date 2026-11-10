@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="450" viewBox="0 0 780 450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">跨行转账的三条通道，走哪条看金额</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同样是转账，5 千和 50 万走的是完全不同的系统</text>
+<rect x="24" y="76" width="732" height="96" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="44" y="102" fill="#67d9a0" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">超级网银 IBPS</text>
+<text x="44" y="126" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">时间：7×24 小时</text>
+<text x="44" y="148" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">金额：单笔一般不超 100 万</text>
+<text x="400" y="104" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">速度：秒到</text>
+<text x="400" y="134" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">典型场景：小额、急用、深夜转账</text>
+<rect x="24" y="184" width="732" height="96" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="44" y="210" fill="#e8b84b" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">大额支付 HVPS</text>
+<text x="44" y="234" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">时间：工作日 8:30–17:00 左右</text>
+<text x="44" y="256" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">金额：5 万以上必须走</text>
+<text x="400" y="212" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">速度：实时全额，一笔一清</text>
+<text x="400" y="242" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">典型场景：买房、货款、对公</text>
+<rect x="24" y="292" width="732" height="96" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="44" y="318" fill="#67b5ef" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">小额批量 BEPS</text>
+<text x="44" y="342" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">时间：7×24 受理，批量处理</text>
+<text x="44" y="364" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">金额：5 万以下</text>
+<text x="400" y="320" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">速度：定时打包，非实时</text>
+<text x="400" y="350" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">典型场景：工资代发、水电费</text>
+<text x="390" y="412" fill="#67d9a0" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">手机银行会自动帮你选：5 千走超级网银，50 万改走大额系统，你什么都不用管</text>
+<text x="390" y="434" fill="#e8965a" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">但如果在大额系统关门的夜里转 50 万，就只能排队等第二天开门</text>
+</svg>

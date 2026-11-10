@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="420" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">汇 100 美元，为什么到账只有 85</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">跨境汇款有三道收费站，其中两道你事先看不见</text>
+<rect x="30" y="68" width="700" height="44" rx="6" fill="#12241a" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="50" y="96" fill="#67d9a0" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">你汇出 100.00 美元（另外还付了人民币手续费）</text>
+<rect x="30" y="124" width="700" height="56" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="50" y="148" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">你的银行</text>
+<text x="50" y="168" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">汇款手续费 0.1%（最低 20 元 / 最高 250 元）+ 电讯费 150 元/笔</text>
+<text x="710" y="156" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">人民币扣</text>
+<rect x="30" y="188" width="700" height="56" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="50" y="212" fill="#e8965a" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">中间行</text>
+<text x="50" y="232" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每过一家扣一笔，常见 10~20 美元；过几家扣几次</text>
+<text x="710" y="220" fill="#e8965a" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">- 10.00 美元</text>
+<rect x="30" y="252" width="700" height="56" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="50" y="276" fill="#e8965a" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">收款银行</text>
+<text x="50" y="296" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">入账费，常见 0~15 美元；也可能不收</text>
+<text x="710" y="284" fill="#e8965a" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">- 5.00 美元</text>
+<rect x="30" y="320" width="700" height="44" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="50" y="348" fill="#e8b84b" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">收款人实际到账 85.00 美元</text>
+<text x="710" y="348" fill="#e87a8a" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">-15.00</text>
+<text x="380" y="396" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三种付费方式：OUR（你全付）、SHA（各付各的）、BEN（收款人全付）——选错会差出一顿饭钱</text>
+</svg>

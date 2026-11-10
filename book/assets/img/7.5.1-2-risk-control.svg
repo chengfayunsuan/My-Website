@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="420" viewBox="0 0 700 420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="700" height="420" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">发卡行的决定：0.3 秒里过完的「四连问」</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收到请求后你的银行连过四道检查，任何一道不过就拒绝</text>
+<rect x="50" y="88" width="600" height="62" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="70" y="114" fill="#67d9a0" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">① 卡还活着吗</text>
+<text x="70" y="136" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卡状态：正常 / 挂失 / 冻结 / 过期。挂失卡直接拒绝</text>
+<rect x="50" y="162" width="600" height="62" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="70" y="188" fill="#67b5ef" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">② 钱够吗</text>
+<text x="70" y="210" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">借记卡查活期余额，信用卡查可用额度。差一分都拒</text>
+<rect x="50" y="236" width="600" height="62" rx="6" fill="#16161f" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="70" y="262" fill="#b58ae8" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">③ 证明对得上吗</text>
+<text x="70" y="284" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">密码 / 签名 / 免密小额规则 / 芯片动态验证码</text>
+<rect x="50" y="310" width="600" height="62" rx="6" fill="#16161f" stroke="#e8965a" stroke-width="1.5"/>
+<text x="70" y="336" fill="#e8965a" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">④ 看着像你吗</text>
+<text x="70" y="358" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">风险评分：地点、金额、频率、时间。凌晨 3 点境外刷 8000？拦</text>
+<text x="350" y="398" fill="#a0a0b8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">全过 → 返回授权码（资金只是冻结）· 一道没过 → POS 显示「交易失败」</text>
+</svg>

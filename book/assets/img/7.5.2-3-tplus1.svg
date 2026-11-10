@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="430" viewBox="0 0 720 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="720" height="430" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">T+1 到底哪一天：周五刷的卡，周一才到账</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">「T」是交易日，加号后面是工作日数，周末节假日不算</text>
+<rect x="24" y="66" width="92" height="110" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="70.0" y="90" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">周一</text>
+<text x="70.0" y="116" fill="#67d9a0" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">凌晨清算</text>
+<text x="70.0" y="136" fill="#67d9a0" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">商户到账</text>
+<text x="70.0" y="160" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">D+1</text>
+<rect x="122" y="66" width="92" height="110" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="168.0" y="90" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">周二</text>
+<text x="168.0" y="128" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">正常到账日</text>
+<rect x="220" y="66" width="92" height="110" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="266.0" y="90" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">周三</text>
+<rect x="318" y="66" width="92" height="110" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="364.0" y="90" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">周四</text>
+<rect x="416" y="66" width="92" height="110" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="462.0" y="90" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">周五</text>
+<text x="462.0" y="116" fill="#e8b84b" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">你刷卡</text>
+<text x="462.0" y="136" fill="#e8b84b" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">100 元</text>
+<text x="462.0" y="160" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">D 日</text>
+<rect x="514" y="66" width="92" height="110" rx="6" fill="#12121a" stroke="#2a2a3e" stroke-width="1.5"/>
+<text x="560.0" y="90" fill="#8a8aa0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">周六</text>
+<text x="560.0" y="118" fill="#8a8aa0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">非工作日</text>
+<text x="560.0" y="138" fill="#6a6a80" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">机器也休息</text>
+<rect x="612" y="66" width="92" height="110" rx="6" fill="#12121a" stroke="#2a2a3e" stroke-width="1.5"/>
+<text x="658.0" y="90" fill="#8a8aa0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">周日</text>
+<text x="658.0" y="118" fill="#8a8aa0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">非工作日</text>
+<text x="658.0" y="138" fill="#6a6a80" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">机器也休息</text>
+<defs><marker id="t2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#e8b84b"/></marker></defs><path d="M462.0,178 L462.0,202 L70.0,202 L70.0,188" fill="none" stroke="#e8b84b" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#t2)"/><text x="360" y="222" fill="#e8b84b" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">跳过周六周日，顺延到下一个工作日</text>
+<rect x="24" y="240" width="340" height="166" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="44" y="266" fill="#e8b84b" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">「T」是谁的一天</text>
+<text x="44" y="292" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">T = 交易发生日（Transaction）</text>
+<text x="44" y="316" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">T+1 = 交易日的下一个工作日</text>
+<text x="44" y="340" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注意是「工作日」不是「第二天」</text>
+<text x="44" y="364" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">春节前刷的卡，可能要等到初八</text>
+<text x="44" y="388" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商户催款的电话，就是这么来的</text>
+<rect x="380" y="240" width="316" height="166" rx="6" fill="#16161f" stroke="#e8965a" stroke-width="1.5"/>
+<text x="400" y="266" fill="#e8965a" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">T+0 是怎么回事</text>
+<text x="400" y="292" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收单机构先自己垫钱给你</text>
+<text x="400" y="316" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">再慢慢等清算，赚一笔垫资费</text>
+<text x="400" y="340" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">费率比 T+1 高，常见 0.1%~0.3%</text>
+<text x="400" y="364" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你拿到的是它的钱，不是顾客的</text>
+<text x="400" y="388" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对账出问题，也是它在替你扛</text>
+</svg>
