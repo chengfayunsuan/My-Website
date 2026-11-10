@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="300" viewBox="0 0 880 300" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="300" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.4.4 / 图 3</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只还最低还款额，利息怎么滚</text>
+<text x="40" y="108" fill="#a8a8c0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">账单金额</text>
+<rect x="200" y="92" width="400" height="22" rx="3" fill="#c8c8dc" stroke="none" stroke-width="0"/>
+<text x="620" y="108" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">10 000 元</text>
+<text x="40" y="148" fill="#a8a8c0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">最低还款额（10%）</text>
+<rect x="200" y="132" width="40.0" height="22" rx="3" fill="#e8965a" stroke="none" stroke-width="0"/>
+<text x="620" y="148" fill="#e8965a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1 000 元</text>
+<text x="40" y="188" fill="#a8a8c0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没还的部分</text>
+<rect x="200" y="172" width="360.0" height="22" rx="3" fill="#e87a8a" stroke="none" stroke-width="0"/>
+<text x="620" y="188" fill="#e87a8a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">9 000 元</text>
+<text x="40" y="214" fill="#c8c8d4" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">剩 9 000 元按日息 0.05% 计：9 000 × 0.05% × 30 = 135 元/月。</text>
+<text x="40" y="238" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">换算成年化，大约 18%。你存银行一年 1.5%，借出来 18%，中间的差价就是银行的毛利。</text>
+<text x="40" y="276" fill="#6e6e88" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">更狠的一条：多数银行是"全额罚息"——只要没还清，已经还掉的那部分也从消费那天开始算利息。</text>
+</svg>

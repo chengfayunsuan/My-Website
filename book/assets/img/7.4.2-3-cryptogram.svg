@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="340" viewBox="0 0 880 340" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="340" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.4.2 / 图 3</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一张卡刷两次，发出去的密文完全不一样</text>
+<rect x="40" y="82" width="120" height="62" rx="6" fill="#1b2438" stroke="#4a6a9a" stroke-width="1.4"/>
+<text x="100" y="108" fill="#dcdcea" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">芯片卡</text>
+<text x="100" y="126" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 1 次</text>
+<path d="M166,113 L206,113" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M206,108 L214,113 L206,118 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="216" y="82" width="150" height="62" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<text x="291" y="108" fill="#dcdcea" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">POS / 读头</text>
+<text x="291" y="126" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">给出随机数</text>
+<path d="M372,113 L412,113" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M412,108 L420,113 L412,118 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="422" y="82" width="150" height="62" rx="6" fill="#1a2430" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="497" y="106" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">芯片算出的密文</text>
+<text x="497" y="128" fill="#67b5ef" font-size="14" text-anchor="middle" font-family="monospace">A7F3 9C2E</text>
+<path d="M578,113 L618,113" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M618,108 L626,113 L618,118 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="628" y="82" width="212" height="62" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<text x="734" y="108" fill="#dcdcea" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发卡行用密钥验算</text>
+<text x="734" y="126" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对上才给授权</text>
+<rect x="40" y="200" width="120" height="62" rx="6" fill="#1b2438" stroke="#4a6a9a" stroke-width="1.4"/>
+<text x="100" y="226" fill="#dcdcea" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">芯片卡</text>
+<text x="100" y="244" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 2 次</text>
+<path d="M166,231 L206,231" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M206,226 L214,231 L206,236 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="216" y="200" width="150" height="62" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<text x="291" y="226" fill="#dcdcea" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">POS / 读头</text>
+<text x="291" y="244" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">给出随机数</text>
+<path d="M372,231 L412,231" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M412,226 L420,231 L412,236 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="422" y="200" width="150" height="62" rx="6" fill="#1a2430" stroke="#e8965a" stroke-width="1.4"/>
+<text x="497" y="224" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">芯片算出的密文</text>
+<text x="497" y="246" fill="#e8965a" font-size="14" text-anchor="middle" font-family="monospace">5B81 D04A</text>
+<path d="M578,231 L618,231" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M618,226 L626,231 L618,236 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="628" y="200" width="212" height="62" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<text x="734" y="226" fill="#dcdcea" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发卡行用密钥验算</text>
+<text x="734" y="244" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对上才给授权</text>
+<rect x="40" y="306" width="800" height="0.8" rx="0" fill="#3a3a52" stroke="#3a3a52" stroke-width="0"/>
+<text x="40" y="328" fill="#6e6e88" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">磁条卡发的是同一串固定数字，被抄一次就永久泄露；芯片每次都不一样，抄到的下一次就用不了了。</text>
+</svg>

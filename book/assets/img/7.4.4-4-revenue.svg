@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="310" viewBox="0 0 880 310" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="310" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.4.4 / 图 4</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行从一张信用卡上能赚六种钱</text>
+<rect x="40" y="84" width="6" height="30" rx="3" fill="#67b5ef" stroke="#67b5ef" stroke-width="0"/>
+<text x="60" y="104" fill="#dcdcea" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商户手续费</text>
+<text x="240" y="104" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你刷 100，商户到手 99.4</text>
+<rect x="40" y="120" width="6" height="30" rx="3" fill="#e87a8a" stroke="#e87a8a" stroke-width="0"/>
+<text x="60" y="140" fill="#dcdcea" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">循环利息</text>
+<text x="240" y="140" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">日息 0.05%，年化约 18%</text>
+<rect x="40" y="156" width="6" height="30" rx="3" fill="#e8965a" stroke="#e8965a" stroke-width="0"/>
+<text x="60" y="176" fill="#dcdcea" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">分期手续费</text>
+<text x="240" y="176" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">名义 0.6%/月，实际年化超 13%</text>
+<rect x="40" y="192" width="6" height="30" rx="3" fill="#b58ae8" stroke="#b58ae8" stroke-width="0"/>
+<text x="60" y="212" fill="#dcdcea" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">取现费 + 利息</text>
+<text x="240" y="212" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">取现当日计息，没有免息期</text>
+<rect x="40" y="228" width="6" height="30" rx="3" fill="#e8b84b" stroke="#e8b84b" stroke-width="0"/>
+<text x="60" y="248" fill="#dcdcea" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">年费</text>
+<text x="240" y="248" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">刷够笔数免，免不了就是纯利润</text>
+<rect x="40" y="264" width="6" height="30" rx="3" fill="#67d9a0" stroke="#67d9a0" stroke-width="0"/>
+<text x="60" y="284" fill="#dcdcea" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">违约金</text>
+<text x="240" y="284" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">最低还款都没还，按未还部分 5%</text>
+<text x="40" y="300" fill="#6e6e88" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">手续费是"稳稳的"，利息是"看人的"。所以银行最喜欢推分期——那是它利润率最高的一块。</text>
+</svg>

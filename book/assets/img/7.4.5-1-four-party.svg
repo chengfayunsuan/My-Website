@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="320" viewBox="0 0 880 320" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="320" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.4.5 / 图 1</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你刷的每一笔，都要经过四个角色</text>
+<rect x="340" y="74" width="200" height="54" rx="8" fill="#1a2430" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="440" y="98" fill="#b58ae8" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">卡组织</text>
+<text x="440" y="118" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银联 / Visa / 万事达</text>
+<rect x="50" y="190" width="190" height="70" rx="8" fill="#15151f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="145" y="218" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发卡行</text>
+<text x="145" y="240" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你的银行</text>
+<rect x="640" y="190" width="190" height="70" rx="8" fill="#15151f" stroke="#e8965a" stroke-width="1.4"/>
+<text x="735" y="218" fill="#e8965a" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收单行</text>
+<text x="735" y="240" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商户的银行</text>
+<rect x="340" y="190" width="200" height="70" rx="8" fill="#15151f" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="440" y="218" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商户</text>
+<text x="440" y="240" fill="#8a8aa0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">饭店、网店、超市</text>
+<text x="40" y="300" fill="#6e6e88" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">持卡人（你）在左边，商户在右边；卡组织在中间只做一件事：传话 + 算账 + 定规矩。</text>
+<path d="M145,190 L145,128 L340,128" fill="none" stroke="#67b5ef" stroke-width="1.4"/>
+<path d="M735,190 L735,128 L540,128" fill="none" stroke="#e8965a" stroke-width="1.4"/>
+<path d="M440,190 L440,128" fill="none" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="158" y="176" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">① 要授权</text>
+<text x="592" y="176" fill="#e8965a" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">② 转过来</text>
+<text x="452" y="176" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">③ 收钱</text>
+</svg>

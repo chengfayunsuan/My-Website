@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="300" viewBox="0 0 880 300" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="300" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.4.3 / 图 3</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发现盗刷后，钱是怎么要回来的</text>
+<rect x="40" y="96" width="130" height="76" rx="6" fill="#15151f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="105" y="126" fill="#67b5ef" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你</text>
+<text x="105" y="148" fill="#8a8aa0" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">打客服 / App 冻结</text>
+<path d="M172,134 L208,134" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M208,129 L216,134 L208,139 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="208" y="96" width="130" height="76" rx="6" fill="#15151f" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="273" y="126" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发卡行</text>
+<text x="273" y="148" fill="#8a8aa0" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">挂账、发拒付</text>
+<path d="M340,134 L376,134" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M376,129 L384,134 L376,139 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="376" y="96" width="130" height="76" rx="6" fill="#15151f" stroke="#b58ae8" stroke-width="1.4"/>
+<text x="441" y="126" fill="#b58ae8" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卡组织</text>
+<text x="441" y="148" fill="#8a8aa0" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">转给收单行</text>
+<path d="M508,134 L544,134" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M544,129 L552,134 L544,139 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="544" y="96" width="130" height="76" rx="6" fill="#15151f" stroke="#e8965a" stroke-width="1.4"/>
+<text x="609" y="126" fill="#e8965a" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收单行</text>
+<text x="609" y="148" fill="#8a8aa0" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">找商户要证据</text>
+<path d="M676,134 L712,134" fill="none" stroke="#8a8aa0" stroke-width="1.4"/>
+<path d="M712,129 L720,134 L712,139 Z" fill="#8a8aa0" stroke="#8a8aa0" stroke-width="0"/>
+<rect x="712" y="96" width="130" height="76" rx="6" fill="#15151f" stroke="#e87a8a" stroke-width="1.4"/>
+<text x="777" y="126" fill="#e87a8a" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商户</text>
+<text x="777" y="148" fill="#8a8aa0" font-size="9.2" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">举证或认赔</text>
+<text x="40" y="210" fill="#c8c8d4" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">时间线：报挂失当天冻结，拒付一般 3～15 个工作日出结果，最长可以拖到 45 天。</text>
+<text x="40" y="234" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商户拿不出你本人签字的凭证，这笔钱通常判给你；反过来，如果商户有你的验证码记录，就很难赢。</text>
+<text x="40" y="274" fill="#6e6e88" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以第一件事永远是：先冻结，再报警，最后才是跟银行谈。顺序错了，钱可能在你操作之前就被转走。</text>
+</svg>

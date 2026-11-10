@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="336" viewBox="0 0 880 336" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="336" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.4.3 / 图 1</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卡还在你兜里，钱却被刷走了：三条路</text>
+<rect x="40" y="76" width="258" height="200" rx="8" fill="#15151f" stroke="#e87a8a" stroke-width="1.4"/>
+<text x="169" y="104" fill="#e87a8a" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">侧录</text>
+<text x="60" y="136" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 在 ATM 口、加油机</text>
+<text x="60" y="162" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 加装一个假读卡器</text>
+<text x="60" y="188" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 外加针孔摄像头偷密码</text>
+<text x="60" y="214" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 做一张克隆卡去取钱</text>
+<rect x="330" y="76" width="258" height="200" rx="8" fill="#15151f" stroke="#e8965a" stroke-width="1.4"/>
+<text x="459" y="104" fill="#e8965a" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">钓鱼</text>
+<text x="350" y="136" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 假网站、假短信</text>
+<text x="350" y="162" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 骗你填卡号+有效期+CVV</text>
+<text x="350" y="188" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 三样一齐就等于卡在手</text>
+<text x="350" y="214" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 境外网站立刻扣款</text>
+<rect x="620" y="76" width="258" height="200" rx="8" fill="#15151f" stroke="#b58ae8" stroke-width="1.4"/>
+<text x="749" y="104" fill="#b58ae8" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">撞库</text>
+<text x="640" y="136" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 用泄露的卡号批量试</text>
+<text x="640" y="162" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· Luhn 算出合法号段</text>
+<text x="640" y="188" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 小额免密一笔笔试</text>
+<text x="640" y="214" fill="#c8c8d4" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 1 元、2 元先探路</text>
+<text x="40" y="302" fill="#6e6e88" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三条路的共同点：拿到的都是"静态信息"。卡号会背、CVV 印在卡上、磁条能复制。</text>
+<text x="40" y="322" fill="#6e6e88" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">芯片卡能挡住第一条，挡不住第二条——因为你在假网站上，是自己把数字念出去的。</text>
+</svg>

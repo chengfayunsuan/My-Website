@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="300" viewBox="0 0 880 300" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="880" height="300" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">7.4.2 / 图 1</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">磁条上其实有三条轨道，常用的只有两条</text>
+<rect x="60" y="72" width="760" height="62" rx="4" fill="#1b1b28" stroke="#4a4a62" stroke-width="1.4"/>
+<rect x="66" y="82" width="748" height="12" rx="2" fill="#2a2a3e" stroke="none" stroke-width="0"/>
+<text x="74" y="92" fill="#8a8aa0" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">轨道 1</text>
+<rect x="66" y="100" width="748" height="12" rx="2" fill="#33405c" stroke="none" stroke-width="0"/>
+<text x="74" y="110" fill="#8a8aa0" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">轨道 2</text>
+<rect x="66" y="118" width="748" height="12" rx="2" fill="#2a2a3e" stroke="none" stroke-width="0"/>
+<text x="74" y="128" fill="#8a8aa0" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">轨道 3</text>
+<text x="60" y="164" fill="#8a8aa0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">轨道 1</text>
+<text x="150" y="164" fill="#dcdcea" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">姓名 + 卡号 + 有效期</text>
+<text x="400" y="164" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">磁条卡时代用来在POS上打印小票，现在基本不用</text>
+<text x="60" y="198" fill="#67b5ef" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">轨道 2</text>
+<text x="150" y="198" fill="#dcdcea" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卡号 + 有效期 + 服务码</text>
+<text x="400" y="198" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">真正干活的就这一条，刷卡时终端读的就是它</text>
+<text x="60" y="232" fill="#8a8aa0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">轨道 3</text>
+<text x="150" y="232" fill="#dcdcea" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">很少写内容</text>
+<text x="400" y="232" fill="#8a8aa0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">标准留了位置，实际几乎空着</text>
+<text x="60" y="288" fill="#6e6e88" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">磁条就是一盘磁带：读头贴上去，磁畴的方向变成 0 和 1。它能被读，也就能被写。</text>
+</svg>
