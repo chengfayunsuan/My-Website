@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="420" viewBox="0 0 780 420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="420" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">小规模和一般纳税人：差在「能不能抵扣」这一环</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不是税率高低的问题，是链条通不通的问题</text>
+<text x="40" y="84" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif"></text>
+<rect x="30" y="76" width="340" height="36" rx="4" fill="#12121a" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="200" y="100" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">小规模纳税人</text>
+<rect x="390" y="76" width="360" height="36" rx="4" fill="#12121a" stroke="#e8b84b" stroke-width="1.2"/>
+<text x="570" y="100" fill="#e8b84b" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">一般纳税人</text>
+<text x="30" y="142" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">认定</text>
+<rect x="90" y="120" width="280" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="102" y="144" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">年销售额 ≤500 万可登记</text>
+<rect x="390" y="120" width="360" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="402" y="144" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">年销售额 >500 万强制；也可自愿申请</text>
+<text x="30" y="186" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">计税</text>
+<rect x="90" y="164" width="280" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="102" y="188" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">销售额 × 征收率（1% 或 3%）</text>
+<rect x="390" y="164" width="360" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="402" y="188" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">销项税额 − 进项税额</text>
+<text x="30" y="230" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">税率</text>
+<rect x="90" y="208" width="280" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="102" y="232" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">征收率 1%（原 3%）</text>
+<rect x="390" y="208" width="360" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="402" y="232" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">6% / 9% / 13%</text>
+<text x="30" y="274" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进项</text>
+<rect x="90" y="252" width="280" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="102" y="276" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不能抵扣，税额进成本</text>
+<rect x="390" y="252" width="360" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="402" y="276" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">凭专票抵扣</text>
+<text x="30" y="318" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">专票</text>
+<rect x="90" y="296" width="280" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="102" y="320" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">可自开，但只能按 1%/3%</text>
+<rect x="390" y="296" width="360" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="402" y="320" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">可开 6%/9%/13%</text>
+<text x="30" y="362" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">申报</text>
+<rect x="90" y="340" width="280" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="102" y="364" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">多为按季</text>
+<rect x="390" y="340" width="360" height="38" rx="4" fill="#16161f" stroke="#2a2a3e" stroke-width="1"/>
+<text x="402" y="364" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">按月</text>
+<text x="390" y="406" fill="#e8965a" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">差别的根源只有一句话：小规模不能抵扣进项，所以它的税会沉进成本里</text>
+</svg>
