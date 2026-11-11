@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="410" viewBox="0 0 760 410" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="410" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">银行开户时到底在审什么：三道关</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">它不是「给你开个户」，是「决定要不要跟你做生意」</text>
+<rect x="30" y="76" width="700" height="86" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="50" y="102" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">第一关　你是不是真的</text>
+<text x="50" y="126" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">营业执照、经营场所（可能上门拍照）、</text>
+<text x="50" y="146" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">经营范围与业务是否对得上、法人是否本人</text>
+<rect x="30" y="172" width="700" height="86" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="50" y="198" fill="#e8b84b" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">第二关　你的钱干不干净</text>
+<text x="50" y="222" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">受益所有人是谁、股东穿透、资金来源、</text>
+<text x="50" y="242" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">是否在制裁或涉诈名单上</text>
+<rect x="30" y="268" width="700" height="86" rx="6" fill="#16161f" stroke="#e87a8a" stroke-width="1.5"/>
+<text x="50" y="294" fill="#e87a8a" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">第三关　你的风险高不高</text>
+<text x="50" y="318" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">行业、注册地是否集中挂靠、是否异地经营、</text>
+<text x="50" y="338" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">法人年龄与户籍、是否刚成立就大额进出</text>
+<rect x="30" y="368" width="700" height="32" rx="4" fill="#16121f" stroke="#e8965a" stroke-width="1"/>
+<text x="380" y="390" fill="#e8965a" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三关全过才给开；任何一关存疑，银行宁可拒绝——它被罚过，也怕担责</text>
+</svg>
