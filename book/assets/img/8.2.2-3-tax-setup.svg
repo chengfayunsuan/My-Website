@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="445" viewBox="0 0 760 445" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="445" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">税务报到：不是「登记」，是「开机」</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">多证合一之后执照就是税务登记证，但系统里你还是个空白账户</text>
+<rect x="30" y="70" width="700" height="60" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="50" y="96" fill="#e8b84b" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">① 实名认证</text>
+<text x="50" y="116" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">法人、财务负责人、办税人，三个人都要在电子税务局刷脸</text>
+<rect x="30" y="134" width="700" height="60" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="50" y="160" fill="#e8b84b" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">② 税种核定</text>
+<text x="50" y="180" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">增值税、企业所得税、附加税、印花税——决定你以后报哪些表</text>
+<rect x="30" y="198" width="700" height="60" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="50" y="224" fill="#e8b84b" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">③ 选身份</text>
+<text x="50" y="244" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">小规模纳税人 还是 一般纳税人，这个选择一年内不好改</text>
+<rect x="30" y="262" width="700" height="60" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="50" y="288" fill="#e8b84b" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">④ 票种核定</text>
+<text x="50" y="308" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能开什么票、开多少限额；全电发票不用买税控盘</text>
+<rect x="30" y="326" width="700" height="60" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.3"/>
+<text x="50" y="352" fill="#e8b84b" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">⑤ 三方协议</text>
+<text x="50" y="372" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">公司、银行、税务签一份扣款协议，报税时自动扣</text>
+<text x="380" y="418" fill="#e8965a" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">五步都做完，你才算「能开票、能报税」；只拿执照不做这些，一开票就卡住</text>
+</svg>
