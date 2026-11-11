@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="410" viewBox="0 0 760 410" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="410" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">统一社会信用代码：18 位，一辈子不变</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">它替代了营业执照号、组织机构代码、税务登记号，三码合一</text>
+<rect x="174" y="92" width="44" height="54" rx="4" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="196.0" y="126" fill="#67b5ef" font-size="14" text-anchor="middle" font-family="monospace" font-weight="bold">9</text>
+<text x="196.0" y="166" fill="#a0a0b8" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">部门代码</text>
+<rect x="228" y="92" width="40" height="54" rx="4" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="248.0" y="126" fill="#67b5ef" font-size="14" text-anchor="middle" font-family="monospace" font-weight="bold">1</text>
+<text x="248.0" y="166" fill="#a0a0b8" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">类别</text>
+<rect x="278" y="92" width="100" height="54" rx="4" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="328.0" y="126" fill="#67d9a0" font-size="14" text-anchor="middle" font-family="monospace" font-weight="bold">410202</text>
+<text x="328.0" y="166" fill="#a0a0b8" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">行政区划</text>
+<rect x="388" y="92" width="132" height="54" rx="4" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="454.0" y="126" fill="#e8b84b" font-size="14" text-anchor="middle" font-family="monospace" font-weight="bold">MA3X8K2L</text>
+<text x="454.0" y="166" fill="#a0a0b8" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">主体标识码</text>
+<rect x="530" y="92" width="56" height="54" rx="4" fill="#16161f" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="558.0" y="126" fill="#b58ae8" font-size="14" text-anchor="middle" font-family="monospace" font-weight="bold">7</text>
+<text x="558.0" y="166" fill="#a0a0b8" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">校验码</text>
+<text x="380" y="196" fill="#a0a0b8" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">前两位合起来表示「谁登记的、什么类型的主体」：91 是企业，92 是个体户，52 是民办非企业</text>
+<rect x="30" y="214" width="700" height="116" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="50" y="240" fill="#e8b84b" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">这串码有什么用</text>
+<text x="50" y="264" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 开发票、报税、签合同、投标、开户全用它，不用记一堆号</text>
+<text x="50" y="286" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 国家企业信用信息公示系统输入它，能查这家公司的全部公开信息</text>
+<text x="50" y="308" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 编码有固定规则，可以被程序校验——写爬虫或做尽调，第一步就该验它</text>
+<text x="380" y="356" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">校验码和身份证最后一位同一个思路：算出来的，输错一位立刻能发现</text>
+<text x="380" y="380" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">这也意味着：只要你拿到一个信用代码，就能反推出它是在哪个省市登记的</text>
+</svg>

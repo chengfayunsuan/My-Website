@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="400" viewBox="0 0 780 400" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="400" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">一个公司名，是四段拼起来的</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">「开封市乘法网络科技有限公司」——每一段都有规矩，不是随便起的</text>
+<rect x="128" y="96" width="118" height="58" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="187.0" y="132" fill="#67b5ef" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">开封市</text>
+<text x="187.0" y="170" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">行政区划</text>
+<line x1="187.0" y1="176" x2="187.0" y2="196" stroke="#3a3a52" stroke-width="1"/>
+<rect x="124" y="198" width="126" height="76" rx="5" fill="#12121a" stroke="#2a2a3e" stroke-width="1"/>
+<text x="187.0" y="224" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">可省略</text>
+<text x="187.0" y="241" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">否则限本市</text>
+<rect x="260" y="96" width="92" height="58" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="306.0" y="132" fill="#e8b84b" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">乘法</text>
+<text x="306.0" y="170" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">字号</text>
+<line x1="306.0" y1="176" x2="306.0" y2="196" stroke="#3a3a52" stroke-width="1"/>
+<rect x="256" y="198" width="100" height="76" rx="5" fill="#12121a" stroke="#2a2a3e" stroke-width="1"/>
+<text x="306.0" y="224" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2 字以上</text>
+<text x="306.0" y="241" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同行业不能重名</text>
+<rect x="366" y="96" width="132" height="58" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="432.0" y="132" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">网络科技</text>
+<text x="432.0" y="170" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">行业</text>
+<line x1="432.0" y1="176" x2="432.0" y2="196" stroke="#3a3a52" stroke-width="1"/>
+<rect x="362" y="198" width="140" height="76" rx="5" fill="#12121a" stroke="#2a2a3e" stroke-width="1"/>
+<text x="432.0" y="224" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对应主营行业</text>
+<rect x="512" y="96" width="140" height="58" rx="6" fill="#16161f" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="582.0" y="132" fill="#b58ae8" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">有限公司</text>
+<text x="582.0" y="170" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">组织形式</text>
+<line x1="582.0" y1="176" x2="582.0" y2="196" stroke="#3a3a52" stroke-width="1"/>
+<rect x="508" y="198" width="148" height="76" rx="5" fill="#12121a" stroke="#2a2a3e" stroke-width="1"/>
+<text x="582.0" y="224" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">决定责任形态</text>
+<text x="390" y="304" fill="#c8c8dc" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">字号是唯一真正属于你的部分，其余三段都是「分类标签」</text>
+<text x="390" y="328" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以要查的不是「有没有人做这个行业」，而是「同行业里有没有同字号」</text>
+<rect x="24" y="348" width="732" height="40" rx="4" fill="#16161f" stroke="#e8b84b" stroke-width="1"/>
+<text x="390" y="365" fill="#e8b84b" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">禁用词：中国、中华、国家、国际、全国——要用得报国家局批准，普通公司别碰</text>
+<text x="390" y="383" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">公司名一旦登记，改起来要办变更，字号改了等于换了个身份，尽量一次定好</text>
+</svg>
