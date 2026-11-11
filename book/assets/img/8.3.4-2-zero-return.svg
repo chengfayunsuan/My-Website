@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="390" viewBox="0 0 760 390" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="390" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">「不报」和「报 0」是两件完全不同的事</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">零申报是合法操作，不申报是违法行为，很多人栽在这一步</text>
+<rect x="30" y="74" width="700" height="84" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="50" y="104" fill="#67d9a0" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">正常申报</text>
+<text x="50" y="130" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">有收入，按实际数字填报</text>
+<text x="390" y="114" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一切正常</text>
+<rect x="30" y="170" width="700" height="84" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="50" y="200" fill="#e8b84b" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">零申报</text>
+<text x="50" y="226" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有收入，也按期填报 0</text>
+<text x="390" y="210" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">合法；但连续 6 个月以上会被重点关注</text>
+<rect x="30" y="266" width="700" height="84" rx="6" fill="#16161f" stroke="#e87a8a" stroke-width="1.5"/>
+<text x="50" y="296" fill="#e87a8a" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">不申报</text>
+<text x="50" y="322" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">什么都不做，等「以后补」</text>
+<text x="390" y="306" fill="#e87a8a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">逾期 → 罚款 → 非正常户 → 吊销</text>
+<rect x="30" y="362" width="700" height="0" rx="0" fill="#000" stroke="#000" stroke-width="0"/>
+<text x="380" y="372" fill="#e8b84b" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">零申报也要点「提交」——它不是「什么都不做」，是「主动填 0 并提交」</text>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="430" viewBox="0 0 780 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="430" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">逾期不报，代价是这么一级一级加上去的</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">从滞纳金到非正常户，中间只隔三个月</text>
+<rect x="30" y="70" width="720" height="62" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="50" y="96" fill="#e8b84b" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">① 逾期第一天</text>
+<text x="50" y="116" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 滞纳金 万分之五 / 天</text>
+<text x="730" y="106" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">年化 18.25%，比任何贷款都贵</text>
+<rect x="30" y="140" width="720" height="62" rx="6" fill="#16161f" stroke="#e8965a" stroke-width="1.4"/>
+<text x="50" y="166" fill="#e8965a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">② 逾期申报</text>
+<text x="50" y="186" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 罚款 2000 元以下（个人）/ 2000~10000（企业）</text>
+<text x="730" y="176" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">首违不罚有适用条件，不是免死金牌</text>
+<rect x="30" y="210" width="720" height="62" rx="6" fill="#16161f" stroke="#e87a8a" stroke-width="1.4"/>
+<text x="50" y="236" fill="#e87a8a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">③ 连续 3 个月不报</text>
+<text x="50" y="256" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 列入「非正常户」</text>
+<text x="730" y="246" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发票被停、无法申报、无法注销</text>
+<rect x="30" y="280" width="720" height="62" rx="6" fill="#16161f" stroke="#e87a8a" stroke-width="1.4"/>
+<text x="50" y="306" fill="#e87a8a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">④ 非正常户满 2 年</text>
+<text x="50" y="326" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 吊销营业执照</text>
+<text x="730" y="316" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">法人进黑名单</text>
+<rect x="30" y="350" width="720" height="62" rx="6" fill="#16161f" stroke="#b58ae8" stroke-width="1.4"/>
+<text x="50" y="376" fill="#b58ae8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">⑤ 法人受限</text>
+<text x="50" y="396" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 限制高消费、坐不了高铁飞机、不能当其他公司高管</text>
+<text x="730" y="386" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">影响是终身的，修复要几年</text>
+</svg>
