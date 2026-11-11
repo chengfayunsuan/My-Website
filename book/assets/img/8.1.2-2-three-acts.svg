@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="390" viewBox="0 0 780 390" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="390" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">认缴、实缴、抽逃：三个动作，三种后果</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同样是把钱和公司扯上关系，法律评价完全相反</text>
+<line x1="50" y1="120" x2="730" y2="120" stroke="#8a8aa0" stroke-width="2"/>
+<circle cx="110" cy="120" r="5" fill="#e8b84b"/>
+<text x="110" y="102" fill="#e8b84b" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">设立当天</text>
+<rect x="0" y="146" width="220" height="86" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="110" y="172" fill="#e8b84b" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">① 认缴</text>
+<text x="110" y="194" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">在章程里写下 1000 万</text>
+<text x="110" y="212" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">登记公示，谁都能查</text>
+<circle cx="390" cy="120" r="5" fill="#67d9a0"/>
+<text x="390" y="102" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">之后五年内</text>
+<rect x="280" y="146" width="220" height="86" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="390" y="172" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">② 实缴</text>
+<text x="390" y="194" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">真金白银打进对公户</text>
+<text x="390" y="212" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">留好银行回单</text>
+<circle cx="660" cy="120" r="5" fill="#e87a8a"/>
+<text x="660" y="102" fill="#e87a8a" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">某一天</text>
+<rect x="550" y="146" width="220" height="86" rx="6" fill="#16161f" stroke="#e87a8a" stroke-width="1.5"/>
+<text x="660" y="172" fill="#e87a8a" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">③ 抽逃</text>
+<text x="660" y="194" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">验资完转走、虚构债务</text>
+<text x="660" y="212" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">关联方无偿占用</text>
+<rect x="30" y="252" width="700" height="120" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="50" y="278" fill="#e8b84b" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">想从公司拿钱，只有这几条正路</text>
+<text x="50" y="302" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 发工资：交个税和社保，账上有记录</text>
+<text x="50" y="324" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 分红：公司先交企业所得税，股东再交 20% 股息红利个税</text>
+<text x="50" y="346" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 报销：发票抬头必须是公司，事由要真实</text>
+<text x="410" y="302" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 借款：签合同、约定利息、按期归还</text>
+<text x="410" y="324" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 采购：跟公司真实交易，价格公允</text>
+<text x="410" y="346" fill="#e87a8a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">直接从对公户转到自己卡 = 抽逃或侵占</text>
+</svg>
