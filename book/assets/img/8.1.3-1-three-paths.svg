@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="420" viewBox="0 0 780 420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="420" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">三条路：哪些生意能直接开，哪些要先拿证</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">执照只是「允许你存在」，许可证才是「允许你做这件事」</text>
+<text x="30" y="94" fill="#67d9a0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">一般经营项目</text>
+<text x="30" y="116" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">直接登记，拿照就能开</text>
+<rect x="210" y="76" width="540" height="58" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.3"/>
+<text x="230" y="100" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">开咨询、做软件、卖日用品</text>
+<text x="230" y="122" fill="#67d9a0" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不需要任何额外许可</text>
+<text x="30" y="182" fill="#e8b84b" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">前置审批</text>
+<text x="30" y="204" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">先拿许可证，才能登记</text>
+<rect x="210" y="164" width="540" height="58" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.3"/>
+<text x="230" y="188" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行、保险、证券、危化品、办学</text>
+<text x="230" y="210" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">顺序不能反，反了就是无证经营</text>
+<text x="30" y="270" fill="#e8965a" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">后置审批</text>
+<text x="30" y="292" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">先登记，再办证，才能开业</text>
+<rect x="210" y="252" width="540" height="58" rx="6" fill="#16161f" stroke="#e8965a" stroke-width="1.3"/>
+<text x="230" y="276" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">餐饮、食品、劳务派遣、ICP</text>
+<text x="230" y="298" fill="#e8965a" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">执照上有，但没证不能营业</text>
+<rect x="30" y="340" width="720" height="66" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<text x="50" y="366" fill="#e8b84b" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">怎么知道自己这行属于哪种</text>
+<text x="50" y="390" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">查「经营范围规范表述查询系统」，只能用它给的标准表述，自己编的句子会被驳回</text>
+</svg>

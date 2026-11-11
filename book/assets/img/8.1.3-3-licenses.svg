@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="420" viewBox="0 0 780 420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="420" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">做网站、做软件，到底要办哪些证</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">从上到下四个台阶，越往下门槛越高，但也不是人人都要爬到底</text>
+<rect x="24" y="70" width="732" height="70" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.4"/>
+<rect x="24" y="70" width="5" height="70" rx="0" fill="#67d9a0" stroke="#67d9a0" stroke-width="0"/>
+<text x="48" y="94" fill="#67d9a0" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">ICP 备案</text>
+<text x="48" y="114" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所有对公网提供服务的网站</text>
+<text x="48" y="132" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">免费 · 20 个工作日 · 省通信管理局</text>
+<rect x="24" y="146" width="732" height="70" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.4"/>
+<rect x="24" y="146" width="5" height="70" rx="0" fill="#67b5ef" stroke="#67b5ef" stroke-width="0"/>
+<text x="48" y="170" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">ICP 许可证</text>
+<text x="48" y="190" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">网站收费、有经营性内容</text>
+<text x="48" y="208" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注册资本 100 万起 · 省通信管理局</text>
+<rect x="24" y="222" width="732" height="70" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.4"/>
+<rect x="24" y="222" width="5" height="70" rx="0" fill="#e8b84b" stroke="#e8b84b" stroke-width="0"/>
+<text x="48" y="246" fill="#e8b84b" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">EDI 许可证</text>
+<text x="48" y="266" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">电商平台、在线交易处理</text>
+<text x="48" y="284" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注册资本 100 万起 · 省通信管理局</text>
+<rect x="24" y="298" width="732" height="70" rx="6" fill="#16161f" stroke="#b58ae8" stroke-width="1.4"/>
+<rect x="24" y="298" width="5" height="70" rx="0" fill="#b58ae8" stroke="#b58ae8" stroke-width="0"/>
+<text x="48" y="322" fill="#b58ae8" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">网络文化经营许可证</text>
+<text x="48" y="342" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">网络游戏、网络音乐、网络动漫</text>
+<text x="48" y="360" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">内容审核 + 版权证明 · 省文旅厅</text>
+<rect x="24" y="376" width="732" height="24" rx="4" fill="#16121a" stroke="#3a3a52" stroke-width="1"/>
+<text x="390" y="392" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">另外还有一条贯穿所有台阶的：等保测评（二级以上系统要过），不属于许可，但不做会被要求整改</text>
+</svg>
