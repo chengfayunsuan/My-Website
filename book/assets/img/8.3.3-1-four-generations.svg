@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="410" viewBox="0 0 780 410" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="410" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">发票的四代：从手写到全电，一张纸变成一段数据</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">四次变化，每次都在削掉一样东西：纸、设备、领用、甚至「票」本身</text>
+<line x1="40" y1="166" x2="740" y2="166" stroke="#8a8aa0" stroke-width="1.5"/>
+<line x1="110" y1="128" x2="110" y2="166" stroke="#67b5ef" stroke-width="1.2"/>
+<circle cx="110" cy="166" r="5" fill="#67b5ef"/>
+<text x="110" y="186" fill="#67b5ef" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1994–2000s</text>
+<rect x="28" y="58" width="164" height="70" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="110" y="82" fill="#67b5ef" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">手写 / 定额</text>
+<text x="110" y="104" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一张复写纸，手写抬头</text>
+<text x="110" y="118" fill="#a0a0b8" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">假票满天飞</text>
+<line x1="290" y1="128" x2="290" y2="166" stroke="#e8b84b" stroke-width="1.2"/>
+<circle cx="290" cy="166" r="5" fill="#e8b84b"/>
+<text x="290" y="186" fill="#e8b84b" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2000s–2015</text>
+<rect x="208" y="58" width="164" height="70" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="290" y="82" fill="#e8b84b" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">税控机打</text>
+<text x="290" y="104" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">税控盘 + 专用打印机</text>
+<text x="290" y="118" fill="#a0a0b8" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">票面信息进税局系统</text>
+<line x1="480" y1="128" x2="480" y2="166" stroke="#e8965a" stroke-width="1.2"/>
+<circle cx="480" cy="166" r="5" fill="#e8965a"/>
+<text x="480" y="186" fill="#e8965a" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2015–2021</text>
+<rect x="398" y="58" width="164" height="70" rx="6" fill="#16161f" stroke="#e8965a" stroke-width="1.4"/>
+<text x="480" y="82" fill="#e8965a" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">电子发票</text>
+<text x="480" y="104" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">PDF / OFD 文件</text>
+<text x="480" y="118" fill="#a0a0b8" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">还是要领票、要盘</text>
+<line x1="660" y1="128" x2="660" y2="166" stroke="#67d9a0" stroke-width="1.2"/>
+<circle cx="660" cy="166" r="5" fill="#67d9a0"/>
+<text x="660" y="186" fill="#67d9a0" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2021–至今</text>
+<rect x="578" y="58" width="164" height="70" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="660" y="82" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">全电发票</text>
+<text x="660" y="104" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">无介质、无税控设备</text>
+<text x="660" y="118" fill="#a0a0b8" font-size="8.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">开票即交付</text>
+<rect x="30" y="204" width="720" height="76" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<text x="50" y="228" fill="#67d9a0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">全电发票到底变了什么</text>
+<text x="50" y="252" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不用买税控盘、不用领纸质票、不用每月抄报税；额度由系统按经营情况动态给</text>
+<text x="50" y="272" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">开票时选「税收分类编码」，系统自动带税率——编码选错，税率就可能错</text>
+<rect x="30" y="292" width="720" height="104" rx="6" fill="#16161f" stroke="#e8965a" stroke-width="1.4"/>
+<text x="50" y="318" fill="#e8965a" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">名字变了，本质没变</text>
+<text x="50" y="342" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">它仍然是「税务机关监控交易」的载体：谁开的、开给谁、什么商品、多少钱、多少税</text>
+<text x="50" y="364" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以「不开发票就能少交税」这个想法，在数据打通之后越来越行不通</text>
+<text x="50" y="386" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行流水、平台订单、物流单据，都在同一个系统里能对上</text>
+</svg>
