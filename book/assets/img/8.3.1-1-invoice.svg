@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="430" viewBox="0 0 780 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="780" height="430" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">一张 10600 元的发票，里面有两种钱</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一种归你，一种归国家；很多人把两种都当成自己的收入</text>
+<rect x="40" y="84" width="640" height="64" rx="6" fill="#12241a" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="60" y="110" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不含税金额</text>
+<text x="60" y="136" fill="#ffffff" font-size="15" text-anchor="start" font-family="monospace" font-weight="bold">10000.00 元</text>
+<rect x="680" y="84" width="60" height="64" rx="6" fill="#2a1f12" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="710" y="110" fill="#e8b84b" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">税额</text>
+<text x="710" y="134" fill="#e8b84b" font-size="13" text-anchor="middle" font-family="monospace" font-weight="bold">600</text>
+<text x="390" y="168" fill="#a0a0b8" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">← 你的收入（要交所得税）　　↑ 代收的增值税（要交出去）</text>
+<text x="390" y="196" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">价税合计 10600 元，客户打给你；但其中 600 元从来不是你的</text>
+<rect x="28" y="232" width="232" height="96" rx="6" fill="#16161f" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="144.0" y="258" fill="#e8b84b" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">增值税</text>
+<text x="144.0" y="282" fill="#c8c8dc" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对「增值」收的税</text>
+<text x="144.0" y="304" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">6% / 9% / 13%，链条抵扣</text>
+<rect x="274" y="232" width="232" height="96" rx="6" fill="#16161f" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="390.0" y="258" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">企业所得税</text>
+<text x="390.0" y="282" fill="#c8c8dc" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对「利润」收的税</text>
+<text x="390.0" y="304" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">25%，小微实际 5%</text>
+<rect x="520" y="232" width="232" height="96" rx="6" fill="#16161f" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="636.0" y="258" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">附加税</text>
+<text x="636.0" y="282" fill="#c8c8dc" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">跟着增值税走</text>
+<text x="636.0" y="304" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">城建 7% + 教育 3% + 地方 2%</text>
+<text x="390" y="364" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三种税不是「收入的三成」，它们的计税依据完全不同：增值额、利润、已缴增值税</text>
+<text x="390" y="390" fill="#e8965a" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">分不清这三个基数，是新手算税最容易错的地方</text>
+<rect x="40" y="404" width="700" height="20" rx="4" fill="#16121f" stroke="#3a3a52" stroke-width="1"/>
+<text x="390" y="418" fill="#e8b84b" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发票上只体现增值税；所得税和附加税，都要等月底或年底才算出来</text>
+</svg>

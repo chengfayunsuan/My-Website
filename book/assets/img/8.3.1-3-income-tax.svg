@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="450" viewBox="0 0 760 450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="760" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">企业所得税：算的是「利润」，不是「收入」</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收入 100 万的公司，可能一分税都不用交</text>
+<rect x="30" y="70" width="440" height="44" rx="5" fill="#16161f" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="48" y="98" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">营业收入</text>
+<text x="440" y="98" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="monospace">100 万</text>
+<text x="490" y="98" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卖出去的所有东西</text>
+<rect x="30" y="120" width="440" height="44" rx="5" fill="#16161f" stroke="#e8965a" stroke-width="1.2"/>
+<text x="48" y="148" fill="#e8965a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">减 成本</text>
+<text x="440" y="148" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="monospace">60 万</text>
+<text x="490" y="148" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">进货、外包、服务器</text>
+<rect x="30" y="170" width="440" height="44" rx="5" fill="#16161f" stroke="#e8965a" stroke-width="1.2"/>
+<text x="48" y="198" fill="#e8965a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">减 费用</text>
+<text x="440" y="198" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="monospace">25 万</text>
+<text x="490" y="198" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">工资、房租、差旅、推广</text>
+<rect x="30" y="220" width="440" height="44" rx="5" fill="#16161f" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="48" y="248" fill="#67b5ef" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">等于 利润</text>
+<text x="440" y="248" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="monospace">15 万</text>
+<text x="490" y="248" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">会计上的账面利润</text>
+<rect x="30" y="270" width="440" height="44" rx="5" fill="#16161f" stroke="#e8b84b" stroke-width="1.2"/>
+<text x="48" y="298" fill="#e8b84b" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">加减 纳税调整</text>
+<text x="440" y="298" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="monospace">±</text>
+<text x="490" y="298" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">招待费超限、罚款不能扣、研发加计</text>
+<rect x="30" y="320" width="440" height="44" rx="5" fill="#16161f" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="48" y="348" fill="#b58ae8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">等于 应纳税所得额</text>
+<text x="440" y="348" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="monospace">15 万</text>
+<text x="490" y="348" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">真正用来算税的基数</text>
+<rect x="30" y="374" width="700" height="58" rx="6" fill="#12241a" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="50" y="400" fill="#67d9a0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">应纳税所得额 15 万 × 小微税率 5% = 企业所得税 7500 元</text>
+<text x="50" y="420" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">如果是 25% 的普通税率，就是 3.75 万——差了五倍</text>
+</svg>
