@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="410" viewBox="0 0 680 410" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="410" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">赚不赚钱看交点，活不活得起看现金</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">固定成本 2.2 万 / 月 · 毛利率 50%</text>
+<line x1="90" y1="100" x2="90" y2="320" stroke="#4a4a62" stroke-width="1.5"/>
+<line x1="90" y1="320" x2="620" y2="320" stroke="#4a4a62" stroke-width="1.5"/>
+<text x="78" y="324.0" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0</text>
+<text x="78" y="250.66666666666669" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">4</text>
+<line x1="84" y1="246.66666666666669" x2="90" y2="246.66666666666669" stroke="#3a3a52" stroke-width="1"/>
+<text x="78" y="177.33333333333334" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">8</text>
+<line x1="84" y1="173.33333333333334" x2="90" y2="173.33333333333334" stroke="#3a3a52" stroke-width="1"/>
+<text x="78" y="104.0" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">12</text>
+<line x1="84" y1="100.0" x2="90" y2="100.0" stroke="#3a3a52" stroke-width="1"/>
+<text x="90.0" y="338" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0 万</text>
+<text x="266.66666666666663" y="338" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">4 万</text>
+<text x="443.3333333333333" y="338" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">8 万</text>
+<text x="620.0" y="338" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">12 万</text>
+<line x1="90.0" y1="320.0" x2="620.0" y2="100.0" stroke="#67d9a0" stroke-width="2.2"/>
+<line x1="90.0" y1="279.6666666666667" x2="620.0" y2="169.66666666666669" stroke="#e8965a" stroke-width="2.2"/>
+<line x1="90" y1="279.6666666666667" x2="620.0" y2="279.6666666666667" stroke="#5a5a72" stroke-width="1.2" stroke-dasharray="4 5"/>
+<text x="616.0" y="295.6666666666667" fill="#a0a0b8" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">固定成本 2.2 万</text>
+<circle cx="284.33333333333337" cy="239.33333333333331" r="5" fill="#e8b84b" stroke="#14141e" stroke-width="1.5"/>
+<line x1="284.33333333333337" y1="239.33333333333331" x2="284.33333333333337" y2="320" stroke="#e8b84b" stroke-width="1.2" stroke-dasharray="3 4"/>
+<text x="100" y="196" fill="#e8b84b" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">盈亏平衡点</text>
+<text x="100" y="214" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">月收入 4.4 万</text>
+<line x1="200" y1="220" x2="275.33333333333337" y2="236.33333333333331" stroke="#e8b84b" stroke-width="1"/>
+<text x="150" y="126" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">— 月收入</text>
+<text x="150" y="144" fill="#e8965a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">— 总成本（固定 + 变动）</text>
+<text x="40" y="386" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">交点左边，每卖一单都在补固定的窟窿；交点右边才开始真正积累。</text>
+</svg>
