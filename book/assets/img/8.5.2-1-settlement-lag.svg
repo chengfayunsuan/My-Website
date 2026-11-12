@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="430" viewBox="0 0 680 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="430" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">同一笔生意，四种到账速度</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">月流水 10 万，延迟几天，就等于永久垫着这几天的钱</text>
+<text x="650" y="100" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">常驻垫资</text>
+<text x="112" y="133" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">T+1 结算</text>
+<rect x="120" y="118" width="12.903225806451616" height="22" rx="3" fill="#e8b84b44" stroke="#e8b84b" stroke-width="1.2"/>
+<text x="650" y="133" fill="#e8b84b" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">0.33 万</text>
+<text x="140.90322580645162" y="133" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 2 天到账</text>
+<text x="112" y="191" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">T+3 结算</text>
+<rect x="120" y="176" width="38.70967741935485" height="22" rx="3" fill="#67b5ef44" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="650" y="191" fill="#67b5ef" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">1.00 万</text>
+<text x="166.70967741935485" y="191" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 4 天到账</text>
+<text x="112" y="249" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">周结</text>
+<rect x="120" y="234" width="90.32258064516128" height="22" rx="3" fill="#b58ae844" stroke="#b58ae8" stroke-width="1.2"/>
+<text x="650" y="249" fill="#b58ae8" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">2.30 万</text>
+<text x="218.32258064516128" y="249" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 8 天到账</text>
+<text x="112" y="307" fill="#c8c8dc" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">月结 30 天</text>
+<rect x="120" y="292" width="387.0967741935484" height="22" rx="3" fill="#e87a8a44" stroke="#e87a8a" stroke-width="1.2"/>
+<text x="650" y="307" fill="#e87a8a" font-size="12" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">10 万</text>
+<text x="515.0967741935484" y="307" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 31 天到账</text>
+<line x1="120" y1="352" x2="530" y2="352" stroke="#4a4a62" stroke-width="1.5"/>
+<line x1="120.0" y1="348" x2="120.0" y2="356" stroke="#4a4a62" stroke-width="1.2"/>
+<text x="120.0" y="372" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0</text>
+<line x1="249.03225806451613" y1="348" x2="249.03225806451613" y2="356" stroke="#4a4a62" stroke-width="1.2"/>
+<text x="249.03225806451613" y="372" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">10</text>
+<line x1="378.06451612903226" y1="348" x2="378.06451612903226" y2="356" stroke="#4a4a62" stroke-width="1.2"/>
+<text x="378.06451612903226" y="372" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">20</text>
+<line x1="507.0967741935484" y1="348" x2="507.0967741935484" y2="356" stroke="#4a4a62" stroke-width="1.2"/>
+<text x="507.0967741935484" y="372" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">30</text>
+<text x="536" y="372" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">交易日后的天数</text>
+<text x="40" y="404" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">常驻垫资 = 月流水 × 延迟天数 ÷ 30。月结 30 天，等于你每个月白借给客户十万。</text>
+</svg>

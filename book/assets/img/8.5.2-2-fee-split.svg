@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="430" viewBox="0 0 680 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="430" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">一笔 100 元的手续费，不是一家拿走</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">以银行卡刷卡的 0.6% 为例：发卡行、清算、收单三方分</text>
+<rect x="50" y="112" width="382.5" height="42" rx="2" fill="#e87a8a3a" stroke="#e87a8a" stroke-width="1.2"/>
+<rect x="432.5" y="112" width="27.625" height="42" rx="2" fill="#67b5ef3a" stroke="#67b5ef" stroke-width="1.2"/>
+<rect x="460.125" y="112" width="99.875" height="42" rx="2" fill="#67d9a03a" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="50" y="96" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你交的 0.6 元</text>
+<circle cx="55" cy="176" r="4" fill="#e87a8a"/>
+<text x="66" y="180" fill="#e87a8a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">发卡行</text>
+<text x="50" y="204" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0.45 元 · 75%</text>
+<circle cx="235" cy="176" r="4" fill="#67b5ef"/>
+<text x="246" y="180" fill="#67b5ef" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">清算机构</text>
+<text x="230" y="204" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0.0325 元 · 5%</text>
+<circle cx="415" cy="176" r="4" fill="#67d9a0"/>
+<text x="426" y="180" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">收单机构</text>
+<text x="410" y="204" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0.1175 元 · 20%</text>
+<line x1="50" y1="224" x2="560" y2="224" stroke="#3a3a52" stroke-width="1"/>
+<text x="50" y="250" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以 0.6% 压不到零：发卡行那 0.45 元是它的收入，收单机构只留两成。</text>
+<rect x="50" y="270" width="164" height="104" rx="5" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="50" y="270" width="3" height="104" rx="1" fill="#67b5ef" stroke="none" stroke-width="0"/>
+<text x="66" y="296" fill="#67b5ef" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">提现费</text>
+<text x="66" y="322" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对公提现多数免费</text>
+<text x="66" y="342" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">个人码提现 0.1%</text>
+<rect x="226" y="270" width="164" height="104" rx="5" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="226" y="270" width="3" height="104" rx="1" fill="#e8965a" stroke="none" stroke-width="0"/>
+<text x="242" y="296" fill="#e8965a" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">退款不退费</text>
+<text x="242" y="322" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">退 100 元，0.6 元不退</text>
+<text x="242" y="342" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">退十笔就是六块</text>
+<rect x="402" y="270" width="164" height="104" rx="5" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="402" y="270" width="3" height="104" rx="1" fill="#b58ae8" stroke="none" stroke-width="0"/>
+<text x="418" y="296" fill="#b58ae8" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">T+0 加急</text>
+<text x="418" y="322" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">通道先垫钱</text>
+<text x="418" y="342" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每笔加 0.1%~0.3%</text>
+<text x="50" y="408" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">费率表上只有一行数字，账单里通常有三到五笔费用。</text>
+</svg>

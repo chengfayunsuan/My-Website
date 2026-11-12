@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="450" viewBox="0 0 680 450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">钱在哪：三个池子，三道手续</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">从交易成功到能花，中间还隔着两个户</text>
+<rect x="40" y="104" width="300" height="78" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="40" y="104" width="4" height="78" rx="2" fill="#e8b84b" stroke="none" stroke-width="0"/>
+<text x="60" y="134" fill="#e8b84b" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">待结算</text>
+<text x="150" y="134" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">在途资金</text>
+<text x="60" y="160" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">通道已收，还没到结算日</text>
+<line x1="190" y1="182" x2="190" y2="208" stroke="#8a8aa0" stroke-width="1.5"/>
+<path d="M186,202 L190,208 L194,202" fill="none" stroke="#8a8aa0" stroke-width="1.5"/>
+<rect x="40" y="208" width="300" height="78" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="40" y="208" width="4" height="78" rx="2" fill="#67b5ef" stroke="none" stroke-width="0"/>
+<text x="60" y="238" fill="#67b5ef" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">可提现</text>
+<text x="150" y="238" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">商户号余额</text>
+<text x="60" y="264" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">已结算，等你发起提现</text>
+<line x1="190" y1="286" x2="190" y2="312" stroke="#8a8aa0" stroke-width="1.5"/>
+<path d="M186,306 L190,312 L194,306" fill="none" stroke="#8a8aa0" stroke-width="1.5"/>
+<rect x="40" y="312" width="300" height="78" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="40" y="312" width="4" height="78" rx="2" fill="#67d9a0" stroke="none" stroke-width="0"/>
+<text x="60" y="342" fill="#67d9a0" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">已到账</text>
+<text x="150" y="342" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对公账户</text>
+<text x="60" y="368" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能付工资、能交税、能放贷</text>
+<text x="370" y="84" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">提现的四条规矩</text>
+<circle cx="378" cy="114" r="3.5" fill="#e8b84b"/>
+<text x="392" y="118" fill="#e8b84b" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">结算起点</text>
+<text x="392" y="140" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">余额满 100~500 元才发起</text>
+<text x="392" y="158" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">小额流水会一直挂着</text>
+<circle cx="378" cy="188" r="3.5" fill="#67b5ef"/>
+<text x="392" y="192" fill="#67b5ef" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">单笔上限</text>
+<text x="392" y="214" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">单次提现几十万要预约</text>
+<text x="392" y="232" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">大额会被风控复核</text>
+<circle cx="378" cy="262" r="3.5" fill="#e8965a"/>
+<text x="392" y="266" fill="#e8965a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">户名一致</text>
+<text x="392" y="288" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收款户名必须等于商户主体</text>
+<text x="392" y="306" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">提现到法人私卡＝违规</text>
+<circle cx="378" cy="336" r="3.5" fill="#67d9a0"/>
+<text x="392" y="340" fill="#67d9a0" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">到账时间</text>
+<text x="392" y="362" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对公 T+1，跨行可能多一天</text>
+<text x="392" y="380" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">急用钱要提前两天安排</text>
+<text x="40" y="430" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">钱停在哪个池子里，决定它能不能发工资——账上有钱和账上能用，是两件事。</text>
+</svg>
