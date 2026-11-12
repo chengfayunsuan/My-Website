@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="450" viewBox="0 0 680 450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">开源不是"随便用"，是从宽到严的一条光谱</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一段代码，选的许可证不同，你要承担的义务完全不同</text>
+<rect x="60" y="96" width="280" height="22" rx="11" fill="#67d9a028" stroke="#67d9a0" stroke-width="1.2"/>
+<rect x="348" y="96" width="272" height="22" rx="11" fill="#e87a8a28" stroke="#e87a8a" stroke-width="1.2"/>
+<text x="200" y="112" fill="#67d9a0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">条件少 · 改了可以闭源</text>
+<text x="484" y="112" fill="#e87a8a" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">条件多 · 改了必须开源</text>
+<circle cx="58" cy="152" r="4.5" fill="#67d9a0"/>
+<text x="76" y="156" fill="#67d9a0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">MIT</text>
+<text x="190" y="156" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">保留版权声明和许可证文本就能用</text>
+<circle cx="58" cy="194" r="4.5" fill="#67d9a0"/>
+<text x="76" y="198" fill="#67d9a0" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">BSD</text>
+<text x="190" y="198" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">和 MIT 差不多，另加"不许拿作者名字背书"</text>
+<circle cx="58" cy="236" r="4.5" fill="#67b5ef"/>
+<text x="76" y="240" fill="#67b5ef" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">Apache-2.0</text>
+<text x="190" y="240" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">多留一个 NOTICE 文件，并明示专利授权</text>
+<circle cx="58" cy="278" r="4.5" fill="#b58ae8"/>
+<text x="76" y="282" fill="#b58ae8" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">MPL-2.0</text>
+<text x="190" y="282" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只传染你改动过的那几个文件，其余可闭源</text>
+<circle cx="58" cy="320" r="4.5" fill="#e8965a"/>
+<text x="76" y="324" fill="#e8965a" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">GPL-3.0</text>
+<text x="190" y="324" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">分发时整个作品都要按 GPL 开源</text>
+<circle cx="58" cy="362" r="4.5" fill="#e87a8a"/>
+<text x="76" y="366" fill="#e87a8a" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">AGPL-3.0</text>
+<text x="190" y="366" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">连只做在线服务、不发布程序，也照样触发</text>
+<line x1="40" y1="400" x2="640" y2="400" stroke="#3a3a52" stroke-width="1"/>
+<text x="340" y="426" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">MIT 和 BSD 几乎不设限；越往下，开源义务越重，GPL 最重。</text>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">闭源项目引入不同许可证的库，后果差多少</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一个"我的商业软件"，四条路四种结局</text>
+<rect x="40" y="112" width="600" height="64" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="40" y="112" width="5" height="64" rx="2" fill="#67d9a0" stroke="none" stroke-width="0"/>
+<text x="62" y="138" fill="#67d9a0" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">引入 MIT 库</text>
+<text x="62" y="160" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">什么事都没有，留个声明文件即可</text>
+<rect x="40" y="190" width="600" height="64" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="40" y="190" width="5" height="64" rx="2" fill="#67b5ef" stroke="none" stroke-width="0"/>
+<text x="62" y="216" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">引入 MPL-2.0 库</text>
+<text x="62" y="238" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只需开源你改动过的那几个文件</text>
+<rect x="40" y="268" width="600" height="64" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="40" y="268" width="5" height="64" rx="2" fill="#e8965a" stroke="none" stroke-width="0"/>
+<text x="62" y="294" fill="#e8965a" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">引入 GPL 库</text>
+<text x="62" y="316" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">整个项目必须按 GPL 开源——商业授权谈崩就得重写</text>
+<rect x="40" y="346" width="600" height="64" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="40" y="346" width="5" height="64" rx="2" fill="#e87a8a" stroke="none" stroke-width="0"/>
+<text x="62" y="372" fill="#e87a8a" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">引入 AGPL 库</text>
+<text x="62" y="394" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">连"只提供在线服务、不分发"也触发开源义务</text>
+<text x="340" y="432" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">"传染"的正名是 copyleft：你享受了别人的自由，就要还回去同样的自由。</text>
+<text x="340" y="454" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">给公司写代码前，先看依赖树里有没有橙色和红色。</text>
+</svg>

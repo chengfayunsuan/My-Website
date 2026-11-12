@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="486" viewBox="0 0 680 486" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="486" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">三个最常见的许可证，各要你做什么</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">MIT 最省事，Apache-2.0 多了专利条款，GPL 要你交出源码</text>
+<rect x="36" y="84" width="194" height="352" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="36" y="84" width="194" height="36" rx="6" fill="#67d9a02a" stroke="none" stroke-width="0"/>
+<text x="133" y="107" fill="#67d9a0" font-size="13.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">MIT</text>
+<text x="52" y="140" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你要做的</text>
+<text x="52" y="160" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">留版权声明</text>
+<text x="52" y="178" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">和许可证文本</text>
+<text x="52" y="214" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你不能做的</text>
+<text x="52" y="234" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">拿作者名字</text>
+<text x="52" y="252" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">做宣传背书</text>
+<text x="52" y="288" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能闭源商用吗</text>
+<text x="52" y="308" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能。改完不公开</text>
+<text x="52" y="326" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">也没人管</text>
+<text x="52" y="362" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一个坑</text>
+<text x="52" y="382" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有明示专利授权</text>
+<text x="52" y="400" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">遇专利主张没保护</text>
+<rect x="242" y="84" width="194" height="352" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="242" y="84" width="194" height="36" rx="6" fill="#67b5ef2a" stroke="none" stroke-width="0"/>
+<text x="339" y="107" fill="#67b5ef" font-size="13.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">Apache-2.0</text>
+<text x="258" y="140" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你要做的</text>
+<text x="258" y="160" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">留声明与 NOTICE</text>
+<text x="258" y="178" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">并标注改动</text>
+<text x="258" y="214" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你不能做的</text>
+<text x="258" y="234" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">用作者商标</text>
+<text x="258" y="252" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">推广你的产品</text>
+<text x="258" y="288" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能闭源商用吗</text>
+<text x="258" y="308" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能。义务比</text>
+<text x="258" y="326" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">MIT 略多一点</text>
+<text x="258" y="362" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一个坑</text>
+<text x="258" y="382" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你先起诉专利侵权</text>
+<text x="258" y="400" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">授权自动终止</text>
+<rect x="448" y="84" width="194" height="352" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="448" y="84" width="194" height="36" rx="6" fill="#e8965a2a" stroke="none" stroke-width="0"/>
+<text x="545" y="107" fill="#e8965a" font-size="13.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">GPL-3.0</text>
+<text x="464" y="140" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你要做的</text>
+<text x="464" y="160" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">分发时整个作品</text>
+<text x="464" y="178" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">都按 GPL 开源</text>
+<text x="464" y="214" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你不能做的</text>
+<text x="464" y="234" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">把衍生品改成</text>
+<text x="464" y="252" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">闭源来卖</text>
+<text x="464" y="288" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能闭源商用吗</text>
+<text x="464" y="308" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不能。除非你</text>
+<text x="464" y="326" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">从不对外分发</text>
+<text x="464" y="362" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一个坑</text>
+<text x="464" y="382" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">链接 GPL 库</text>
+<text x="464" y="400" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">也可能被认定传染</text>
+<text x="340" y="464" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">选许可证不是选哪个好听，是选愿意接受哪套义务。</text>
+</svg>
