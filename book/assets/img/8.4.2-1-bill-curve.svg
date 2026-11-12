@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="392" viewBox="0 0 680 392" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="392" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">同一个网站，两种计费方式，一夜之间的差别</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">累计账单（元）· 横轴为小时 · 某站点真实量级的复盘</text>
+<line x1="90" y1="100" x2="90" y2="310" stroke="#4a4a62" stroke-width="1.5"/>
+<line x1="90" y1="310" x2="620" y2="310" stroke="#4a4a62" stroke-width="1.5"/>
+<line x1="84" y1="310.0" x2="90" y2="310.0" stroke="#3a3a52" stroke-width="1"/>
+<text x="78" y="314.0" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0</text>
+<line x1="84" y1="257.5" x2="90" y2="257.5" stroke="#3a3a52" stroke-width="1"/>
+<text x="78" y="261.5" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2000</text>
+<line x1="84" y1="205.0" x2="90" y2="205.0" stroke="#3a3a52" stroke-width="1"/>
+<text x="78" y="209.0" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">4000</text>
+<line x1="84" y1="152.5" x2="90" y2="152.5" stroke="#3a3a52" stroke-width="1"/>
+<text x="78" y="156.5" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">6000</text>
+<line x1="84" y1="100.0" x2="90" y2="100.0" stroke="#3a3a52" stroke-width="1"/>
+<text x="78" y="104.0" fill="#a0a0b8" font-size="9.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">8000</text>
+<text x="90.0" y="328" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0:00</text>
+<text x="222.5" y="328" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">6:00</text>
+<text x="355.0" y="328" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">12:00</text>
+<text x="487.5" y="328" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">18:00</text>
+<text x="620.0" y="328" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">24:00</text>
+<path d="M 90.0,310.0 L 112.1,310.0 L 134.2,309.9 L 156.2,302.1 L 178.3,278.5 L 200.4,241.8 L 222.5,202.4 L 244.6,168.2 L 266.7,142.0 L 288.8,136.8 L 620.0,136.8 L 620.0,310 L 90.0,310 Z" fill="#e87a8a22" stroke="none"/>
+<path d="M 90.0,310.0 L 112.1,310.0 L 134.2,309.9 L 156.2,302.1 L 178.3,278.5 L 200.4,241.8 L 222.5,202.4 L 244.6,168.2 L 266.7,142.0 L 288.8,136.8 L 620.0,136.8" fill="none" stroke="#e87a8a" stroke-width="2.4"/>
+<line x1="90" y1="306" x2="620" y2="306" stroke="#67d9a0" stroke-width="2.5" stroke-dasharray="8 5"/>
+<line x1="134.16666666666666" y1="310" x2="134.16666666666666" y2="284" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="142.16666666666666" y="278" fill="#e8b84b" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">2:00</text>
+<text x="110" y="132" fill="#e8b84b" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">▲ 凌晨 2:00 起请求量异常</text>
+<text x="294.75" y="126.75" fill="#e87a8a" font-size="14" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">¥6,600</text>
+<line x1="288.75" y1="136.75" x2="288.75" y2="310" stroke="#5a3a44" stroke-width="1" stroke-dasharray="3 4"/>
+<text x="40" y="356" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">● 固定带宽：整月封顶 100 元。红线是同一时段的累计账单。</text>
+<text x="40" y="376" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">9 点发现并关停。按这个速率跑满一天，是一万九。</text>
+</svg>

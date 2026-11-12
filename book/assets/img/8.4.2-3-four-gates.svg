@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">四道闸：从物理上限到自动停服</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">从上往下依次收窄，任何一道漏了都还有下一道</text>
+<rect x="40" y="90" width="600" height="72" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<rect x="40" y="90" width="5" height="72" rx="2" fill="#67d9a0" stroke="none" stroke-width="0"/>
+<circle cx="78" cy="126" r="17" fill="#67d9a026" stroke="#67d9a0" stroke-width="1.4"/>
+<text x="78" y="131" fill="#67d9a0" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">1</text>
+<text x="110" y="120" fill="#c8c8dc" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">带宽封顶</text>
+<text x="330" y="120" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">把爆炸半径锁死</text>
+<text x="110" y="142" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">固定 5M 带宽，一个月最多 1.6 TB，账单封顶 100 元。</text>
+<text x="622" y="131" fill="#67d9a0" font-size="10.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">物理上限</text>
+<line x1="78" y1="162" x2="78" y2="184" stroke="#3a3a52" stroke-width="1.4" stroke-dasharray="3 4"/>
+<rect x="40" y="184" width="600" height="72" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<rect x="40" y="184" width="5" height="72" rx="2" fill="#67b5ef" stroke="none" stroke-width="0"/>
+<circle cx="78" cy="220" r="17" fill="#67b5ef26" stroke="#67b5ef" stroke-width="1.4"/>
+<text x="78" y="225" fill="#67b5ef" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">2</text>
+<text x="110" y="214" fill="#c8c8dc" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">CC 防护 / WAF</text>
+<text x="330" y="214" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">拦住异常请求</text>
+<text x="110" y="236" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一 IP 每秒几十次、无 Referer、UA 为空，直接拒绝。</text>
+<text x="622" y="225" fill="#67b5ef" font-size="10.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">入口过滤</text>
+<line x1="78" y1="256" x2="78" y2="278" stroke="#3a3a52" stroke-width="1.4" stroke-dasharray="3 4"/>
+<rect x="40" y="278" width="600" height="72" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<rect x="40" y="278" width="5" height="72" rx="2" fill="#e8b84b" stroke="none" stroke-width="0"/>
+<circle cx="78" cy="314" r="17" fill="#e8b84b26" stroke="#e8b84b" stroke-width="1.4"/>
+<text x="78" y="319" fill="#e8b84b" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">3</text>
+<text x="110" y="308" fill="#c8c8dc" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">防盗链 / 签名 URL</text>
+<text x="330" y="308" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">让链接不能被白嫖</text>
+<text x="110" y="330" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Referer 校验 + 带过期时间的签名，复制出去的链接几小时就废。</text>
+<text x="622" y="319" fill="#e8b84b" font-size="10.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">资源授权</text>
+<line x1="78" y1="350" x2="78" y2="372" stroke="#3a3a52" stroke-width="1.4" stroke-dasharray="3 4"/>
+<rect x="40" y="372" width="600" height="72" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<rect x="40" y="372" width="5" height="72" rx="2" fill="#e87a8a" stroke="none" stroke-width="0"/>
+<circle cx="78" cy="408" r="17" fill="#e87a8a26" stroke="#e87a8a" stroke-width="1.4"/>
+<text x="78" y="413" fill="#e87a8a" font-size="14" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">4</text>
+<text x="110" y="402" fill="#c8c8dc" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">预算告警 + 自动停服</text>
+<text x="330" y="402" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">最后一道兜底</text>
+<text x="110" y="424" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">日消费超阈值就短信告警，超两倍自动切到"仅白名单可访问"。</text>
+<text x="622" y="413" fill="#e87a8a" font-size="10.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">兜底</text>
+<text x="40" y="462" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">顺序不能反：先有上限，再谈拦截；先有告警，再谈优化。</text>
+</svg>
