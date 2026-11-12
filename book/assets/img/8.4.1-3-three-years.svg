@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="450" viewBox="0 0 680 450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">广告写"99 元/年"，三年账单是 ¥1,095</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一台 2 核 2G 轻量服务器，另加一个 .com 域名 60 元 / 年</text>
+<line x1="110" y1="110" x2="110" y2="360" stroke="#4a4a62" stroke-width="1.5"/>
+<line x1="110" y1="360" x2="620" y2="360" stroke="#4a4a62" stroke-width="1.5"/>
+<line x1="104" y1="360.0" x2="124" y2="360.0" stroke="#3a3a52" stroke-width="1"/>
+<text x="96" y="364.0" fill="#a0a0b8" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0</text>
+<line x1="104" y1="268.0" x2="124" y2="268.0" stroke="#3a3a52" stroke-width="1"/>
+<text x="96" y="272.0" fill="#a0a0b8" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">200</text>
+<line x1="104" y1="176.0" x2="124" y2="176.0" stroke="#3a3a52" stroke-width="1"/>
+<text x="96" y="180.0" fill="#a0a0b8" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">400</text>
+<rect x="170" y="286.86" width="100" height="73.14" rx="0" fill="#67d9a033" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="220" y="272.86" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">¥159</text>
+<text x="220" y="384" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 1 年</text>
+<text x="220" y="402" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">促销价</text>
+<rect x="310" y="144.72" width="100" height="215.28" rx="0" fill="#e8965a33" stroke="#e8965a" stroke-width="1.5"/>
+<text x="360" y="130.72" fill="#e8965a" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">¥468</text>
+<text x="360" y="384" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 2 年</text>
+<text x="360" y="402" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">续费原价</text>
+<rect x="450" y="144.72" width="100" height="215.28" rx="0" fill="#e8965a33" stroke="#e8965a" stroke-width="1.5"/>
+<text x="500" y="130.72" fill="#e8965a" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">¥468</text>
+<text x="500" y="384" fill="#c8c8dc" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 3 年</text>
+<text x="500" y="402" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">续费原价</text>
+<line x1="110" y1="192.1" x2="620" y2="192.1" stroke="#e8b84b" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="132" y="210.1" fill="#e8b84b" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三年均价 365 元 / 年</text>
+<text x="40" y="435" fill="#c8c8dc" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三年合计 ¥1,095，摊到月是 30 元。可你第一年看到的广告数字是 99。</text>
+</svg>
