@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">把一个产品拆开，三种保护各盖一层</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">以「一款取名云记的笔记应用」为例</text>
+<rect x="40" y="100" width="600" height="86" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="40" y="100" width="5" height="86" rx="2" fill="#e8b84b" stroke="none" stroke-width="0"/>
+<text x="62" y="126" fill="#e8b84b" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">名字与 Logo</text>
+<text x="62" y="150" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">「云记」两个字 + 图形标</text>
+<text x="62" y="172" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没注册：别人做个「云记」上架同款应用，你只能干看着</text>
+<text x="622" y="126" fill="#e8b84b" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">商标</text>
+<text x="622" y="148" fill="#a0a0b8" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 9、42 类</text>
+<rect x="40" y="200" width="600" height="86" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="40" y="200" width="5" height="86" rx="2" fill="#67b5ef" stroke="none" stroke-width="0"/>
+<text x="62" y="226" fill="#67b5ef" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">代码与界面</text>
+<text x="62" y="250" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">源代码、README、图标、截图</text>
+<text x="62" y="272" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">别人抄了你的代码，直接可诉；不需要任何登记</text>
+<text x="622" y="226" fill="#67b5ef" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">著作权</text>
+<text x="622" y="248" fill="#a0a0b8" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">自动取得</text>
+<rect x="40" y="300" width="600" height="86" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="40" y="300" width="5" height="86" rx="2" fill="#67d9a0" stroke="none" stroke-width="0"/>
+<text x="62" y="326" fill="#67d9a0" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">核心技术</text>
+<text x="62" y="350" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">秒级全文检索算法</text>
+<text x="62" y="372" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">申请专利要公开原理；不申请就要靠保密协议守住</text>
+<text x="622" y="326" fill="#67d9a0" font-size="11.5" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">专利 或 商业秘密</text>
+<text x="622" y="348" fill="#a0a0b8" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif"></text>
+<text x="340" y="440" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">名字被抢注、代码被抄袭、点子被公开——三种风险，各有各的盾。</text>
+<text x="340" y="462" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">最贵的一次性成本是商标；最容易忘的是把它注册在应用所属的类别上。</text>
+</svg>
