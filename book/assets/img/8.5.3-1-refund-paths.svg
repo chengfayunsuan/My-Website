@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="420" viewBox="0 0 680 420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="420" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">退款只有一条正路</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">退回去的方式，决定这笔账还能不能对上</text>
+<rect x="30" y="92" width="196" height="268" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<rect x="30" y="92" width="196" height="32" rx="6" fill="#67d9a026" stroke="none" stroke-width="0"/>
+<text x="46" y="114" fill="#67d9a0" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">原路退回</text>
+<text x="46" y="146" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">做法</text>
+<text x="46" y="164" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">通道退回原卡 / 原账户</text>
+<text x="46" y="214" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">账务</text>
+<text x="46" y="232" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">订单转"已退款"，收入冲减</text>
+<text x="46" y="282" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价</text>
+<text x="46" y="300" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">手续费不退，</text>
+<text x="46" y="316" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">钱要等 1~7 天</text>
+<rect x="242" y="92" width="196" height="268" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<rect x="242" y="92" width="196" height="32" rx="6" fill="#e8965a26" stroke="none" stroke-width="0"/>
+<text x="258" y="114" fill="#e8965a" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">手工转账</text>
+<text x="258" y="146" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">做法</text>
+<text x="258" y="164" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">从对公户转给客户</text>
+<text x="258" y="214" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">账务</text>
+<text x="258" y="232" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收入还挂在账上，要红字冲销</text>
+<text x="258" y="282" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价</text>
+<text x="258" y="300" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没凭证，</text>
+<text x="258" y="316" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">说不清是退款还是走账</text>
+<rect x="454" y="92" width="196" height="268" rx="6" fill="#16161f" stroke="#3a3a52" stroke-width="1.5"/>
+<rect x="454" y="92" width="196" height="32" rx="6" fill="#67b5ef26" stroke="none" stroke-width="0"/>
+<text x="470" y="114" fill="#67b5ef" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">退成余额</text>
+<text x="470" y="146" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">做法</text>
+<text x="470" y="164" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">记在站内账户，下次消费抵扣</text>
+<text x="470" y="214" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">账务</text>
+<text x="470" y="232" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不算退款，算预收款（负债）</text>
+<text x="470" y="282" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代价</text>
+<text x="470" y="300" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">公司没了，这笔钱就是债</text>
+<text x="30" y="392" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">手工退的那笔钱，在账上既不是收入减少，也不是成本——它是一个没有名目的洞。</text>
+</svg>

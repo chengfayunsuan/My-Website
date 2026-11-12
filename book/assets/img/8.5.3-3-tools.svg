@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">一个人做账，三档工具够用了</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">订单量决定工具，不是反过来</text>
+<rect x="36" y="250" width="180" height="70" rx="4" fill="#8a8aa02e" stroke="#8a8aa0" stroke-width="1.5"/>
+<text x="126" y="276" fill="#8a8aa0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">Excel + 代账</text>
+<text x="126" y="298" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">0 元 + 300 元 / 月</text>
+<text x="126" y="346" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">三张表手工对</text>
+<text x="126" y="364" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每月寄票据</text>
+<text x="126" y="390" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">&lt; 100 单 / 月</text>
+<rect x="246" y="170" width="180" height="150" rx="4" fill="#67b5ef2e" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="336" y="196" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">财务软件</text>
+<text x="336" y="218" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1000~2000 元 / 年</text>
+<text x="336" y="346" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行流水自动导入</text>
+<text x="336" y="364" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">发票一键开</text>
+<text x="336" y="390" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">100~1000 单 / 月</text>
+<rect x="456" y="90" width="180" height="230" rx="4" fill="#67d9a02e" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="546" y="116" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">ERP / 业财一体</text>
+<text x="546" y="138" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">几千~几万元 / 年</text>
+<text x="546" y="346" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">订单库存财务打通</text>
+<text x="546" y="364" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">多人协作、分仓</text>
+<text x="546" y="390" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">&gt; 1000 单 / 月</text>
+<line x1="28" y1="320" x2="652" y2="320" stroke="#4a4a62" stroke-width="1.5"/>
+<text x="28" y="420" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">工具解决的是"记得住"，不是"想得清"。三张表对不上，换十套软件也对不上。</text>
+<text x="28" y="444" fill="#a0a0b8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">先用 Excel 把三张表跑通三个月，再决定要不要买软件——那时你才知道自己要什么。</text>
+</svg>
