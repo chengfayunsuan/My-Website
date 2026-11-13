@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">每一级由哪些组件组成</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">组件数量就是门槛的量化：3 个、6 个、3 个</text>
+<rect x="30" y="86" width="196" height="310" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="30" y="86" width="196" height="34" rx="6" fill="#67d9a026" stroke="none" stroke-width="0"/>
+<text x="128" y="108" fill="#67d9a0" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">用服务</text>
+<circle cx="52" cy="133" r="3.5" fill="#67d9a0"/>
+<text x="64" y="136" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">支付工具</text>
+<text x="64" y="151" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能付外币的卡或账户</text>
+<circle cx="52" cy="175" r="3.5" fill="#67d9a0"/>
+<text x="64" y="178" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">邮箱</text>
+<text x="64" y="193" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能收验证码、能找回</text>
+<circle cx="52" cy="217" r="3.5" fill="#67d9a0"/>
+<text x="64" y="220" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">网络环境</text>
+<text x="64" y="235" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能稳定访问的出口</text>
+<rect x="242" y="86" width="196" height="310" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="242" y="86" width="196" height="34" rx="6" fill="#67b5ef26" stroke="none" stroke-width="0"/>
+<text x="340" y="108" fill="#67b5ef" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">收钱</text>
+<circle cx="264" cy="133" r="3.5" fill="#67b5ef"/>
+<text x="276" y="136" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">主体</text>
+<text x="276" y="151" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">个人 / LLC / 其他</text>
+<circle cx="264" cy="175" r="3.5" fill="#67b5ef"/>
+<text x="276" y="178" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">地址</text>
+<text x="276" y="193" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能收信的街道地址</text>
+<circle cx="264" cy="217" r="3.5" fill="#67b5ef"/>
+<text x="276" y="220" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">电话</text>
+<text x="276" y="235" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能收短信的号</text>
+<circle cx="264" cy="259" r="3.5" fill="#67b5ef"/>
+<text x="276" y="262" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">银行账户</text>
+<text x="276" y="277" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能收美元</text>
+<circle cx="264" cy="301" r="3.5" fill="#67b5ef"/>
+<text x="276" y="304" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">收款通道</text>
+<text x="276" y="319" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">Stripe / PayPal / MoR</text>
+<circle cx="264" cy="343" r="3.5" fill="#67b5ef"/>
+<text x="276" y="346" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">网站</text>
+<text x="276" y="361" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能说明你卖什么</text>
+<rect x="454" y="86" width="196" height="310" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="454" y="86" width="196" height="34" rx="6" fill="#b58ae826" stroke="none" stroke-width="0"/>
+<text x="552" y="108" fill="#b58ae8" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">持有资产</text>
+<circle cx="476" cy="133" r="3.5" fill="#b58ae8"/>
+<text x="488" y="136" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">税务身份</text>
+<text x="488" y="151" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">W-8BEN / ITIN</text>
+<circle cx="476" cy="175" r="3.5" fill="#b58ae8"/>
+<text x="488" y="178" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">券商账户</text>
+<text x="488" y="193" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能买美股或基金</text>
+<circle cx="476" cy="217" r="3.5" fill="#b58ae8"/>
+<text x="488" y="220" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">资金来源</text>
+<text x="488" y="235" fill="#a0a0b8" font-size="8.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能解释钱从哪来</text>
+<text x="340" y="422" fill="#e8b84b" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第二级六个组件里有四个要别人审核：地址、电话、银行、通道。</text>
+<text x="340" y="446" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">审核方各自独立，任何一环没过，整条链就停在那里。</text>
+</svg>
