@@ -1,0 +1,30 @@
+name = "r2-guard"
+main = "r2-guard.js"
+compatibility_date = "2026-11-13"
+workers_dev = false
+
+# KV：存用量与档位。名称随便起，id 在 Cloudflare 创建后填
+[[kv_namespaces]]
+binding = "QUOTA"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+# R2 桶绑定：读文件走这里（不产生 S3 的 GetObject 计费口径以外的额外费用）
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "REPLACE_WITH_BUCKET_NAME"
+
+# 每小时同步一次真实用量
+[triggers]
+crons = ["0 * * * *"]
+
+[vars]
+ALLOW_ORIGIN = "https://chengfa-761.pages.dev"
+MAX_UPLOAD_MB = "200"
+LIMIT_STORAGE_GB = "10"
+LIMIT_OPS_A = "100"
+LIMIT_OPS_B = "1000"
+
+# 下面这些用 wrangler secret put 设置，不要写进本文件：
+#   R2_ACCOUNT_ID / R2_BUCKET / R2_ACCESS_KEY_ID / R2_SECRET_KEY
+#   CF_API_TOKEN / PUBLIC_BASE
+#   UPLOAD_KEY（或 SUPABASE_URL + SUPABASE_ANON_KEY 二选一）
