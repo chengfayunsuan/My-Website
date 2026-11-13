@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="480" viewBox="0 0 680 480" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="480" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">内容红线分四层，越往上越不能碰</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一句话，在不同的产品形态里，后果可能差一个量级</text>
+<rect x="30" y="92" width="620" height="84" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="30" y="92" width="5" height="84" rx="2" fill="#e87a8a" stroke="none" stroke-width="0"/>
+<text x="52" y="116" fill="#e87a8a" font-size="9.5" text-anchor="start" font-family="monospace">第一层</text>
+<text x="52" y="136" fill="#e87a8a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">法律绝对禁止，无例外</text>
+<text x="250" y="116" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 危害国家安全、泄露秘密</text>
+<text x="250" y="136" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 淫秽色情、赌博、暴力</text>
+<text x="250" y="156" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 谣言、侮辱诽谤、侵害他人权益</text>
+<rect x="30" y="184" width="620" height="84" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="30" y="184" width="5" height="84" rx="2" fill="#e8965a" stroke="none" stroke-width="0"/>
+<text x="52" y="208" fill="#e8965a" font-size="9.5" text-anchor="start" font-family="monospace">第二层</text>
+<text x="52" y="228" fill="#e8965a" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">要资质，没证不能做</text>
+<text x="250" y="208" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 新闻采编与转载</text>
+<text x="250" y="228" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 视听节目、网络出版</text>
+<text x="250" y="248" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 网络文化经营</text>
+<rect x="30" y="276" width="620" height="84" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="30" y="276" width="5" height="84" rx="2" fill="#e8b84b" stroke="none" stroke-width="0"/>
+<text x="52" y="300" fill="#e8b84b" font-size="9.5" text-anchor="start" font-family="monospace">第三层</text>
+<text x="52" y="320" fill="#e8b84b" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">高风险领域，要专业把关</text>
+<text x="250" y="300" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 医疗健康、用药建议</text>
+<text x="250" y="320" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 金融投资、荐股</text>
+<text x="250" y="340" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 教育培训、法律咨询</text>
+<rect x="30" y="368" width="620" height="84" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="30" y="368" width="5" height="84" rx="2" fill="#67b5ef" stroke="none" stroke-width="0"/>
+<text x="52" y="392" fill="#67b5ef" font-size="9.5" text-anchor="start" font-family="monospace">第四层</text>
+<text x="52" y="412" fill="#67b5ef" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">你自己要管的</text>
+<text x="250" y="392" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 垃圾广告、诈骗引流</text>
+<text x="250" y="412" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 侵权、抄袭</text>
+<text x="250" y="432" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 未成年人不当内容</text>
+<text x="340" y="462" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第一层是"发了就违法"，第二层是"没证就不能发"，两层都不是靠审核技巧能解决的。</text>
+</svg>

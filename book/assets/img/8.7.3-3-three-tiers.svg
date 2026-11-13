@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">一个人做站，按产品形态选一档就够</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不要一上来就搭审核后台，先看自己有没有用户内容</text>
+<rect x="26" y="90" width="196" height="250" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="26" y="90" width="196" height="34" rx="6" fill="#67b5ef28" stroke="none" stroke-width="0"/>
+<text x="124" y="112" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">纯静态</text>
+<text x="42" y="142" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 没有用户发布</text>
+<text x="42" y="162" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 只有你自己写的内容</text>
+<text x="42" y="182" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 不设评论、不设投稿</text>
+<line x1="42" y1="212" x2="206" y2="212" stroke="#2e2e44" stroke-width="1"/>
+<text x="42" y="234" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 审核成本：0</text>
+<text x="42" y="254" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 风险：你自己别写错</text>
+<text x="42" y="274" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 结论：不需要审核系统</text>
+<rect x="238" y="90" width="196" height="250" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="238" y="90" width="196" height="34" rx="6" fill="#e8b84b28" stroke="none" stroke-width="0"/>
+<text x="336" y="112" fill="#e8b84b" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">有评论</text>
+<text x="254" y="142" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 文章下能留言</text>
+<text x="254" y="162" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 用户能互相互动</text>
+<text x="254" y="182" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 量不大但会出事</text>
+<line x1="254" y1="212" x2="418" y2="212" stroke="#2e2e44" stroke-width="1"/>
+<text x="254" y="234" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 先发后审 + 关键词</text>
+<text x="254" y="254" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 举报入口放显眼处</text>
+<text x="254" y="274" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 24 小时内处置</text>
+<rect x="450" y="90" width="196" height="250" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="450" y="90" width="196" height="34" rx="6" fill="#e87a8a28" stroke="none" stroke-width="0"/>
+<text x="548" y="112" fill="#e87a8a" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">开放发布</text>
+<text x="466" y="142" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 论坛、投稿、私信</text>
+<text x="466" y="162" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 用户能发长内容</text>
+<text x="466" y="182" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 能形成传播</text>
+<line x1="466" y1="212" x2="630" y2="212" stroke="#2e2e44" stroke-width="1"/>
+<text x="466" y="234" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 先审后发 + 人审</text>
+<text x="466" y="254" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 分级分类、留日志</text>
+<text x="466" y="274" fill="#c8c8dc" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 做安全评估并公示</text>
+<text x="340" y="368" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">评论和投稿不是"加个输入框"，是"接下一份持续的义务"。</text>
+<rect x="26" y="392" width="624" height="62" rx="5" fill="#16161f" stroke="#3a3a52" stroke-width="1.2"/>
+<rect x="26" y="392" width="4" height="62" rx="2" fill="#67d9a0" stroke="none" stroke-width="0"/>
+<text x="46" y="414" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">最省事的合规不是"把审核做好"，是"不开放用户发布"。</text>
+<text x="46" y="436" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">作品集、文档站、工具站，本来就不需要评论区。少一个功能，少一整套义务。</text>
+</svg>

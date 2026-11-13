@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="450" viewBox="0 0 680 450" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="450" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">一条内容从提交到处置，要过六道</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">每一道都有它的作用，也都有它可以被绕过的地方</text>
+<rect x="26" y="96" width="96" height="146" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="26" y="96" width="96" height="30" rx="6" fill="#67b5ef28" stroke="none" stroke-width="0"/>
+<text x="74" y="116" fill="#67b5ef" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">提交</text>
+<text x="74" y="144" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">用户发布</text>
+<text x="74" y="164" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">或评论</text>
+<text x="74" y="184" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一条新内容</text>
+<text x="128" y="172" fill="#5a5a72" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">›</text>
+<rect x="134" y="96" width="96" height="146" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="134" y="96" width="96" height="30" rx="6" fill="#67d9a028" stroke="none" stroke-width="0"/>
+<text x="182" y="116" fill="#67d9a0" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">机审</text>
+<text x="182" y="144" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">关键词命中</text>
+<text x="182" y="164" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">模型识别</text>
+<text x="182" y="184" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">毫秒级</text>
+<text x="236" y="172" fill="#5a5a72" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">›</text>
+<rect x="242" y="96" width="96" height="146" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="242" y="96" width="96" height="30" rx="6" fill="#e8b84b28" stroke="none" stroke-width="0"/>
+<text x="290" y="116" fill="#e8b84b" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">人审</text>
+<text x="290" y="144" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">命中项复核</text>
+<text x="290" y="164" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">高风险抽检</text>
+<text x="290" y="184" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">分钟级</text>
+<text x="344" y="172" fill="#5a5a72" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">›</text>
+<rect x="350" y="96" width="96" height="146" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="350" y="96" width="96" height="30" rx="6" fill="#b58ae828" stroke="none" stroke-width="0"/>
+<text x="398" y="116" fill="#b58ae8" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">发布</text>
+<text x="398" y="144" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">通过即上线</text>
+<text x="398" y="164" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">带作者与时间</text>
+<text x="398" y="184" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">对外可见</text>
+<text x="452" y="172" fill="#5a5a72" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">›</text>
+<rect x="458" y="96" width="96" height="146" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="458" y="96" width="96" height="30" rx="6" fill="#e8965a28" stroke="none" stroke-width="0"/>
+<text x="506" y="116" fill="#e8965a" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">巡查</text>
+<text x="506" y="144" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">举报入口</text>
+<text x="506" y="164" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">日常抽检</text>
+<text x="506" y="184" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">小时级</text>
+<text x="560" y="172" fill="#5a5a72" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">›</text>
+<rect x="566" y="96" width="96" height="146" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="566" y="96" width="96" height="30" rx="6" fill="#e87a8a28" stroke="none" stroke-width="0"/>
+<text x="614" y="116" fill="#e87a8a" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">处置</text>
+<text x="614" y="144" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">删除/禁言</text>
+<text x="614" y="164" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">封号/移交</text>
+<text x="614" y="184" fill="#c8c8dc" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">留痕</text>
+<line x1="26" y1="266" x2="654" y2="266" stroke="#3a3a52" stroke-width="1"/>
+<text x="340" y="292" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">机审负责"快"，人审负责"准"，巡查负责"漏网的"。</text>
+<text x="340" y="316" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">只做机审会误杀，只做人审会累死，只做巡查等于放养。</text>
+<rect x="26" y="340" width="196" height="86" rx="5" fill="#16161f" stroke="#3a3a52" stroke-width="1.2"/>
+<rect x="26" y="340" width="4" height="86" rx="2" fill="#67d9a0" stroke="none" stroke-width="0"/>
+<text x="42" y="364" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">通知—删除</text>
+<text x="42" y="386" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">接到侵权通知</text>
+<text x="42" y="403" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">要立即处理</text>
+<text x="42" y="420" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">否则扩大部分要担责</text>
+<rect x="238" y="340" width="196" height="86" rx="5" fill="#16161f" stroke="#3a3a52" stroke-width="1.2"/>
+<rect x="238" y="340" width="4" height="86" rx="2" fill="#e8965a" stroke="none" stroke-width="0"/>
+<text x="254" y="364" fill="#e8965a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">处置阶梯</text>
+<text x="254" y="386" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">删除 → 警告</text>
+<text x="254" y="403" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">禁言 → 封号</text>
+<text x="254" y="420" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">移交司法机关</text>
+<rect x="450" y="340" width="196" height="86" rx="5" fill="#16161f" stroke="#3a3a52" stroke-width="1.2"/>
+<rect x="450" y="340" width="4" height="86" rx="2" fill="#b58ae8" stroke="none" stroke-width="0"/>
+<text x="466" y="364" fill="#b58ae8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">留痕</text>
+<text x="466" y="386" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">日志留存 6 个月</text>
+<text x="466" y="403" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">处置记录可追溯</text>
+<text x="466" y="420" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">申诉要有入口</text>
+</svg>
