@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="440" viewBox="0 0 680 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">十二个组件背后，只有五道墙</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">墙的高度按"影响多少个组件"排</text>
+<rect x="30" y="66" width="116" height="274" rx="6" fill="#67b5ef1e" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="88.0" y="92" fill="#67b5ef" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">身份</text>
+<text x="88.0" y="116" fill="#c8c8dc" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你是谁</text>
+<text x="88.0" y="316" fill="#67b5ef" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">6 个组件</text>
+<text x="88.0" y="362" fill="#a0a0b8" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">护照与地址证明</text>
+<rect x="158" y="168" width="116" height="172" rx="6" fill="#67d9a01e" stroke="#67d9a0" stroke-width="1.5"/>
+<text x="216.0" y="194" fill="#67d9a0" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">环境</text>
+<text x="216.0" y="218" fill="#c8c8dc" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你在哪</text>
+<text x="216.0" y="316" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">3 个组件</text>
+<text x="216.0" y="362" fill="#a0a0b8" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">IP、时区、指纹</text>
+<rect x="286" y="100" width="116" height="240" rx="6" fill="#e8b84b1e" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="344.0" y="126" fill="#e8b84b" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">资金</text>
+<text x="344.0" y="150" fill="#c8c8dc" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">钱怎么走</text>
+<text x="344.0" y="316" fill="#e8b84b" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">5 个组件</text>
+<text x="344.0" y="362" fill="#a0a0b8" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收得进、回得来</text>
+<rect x="414" y="134" width="116" height="206" rx="6" fill="#e8965a1e" stroke="#e8965a" stroke-width="1.5"/>
+<text x="472.0" y="160" fill="#e8965a" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">合规</text>
+<text x="472.0" y="184" fill="#c8c8dc" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">能不能做</text>
+<text x="472.0" y="316" fill="#e8965a" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">4 个组件</text>
+<text x="472.0" y="362" fill="#a0a0b8" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">税务、申报、外汇</text>
+<rect x="542" y="100" width="116" height="240" rx="6" fill="#b58ae81e" stroke="#b58ae8" stroke-width="1.5"/>
+<text x="600.0" y="126" fill="#b58ae8" font-size="15" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">语言</text>
+<text x="600.0" y="150" fill="#c8c8dc" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">说得清吗</text>
+<text x="600.0" y="316" fill="#b58ae8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">5 个组件</text>
+<text x="600.0" y="362" fill="#a0a0b8" font-size="9" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">邮件、条款、申诉</text>
+<line x1="30" y1="340" x2="658" y2="340" stroke="#4a4a62" stroke-width="1.4"/>
+<text x="340" y="412" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">墙不是依次出现的：身份墙和语言墙从头到尾都在，环境墙只在注册和登录时出现。</text>
+</svg>

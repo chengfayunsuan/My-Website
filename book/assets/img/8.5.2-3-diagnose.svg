@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">卡住的时候，先判断是哪道墙</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">同一种"失败"，原因可能完全不同</text>
+<rect x="30" y="100" width="620" height="64" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="30" y="100" width="4" height="64" rx="2" fill="#67b5ef" stroke="none" stroke-width="0"/>
+<text x="50" y="126" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">账户申请被拒</text>
+<text x="210" y="126" fill="#67b5ef" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">身份墙</text>
+<text x="50" y="148" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">地址证明不合格 / 网站说不清业务</text>
+<text x="640" y="126" fill="#7a7a94" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 4 章 4.4 与 10.1</text>
+<rect x="30" y="170" width="620" height="64" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="30" y="170" width="4" height="64" rx="2" fill="#67d9a0" stroke="none" stroke-width="0"/>
+<text x="50" y="196" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">登录被要求验证</text>
+<text x="210" y="196" fill="#67d9a0" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">环境墙</text>
+<text x="50" y="218" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">IP 与注册地不一致 / 时区对不上</text>
+<text x="640" y="196" fill="#7a7a94" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 1 章 1.5 与 1.6</text>
+<rect x="30" y="240" width="620" height="64" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="30" y="240" width="4" height="64" rx="2" fill="#e8b84b" stroke="none" stroke-width="0"/>
+<text x="50" y="266" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">卡被拒付</text>
+<text x="210" y="266" fill="#e8b84b" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">资金墙</text>
+<text x="50" y="288" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">卡段被风控 / 账单地址错 / 3D 验证</text>
+<text x="640" y="266" fill="#7a7a94" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 1 章 1.7</text>
+<rect x="30" y="310" width="620" height="64" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="30" y="310" width="4" height="64" rx="2" fill="#e8965a" stroke="none" stroke-width="0"/>
+<text x="50" y="336" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">账户被冻结</text>
+<text x="210" y="336" fill="#e8965a" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">合规墙</text>
+<text x="50" y="358" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">来源不明 / 交易对手涉诈 / 申报缺失</text>
+<text x="640" y="336" fill="#7a7a94" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 7 章与第 10 章</text>
+<rect x="30" y="380" width="620" height="64" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="30" y="380" width="4" height="64" rx="2" fill="#b58ae8" stroke="none" stroke-width="0"/>
+<text x="50" y="406" fill="#c8c8dc" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">邮件没人回</text>
+<text x="210" y="406" fill="#b58ae8" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">语言墙</text>
+<text x="50" y="428" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">表述含糊 / 没给材料 / 找错部门</text>
+<text x="640" y="406" fill="#7a7a94" font-size="9" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 10 章 10.1</text>
+<text x="340" y="462" fill="#c8c8dc" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">先分类再查资料：把"失败"归到某道墙上，才知道该翻哪一节。</text>
+</svg>
