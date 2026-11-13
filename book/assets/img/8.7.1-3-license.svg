@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="460" viewBox="0 0 680 460" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="460" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">同样一个网站，收不收钱决定了要不要许可证</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">备案是登记，许可证是审批，两码事</text>
+<rect x="250" y="84" width="180" height="42" rx="6" fill="#16161f" stroke="#4a4a62" stroke-width="1.3"/>
+<text x="340" y="110" fill="#c8c8dc" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">你的网站收钱吗</text>
+<line x1="340" y1="126" x2="340" y2="146" stroke="#4a4a62" stroke-width="1.4"/>
+<line x1="180" y1="146" x2="500" y2="146" stroke="#4a4a62" stroke-width="1.4"/>
+<line x1="180" y1="146" x2="180" y2="164" stroke="#4a4a62" stroke-width="1.4"/>
+<line x1="500" y1="146" x2="500" y2="164" stroke="#4a4a62" stroke-width="1.4"/>
+<text x="180" y="138" fill="#67d9a0" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不收</text>
+<text x="500" y="138" fill="#e8965a" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收</text>
+<rect x="36" y="164" width="288" height="180" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="36" y="164" width="288" height="32" rx="6" fill="#67d9a026" stroke="none" stroke-width="0"/>
+<text x="180" y="185" fill="#67d9a0" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">非经营性 · ICP 备案</text>
+<text x="56" y="214" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 个人博客、作品集</text>
+<text x="56" y="240" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 企业官网、产品介绍</text>
+<text x="56" y="266" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 不直接在线收费</text>
+<text x="56" y="292" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 只要备案，免费</text>
+<text x="180" y="332" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">备案号形如：豫ICP备2026xxxxxx号</text>
+<rect x="356" y="164" width="288" height="180" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="356" y="164" width="288" height="32" rx="6" fill="#e8965a26" stroke="none" stroke-width="0"/>
+<text x="500" y="185" fill="#e8965a" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">经营性 · ICP 许可证</text>
+<text x="376" y="214" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 在线卖货、卖会员</text>
+<text x="376" y="240" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 平台抽成、付费内容</text>
+<text x="376" y="266" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 要办增值电信业务许可证</text>
+<text x="376" y="292" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 门槛：注册资本 100 万起</text>
+<text x="500" y="332" fill="#a0a0b8" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">证号形如：豫B2-2026xxxx</text>
+<rect x="36" y="356" width="608" height="88" rx="5" fill="#16161f" stroke="#3a3a52" stroke-width="1.2"/>
+<rect x="36" y="356" width="4" height="88" rx="2" fill="#e87a8a" stroke="none" stroke-width="0"/>
+<text x="56" y="380" fill="#e87a8a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">还有一类要前置审批：</text>
+<text x="56" y="404" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">新闻、出版、教育、医疗、药品与医疗器械、文化、广播电影电视节目——</text>
+<text x="56" y="426" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">先拿到主管部门的批文，管局才受理备案。没有批文，选了这些关键词也过不去。</text>
+</svg>

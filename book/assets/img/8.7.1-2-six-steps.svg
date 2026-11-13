@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">从买域名到拿到备案号，六步</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">全程在接入商（云厂商）的系统里走，不用自己跑管局</text>
+<rect x="26" y="92" width="98" height="168" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<circle cx="75" cy="116" r="13" fill="#67d9a033" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="75" y="121" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">1</text>
+<text x="75" y="150" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">域名实名</text>
+<text x="75" y="174" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">个人身份证或</text>
+<text x="75" y="194" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">企业营业执照</text>
+<text x="75" y="214" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1~3 天</text>
+<rect x="134" y="92" width="98" height="168" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<circle cx="183" cy="116" r="13" fill="#67d9a033" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="183" y="121" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">2</text>
+<text x="183" y="150" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">买境内服务器</text>
+<text x="183" y="174" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">境内接入商</text>
+<text x="183" y="194" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">香港/海外免备案</text>
+<text x="183" y="214" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">但也没有号</text>
+<rect x="242" y="92" width="98" height="168" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<circle cx="291" cy="116" r="13" fill="#67d9a033" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="291" y="121" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">3</text>
+<text x="291" y="150" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">接入商提交</text>
+<text x="291" y="174" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">证件 + 域名证书</text>
+<text x="291" y="194" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">人脸核验 + 承诺</text>
+<text x="291" y="214" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">当天可提交</text>
+<rect x="350" y="92" width="98" height="168" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<circle cx="399" cy="116" r="13" fill="#67d9a033" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="399" y="121" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">4</text>
+<text x="399" y="150" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">管局审核</text>
+<text x="399" y="174" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">1~20 个工作日</text>
+<text x="399" y="194" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">可能电话核验</text>
+<text x="399" y="214" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">别漏接</text>
+<rect x="458" y="92" width="98" height="168" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<circle cx="507" cy="116" r="13" fill="#67d9a033" stroke="#67d9a0" stroke-width="1.2"/>
+<text x="507" y="121" fill="#67d9a0" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">5</text>
+<text x="507" y="150" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">展示备案号</text>
+<text x="507" y="174" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">页脚放备案号</text>
+<text x="507" y="194" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">链到工信部</text>
+<text x="507" y="214" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">否则算未展示</text>
+<rect x="566" y="92" width="98" height="168" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<circle cx="615" cy="116" r="13" fill="#67b5ef33" stroke="#67b5ef" stroke-width="1.2"/>
+<text x="615" y="121" fill="#67b5ef" font-size="12" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">6</text>
+<text x="615" y="150" fill="#67b5ef" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">公安备案</text>
+<text x="615" y="174" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">上线起 30 日内</text>
+<text x="615" y="194" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">拿公安备案号</text>
+<text x="615" y="214" fill="#c8c8dc" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">也要展示</text>
+<line x1="26" y1="286" x2="654" y2="286" stroke="#3a3a52" stroke-width="1"/>
+<text x="340" y="312" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">前五步是 ICP 备案，第六步是另一套系统、另一个号。</text>
+<text x="340" y="336" fill="#a0a0b8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">很多人以为拿到备案号就完了，结果卡在公安备案。</text>
+<rect x="26" y="360" width="304" height="92" rx="5" fill="#16161f" stroke="#3a3a52" stroke-width="1.2"/>
+<rect x="26" y="360" width="4" height="92" rx="2" fill="#67d9a0" stroke="none" stroke-width="0"/>
+<text x="44" y="384" fill="#67d9a0" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">不用备案的情况</text>
+<text x="44" y="406" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">服务器在香港/海外</text>
+<text x="44" y="424" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">——但这本身有别的代价</text>
+<text x="44" y="442" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">访问慢、支付通道受限</text>
+<rect x="344" y="360" width="304" height="92" rx="5" fill="#16161f" stroke="#3a3a52" stroke-width="1.2"/>
+<rect x="344" y="360" width="4" height="92" rx="2" fill="#e8965a" stroke="none" stroke-width="0"/>
+<text x="362" y="384" fill="#e8965a" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">备案号会失效</text>
+<text x="362" y="406" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">换主体、换省、注销</text>
+<text x="362" y="424" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">都要重新走一遍</text>
+<text x="362" y="442" fill="#a0a0b8" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">域名过期也会掉</text>
+</svg>

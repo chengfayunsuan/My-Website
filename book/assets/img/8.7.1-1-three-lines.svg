@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="420" viewBox="0 0 680 420" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="420" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">三条合规线，卡在三个不同的时间点</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">备案在开门前，公安备案在开门后 30 天内，等保跟着系统等级走</text>
+<text x="128" y="96" fill="#67d9a0" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">上线前</text>
+<rect x="30" y="108" width="196" height="158" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="30" y="108" width="196" height="32" rx="6" fill="#67d9a028" stroke="none" stroke-width="0"/>
+<text x="128" y="130" fill="#67d9a0" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">ICP 备案</text>
+<text x="46" y="162" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 管局通过才能开通访问</text>
+<text x="46" y="186" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 备案号要放在页脚</text>
+<text x="46" y="210" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 并链接到工信部网站</text>
+<text x="340" y="96" fill="#67b5ef" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">上线后 30 日内</text>
+<rect x="242" y="108" width="196" height="158" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="242" y="108" width="196" height="32" rx="6" fill="#67b5ef28" stroke="none" stroke-width="0"/>
+<text x="340" y="130" fill="#67b5ef" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">公安备案</text>
+<text x="258" y="162" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 到全国互联网安全</text>
+<text x="258" y="186" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 管理服务平台登记</text>
+<text x="258" y="210" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 拿到公安备案号</text>
+<text x="552" y="96" fill="#b58ae8" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">运营中</text>
+<rect x="454" y="108" width="196" height="158" rx="6" fill="#14141e" stroke="#3a3a52" stroke-width="1.4"/>
+<rect x="454" y="108" width="196" height="32" rx="6" fill="#b58ae828" stroke="none" stroke-width="0"/>
+<text x="552" y="130" fill="#b58ae8" font-size="12.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">等保</text>
+<text x="470" y="162" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 二级以上要定级备案</text>
+<text x="470" y="186" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 二级约两年测评一次</text>
+<text x="470" y="210" fill="#c8c8dc" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">· 三级每年一次</text>
+<line x1="60" y1="300" x2="620" y2="300" stroke="#4a4a62" stroke-width="1.6"/>
+<circle cx="128" cy="300" r="5" fill="#67d9a0"/>
+<text x="128" y="324" fill="#a0a0b8" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">上线日</text>
+<circle cx="340" cy="300" r="5" fill="#67b5ef"/>
+<text x="340" y="324" fill="#a0a0b8" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">第 30 天</text>
+<circle cx="552" cy="300" r="5" fill="#b58ae8"/>
+<text x="552" y="324" fill="#a0a0b8" font-size="10" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">长期</text>
+<text x="340" y="362" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">备案是"能不能开门"，公安备案是"开门后登记"，等保是"门锁够不够结实"。</text>
+<text x="340" y="388" fill="#e8b84b" font-size="10.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">顺序错了不致命，漏做会卡在这三处。</text>
+</svg>
