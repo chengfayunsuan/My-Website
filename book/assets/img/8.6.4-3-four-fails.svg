@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="460" viewBox="0 0 680 460" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="460" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">照抄别人的隐私政策，会以四种方式翻车</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">模板写得再漂亮，和你的实际做法对不上就是证据</text>
+<rect x="40" y="94" width="600" height="72" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="40" y="94" width="5" height="72" rx="2" fill="#e87a8a" stroke="none" stroke-width="0"/>
+<text x="62" y="118" fill="#e87a8a" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">抄了没做的</text>
+<text x="170" y="118" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">模板写"采用 AES-256 加密存储"，你其实是明文入库</text>
+<text x="62" y="142" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 被查时这句话就是虚假告知的直接证据</text>
+<rect x="40" y="176" width="600" height="72" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="40" y="176" width="5" height="72" rx="2" fill="#e8965a" stroke="none" stroke-width="0"/>
+<text x="62" y="200" fill="#e8965a" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">做了没写的</text>
+<text x="170" y="200" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">偷偷接了统计 SDK、把手机号给了短信服务商</text>
+<text x="62" y="224" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 未告知即收集，属于违法处理</text>
+<rect x="40" y="258" width="600" height="72" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="40" y="258" width="5" height="72" rx="2" fill="#b58ae8" stroke="none" stroke-width="0"/>
+<text x="62" y="282" fill="#b58ae8" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">写了但无效的</text>
+<text x="170" y="282" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">"最终解释权归本平台"、"概不退还"</text>
+<text x="62" y="306" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 排除对方主要权利，该条直接无效</text>
+<rect x="40" y="340" width="600" height="72" rx="5" fill="#14141e" stroke="#3a3a52" stroke-width="1.3"/>
+<rect x="40" y="340" width="5" height="72" rx="2" fill="#67b5ef" stroke="none" stroke-width="0"/>
+<text x="62" y="364" fill="#67b5ef" font-size="12" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="bold">管辖写错的</text>
+<text x="170" y="364" fill="#c8c8dc" font-size="10.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">照抄的公司注册在深圳，你在开封</text>
+<text x="62" y="388" fill="#a0a0b8" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">→ 管辖条款可能不成立，还白送对方一个理由</text>
+<text x="340" y="430" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">模板能抄的是结构，抄不了的是"你到底做了什么"。</text>
+</svg>
