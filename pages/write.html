@@ -358,7 +358,7 @@
       <!-- 【id="pageTitle"】编辑模式下 JS 会把它改成「编辑文章」。
            同一个页面身兼「新建」和「编辑」两种模式，靠这个标题区分。 -->
 
-      <input class="ed-title" id="title" maxlength="100" placeholder="标题（最多 100 字）" autocomplete="off" data-lpignore="true">
+      <input class="ed-title" id="title" name="article-title" maxlength="100" placeholder="标题（最多 100 字）" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore>
       <!-- 【input】单行输入框，不需要闭合标签。
            【maxlength="100"】最多 100 字，超了打不进去。
              注意这只是「体验」，用户改代码就能绕过，后端必须再校验。
@@ -1495,6 +1495,30 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
 });
 
 /* ============ 11. 启动 ============ */
+/* 【保证新建文章时标题框是空的】
+   浏览器（尤其 Edge / Chrome）会把 id="title" 误判成「姓名 / 昵称」，
+   一进页面就自动填上登录名或上次填过的内容。autocomplete="off" 对它
+   并不总是生效，所以这里再主动清两次。
+   【为什么要第二次】浏览器的自动填充常常发生在首屏渲染之后，
+   只清一次会被它随后填回来。400ms 是个经验值。
+   【为什么要在 setTimeout 里再判 articleId】
+   编辑模式下 loadArticle() 是异步的，可能晚于这 400ms 才把标题填进去，
+   不判一下就会把已有文章的标题擦掉。
+   【titleTouched】用户只要打过字就不再动他，
+   免得正在输入时被清空 —— 那是最让人恼火的一种 bug。 */
+let titleTouched = false;
+titleEl.addEventListener('input', () => { titleTouched = true; });
+
+function keepTitleBlank() {
+  if (articleId || titleTouched) return;
+  titleEl.value = '';
+  setTimeout(() => {
+    if (articleId || titleTouched) return;
+    titleEl.value = '';
+  }, 400);
+}
+
+keepTitleBlank();
 loadQuota();
 loadArticle();
 countChars();
