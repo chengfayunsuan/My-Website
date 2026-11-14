@@ -452,6 +452,13 @@
        同样必须拦下来，否则下面会拿 undefined 去上传，报一个莫名其妙的错。
        【j.error || ('签发失败 HTTP ' + r.status)】
          优先用服务器给的中文说明，没有就退回状态码。 */
+    /* 【把 401 翻成人话】
+       服务器只回 error:'unauthorized'，用户看不懂。
+       真正的原因九成是登录态过期（Supabase 的 token 默认一小时有效），
+       这时页面上的登录状态看着还在，实际已经不能用了。 */
+    if (r.status === 401) {
+      throw new Error('登录已过期，请退出后重新登录，再上传');
+    }
     if (!r.ok || !j.uploadUrl) throw new Error(j.error || ('签发失败 HTTP ' + r.status));
 
     /* 【第②步：直传 R2】
