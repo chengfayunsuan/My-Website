@@ -191,9 +191,12 @@
       //   profiles!articles_uid_fkey(*) —— 顺着外键把作者资料也带出来（!后面的名字是外键名）；
       //   article_likes(count) / article_favs(count) —— 只要点赞数、收藏数的「数量」，不要全部明细。
       .neq('status', 'deleted')                 // 【.neq】不等于：排除已删除的文章。
-      .order(sort === 'hot' ? 'views' : 'created_at', { descending: true })
+      .order(sort === 'hot' ? 'views' : 'created_at', { ascending: false })
       // 【.order】排序。三元：sort 是 'hot' 就按浏览量排，否则按创建时间排。
-      // descending:true = 从大到小 / 从新到旧。
+      // 【ascending:false 而不是 descending:true】
+      //   supabase-js 的 order 只认 ascending 这一个参数名，
+      //   写 descending:true 会被**静默忽略**，结果变成默认的升序 ——
+      //   表现就是「刚发的文章排在列表最下面」，看着像没发出去。
       .range(offset, offset + limit - 1);
       // 【.range】分页：从第 offset 条开始，到 offset+limit-1 条结束（下标包含两端）。
       // 例：offset=0、limit=20 → 第 0~19 条，正好 20 条。
@@ -383,7 +386,7 @@
     let q = SB.from('videos')
       .select('*, profiles!videos_uid_fkey(*), video_likes(count), video_favs(count)')
       .neq('status', 'deleted')
-      .order(sort === 'hot' ? 'views' : 'created_at', { descending: true })
+      .order(sort === 'hot' ? 'views' : 'created_at', { ascending: false })
       .range(offset, offset + limit - 1);
     if (uid) q = q.eq('uid', uid);
     const { data, error } = await q;

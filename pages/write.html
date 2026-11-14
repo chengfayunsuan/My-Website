@@ -499,11 +499,10 @@
       <div class="ed-foot">
         <span>字数 <b id="chars">0</b> / 10000</span>
         <!-- 【b】加粗，让数字比周围的说明文字更醒目。 -->
-        <span>素材空间 <span id="quota">—</span></span>
-        <!-- 嵌套 span：外面是标签文字，里面的 span 单独装数字，方便 JS 只替换数字。 -->
-        <span style="color:var(--text-light)">图片 ≤ 50MB，音频 ≤ 200MB，视频 ≤ 2GB</span>
-        <!-- 【≤】Unicode 字符「小于等于」，直接打出来的，不是实体编码。
-             类似的还有 ≥、≠、± —— 这些符号直接打比写 &le; 之类好记。 -->
+        <span>素材空间 <span id="quota">图片 8MB · 音频 30MB · 视频 0.8GB</span></span>
+        <!-- 嵌套 span：外面是标签文字，里面的 span 单独装限额，方便 JS 只替换里面那段。
+             这段固定文案只是首屏占位，页面加载后 loadQuota() 会用 MEDIA 里的真实上限覆盖它，
+             所以改限额只需要改 js/upload.js 里的 MAX_R2，这里天然跟着变。 -->
       </div>
 
       <div class="ed-actions">
@@ -1368,7 +1367,22 @@ function setMsg(text, cls) {
 
 /* ============ 8. 素材空间提示 ============ */
 async function loadQuota() {
-  document.getElementById('quota').textContent = '媒体直传 R2 · 图片 8MB / 音频 30MB / 视频 2GB';
+  const el = document.getElementById('quota');
+  const mm = window.MEDIA;
+  /* 【为什么从 MEDIA 里取，而不是写死一句话】
+     原来这里写死了「图片 8MB / 音频 30MB / 视频 2GB」，
+     跟右下角那行静态文字（50MB / 200MB / 2GB）自相矛盾，
+     改限额时还得记着改两处。
+     现在统一从 js/upload.js 的限额表读，页面上永远只有一套数字。
+     【limitOf】它会自己判断当前走 R2 还是 Supabase，返回对应上限。 */
+  if (mm && mm.limitOf && mm.fmt) {
+    const LABEL = { img: '图片', audio: '音频', video: '视频' };
+    el.textContent = ['img', 'audio', 'video']
+      .map((k) => `${LABEL[k]} ${mm.fmt(mm.limitOf(k))}`)
+      .join(' · ');
+    return;
+  }
+  el.textContent = '图片 8MB · 音频 30MB · 视频 0.8GB';
 }
 /* 【这个名字又和实际行为不符了】
    叫 loadQuota（加载配额），实际上只是写了一句固定文案。
