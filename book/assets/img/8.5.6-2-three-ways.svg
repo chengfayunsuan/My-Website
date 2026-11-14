@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">8.5.6-2 / 三种取得方式，各管一段</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">没有一种能全包；常见组合是代理 + 转运</text>
+<rect x="24" y="92" width="200" height="296" rx="6" fill="#15151f" stroke="#2e2e44" stroke-width="1.2"/>
+<rect x="24" y="92" width="200" height="3" rx="0" fill="#67b5ef" stroke="none" stroke-width="1.5"/>
+<text x="40" y="120" fill="#c8c8dc" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">法定注册代理</text>
+<text x="40" y="138" fill="#5e5e78" font-size="9" text-anchor="start" font-family="monospace">Registered Agent</text>
+<text x="40" y="166" fill="#67b5ef" font-size="12" text-anchor="start" font-family="monospace">$50~300 / 年</text>
+<line x1="40" y1="180" x2="208" y2="180" stroke="#2a2a3e" stroke-width="1"/>
+<text x="40" y="202" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收法律文书</text>
+<text x="208" y="202" fill="#67d9a0" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">必须，法定</text>
+<text x="40" y="236" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收普通信件</text>
+<text x="208" y="236" fill="#67d9a0" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">可以</text>
+<text x="40" y="270" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">当地址证明</text>
+<text x="208" y="270" fill="#e87a8a" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不行</text>
+<text x="40" y="304" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">被识破风险</text>
+<text x="208" y="304" fill="#67d9a0" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">低</text>
+<text x="40" y="350" fill="#6a6a84" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">公司层面唯一绕不开的一笔</text>
+<rect x="240" y="92" width="200" height="296" rx="6" fill="#15151f" stroke="#2e2e44" stroke-width="1.2"/>
+<rect x="240" y="92" width="200" height="3" rx="0" fill="#b58ae8" stroke="none" stroke-width="1.5"/>
+<text x="256" y="120" fill="#c8c8dc" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">虚拟办公室</text>
+<text x="256" y="138" fill="#5e5e78" font-size="9" text-anchor="start" font-family="monospace">Virtual Office</text>
+<text x="256" y="166" fill="#b58ae8" font-size="12" text-anchor="start" font-family="monospace">$50~200 / 月</text>
+<line x1="256" y1="180" x2="424" y2="180" stroke="#2a2a3e" stroke-width="1"/>
+<text x="256" y="202" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收法律文书</text>
+<text x="424" y="202" fill="#67d9a0" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">可以</text>
+<text x="256" y="236" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收普通信件</text>
+<text x="424" y="236" fill="#67d9a0" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">可以</text>
+<text x="256" y="270" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">当地址证明</text>
+<text x="424" y="270" fill="#e8b84b" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">看服务商</text>
+<text x="256" y="304" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">被识破风险</text>
+<text x="424" y="304" fill="#e8b84b" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">中</text>
+<text x="256" y="350" fill="#6a6a84" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">贵，但能给你一间会议室</text>
+<rect x="456" y="92" width="200" height="296" rx="6" fill="#15151f" stroke="#2e2e44" stroke-width="1.2"/>
+<rect x="456" y="92" width="200" height="3" rx="0" fill="#e8965a" stroke="none" stroke-width="1.5"/>
+<text x="472" y="120" fill="#c8c8dc" font-size="13" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">邮件转运</text>
+<text x="472" y="138" fill="#5e5e78" font-size="9" text-anchor="start" font-family="monospace">CMRA</text>
+<text x="472" y="166" fill="#e8965a" font-size="12" text-anchor="start" font-family="monospace">$10~30 / 月</text>
+<line x1="472" y1="180" x2="640" y2="180" stroke="#2a2a3e" stroke-width="1"/>
+<text x="472" y="202" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收法律文书</text>
+<text x="640" y="202" fill="#e87a8a" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">不代签收</text>
+<text x="472" y="236" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">收普通信件</text>
+<text x="640" y="236" fill="#67d9a0" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">扫描 + 转寄</text>
+<text x="472" y="270" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">当地址证明</text>
+<text x="640" y="270" fill="#e8b84b" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">账单可以</text>
+<text x="472" y="304" fill="#7a7a94" font-size="10" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">被识破风险</text>
+<text x="640" y="304" fill="#e87a8a" font-size="10" text-anchor="end" font-family="'PingFang SC','Microsoft YaHei',sans-serif">高</text>
+<text x="472" y="350" fill="#6a6a84" font-size="9.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">地址里会带 STE / PMB 编号</text>
+<text x="24" y="440" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注册代理是州法要求：每家公司必须有一个在本州、有实体门牌的地址，代收法院传票。</text>
+<text x="24" y="458" fill="#6a6a84" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">转运地址是工具，能收信；但只要银行或支付平台的风控库里有那段邮编，它就连带被标记。</text>
+</svg>
