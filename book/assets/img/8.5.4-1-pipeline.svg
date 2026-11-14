@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">8.5.4-1 / 一份材料进去，七个环节出来</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">前五个是机器，第六个才是人；时间几乎全花在第六个上</text>
+<circle cx="38" cy="108" r="13" fill="#1a1a28" stroke="#67b5ef" stroke-width="1.5"/>
+<text x="38" y="112" fill="#67b5ef" font-size="11" text-anchor="middle" font-family="monospace">1</text>
+<text x="62" y="104" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">提交材料</text>
+<text x="62" y="122" fill="#7a7a94" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">护照、地址证明、人脸，三样</text>
+<text x="648" y="112" fill="#67b5ef" font-size="11" text-anchor="end" font-family="monospace">10 分钟</text>
+<line x1="24" y1="132" x2="648" y2="132" stroke="#1e1e2c" stroke-width="1"/>
+<circle cx="38" cy="156" r="13" fill="#1a1a28" stroke="#8a8aa0" stroke-width="1.5"/>
+<text x="38" y="160" fill="#8a8aa0" font-size="11" text-anchor="middle" font-family="monospace">2</text>
+<text x="62" y="152" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">机器读取</text>
+<text x="62" y="170" fill="#7a7a94" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">OCR 抽字段，验 MRZ 校验位</text>
+<text x="648" y="160" fill="#6a6a84" font-size="11" text-anchor="end" font-family="monospace">3 秒</text>
+<line x1="24" y1="180" x2="648" y2="180" stroke="#1e1e2c" stroke-width="1"/>
+<circle cx="38" cy="204" r="13" fill="#1a1a28" stroke="#8a8aa0" stroke-width="1.5"/>
+<text x="38" y="208" fill="#8a8aa0" font-size="11" text-anchor="middle" font-family="monospace">3</text>
+<text x="62" y="200" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">活体检测</text>
+<text x="62" y="218" fill="#7a7a94" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">眨眼转头，挡照片和录屏</text>
+<text x="648" y="208" fill="#6a6a84" font-size="11" text-anchor="end" font-family="monospace">30 秒</text>
+<line x1="24" y1="228" x2="648" y2="228" stroke="#1e1e2c" stroke-width="1"/>
+<circle cx="38" cy="252" r="13" fill="#1a1a28" stroke="#8a8aa0" stroke-width="1.5"/>
+<text x="38" y="256" fill="#8a8aa0" font-size="11" text-anchor="middle" font-family="monospace">4</text>
+<text x="62" y="248" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">名单比对</text>
+<text x="62" y="266" fill="#7a7a94" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">制裁名单、PEP、内部黑名单</text>
+<text x="648" y="256" fill="#6a6a84" font-size="11" text-anchor="end" font-family="monospace">5 秒</text>
+<line x1="24" y1="276" x2="648" y2="276" stroke="#1e1e2c" stroke-width="1"/>
+<circle cx="38" cy="300" r="13" fill="#1a1a28" stroke="#8a8aa0" stroke-width="1.5"/>
+<text x="38" y="304" fill="#8a8aa0" font-size="11" text-anchor="middle" font-family="monospace">5</text>
+<text x="62" y="296" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">地址与业务</text>
+<text x="62" y="314" fill="#7a7a94" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">地址库命中、网站能不能打开</text>
+<text x="648" y="304" fill="#6a6a84" font-size="11" text-anchor="end" font-family="monospace">10 秒</text>
+<line x1="24" y1="324" x2="648" y2="324" stroke="#1e1e2c" stroke-width="1"/>
+<circle cx="38" cy="348" r="13" fill="#1a1a28" stroke="#e8b84b" stroke-width="1.5"/>
+<text x="38" y="352" fill="#e8b84b" font-size="11" text-anchor="middle" font-family="monospace">6</text>
+<text x="62" y="344" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">人工复核</text>
+<text x="62" y="362" fill="#7a7a94" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">平均看 90 秒，只看三样对齐</text>
+<text x="648" y="352" fill="#e8b84b" font-size="11" text-anchor="end" font-family="monospace">1~3 天</text>
+<line x1="24" y1="372" x2="648" y2="372" stroke="#1e1e2c" stroke-width="1"/>
+<circle cx="38" cy="396" r="13" fill="#1a1a28" stroke="#c8c8dc" stroke-width="1.5"/>
+<text x="38" y="400" fill="#c8c8dc" font-size="11" text-anchor="middle" font-family="monospace">7</text>
+<text x="62" y="392" fill="#c8c8dc" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">结果</text>
+<text x="62" y="410" fill="#7a7a94" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">通过、补件、拒绝</text>
+<text x="648" y="400" fill="#c8c8dc" font-size="11" text-anchor="end" font-family="monospace">—</text>
+<text x="24" y="434" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">机器那五步一共不到一分钟，但它们决定了你的材料进不进人工。</text>
+<text x="24" y="454" fill="#6a6a84" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">九成的"等一周"，等的不是审核，是排队。</text>
+</svg>
