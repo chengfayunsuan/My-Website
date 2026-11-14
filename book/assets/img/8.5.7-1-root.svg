@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="440" viewBox="0 0 680 440" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="440" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">8.5.7-1 / 所有账号最后都系在一根线上</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">登录名可以各不相同，但“忘记密码”只有一个出口</text>
+<rect x="245" y="150" width="190" height="74" rx="8" fill="#12202a" stroke="#67b5ef" stroke-width="1.6"/>
+<text x="340.0" y="180" fill="#c8c8dc" font-size="13" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">主邮箱</text>
+<text x="340.0" y="202" fill="#67b5ef" font-size="9.5" text-anchor="middle" font-family="monospace">you@yourdomain.com</text>
+<rect x="36" y="88" width="150" height="42" rx="6" fill="#16161f" stroke="#33334a" stroke-width="1"/>
+<text x="111.0" y="115" fill="#a0a0b8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">银行</text>
+<path d="M186,109.0 L218,109.0 L245,187.0" fill="none" stroke="#33566b" stroke-width="1.2"/>
+<rect x="36" y="166" width="150" height="42" rx="6" fill="#16161f" stroke="#33334a" stroke-width="1"/>
+<text x="111.0" y="193" fill="#a0a0b8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">支付平台</text>
+<path d="M186,187.0 L218,187.0 L245,187.0" fill="none" stroke="#33566b" stroke-width="1.2"/>
+<rect x="36" y="244" width="150" height="42" rx="6" fill="#16161f" stroke="#33334a" stroke-width="1"/>
+<text x="111.0" y="271" fill="#a0a0b8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">域名注册商</text>
+<path d="M186,265.0 L218,265.0 L245,187.0" fill="none" stroke="#33566b" stroke-width="1.2"/>
+<rect x="494" y="88" width="150" height="42" rx="6" fill="#16161f" stroke="#33334a" stroke-width="1"/>
+<text x="569.0" y="115" fill="#a0a0b8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">代码仓库</text>
+<path d="M494,109.0 L462,109.0 L435,187.0" fill="none" stroke="#33566b" stroke-width="1.2"/>
+<rect x="494" y="166" width="150" height="42" rx="6" fill="#16161f" stroke="#33334a" stroke-width="1"/>
+<text x="569.0" y="193" fill="#a0a0b8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">云服务</text>
+<path d="M494,187.0 L462,187.0 L435,187.0" fill="none" stroke="#33566b" stroke-width="1.2"/>
+<rect x="494" y="244" width="150" height="42" rx="6" fill="#16161f" stroke="#33334a" stroke-width="1"/>
+<text x="569.0" y="271" fill="#a0a0b8" font-size="11.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">税务账号</text>
+<path d="M494,265.0 L462,265.0 L435,187.0" fill="none" stroke="#33566b" stroke-width="1.2"/>
+<rect x="100" y="296" width="160" height="54" rx="5" fill="#1a1a26" stroke="#e8b84b" stroke-width="1"/>
+<text x="180" y="318" fill="#e8b84b" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">手机号丢了</text>
+<text x="180" y="338" fill="#6a6a84" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">营业厅补一张卡</text>
+<rect x="276" y="296" width="160" height="54" rx="5" fill="#1a1a26" stroke="#e8b84b" stroke-width="1"/>
+<text x="356" y="318" fill="#e8b84b" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">密码忘了</text>
+<text x="356" y="338" fill="#6a6a84" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">邮箱重置一次</text>
+<rect x="452" y="296" width="160" height="54" rx="5" fill="#1a1a26" stroke="#e87a8a" stroke-width="1"/>
+<text x="532" y="318" fill="#e87a8a" font-size="11" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">邮箱丢了</text>
+<text x="532" y="338" fill="#6a6a84" font-size="9.5" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif">全部一起失守</text>
+<text x="24" y="382" fill="#a0a0b8" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">前两种都有别人替你兜底，第三种没有——邮箱是唯一一个“丢了就没人能帮你”的东西。</text>
+<text x="24" y="404" fill="#6a6a84" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">所以这一节不是讲“用哪个邮箱好看”，是讲“哪一样东西丢了会让全部东西一起丢”。</text>
+</svg>
