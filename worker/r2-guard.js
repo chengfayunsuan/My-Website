@@ -264,10 +264,14 @@ async function presignPut(env, key, expiresSec = 900) {
 
 async function syncUsage(env) {
   const u = await readUsage(env);
-  const query = `query($tag:String!,$s:Time!,$e:Time!){
+  // 注意：这里必须是 Date! 而不是 Time!，传进去的也得是 '2026-11-14' 这种纯日期。
+  // 传带时分秒的 ISO 串会报 date format should be '2006-01-02'。
+  // orderBy 里的 date 必须同时在 dimensions 里请求，否则会报「not aggregated nor a dimension」。
+  const query = `query($tag:String!,$s:Date!,$e:Date!){
     viewer{accounts(filter:{accountTag:$tag}){
       r2StorageAdaptiveGroups(limit:1,filter:{date_geq:$s,date_leq:$e},orderBy:[date_DESC]){
         max{payloadSize metadataSize objectCount}
+        dimensions{date}
       }
       r2OperationsAdaptiveGroups(limit:100,filter:{date_geq:$s,date_leq:$e}){
         sum{requests}
@@ -278,9 +282,10 @@ async function syncUsage(env) {
 
   const end = new Date();
   const start = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), 1));
+  const day = (d) => d.toISOString().slice(0, 10); // '2026-11-01'
   const body = JSON.stringify({
     query,
-    variables: { tag: env.R2_ACCOUNT_ID, s: start.toISOString(), e: end.toISOString() },
+    variables: { tag: env.R2_ACCOUNT_ID, s: day(start), e: day(end) },
   });
 
   let ok = false;
@@ -305,8 +310,11 @@ async function syncUsage(env) {
       for (const row of acct.r2OperationsAdaptiveGroups || []) {
         const t = row?.dimensions?.actionType || '';
         const n = row?.sum?.requests || 0;
-        // A 类：写入类；B 类：读取类
-        if (/^(PutObject|CopyObject|ListObjects|ListBuckets|CreateMultipartUpload|CompleteMultipartUpload|UploadPart|DeleteObject|DeleteObjects)/i.test(t)) a += n;
+        // A 类：写入 / 列举类；B 类：读取类。
+        // 这里刻意用宽口径：Put / Copy / List / Delete / Create / Upload / Complete / Abort
+        // 全部记到 A 类。A 类免费额度只有 100 万、B 类 1000 万，
+        // 宁可把 B 类误算成 A 类（提前熔断），也不能把 A 类漏算（超了要扣钱）。
+        if (/^(Put|Copy|List|Delete|Create|Upload|Complete|Abort)/i.test(t)) a += n;
         else b += n;
       }
       u.opsA = a;
