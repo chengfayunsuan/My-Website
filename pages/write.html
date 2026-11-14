@@ -1375,10 +1375,16 @@ async function loadQuota() {
      改限额时还得记着改两处。
      现在统一从 js/upload.js 的限额表读，页面上永远只有一套数字。
      【limitOf】它会自己判断当前走 R2 还是 Supabase，返回对应上限。 */
-  if (mm && mm.limitOf && mm.fmt) {
+  if (mm && mm.limitOf) {
     const LABEL = { img: '图片', audio: '音频', video: '视频' };
+    /* 【不用 MEDIA.fmt 的原因】那个函数给「文件大小」用的，
+       8MB 会变成 "8.0MB"、0.8GB 会变成 "819.2MB"，写在提示里太啰嗦。
+       这里另写一个只保留有效位的短格式：8MB / 30MB / 0.8GB。 */
+    const brief = (n) => n >= 1073741824
+      ? (n / 1073741824).toFixed(1).replace(/\.0$/, '') + 'GB'
+      : Math.round(n / 1048576) + 'MB';
     el.textContent = ['img', 'audio', 'video']
-      .map((k) => `${LABEL[k]} ${mm.fmt(mm.limitOf(k))}`)
+      .map((k) => `${LABEL[k]} ${brief(mm.limitOf(k))}`)
       .join(' · ');
     return;
   }
