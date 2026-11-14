@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="470" viewBox="0 0 680 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+<rect width="680" height="470" fill="#0e0e16"/>
+<text x="24" y="26" fill="#9a9ab4" font-size="12.5" text-anchor="start" font-family="monospace">8.5.3-3 / 一年到底花多少</text>
+<text x="24" y="48" fill="#7a7a94" font-size="11.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">一个人、一个 LLC、只收款；不含中介代办和差旅</text>
+<rect x="24" y="80" width="192" height="282" rx="8" fill="#14141e" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="40" y="108" fill="#67b5ef" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">一次性</text>
+<text x="40" y="130" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="monospace">$150 ~ $400</text>
+<line x1="40" y1="142" x2="200" y2="142" stroke="#2e2e44" stroke-width="1"/>
+<text x="40" y="168" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">州注册费（WY）</text>
+<text x="200" y="168" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$100</text>
+<text x="40" y="198" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注册代理首年</text>
+<text x="200" y="198" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$0 ~ $125</text>
+<text x="40" y="228" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">域名首年</text>
+<text x="200" y="228" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$12</text>
+<text x="40" y="258" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">EIN（传真）</text>
+<text x="200" y="258" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$0</text>
+<text x="40" y="288" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">公章与文件</text>
+<text x="200" y="288" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$0 ~ $50</text>
+<rect x="244" y="80" width="192" height="282" rx="8" fill="#14141e" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="260" y="108" fill="#67d9a0" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">每年固定</text>
+<text x="260" y="130" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="monospace">$200 ~ $500</text>
+<line x1="260" y1="142" x2="420" y2="142" stroke="#2e2e44" stroke-width="1"/>
+<text x="260" y="168" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">年报 + 特许税</text>
+<text x="420" y="168" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$60</text>
+<text x="260" y="198" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注册代理续费</text>
+<text x="420" y="198" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$50 ~ $125</text>
+<text x="260" y="228" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">注册地址续费</text>
+<text x="420" y="228" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$0 ~ $100</text>
+<text x="260" y="258" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">域名续费</text>
+<text x="420" y="258" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$12</text>
+<text x="260" y="288" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">记账报税</text>
+<text x="420" y="288" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$0 ~ $300</text>
+<text x="260" y="318" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">手机号保号</text>
+<text x="420" y="318" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$0 ~ $36</text>
+<rect x="464" y="80" width="192" height="282" rx="8" fill="#14141e" stroke="#3a3a52" stroke-width="1.2"/>
+<text x="480" y="108" fill="#e8b84b" font-size="13.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">每月浮动</text>
+<text x="480" y="130" fill="#c8c8dc" font-size="12" text-anchor="start" font-family="monospace">$10 ~ $60</text>
+<line x1="480" y1="142" x2="640" y2="142" stroke="#2e2e44" stroke-width="1"/>
+<text x="480" y="168" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">出口 / 住宅 IP</text>
+<text x="640" y="168" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$5 ~ $15</text>
+<text x="480" y="198" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">邮箱 Workspace</text>
+<text x="640" y="198" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$7</text>
+<text x="480" y="228" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">AI 与 API</text>
+<text x="640" y="228" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$0 ~ $30</text>
+<text x="480" y="258" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">短信与邮件</text>
+<text x="640" y="258" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$0 ~ $10</text>
+<text x="480" y="288" fill="#a0a0b8" font-size="10.8" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">托管（Cloudflare）</text>
+<text x="640" y="288" fill="#9a9ab4" font-size="10.8" text-anchor="end" font-family="monospace">$0</text>
+<rect x="24" y="378" width="632" height="52" rx="8" fill="#1d1a12" stroke="#4a3d1c" stroke-width="1.2"/>
+<text x="40" y="400" fill="#e8b84b" font-size="12.5" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-weight="600">真正的大头不在这三栏里：手续费。</text>
+<text x="40" y="420" fill="#a0a0b8" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">通道按 2.9% + $0.30 抽，收 $10,000 就少 $320——超过上面所有固定成本的总和。</text>
+<text x="24" y="452" fill="#6a6a84" font-size="11" text-anchor="start" font-family="'PingFang SC','Microsoft YaHei',sans-serif">把这三栏加起来：第一年 $350 ~ $900，第二年往后 $200 ~ $500。能自己报税的话取低值。</text>
+</svg>
