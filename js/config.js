@@ -71,11 +71,11 @@ window.API_BASE = '';
 window.MEDIA_BASE = '';
 // 【语法】同上，留空 = 用相对路径。nav.js 里 fixAvatar 会用它拼头像地址。
 
-// ============ 上传签发服务（Cloudflare Worker，见 worker/r2-presign.js）============
-// 部署 Worker 后把地址填进来，例如 'https://r2-presign.xxxx.workers.dev'。
+// ============ 上传签发服务（Pages Function，见 functions/api/[[path]].js）============
+// 走站点自己的域名，不依赖 workers.dev（那个域名在国内被 DNS 污染，打不开）。
+// 它只做一件事：校验 Supabase 登录态，然后签发 R2 预签名 PUT 地址（文件不经过它）。
 // 留空 = 自动走 Supabase Storage 兜底（见下面的 STORAGE_BUCKET），单文件上限 50MB。
-// 它只做一件事：校验 Supabase 登录态，然后签发 R2 预签名 PUT 地址（文件不经过 Worker）。
-window.UPLOAD_API = '';
+window.UPLOAD_API = 'https://chengfa-761.pages.dev/api';
 // 【语法】upload.js 里 backend() 就是判断这个值：
 //   有值 → 'r2'（走 R2 大文件直传）
 //   空   → 'storage'（退回 Supabase Storage）
