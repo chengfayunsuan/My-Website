@@ -302,8 +302,30 @@ async function syncUsage(env) {
     const acct = data?.data?.viewer?.accounts?.[0];
     if (acct) {
       const st = acct.r2StorageAdaptiveGroups?.[0]?.max;
+      /* 【月度重置】
+         R2 的免费额度是按自然月算的，Analytics 也按月清零。
+         这里跟着重置一次，否则下面那个「只增不减」的记账会永远停在历史峰值，
+         到了下个月 1 号站点还停在黑档起不来。 */
+      const monthKey = new Date().toISOString().slice(0, 7);
+      if (u.monthKey !== monthKey) {
+        u.monthKey = monthKey;
+        u.storage = 0;
+        u.opsA = 0;
+        u.opsB = 0;
+        u.uploadPending = 0;
+      }
+
       if (st) {
-        u.storage = (st.payloadSize || 0) + (st.metadataSize || 0);
+        /* 【为什么用 max 而不是直接覆盖】
+           R2 的存储指标是按天聚合的，今天刚传的文件通常要到明天才出现在这里。
+           如果直接覆盖，「已用空间」会在传完之后掉回昨天的旧值，
+           于是又能继续传 —— 那就等于存储这道闸是虚的，
+           一天之内把 10GB 传满也拦不住，正是最怕的情况。
+           所以取「真实值」和「本地记账（已用 + 待确认）」里的较大者。
+           代价：删掉文件后数字不会立刻回落，要等 Analytics 追上来。
+           这是有意选的：宁可提前停服，也不要超额扣费。 */
+        const real = (st.payloadSize || 0) + (st.metadataSize || 0);
+        u.storage = Math.max(real, (u.storage || 0) + (u.uploadPending || 0));
       }
       let a = 0;
       let b = 0;
@@ -319,7 +341,7 @@ async function syncUsage(env) {
       }
       u.opsA = a;
       u.opsB = b;
-      u.uploadPending = 0; // 真实值已覆盖，清掉本地增量
+      u.uploadPending = 0; // 上面已经并进 u.storage 了，这里清掉避免重复计算
       ok = true;
     }
   } catch (e) {
