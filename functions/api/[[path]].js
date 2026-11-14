@@ -251,7 +251,7 @@ export async function onRequest(context) {
 
   /* ---- 用量查询 ---- */
   if (head === 'quota') {
-    return json({
+    const out = {
       level: st.level,
       percent: st.pct + '%',
       driver: st.driver,
@@ -267,7 +267,26 @@ export async function onRequest(context) {
       },
       updated: u.updated ? new Date(u.updated).toISOString() : null,
       note: 'green<70% / yellow<85% / red<95% / black≥95%',
-    }, 200, cors);
+    };
+
+    // 诊断：只输出「长度」，不输出值；用来判断变量有没有被写成空串
+    if (url.searchParams.get('debug') === '1') {
+      const KEYS = ['SUPABASE_URL', 'SUPABASE_ANON_KEY', 'R2_ACCOUNT_ID', 'R2_BUCKET',
+        'R2_ACCESS_KEY_ID', 'R2_SECRET_KEY', 'PUBLIC_BASE', 'ALLOW_ORIGIN', 'MAX_UPLOAD_MB'];
+      out.env = {};
+      for (const k of KEYS) out.env[k] = (env[k] || '').length;
+
+      // 用假 token 探一次 Supabase：能区分「key 不行」和「token 不行」
+      try {
+        const pr = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, {
+          headers: { authorization: 'Bearer probe-invalid', apikey: env.SUPABASE_ANON_KEY || '' },
+        });
+        out.probe = { status: pr.status, body: (await pr.text()).slice(0, 220) };
+      } catch (e) {
+        out.probe = { error: String(e).slice(0, 220) };
+      }
+    }
+    return json(out, 200, cors);
   }
 
   /* ---- 黑档：停上传 ---- */
@@ -297,7 +316,7 @@ export async function onRequest(context) {
     }
 
     const size = Number(payload.size || 0);
-    const name = String(payload.name || 'file');
+    const name = String(payload.filename || payload.name || 'file');
     const limitMb = Number(env.MAX_UPLOAD_MB || 200);
 
     if (!size || size <= 0) return json({ error: 'size_required' }, 400, cors);
@@ -339,6 +358,7 @@ export async function onRequest(context) {
     const base = (env.PUBLIC_BASE || url.origin).replace(/\/+$/, '');
     return json({
       url: putUrl,
+      uploadUrl: putUrl, // 前端读的是这个名字，两个都给，避免再对不上
       key,
       publicUrl: `${base}/api/f/${key}`,
       expiresIn: 900,
