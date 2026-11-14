@@ -231,7 +231,7 @@
              不写的话默认是 "submit"，一旦这段被包进 form 元素里，
              点它就会触发表单提交、页面自动刷新，所有填好的内容全丢。
              这是个非常常见的踩坑点，养成习惯：不提交表单的按钮都写 type="button"。 -->
-        <span id="fileInfo" style="font-size:13px;color:var(--text-light)">支持 mp4 / webm / ogv / mov / mkv，最大 2GB</span>
+        <span id="fileInfo" style="font-size:13px;color:var(--text-light)">支持 mp4 / webm / ogv / mov / mkv，最大 0.8GB</span>
         <!-- 选完文件后会显示「文件名 · 大小」。
              【span】行内容器，本身没样式，用来圈住一小段内容方便单独控制。 -->
       </div>
@@ -824,7 +824,12 @@ initEdit();
   if (!window.MEDIA) return;
   /* upload.js 没加载成功就直接退出 —— 连限制都读不到，别乱写文案。 */
 
-  const big = MEDIA.limitOf('video') >= 1073741824;
+  /* 【判断阈值改成「大于 50MB」而不是「大于等于 1GB」】
+     原来写的是 >= 1GB，因为当时 R2 那套是 2GB。
+     现在 R2 的上限收到 0.8GB（819MB），按 1GB 判断会掉进「50MB」那个分支，
+     页面上就会显示「当前最大 50MB」—— 明明能传 819MB，文案却说 50MB。
+     改成跟 Supabase 的 50MB 硬限制比，谁大就算「大上限那套」。 */
+  const big = MEDIA.limitOf('video') > 50 * 1024 * 1024;
   /* 【limitOf('video')】向上传层问「视频这一类的上限是多少字节」。
      为什么上限会变？因为项目配了两套存储：
        R2（Cloudflare 对象存储）→ 支持 2GB
@@ -832,8 +837,11 @@ initEdit();
      当前用哪套决定了用户能传多大，文案必须跟着变，否则就是骗人。
      【1073741824】= 1024×1024×1024 = 1GB。
      大于等于 1GB 就认为「是大上限那套」。 */
+  /* 【文案里的格式提醒】mkv 能传、但浏览器基本放不了
+     （Chrome / Edge 只认 mp4 和 webm 里的部分编码），
+     所以直接在这里写出来，省得用户传完发现是黑屏再来问。 */
   fileInfo.textContent = big
-    ? '支持 mp4 / webm / ogv / mov / mkv，最大 2GB'
+    ? '支持 mp4 / webm / ogv / mov / mkv，最大 0.8GB（mkv 浏览器多半放不了，建议先转 mp4）'
     : '支持 mp4 / webm / ogv / mov / mkv，当前最大 50MB；长视频请用 B 站 BV 号';
   /* 【三元运算符】条件 ? 值1 : 值2，相当于 if/else 的简写。
      【注意第二句文案】它不只说了限制，还给了替代方案「长视频请用 BV 号」。
